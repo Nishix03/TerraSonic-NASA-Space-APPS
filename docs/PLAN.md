@@ -257,7 +257,18 @@ Todos tienen además `aparecer` y `salir` (4 frames).
 
 **Responsables:** M4 (diseño responsivo), M6 (PWA, viewport, desbloqueo de audio y caché), M5 (accesibilidad móvil y pruebas con TalkBack y VoiceOver), M3 (audio en iOS) y M1 (tamaños de fotograma y lista de caché).
 
-**Plan de trabajo:** primero una **maqueta móvil en Claude Design** (artboards de 390×844 y 360×800) para aprobarla; luego el CSS responsivo (horas 12–24) y, por último, pruebas en dispositivos reales (horas 24–30).
+**Maqueta móvil (hecha):** está en el prototipo de Claude Design (https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU), a la derecha del prototipo de escritorio, con siete pantallas estáticas:
+1. *Jukebox* (390×844): barra superior, carrusel de discos, visor con flechas, miniaturas, escenario compacto, interruptores de la banda, reproductor fijo y pestañas.
+2. *Jukebox al desplazar*: tarjeta del protagonista con «Ver grande», acordeón «Por qué suena así» y acordeones plegados, con el reproductor y las pestañas fijos.
+3. *Ver grande*: hoja a pantalla completa con el modelo del protagonista.
+4. *La banda*: tarjetas en una columna.
+5. *Tus datos*: «Elegir archivo», «Tomar foto», ejemplo de Chiclayo y el reproductor.
+6. *Accesibilidad*: hoja con interruptores grandes.
+7. *Jukebox en 360×800*: la misma pantalla en un teléfono más pequeño.
+
+Son **maquetas estáticas** (los sprites son marcadores de posición y no se han probado en un teléfono). Sirven como referencia para M4.
+
+**Plan de trabajo:** aprobar la maqueta; luego el CSS responsivo (horas 12–24) y, por último, pruebas en dispositivos reales (horas 24–30).
 
 ---
 
