@@ -1,0 +1,13 @@
+# Reemplazar @usuarioN por el usuario de GitHub de cada miembro
+/data/                @usuario1
+/scripts/             @usuario1
+/src/datos/           @usuario1
+/src/sonido/          @usuario2
+/src/visual/          @usuario3
+/src/accesibilidad/   @usuario4
+/src/historia/        @usuario5
+/docs/pitch/          @usuario5
+/index.html           @usuario6
+/src/app/             @usuario6
+/.github/             @usuario6
+/docs/CONTRATOS.md    @usuario6

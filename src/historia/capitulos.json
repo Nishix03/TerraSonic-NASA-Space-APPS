@@ -1,0 +1,7 @@
+[
+  { "id": "c1", "inicio": 0,   "kicker": "Capítulo 1 · 1981–1996", "titulo": "El desierto que respira", "texto": "Chiclayo es costa desértica: en un mes típico cae apenas 0,1 mm de lluvia al día.", "narracion": "" },
+  { "id": "c2", "inicio": 192, "kicker": "Capítulo 2 · 1997–1998", "titulo": "Cuando el mar se calienta", "texto": "En febrero de 1998 cae 52 veces la lluvia normal: el huaco empieza a silbar.", "narracion": "" },
+  { "id": "c3", "inicio": 432, "kicker": "Capítulo 3 · 2017", "titulo": "El Niño Costero", "texto": "Marzo de 2017: 6,2 mm/día, 62 veces lo normal.", "narracion": "" },
+  { "id": "c4", "inicio": 504, "kicker": "Capítulo 4 · 2023", "titulo": "Yaku: la lluvia vuelve", "texto": "Abril de 2023 llega a 40 veces lo normal.", "narracion": "" },
+  { "id": "c5", "inicio": 516, "kicker": "Epílogo · 2024", "titulo": "Tu turno", "texto": "Escucha la Orquesta del Pacífico o crea tu versión en el Laboratorio.", "narracion": "" }
+]
