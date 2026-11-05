@@ -1,171 +1,176 @@
 [
   {
-    "id": "nina2010",
+    "id": "inv2024",
     "n": "1",
-    "titulo": "La Niña",
-    "periodo": "ago 2010 – ene 2011",
+    "titulo": "Invierno 2024",
+    "periodo": "may 2024 – oct 2024",
     "color": "#38C6E8",
-    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "protagonista": "mama",
+    "fuente": "NASA Scientific Visualization Studio · SVS 5176 «Sea Surface Temperature Anomaly» (Earth Information Center), datos JPL MUR SST",
     "fotogramas": [
       {
-        "url": "data/fotogramas/nina2010_0.png",
-        "fecha": "2010-08-15"
+        "url": "data/fotogramas/inv2024_0.png",
+        "fecha": "2024-05-16"
       },
       {
-        "url": "data/fotogramas/nina2010_1.png",
-        "fecha": "2010-09-15"
+        "url": "data/fotogramas/inv2024_1.png",
+        "fecha": "2024-06-15"
       },
       {
-        "url": "data/fotogramas/nina2010_2.png",
-        "fecha": "2010-10-15"
+        "url": "data/fotogramas/inv2024_2.png",
+        "fecha": "2024-07-15"
       },
       {
-        "url": "data/fotogramas/nina2010_3.png",
-        "fecha": "2010-11-15"
+        "url": "data/fotogramas/inv2024_3.png",
+        "fecha": "2024-08-14"
       },
       {
-        "url": "data/fotogramas/nina2010_4.png",
-        "fecha": "2010-12-15"
+        "url": "data/fotogramas/inv2024_4.png",
+        "fecha": "2024-09-13"
       },
       {
-        "url": "data/fotogramas/nina2010_5.png",
-        "fecha": "2011-01-15"
+        "url": "data/fotogramas/inv2024_5.png",
+        "fecha": "2024-10-13"
       }
     ]
   },
   {
-    "id": "nino2015",
+    "id": "ver2025",
     "n": "2",
-    "titulo": "El Niño «Godzilla»",
-    "periodo": "jul – dic 2015",
+    "titulo": "Verano 2024–25",
+    "periodo": "nov 2024 – abr 2025",
     "color": "#FF5A36",
-    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "protagonista": "inti",
+    "fuente": "NASA Scientific Visualization Studio · SVS 5176 «Sea Surface Temperature Anomaly» (Earth Information Center), datos JPL MUR SST",
     "fotogramas": [
       {
-        "url": "data/fotogramas/nino2015_0.png",
-        "fecha": "2015-07-15"
+        "url": "data/fotogramas/ver2025_0.png",
+        "fecha": "2024-11-12"
       },
       {
-        "url": "data/fotogramas/nino2015_1.png",
-        "fecha": "2015-08-15"
+        "url": "data/fotogramas/ver2025_1.png",
+        "fecha": "2024-12-12"
       },
       {
-        "url": "data/fotogramas/nino2015_2.png",
-        "fecha": "2015-09-15"
+        "url": "data/fotogramas/ver2025_2.png",
+        "fecha": "2025-01-11"
       },
       {
-        "url": "data/fotogramas/nino2015_3.png",
-        "fecha": "2015-10-15"
+        "url": "data/fotogramas/ver2025_3.png",
+        "fecha": "2025-02-10"
       },
       {
-        "url": "data/fotogramas/nino2015_4.png",
-        "fecha": "2015-11-15"
+        "url": "data/fotogramas/ver2025_4.png",
+        "fecha": "2025-03-12"
       },
       {
-        "url": "data/fotogramas/nino2015_5.png",
-        "fecha": "2015-12-15"
+        "url": "data/fotogramas/ver2025_5.png",
+        "fecha": "2025-04-11"
       }
     ]
   },
   {
-    "id": "costero2017",
+    "id": "inv2025",
     "n": "3",
-    "titulo": "Niño Costero",
-    "periodo": "dic 2016 – may 2017",
+    "titulo": "Invierno 2025",
+    "periodo": "may 2025 – oct 2025",
     "color": "#FFD447",
-    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "protagonista": "silbo",
+    "fuente": "NASA Scientific Visualization Studio · SVS 5176 «Sea Surface Temperature Anomaly» (Earth Information Center), datos JPL MUR SST",
     "fotogramas": [
       {
-        "url": "data/fotogramas/costero2017_0.png",
-        "fecha": "2016-12-15"
+        "url": "data/fotogramas/inv2025_0.png",
+        "fecha": "2025-05-11"
       },
       {
-        "url": "data/fotogramas/costero2017_1.png",
-        "fecha": "2017-01-15"
+        "url": "data/fotogramas/inv2025_1.png",
+        "fecha": "2025-06-10"
       },
       {
-        "url": "data/fotogramas/costero2017_2.png",
-        "fecha": "2017-02-15"
+        "url": "data/fotogramas/inv2025_2.png",
+        "fecha": "2025-07-10"
       },
       {
-        "url": "data/fotogramas/costero2017_3.png",
-        "fecha": "2017-03-15"
+        "url": "data/fotogramas/inv2025_3.png",
+        "fecha": "2025-08-09"
       },
       {
-        "url": "data/fotogramas/costero2017_4.png",
-        "fecha": "2017-04-15"
+        "url": "data/fotogramas/inv2025_4.png",
+        "fecha": "2025-09-08"
       },
       {
-        "url": "data/fotogramas/costero2017_5.png",
-        "fecha": "2017-05-15"
+        "url": "data/fotogramas/inv2025_5.png",
+        "fecha": "2025-10-08"
       }
     ]
   },
   {
-    "id": "yaku2023",
+    "id": "ver2026",
     "n": "4",
-    "titulo": "Yaku",
-    "periodo": "ene – jun 2023",
+    "titulo": "Verano 2025–26",
+    "periodo": "nov 2025 – abr 2026",
     "color": "#7BE38A",
-    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "protagonista": "yaku",
+    "fuente": "NASA Scientific Visualization Studio · SVS 5176 «Sea Surface Temperature Anomaly» (Earth Information Center), datos JPL MUR SST",
     "fotogramas": [
       {
-        "url": "data/fotogramas/yaku2023_0.png",
-        "fecha": "2023-01-15"
+        "url": "data/fotogramas/ver2026_0.png",
+        "fecha": "2025-11-07"
       },
       {
-        "url": "data/fotogramas/yaku2023_1.png",
-        "fecha": "2023-02-15"
+        "url": "data/fotogramas/ver2026_1.png",
+        "fecha": "2025-12-07"
       },
       {
-        "url": "data/fotogramas/yaku2023_2.png",
-        "fecha": "2023-03-15"
+        "url": "data/fotogramas/ver2026_2.png",
+        "fecha": "2026-01-06"
       },
       {
-        "url": "data/fotogramas/yaku2023_3.png",
-        "fecha": "2023-04-15"
+        "url": "data/fotogramas/ver2026_3.png",
+        "fecha": "2026-02-05"
       },
       {
-        "url": "data/fotogramas/yaku2023_4.png",
-        "fecha": "2023-05-15"
+        "url": "data/fotogramas/ver2026_4.png",
+        "fecha": "2026-03-07"
       },
       {
-        "url": "data/fotogramas/yaku2023_5.png",
-        "fecha": "2023-06-15"
+        "url": "data/fotogramas/ver2026_5.png",
+        "fecha": "2026-04-06"
       }
     ]
   },
   {
-    "id": "nino2023",
+    "id": "inv2026",
     "n": "5",
-    "titulo": "El Niño 2023",
-    "periodo": "jul – dic 2023",
+    "titulo": "Invierno 2026",
+    "periodo": "may 2026 – oct 2026",
     "color": "#E0459B",
-    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "protagonista": "illapa",
+    "fuente": "NASA Scientific Visualization Studio · SVS 5176 «Sea Surface Temperature Anomaly» (Earth Information Center), datos JPL MUR SST",
     "fotogramas": [
       {
-        "url": "data/fotogramas/nino2023_0.png",
-        "fecha": "2023-07-15"
+        "url": "data/fotogramas/inv2026_0.png",
+        "fecha": "2026-05-06"
       },
       {
-        "url": "data/fotogramas/nino2023_1.png",
-        "fecha": "2023-08-15"
+        "url": "data/fotogramas/inv2026_1.png",
+        "fecha": "2026-06-05"
       },
       {
-        "url": "data/fotogramas/nino2023_2.png",
-        "fecha": "2023-09-15"
+        "url": "data/fotogramas/inv2026_2.png",
+        "fecha": "2026-07-05"
       },
       {
-        "url": "data/fotogramas/nino2023_3.png",
-        "fecha": "2023-10-15"
+        "url": "data/fotogramas/inv2026_3.png",
+        "fecha": "2026-08-04"
       },
       {
-        "url": "data/fotogramas/nino2023_4.png",
-        "fecha": "2023-11-15"
+        "url": "data/fotogramas/inv2026_4.png",
+        "fecha": "2026-09-03"
       },
       {
-        "url": "data/fotogramas/nino2023_5.png",
-        "fecha": "2023-12-15"
+        "url": "data/fotogramas/inv2026_5.png",
+        "fecha": "2026-10-03"
       }
     ]
   }

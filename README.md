@@ -46,7 +46,7 @@ Luego abre http://localhost:8000. También funciona con la extensión Live Serve
 
 ## Datos
 
-- Fotogramas: NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, el producto de la visualización EIC *SST Anomaly – Near Real Time* ([SVS 5176](https://svs.gsfc.nasa.gov/5176)), descargados de Worldview/GIBS con `python scripts/descargar_fotogramas.py`.
+- Fotogramas: los de la visualización oficial del EIC *SST Anomaly – Near Real Time*, variante Pacífico ([SVS 5176](https://svs.gsfc.nasa.gov/5176)), extraídos y recortados con `python scripts/descargar_fotogramas.py` (necesita ffmpeg; baja un video de ~340 MB que no se sube a git). Cubren del 16 may 2024 al 2 nov 2026: cinco discos de seis fotogramas, uno cada 30 días.
 - Lluvia de Chiclayo (extra): NASA POWER, con `python scripts/descargar_power.py`.
 
 ## Cómo trabajamos

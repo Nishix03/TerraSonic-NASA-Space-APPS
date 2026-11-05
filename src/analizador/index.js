@@ -1,35 +1,29 @@
 // M2 · Analizador visual. Contrato: docs/CONTRATOS.md
-// Versión inicial portada del prototipo y calibrada con la paleta GHRSST MUR. M2 la mejora y la testea.
+// Calibrado con la escala de color de las visualizaciones del EIC (SVS 5176). M2 la mejora y la testea.
 const ANCHO = 140, ALTO = 80, COLS = 28, FILAS = 16, CELDA = 5;
 const COSTA = { x0: 116, x1: 128, y0: 36, y1: 66 }; // costa norte del Perú (82°–76°O, 3°–18°S)
 
-function hsv(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
-  let h = 0;
-  if (d) {
-    if (mx === r) h = ((g - b) / d) % 6; else if (mx === g) h = (b - r) / d + 2; else h = (r - g) / d + 4;
-    h *= 60; if (h < 0) h += 360;
-  }
-  return [h, mx ? d / mx : 0, mx];
+// Escala de color oficial del EIC (SVS 5176): anomalía de −4 °C a +4 °C, una muestra cada 0,25 °C.
+const ESCALA = [[0,35,63],[0,44,79],[0,53,97],[1,67,119],[0,82,142],[1,100,168],[5,117,191],[3,129,203],[0,139,208],
+  [0,149,215],[51,161,220],[90,175,229],[121,190,232],[145,201,238],[166,211,244],[185,219,246],[227,227,229],
+  [255,227,187],[250,216,168],[243,200,147],[234,184,131],[225,169,118],[213,151,102],[203,134,92],[194,116,80],
+  [185,90,68],[170,70,55],[154,55,50],[138,47,46],[123,43,46],[105,36,41],[86,30,33],[74,25,28]];
+
+// Tierra en los fotogramas del EIC: gris oscuro sin color (el océano casi neutro es muy claro).
+export function esTierra(r, g, b) {
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+  return mx - mn < 22 && mx < 175;
 }
 
+// Nivel −5…+5 (= anomalía en °C × 1,25) por el color más cercano de la escala oficial.
 export function nivel(r, g, b) {
-  const [h, s, v] = hsv(r, g, b);
-  if (s < 0.15) return 0;
-  if (v < 0.6 && (h < 20 || h > 330)) return 5;
-  if (h >= 300 && h < 345) return 4.5;
-  if (h >= 345 || h < 7) return 4;
-  if (h < 27) return 3;
-  if (h < 43) return 2;
-  if (h < 53) return 1;
-  if (h < 75) return s > 0.3 ? 0.5 : 0;
-  if (h < 118) return -0.5;
-  if (h < 145) return -1;
-  if (h < 170) return -2;
-  if (h < 190) return -3;
-  if (h < 250) return -4;
-  return -5;
+  let mejor = 0, dmin = Infinity;
+  for (let i = 0; i < ESCALA.length; i++) {
+    const [er, eg, eb] = ESCALA[i];
+    const d = (r - er) ** 2 + (g - eg) ** 2 + (b - eb) ** 2;
+    if (d < dmin) { dmin = d; mejor = i; }
+  }
+  return (mejor - 16) / 4 * 1.25;
 }
 
 function cargarImagen(url) {
@@ -57,7 +51,7 @@ export async function analizar(url) {
       for (let y = fy * CELDA; y < (fy + 1) * CELDA; y++) {
         for (let x = cx * CELDA; x < (cx + 1) * CELDA; x++) {
           const i = (y * ANCHO + x) * 4;
-          if (px[i + 3] < 128) continue; // transparente = tierra
+          if (px[i + 3] < 128 || esTierra(px[i], px[i + 1], px[i + 2])) continue; // tierra
           const v = nivel(px[i], px[i + 1], px[i + 2]);
           suma += v; n++; total++;
           if (v > 0) calido += v; else frio -= v;

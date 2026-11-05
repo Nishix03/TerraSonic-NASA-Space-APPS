@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Terrasonic · Earth Jukebox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Pixelify+Sans:wght@500;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+html{scroll-behavior:smooth}
+a{color:#FFD447}a:hover{color:#FFE88A}
+.px button{font:inherit;cursor:pointer}
+.px button:focus-visible,.px input:focus-visible,.px select:focus-visible{outline:4px solid #FFD447;outline-offset:3px}
+.px ::selection{background:#FFD447;color:#0A0D1A}
+.px .pximg{image-rendering:pixelated;image-rendering:crisp-edges}
+.px .crt{background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+.px .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.px .bob{animation:bob 1.2s steps(2) infinite}
+.px .bgfix{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.px .farstars{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(1px 1px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 120px,#cfd8ff,transparent),radial-gradient(1px 1px at 160px 60px,#fff,transparent),radial-gradient(1px 1px at 50px 150px,#ffe9a8,transparent);background-size:200px 180px;animation:starpan 160s linear infinite}
+@keyframes starpan{to{background-position:-1600px 900px}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes cross{from{transform:translate(0,0)}to{transform:translate(115vw,22vh)}}
+@keyframes shoot{0%,90%{opacity:0;transform:translate(0,0) rotate(28deg)}92%{opacity:1}100%{opacity:0;transform:translate(-40vw,24vh) rotate(28deg)}}
+@keyframes sweep{from{transform:translateX(-30vw)}to{transform:translateX(105vw)}}
+@keyframes glowpulse{0%,100%{opacity:.5}50%{opacity:.9}}
+.px .sat{position:absolute;top:16%;left:-4%;width:6px;height:6px;background:#fff;box-shadow:0 0 8px #fff,-10px 0 0 rgba(255,255,255,.35),-20px 0 0 rgba(255,255,255,.18);animation:cross 46s linear infinite}
+.px .shoot{position:absolute;top:8%;left:78%;width:90px;height:2px;background:linear-gradient(90deg,#fff,transparent);animation:shoot 17s linear infinite}
+.px .glow{position:absolute;left:0;right:0;bottom:0;height:55vh;animation:glowpulse 7s ease-in-out infinite}
+.px .planet{position:absolute;left:-30vw;top:88vh;width:160vw;height:160vw;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1d3a8f 0%,#0f1f55 14%,#0a0d1a 42%)}
+.px .sweep{position:absolute;top:calc(88vh - 2px);left:0;width:30vw;height:4px;background:linear-gradient(90deg,transparent,#FFD447,transparent);animation:sweep 7s linear infinite}
+.px button{transition:transform .15s cubic-bezier(.2,.7,.2,1),filter .15s,background-color .2s,border-color .2s,box-shadow .2s,color .2s}
+.px button:hover:not(:disabled){transform:translate(-2px,-2px);filter:brightness(1.12)}
+.px button:active:not(:disabled){transform:translate(2px,2px);filter:brightness(.95)}
+.px .fxc{transition:opacity .15s,background-color .35s}
+.px .fxm{transition:background-color .12s}
+.px .fx{transition:border-color .3s,box-shadow .3s,transform .3s}
+.px .fx:hover{transform:translateY(-3px)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fa{from{opacity:0;filter:blur(4px) saturate(1.6)}to{opacity:1;filter:none}}
+@keyframes fb{from{opacity:0;filter:blur(4px) saturate(1.6)}to{opacity:1;filter:none}}
+@keyframes pa{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes pb{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@keyframes btnpulse{0%,100%{box-shadow:4px 4px 0 #05070F,0 0 0 0 rgba(255,212,71,.55)}50%{box-shadow:4px 4px 0 #05070F,0 0 0 9px rgba(255,212,71,0)}}
+.px .rise{animation:rise .65s cubic-bezier(.2,.7,.2,1) both}
+.px .d1{animation-delay:.08s}.px .d2{animation-delay:.16s}.px .d3{animation-delay:.24s}
+.px .fa{animation:fa .55s ease both}.px .fb{animation:fb .55s ease both}
+.px .pa{animation:pa .45s ease both}.px .pb{animation:pb .45s ease both}
+.px .pulse{animation:btnpulse 2.4s ease-in-out infinite}
+.px .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:14px;border:3px dashed #2E3A6E;cursor:pointer;transition:border-color .2s,background-color .2s,transform .2s}
+.px .drop:hover,.px .drop:focus-within{border-color:#FFD447;background-color:rgba(255,212,71,.08)}
+.px .drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.px .drop.over{border-color:#FFD447;background-color:rgba(255,212,71,.16);transform:scale(1.01)}
+.px .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:980px){.px .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.px .grid3{grid-template-columns:minmax(0,1fr)}}
+.px .fillrow>:last-child{grid-column:auto / -1}
+.px .arrow:disabled{opacity:.3;cursor:not-allowed}
+.px .arrow svg{display:block}
+.px .arrowL svg{animation:nudgeL 1.3s steps(3) infinite}
+.px .arrowR svg{animation:nudgeR 1.3s steps(3) infinite}
+.px .arrow:hover:not(:disabled) svg{animation-duration:.45s}
+.px .arrow:disabled svg{animation:none}
+@keyframes nudgeL{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
+@keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+.px .stage{position:absolute;inset:0;background:#070914}
+.px .stage .floor{position:absolute;left:0;right:0;bottom:0;height:30%;background:repeating-linear-gradient(90deg,#241a3d 0 72px,#1a1230 72px 74px);border-top:4px solid #3b2a63;box-shadow:inset 0 16px 30px rgba(0,0,0,.55)}
+.px .stage .curtL,.px .stage .curtR{position:absolute;top:0;bottom:0;width:7%;background:repeating-linear-gradient(90deg,#4a1330 0 10px,#33091f 10px 20px)}
+.px .stage .curtL{left:0;border-right:4px solid #1c0612}
+.px .stage .curtR{right:0;border-left:4px solid #1c0612}
+.px .stage .valance{position:absolute;left:0;right:0;top:0;height:26px;background:repeating-linear-gradient(90deg,#5a1738 0 24px,#3d0f27 24px 48px);border-bottom:4px solid #8b2a5a}
+.px .mem{flex:1 1 0;min-width:0;max-width:190px;display:flex;flex-direction:column;align-items:center;position:relative;transition:max-width .45s cubic-bezier(.2,.8,.2,1),opacity .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.px .mem.gone{max-width:0;opacity:0;transform:translateY(26px) scale(.7);pointer-events:none}
+@keyframes pop{0%{transform:scale(.4) translateY(20px);opacity:0}70%{transform:scale(1.08)}100%{transform:none;opacity:1}}
+.px .mem:not(.gone) .sp{animation:pop .5s cubic-bezier(.2,1.4,.3,1) both}
+.px .cone{position:absolute;left:50%;top:0;bottom:6px;width:150%;transform:translateX(-50%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);transition:opacity .35s;pointer-events:none}
+.px .sp{position:relative;width:100%;max-width:132px;aspect-ratio:112 / 140;z-index:1}
+.px .sp.big{flex:1 1 auto;max-width:none;width:auto;aspect-ratio:auto;min-height:380px;margin:18px 22px 18px 18px}
+.px .sp .body{position:absolute;left:6%;top:4%;width:72%;height:88%;box-sizing:border-box;border:3px dashed currentColor;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;font-family:'Press Start 2P',monospace;font-size:7px;line-height:1.5;background:rgba(10,13,26,.6);transform-origin:50% 100%;animation:breathe 3s ease-in-out infinite}
+.px .sp.big .body{font-size:11px;border-width:4px;gap:8px}
+.px .sp .ins{position:absolute;right:0;bottom:6%;width:38%;height:30%;box-sizing:border-box;border:3px dashed currentColor;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Press Start 2P',monospace;font-size:5px;line-height:1.4;background:rgba(10,13,26,.78);transform-origin:50% 100%}
+.px .sp.big .ins{font-size:8px;border-width:4px}
+.px .sp .pt{position:absolute;right:10%;top:0;opacity:0;font-family:'Press Start 2P',monospace;font-size:14px}
+.px .sp.big .pt{font-size:26px}
+.px .sp.off{opacity:.4;filter:grayscale(.7)}
+@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.035)}}
+@keyframes swayS{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes bounceI{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes waveM{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}}
+@keyframes hopY{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-14px) scaleY(1.06)}70%{transform:translateY(0) scaleY(.94)}}
+@keyframes stompL{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.px .sp-silbo.play .body{animation-name:swayS}
+.px .sp-inti.play .body{animation-name:bounceI;animation-timing-function:steps(2)}
+.px .sp-mama.play .body{animation-name:waveM}
+.px .sp-yaku.play .body{animation-name:hopY}
+.px .sp-illapa.play .body{animation-name:stompL;animation-timing-function:steps(2)}
+@keyframes mallA{0%{transform:rotate(-30deg)}100%{transform:rotate(0)}}
+@keyframes mallB{0%{transform:rotate(30deg)}100%{transform:rotate(0)}}
+@keyframes fluteA{0%{transform:translateY(-9px) rotate(-12deg)}100%{transform:none}}
+@keyframes fluteB{0%{transform:translateY(-9px) rotate(-12deg)}100%{transform:none}}
+@keyframes ringA{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
+@keyframes ringB{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
+@keyframes dropA{0%{transform:translateY(-18px)}60%{transform:translateY(5px)}100%{transform:none}}
+@keyframes dropB{0%{transform:translateY(-18px)}60%{transform:translateY(5px)}100%{transform:none}}
+@keyframes stickA{0%{transform:rotate(-38deg)}100%{transform:none}}
+@keyframes stickB{0%{transform:rotate(-38deg)}100%{transform:none}}
+@keyframes noteA{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes noteB{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
+.px .sp-inti.ha .ins{animation:mallA .28s ease-out}.px .sp-inti.hb .ins{animation:mallB .28s ease-out}
+.px .sp-silbo.ha .ins{animation:fluteA .5s ease-out}.px .sp-silbo.hb .ins{animation:fluteB .5s ease-out}
+.px .sp-mama.ha .ins{animation:ringA .8s ease-out}.px .sp-mama.hb .ins{animation:ringB .8s ease-out}
+.px .sp-yaku.ha .ins{animation:dropA .4s ease-out}.px .sp-yaku.hb .ins{animation:dropB .4s ease-out}
+.px .sp-illapa.ha .ins{animation:stickA .3s ease-out}.px .sp-illapa.hb .ins{animation:stickB .3s ease-out}
+.px .sp.ha .pt{animation:noteA .9s ease-out}.px .sp.hb .pt{animation:noteB .9s ease-out}
+@keyframes flashA{0%{opacity:.35}100%{opacity:0}}
+@keyframes flashB{0%{opacity:.35}100%{opacity:0}}
+@keyframes shA{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes shB{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.px .flash{position:absolute;inset:0;background:#E0459B;opacity:0;pointer-events:none;z-index:4}
+.px .flash.fl1{animation:flashA .45s ease-out}.px .flash.fl2{animation:flashB .45s ease-out}
+.px .shk.sh1{animation:shA .3s}.px .shk.sh2{animation:shB .3s}
+@media (max-width:640px){.px .clipname{display:none}.px .sp .body{font-size:5px}}
+.px .trans{position:fixed;inset:0;z-index:50;overflow:hidden;pointer-events:auto}
+.px .tbars{position:absolute;inset:0;display:flex}
+.px .tbar{flex:1 1 0;background:#0A0D1A;border-right:1px solid rgba(255,212,71,.22);transform:scaleY(0);transform-origin:top;animation:tbar .8s cubic-bezier(.65,0,.35,1) both}
+@keyframes tbar{0%{transform:scaleY(0)}30%{transform:scaleY(1)}70%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+.px .tscan{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px);opacity:0;animation:tlabel 1s ease both}
+.px .tlabel{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;opacity:0;animation:tlabel 1s ease both .05s}
+@keyframes tlabel{0%,22%{opacity:0}38%{opacity:1}62%{opacity:1}78%,100%{opacity:0}}
+.px .tsat{position:absolute;top:34%;left:0;width:144px;height:72px;animation:tsat 1.05s cubic-bezier(.45,.05,.55,.95) both}
+@keyframes tsat{from{transform:translate(-200px,16vh) rotate(-8deg)}to{transform:translate(calc(100vw + 80px),-14vh) rotate(-8deg)}}
+.px .ttrail{position:absolute;right:100%;top:50%;width:46vw;height:6px;margin-top:-3px;background:linear-gradient(90deg,transparent,rgba(255,138,43,.85),#FFD447)}
+@media (prefers-reduced-motion: reduce){.px *{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div class="px" style="min-height: 100vh; background: {{th.bg}}; color: {{th.fg}}; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: {{th.fs}}; line-height: 1.5">
+
+<sc-if value="{{showBg}}" hint-placeholder-val="{{ true }}">
+<div class="bgfix" aria-hidden="true">
+<div class="farstars"></div>
+<sc-for list="{{stars}}" as="s" hint-placeholder-count="70"><div style="position: absolute; {{s.st}}"></div></sc-for>
+<div class="sat"></div>
+<div class="shoot"></div>
+<div class="glow" style="background: radial-gradient(ellipse at 50% 100%, {{glowA}}, transparent 70%)"></div>
+<div class="planet" style="box-shadow: 0 -4px 0 {{glow}}, 0 -16px 56px {{glowSoft}}"></div>
+<div class="sweep"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
+<div class="trans" aria-hidden="true">
+<div class="tbars"><sc-for list="{{tbars}}" as="tb" hint-placeholder-count="14"><div class="tbar" style="animation-delay: {{tb.delay}}"></div></sc-for></div>
+<div class="tscan"></div>
+<div class="tlabel">
+<div style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.muted}}">PÁGINA {{transNum}}</div>
+<div style="font-family: {{th.pixelFont}}; font-size: 1.7em; color: {{th.accent}}; margin-top: 12px">{{transName}}</div>
+</div>
+<div class="tsat">
+<div class="ttrail"></div>
+<svg width="144" height="72" viewBox="0 0 24 12" shape-rendering="crispEdges" aria-hidden="true">
+<rect x="10" y="0" width="3" height="1" fill="#FFD447"></rect><rect x="11" y="1" width="1" height="2" fill="#BFD0FF"></rect>
+<rect x="0" y="4" width="8" height="4" fill="#2F6FE0"></rect><rect x="2" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="5" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="0" y="6" width="8" height="1" fill="#0A0D1A"></rect>
+<rect x="16" y="4" width="8" height="4" fill="#2F6FE0"></rect><rect x="18" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="21" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="16" y="6" width="8" height="1" fill="#0A0D1A"></rect>
+<rect x="8" y="5" width="1" height="2" fill="#E8ECFF"></rect><rect x="15" y="5" width="1" height="2" fill="#E8ECFF"></rect>
+<rect x="9" y="3" width="6" height="6" fill="#E8ECFF"></rect><rect x="9" y="7" width="6" height="2" fill="#AEB6DA"></rect><rect x="11" y="4" width="2" height="2" fill="#38C6E8"></rect>
+<rect x="11" y="9" width="2" height="1" fill="#FF8A2B"></rect>
+</svg>
+</div>
+</div>
+</sc-if>
+
+<div role="status" aria-live="polite" class="sr">Página: {{pageName}}</div>
+
+<div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 18px 24px 48px; display: flex; flex-direction: column; gap: 24px">
+
+<div class="rise" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 8px 14px; background: {{th.panel}}; border: 3px solid {{th.line}}">
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+<div role="img" aria-label="Espacio reservado para el logo oficial de NASA Space Apps Challenge" style="width: 140px; height: 40px; border: 3px dashed {{th.muted}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.4em; color: {{th.muted}}; line-height: 1.5">LOGO OFICIAL<br>NASA SPACE APPS</div>
+<span style="font-family: {{th.headFont}}; font-size: 1.05em">NASA Space Apps Challenge 2026 · Chiclayo</span>
+</div>
+<span style="font-size: 0.78em; color: {{th.muted}}">Reto 5 · The Earth Information Jukebox · Proyecto independiente, no respaldado por NASA</span>
+</div>
+
+<header class="rise d1" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}, inset 0 1px 0 rgba(255,255,255,0.07)">
+<div style="display: flex; align-items: center; gap: 14px">
+<div role="img" aria-label="Logo de Terrasonic: planeta Tierra con un satélite que emite ondas de sonido" style="position: relative; flex: 0 0 auto; width: 84px; height: 54px">
+<sc-for list="{{logoPx}}" as="p" hint-placeholder-count="150"><div style="position: absolute; width: 3px; height: 3px; {{p.st}}"></div></sc-for>
+</div>
+<div>
+<div style="font-family: {{th.pixelFont}}; font-size: 1.05em; letter-spacing: 0.04em; color: {{th.accent}}; line-height: 1.2">TERRASONIC</div>
+<div style="font-family: {{th.headFont}}; font-size: 1.05em; color: {{th.muted}}">Earth Information Jukebox</div>
+</div>
+</div>
+<nav aria-label="Páginas" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+<button type="button" onClick="{{t.go}}" aria-current="{{t.cur}}" style="display: flex; align-items: center; gap: 8px; font-family: {{th.headFont}}; font-size: 1.02em; padding: 8px 14px; min-height: 44px; border: 3px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}; box-shadow: 3px 3px 0 {{th.shadow}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{t.ic}}"></path></svg>{{t.label}}</button>
+</sc-for>
+</nav>
+<div role="group" aria-label="Accesibilidad" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{a11y}}" as="a" hint-placeholder-count="5">
+<button type="button" onClick="{{a.toggle}}" aria-pressed="{{a.on}}" aria-label="{{a.label}}" title="{{a.label}}" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 2px solid {{th.line}}; background: {{a.bg}}; color: {{a.fg}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{a.ic}}"></path></svg></button>
+</sc-for>
+</div>
+</header>
+
+<sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
+<section class="rise d2" aria-labelledby="hero" style="display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; justify-content: space-between">
+<div style="flex: 999 1 520px; min-width: 0">
+<p style="margin: 0 0 8px; font-family: {{th.pixelFont}}; font-size: 0.62em; color: {{th.hot}}; letter-spacing: 0.06em">NASA SPACE APPS 2026 · RETO 5 · EARTH INFORMATION JUKEBOX</p>
+<h1 id="hero" style="margin: 0; font-family: {{th.headFont}}; font-weight: 700; font-size: 2.9em; line-height: 1.05">Elige un disco. Escucha cómo se calienta el Pacífico.</h1>
+<p style="margin: 10px 0 0; color: {{th.muted}}; max-width: 70ch">Cada fotograma de anomalía de temperatura del mar de la NASA se escanea de oeste a este, columna por columna. Cada disco enciende a su protagonista; suma a los demás para armar la banda completa.</p>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isData}}" hint-placeholder-val="{{ false }}">
+<section class="rise d2" aria-labelledby="data-t" style="display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; justify-content: space-between">
+<div style="flex: 999 1 520px; min-width: 0">
+<p style="margin: 0 0 8px; font-family: {{th.pixelFont}}; font-size: 0.62em; color: {{th.hot}}; letter-spacing: 0.06em">TUS DATOS · TRADUCCIÓN EXPLORATORIA</p>
+<h1 id="data-t" style="margin: 0; font-family: {{th.headFont}}; font-weight: 700; font-size: 2.9em; line-height: 1.05">Convierte tu propio archivo en música.</h1>
+<p style="margin: 10px 0 0; color: {{th.muted}}; max-width: 70ch">Sube una imagen o una tabla CSV y la banda la escanea igual que a un fotograma de la NASA. Todo ocurre en tu navegador: el archivo no sale de tu equipo.</p>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{showMain}}" hint-placeholder-val="{{ true }}">
+<section class="rise d3" aria-label="Jukebox" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+
+<div style="flex: 1 1 300px; max-width: 360px; display: flex; flex-direction: column; gap: 12px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
+
+<sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0 0 2px; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">DISCOS</h2>
+<sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
+<button type="button" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="text-align: left; display: flex; gap: 12px; align-items: center; padding: 8px 10px; min-height: 52px; border: 3px solid {{d.border}}; background: {{d.bg}}; color: {{th.fg}}">
+<span aria-hidden="true" style="flex: 0 0 auto; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: {{d.color}}; color: #0A0D1A; border: 3px solid {{th.shadow}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{d.ic}}"></path></svg></span>
+<span style="display: flex; flex-direction: column; min-width: 0">
+<span style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.05em">{{d.title}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; color: {{th.muted}}">{{d.period}} · protagoniza {{d.hero}}</span>
+</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isData}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">TU ARCHIVO</h2>
+<label class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}" style="position: relative; color: {{th.fg}}; min-height: 150px">
+<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}">
+<svg width="30" height="30" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.data}}"></path></svg>
+<strong style="font-family: {{th.headFont}}; font-size: 1.15em">Suelta un archivo o pulsa aquí</strong>
+<span style="font-size: 0.8em; color: {{th.muted}}">Imagen (PNG, JPG, WebP) o CSV con una columna numérica. Máx. 8 MB.</span>
+</label>
+<button type="button" onClick="{{useSample}}" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 44px; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}; text-align: left"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.cold}}"><path d="{{ic.drop}}"></path></svg>Probar con la lluvia de Chiclayo (NASA POWER)</button>
+<sc-if value="{{isImageUp}}" hint-placeholder-val="{{ false }}">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85em">Cómo leer los colores
+<select onChange="{{onUpMode}}" value="{{customMode}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
+<option value="palette">Mapa de anomalía (paleta NASA)</option><option value="free">Color libre (cualquier imagen)</option>
+</select></label>
+</sc-if>
+<sc-if value="{{isCsvUp}}" hint-placeholder-val="{{ false }}">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85em">Columna a escuchar
+<select onChange="{{onCol}}" value="{{colIdx}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
+<sc-for list="{{colOpts}}" as="o" hint-placeholder-count="2"><option value="{{o.v}}">{{o.l}}</option></sc-for>
+</select></label>
+</sc-if>
+<p role="status" aria-live="polite" style="margin: 0; font-size: 0.8em; color: {{th.muted}}">{{upMsg}}</p>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 3px dashed {{th.line}}">
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">MOTOR DE SONIDO</h2>
+<div role="group" aria-label="Motor de sonido" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{engines}}" as="e" hint-placeholder-count="4">
+<button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" aria-label="{{e.label}}" title="{{e.label}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; min-height: 52px; border: 3px solid {{e.border}}; background: {{e.bg}}; color: {{e.fg}}; opacity: {{e.op}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{e.ic}}"></path></svg><span style="font-size: 0.68em">{{e.short}}</span></button>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 0.76em; color: {{th.muted}}">{{engineDesc}}</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 3px dashed {{th.line}}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">BANDA EN VIVO</h2>
+<div style="display: flex; gap: 6px">
+<button type="button" onClick="{{bandAll}}" aria-label="Banda completa" title="Banda completa" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.accent}}; background: transparent; color: {{th.accent}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.all}}"></path></svg></button>
+<button type="button" onClick="{{bandNone}}" aria-label="Apagar banda" title="Apagar banda" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.none}}"></path></svg></button>
+</div>
+</div>
+<p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
+<sc-for list="{{band}}" as="b" hint-placeholder-count="5">
+<button type="button" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" class="fx" style="display: flex; gap: 10px; align-items: center; min-height: 48px; padding: 6px 10px; border: 0; border-left: 4px solid {{b.btnBorder}}; background: {{b.rowBg}}; color: {{th.fg}}; text-align: left; opacity: {{b.rowOp}}">
+<svg width="22" height="22" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="flex: 0 0 auto; color: {{b.color}}"><path d="{{b.ic}}"></path></svg>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px"><span style="font-family: {{th.headFont}}; font-weight: 700; color: {{b.color}}">{{b.name}}</span><span aria-hidden="true" style="display: block; height: 4px; background: {{th.line}}"><span style="display: block; height: 4px; width: {{b.lvlW}}; background: {{b.color}}; transition: width 0.12s"></span></span></span>
+<svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="flex: 0 0 auto; color: {{b.pwColor}}"><path d="{{ic.none}}"></path></svg>
+</button>
+</sc-for>
+</div>
+
+<p style="margin: auto 0 0; font-size: 0.72em; color: {{th.muted}}">Fotogramas: visualización «Sea Surface Temperature Anomaly» del Earth Information Center de la NASA (SVS 5176, variante Pacífico), recortados. Crédito: NASA's Scientific Visualization Studio.</p>
+</div>
+
+<sc-if value="{{showPlayer}}" hint-placeholder-val="{{ true }}">
+<div style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-end">
+<div>
+<div style="font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.muted}}">DISCO {{disc.n}} · {{disc.title}} · {{frameCount}}</div>
+<div style="font-family: {{th.headFont}}; font-weight: 700; font-size: 2.3em; line-height: 1">{{frameLabel}}</div>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" class="{{playPulse}}" onClick="{{togglePlay}}" style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.15em; padding: 10px 22px; min-height: 52px; border: 4px solid {{th.shadow}}; background: {{th.accent}}; color: #0A0D1A; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; gap: 10px; align-items: center"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
+<button type="button" onClick="{{describe}}" aria-label="Describir fotograma" title="Describir fotograma" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}"><svg width="22" height="22" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.describe}}"></path></svg></button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 6px">
+<div style="position: relative; border: 4px solid {{th.shadow}}; background: #2A3157; aspect-ratio: 560 / 320; overflow: hidden">
+<img class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}" style="display: block; width: 100%; height: 100%; object-fit: cover">
+<div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; background: linear-gradient(90deg, rgba(255,212,71,0.04), rgba(255,212,71,0.38)); border-right: 3px solid {{th.accent}}; box-shadow: 0 0 16px {{th.accent}}; transition: left 110ms linear"></div>
+<sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 3px dashed {{silboBox}}; transition: border-color .4s"></div>
+<div aria-hidden="true" style="position: absolute; left: 76%; top: 84%; font-family: {{th.pixelFont}}; font-size: 0.45em; color: #0A0D1A; background: {{silboBox}}; padding: 3px 5px; transition: background-color .4s">CASA DE SILBO</div>
+</sc-if>
+<div aria-hidden="true" class="crt" style="position: absolute; inset: 0"></div>
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="arrow arrowL" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="Fotograma anterior" style="position: absolute; left: 8px; top: 50%; margin-top: -26px; z-index: 2; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border: 3px solid {{th.accent}}; background: rgba(10, 13, 26, 0.72); color: {{th.accent}}; padding: 0"><svg width="20" height="22" viewBox="0 0 8 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M6 0h2v1H6zM5 1h2v1H5zM4 2h2v1H4zM3 3h2v1H3zM2 4h2v1H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5zM6 8h2v1H6z"></path></svg></button>
+<button type="button" class="arrow arrowR" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="Fotograma siguiente" style="position: absolute; right: 8px; top: 50%; margin-top: -26px; z-index: 2; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border: 3px solid {{th.accent}}; background: rgba(10, 13, 26, 0.72); color: {{th.accent}}; padding: 0"><svg width="20" height="22" viewBox="0 0 8 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M0 0h2v1H0zM1 1h2v1H1zM2 2h2v1H2zM3 3h2v1H3zM4 4h2v1H4zM3 5h2v1H3zM2 6h2v1H2zM1 7h2v1H1zM0 8h2v1H0z"></path></svg></button>
+</sc-if>
+</div>
+<figcaption style="display: flex; justify-content: space-between; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></figcaption>
+</figure>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: {{th.pixelFont}}; font-size: 0.55em; color: {{th.muted}}">LO QUE OYE LA MÁQUINA · 28×16</div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(28, minmax(0, 1fr)); gap: 1px; background: {{th.shadow}}; border: 4px solid {{th.shadow}}">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="448">
+<div class="fxc" style="aspect-ratio: 1 / 1; background: {{c.bg}}; opacity: {{c.o}}"></div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em">
+<span title="Cálido" aria-label="Cálido {{stats.warm}}" style="display: flex; gap: 6px; align-items: center; color: {{th.hot}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.sun}}"></path></svg>{{stats.warm}}</span>
+<span title="Frío" aria-label="Frío {{stats.cold}}" style="display: flex; gap: 6px; align-items: center; color: {{th.cold}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.snow}}"></path></svg>{{stats.cold}}</span>
+<span title="Extremo" aria-label="Extremo {{stats.hot}}" style="display: flex; gap: 6px; align-items: center; color: {{th.magenta}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.bolt}}"></path></svg>{{stats.hot}}</span>
+<span title="Costa del Perú" aria-label="Costa del Perú {{stats.coast}}" style="display: flex; gap: 6px; align-items: center; color: {{th.accent}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.wave}}"></path></svg>{{stats.coast}}</span>
+</div>
+</div>
+
+<aside aria-label="Protagonista del disco" class="{{lead.pop}}" style="flex: 1 1 300px; max-width: 440px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-family: {{th.pixelFont}}; font-size: 0.5em; color: {{th.muted}}">PROTAGONISTA DEL DISCO</div>
+<div role="img" aria-label="{{lead.spriteAria}}" style="position: relative; flex: 1 1 auto; min-height: 420px; border: 4px solid {{lead.color}}; background: {{th.bg}}; box-shadow: 4px 4px 0 {{th.shadow}}, inset 0 0 48px {{lead.glow}}; overflow: hidden; display: flex; align-items: stretch">
+<div class="cone" aria-hidden="true" style="background: linear-gradient(180deg, {{lead.coneC}}, transparent); opacity: {{lead.coneOp}}; width: 120%"></div>
+<div class="sp big {{lead.cls}}" style="color: {{lead.color}}">
+<div class="body" style="animation-duration: {{lead.dur}}"><span>MODELO ANIME</span><span>DETALLADO</span><span>768×1152</span><span>POR GENERAR</span><span style="opacity: 0.8">clip: {{lead.clip}}</span></div>
+<div class="ins">{{lead.ins}}</div>
+<span class="pt">{{lead.glyph}}</span>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline">
+<span style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.4em; color: {{lead.color}}">{{lead.name}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.78em; color: {{th.muted}}">{{lead.state}}</span>
+</div>
+<div style="font-size: 0.9em; font-style: italic">«{{lead.quote}}»</div>
+<button type="button" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="padding: 8px 12px; min-height: 44px; border: 3px solid {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
+</aside>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: stretch">
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<span style="display: flex; align-items: center; gap: 6px; color: {{th.hot}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.eye}}"></path></svg><span class="sr">Lo que ves</span></span>
+<span style="font-size: 0.88em">{{seeText}}</span>
+</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 6px; color: {{th.cold}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.ears}}"></path></svg><span class="sr">Lo que oyes</span></span>
+<span style="font-size: 0.88em">{{hearText}}</span>
+<div aria-label="Progresión de acordes" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.82em; padding: 3px 10px; border: 2px solid {{c.border}}; background: {{c.bg}}; color: {{c.fg}}; transition: background-color .15s, color .15s">{{c.label}}</span></sc-for>
+</div>
+</div>
+</div>
+<details style="border-top: 2px dashed {{th.line}}; padding-top: 6px">
+<summary style="cursor: pointer; min-height: 32px; font-size: 0.85em; color: {{th.accent}}">Ver las cuatro decisiones</summary>
+<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; padding-top: 8px">
+<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-family: {{th.pixelFont}}; font-size: 0.5em; color: {{th.accent}}">{{w.tag}}</span>
+<strong style="font-family: {{th.headFont}}">{{w.title}}</strong>
+<span style="font-size: 0.8em; color: {{th.muted}}">{{w.body}}</span>
+</div>
+</sc-for>
+</div>
+</details>
+</div>
+
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<div role="group" aria-label="Fotogramas del disco" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
+<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}" style="padding: 0; border: 3px solid {{f.border}}; background: {{th.bg}}; color: {{th.fg}}; display: flex; flex-direction: column">
+<img class="pximg" src="{{f.url}}" alt="" style="display: block; width: 100%; aspect-ratio: 560 / 320; object-fit: cover">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; padding: 2px 0">{{f.label}}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+</sc-if>
+<label title="Velocidad del escaneo" style="display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 0.9em"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.clock}}"></path></svg><span class="sr">Velocidad del escaneo</span>
+<select onChange="{{onSpeed}}" value="{{speed}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
+<option value="180">Lenta</option><option value="110">Normal</option><option value="70">Rápida</option>
+</select></label>
+</div>
+<p role="status" aria-live="polite" style="margin: auto 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; padding: 4px 0 4px 10px; border-left: 4px solid {{th.accent}}">{{caption}}</p>
+</div>
+</sc-if>
+
+<sc-if value="{{dataEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
+<h2 style="margin: 0; font-family: {{th.headFont}}; font-size: 1.6em">Así se lee tu archivo</h2>
+<sc-for list="{{howData}}" as="h" hint-placeholder-count="3">
+<div class="fx" style="flex: 1 1 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 16px; background: {{th.bg}}; border: 3px solid {{h.color}}">
+<span style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{h.color}}">{{h.tag}}</span>
+<strong style="font-family: {{th.headFont}}; font-size: 1.3em">{{h.title}}</strong>
+<span style="color: {{th.muted}}">{{h.body}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+</section>
+
+<section class="rise d3" aria-label="Escenario de la banda" style="position: relative; overflow: hidden; display: flex; flex-direction: column; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}; background: #070914">
+<p role="status" aria-live="polite" class="sr">En el escenario: {{stageNames}}</p>
+<div class="shk {{shakeCls}}" style="position: relative; flex: 1 1 auto; display: flex; flex-direction: column; min-height: 360px">
+<div aria-hidden="true" class="stage">
+<img class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="" style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; object-fit: cover; opacity: 0.3; filter: saturate(1.4)">
+<div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; background: linear-gradient(180deg, rgba(7,9,20,0.1), #070914)"></div>
+<div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; overflow: hidden"><div style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; border-right: 3px solid {{th.accent}}; box-shadow: 0 0 14px {{th.accent}}; background: linear-gradient(90deg, transparent, rgba(255,212,71,0.2)); transition: left 110ms linear"></div></div>
+<div class="crt" style="position: absolute; inset: 0"></div>
+<div class="curtL"></div><div class="curtR"></div><div class="valance"></div><div class="floor"></div>
+</div>
+<div class="flash {{flashCls}}" aria-hidden="true"></div>
+<div role="group" aria-label="Músicos en escena" style="position: relative; z-index: 2; flex: 1 1 auto; display: flex; justify-content: space-evenly; align-items: flex-end; gap: 6px; padding: 60px 9% 30px">
+<sc-for list="{{stage}}" as="m" hint-placeholder-count="5">
+<div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}">
+<div class="cone" style="background: linear-gradient(180deg, {{m.coneC}}, transparent); opacity: {{m.coneOp}}"></div>
+<div class="sp {{m.cls}}" style="color: {{m.color}}">
+<div class="body" style="animation-duration: {{m.dur}}"><span>{{m.name}}</span><span class="clipname" style="opacity: 0.8">{{m.clip}}</span></div>
+<div class="ins">{{m.ins}}</div>
+<span class="pt">{{m.glyph}}</span>
+</div>
+<div style="margin-top: 8px; font-family: {{th.pixelFont}}; font-size: 0.55em; color: {{m.color}}; text-align: center">{{m.name}}</div>
+<div style="width: 70%; height: 4px; margin-top: 4px; background: {{th.line}}"><div style="height: 4px; width: {{m.lvPct}}; background: {{m.color}}; transition: width 0.12s"></div></div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{stageEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: none"><p style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; line-height: 1.9; color: {{th.muted}}; background: rgba(5,7,15,0.75); padding: 12px 16px; border: 3px dashed {{th.line}}">ESCENARIO VACÍO<br>Enciende a un personaje en «Banda en vivo»</p></div>
+</sc-if>
+<div style="position: relative; z-index: 3; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; padding: 8px 12px; background: rgba(5,7,15,0.85); border-top: 3px solid {{th.line}}; font-family: 'IBM Plex Mono', monospace; font-size: 0.78em">
+<span style="color: {{th.muted}}">EN ESCENA · {{stageNames}}</span>
+<span aria-hidden="true" style="display: flex; gap: 5px; align-items: center"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="width: 10px; height: 10px; background: {{bd.c}}; transition: background-color 0.08s"></span></sc-for></span>
+<span style="color: {{th.accent}}">{{chordHud}}</span>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isBand}}" hint-placeholder-val="{{ false }}">
+<section class="rise d2" aria-labelledby="band-t" style="display: flex; flex-direction: column; gap: 16px">
+<div style="max-width: 72ch">
+<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">PERSONAJES · CADA UNO ES UN CONJUNTO DE SONIDOS</p>
+<h1 id="band-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">La banda del Pacífico</h1>
+<p style="margin: 8px 0 0; color: {{th.muted}}">Cinco músicos con nombres de la cosmovisión andina y moche. Cada uno escucha un rasgo visual del fotograma y lo toca con su instrumento, y cada uno protagoniza un disco. Tendrán dos versiones: un modelo anime grande y un sprite de 32×32 (ver el plan, módulo M4). Aquí hay marcadores de posición.</p>
+</div>
+<div class="grid3">
+<sc-for list="{{band}}" as="b" hint-placeholder-count="5">
+<article class="fx rise" style="animation-delay: {{b.delay}}; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: {{th.panel}}; border: 4px solid {{b.color}}; box-shadow: 6px 6px 0 {{th.shadow}}">
+<div style="display: flex; gap: 14px; align-items: flex-end">
+<div style="flex: 0 0 auto; display: flex; gap: 10px; align-items: flex-end">
+<div role="img" aria-label="Marcador del modelo anime detallado de {{b.name}}" style="width: 104px; aspect-ratio: 2 / 3; border: 4px dashed {{b.color}}; background: {{th.bg}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.38em; color: {{b.color}}; line-height: 1.7">MODELO<br>DETALLADO<br>768×1152</div>
+<div role="img" aria-label="Marcador del sprite de 32 por 32 de {{b.name}}" style="width: 64px; height: 64px; border: 3px dashed {{b.color}}; background: {{th.bg}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.36em; color: {{b.color}}; line-height: 1.7">SPRITE<br>32×32</div>
+</div>
+<div>
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.95em; color: {{b.color}}">{{b.name}}</h2>
+<div style="font-size: 0.85em; color: {{th.muted}}">{{b.origin}}</div>
+</div>
+</div>
+<dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 0.9em">
+<dt style="color: {{th.muted}}">Protagoniza</dt><dd style="margin: 0">{{b.disc}}</dd>
+<dt style="color: {{th.muted}}">Escucha</dt><dd style="margin: 0">{{b.listens}}</dd>
+<dt style="color: {{th.muted}}">Toca</dt><dd style="margin: 0">{{b.plays}}</dd>
+<dt style="color: {{th.muted}}">Carácter</dt><dd style="margin: 0">{{b.persona}}</dd>
+<dt style="color: {{th.muted}}">Instrumento</dt><dd style="margin: 0">{{b.ins}}</dd>
+<dt style="color: {{th.muted}}">Animaciones</dt><dd style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em">{{b.clips}}</dd>
+</dl>
+<p style="margin: 0; font-style: italic; border-top: 2px dashed {{th.line}}; padding-top: 8px">«{{b.quote}}»</p>
+<p style="margin: auto 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}">Brief del sprite: {{b.brief}}</p>
+</article>
+</sc-for>
+<article class="fx rise" style="animation-delay: 0.4s; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.accent}}; box-shadow: 6px 6px 0 {{th.shadow}}">
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.95em; color: {{th.accent}}">BANDA COMPLETA</h2>
+<p style="margin: 0">Cada disco enciende solo a su protagonista. Aquí puedes juntar a los cinco y escucharlos tocar a la vez.</p>
+<button type="button" onClick="{{bandGo}}" style="padding: 10px 16px; min-height: 48px; border: 4px solid {{th.shadow}}; background: {{th.accent}}; color: #0A0D1A; font-family: {{th.headFont}}; font-weight: 700; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; gap: 10px; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.all}}"></path></svg>Armar la banda y escuchar</button>
+</article>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isHow}}" hint-placeholder-val="{{ false }}">
+<section class="rise d2" aria-labelledby="how-t" style="display: flex; flex-direction: column; gap: 18px">
+<div style="max-width: 72ch">
+<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">MÉTODO · DE LA IMAGEN AL SONIDO</p>
+<h1 id="how-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">Cómo suena un fotograma</h1>
+<p style="margin: 8px 0 0; color: {{th.muted}}">Todo ocurre en el navegador y en tiempo real, con Canvas y Web Audio. No hay modelos ni servidores: son reglas artísticas explícitas, así que cada sonido se puede explicar.</p>
+</div>
+<ol class="fillrow" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="7">
+<li class="fx rise" style="animation-delay: {{s.delay}}; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">{{s.n}}</span>
+<strong style="font-family: {{th.headFont}}; font-size: 1.15em">{{s.title}}</strong>
+<span style="font-size: 0.88em; color: {{th.muted}}">{{s.body}}</span>
+</li>
+</sc-for>
+</ol>
+<div style="padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}">
+<h2 style="margin: 0 0 10px; font-family: {{th.headFont}}; font-size: 1.3em">Paleta de la NASA → nivel → músico</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="10">
+<div style="display: flex; gap: 8px; align-items: center; font-size: 0.85em"><span aria-hidden="true" style="width: 22px; height: 22px; flex: 0 0 auto; background: {{l.c}}; border: 2px solid {{th.shadow}}"></span><span><strong>{{l.v}}</strong> · {{l.who}}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: {{th.headFont}}; font-size: 1.5em">Lo que pide el reto y dónde verlo</h2>
+<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px">
+<sc-for list="{{objectives}}" as="o" hint-placeholder-count="8">
+<button type="button" onClick="{{o.go}}" aria-label="{{o.goLabel}}: {{o.title}}" class="fx rise" style="text-align: left; display: flex; flex-direction: column; gap: 6px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}; color: {{th.fg}}">
+<span style="display: flex; justify-content: space-between; align-items: center"><span style="font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.accent}}">{{o.tag}}</span><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.arrow}}"></path></svg></span>
+<strong style="font-family: {{th.headFont}}; font-size: 1.1em">{{o.title}}</strong>
+<span style="font-size: 0.86em; color: {{th.muted}}">{{o.where}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isTech}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="tech-t" class="rise d2" style="display: flex; flex-direction: column; gap: 18px">
+<div style="max-width: 74ch">
+<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">STACK · QUÉ HAY DETRÁS</p>
+<h1 id="tech-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">Tecnología del prototipo</h1>
+<p style="margin: 8px 0 0; color: {{th.muted}}">Esto es lo que se usó para construir este boceto y lo que se usará en la versión final. Lo marcado como <strong style="color: {{th.fg}}">Planeado</strong> todavía no está hecho.</p>
+</div>
+<div role="group" aria-label="Filtrar tecnologías" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<sc-for list="{{techFilters}}" as="f" hint-placeholder-count="3">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; min-height: 44px; border: 3px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}; font-family: {{th.headFont}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{f.ic}}"></path></svg>{{f.label}}</button>
+</sc-for>
+<span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.8em; color: {{th.muted}}">{{techSummary}}</span>
+</div>
+<sc-for list="{{techGroups}}" as="g" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">{{g.title}}</h2>
+<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px">
+<sc-for list="{{g.items}}" as="t" hint-placeholder-count="3">
+<article class="fx rise" style="animation-delay: {{t.delay}}; display: flex; flex-direction: column; gap: 8px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}">
+<div style="display: flex; justify-content: space-between; gap: 8px; align-items: flex-start">
+<strong style="font-family: {{th.headFont}}; font-size: 1.1em">{{t.name}}</strong>
+<span style="flex: 0 0 auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.68em; padding: 3px 8px; background: {{t.chipBg}}; color: #0A0D1A; font-weight: 500">{{t.chip}}</span>
+</div>
+<span style="font-size: 0.9em; color: {{th.muted}}">{{t.use}}</span>
+<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 0.8em; padding: 6px 8px; border: 2px dashed {{th.line}}">{{t.note}}</span></sc-if>
+<span style="margin-top: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}">Módulo {{t.mod}}</span>
+</article>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="padding: 14px 16px; background: {{th.panel}}; border: 4px solid {{th.accent}}">
+<h2 style="margin: 0 0 6px; font-family: {{th.headFont}}; font-size: 1.2em">Declaración de uso de IA</h2>
+<p style="margin: 0; font-size: 0.92em">Este boceto se hizo con Claude Design y Claude Code, y la charla se transcribió con Whisper. ChatGPT Codex (funciones de código) y ChatGPT (imágenes) se usarán en la versión final. Todo código generado se revisa y se prueba antes de integrarlo, y toda imagen generada se retoca a mano y lleva una etiqueta visible. Cada uso queda anotado en el repositorio.</p>
+</div>
+</section>
+</sc-if>
+
+<footer style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; border-top: 4px solid {{th.line}}; padding-top: 14px; font-size: 0.8em; color: {{th.muted}}">
+<div style="flex: 1 1 380px; max-width: 72ch"><strong style="color: {{th.fg}}">Datos:</strong> fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</div>
+<div style="flex: 1 1 300px; max-width: 60ch"><strong style="color: {{th.fg}}">Uso de IA, declarado:</strong> boceto de interfaz y código generados con Claude (Anthropic) y revisados por el equipo. Los avatares finales (modelo anime y sprite 32×32) se generarán con ChatGPT y se retocarán a mano, y ChatGPT Codex programará algunas funciones de la versión final. Detalle en la página Tecnología.</div>
+</footer>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+var B = '/_blob/';
+var DISCS = [
+  { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.png", "fotogramas/inv2024_1.png", "fotogramas/inv2024_2.png", "fotogramas/inv2024_3.png", "fotogramas/inv2024_4.png", "fotogramas/inv2024_5.png"] },
+  { id: 'ver2025', n: '2', title: 'Verano 2024–25', period: 'nov 2024 – abr 2025', color: '#FF5A36', dates: ["2024-11-12", "2024-12-12", "2025-01-11", "2025-02-10", "2025-03-12", "2025-04-11"], files: ["fotogramas/ver2025_0.png", "fotogramas/ver2025_1.png", "fotogramas/ver2025_2.png", "fotogramas/ver2025_3.png", "fotogramas/ver2025_4.png", "fotogramas/ver2025_5.png"] },
+  { id: 'inv2025', n: '3', title: 'Invierno 2025', period: 'may 2025 – oct 2025', color: '#FFD447', dates: ["2025-05-11", "2025-06-10", "2025-07-10", "2025-08-09", "2025-09-08", "2025-10-08"], files: ["fotogramas/inv2025_0.png", "fotogramas/inv2025_1.png", "fotogramas/inv2025_2.png", "fotogramas/inv2025_3.png", "fotogramas/inv2025_4.png", "fotogramas/inv2025_5.png"] },
+  { id: 'ver2026', n: '4', title: 'Verano 2025–26', period: 'nov 2025 – abr 2026', color: '#7BE38A', dates: ["2025-11-07", "2025-12-07", "2026-01-06", "2026-02-05", "2026-03-07", "2026-04-06"], files: ["fotogramas/ver2026_0.png", "fotogramas/ver2026_1.png", "fotogramas/ver2026_2.png", "fotogramas/ver2026_3.png", "fotogramas/ver2026_4.png", "fotogramas/ver2026_5.png"] },
+  { id: 'inv2026', n: '5', title: 'Invierno 2026', period: 'may 2026 – oct 2026', color: '#E0459B', dates: ["2026-05-06", "2026-06-05", "2026-07-05", "2026-08-04", "2026-09-03", "2026-10-03"], files: ["fotogramas/inv2026_0.png", "fotogramas/inv2026_1.png", "fotogramas/inv2026_2.png", "fotogramas/inv2026_3.png", "fotogramas/inv2026_4.png", "fotogramas/inv2026_5.png"] }
+];
+DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] });
+var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
+var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+var MESC = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+var PAGES = { juke: ['01', 'JUKEBOX'], band: ['02', 'LA BANDA'], data: ['03', 'TUS DATOS'], how: ['04', 'CÓMO SUENA'], tech: ['05', 'TECNOLOGÍA'] };
+var BAND = [
+  { k: 'silbo', name: 'SILBO', color: '#FFD447', disc: 'Invierno 2025', glyph: '♪', ins: 'FLAUTA', clip: 'tocar_flauta', clips: 'idle · tocar_flauta · nota · motivo_silbo · aparecer / salir', origin: 'Huaco silbador moche, 1500 años', listens: 'Solo el recuadro de la costa norte del Perú (82°–76°O, 3°–18°S).', plays: 'Un silbido de vasija con vibrato. Aparece cuando la costa supera el nivel +2.', persona: 'Viejo, sabio, de pocas palabras. Es el narrador y el que da la alarma.', quote: 'Cuando yo silbo, en Chiclayo va a llover.', brief: 'botella silbadora moche de barro ocre con asa puente, ojos pequeños, gotas de agua saliendo de su pico; 3 frames de reposo y 2 de silbido.' },
+  { k: 'inti', name: 'INTI', color: '#FF5A36', disc: 'Verano 2024–25', glyph: '♫', ins: 'MARIMBA', clip: 'tocar_marimba', clips: 'idle · tocar_marimba · golpe_izq / golpe_der · acento · aparecer / salir', origin: 'El sol, en quechua', listens: 'El promedio de los píxeles cálidos (amarillo → rojo) de cada grupo de 4 columnas.', plays: 'Acordes de marimba: Do, Fa, Sol y, si hace demasiado calor, Mi mayor tenso.', persona: 'Entusiasta y ruidoso. A veces se emociona demasiado.', quote: '¡Más calor, más fiesta! …¿no?', brief: 'sol pixelado con rayos escalonados y cara expresiva, paleta amarillo-naranja-rojo; brilla más con la intensidad.' },
+  { k: 'mama', name: 'MAMACOCHA', color: '#38C6E8', disc: 'Invierno 2024', glyph: '♩', ins: 'BAJO + COLCHÓN', clip: 'tocar_pad', clips: 'idle · tocar_pad · acorde · apagarse · aparecer / salir', origin: 'Madre del mar en la cosmovisión andina', listens: 'El promedio de los píxeles fríos (verde → azul) del fotograma.', plays: 'Un bajo profundo y calmado. En La Niña domina; en El Niño casi desaparece.', persona: 'Tranquila y protectora. Cuando ella calla, algo anda mal.', quote: 'Mientras yo cante, el mar está en calma.', brief: 'figura femenina hecha de olas en azul y turquesa, cabello de espuma; se encoge cuando el agua se calienta.' },
+  { k: 'yaku', name: 'YAKU', color: '#7BE38A', disc: 'Verano 2025–26', glyph: '▾', ins: 'GOTERO', clip: 'saltar', clips: 'idle · saltar · gota · salpicadura · aparecer / salir', origin: 'El agua, en quechua', listens: 'Cuántas celdas de cada columna tienen anomalía fuerte (±2 o más) y en qué latitud.', plays: 'Gotas en escala pentatónica andina: más al norte, más agudas.', persona: 'Inquieto y travieso. Nunca se queda quieto.', quote: '¡Plic, plic! Te digo dónde está pasando algo.', brief: 'gotita de agua con patas, ojos grandes y brillo pixelado; salta al ritmo.' },
+  { k: 'illapa', name: 'ILLAPA', color: '#E0459B', disc: 'Invierno 2026', glyph: '✦', ins: 'TIMBAL', clip: 'latido', clips: 'idle · latido · trueno · aparecer / salir', origin: 'Rayo y trueno en la cosmovisión andina', listens: 'Los píxeles de anomalía extrema (rojo oscuro y magenta) de cada columna.', plays: 'Truenos graves. Solo aparece cuando una columna supera un 25 % de valores extremos.', persona: 'Aparece poco, pero cuando llega todos callan.', quote: 'No me llames. Si vengo, es en serio.', brief: 'guerrero de tormenta con honda y rayo zigzag magenta; nube oscura detrás; frame de destello.' }
+];
+var TECH = [
+  { cat: 'Interfaz y código', name: 'HTML + CSS + JavaScript', use: 'Base del prototipo y de la app final. Sin frameworks ni servidor.', st: 'done', mod: 'M6' },
+  { cat: 'Interfaz y código', name: 'Web Audio API', use: 'Sintetiza la banda en tiempo real: marimba, bajo, gotas, truenos y el silbido.', st: 'done', mod: 'M3' },
+  { cat: 'Interfaz y código', name: 'Canvas 2D (getImageData)', use: 'Lee los píxeles de cada fotograma y de tus imágenes: visión por computadora sin librerías.', st: 'done', mod: 'M2' },
+  { cat: 'Interfaz y código', name: 'Web Speech API', use: 'Narración y «Describir fotograma» en español.', st: 'done', mod: 'M5' },
+  { cat: 'Interfaz y código', name: 'Vibration API', use: 'Vibración en el móvil con los truenos y las gotas densas.', st: 'done', mod: 'M5' },
+  { cat: 'Interfaz y código', name: 'FileReader y Blob', use: 'Lee tus imágenes y CSV dentro del navegador, sin subirlos a ningún servidor.', st: 'done', mod: 'M4' },
+  { cat: 'Interfaz y código', name: 'Animaciones CSS', use: 'Fondo espacial, transición de página con satélite, escenario de la banda y efectos de la interfaz.', st: 'done', mod: 'M4' },
+  { cat: 'Interfaz y código', name: 'Press Start 2P, Pixelify Sans, IBM Plex', use: 'Tipografías de la identidad retro y del texto legible (Google Fonts).', st: 'done', mod: 'M4' },
+  { cat: 'Interfaz y código', name: 'Tone.js', use: 'Opcional para el motor de sonido final. El prototipo usa Web Audio puro.', st: 'plan', mod: 'M3' },
+  { cat: 'Interfaz y código', name: 'GitHub (repositorio)', use: 'Repositorio público, una rama por módulo y revisión de cambios entre compañeros.', st: 'done', mod: 'M6' },
+  { cat: 'Interfaz y código', name: 'GitHub Pages', use: 'Publicación de la versión final con una URL pública.', st: 'plan', mod: 'M6' },
+  { cat: 'Datos de la NASA', name: 'EIC · SST Anomaly (SVS 5176)', use: 'Los 30 fotogramas de los 5 discos, extraídos del video oficial del EIC «SST Anomaly» (SVS 5176, Pacífico).', st: 'done', mod: 'M1' },
+  { cat: 'Datos de la NASA', name: 'NASA POWER API', use: 'Lluvia y temperatura mensuales (1981–2024) de Chiclayo, Galápagos e Iquitos. Alimenta el ejemplo de «Tus datos».', st: 'done', mod: 'M1' },
+  { cat: 'Datos de la NASA', name: 'Galería del Earth Information Center (SVS)', use: 'Fuente oficial de las visualizaciones. Los discos extra saldrán de SVS 5207 y 4897.', st: 'plan', mod: 'M1' },
+  { cat: 'Datos de la NASA', name: 'ffmpeg', use: 'Recortar y reducir los fotogramas del video del EIC (y los de los discos extra).', st: 'done', mod: 'M1' },
+  { cat: 'Música y sonido', name: 'Compositor por reglas (teoría musical)', use: 'Una tonalidad, un tempo y una progresión de acordes por personaje. La melodía sale de los datos y se ajusta al acorde en los tiempos fuertes.', st: 'done', mod: 'M3' },
+  { cat: 'Música y sonido', name: 'ConvolverNode (reverb)', use: 'Reverberación generada en el navegador para que el sonido sea más cálido y agradable.', st: 'done', mod: 'M3' },
+  { cat: 'Música y sonido', name: 'Tonal.js', use: 'Biblioteca de teoría musical (escalas, acordes, modos) para ampliar el compositor en la versión final.', st: 'plan', mod: 'M3' },
+  { cat: 'Música y sonido', name: 'Magenta.js (MusicRNN)', use: 'IA que corre en el navegador para variar o continuar la melodía. Alimentaría la opción «IA en el navegador».', note: 'Verificar versión, tamaño del modelo y mantenimiento antes de integrarla.', st: 'plan', mod: 'M3' },
+  { cat: 'Música y sonido', name: 'Lyria RealTime (Gemini API)', use: 'Música generada por IA en tiempo real por WebSocket, guiada por texto, tempo, escala y densidad. Es experimental y solo instrumental.', note: 'Necesita clave de API: no puede ir en una web estática, haría falta un servidor intermediario. No es parte del MVP.', st: 'plan', mod: 'M3' },
+  { cat: 'Música y sonido', name: 'Stable Audio / ElevenLabs Music', use: 'Pistas pregeneradas para la playlist de respaldo y el video, con prompts derivados de los datos.', note: 'No es en tiempo real ni traduce los datos 1:1. Revisar licencias y declarar el uso de IA.', st: 'plan', mod: 'M5' },
+  { cat: 'IA y herramientas', name: 'Claude Design (Anthropic)', use: 'Crear este boceto interactivo: interfaz, analizador y sonido.', st: 'done', mod: 'Todos' },
+  { cat: 'IA y herramientas', name: 'Claude Code (Anthropic)', use: 'Plan, análisis del audio y del reto, cálculos con NASA POWER y estructura del repositorio.', st: 'done', mod: 'Todos' },
+  { cat: 'IA y herramientas', name: 'Whisper (OpenAI, en local)', use: 'Transcribir la charla de orientación para extraer los requerimientos.', st: 'done', mod: 'M5' },
+  { cat: 'IA y herramientas', name: 'ChatGPT Codex (OpenAI)', use: 'Programar ciertas funciones de la versión final, por ejemplo exportar .wav, pruebas del analizador y la animación por capas de los avatares.', note: 'Cada función generada se revisa en un cambio aparte y se prueba antes de integrarla. Se anota en el repositorio.', st: 'plan', mod: 'M2–M4' },
+  { cat: 'IA y herramientas', name: 'ChatGPT · generación de imágenes', use: 'Conceptos de los 5 avatares: modelo anime detallado y sprite 32×32.', note: 'Confirmar la herramienta exacta y sus condiciones de uso antes de generar. Retoque a mano y etiqueta «generado con IA».', st: 'plan', mod: 'M4' },
+  { cat: 'IA y herramientas', name: 'Krita / Piskel', use: 'Repintar, separar en capas y ajustar los avatares y sprites.', st: 'plan', mod: 'M4' },
+  { cat: 'IA y herramientas', name: 'ElevenLabs (opcional)', use: 'Voz de la narración del video, si la voz del navegador suena muy robótica.', st: 'plan', mod: 'M5' }
+];
+var OBJ = [
+  { tag: 'EMPAREJAR', title: 'Fotogramas del EIC + sonido en tiempo real', where: 'Cada fotograma suena mientras el cabezal lo escanea, columna por columna.', page: 'juke' },
+  { tag: 'ELEGIR', title: 'Elegir una visualización y oírla', where: 'Cinco discos, una tira de fotogramas y flechas para saltar de mes.', page: 'juke' },
+  { tag: 'DE LA VISTA AL OÍDO', title: 'Del color al sonido', where: 'La cuadrícula «Lo que oye la máquina» muestra qué lee el algoritmo, y «Por qué suena así» lo explica.', page: 'juke' },
+  { tag: 'MUSICAL', title: 'Agradable, no ruido', where: 'El motor Melodía usa escalas, acordes y una progresión por disco, no píxeles convertidos a tonos al azar.', page: 'juke' },
+  { tag: 'ACCESIBLE', title: 'Para personas ciegas o con baja visión', where: 'Descripción por voz, subtítulos de sonido, vibración, teclado, alto contraste y texto grande.', page: 'juke' },
+  { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen o un CSV y suena con la misma banda.', page: 'data' },
+  { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cada disco tiene un protagonista con personalidad. Mamacocha se apaga cuando el mar se calienta. El escenario muestra quién toca en cada momento.', page: 'band' },
+  { tag: 'PROCESO', title: 'Documentar el método', where: 'La página Tecnología explica herramientas, datos y uso de IA, con lo hecho y lo planeado.', page: 'tech' }
+];
+var STEPS = [
+  { n: '01', title: 'Fotograma EIC', body: 'Imagen de anomalía de temperatura del mar de la visualización del EIC, un fotograma cada 30 días.' },
+  { n: '02', title: 'Cuadrícula 28×16', body: 'Se reduce a 448 celdas con Canvas (getImageData). La tierra se ignora.' },
+  { n: '03', title: 'Color → nivel', body: 'Cada color de la paleta de la NASA se convierte en un nivel de −5 (muy frío) a +5 (muy cálido).' },
+  { n: '04', title: 'Escaneo oeste → este', body: 'Un cabezal recorre las 28 columnas. Cada columna es un paso del ritmo.' },
+  { n: '05', title: 'Cinco músicos', body: 'Inti, Mamacocha, Yaku, Illapa y Silbo convierten esos niveles en acordes, bajo, gotas, truenos y silbidos. En modo Melodía, todos tocan en la tonalidad y la progresión del disco.' },
+  { n: '06', title: 'Para todos', body: 'Subtítulos de sonido, descripción por voz, vibración, teclado y alto contraste.' },
+  { n: '07', title: 'Tus datos', body: 'Sube una imagen o un CSV. Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Se procesa en tu navegador.' },
+  { n: '08', title: 'Un protagonista por disco', body: 'Cada disco enciende a su personaje. Suma a los demás para armar la banda completa.' }
+];
+var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
+var CHORDS = { Am: [[220,261.63,329.63],110], C: [[261.63,329.63,392],130.81], F: [[174.61,220,261.63],87.31], G: [[196,246.94,293.66],98], E: [[164.81,207.65,246.94],82.41] };
+var PENTA = [0,3,5,7,10];
+var ICONS = {
+  juke: ['..XXXX..', '.XX..XX.', 'XX.XX.XX', 'X.XXXX.X', 'X.XXXX.X', 'XX.XX.XX', '.XX..XX.', '..XXXX..'],
+  band: ['..XXXXXX', '..X....X', '..X....X', '..X....X', 'XXX..XXX', 'XXX..XXX', '........', '........'],
+  data: ['...XX...', '..XXXX..', '.XXXXXX.', '...XX...', '...XX...', '...XX...', 'XXXXXXXX', 'XXXXXXXX'],
+  how: ['.XXXXXX.', 'XX....XX', '......XX', '....XXX.', '...XX...', '........', '...XX...', '...XX...'],
+  tech: ['XXXXXXXX', 'X......X', 'X.X....X', 'X..X...X', 'X.X....X', 'X..XXX.X', 'X......X', 'XXXXXXXX'],
+  contrast: ['..XXXX..', '.XXX..X.', 'XXXX...X', 'XXXX...X', 'XXXX...X', 'XXXX...X', '.XXX..X.', '..XXXX..'],
+  bigtext: ['..XXXX..', '.XX..XX.', '.XX..XX.', '.XXXXXX.', '.XX..XX.', '.XX..XX.', '.XX..XX.', '........'],
+  legible: ['........', '..XXXX..', '.....XX.', '..XXXXX.', '.XX..XX.', '.XX..XX.', '..XXXXX.', '........'],
+  voice: ['...X....', '..XX..X.', 'XXXX...X', 'XXXX.X.X', 'XXXX.X.X', 'XXXX...X', '..XX..X.', '...X....'],
+  vibe: ['..XXXX..', 'X.X..X.X', 'X.X..X.X', '..X..X..', 'X.X..X.X', 'X.X..X.X', '..XXXX..', '..XXXX..'],
+  describe: ['XXXXXXXX', 'X......X', 'X.XXXX.X', 'X......X', 'X.XXX..X', 'XXXXXXXX', '..XX....', '..X.....'],
+  all: ['......X.', '..X...X.', '..X.X.X.', '..X.X.X.', 'X.X.X.X.', 'X.X.X.X.', 'X.X.X.X.', 'X.X.X.X.'],
+  none: ['...XX...', '.X.XX.X.', 'X..XX..X', 'X..XX..X', 'X......X', '.X....X.', '..XXXX..', '........'],
+  melody: ['...XXXX.', '...X....', '...X....', '...X....', 'XX.X....', 'XXXX....', 'XX......', '........'],
+  raw: ['...X....', '...X..X.', 'X..X..X.', 'X.XXX.X.', 'X.XXXXX.', 'XXXXXXXX', 'XXXXXXXX', '........'],
+  chip: ['..X..X..', '.XXXXXX.', 'XX....XX', '.X.XX.X.', '.X.XX.X.', 'XX....XX', '.XXXXXX.', '..X..X..'],
+  cloud: ['........', '..XXX...', '.XXXXXX.', 'XXXXXXXX', 'XXXXXXXX', '.XXXXXX.', '........', '........'],
+  f_all: ['XXX.XXX.', 'XXX.XXX.', 'XXX.XXX.', '........', 'XXX.XXX.', 'XXX.XXX.', 'XXX.XXX.', '........'],
+  f_done: ['......XX', '.....XX.', 'X...XX..', 'XX.XX...', '.XXX....', '..X.....', '........', '........'],
+  f_plan: ['XXXXXXXX', '.XXXXXX.', '..XXXX..', '...XX...', '...XX...', '..X..X..', '.X....X.', 'XXXXXXXX'],
+  eye: ['........', '..XXXX..', '.X....X.', 'X..XX..X', 'X..XX..X', '.X....X.', '..XXXX..', '........'],
+  ears: ['..XXXX..', '.X....X.', 'X......X', 'X......X', 'XXX..XXX', 'XXX..XXX', 'XXX..XXX', '........'],
+  sun: ['...XX...', '........', '..XXXX..', 'X.XXXX.X', 'X.XXXX.X', '..XXXX..', '........', '...XX...'],
+  snow: ['...XX...', 'X..XX..X', '.X.XX.X.', '..XXXX..', '..XXXX..', '.X.XX.X.', 'X..XX..X', '...XX...'],
+  bolt: ['....XX..', '...XX...', '..XX....', '.XXXXX..', '...XX...', '..XX....', '.XX.....', 'X.......'],
+  wave: ['........', '........', '.XX..XX.', 'X..XX..X', '........', '.XX..XX.', 'X..XX..X', '........'],
+  flute: ['......XX', '.....XX.', '....XX..', '...XX...', '..XX....', '.XX.....', 'XX......', 'X.......'],
+  marimba: ['........', 'XXXXXXXX', '........', '.XXXXXX.', '........', '..XXXX..', '........', '........'],
+  harp: ['XXXXX...', 'X.X.XX..', 'X.X..X..', 'X.X..XX.', 'X.X...X.', 'X.X...X.', 'XXXXXXXX', '........'],
+  drop: ['...X....', '...X....', '..XXX...', '.XXXXX..', '.XXXXX..', '.XXXXX..', '..XXX...', '........'],
+  drum: ['........', 'XXXXXXXX', 'X......X', 'X.XXXX.X', 'X.XXXX.X', 'X......X', 'XXXXXXXX', '........'],
+  arrow: ['........', '...X....', '...XX...', 'XXXXXXX.', '...XX...', '...X....', '........', '........'],
+  clock: ['..XXXX..', '.X.XX.X.', 'X..XX..X', 'X..XXX.X', 'X......X', 'X......X', '.X....X.', '..XXXX..']
+};
+var INS_ICON = { silbo: 'flute', inti: 'marimba', mama: 'harp', yaku: 'drop', illapa: 'drum' };
+var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
+var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11] };
+var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7' };
+var MUSIC = {
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'mayor', root: 52, scale: [0, 2, 4, 5, 7, 9, 11], bpm: 108, prog: [[0, 'maj'], [7, 'maj'], [9, 'min'], [5, 'maj']], story: 'el calor y la energía de un océano rojo' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], story: 'el juego de las gotas de lluvia' },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 84, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], story: 'la tensión de la tormenta' }
+};
+
+function hsv(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  var mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, h = 0;
+  if (d) { if (mx === r) h = ((g - b) / d) % 6; else if (mx === g) h = (b - r) / d + 2; else h = (r - g) / d + 4; h *= 60; if (h < 0) h += 360; }
+  return [h, mx ? d / mx : 0, mx];
+}
+// Escala de color oficial del EIC (SVS 5176): de −4 °C a +4 °C, una muestra cada 0,25 °C. Nivel = °C × 1,25 (−5…+5).
+var EIC_SCALE = [[0,35,63],[0,44,79],[0,53,97],[1,67,119],[0,82,142],[1,100,168],[5,117,191],[3,129,203],[0,139,208],[0,149,215],[51,161,220],[90,175,229],[121,190,232],[145,201,238],[166,211,244],[185,219,246],[227,227,229],[255,227,187],[250,216,168],[243,200,147],[234,184,131],[225,169,118],[213,151,102],[203,134,92],[194,116,80],[185,90,68],[170,70,55],[154,55,50],[138,47,46],[123,43,46],[105,36,41],[86,30,33],[74,25,28]];
+function isLand(r, g, b) { var mx = Math.max(r, g, b), mn = Math.min(r, g, b); return mx - mn < 22 && mx < 175; }
+function score(r, g, b) {
+  var best = 0, dmin = Infinity;
+  for (var i = 0; i < EIC_SCALE.length; i++) { var e = EIC_SCALE[i], dd = (r - e[0]) * (r - e[0]) + (g - e[1]) * (g - e[1]) + (b - e[2]) * (b - e[2]); if (dd < dmin) { dmin = dd; best = i; } }
+  return (best - 16) / 4 * 1.25;
+}
+function freeScore(r, g, b) {
+  var q = hsv(r, g, b), h = q[0], s = q[1], v = q[2];
+  if (s < 0.12 || v < 0.12) return (v - 0.5) * 2;
+  return Math.cos((h - 30) * Math.PI / 180) * (0.35 + 0.65 * s) * (0.3 + 0.7 * v) * 5;
+}
+function rampColor(v) { var best = RAMP[0]; RAMP.forEach(function (p) { if (Math.abs(p[0] - v) < Math.abs(best[0] - v)) best = p; }); return best[1]; }
+function iconPath(rows) {
+  var d = '';
+  rows.forEach(function (r, y) {
+    var x = 0;
+    while (x < r.length) {
+      if (r[x] !== 'X') { x++; continue; }
+      var x2 = x; while (x2 + 1 < r.length && r[x2 + 1] === 'X') x2++;
+      d += 'M' + x + ' ' + y + 'h' + (x2 - x + 1) + 'v1h-' + (x2 - x + 1) + 'z'; x = x2 + 1;
+    }
+  });
+  return d;
+}
+function makeIcons() { var o = {}; Object.keys(ICONS).forEach(function (k) { o[k] = iconPath(ICONS[k]); }); return o; }
+function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function chordOf(prof, ch) { var r = prof.root + ch[0]; return { root: r, notes: QUAL[ch[1]].map(function (i) { return r + i; }), label: NOTE_ES[r % 12] + SUF[ch[1]] }; }
+function scaleMidi(sc, root, deg) { var L = sc.length, oct = Math.floor(deg / L), idx = ((deg % L) + L) % L; return root + sc[idx] + 12 * oct; }
+function snapChord(midi, notes) {
+  var pcs = notes.map(function (n) { return n % 12; }), ds = [0, -1, 1, -2, 2];
+  for (var i = 0; i < ds.length; i++) if (pcs.indexOf(((midi + ds[i]) % 12 + 12) % 12) >= 0) return midi + ds[i];
+  return midi;
+}
+function pentOf(prof) { return prof.scale.indexOf(3) >= 0 ? [0, 3, 5, 7, 10] : [0, 2, 4, 7, 9]; }
+function makeStars() {
+  var out = [], seed = 7;
+  function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  for (var i = 0; i < 70; i++) {
+    var sz = rnd() < 0.2 ? 3 : 2, tint = rnd();
+    out.push({ st: 'left:' + (rnd() * 100).toFixed(1) + '%;top:' + (rnd() * 78).toFixed(1) + '%;width:' + sz + 'px;height:' + sz + 'px;background:' + (tint < 0.6 ? '#FFFFFF' : tint < 0.8 ? '#BFD0FF' : '#FFE9A8') + ';animation:twinkle ' + (2 + rnd() * 4).toFixed(1) + 's steps(2) infinite;animation-delay:-' + (rnd() * 6).toFixed(1) + 's' });
+  }
+  return out;
+}
+function makeLogo() {
+  var W = 28, H = 18, cx = 9, cy = 9, R = 6.6, g = {}, x, y, t;
+  function put(px, py, c) { if (px >= 0 && py >= 0 && px < W && py < H) g[px + ',' + py] = c; }
+  for (y = 0; y < H; y++) for (x = 0; x < W; x++) {
+    var dx = x + 0.5 - cx, dy = y + 0.5 - cy;
+    if (Math.sqrt(dx * dx + dy * dy) <= R) {
+      var land = (Math.sin(x * 1.3 + y * 0.7) + Math.sin(y * 1.9 - x * 0.45)) > 0.95, shade = (dx + dy) > 3;
+      put(x, y, land ? (shade ? '#3E9A58' : '#7BE38A') : (shade ? '#1F2F9E' : '#2F6FE0'));
+    }
+  }
+  var phi = -0.35, a = 9.4, b = 2.8;
+  for (t = 0; t < 6.2832; t += 0.03) {
+    var ex = cx + a * Math.cos(t) * Math.cos(phi) - b * Math.sin(t) * Math.sin(phi);
+    var ey = cy + a * Math.cos(t) * Math.sin(phi) + b * Math.sin(t) * Math.cos(phi);
+    var behind = Math.sin(t) < 0 && Math.sqrt((ex - cx) * (ex - cx) + (ey - cy) * (ey - cy)) < R;
+    if (!behind) put(Math.floor(ex), Math.floor(ey), '#F4EFE6');
+  }
+  var sx = cx + a * Math.cos(phi), sy = cy + a * Math.sin(phi);
+  [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (o) { put(Math.floor(sx) + o[0], Math.floor(sy) + o[1], '#FFFFFF'); });
+  [[3, '#FFD447'], [5.6, '#FF8A2B'], [8.2, '#E8283A']].forEach(function (w) {
+    for (y = 0; y < H; y++) for (x = 0; x < W; x++) {
+      var wx = x + 0.5 - sx, wy = y + 0.5 - sy, d = Math.sqrt(wx * wx + wy * wy);
+      if (Math.abs(d - w[0]) < 0.6 && wx > 0 && Math.abs(Math.atan2(wy, wx)) < 0.85) put(x, y, w[1]);
+    }
+  });
+  return Object.keys(g).map(function (k) { var p = k.split(','); return { st: 'left:' + (p[0] * 3) + 'px;top:' + (p[1] * 3) + 'px;background:' + g[k] }; });
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'juke', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+      trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
+      mute: { silbo: true, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
+      caption: 'Elige un disco y pulsa Reproducir. La banda empieza apagada: cada disco enciende a su protagonista.' };
+    this.timer = null; this.ac = null; this.lastThunder = -9; this.tm = []; this.melDeg = null;
+    this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
+    this.tbars = []; for (var i = 0; i < 14; i++) this.tbars.push({ delay: (i * 0.02).toFixed(2) + 's' });
+  }
+  componentDidMount() { this.loadDisc(this.state.disc); }
+  componentWillUnmount() { this.stop(); this.tm.forEach(clearTimeout); if (this.ac) this.ac.close(); }
+  url(d, f) { if (d === 5) return this.state.custom ? this.state.custom.url : ''; return DISCS[d].files[f]; }
+  frameDate(d, f) { var dt = DISCS[d].dates && DISCS[d].dates[f]; if (dt) { var q = dt.split('-'); return { m: +q[1] - 1, y: +q[0] }; } var s = DISCS[d].start, m = s[1] + f, y = s[0] + Math.floor(m / 12); return { m: m % 12, y: y }; }
+  only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
+  allMute(v) { var m = {}; BAND.forEach(function (b) { m[b.k] = v; }); return m; }
+  leadChar() {
+    var s = this.state; if (s.disc < 5) return DISC_CHAR[s.disc];
+    var a = this.cur(); return a && a.cold > a.warm ? 'mama' : 'inti';
+  }
+  loadDisc(d) { if (d === 5) return; for (var f = 0; f < DISCS[d].files.length; f++) this.analyze(d, f); }
+  frameTag(d, f) {
+    if (d === 5) return this.state.custom ? this.state.custom.name : 'tus datos';
+    var dt = this.frameDate(d, f); return MESC[dt.m] + ' ' + dt.y;
+  }
+  frameAnimClass() {
+    var s = this.state, key = s.disc + '_' + s.frame + '_' + (s.custom ? s.custom.url : '');
+    if (key !== this.lastFrameKey) { this.lastFrameKey = key; this.frameCount++; }
+    return this.frameCount % 2 ? 'fa' : 'fb';
+  }
+  goTab(k) {
+    var s = this.state, self = this;
+    if (k === s.tab || s.trans) return;
+    this.stop();
+    var swap = function () {
+      var patch = { tab: k, col: -1 };
+      if (k === 'data' && self.state.custom) { patch.disc = 5; patch.frame = 0; }
+      self.setState(patch);
+    };
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { swap(); return; }
+    this.setState({ trans: true, transTo: k });
+    this.tm.push(setTimeout(swap, 520));
+    this.tm.push(setTimeout(function () { self.setState({ trans: false }); }, 1100));
+  }
+  analyze(d, f, force) {
+    var key = d + '_' + f, self = this;
+    if (this.state.an[key] && !force) return;
+    var free = d === 5 && this.state.custom && this.state.custom.mode === 'free';
+    var img = new Image();
+    img.onerror = function () { self.setState({ upMsg: 'No se pudo leer la imagen.' }); };
+    img.onload = function () {
+      try {
+        var cv = document.createElement('canvas'); cv.width = 140; cv.height = 80;
+        var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, 140, 80);
+        var px = cx.getImageData(0, 0, 140, 80).data, cells = [], W = 28, H = 16;
+        var warm = 0, cold = 0, hot = 0, n = 0, cs = 0, cn = 0;
+        for (var cy = 0; cy < H; cy++) for (var cxi = 0; cxi < W; cxi++) {
+          var sum = 0, cnt = 0;
+          for (var yy = 0; yy < 5; yy++) for (var xx = 0; xx < 5; xx++) {
+            var x = cxi * 5 + xx, y = cy * 5 + yy, i = (y * 140 + x) * 4;
+            if (px[i + 3] < 128 || (!free && isLand(px[i], px[i + 1], px[i + 2]))) continue;
+            var sc = free ? freeScore(px[i], px[i + 1], px[i + 2]) : score(px[i], px[i + 1], px[i + 2]); sum += sc; cnt++; n++;
+            if (sc > 0) warm += sc; else cold -= sc; if (sc >= 4) hot++;
+            if (x >= 116 && x <= 128 && y >= 36 && y <= 66) { cs += sc; cn++; }
+          }
+          cells.push(cnt > 6 ? sum / cnt : null);
+        }
+        var res = { cells: cells, warm: warm / n, cold: cold / n, hot: hot / n, coast: cn ? cs / cn : 0 };
+        var an = Object.assign({}, self.state.an); an[key] = res;
+        var nm = self.state.custom ? self.state.custom.name : 'tu imagen';
+        self.setState(d === 5 ? { an: an, mute: self.only(res.cold > res.warm ? 'mama' : 'inti'), upMsg: 'Listo: ' + nm + '. Pulsa Reproducir.', caption: 'Cargado: ' + nm + '. Pulsa Reproducir para escucharlo.' } : { an: an });
+      } catch (e) { self.setState({ caption: 'No se pudo analizar el fotograma en este navegador.' }); }
+    };
+    img.src = this.url(d, f);
+  }
+  cur() { return this.state.an[this.state.disc + '_' + this.state.frame]; }
+  glowColor(a) {
+    if (!a) return '#38C6E8';
+    if (a.calido > a.frio) return a.extremo > 0.15 ? '#E8283A' : '#FF8A2B';
+    return '#38C6E8';
+  }
+  glowFor(a) {
+    if (!a) return '#38C6E8';
+    if (a.warm > a.cold) return a.hot > 0.15 ? '#E8283A' : '#FF8A2B';
+    return '#38C6E8';
+  }
+  techGroups(th) {
+    var f = this.state.techFilter, groups = {}, order = [];
+    TECH.forEach(function (t) {
+      if (f !== 'all' && t.st !== f) return;
+      if (!groups[t.cat]) { groups[t.cat] = []; order.push(t.cat); }
+      var done = t.st === 'done';
+      groups[t.cat].push({ name: t.name, use: t.use, mod: t.mod, note: t.note || '', hasNote: !!t.note, chip: done ? 'En el prototipo' : 'Planeado', chipBg: done ? '#7BE38A' : '#FFD447', delay: (groups[t.cat].length * 0.05).toFixed(2) + 's' });
+    });
+    return order.map(function (c) { return { title: c, items: groups[c] }; });
+  }
+  leadInfo(th) {
+    var s = this.state, self = this, k = this.leadChar(), b = BAND.filter(function (x) { return x.k === k; })[0];
+    var off = s.mute[k], lv = s.levels[k] || 0, vm = this.spriteVm(k);
+    var state = off ? 'apagado' : lv > 0.6 ? 'intenso' : lv >= 0.15 ? 'activo' : 'calmo';
+    if (k !== this.lastLead) { this.lastLead = k; this.leadCount++; }
+    return { cls: vm.cls, dur: vm.dur, clip: vm.clip, ins: vm.ins, glyph: vm.glyph, coneC: vm.coneC, coneOp: vm.coneOp, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', quote: b.quote, state: state, on: !off,
+      anim: !off && s.playing && lv >= 0.15 ? 'bob' : '', toggleLabel: off ? 'Activar a ' + b.name : 'Desactivar a ' + b.name,
+      btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A',
+      spriteAria: 'Marcador del modelo anime detallado de ' + b.name + ', ' + state,
+      toggle: function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); } };
+  }
+  revokeCustom() { var c = this.state.custom; if (c && c.url && c.url.indexOf('blob:') === 0) URL.revokeObjectURL(c.url); }
+  showCustom(custom, an, msg) {
+    var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
+    this.stop(); this.lastThunder = -9;
+    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, mute: this.only(an.cold > an.warm ? 'mama' : 'inti'), upMsg: msg, caption: 'Cargado: ' + custom.name + '. Pulsa Reproducir para escucharlo.' });
+  }
+  handleFile(f) {
+    var self = this, name = f.name;
+    if (f.size > 8 * 1024 * 1024) { this.setState({ upMsg: 'El archivo pesa más de 8 MB. Prueba con uno más pequeño.' }); return; }
+    if (/^image\//.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(name)) {
+      this.revokeCustom();
+      var custom = { name: name, kind: 'image', url: URL.createObjectURL(f), mode: this.state.customMode };
+      var ans = Object.assign({}, this.state.an); delete ans['5_0'];
+      this.stop(); this.lastThunder = -9;
+      this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, upMsg: 'Analizando la imagen…' }, function () { self.analyze(5, 0, true); });
+      return;
+    }
+    if (/\.(csv|tsv|txt)$/i.test(name) || /^text\//.test(f.type)) {
+      var rd = new FileReader();
+      rd.onload = function () { self.loadCsv(name, String(rd.result)); };
+      rd.onerror = function () { self.setState({ upMsg: 'No se pudo leer el archivo.' }); };
+      rd.readAsText(f);
+      return;
+    }
+    this.setState({ upMsg: 'Formato no admitido. Usa una imagen (PNG, JPG, WebP) o un CSV.' });
+  }
+  loadCsv(name, text) {
+    var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); }).slice(0, 5001);
+    if (lines.length < 3) { this.setState({ upMsg: 'El CSV tiene muy pocas filas.' }); return; }
+    var delim = lines[0].indexOf(';') >= 0 ? ';' : lines[0].indexOf('\t') >= 0 ? '\t' : ',';
+    var rows = lines.map(function (l) { return l.split(delim).map(function (c) { return c.trim().replace(/^"|"$/g, ''); }); });
+    var num = function (c) { if (c === undefined || c === '') return null; var v = Number(delim === ';' ? c.replace(',', '.') : c); return isFinite(v) ? v : null; };
+    var headerRow = rows[0].every(function (c) { return num(c) === null; });
+    var body = headerRow ? rows.slice(1) : rows, cols = [];
+    for (var j = 0; j < rows[0].length; j++) {
+      var vals = [];
+      for (var i = 0; i < body.length; i++) { var v = num(body[i][j]); if (v !== null) vals.push(v); }
+      if (vals.length >= 8 && vals.length >= body.length * 0.7) cols.push({ name: headerRow ? (rows[0][j] || 'columna ' + (j + 1)) : 'columna ' + (j + 1), values: vals });
+    }
+    if (!cols.length) { this.setState({ upMsg: 'No encontré una columna numérica con al menos 8 valores.' }); return; }
+    var pick = 0;
+    for (var q = 0; q < cols.length; q++) { if (!this.isIndexLike(cols[q].values)) { pick = q; break; } }
+    this.useSeries(name, cols, pick);
+  }
+  isIndexLike(v) {
+    var d = v[1] - v[0]; if (!d) return false;
+    for (var i = 2; i < v.length; i++) if (Math.abs((v[i] - v[i - 1]) - d) > 1e-9) return false;
+    return true;
+  }
+  seriesAnalysis(values) {
+    var G = 28, groups = [], i;
+    for (i = 0; i < G; i++) { var a0 = Math.floor(i * values.length / G), a1 = Math.max(a0 + 1, Math.floor((i + 1) * values.length / G)); groups.push(values.slice(a0, a1)); }
+    var mean = values.reduce(function (p, q) { return p + q; }, 0) / values.length;
+    var vs = groups.map(function (g) { var best = g[0]; g.forEach(function (v) { if (Math.abs(v - mean) > Math.abs(best - mean)) best = v; }); return best; });
+    var mn = Math.min.apply(null, values), mx = Math.max.apply(null, values), half = Math.max((mx - mn) / 2, 1e-9);
+    var cells = []; for (i = 0; i < 16 * G; i++) cells.push(0);
+    vs.forEach(function (v, c) {
+      var z = Math.max(-1, Math.min(1, (v - mean) / half)), L = z * 5, h = Math.round(Math.abs(z) * 8);
+      for (var k = 0; k < h; k++) cells[(z >= 0 ? 7 - k : 8 + k) * G + c] = L;
+    });
+    var warm = 0, cold = 0, hot = 0;
+    cells.forEach(function (v) { if (v > 0) warm += v; else cold -= v; if (v >= 4) hot++; });
+    return { cells: cells, warm: warm / 448, cold: cold / 448, hot: hot / 448, coast: 0 };
+  }
+  drawSeries(an, done) {
+    var cv = document.createElement('canvas'); cv.width = 560; cv.height = 320;
+    var cx = cv.getContext('2d'); cx.fillStyle = '#232A4A'; cx.fillRect(0, 0, 560, 320);
+    for (var r = 0; r < 16; r++) for (var c = 0; c < 28; c++) { var v = an.cells[r * 28 + c]; if (!v) continue; cx.fillStyle = rampColor(v); cx.fillRect(c * 20 + 1, r * 20 + 1, 18, 18); }
+    cx.fillStyle = 'rgba(255,255,255,0.25)'; cx.fillRect(0, 160, 560, 1);
+    cv.toBlob(function (b) { done(URL.createObjectURL(b)); });
+  }
+  useSeries(name, cols, pick) {
+    var self = this, vals = cols[pick].values, an = this.seriesAnalysis(vals);
+    this.drawSeries(an, function (url) {
+      self.revokeCustom();
+      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), baseName: name, kind: 'csv', url: url, cols: cols, col: pick, mode: 'palette' }, an,
+        'Listo: ' + vals.length + ' valores de «' + cols[pick].name + '». Pulsa Reproducir.');
+    });
+  }
+  setCol(i) {
+    var c = this.state.custom; if (!c || !c.cols || !c.cols[i]) return;
+    var self = this, vals = c.cols[i].values, an = this.seriesAnalysis(vals);
+    this.drawSeries(an, function (url) {
+      self.revokeCustom(); var ans = Object.assign({}, self.state.an); ans['5_0'] = an; self.stop();
+      self.setState({ custom: Object.assign({}, c, { col: i, url: url, name: c.baseName + ' · ' + c.cols[i].name }), an: ans, col: -1, upMsg: 'Columna «' + c.cols[i].name + '»: ' + vals.length + ' valores.' });
+    });
+  }
+  setMode(m) {
+    var self = this, c = this.state.custom; this.stop();
+    this.setState({ customMode: m, custom: c ? Object.assign({}, c, { mode: m }) : c, col: -1 }, function () { if (self.state.custom && self.state.custom.kind === 'image') self.analyze(5, 0, true); });
+  }
+  loadSample() {
+    var self = this; this.setState({ upMsg: 'Cargando datos de NASA POWER…' });
+    fetch('/_blob/73710d959697d6b73c436a389b19a0de').then(function (r) { return r.json(); }).then(function (d) {
+      self.useSeries('Chiclayo · lluvia 2015–2018 (NASA POWER)', [{ name: 'lluvia (mm/día)', values: d.chiclayo.p.slice(34 * 12, 38 * 12) }], 0);
+    }).catch(function () { self.setState({ upMsg: 'No se pudieron cargar los datos de ejemplo.' }); });
+  }
+  colInfo(a, col) {
+    var w = 0, c = 0, strong = [], ext = 0, k = 0;
+    for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v === null) continue; k++; if (v > 0) w += v; else c -= v; if (Math.abs(v) >= 2) strong.push([r, v]); if (v >= 4.4) ext++; }
+    return { w: k ? w / k : 0, c: k ? c / k : 0, strong: strong, ext: k ? ext / k : 0, k: k };
+  }
+  ensureAudio() {
+    if (!this.ac) {
+      var AC = window.AudioContext || window.webkitAudioContext; this.ac = new AC();
+      this.master = this.ac.createGain(); this.master.gain.value = 0.8;
+      var comp = this.ac.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ac.destination);
+      this.bus = this.ac.createGain(); this.bus.connect(this.master);
+      var conv = this.ac.createConvolver(), irLen = Math.floor(this.ac.sampleRate * 2.4), ir = this.ac.createBuffer(2, irLen, this.ac.sampleRate);
+      for (var cc = 0; cc < 2; cc++) { var dd = ir.getChannelData(cc); for (var jj = 0; jj < irLen; jj++) dd[jj] = (Math.random() * 2 - 1) * Math.pow(1 - jj / irLen, 2.6); }
+      conv.buffer = ir; var send = this.ac.createGain(); send.gain.value = 0.3; this.bus.connect(send); send.connect(conv); conv.connect(this.master);
+      var len = this.ac.sampleRate; this.noise = this.ac.createBuffer(1, len, len);
+      var ch = this.noise.getChannelData(0); for (var i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    }
+    if (this.ac.state === 'suspended') this.ac.resume();
+  }
+  tone(type, f, t, vol, dec, pan, glide) {
+    var ac = this.ac, o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    o.type = type; o.frequency.setValueAtTime(glide ? f * glide : f, t); if (glide) o.frequency.exponentialRampToValueAtTime(f, t + 0.04);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.master); } else g.connect(this.master);
+    o.start(t); o.stop(t + dec + 0.05);
+  }
+  noiseBurst(t, vol, dec, freq) {
+    var ac = this.ac, n = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    n.buffer = this.noise; f.type = 'lowpass'; f.frequency.setValueAtTime(freq, t); f.frequency.exponentialRampToValueAtTime(80, t + dec);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+    n.connect(f); f.connect(g); g.connect(this.master); n.start(t); n.stop(t + dec + 0.05);
+  }
+  whistle(t, dur, amt) {
+    var ac = this.ac, o = ac.createOscillator(), l = ac.createOscillator(), lg = ac.createGain(), g = ac.createGain(), n = ac.createBufferSource(), bp = ac.createBiquadFilter();
+    o.type = 'sine'; o.frequency.value = 1318.5; l.frequency.value = 5.5; lg.gain.value = 16; l.connect(lg); lg.connect(o.frequency);
+    n.buffer = this.noise; bp.type = 'bandpass'; bp.frequency.value = 1318.5; bp.Q.value = 20;
+    n.connect(bp); bp.connect(g); o.connect(g); g.connect(this.master);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05 + 0.12 * amt, t + dur * 0.35); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.start(t); l.start(t); n.start(t); o.stop(t + dur + 0.05); l.stop(t + dur + 0.05); n.stop(t + dur + 0.05);
+  }
+  step(col) {
+    var a = this.cur(); if (!a) return;
+    var s = this.state, m = s.mute, t = this.ac.currentTime + 0.02, sp = s.speed / 1000, info = this.colInfo(a, col), pan = (col / 27) * 1.6 - 0.8;
+    var lv = { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, notes = [];
+    if (col % 4 === 0) {
+      var w = 0, c = 0, k = 0; for (var j = col; j < Math.min(28, col + 4); j++) { var ci = this.colInfo(a, j); if (!ci.k) continue; w += ci.w; c += ci.c; k++; }
+      w = k ? w / k : 0; c = k ? c / k : 0;
+      var name = c > w + 0.3 ? 'Am' : w < 0.6 ? 'C' : w < 1.3 ? 'F' : w < 2.2 ? 'G' : 'E', ch = CHORDS[name];
+      if (!m.inti && w > 0.05) { var self = this; ch[0].forEach(function (f, q) { self.tone('triangle', f, t + q * 0.03, Math.min(0.16, 0.03 + 0.06 * w), sp * 4.5, pan * 0.5); }); lv.inti = Math.min(1, w / 3); notes.push('Inti toca ' + name); }
+      if (!m.mama && c > 0.05) { this.tone('sine', ch[1], t, Math.min(0.32, 0.06 + 0.2 * c), sp * 4.2, 0); lv.mama = Math.min(1, c / 2); notes.push('Mamacocha canta grave'); }
+    } else { lv.inti = s.levels.inti * 0.8; lv.mama = s.levels.mama * 0.8; }
+    if (!m.yaku && info.strong.length) {
+      var picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(3, Math.ceil(info.strong.length / 4)));
+      var self2 = this;
+      picks.forEach(function (p, q) { var deg = 15 - p[0], oct = Math.floor(deg / 5), f = 440 * Math.pow(2, (oct * 12 + PENTA[deg % 5]) / 12) / 2; self2.tone('sine', f, t + q * sp / 3, 0.12, 0.22, pan, 1.4); });
+      lv.yaku = Math.min(1, info.strong.length / 10);
+    }
+    if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push('¡Illapa truena!'); }
+    if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push('Silbo silba: la costa del Perú está caliente'); }
+    else if (col >= 23 && col <= 26) lv.silbo = s.levels.silbo * 0.85;
+    if (s.vibe && navigator.vibrate && (lv.illapa > 0.3 || info.strong.length > 4)) navigator.vibrate(lv.illapa > 0.3 ? 120 : 25);
+    var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? 'columna ' + (col + 1) + '/28' : lon + '°O';
+    var feel = info.k === 0 ? 'tierra, silencio' : info.w > 2 ? 'muy cálido' : info.w > 0.8 ? 'cálido' : info.c > 0.8 ? 'frío' : 'casi normal';
+    var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
+    var bp = this.bump({ inti: has('Inti'), mama: has('Mamacocha'), illapa: has('¡Illapa'), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 }, has('¡Illapa'));
+    this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') });
+  }
+  spriteVm(k) {
+    var s = this.state, b = BAND.filter(function (x) { return x.k === k; })[0], off = s.mute[k], lv = s.levels[k] || 0;
+    var play = s.playing && !off && lv >= 0.15, hitN = (s.hits && s.hits[k]) || 0;
+    var bpm = s.engine === 'melody' ? Math.round(MUSIC[this.leadChar()].bpm * this.speedFactor()) : 100;
+    return { color: b.color, name: b.name, glyph: b.glyph, ins: b.ins, clip: play ? b.clip : 'idle', dur: play ? (60 / bpm).toFixed(2) + 's' : '3s',
+      cls: 'sp-' + k + (play ? ' play' : '') + (off ? ' off' : '') + (hitN && !off ? (hitN % 2 ? ' ha' : ' hb') : ''),
+      coneC: b.color + '66', coneOp: play ? '1' : '0.4', lvPct: Math.round((off ? 0 : lv) * 100) + '%' };
+  }
+  bump(fired, thunder) {
+    var h = Object.assign({}, this.state.hits);
+    BAND.forEach(function (b) { if (fired[b.k]) h[b.k] = (h[b.k] || 0) + 1; });
+    return { hits: h, flash: thunder ? this.state.flash + 1 : this.state.flash };
+  }
+  speedFactor() { return { 180: 0.75, 110: 1, 70: 1.4 }[this.state.speed] || 1; }
+  stepMs() {
+    var s = this.state; if (s.engine !== 'melody') return s.speed;
+    return Math.round(30000 / (MUSIC[this.leadChar()].bpm * this.speedFactor()));
+  }
+  setEngine(k) {
+    this.stop(); this.melDeg = null;
+    this.setState({ engine: k, caption: k === 'melody' ? 'Motor Melodía: la banda toca en una tonalidad y una progresión por disco.' : 'Motor Datos puros: cada color suena directo, sin armonía.' });
+  }
+  note(type, midi, t, dur, vol, o) {
+    o = o || {};
+    var ac = this.ac, osc = ac.createOscillator(), g = ac.createGain(), f = ac.createBiquadFilter(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    osc.type = type; osc.frequency.value = mtof(midi); if (o.detune) osc.detune.value = o.detune;
+    f.type = 'lowpass'; f.frequency.value = o.cut || 3500;
+    var a = o.att || 0.01, rel = o.rel || 0.15, peak = Math.max(vol, 0.0002), hold = t + Math.max(a + 0.01, dur - rel);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a);
+    g.gain.setValueAtTime(peak, hold); g.gain.exponentialRampToValueAtTime(0.0001, hold + rel);
+    osc.connect(f); f.connect(g);
+    if (p) { p.pan.value = o.pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    osc.start(t); osc.stop(hold + rel + 0.05);
+    return osc;
+  }
+  pluck(type, midi, t, vol, dec, pan) {
+    var ac = this.ac, o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    o.type = type; o.frequency.value = mtof(midi);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    o.start(t); o.stop(t + dec + 0.05);
+  }
+  marimba(midi, t, vol, pan) { this.pluck('sine', midi, t, vol, 0.45, pan); this.pluck('triangle', midi + 19, t, vol * 0.12, 0.12, pan); }
+  flute(midi, t, dur, vol, pan) {
+    var ac = this.ac, o = this.note('sine', midi, t, dur, vol, { att: 0.07, rel: 0.12, cut: 5000, pan: pan });
+    var l = ac.createOscillator(), lg = ac.createGain(); l.frequency.value = 5.2; lg.gain.value = 9; l.connect(lg); lg.connect(o.detune); l.start(t + 0.1); l.stop(t + dur + 0.3);
+    var n = ac.createBufferSource(), bp = ac.createBiquadFilter(), ng = ac.createGain();
+    n.buffer = this.noise; bp.type = 'bandpass'; bp.frequency.value = mtof(midi) * 2; bp.Q.value = 6;
+    ng.gain.setValueAtTime(0.0001, t); ng.gain.exponentialRampToValueAtTime(Math.max(vol * 0.18, 0.0002), t + 0.05); ng.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.1);
+    n.connect(bp); bp.connect(ng); ng.connect(this.bus); n.start(t); n.stop(t + dur + 0.15);
+  }
+  droplet(midi, t, vol, pan) {
+    var ac = this.ac, f = mtof(midi), o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    o.type = 'sine'; o.frequency.setValueAtTime(f * 1.5, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.035);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    o.start(t); o.stop(t + 0.4);
+  }
+  timpani(midi, t, vol) {
+    var ac = this.ac, f = mtof(midi), o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(f * 1.7, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.12);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+    o.connect(g); g.connect(this.bus); o.start(t); o.stop(t + 1.2);
+    this.noiseBurst(t, vol * 0.5, 0.25, 500);
+  }
+  stepMelody(col) {
+    var a = this.cur(); if (!a) return;
+    var self = this, s = this.state, m = s.mute, t = this.ac.currentTime + 0.03, sp = this.stepMs() / 1000;
+    var prof = MUSIC[this.leadChar()], cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
+    var ch = chordOf(prof, prof.prog[cIdx]), info = this.colInfo(a, col), onBeat = col % 4 === 0, pan = (col / 27) * 1.2 - 0.6;
+    var lv = { silbo: s.levels.silbo * 0.8, inti: s.levels.inti * 0.8, mama: s.levels.mama * 0.85, yaku: s.levels.yaku * 0.7, illapa: s.levels.illapa * 0.85 }, notes = [];
+    var lv0 = Object.assign({}, lv);
+    if (!m.mama && onBeat) {
+      this.note('sine', ch.root - 12, t, sp * 3.8, 0.2 + 0.12 * Math.min(1, info.c / 2), { att: 0.03, rel: 0.25, cut: 500 });
+      ch.notes.forEach(function (n, q) { self.note('triangle', n, t, sp * 4, 0.03, { att: 0.35, rel: 0.7, cut: 800 + 400 * Math.min(1, info.w), detune: q % 2 ? 7 : -7, pan: q % 2 ? 0.3 : -0.3 }); });
+      lv.mama = 0.45 + 0.55 * Math.min(1, info.c / 2); notes.push('Mamacocha: ' + ch.label);
+    }
+    if (!m.inti && info.k > 0 && (info.w > 0.15 || onBeat)) {
+      var base = ch.notes[[0, 1, 2, 1][col % 4] % ch.notes.length] + 12 + (info.w > 2 ? 12 : 0);
+      this.marimba(base, t, 0.06 + 0.1 * Math.min(1, info.w / 3), pan); lv.inti = Math.min(1, 0.3 + info.w / 3);
+      if (onBeat) notes.push('Inti: ' + ch.label);
+    }
+    if (!m.silbo) {
+      if (s.disc !== 5 && a.coast >= 2 && col >= 22 && col <= 25) {
+        var md0 = scaleMidi(prof.scale, prof.root + 12, [4, 3, 1, 0][col - 22]);
+        this.flute(md0, t, sp * 1.7, 0.13, pan); lv.silbo = 1; if (col === 22) notes.push('Silbo canta su motivo');
+      } else {
+        var best = null;
+        for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v !== null && Math.abs(v) >= 1 && (!best || Math.abs(v) > Math.abs(best.v))) best = { r: r, v: v }; }
+        if (best) {
+          var target = Math.round((15 - best.r) / 15 * 7), prev = this.melDeg == null ? target : this.melDeg;
+          var dg = prev + Math.max(-2, Math.min(2, target - prev)); this.melDeg = dg;
+          var md = scaleMidi(prof.scale, prof.root + 12, dg); if (onBeat) md = snapChord(md, ch.notes);
+          var nxt = col < 27 ? this.colInfo(a, col + 1) : null;
+          this.flute(md, t, sp * (nxt && nxt.strong.length > 0 ? 1.9 : 1.0), 0.05 + 0.1 * Math.min(1, Math.abs(best.v) / 4), pan);
+          lv.silbo = Math.min(1, Math.abs(best.v) / 4 + 0.2); if (onBeat) notes.push('Silbo: ' + NOTE_ES[md % 12]);
+        }
+      }
+    }
+    if (!m.yaku && info.strong.length) {
+      var pent = pentOf(prof), picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(2, Math.ceil(info.strong.length / 5)));
+      picks.forEach(function (p, q) { self.droplet(scaleMidi(pent, prof.root + 24, Math.round((15 - p[0]) / 15 * 7)), t + q * sp * 0.5, 0.09, pan); });
+      lv.yaku = Math.min(1, 0.3 + info.strong.length / 10);
+    }
+    if (!m.illapa) {
+      if (info.ext >= 0.25 && col - this.lastThunder >= 2) {
+        this.timpani(ch.root - 12, t, Math.min(0.5, 0.25 + info.ext)); this.noiseBurst(t, 0.25, 1.0, 700);
+        this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push('¡Illapa truena!');
+      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); lv.illapa = Math.max(lv.illapa, 0.3); }
+    }
+    if (s.vibe && navigator.vibrate && lv.illapa > 0.5) navigator.vibrate(100);
+    var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? 'columna ' + (col + 1) + '/28' : lon + '°O';
+    var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
+    var bp = this.bump(fired, notes.some(function (n) { return n.indexOf('truena') >= 0; }));
+    this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] acorde ' + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') });
+  }
+  describeText() {
+    var a = this.cur(), s = this.state, dt = this.frameDate(s.disc, s.frame);
+    if (!a) return 'Analizando el fotograma.';
+    if (s.disc === 5) {
+      var up = a.cold > a.warm ? 'Predominan los valores bajos o los colores fríos: Mamacocha canta fuerte.' : a.warm > 0.8 ? 'Predominan los valores altos o los colores cálidos: Inti y Yaku suenan fuerte.' : 'Los valores están cerca de lo normal.';
+      return 'Tus datos: ' + (s.custom ? s.custom.name : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + ' por ciento de las celdas son extremas.';
+    }
+    var lead = a.cold > a.warm ? 'Domina el agua más fría de lo normal: Mamacocha canta fuerte.' : a.hot > 0.15 ? 'Una gran franja del océano está en rojo intenso: Inti e Illapa dominan.' : a.warm > 0.8 ? 'El océano está más cálido de lo normal: Inti toca acordes brillantes.' : 'El océano está cerca de lo normal.';
+    var coast = a.coast >= 2 ? 'La costa del Perú está muy caliente, nivel ' + a.coast.toFixed(1) + ' de 5: Silbo silba.' : a.coast > 0.5 ? 'La costa del Perú está algo cálida.' : 'La costa del Perú está fría o normal.';
+    return DISCS[s.disc].title + ', ' + MES[dt.m] + ' de ' + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + ' por ciento del mar visible tiene anomalías extremas. ' + coast;
+  }
+  speak(text) { if (!this.state.voice || !window.speechSynthesis) return; window.speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.lang = 'es-PE'; window.speechSynthesis.speak(u); }
+  play() {
+    this.ensureAudio(); var self = this, s = this.state;
+    var allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
+    var go = function () { self.melDeg = null; self.setState({ playing: true, col: -1 }); self.timer = setInterval(function () { self.tick(); }, self.stepMs()); };
+    if (allOff) {
+      var nm = BAND.filter(function (b) { return b.k === k; })[0].name;
+      this.setState({ mute: this.only(k), caption: 'La banda estaba apagada: activé a ' + nm + ', protagonista de este disco.' }, go);
+    } else go();
+  }
+  tick() {
+    var s = this.state, col = s.col + 1;
+    if (col >= 28) {
+      if (s.frame >= DISCS[s.disc].files.length - 1) { this.stop(); this.setState({ col: -1, caption: 'Fin del disco. Elige otro o vuelve a reproducir.' }); return; }
+      var dt = this.frameDate(s.disc, s.frame + 1);
+      this.setState({ frame: s.frame + 1, col: -1 }); this.lastThunder = -9; this.speak(MES[dt.m] + ' ' + dt.y); return;
+    }
+    if (s.engine === 'melody') this.stepMelody(col); else this.step(col);
+  }
+  stop() { if (this.timer) clearInterval(this.timer); this.timer = null; if (this.state.playing) this.setState({ playing: false }); }
+  gotoFrame(f) { var self = this; this.stop(); this.lastThunder = -9; this.setState({ frame: Math.max(0, Math.min(DISCS[this.state.disc].files.length - 1, f)), col: -1 }, function () { self.speak(self.describeText()); }); }
+
+  renderVals() {
+    var s = this.state, self = this, hc = s.contrast;
+    var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF7A5C', cold: '#5CE1FF', magenta: '#FF7AD0' }
+                : { bg: '#0A0D1A', panel: 'rgba(18, 24, 52, 0.88)', line: '#2E3A6E', shadow: '#05070F', fg: '#F4EFE6', muted: '#AEB6DA', accent: '#FFD447', hot: '#FF7A5C', cold: '#38C6E8', magenta: '#F06BB0' };
+    th.fs = s.big ? '19px' : '16px';
+    th.pixelFont = s.legible ? "'IBM Plex Mono', monospace" : "'Press Start 2P', monospace";
+    th.headFont = s.legible ? "'IBM Plex Sans', sans-serif" : "'Pixelify Sans', sans-serif";
+    var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
+    var cells = []; for (var i = 0; i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
+    var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
+    var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); }; };
+    var tog = function (k) { return function () { var p = {}; p[k] = !s[k]; self.setState(p); if (k === 'voice' && s.voice && window.speechSynthesis) window.speechSynthesis.cancel(); }; };
+    var tabDef = [{ k: 'juke', l: 'Jukebox' }, { k: 'band', l: 'La banda' }, { k: 'data', l: 'Tus datos' }, { k: 'how', l: 'Cómo suena' }, { k: 'tech', l: 'Tecnología' }];
+    var a11yDef = [{ k: 'contrast', l: 'Alto contraste' }, { k: 'big', l: 'Texto grande' }, { k: 'legible', l: 'Fuente legible' }, { k: 'voice', l: 'Voz' }, { k: 'vibe', l: 'Vibración' }];
+    var activeN = BAND.filter(function (b) { return !s.mute[b.k]; }).length;
+    var isJuke = s.tab === 'juke', isData = s.tab === 'data', hasCustom = !!s.custom;
+    var gl = this.glowFor(a);
+    var prof = MUSIC[this.leadChar()], factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
+    var chordLabels = prof.prog.map(function (c) { return chordOf(prof, c).label; });
+    var progItems = chordLabels.map(function (l) { var on = s.playing && l === s.chord; return { label: l, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line }; });
+    var seeText = a ? this.describeText() : 'Analizando el fotograma.';
+    var hearText = melody
+      ? prof.key + ' ' + prof.mode + ' · ' + bpmEff + ' pulsaciones por minuto · progresión ' + chordLabels.join(' – ') + (s.playing && s.chord ? ' · ahora suena ' + s.chord : '') + '.'
+      : 'Datos puros: cada color suena directo, sin tonalidad ni progresión. Es la traducción más literal.';
+    var whyTiles = melody ? [
+      { tag: 'TONALIDAD', title: prof.key + ' ' + prof.mode, body: 'Una tonalidad por disco, elegida para el carácter de ' + prof.name + ': ' + prof.story + '.' },
+      { tag: 'TEMPO', title: bpmEff + ' ppm', body: 'Cada columna del fotograma es una corchea. Un fotograma dura unos ' + Math.round(840 / bpmEff) + ' segundos.' },
+      { tag: 'MELODÍA', title: 'La latitud pone la nota', body: 'La anomalía más fuerte de cada columna decide la altura: más al norte, más agudo. En los tiempos fuertes la nota se ajusta al acorde.' },
+      { tag: 'DATOS', title: 'Lo cálido y lo frío se oyen', body: 'Lo cálido enciende arpegios (Inti), lo frío el bajo y el colchón (Mamacocha), las anomalías fuertes las gotas (Yaku) y los extremos el trueno (Illapa).' }
+    ] : [
+      { tag: 'MODO', title: 'Datos puros', body: 'Cada color se convierte en un nivel de −5 a +5 y suena directo.' },
+      { tag: 'ESCALA', title: 'Solo en las gotas', body: 'Únicamente Yaku usa una escala pentatónica; el resto es la traducción literal.' },
+      { tag: 'RITMO', title: 'Escaneo libre', body: 'Cada columna dura lo que marque la velocidad, sin pulso musical.' },
+      { tag: 'USO', title: 'Para estudiar', body: 'Sirve para comparar discos sin que la música «embellezca» los datos.' }
+    ];
+    var engines = [
+      { key: 'melody', label: 'Melodía compuesta', desc: 'Escalas, acordes y ritmo por disco. La melodía sale de los datos.', chip: 'En el prototipo', live: true },
+      { key: 'raw', label: 'Datos puros', desc: 'Cada color suena directo, sin armonía. La traducción más literal.', chip: 'En el prototipo', live: true },
+      { key: 'magenta', label: 'IA en el navegador', desc: 'Magenta.js varía y continúa la melodía, en tu equipo.', chip: 'Planeado', live: false },
+      { key: 'cloud', label: 'IA generativa en la nube', desc: 'Lyria RealTime, Stable Audio o ElevenLabs. Pide servidor y clave.', chip: 'Planeado', live: false }
+    ].map(function (e) {
+      var on = e.key === s.engine;
+      return { ic: self.icons[{ melody: 'melody', raw: 'raw', magenta: 'chip', cloud: 'cloud' }[e.key]], short: { melody: 'Melodía', raw: 'Datos', magenta: 'IA local', cloud: 'IA nube' }[e.key], label: e.label, desc: e.desc, chip: e.chip, chipBg: e.live ? '#7BE38A' : '#FFD447', on: on, off: !e.live, op: e.live ? '1' : '0.6',
+        bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, sub: on ? '#0A0D1A' : th.muted, border: on ? th.accent : th.line, pick: function () { self.setEngine(e.key); } };
+    });
+    var objectives = OBJ.map(function (o) { var nm = PAGES[o.page][1]; return { tag: o.tag, title: o.title, where: o.where, goLabel: 'Ir a ' + nm.charAt(0) + nm.slice(1).toLowerCase(), go: function () { self.goTab(o.page); } }; });
+    var tp = PAGES[s.transTo] || PAGES.juke;
+    return {
+      th: th, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
+      stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || 'nadie',
+      stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),
+      beatDots: [0, 1, 2, 3, 4, 5, 6, 7].map(function (i) { return { c: s.playing && s.col >= 0 && (s.col % 8) === i ? th.accent : th.line }; }),
+      chordHud: melody ? 'ACORDE ' + (s.playing && s.chord ? s.chord : '—') + ' · ' + bpmEff + ' ppm' : 'DATOS PUROS · ' + s.speed + ' ms por columna',
+      shakeCls: s.flash ? (s.flash % 2 ? 'sh1' : 'sh2') : '', flashCls: s.flash ? (s.flash % 2 ? 'fl1' : 'fl2') : '',
+      engineDesc: (melody ? 'Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.' : 'Datos puros: cada color suena directo, sin armonía.') + ' IA local e IA en la nube: planeadas.',
+      engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, objectives: objectives,
+      frameCount: s.disc === 5 ? 'tus datos' : 'fotograma ' + (s.frame + 1) + ' de ' + d.files.length, prevOff: s.frame <= 0, nextOff: s.frame >= d.files.length - 1,
+      trans: s.trans, tbars: this.tbars, transNum: tp[0], transName: tp[1], pageName: PAGES[s.tab][1],
+      isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
+      showMain: isJuke || isData, showPlayer: isJuke || (isData && hasCustom), dataEmpty: isData && !hasCustom,
+      showStrip: s.disc !== 5, showSilbo: s.disc !== 5,
+      heroStats: [{ k: '5', l: 'discos' }, { k: '30', l: 'fotogramas del EIC' }, { k: '5', l: 'personajes' }],
+      dataStats: [{ k: '2', l: 'formatos' }, { k: '8 MB', l: 'máximo' }, { k: '0', l: 'bytes enviados' }],
+      howData: [
+        { tag: 'IMAGEN', color: th.accent, title: 'Se lee por colores', body: 'Cada imagen se reduce a una cuadrícula de 28×16. Lo cálido suena como Inti y Yaku; lo frío, como Mamacocha. Elige entre la paleta de anomalías de la NASA o color libre.' },
+        { tag: 'CSV', color: th.cold, title: 'Se lee por valores', body: 'Una columna numérica se resume en 28 pasos. Lo que está sobre la media es cálido; lo que está bajo la media, frío. Los picos extremos hacen tronar a Illapa.' },
+        { tag: 'PRIVADO', color: th.magenta, title: 'Nada sale de tu equipo', body: 'El archivo se procesa dentro del navegador. No se sube a ningún servidor. Prueba primero con la lluvia de Chiclayo de NASA POWER.' }
+      ],
+      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
+      a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      discs: DISCS.filter(function (x, k) { return k < 5 || hasCustom; }).map(function (x, k) {
+        var on = k === s.disc, hero = k < 5 ? BAND.filter(function (b) { return b.k === DISC_CHAR[k]; })[0].name : 'según tus datos';
+        return { ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
+          pick: function () {
+            self.stop(); self.lastThunder = -9;
+            var who = k < 5 ? DISC_CHAR[k] : (self.state.an['5_0'] && self.state.an['5_0'].cold > self.state.an['5_0'].warm ? 'mama' : 'inti');
+            self.setState({ disc: k, frame: 0, col: -1, mute: self.only(who), caption: 'Disco ' + x.n + ': ' + x.title + '. Se enciende ' + BAND.filter(function (b) { return b.k === who; })[0].name + '. Pulsa Reproducir.' });
+            self.loadDisc(k);
+          } };
+      }),
+      disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),
+      frameAlt: (s.disc === 5 ? 'Tu archivo: ' + (s.custom ? s.custom.name : '') + '. ' : 'Mapa de anomalía de temperatura del mar del Pacífico oriental, ' + MES[dt.m] + ' de ' + dt.y + '. ') + (a ? this.describeText() : ''),
+      frameAnim: this.frameAnimClass(),
+      scanLeft: s.col < 0 ? '-10%' : (s.col / 28 * 100).toFixed(2) + '%',
+      silboBox: a && a.coast >= 2 ? th.accent : th.muted,
+      capL: s.disc === 5 ? 'inicio' : '140°O', capM: s.disc === 5 ? 'escaneo de izquierda a derecha' : 'Pacífico ecuatorial · 25°S–15°N', capR: s.disc === 5 ? 'fin' : '70°O',
+      cells: cells,
+      stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) } : { warm: '…', cold: '…', hot: '…', coast: '…' },
+      lead: this.leadInfo(th),
+      strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: 'Ver ' + MES[fd.m] + ' de ' + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
+      playLabel: s.playing ? 'Pausar' : 'Reproducir', playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
+      togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
+      describe: function () { var txt = self.describeText(); self.setState({ caption: txt }); if (window.speechSynthesis) { window.speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt); u.lang = 'es-PE'; window.speechSynthesis.speak(u); } },
+      prevFrame: function () { self.gotoFrame(s.frame - 1); }, nextFrame: function () { self.gotoFrame(s.frame + 1); },
+      speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
+      caption: s.caption,
+      bandStatus: activeN === 0 ? 'Banda apagada. Cada disco enciende a su protagonista; suma a los demás para armar la banda completa.' : activeN === 5 ? 'Banda completa: suenan los cinco.' : activeN + ' de 5 personajes activos.',
+      bandAll: function () { self.setState({ mute: self.allMute(false) }); },
+      bandNone: function () { self.setState({ mute: self.allMute(true) }); },
+      bandGo: function () { self.setState({ mute: self.allMute(false), caption: 'Banda completa activada. Pulsa Reproducir.' }); self.goTab('juke'); },
+      band: BAND.map(function (b, bi) {
+        var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
+        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, disc: b.disc, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
+          on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? 'Activar a ' : 'Desactivar a ') + b.name,
+          btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A', btnBorder: off ? th.line : b.color,
+          border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
+      }),
+      overCls: s.over ? 'over' : '',
+      isImageUp: hasCustom && s.custom.kind === 'image', isCsvUp: hasCustom && !!s.custom.cols && s.custom.cols.length > 1,
+      customMode: s.customMode, colIdx: hasCustom && s.custom.cols ? String(s.custom.col) : '0',
+      colOpts: hasCustom && s.custom.cols ? s.custom.cols.map(function (cc, ci) { return { v: String(ci), l: cc.name }; }) : [],
+      upMsg: s.upMsg,
+      onFile: function (e) { var fl = e.target.files && e.target.files[0]; if (fl) self.handleFile(fl); e.target.value = ''; },
+      onDragOver: function (e) { e.preventDefault(); if (!s.over) self.setState({ over: true }); },
+      onDragLeave: function () { self.setState({ over: false }); },
+      onDrop: function (e) { e.preventDefault(); self.setState({ over: false }); var fl = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (fl) self.handleFile(fl); },
+      useSample: function () { self.loadSample(); },
+      onUpMode: function (e) { self.setMode(e.target.value); },
+      onCol: function (e) { self.setCol(parseInt(e.target.value, 10)); },
+      techGroups: this.techGroups(th),
+      techFilters: [['all', 'Todo', 'f_all'], ['done', 'En el prototipo', 'f_done'], ['plan', 'Planeado', 'f_plan']].map(function (x) { var on = s.techFilter === x[0]; return { ic: self.icons[x[2]], label: x[1], on: on, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, pick: function () { self.setState({ techFilter: x[0] }); } }; }),
+      techSummary: TECH.filter(function (t) { return t.st === 'done'; }).length + ' en el prototipo · ' + TECH.filter(function (t) { return t.st === 'plan'; }).length + ' planeadas',
+      steps: STEPS.map(function (x, i) { return { n: x.n, title: x.title, body: x.body, delay: (i * 0.07).toFixed(2) + 's' }; }),
+      legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa' }, { v: '+4,5', c: '#C21F7A', who: 'Illapa' }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku' }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku' }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku' }, { v: '+1', c: '#FFD447', who: 'Inti' }, { v: '0', c: '#7E849E', who: 'silencio' }, { v: '−1', c: '#7BE38A', who: 'Mamacocha' }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku' }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

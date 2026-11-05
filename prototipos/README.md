@@ -4,6 +4,7 @@ Copias del código de cada iteración del prototipo, para no perder la historia.
 
 | Carpeta | Iteración | Contenido |
 |---|---|---|
+| [`I11-eic/`](I11-eic/) | I11 · Fotogramas oficiales del EIC | `Main.dc.html` con los 30 fotogramas del video del EIC (SVS 5176, Pacífico) en `fotogramas/`, escala de color y detección de tierra del EIC, y discos por estación 2024–2026 |
 | [`I10-iconos/`](I10-iconos/) | I10 · Iconos y menos cajas (v18 del artefacto) | `Main.dc.html` (prototipo de escritorio con iconos) y `canvas.json`. Las maquetas móviles no cambiaron: están en I09 |
 | [`I09-maqueta-movil/`](I09-maqueta-movil/) | I09 · Maqueta móvil (estado de la v17 del artefacto) | `Main.dc.html` (prototipo jugable de escritorio) y 7 maquetas móviles `Movil-*.dc.html`, más `canvas.json` |
 
