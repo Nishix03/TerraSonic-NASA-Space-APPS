@@ -18,16 +18,19 @@ bus.emit('play:toggle');
 | `play:toggle` | M4, M5 | — | M6 |
 | `fotograma:listo` | M6 | `{ disco, fotograma, analisis }` | M4, M5 |
 | `paso` | M6 (reloj del escaneo) | `{ disco, fotograma, columna, analisis }` | M3, M4 |
-| `voces` | M3 | `{ columna, niveles: {silbo,inti,mama,yaku,illapa}, eventos: ['Silbo silba', ...] }` | M4 (medidores, avatares), M5 (subtítulo, vibración) |
+| `voces` | M3 | `{ columna, niveles: {silbo,inti,mama,yaku,illapa}, eventos: ['Silbo silba', ...], acorde: 'Lam', disparos: { silbo, inti, mama, yaku, illapa }, trueno }` | M4 (medidores, avatares), M5 (subtítulo, vibración) |
 | `estado` | M6 | `{ reproduciendo }` | M4, M5 |
 | `silenciar` | M4, M5 | `{ personaje, silenciado }` | M3 |
 | `tema` | M5 | `{ contraste, grande, legible }` | M4 |
 | `velocidad` | M4 | `{ msPorColumna }` (70, 110 o 180) | M6 |
+| `pagina:cambio` | M4 (pestañas) | `{ desde, hacia }` | M6 (router: cambia el contenido a ~0,5 s), M4 (transición), M5 (`aria-live`) |
+| `motor:cambio` | M4 (tarjeta «Motor de sonido») | `{ motor: 'melodia'\|'datos' }` | M3 |
+| `banda:preset` | M4 (botones), M6 (al elegir disco) | `{ modo: 'protagonista'\|'completa'\|'apagada', disco }` | M3 (enciende y apaga voces) |
 
 ## M1 · `src/fotogramas/index.js`
 ```js
 export async function cargarDiscos(): Promise<Disco[]>
-type Disco = { id, n, titulo, periodo, color, fuente, fotogramas: [{ url, fecha: 'YYYY-MM-DD' }] }  // 6 por disco
+type Disco = { id, n, titulo, periodo, color, fuente, protagonista: 'mama'|'inti'|'silbo'|'yaku'|'illapa', fotogramas: [{ url, fecha: 'YYYY-MM-DD' }] }  // 6 por disco
 ```
 
 ## M2 · `src/analizador/index.js`
@@ -46,19 +49,23 @@ Recuadro de la costa (Silbo): píxeles x 116–128 e y 36–66 de la imagen redu
 ## M3 · `src/sonido/index.js`
 ```js
 export function iniciarAudio(): void              // llamar tras un clic (política del navegador)
-// Escucha 'paso' y 'silenciar'. Emite 'voces'.
+// Escucha 'paso', 'silenciar' y 'motor:cambio'. Emite 'voces'.
+// Motores: 'melodia' (por defecto: tonalidad, tempo y progresión por personaje; ver docs/PLAN.md §5.1) y 'datos' (traducción literal).
+// Perfil musical = el del protagonista del disco: { tonalidad, modo, tempo, progresión }. Todas las voces tocan en esa armonía.
 ```
-Reglas musicales (cambian solo con acuerdo del equipo): ver `docs/PLAN.md` §5.
+Reglas musicales (cambian solo con acuerdo del equipo): ver `docs/PLAN.md` §5 y §5.1.
 
 ## M4 · `src/arte/index.js`
 ```js
 export function montarJukebox(contenedor: HTMLElement, discos: Disco[]): void
 export function montarBanda(contenedor: HTMLElement): void
+export function montarEscenario(contenedor: HTMLElement): void   // escucha 'voces', 'silenciar' y 'banda:preset'
 export function montarAvatares(contenedor: HTMLElement): void   // escucha 'voces', 'fotograma:listo' y 'tema'
 // Avatares: assets/avatares/<silbo|inti|mama|yaku|illapa>/ con capas PNG (cuerpo, cabeza, ojos, bocas, pelo, ropa, accesorio)
-// y assets/avatares/avatares.json: { id, nombre, alt, ficha, modelo: { capas[], tam: '512x768' }, sprite: 'sprite.png (4 frames 32x32)', estados: ['calmo','activo','intenso'] }
-// El modelo detallado va junto al fotograma (protagonista = personaje con mayor nivel en 'voces'); el sprite 32x32 va en la banda, el mezclador y la tira.
+// y assets/avatares/avatares.json: { id, nombre, alt, ficha, modelo: { capas[], tam: '768x1152' }, sprite: 'sprite.png (4 frames 32x32)', estados: ['calmo','activo','intenso'] }
+// El modelo detallado (~400x600 px) va junto al fotograma y es el protagonista del disco (`disco.protagonista`); el sprite 32x32 va en el mezclador de la banda y en la tira.
 // Estado por nivel de 'voces': calmo < 0,15 · activo 0,15–0,6 · intenso > 0,6
+// Animaciones (clips) por personaje: docs/PLAN.md §4.3. El escenario y el protagonista usan el MISMO estado: nivel, `disparos`, `trueno` y ON/OFF.
 ```
 
 ## M5 · `src/accesibilidad/index.js`

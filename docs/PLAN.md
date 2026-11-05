@@ -88,6 +88,7 @@
 | **Logo** | Planeta Tierra en pixel art con un anillo orbital y un satélite que emite tres ondas de sonido (amarillo → naranja → rojo, la escala de calor de los mapas). El prototipo trae una primera versión; M4 la pule |
 | **Fondo animado** | Campo de estrellas que titila, un satélite que cruza, estrellas fugaces y un horizonte de la Tierra cuyo resplandor **cambia con el fotograma** (cian si domina el frío, naranja si hay calor, rojo con extremos). Una línea de escaneo recorre el horizonte, igual que el cabezal de la jukebox. Se desactiva con alto contraste y `prefers-reduced-motion` |
 | **Transiciones y efectos** | Entrada escalonada de las secciones, elevación al pasar el cursor, fundido con desenfoque al cambiar de fotograma, cabezal de escaneo con brillo y movimiento suave, celdas y medidores que se animan, el protagonista entra deslizando y el botón principal late mientras espera. Todo se apaga con `prefers-reduced-motion` |
+| **Transición entre páginas** | Estilo videojuego: un **satélite pixelado cruza la pantalla** de izquierda a derecha dejando una estela, mientras 14 barras verticales cubren y descubren la pantalla y aparece el rótulo «PÁGINA 0N · NOMBRE». El contenido cambia cuando la pantalla está cubierta (~0,5 s) y todo dura ~1,1 s. Detalles y límites de seguridad en §4.2 |
 | **Logos de la NASA** | Solo se usan los **oficiales** del reto. El kit de logos y la guía de marca de Space Apps se descargan desde https://www.spaceappschallenge.org/brand/. **No dibujamos réplicas** del emblema de la NASA. Para el uso del emblema de la NASA se consulta la guía de marca o se escribe al equipo de Space Apps. El prototipo reserva el espacio y lleva el aviso *"Proyecto independiente, no respaldado por NASA"* |
 | **Nombre del equipo** | *Los Silbadores de Ñaylamp* se mantiene como nombre del equipo (distinto del nombre del producto). Si quieren cambiarlo también, queda como decisión del kickoff |
 
@@ -107,6 +108,25 @@ Cada personaje es **un conjunto de sonidos ligado a un rasgo visual**. La person
 
 **Cómo se ven:** cada personaje es un **avatar 2D original, detallado y animado, de estética anime**, con ropa aesthetic que fusiona motivos andinos con techwear/streetwear, y comparte el estilo visual de la página (paleta de la escala de anomalías, contornos de 4 px y marco pixelado). Acompañan cada fotograma y reaccionan al sonido de su voz. Diseño y producción: sección 9.
 
+### Banda en vivo y protagonista por disco
+Cada disco tiene **un protagonista**, el personaje que mejor cuenta ese evento. Es el que se muestra grande junto al fotograma.
+
+| Disco | Protagonista | Por qué |
+|---|---|---|
+| 1 · La Niña | **Mamacocha** | Domina el agua fría: su bajo es lo que más suena |
+| 2 · El Niño «Godzilla» | **Inti** | Un océano rojo: los acordes cálidos mandan |
+| 3 · Niño Costero | **Silbo** | La costa del Perú arde: es su silbido de alarma |
+| 4 · Yaku | **Yaku** | Es el nombre del evento y su lluvia de gotas |
+| 5 · El Niño 2023 | **Illapa** | Los extremos: truenos |
+| Tus datos | **Inti** o **Mamacocha** | Según predomine lo cálido o lo frío en el archivo |
+
+Reglas de la banda en vivo:
+1. Al abrir la app la banda está **apagada**: no suena ninguna voz.
+2. Al elegir un disco se enciende **solo su protagonista**; las demás voces se apagan.
+3. La persona puede **encender a cada personaje** con su botón ON/OFF, o usar **«Banda completa»** y **«Apagar banda»**, hasta armar la banda de cinco.
+4. Si pulsa Reproducir con la banda apagada, se enciende el protagonista del disco y la app lo avisa (así nunca se queda en silencio sin explicación).
+5. El personaje grande siempre es el protagonista del disco y muestra su estado: *apagado*, *calmo*, *activo* o *intenso*.
+
 Respeto cultural: M5 valida los nombres y las descripciones con fuentes, como el Museo Tumbas Reales de Sipán y el Museo Brüning, y evita caricaturizar a las divinidades.
 
 ---
@@ -116,18 +136,20 @@ Respeto cultural: M5 valida los nombres y las descripciones con fuentes, como el
 ### MVP (obligatorio, listo a la hora 30)
 1. **Jukebox** con 5 discos de 6 fotogramas cada uno: reproducir/pausar, tira de fotogramas, fotograma anterior/siguiente y velocidad del escaneo.
 2. **Analizador visual en el navegador**: cuadrícula 28×16, clasificación de color → nivel y recuadro de la costa.
-3. **La banda** sonando en tiempo real: 5 voces, con mezclador para silenciar a cada personaje.
+3. **La banda** sonando en tiempo real: 5 voces. Inicia apagada, cada disco enciende a su protagonista y se pueden ir sumando los demás hasta la banda completa (sección 3). El sonido sale del motor **Melodía compuesta** (por defecto) o de **Datos puros**, a elección (sección 5.1).
 4. **Visualización**: cabezal de escaneo sobre el fotograma, vista "lo que oye la máquina" y medidores por personaje.
 5. **Accesibilidad**: subtítulos de sonido, botón "Describir fotograma" (texto y voz), vibración, alto contraste, texto grande, fuente legible y todo con teclado.
 6. **Identidad Terrasonic** (logo, fondo espacial animado que reacciona al fotograma) y los **5 avatares en dos versiones**: modelo anime grande junto al fotograma y sprite 32×32 (respiración, parpadeo y 3 estados según su voz; ver sección 9).
-7. **«Tus datos»**: subir una imagen o un CSV y escucharlo con la misma banda (sección 4.1). Va dentro del MVP, pero **después del núcleo** (horas 24–30).
+7. **«Tus datos»**: subir una imagen o un CSV y escucharlo con la misma banda, **en su propia página** (sección 4.1). Va dentro del MVP, pero **después del núcleo** (horas 24–30).
 8. **Página «Tecnología»**: una pestaña de la app que muestra qué tecnologías, datos y herramientas de IA se usaron, con su estado (*en el prototipo* o *planeado*) y la declaración de uso de IA (sección 6.1).
+9. **Escenario de la banda**: sprites animados de cada personaje encendido, que tocan su instrumento según su participación en la melodía. Si un personaje se apaga, desaparece del escenario, y el panel del protagonista se anima igual que su sprite (sección 4.3).
+10. **Versión móvil** bien adaptada: una columna, barra de pestañas inferior, reproductor fijo y escenario compacto (sección 4.4).
 
 ### Extras (solo con el MVP cerrado)
-9. Más discos del EIC: **Global Temperature Anomalies 1880–2023** (SVS 5207) y **Seasonal Global Precipitation, GPM** (SVS 4897). Para el de lluvia, Yaku pasa a escuchar la densidad de precipitación.
-10. **Eco de Chiclayo** (R4): tras cada disco suena la lluvia mensual real de Chiclayo de NASA POWER (ya descargada en `data/`).
-11. **Exportar .wav** de cada disco (playlist de respaldo para el envío).
-12. **Ropa alternativa por disco** (variante según el evento), efectos de gotas y destellos, y animación avanzada de los avatares (Live2D/Spine solo si alguien ya lo domina).
+11. Más discos del EIC: **Global Temperature Anomalies 1880–2023** (SVS 5207) y **Seasonal Global Precipitation, GPM** (SVS 4897). Para el de lluvia, Yaku pasa a escuchar la densidad de precipitación.
+12. **Eco de Chiclayo** (R4): tras cada disco suena la lluvia mensual real de Chiclayo de NASA POWER (ya descargada en `data/`).
+13. **Exportar .wav** de cada disco (playlist de respaldo para el envío).
+14. **Ropa alternativa por disco** (variante según el evento), efectos de gotas y destellos, y animación avanzada de los avatares (Live2D/Spine solo si alguien ya lo domina).
 
 ### Fuera de alcance
 Backend, login, base de datos, entrenar modelos de ML, app nativa.
@@ -136,6 +158,7 @@ Backend, login, base de datos, entrenar modelos de ML, app nativa.
 | Aspecto | Decisión |
 |---|---|
 | **Qué acepta** | Una **imagen** (PNG, JPG, WebP, GIF) o un **CSV/TSV/TXT** con una columna numérica (mínimo 8 valores, hasta 5000 filas). Máximo 8 MB |
+| **Dónde vive** | En su **propia página** «Tus datos» (ya no dentro de la jukebox). Al cargar un archivo aparece el mismo reproductor, con su banda y su protagonista |
 | **Imagen** | Misma cuadrícula 28×16 y mismo escaneo. Dos modos: **Mapa de anomalía** (paleta NASA, para mapas del EIC) y **Color libre** (cualquier imagen: lo cálido suma, lo frío resta y los grises siguen el brillo) |
 | **CSV** | La serie se resume en 28 columnas (se conserva el valor más extremo de cada grupo). Lo que está **sobre la media** se lee como cálido (Inti y Yaku, y Illapa si es extremo) y lo que está **bajo la media** como frío (Mamacocha). La persona elige la columna; por defecto se evita una columna que sea solo un índice (año, número de fila) |
 | **Ejemplo incluido** | Lluvia mensual de Chiclayo 2015–2018 (NASA POWER) para probar sin tener archivos |
@@ -144,6 +167,97 @@ Backend, login, base de datos, entrenar modelos de ML, app nativa.
 | **Límites honestos** | Es una sonificación artística: los niveles de una imagen libre no son magnitudes físicas. El silbido de Silbo (costa del Perú) solo aplica a los fotogramas del EIC |
 | **Responsables** | M2 (análisis), M4 (interfaz), M5 (accesibilidad), M6 (integración) |
 | **Prioridad** | Dentro del MVP, después del núcleo (horas 24–30). Si no llega, pasa a extra |
+
+### 4.2 Navegación, transiciones y reglas de interfaz
+La app tiene **cinco páginas**: *Jukebox*, *La banda*, *Tus datos*, *Cómo suena* y *Tecnología*.
+
+| Tema | Decisión |
+|---|---|
+| **Transición del satélite** | Al cambiar de página, un satélite pixelado cruza la pantalla con una estela y 14 barras verticales cubren y descubren la imagen. En el centro aparece «PÁGINA 0N» y el nombre de la página, como el cambio de nivel de un videojuego. El contenido cambia a ~0,5 s y todo dura ~1,1 s |
+| **Seguridad y accesibilidad de la transición** | Sin destellos rápidos (nada parpadea más de 3 veces por segundo). Con `prefers-reduced-motion` la página cambia al instante, sin animación. La transición bloquea los clics solo ese ~1 s. Al terminar se anuncia «Página: NOMBRE» en una región `aria-live` |
+| **Sin espacios en blanco** | En la jukebox, la columna izquierda (discos y banda) y el panel derecho miden **lo mismo de alto** y se rellenan: la nota de fuente y el subtítulo se anclan abajo. Las cuadrículas de tarjetas rellenan su última fila. No hay columnas vacías (por ejemplo, la página *La banda* trae una sexta tarjeta, «Banda completa») |
+| **Personaje grande** | El modelo detallado ocupa la columna derecha del reproductor (~400×600 px, casi el doble que antes) y se estira a la altura del fotograma, la cuadrícula y las estadísticas |
+| **Banda en vivo** | Es un mezclador en la columna izquierda, debajo de los discos. Inicia apagada (§3) |
+| **Tus datos** | Página propia, con su zona de carga a la izquierda y, al cargar un archivo, el mismo reproductor a la derecha. Sin archivo, la derecha explica cómo se lee una imagen y un CSV |
+| **Flechas animadas** | Los botones «anterior» y «siguiente» se sustituyen por **flechas pixeladas animadas** a los lados del fotograma: se deslizan en reposo, más rápido al pasar el cursor, se desactivan en los extremos y tienen `aria-label`. Se añade el contador «fotograma N de 6» |
+| **Selector de motor de sonido** | Tarjeta «Motor de sonido» en la columna izquierda: *Melodía compuesta*, *Datos puros* y, planeadas y desactivadas, *IA en el navegador* e *IA generativa en la nube* |
+| **«Por qué suena así»** | Panel dentro del reproductor que empareja **lo que ves** (descripción del fotograma) con **lo que oyes** (tonalidad, tempo y progresión con el acorde activo resaltado), y explica cuatro decisiones. Cubre «contar el porqué» y «documentar el proceso» del reto |
+| **Objetivos del reto en la interfaz** | La página *Cómo suena* trae «Lo que pide el reto y dónde verlo»: ocho objetivos, cada uno con un botón que lleva a la página donde se cumple |
+| **Responsables** | M4 (visual y animación), M6 (orquesta el cambio de página y el estado de la banda) y M5 (aviso `aria-live` y modo sin movimiento) |
+
+### 4.3 El escenario de la banda
+Al pie de las páginas *Jukebox* y *Tus datos* hay un **escenario** donde se ve quién está tocando y cómo. Refuerza el núcleo del reto: que lo que se ve y lo que se oye vayan juntos.
+
+| Tema | Decisión |
+|---|---|
+| **Ubicación** | Parte inferior de la página, debajo del reproductor y a todo el ancho |
+| **Quién aparece** | Solo los personajes **encendidos (ON)**. Si uno se apaga, **desaparece** del escenario (se encoge y se desvanece) y los demás se reparten el espacio. Al encenderlo, **vuelve a entrar** con un salto. Con la banda apagada se ve el cartel «Escenario vacío» |
+| **Escena** | Telón y cenefa, tarima de madera, un reflector por músico (más intenso cuando toca) y, de fondo, **el fotograma que suena** con su cabezal de escaneo. Abajo, un metrónomo de 8 pasos, el acorde actual y los pulsos por minuto |
+| **Participación → animación** | Cada voz se anima con tres señales que salen del motor de sonido: **estado** (calmo = *idle*; activo = *tocar*), **disparo** (cada nota que toca la voz lanza su gesto: golpe, nota, gota, latido) y **ritmo** (el balanceo o el rebote duran 60 / ppm segundos, es decir, siguen el tempo del disco) |
+| **Protagonista del disco** | El modelo grande usa **exactamente el mismo estado** que su sprite del escenario: mismos clips, mismos disparos y mismo ritmo. Si en el escenario toca la marimba, en el panel también. Si el personaje está apagado, el panel lo muestra atenuado y quieto |
+| **Partículas y efectos** | Notas (♪ ♫ ♩), gotas (▾) y chispas (✦) suben y se desvanecen con cada disparo. El **trueno** de Illapa da un destello suave y un temblor corto del escenario |
+| **Accesibilidad** | El escenario es decorativo (`aria-hidden`); la información equivalente está en los subtítulos de sonido y en la región «En el escenario: …» (`aria-live`). El destello es único, de máximo 35 % de opacidad, nunca más de 3 por segundo, y se desactiva con `prefers-reduced-motion` |
+| **Fuente de verdad** | Un único estado: el evento `voces` (niveles, `disparos` y `trueno`) más el ON/OFF de la banda. El escenario y el protagonista solo lo dibujan, así que nunca se desincronizan |
+
+#### Hoja de animaciones (clips) por personaje
+Todos tienen además `aparecer` y `salir` (4 frames).
+
+| Personaje | Instrumento | Clips | Qué los dispara |
+|---|---|---|---|
+| **Silbo** | Flauta | `idle` (respira, 2 f, bucle) · `tocar_flauta` (se balancea al pulso, 4 f, bucle) · `nota` (sube la flauta, 3 f) · `motivo_silbo` (levanta la botella y silba, 6 f) | Nivel ≥ 0,15 → `tocar`. Cada nota → `nota`. Costa > +2 → `motivo_silbo` |
+| **Inti** | Marimba | `idle` · `tocar_marimba` (rebota al pulso) · `golpe_izq` / `golpe_der` (2 f, los mazos alternan en cada arpegio) · `acento` (acorde fuerte, 4 f) | Cada nota del arpegio → golpe. Mucho calor → `acento` |
+| **Mamacocha** | Bajo + colchón | `idle` (olas) · `tocar_pad` (onda lenta) · `acorde` (anillo de agua al cambiar de acorde, 4 f) · `apagarse` (se encoge cuando el mar se calienta y casi no suena, 6 f) | Cada cambio de acorde → `acorde`. Nivel muy bajo → `apagarse` |
+| **Yaku** | Gotero | `idle` · `saltar` (salta al pulso) · `gota` (cae una gota, 3 f) · `salpicadura` (dos gotas a la vez, 4 f) | Cada gota → `gota`. Dos gotas juntas → `salpicadura` |
+| **Illapa** | Timbal | `idle` (inmóvil) · `latido` (golpe suave cada 8 pasos, 3 f) · `trueno` (golpe fuerte y relámpago, 6 f) | Cada 8 pasos → `latido`. Columna extrema → `trueno` |
+
+**Arte:** sprite de 32×32 con al menos 4 frames por clip a 8–12 fps, escalado en múltiplos enteros (×4 = 128 px) para que quede nítido. El modelo detallado se anima por capas (cuerpo, cabeza, brazos, instrumento) con los mismos nombres de clip. El prototipo ya trae **placeholders animados** (una caja punteada para el personaje y otra para el instrumento) que muestran los gestos, los disparos y la sincronización; M4 los reemplaza por el arte real sin cambiar el código.
+
+**Orden de trabajo:** (1) placeholders animados *(hecho en el prototipo)*, (2) sprites 32×32 estáticos, (3) clips `idle` y `tocar`, (4) disparos y efectos, (5) `aparecer`/`salir` y detalles.
+
+### 4.4 Versión móvil (diseño y plan)
+**Objetivo:** que toda la app se use con una mano, en vertical, en un teléfono de gama media (360–430 px de ancho), sin perder el escenario, la banda ni la accesibilidad. Muchas personas con baja visión usan el móvil con TalkBack o VoiceOver, así que esta versión es parte del núcleo del reto, no un adorno.
+
+**Estado honesto:** el prototipo actual ya apila las columnas y el escenario es proporcional al ancho, pero **no tiene todavía** la barra inferior, el reproductor fijo ni los acordeones, y no lo he probado en un teléfono. Lo siguiente está **planeado**.
+
+| Ancho | Diseño |
+|---|---|
+| **≥ 1100 px** (escritorio) | Dos columnas (discos y banda a la izquierda, reproductor a la derecha) y escenario debajo |
+| **700–1099 px** (tableta) | Discos en una fila horizontal arriba, reproductor a ancho completo, mezclador de la banda debajo del reproductor y escenario al pie |
+| **< 700 px** (móvil vertical) | Una sola columna, barra de pestañas inferior y reproductor fijo |
+| **Móvil horizontal** | Dos columnas: fotograma a un lado y escenario al otro, con la barra de reproducción lateral |
+
+**Principios:** pulgar y una mano (las acciones principales en la mitad inferior, objetivos táctiles de al menos 48 px, texto de al menos 16 px, nada que dependa del hover); una pantalla, una tarea (lo secundario va plegado en acordeones); rendimiento y batería; y que funcione sin conexión.
+
+**Página Jukebox en el móvil, de arriba abajo:**
+1. **Barra superior compacta** (56 px): logo Terrasonic, espacio pequeño para el logo oficial de Space Apps y un botón «Accesibilidad» que abre una hoja con contraste, texto grande, fuente legible, voz y vibración.
+2. **Selector de discos:** carrusel horizontal con ajuste de posición; 5 fichas con el color del disco y su protagonista.
+3. **Visor del fotograma** a ancho completo con las flechas animadas, el cabezal de escaneo y «fotograma N de 6». Deslizar a izquierda o derecha también cambia de fotograma (alternativa, nunca la única vía).
+4. **Escenario compacto** (~200 px de alto) con sprites pequeños; los músicos apagados no aparecen.
+5. **Fila de la banda:** 5 interruptores con el sprite 32×32 (un toque = ON/OFF) y, debajo, «Banda completa» y «Apagar banda».
+6. **Tarjeta «Protagonista»** compacta (modelo de ~220×330 px) con el botón «Ver grande», que abre una hoja a pantalla completa. Mismo estado y misma animación que el escenario.
+7. **Acordeones plegados:** «Por qué suena así», «Lo que oye la máquina», «Motor de sonido» y «Describir fotograma».
+8. **Barra de reproducción fija**, justo sobre la de pestañas: botón Reproducir/Pausa grande (56 px), acorde actual y velocidad. Siempre al alcance del pulgar.
+9. **Barra de pestañas inferior** (5 iconos con etiqueta): Jukebox, Banda, Datos, Método y Tecnología.
+
+**Otras páginas:** *La banda* en una columna, con el modelo grande en un carrusel. *Tus datos* con un botón grande «Elegir archivo» y otro «Tomar foto» (cámara), el ejemplo de Chiclayo y el reproductor debajo, con el mismo diseño. *Cómo suena* con acordeones y los objetivos del reto en tarjetas apiladas con botón «Ir a». *Tecnología* con filtros que se desplazan en horizontal y fichas en una columna.
+
+| Aspecto | Decisión |
+|---|---|
+| **Transición y fondo** | La transición del satélite dura ~0,7 s con 8 barras y solo usa `transform` y `opacity`. El fondo espacial lleva 30 estrellas, sin estrella fugaz. Todo se pausa con la pestaña oculta o con `prefers-reduced-motion` |
+| **Viewport y áreas seguras** | `meta viewport` con `viewport-fit=cover` y `env(safe-area-inset-*)` en las barras fijas (iPhone con muesca) |
+| **Audio** | Se desbloquea con el primer toque. Se avisa si el interruptor de silencio del iPhone está activado. El audio se corta con la pantalla bloqueada: opcionalmente se usa Wake Lock mientras suena |
+| **Vibración** | La Vibration API no existe en el Safari de iPhone: hay alternativa visual (pulso del escenario) y nada depende de la vibración |
+| **Imágenes** | Fotogramas en dos tamaños (560×320 y 280×160) con `srcset`; el análisis usa 140×80 en ambos |
+| **Rendimiento** | Objetivo de 60 fps en un Android de gama media (4 GB de RAM): animaciones solo con `transform`/`opacity`, como máximo 5 partículas visibles y sin `backdrop-filter` |
+| **Sin conexión** | PWA (manifest y service worker) que guarda los 30 fotogramas (~1,3 MB), el JSON y el código, con icono para añadir a la pantalla de inicio |
+| **Gestos** | Deslizar para cambiar de fotograma y mantener pulsado un músico para ver su ficha, siempre como atajo |
+| **Accesibilidad** | TalkBack y VoiceOver con orden de lectura lógico, etiquetas en todos los iconos, contraste AA, el escenario como decoración y respeto al tamaño de texto del sistema |
+
+**Matriz de pruebas:** iPhone SE y iPhone 14/15 (Safari), Pixel 7 y un Samsung Galaxy A de gama media (Chrome), una tableta, conexión lenta y modo sin conexión, con TalkBack y con VoiceOver.
+
+**Responsables:** M4 (diseño responsivo), M6 (PWA, viewport, desbloqueo de audio y caché), M5 (accesibilidad móvil y pruebas con TalkBack y VoiceOver), M3 (audio en iOS) y M1 (tamaños de fotograma y lista de caché).
+
+**Plan de trabajo:** primero una **maqueta móvil en Claude Design** (artboards de 390×844 y 360×800) para aprobarla; luego el CSS responsivo (horas 12–24) y, por último, pruebas en dispositivos reales (horas 24–30).
 
 ---
 
@@ -162,6 +276,57 @@ Backend, login, base de datos, entrenar modelos de ML, app nativa.
 
 Validación: el algoritmo se probó con los 30 fotogramas. La Niña da frío ≈1,6 y costa −1,4; el Niño Costero 2017 da costa +3,9; Yaku 2023 sube de −0,3 a +4,4.
 
+### 5.1 Capa musical: de datos a melodía (investigación y decisión)
+**Pregunta del equipo:** ¿se puede lograr que los sonidos que salen del análisis de los fotogramas suenen como una melodía con sentido, que represente a cada disco y personaje? **Sí.** Suena "aleatorio" cuando cada píxel se convierte en una nota suelta, sin tonalidad, sin ritmo y sin acordes. Se arregla de dos maneras que se pueden combinar: **componer con reglas musicales** (lo que hace el prototipo) y, opcionalmente, **sumar IA generativa**.
+
+**Qué pide el reto:** sonificaciones "generadas en tiempo real" a partir de los fotogramas y un equilibrio "entre la traducción estricta de datos y la musicalidad", con escalas, armonías y salidas "agradables". Permite reglas artísticas, aprendizaje automático, sintetizadores de código abierto, o una colección de audios generados.
+
+#### Opciones investigadas
+Investigación hecha con documentación pública el 5 de noviembre de 2026. **Precios, licencias y estado de cada servicio deben verificarse antes de usarlos**: varias fuentes secundarias se contradicen.
+
+| Opción | Qué es | Tiempo real | Fidelidad a los datos | Requisitos y costo | Veredicto |
+|---|---|---|---|---|---|
+| **Compositor por reglas en el navegador** (Web Audio; Tone.js y Tonal.js opcionales) | Teoría musical programada: tonalidad, acordes, ritmo y melodía que salen de los datos | Sí | **Alta**: cada nota se explica | Gratis, sin servidor ni cuenta, funciona sin internet | **Recomendado. Es el MVP y ya está en el prototipo** |
+| **Magenta.js** (MusicRNN, MusicVAE) | Modelos de IA de código abierto que corren en el navegador con TensorFlow.js. Solo inferencia | Casi (tarda unos segundos en generar) | Media: varía o continúa un motivo que ya viene de los datos | Gratis. Hay que descargar los modelos (se alojan en Google Cloud Storage). Verificar versión y mantenimiento | Extra opcional: «IA en el navegador» |
+| **Lyria RealTime** (Gemini API) | Modelo de Google que genera música instrumental en streaming por WebSocket. Parámetros: tempo (60–200), densidad, brillo y escala. La salida lleva marca de agua | Sí | Baja: se guía con texto y parámetros, **no con píxeles** | Es **experimental**. Pide clave de API: en una web pública quedaría expuesta, así que haría falta un servidor intermediario. Cambiar tempo o escala obliga a reiniciar el contexto. La documentación no indica precios | Experimento opcional. **No entra en el MVP** |
+| **ElevenLabs Music** (`POST /v1/music`) | API de texto a música | No | Baja | Plan de pago para uso comercial (las fuentes citan desde unos 6 USD al mes) y límites mensuales. Verificar | Solo para pistas pregeneradas |
+| **Stable Audio 3.0** (API, y variantes de pesos abiertos) | Texto a audio, hasta varios minutos | No | Baja | Licencia comunitaria con un tope de ingresos de la empresa (se cita 1 millón de USD). Verificar | Solo para pistas pregeneradas |
+
+No se evaluaron Suno, Udio, MusicGen ni Mubert.
+
+#### Decisión: arquitectura en tres capas
+1. **Capa 1 · Compositor por reglas (MVP).** Es la capa que se oye por defecto. Es en tiempo real, determinista (el mismo fotograma siempre suena igual), accesible y no depende de nada externo.
+2. **Capa 2 · IA en el navegador (extra).** Magenta.js varía o continúa la melodía de la capa 1 sin salir del equipo. Es la opción «IA en el navegador», hoy desactivada en el prototipo.
+3. **Capa 3 · Pistas pregeneradas (extra).** Para la **playlist de respaldo** que el reto permite entregar ("una colección de audios originales generados"), y para la música del video, se generan pistas con Stable Audio o ElevenLabs **fuera de línea**, con prompts derivados de los datos de cada disco. Se declaran como IA, con su licencia revisada. Lyria RealTime queda como experimento en vivo solo si el equipo monta un servidor intermediario.
+
+Se mantiene siempre el motor **Datos puros** para quien quiera la traducción más literal, sin "embellecer".
+
+#### Identidad musical por disco y personaje
+Cada personaje tiene su propia tonalidad, tempo y progresión. Todos los músicos tocan **dentro de la misma armonía**, así que suenan bien juntos o por separado.
+
+| Protagonista | Tonalidad y modo | Tempo | Progresión | Carácter musical |
+|---|---|---|---|---|
+| **Mamacocha** (La Niña) | Re dórico | 60 ppm | Rem7 – Lam7 – Famaj7 – Domaj7 | Lento y profundo: bajo y colchón de cuerdas |
+| **Inti** (Godzilla) | Mi mayor | 108 ppm | Mi – Si – Do♯m – La | Brillante y enérgico: arpegios de marimba |
+| **Silbo** (Niño Costero) | La menor pentatónico | 76 ppm | Lam – Sol – Fa – Mi | Aire andino de huayno: flauta melancólica |
+| **Yaku** (Yaku) | Sol mayor pentatónico | 96 ppm | Sol – Mim – Do – Re | Juguetón: gotas en pentatónica |
+| **Illapa** (Niño 2023) | Si menor natural | 84 ppm | Sim – Sol – Re – La | Tensión de tormenta: timbales y trueno |
+
+#### Reglas de composición (todas se pueden explicar)
+- **Pulso:** cada columna del fotograma es una corchea. Un fotograma dura entre 8 y 14 segundos según el disco, y la velocidad (lenta, normal, rápida) cambia el tempo.
+- **Armonía:** el acorde cambia cada 4 columnas siguiendo la progresión del disco. Las **últimas 4 columnas vuelven al acorde de reposo**, así cada fotograma termina con sensación de cierre.
+- **Melodía (Silbo):** la anomalía más fuerte de cada columna decide la nota: **más al norte, más agudo**. Los saltos se limitan a dos grados para que suene a melodía, y en los tiempos fuertes la nota se ajusta al acorde. Si la columna es neutra, hay silencio, así que el **ritmo también cuenta los datos**.
+- **Motivo de Silbo:** cuando la costa del Perú supera +2, toca su motivo descendente (en La menor pentatónico: Sol – Mi – Do – La).
+- **Inti:** arpegios sobre el acorde actual; con más calor suben una octava y suenan más fuerte.
+- **Mamacocha:** nota grave del acorde y colchón; su fuerza sigue al frío del fotograma.
+- **Yaku:** hasta dos gotas por columna en la pentatónica de la tonalidad, con la altura según la latitud.
+- **Illapa:** latido de timbal cada 8 columnas y **trueno** cuando una columna supera el 25 % de valores extremos.
+- **Sonido:** reverberación generada en el navegador para que suene más cálido.
+
+**Límites honestos:** la melodía es una **interpretación artística** de los datos, no una medición. Decide la tonalidad el equipo, no los datos; lo que sí viene de los datos es la altura, el ritmo, la intensidad y qué voces aparecen. Las capas 2 y 3 están planeadas y **no están hechas**.
+
+**Fuentes de la investigación:** [Lyria RealTime (Google)](https://aistudio.google.com/docs/realtime-music-generation) · [Magenta.js](https://magenta.github.io/magenta-js/music/) · [@magenta/music en npm](https://npmjs.com/package/@magenta/music) · [Tonal.js](https://github.com/tonaljs/tonal) · [ElevenLabs, precios](https://www.elevenlabs.io/pricing) · [ElevenLabs, Eleven Music API](https://elevenlabs.io/hi/eleven-music-api) · [Stable Audio 3.0 (The Decoder)](https://the-decoder.com/stability-ai-launches-stable-audio-3-0-with-up-to-six-minute-tracks-and-open-weights/) · [Stability AI, licencias](https://stability.ai/license).
+
 ---
 
 ## 6. Tecnología: lo mínimo que funciona
@@ -170,7 +335,7 @@ Validación: el algoritmo se probó con los 30 fotogramas. La Niña da frío ≈
 |---|---|---|
 | App | HTML, CSS y JS con módulos ES, sin build | Lo recomendaron en la charla. Cualquiera puede editarla |
 | Visión por computadora | **Canvas 2D `getImageData`** | Nativo del navegador, sin librerías |
-| Audio | **Web Audio** (ya funciona en el prototipo). Tone.js opcional | Sin dependencias |
+| Audio | **Web Audio** (ya funciona en el prototipo), con compositor por reglas y reverb propios. Tone.js y Tonal.js opcionales | Sin dependencias. Ver §5.1 |
 | Voz | Web Speech API | Gratis y offline |
 | Fotogramas | Script Python (`scripts/descargar_fotogramas.py`) que guarda PNG en `data/fotogramas/` | La demo no depende de internet |
 | Extracción desde el video del EIC | `ffmpeg -i video.mp4 -vf fps=1 frame_%03d.png` | Para los discos extra de SVS |
@@ -224,10 +389,11 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 
 ### M1 · Fotogramas EIC y datos (`data/`, `scripts/`, `src/fotogramas/`)
 - [ ] `scripts/descargar_fotogramas.py`: 5 discos × 6 fotogramas GHRSST MUR desde Worldview, con encuadre 140°O–70°O y 25°S–15°N (las fechas están en el prototipo).
-- [ ] `data/discos.json`: manifiesto con id, título, periodo, fuente, fechas y ruta de cada fotograma.
+- [ ] `data/discos.json`: manifiesto con id, título, periodo, fuente, **protagonista** (`mama`, `inti`, `silbo`, `yaku` o `illapa`), fechas y ruta de cada fotograma.
 - [ ] *(Extra)* Extraer fotogramas de los videos EIC SVS 5207 y 4897 con ffmpeg y agregarlos como discos 6 y 7.
 - [ ] `docs/DATOS.md`: fuentes, licencias, paleta de color y limitaciones (MUR 0,25°, no son grados exactos).
 - [ ] *(Extra)* Serie de lluvia de NASA POWER para el "Eco de Chiclayo" (ya está en `data/nasa_power_monthly.json`).
+- [ ] Fotogramas en **dos tamaños** (560×320 y 280×160) para móviles, y la **lista de archivos** para la caché sin conexión (§4.4).
 - **Hecho cuando:** `getDiscos()` devuelve los 5 discos y todas las imágenes cargan sin internet.
 
 ### M2 · Analizador visual (`src/analizador/`)
@@ -240,20 +406,27 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - **Hecho cuando:** los valores coinciden con la tabla de la sección 2 (±0,2).
 
 ### M3 · Motor de sonido: la banda (`src/sonido/`)
-- [ ] Las 5 voces (sección 5) con Web Audio. Puedes partir del código del prototipo.
-- [ ] Mezclador: `silenciar(personaje)` y volumen general.
+- [ ] Las 5 voces con Web Audio y **dos motores**: **Melodía compuesta** (por defecto; §5.1: tonalidad, tempo y progresión por personaje, melodía desde la latitud de la anomalía, cierre en el acorde de reposo y reverb) y **Datos puros** (§5). Puedes partir del código del prototipo, que ya trae ambos.
+- [ ] Mezclador y **estado de la banda**: inicia apagada; `banda:preset` enciende solo al protagonista del disco, a la banda completa o a ninguno; `silenciar(personaje)` y volumen general.
 - [ ] Emitir `voces` con el nivel 0…1 de cada personaje en cada paso.
 - [ ] Ajuste musical: que suene bien a 70, 110 y 180 ms por columna.
 - [ ] *(Extra)* Exportar .wav de cada disco con `MediaRecorder` y armar la playlist de respaldo.
 - [ ] *(Extra)* Grabar una réplica real de huaco silbador y usarla como muestra de Silbo.
-- **Hecho cuando:** con los ojos cerrados se distingue el disco 1 del disco 2.
+- [ ] Emitir en `voces` los **`disparos`** (qué voces sonaron en este paso) y el **`trueno`**, para animar el escenario y el protagonista (§4.3).
+- [ ] *(Extra)* **IA en el navegador** (Magenta.js): variar o continuar la melodía de la capa 1. Verificar versión, tamaño del modelo y mantenimiento antes de integrarla.
+- [ ] *(Extra)* **Pistas pregeneradas** para la playlist de respaldo (Stable Audio o ElevenLabs, fuera de línea; §5.1). Se declaran como IA y se revisa la licencia.
+- **Hecho cuando:** con los ojos cerrados se distingue el disco 1 del disco 2 y **3 personas ajenas al equipo dicen que la melodía suena agradable**.
 
 ### M4 · Arte, avatares anime y componentes visuales (`src/arte/`, `assets/`)
 - [ ] **Sprites 32×32 de los 5 personajes** (primero: son la red de seguridad) y **modelos anime detallados** por capas PNG en `assets/avatares/` (diseño, proceso y prioridades en la sección 9).
 - [ ] **Pulido visual**: transiciones y efectos de la sección 2 (entradas escalonadas, hover, fundido entre fotogramas, escaneo con brillo), siempre con `prefers-reduced-motion`.
 - [ ] Página **«Tecnología»** (§6.1): fichas por categoría, filtros, contador y declaración de IA. Se mantiene al día.
-- [ ] **Jukebox**: el panel de visualización y el de selección de discos miden lo mismo de alto (se estiran juntos; la zona «Tus datos» queda abajo).
-- [ ] Interfaz de **«Tus datos»** (zona de arrastrar y soltar, selector de modo y de columna, ejemplo de Chiclayo).
+- [ ] **Jukebox sin espacios en blanco** (§4.2): columna de discos y banda, y panel de visualización de la misma altura; **personaje grande (~400×600 px)** a la derecha del fotograma; mezclador de la banda con ON/OFF, «Banda completa» y «Apagar banda».
+- [ ] **Transición del satélite** entre páginas (§4.2): satélite, estela, 14 barras y rótulo «PÁGINA 0N».
+- [ ] **Flechas animadas** de fotograma, tarjeta **«Motor de sonido»**, panel **«Por qué suena así»** y la sección de **objetivos del reto** en *Cómo suena* (§4.2).
+- [ ] **Escenario de la banda** (§4.3): telón, tarima, reflectores, metrónomo, entrada y salida de cada músico, y animaciones (placeholders ya hechos; sustituir por sprites y clips reales). El panel del protagonista usa el mismo estado.
+- [ ] **Diseño móvil** (§4.4): maqueta en Claude Design, CSS responsivo, barra de pestañas inferior, reproductor fijo, acordeones y hoja «Ver grande».
+- [ ] Página **«Tus datos»** (zona de arrastrar y soltar, selector de modo y de columna, ejemplo de Chiclayo, y estado vacío con explicación).
 - [ ] Marca **Terrasonic**: logo final, fondo espacial animado y cabecera con el espacio del logo oficial de Space Apps (§2, identidad de marca).
 - [ ] Kit visual retro: bordes de 4 px, sombras duras, tipografías Press Start 2P (títulos cortos), Pixelify Sans (encabezados) e IBM Plex (texto) y paleta derivada de la escala de anomalías.
 - [ ] Componentes: visor de fotograma con cabezal y recuadro de Silbo, cuadrícula "lo que oye la máquina", tira de fotogramas y tarjetas de la banda con medidores.
@@ -267,6 +440,9 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] Prueba real con NVDA o TalkBack, idealmente con una persona ciega o con baja visión. Grabar la prueba para el pitch.
 - [ ] Textos de los personajes y del pitch, validando los nombres andinos con fuentes.
 - [ ] Accesibilidad de **«Tus datos»**: carga con teclado, estados en `aria-live` y descripción por voz del resultado.
+- [ ] **Cambio de página**: anuncio «Página: NOMBRE» en `aria-live` y cambio inmediato con `prefers-reduced-motion`.
+- [ ] **Prueba de escucha** del motor Melodía con personas ciegas o con baja visión: ¿entienden qué pasa en el fotograma solo con el sonido y la descripción?
+- [ ] Pruebas con **TalkBack y VoiceOver** en móvil, y comprobar que el escenario es decorativo (la información equivalente está en los subtítulos y en «En el escenario: …»).
 - **Hecho cuando:** se recorre la jukebox completa sin mirar la pantalla.
 
 ### M6 · App, integración, despliegue y entrega (`index.html`, `src/app/`, `.github/`)
@@ -276,7 +452,9 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] `docs/METODO.md` (E6) y `docs/CREDITOS.md`.
 - [ ] Coordina el video y el formulario de envío con M5.
 - [ ] Conectar **«Tus datos»**: evento `datos:subidos` → M2 → `fotograma:listo`, con un solo disco temporal «Tus datos».
-- **Hecho cuando:** la URL pública funciona en Chrome de escritorio y de Android.
+- [ ] **Router de páginas**: `pagina:cambio` con el cambio de contenido a ~0,5 s (cuando la pantalla está cubierta) y estado de la banda por disco (`banda:preset`).
+- [ ] **Móvil** (§4.4): `viewport-fit=cover` y áreas seguras, PWA instalable (manifest y service worker que guarda los 30 fotogramas), Wake Lock opcional y desbloqueo del audio en el primer toque.
+- **Hecho cuando:** la URL pública funciona en Chrome de escritorio y de Android, y la app instalada funciona sin conexión.
 
 ---
 
@@ -289,7 +467,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 ### 9.0 Dos versiones por avatar
 | Versión | Formato | Dónde se usa |
 |---|---|---|
-| **Modelo detallado** | PNG por capas de 512×768 px, con fondo transparente (se muestra a ~200–240 px) | En la jukebox, **junto al fotograma**, como "protagonista" del fotograma: el personaje con la voz más fuerte en ese momento (si no está sonando, el que mejor describe el fotograma). Y en la pestaña *La banda* |
+| **Modelo detallado** | PNG por capas de 768×1152 px, con fondo transparente (se muestra a ~400×600 px, grande, junto al fotograma) | En la jukebox, **junto al fotograma**, como **protagonista del disco** (el personaje asignado a ese disco, ver §3). Y en la pestaña *La banda* |
 | **Sprite 32×32** | Hoja horizontal de 4 frames (2 reposo + 2 activos) con la paleta compartida | En la barra de la banda con los medidores, el mezclador, la tira de fotogramas y como icono de cada voz |
 
 Ambas versiones salen del **mismo diseño**: primero se cierra el concepto, y el sprite se deriva simplificando el modelo (unas 1–2 horas extra por personaje). Así se ven como la misma familia.
@@ -302,7 +480,7 @@ Ambas versiones salen del **mismo diseño**: primero se cierra el concepto, y el
 | **Moda alternativa / aesthetic** | Ropa con identidad: fusión de **motivos andinos y moches** (chakana, escalonados, ceramios, tejidos) con *techwear*, *streetwear* y capas largas. Evitar disfraces folclóricos caricaturescos |
 | **Coherencia con la página** | Misma paleta que la escala de anomalías (azules, verdes, grises, amarillos, rojos, magentas), contorno de 4 px y sombra dura como las tarjetas, marco con bordes pixelados y *scanlines* CRT encima. Cada avatar vive dentro de un marco igual al del resto de la interfaz |
 | **Paleta limitada** | Máximo ~24 colores por personaje, más una paleta compartida de 16. Así se ven pixel-coherentes y pesan poco |
-| **Tamaño** | Modelo de 512×768 px con fondo transparente (se muestra a ~200–240 px) y sprite de 32×32 (se amplía con `image-rendering: pixelated`) |
+| **Tamaño** | Modelo de 768×1152 px con fondo transparente (se muestra a ~400×600 px, grande, junto al fotograma) y sprite de 32×32 (se amplía con `image-rendering: pixelated`) |
 | **Accesibles** | Cada avatar tiene texto alternativo y una ficha de texto con su personalidad (para lectores de pantalla). No transmiten información solo con el color |
 
 ### 9.2 Diseño por personaje (según la personalidad de su sonido)
@@ -368,7 +546,7 @@ Recomendación: si alguien más del equipo sabe dibujar, sumarlo **como apoyo de
 | 12 | **Integración 1**: play → escaneo → sonido → cabezal y subtítulo | M6 + todos |
 | 12–24 | MVP completo con los primeros avatares (Silbo, Illapa, Mamacocha) | Todos |
 | 24 | **Integración 2** en GitHub Pages | M6 |
-| 24–30 | Bugs y prueba con lector de pantalla | M5 lidera |
+| 24–30 | Bugs, prueba con lector de pantalla y **pruebas en móviles reales** | M5 lidera |
 | 30 | **Congelar el MVP** | Todos |
 | 30–40 | Extras (discos EIC 5207/4897, Eco de Chiclayo, .wav, animación) y video | M1–M4 / M5–M6 |
 | 40–44 | Congelar el código. Ensayos del pitch | M5 |
@@ -387,6 +565,7 @@ Stand-up de 5 minutos cada 6 horas: ¿qué terminé?, ¿qué me bloquea?, ¿qué
 | **Whisper (OpenAI, modelo abierto, ejecutado en local)** | Transcribir la charla de orientación | Se revisaron a mano los fragmentos citados |
 | **ChatGPT (OpenAI), generación de imágenes** | **Conceptos de los 5 avatares (modelo anime detallado y sprite 32×32)** | Repintado y separación en capas a mano (Krita), prompts guardados, búsqueda inversa de originalidad y etiqueta visible |
 | **ChatGPT Codex (OpenAI)** | **Ciertas funciones de código de la versión final** (exportar .wav, parser de CSV, pruebas, animación por capas) | Revisión cruzada de cada cambio, prueba manual y comentario de autoría en la función |
+| **Servicios de música con IA** (Lyria RealTime, Stable Audio, ElevenLabs Music): *candidatas, no acordadas* | Pistas pregeneradas o un experimento en vivo (§5.1) | Solo si el equipo decide usarlas: se declaran, se revisa su licencia y se etiqueta el audio |
 | **Asistente de código (Claude / Copilot), si se usa** | Funciones durante la hackathon | Revisión cruzada de cada PR y prueba manual |
 | **ElevenLabs (opcional)** | Voz del video | Guion escrito por el equipo |
 
@@ -416,6 +595,13 @@ Stand-up de 5 minutos cada 6 horas: ¿qué terminé?, ¿qué me bloquea?, ¿qué
 | La herramienta de IA tiene condiciones de uso restrictivas o el diseño se parece a un personaje existente | Revisar términos antes de elegirla, no nombrar obras ni artistas en los prompts y hacer búsqueda inversa de imagen |
 | Archivos del usuario enormes, corruptos o con formatos raros | Límite de 8 MB, validación y mensajes claros, más un ejemplo incluido para la demo |
 | El código de Codex no encaja con los contratos o tiene errores | Pedirle funciones pequeñas con la firma del contrato, revisarlas y probarlas antes de integrarlas. Si no convence, se escribe a mano |
+| La transición del satélite marea, ralentiza un equipo modesto o frustra por lenta | Dura ~1,1 s, sin destellos, solo `transform`/`opacity`, se desactiva con `prefers-reduced-motion` y se prueba en un móvil de gama baja |
+| La banda apagada parece un error (no se oye nada) | Texto de estado visible, y al pulsar Reproducir con la banda apagada se enciende el protagonista del disco |
+| La melodía suena bonita pero se pierde la fidelidad a los datos | El motor **Datos puros** siempre está disponible, y «Por qué suena así» explica qué viene de los datos y qué es decisión artística |
+| Un servicio de música con IA expone la clave, cuesta, tiene una licencia restrictiva o tarda | No entra en el MVP. Si se usa: pistas pregeneradas fuera de línea, o un servidor intermediario para la clave; revisar licencia y declarar el uso de IA |
+| Cinco sprites animados más el fondo ralentizan un móvil modesto | Animaciones solo con `transform` y `opacity`, pocas partículas, pausar con la pestaña oculta, menos estrellas en móvil y probar en un Android de gama baja |
+| El audio no suena en iPhone (modo silencio o bloqueo del navegador) | Desbloquear el audio con el primer toque, avisar si el interruptor de silencio está activado y no depender de la vibración (no existe en el Safari de iPhone) |
+| El relámpago de Illapa incomoda a personas sensibles a la luz | Un solo destello suave (máx. 35 % de opacidad), nunca más de 3 por segundo, y se desactiva con `prefers-reduced-motion` |
 | Conflictos de Git | Carpetas separadas, CODEOWNERS y merges pequeños |
 | No llegamos a los extras | El MVP se congela en la hora 30 |
 | El audio no arranca solo | Arranca tras el clic en Reproducir (política del navegador) |
