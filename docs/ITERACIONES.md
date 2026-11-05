@@ -21,7 +21,7 @@ Las versiones del artefacto de Claude Design se numeran en orden (v2, v3…). Al
 | **I07** · Melodía y objetivos | v9 (`1793856238-e28c`) | Motor **Melodía compuesta** (tonalidad, acordes y melodía por disco), selector de motor, flechas animadas, «Por qué suena así» y los objetivos del reto | Que suene como melodía y no al azar; flechas con animación; tener presentes los objetivos del reto | Nishix03 | Claude Design, Claude Code |
 | **I08** · Escenario | v10 (`1793856971-7389`) | **Escenario** con un sprite por personaje encendido, que toca su instrumento según su participación y desaparece al apagarse; el protagonista usa el mismo estado | Escenario al pie con sprites animados; versión móvil planeada | Nishix03 | Claude Design, Claude Code |
 | **I09** · Maqueta móvil | v11–v17 | Siete pantallas móviles (390×844 y 360×800): Jukebox, Jukebox al desplazar, Ver grande, La banda, Tus datos, Accesibilidad y Jukebox compacto | Maqueta móvil muy bien adaptada | Nishix03 | Claude Design, Claude Code |
-| **I10** · Iconos y menos cajas | *(en curso)* | Iconos en cada opción y menos botones y cuadros innecesarios | «Agrega iconos a cada opción, no te llenes de botones o cuadros innecesarios» | Nishix03 | Claude Design, Claude Code |
+| **I10** · Iconos y menos cajas | v18 (`1793859417-c59d`) | Iconos pixel en cada opción y menos botones y cuadros: opciones de accesibilidad solo con icono, mezclador de una fila por músico, selector de motor con 4 iconos, estadísticas en línea y «Por qué suena así» desplegable. Las maquetas móviles no cambiaron en esta iteración | «Agrega iconos a cada opción, no te llenes de botones o cuadros innecesarios» | Nishix03 | Claude Design, Claude Code |
 
 ## Historial de cambios en GitHub (commits)
 
@@ -40,7 +40,7 @@ Todos los commits son de la cuenta **nishix_03 / Nishix03**, con la IA como coau
 
 ## Qué fuentes se guardan y cuáles no
 
-- **Se guarda:** el código de la iteración en [`prototipos/`](../prototipos/README.md), una carpeta por iteración a partir de la **I09** (el estado más reciente al momento de crear este registro).
+- **Se guarda:** el código de la iteración en [`prototipos/`](../prototipos/README.md), una carpeta por iteración a partir de la **I09** (`I09-maqueta-movil/` y `I10-iconos/`).
 - **No se guardó antes de la I09:** el código de las iteraciones I01 a I08 se fue sobrescribiendo en el mismo artefacto y **no se conservó una copia local**. Quedan **documentadas** arriba (qué cambió, quién y por qué) y siguen en el **historial de versiones del artefacto de Claude Design**, con los números de versión de la tabla.
 - **Desde ahora:** cada iteración nueva se guarda en su propia carpeta de `prototipos/` y se agrega una fila aquí, antes de pasar a la siguiente.
 

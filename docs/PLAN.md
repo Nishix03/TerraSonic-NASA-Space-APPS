@@ -183,6 +183,7 @@ La app tiene **cinco páginas**: *Jukebox*, *La banda*, *Tus datos*, *Cómo suen
 | **Selector de motor de sonido** | Tarjeta «Motor de sonido» en la columna izquierda: *Melodía compuesta*, *Datos puros* y, planeadas y desactivadas, *IA en el navegador* e *IA generativa en la nube* |
 | **«Por qué suena así»** | Panel dentro del reproductor que empareja **lo que ves** (descripción del fotograma) con **lo que oyes** (tonalidad, tempo y progresión con el acorde activo resaltado), y explica cuatro decisiones. Cubre «contar el porqué» y «documentar el proceso» del reto |
 | **Objetivos del reto en la interfaz** | La página *Cómo suena* trae «Lo que pide el reto y dónde verlo»: ocho objetivos, cada uno con un botón que lleva a la página donde se cumple |
+| **Iconos y menos cajas** | Cada opción lleva un **icono pixel de 8×8** (juego de 33: pestañas, accesibilidad, motor de sonido, banda, filtros, estadísticas, instrumentos…) que usa `currentColor`, así toma el color de la interfaz. Reglas para no llenar de botones y cuadros: las opciones de accesibilidad, «Describir fotograma», «Banda completa» y «Apagar banda» son **solo icono** (con `aria-label` y `title`); cada músico del mezclador es **una sola fila que se pulsa** (sin botón ON/OFF aparte); el motor de sonido es un **selector de 4 iconos** con una sola línea de descripción; las estadísticas van **en línea** con su icono; «Por qué suena así» muestra primero lo esencial y las cuatro decisiones quedan en un **desplegable**; se quitan las tarjetas decorativas de cifras; y las tarjetas de objetivos del reto son **un único botón** |
 | **Responsables** | M4 (visual y animación), M6 (orquesta el cambio de página y el estado de la banda) y M5 (aviso `aria-live` y modo sin movimiento) |
 
 ### 4.3 El escenario de la banda
@@ -434,6 +435,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] Página **«Tecnología»** (§6.1): fichas por categoría, filtros, contador y declaración de IA. Se mantiene al día.
 - [ ] **Jukebox sin espacios en blanco** (§4.2): columna de discos y banda, y panel de visualización de la misma altura; **personaje grande (~400×600 px)** a la derecha del fotograma; mezclador de la banda con ON/OFF, «Banda completa» y «Apagar banda».
 - [ ] **Transición del satélite** entre páginas (§4.2): satélite, estela, 14 barras y rótulo «PÁGINA 0N».
+- [ ] **Iconos en cada opción y menos cajas** (§4.2): juego de 33 iconos pixel 8×8 en `currentColor`; opciones solo con icono llevan `aria-label` y `title`.
 - [ ] **Flechas animadas** de fotograma, tarjeta **«Motor de sonido»**, panel **«Por qué suena así»** y la sección de **objetivos del reto** en *Cómo suena* (§4.2).
 - [ ] **Sprites de los cinco personajes según la biblia visual** (§9.6): cuerpo 32×32, instrumento, partícula, busto, icono 16×16, modelo por capas y hoja de poses, con los nombres de archivo de §9.6.6. Se empieza por los sets mínimos.
 - [ ] **Escenario de la banda** (§4.3): telón, tarima, reflectores, metrónomo, entrada y salida de cada músico, y animaciones (placeholders ya hechos; sustituir por sprites y clips reales). El panel del protagonista usa el mismo estado.
