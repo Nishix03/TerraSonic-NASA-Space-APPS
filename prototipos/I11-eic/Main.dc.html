@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Atkinson+Hyperlegible:wght@400;700&amp;family=Press+Start+2P&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0;background:#000}
 html{scroll-behavior:smooth}
@@ -207,7 +207,7 @@ a{color:inherit}
 .px.app{height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 .px .top{flex:0 0 auto;position:relative;z-index:40;background:rgba(0,0,0,.72);border-bottom:1px solid var(--line)}
 .px .top .wrap{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:20px;min-height:60px}
-.px .viewport{flex:1 1 auto;min-height:0;position:relative;z-index:1}
+.px .viewport{flex:1 1 auto;min-height:0;position:relative}
 .px .scr{position:absolute;inset:0;overflow:hidden}
 .px .in{max-width:1320px;width:100%;height:100%;margin:0 auto;padding:22px 32px;display:flex;flex-direction:column;gap:16px;min-height:0}
 .px .bar{flex:0 0 auto;position:relative;z-index:40;border-top:1px solid var(--line);background:rgba(0,0,0,.72)}
@@ -289,12 +289,12 @@ a{color:inherit}
 .px .legendgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 18px;align-content:center;flex:1 1 auto}
 
 /* transiciones */
-.px .scr.sr-a{animation:srA .42s cubic-bezier(.2,.7,.2,1) both}
-.px .scr.sr-b{animation:srB .42s cubic-bezier(.2,.7,.2,1) both}
-.px .scr.sl-a{animation:slA .42s cubic-bezier(.2,.7,.2,1) both}
-.px .scr.sl-b{animation:slB .42s cubic-bezier(.2,.7,.2,1) both}
-.px .scr.sf-a{animation:sfA .5s ease both}
-.px .scr.sf-b{animation:sfB .5s ease both}
+.px .scr.sr-a{animation:srA .42s cubic-bezier(.2,.7,.2,1) backwards}
+.px .scr.sr-b{animation:srB .42s cubic-bezier(.2,.7,.2,1) backwards}
+.px .scr.sl-a{animation:slA .42s cubic-bezier(.2,.7,.2,1) backwards}
+.px .scr.sl-b{animation:slB .42s cubic-bezier(.2,.7,.2,1) backwards}
+.px .scr.sf-a{animation:sfA .5s ease backwards}
+.px .scr.sf-b{animation:sfB .5s ease backwards}
 @keyframes srA{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
 @keyframes srB{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
 @keyframes slA{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
@@ -337,6 +337,113 @@ a{color:inherit}
   .px .bar .side{min-width:0}
   .px .legendgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* ===== escuchar en una sola pantalla ===== */
+.px .tour.bottom{bottom:24px}
+.px .uni{display:flex;flex-direction:column;gap:14px;height:100%;min-height:0}
+.px .drow{display:flex;gap:12px;align-items:stretch;flex:0 0 auto}
+.px .dchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;flex:1 1 auto;min-width:0}
+.px .dchip{display:flex;align-items:center;gap:10px;padding:5px 10px 5px 5px;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.02);min-height:56px;min-width:0}
+.px .dchip:hover{border-color:var(--fg)}
+.px .dchip[aria-pressed="true"]{background:rgba(255,255,255,.08)}
+.px .dchip img{width:68px;aspect-ratio:560/320;object-fit:cover;flex:0 0 auto;opacity:.8}
+.px .dchip[aria-pressed="true"] img{opacity:1}
+.px .dchip .tx{min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.px .dchip .t{font-family:var(--head);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.85em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:7px}
+.px .dchip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.px .dchip .s{font-size:.66em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px .seg.v{flex-direction:column;margin-left:0;flex:0 0 auto}
+.px .seg.v button{min-height:27px;padding:0 12px;font-size:.62em}
+.px .umain{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;flex:1 1 auto;min-height:0;align-items:start}
+.px .uleft{min-width:0;display:flex;flex-direction:column;gap:10px}
+.px .uright{display:flex;flex-direction:column;gap:12px;min-width:0}
+.px .uni .mapbox,.px .uni .timeline{width:min(100%,max(300px,calc((100dvh - 400px) * 1.75)))}
+.px .tagbox.r{left:auto;right:12px}
+.px .lead.lh{flex-direction:row;align-items:stretch}
+.px .lead.lh .leadface{width:150px;flex:0 0 auto;border-bottom:0;border-right:1px solid var(--line);max-height:none;align-items:flex-end}
+.px .lead.lh .meta{padding:12px;gap:6px;min-width:0;justify-content:center}
+.px .lead.lh .name{font-size:1.05em}
+.px .band.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.px .band.two .bchip{min-height:50px;padding:6px 10px;gap:8px}
+.px .band.two .bchip .nm{font-size:.74em;letter-spacing:.1em}
+.px .stagebox.slim{flex:0 0 auto;min-height:0;height:clamp(118px,17vh,176px)}
+.px .stagebox.slim .sp{max-width:84px;aspect-ratio:1/1.05}
+.px .stagebox.slim .mem{max-width:150px}
+.px .stagebox.slim .stagebar{padding:4px 14px;font-size:.68em}
+.px .stagebox.slim .stagebar>span:first-child{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px .mdim{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72)}
+.px .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:85;width:min(900px,94vw);max-height:90vh;overflow:auto;background:#06080f;border:1px solid rgba(255,255,255,.5);padding:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.px .modal .mhead{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.px .modal .col{display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (max-width:760px){.px .modal{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== la banda · una pantalla ===== */
+.px .bpage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;height:100%;min-height:0}
+.px .bshow{display:flex;align-items:center;justify-content:center;min-height:0;height:100%}
+.px .bface{position:relative;border:1px solid var(--line);background:#02040a;overflow:hidden;width:min(100%,calc((100dvh - 150px) * 1.06));max-width:560px}
+.px .bface .face{width:100%}
+.px .bsprite{position:absolute;right:12px;bottom:12px;padding:6px;background:rgba(0,0,0,.65);border:1px solid var(--line)}
+.px .bsprite .spr{display:block}
+.px .binfo{display:flex;flex-direction:column;gap:14px;min-width:0}
+.px .bpick{display:flex;gap:8px;flex-wrap:wrap}
+.px .bsel{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 8px;font-family:var(--head);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.72em;color:var(--muted)}
+.px .bsel[aria-pressed="true"]{color:var(--fg);background:rgba(255,255,255,.08)}
+.px .bsel:hover{color:var(--fg)}
+.px .bdl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:.92em}
+@media (max-width:900px),(max-height:620px){.px .bpage{grid-template-columns:minmax(0,1fr);gap:20px}.px .bface{width:min(100%,360px)}}
+@media (max-width:900px){.px .uni .mapbox,.px .uni .timeline{width:100%}.px .umain{grid-template-columns:minmax(0,1fr)}.px .dchips{grid-template-columns:repeat(2,minmax(0,1fr))}.px .uni{height:auto}}
+
+/* ===== toques retro, sobrios ===== */
+.px .pix{font-family:'Press Start 2P',monospace;font-size:.56em;letter-spacing:.04em;line-height:1.7;text-transform:uppercase}
+.px .amber{color:#FFD447}
+.px .eyebrow,.px .tag,.px .title .n{font-family:'Press Start 2P',monospace;font-size:.56em;letter-spacing:.05em;line-height:1.8}
+.px .eyebrow{color:#FFD447}
+.px .wordmark{font-family:'Press Start 2P',monospace;font-size:.7em;letter-spacing:.12em}
+.px .nav button{display:inline-flex;align-items:center;gap:8px}
+.px .nav button svg{opacity:.8}
+.px .btn.primary{box-shadow:3px 3px 0 rgba(255,255,255,.28)}
+.px .btn.primary:hover:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(255,255,255,.28)}
+.px .btn:active:not(:disabled){transform:translate(2px,2px)}
+.px .crt{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px)}
+.px .views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.px .vpanel{margin:0;min-width:0;display:flex;flex-direction:column;gap:6px}
+.px .vcap{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.78em}
+.px .vfoot{display:flex;justify-content:space-between;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:.66em;color:var(--muted)}
+.px .uni .mapbox,.px .mbox{width:100%;aspect-ratio:560/320;position:relative;border:1px solid var(--line);box-shadow:4px 4px 0 rgba(255,255,255,.07);overflow:hidden;background:#0a0f1c}
+.px .mbox .heard{display:grid;grid-template-columns:repeat(28,minmax(0,1fr));grid-template-rows:repeat(16,minmax(0,1fr));gap:1px;height:100%;border:0;background:rgba(255,255,255,.1)}
+.px .mbox .heard div{min-height:0;transition:opacity .12s}
+.px .uni .timeline{width:100%;grid-template-columns:repeat(6,minmax(0,1fr))}
+.px .uni .timeline img{height:34px;aspect-ratio:auto;object-fit:cover}
+.px .readout{display:flex;flex-direction:column;gap:6px;font-size:.84em;padding:10px 12px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.px .readout p{display:flex;gap:10px;align-items:baseline}
+.px .readout .pix{flex:0 0 46px}
+.px .umain{grid-template-columns:minmax(0,1fr) 400px}
+.px .uni .uright .stagebox.slim{height:clamp(150px,24vh,240px);box-shadow:4px 4px 0 rgba(255,255,255,.07)}
+.px .stagebox.slim .stagebar{justify-content:space-between}
+.px .stagebg .floor{position:absolute;left:0;right:0;bottom:0;height:24%;border-top:2px solid rgba(255,255,255,.28);background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 16px,transparent 16px 32px)}
+.px .stagebg .horizon{display:none}
+.px .lead.lh{box-shadow:4px 4px 0 rgba(255,255,255,.07)}
+.px .dchip .dot{border-radius:0}
+.px .bchip{box-shadow:none}
+.px .tour.bl{left:24px;bottom:24px;transform:none}
+.px .tour.tl{left:24px;top:74px;transform:none}
+.px .tour.br{right:24px;bottom:24px;left:auto;transform:none}
+.px .tour.tr{right:24px;top:74px;left:auto;transform:none}
+@keyframes tourpulse{0%,100%{outline-offset:5px;outline-color:#fff}50%{outline-offset:10px;outline-color:rgba(255,255,255,.35)}}
+@media (max-width:1100px){.px .umain{grid-template-columns:minmax(0,1fr)}.px .views{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== llenar todo el alto de la pantalla ===== */
+.px .umain{align-items:stretch}
+.px .uleft{height:100%;min-height:0}
+.px .uright{height:100%;min-height:0}
+.px .uleft .views{flex:1 1 auto;min-height:0;grid-template-rows:minmax(0,1fr);align-items:stretch}
+.px .uleft .vpanel{min-height:0}
+.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:auto;flex:1 1 auto;min-height:0;width:100%;height:auto}
+.px .uni .vpanel .mapbox img.map{height:100%;object-fit:cover}
+.px .uni .timeline img{height:44px}
+.px .uni .uright .stagebox.slim{flex:1 1 auto;height:auto;min-height:150px}
+.px .uni .uright .lead,.px .uni .uright #tour-band{flex:0 0 auto}
+@media (max-width:1100px){.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:560/320;flex:0 0 auto;height:auto}.px .uleft,.px .uright{height:auto}}
 </style>
 </helmet>
 <div class="px app" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; font-size: {{th.fs}}">
@@ -344,15 +451,15 @@ a{color:inherit}
 <div class="skyfix" aria-hidden="true"></div>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
-<header class="top">
+<header class="top" style="{{hl.top}}">
 <div class="wrap">
 <button type="button" class="brand" onClick="{{goHome}}" aria-label="Terrasonic, ir al inicio">
 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="15" r="8"></circle><path d="M3.5 12.5c4 2.2 9.5 2.2 15 0M4 18c4-1.4 8.6-1.4 13.5 0"></path><path d="M19 3.5l3.5 3.5M16.5 6l3.5 3.5" stroke-linecap="round"></path><circle cx="22.5" cy="3.5" r="1.4" fill="currentColor" stroke="none"></circle></svg>
-Terrasonic
+<span class="wordmark">Terrasonic</span>
 </button>
 <nav class="nav" aria-label="Secciones">
 <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
-<button type="button" onClick="{{t.go}}" aria-current="{{t.cur}}">{{t.label}}</button>
+<button type="button" onClick="{{t.go}}" aria-current="{{t.cur}}"><svg width="13" height="13" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{t.ic}}"></path></svg>{{t.label}}</button>
 </sc-for>
 </nav>
 <div class="right">
@@ -372,24 +479,6 @@ Terrasonic
 <main class="viewport">
 <div class="scr {{scrCls}}">
 <div class="in">
-
-<!-- JUKEBOX · 1 · Elegir disco -->
-<sc-if value="{{scr.jDisc}}" hint-placeholder-val="{{ false }}">
-<div class="title"><span class="n">01</span><h2 class="h2">Elige un disco</h2><span class="muted" style="font-size: 0.85em">Cada disco son seis meses de mapas reales de la NASA.</span>
-<div class="seg" role="group" aria-label="Origen de los datos">
-<sc-for list="{{sets}}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" title="{{o.sub}}">{{o.label}} · {{o.years}}</button></sc-for>
-</div></div>
-<div id="tour-discs" class="discs" role="group" aria-label="Discos" style="{{hl.discs}}">
-<sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
-<button type="button" class="dcard" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="border-color: {{d.border}}">
-<img decoding="async" src="{{d.thumb}}" alt="">
-<span class="tx"><span class="t"><span class="dot" aria-hidden="true" style="background: {{d.color}}"></span>{{d.title}}</span>
-<span class="s">{{d.period}}<br>Protagoniza {{d.hero}}</span></span>
-</button>
-</sc-for>
-</div>
-<p class="muted" style="font-size: 0.74em; max-width: 90ch">Terrasonic convierte mapas de la temperatura del mar de la NASA en música. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</p>
-</sc-if>
 
 <!-- TUS DATOS · 1 · Subir -->
 <sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
@@ -420,16 +509,39 @@ Terrasonic
 </div>
 </sc-if>
 
-<!-- ESCUCHAR (Jukebox 3 y Tus datos 2) -->
-<sc-if value="{{scr.play}}" hint-placeholder-val="{{ false }}">
+<!-- ESCUCHAR · todo en una sola pantalla (Jukebox y Tus datos 2) -->
+<sc-if value="{{scr.play}}" hint-placeholder-val="{{ true }}">
 <sc-if value="{{noFile}}" hint-placeholder-val="{{ false }}">
 <div class="panel" style="margin: auto; max-width: 520px; text-align: center; align-items: center"><h2 class="h2">Aún no hay archivo</h2><p class="muted">Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.</p><button type="button" class="btn primary" onClick="{{backToUpload}}">Subir un archivo</button></div>
 </sc-if>
 <sc-if value="{{showPlayer}}" hint-placeholder-val="{{ true }}">
-<div class="title"><span class="n">02</span><h2 class="h2">Mira y escucha</h2><span class="muted mono" style="font-size: 0.78em">{{disc.title}} · {{frameCount}}</span></div>
-<div class="s3">
-<div class="left">
-<div id="tour-frame" style="{{hl.frame}}; width: fit-content; max-width: 100%">
+<div class="uni">
+
+<sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
+<div id="tour-discs" class="drow" style="{{hl.discs}}">
+<div class="dchips" role="group" aria-label="Discos">
+<sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
+<button type="button" class="dchip" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="border-color: {{d.border}}">
+<img decoding="async" src="{{d.thumb}}" alt="">
+<span class="tx"><span class="t"><span class="dot" aria-hidden="true" style="background: {{d.color}}"></span>{{d.title}}</span><span class="s">{{d.period}}</span></span>
+</button>
+</sc-for>
+</div>
+<div class="seg v" role="group" aria-label="Origen de los datos">
+<sc-for list="{{sets}}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" title="{{o.sub}}">{{o.label}} · {{o.years}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isData}}" hint-placeholder-val="{{ false }}">
+<div class="drow" style="align-items: center"><h2 class="h2">{{fileName}}</h2><span class="muted" style="font-size: 0.85em">Tu archivo, escuchado por la banda.</span><span class="grow"></span><button type="button" class="btn sm quiet" onClick="{{backToUpload}}">Cambiar archivo</button></div>
+</sc-if>
+
+<div class="umain">
+
+<div class="uleft">
+<div class="views">
+<figure id="tour-frame" class="vpanel" style="{{hl.frame}}">
+<figcaption class="vcap"><span class="pix amber">Lo que ves tú</span><span class="muted">imagen de la NASA</span></figcaption>
 <div class="mapbox">
 <img decoding="async" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
 <div aria-hidden="true" class="scanline" style="left: {{scanLeft}}"></div>
@@ -437,23 +549,37 @@ Terrasonic
 <div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 1px dashed {{silboBox}}; transition: border-color .4s"></div>
 </sc-if>
 <span class="tagbox" aria-hidden="true">{{frameLabel}}</span>
+<span class="crt" aria-hidden="true"></span>
 <sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<button type="button" class="arrow" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="Fotograma anterior" style="left: 10px"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5"></path></svg></button>
-<button type="button" class="arrow" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="Fotograma siguiente" style="right: 10px"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5"></path></svg></button>
+<button type="button" class="arrow" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="Fotograma anterior" style="left: 8px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5"></path></svg></button>
+<button type="button" class="arrow" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="Fotograma siguiente" style="right: 8px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5"></path></svg></button>
 </sc-if>
 </div>
+<div class="vfoot"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></div>
+</figure>
+<figure id="tour-machine" class="vpanel" style="{{hl.machine}}">
+<figcaption class="vcap"><span class="pix amber">Lo que ve la máquina</span><span class="muted">28×16 píxeles de color</span></figcaption>
+<div class="mbox" aria-hidden="true">
+<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
+<div class="scanline" style="left: {{scanLeft}}"></div>
+<span class="crt"></span>
 </div>
-<div class="caps"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></div>
+<div class="vfoot mono"><span>Cálido {{stats.warm}}</span><span>Frío {{stats.cold}}</span><span>Extremo {{stats.hot}}</span><span>Costa {{stats.coast}}</span></div>
+</figure>
+</div>
+
 <div class="controls">
 <div id="tour-play" style="{{hl.play}}; display: inline-flex">
-<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" style="min-width: 180px"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
+<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" style="min-width: 168px"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
 <div class="when"><span class="tag">{{disc.title}}</span><b>{{frameLabel}}</b></div>
 <span class="grow"></span>
 <button type="button" class="btn sm quiet" onClick="{{describe}}">Describir en voz alta</button>
+<div id="tour-more" style="{{hl.more}}; display: inline-flex"><button type="button" class="btn sm" onClick="{{toggleMore}}" aria-haspopup="dialog">Más opciones</button></div>
 </div>
+
 <sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<div id="tour-strip" style="{{hl.strip}}; width: fit-content; max-width: 100%">
+<div id="tour-strip" style="{{hl.strip}}">
 <div class="timeline" role="group" aria-label="Línea de tiempo del disco">
 <sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
 <button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
@@ -461,136 +587,110 @@ Terrasonic
 </div>
 </div>
 </sc-if>
-<p role="status" aria-live="polite" class="status mono">{{caption}}</p>
+
+<div class="readout">
+<p><span class="pix amber">Ves</span>{{seeText}}</p>
+<p><span class="pix amber">Oyes</span>{{hearText}}</p>
+<div class="row" style="gap: 10px">
+<div class="chips" aria-label="Progresión de acordes"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
+<span class="muted" style="font-size: 0.78em">{{moodText}}</span>
+</div>
+</div>
+<p role="status" aria-live="polite" class="sr">{{caption}}</p>
 </div>
 
-<aside aria-label="Protagonista del disco" class="lead {{lead.pop}}" style="border-color: {{lead.color}}">
-<div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
-<div class="cone" aria-hidden="true" style="background: linear-gradient(180deg, {{lead.coneC}}, transparent); opacity: {{lead.coneOp}}; width: 120%"></div>
-<div class="sp {{lead.cls}}" style="color: {{lead.color}}; max-width: none; aspect-ratio: auto; width: 100%; display: flex; justify-content: center">
-<div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
-<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 12px; right: 14px"></span>
-</div>
-</div>
-<div class="meta">
-<span class="tag">Protagonista del disco</span>
-<div class="name" style="color: {{lead.color}}"><span>{{lead.name}}</span><small>{{lead.state}}</small></div>
-<q>{{lead.quote}}</q>
-<button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
-</div>
-</aside>
-</div>
-</sc-if>
-</sc-if>
-
-<!-- JUKEBOX · 4 · Banda y escenario -->
-<sc-if value="{{scr.jBand}}" hint-placeholder-val="{{ false }}">
-<div class="title"><span class="n">03</span><h2 class="h2">La banda en escena</h2><span class="muted" style="font-size: 0.85em">Toca a un músico para encenderlo o apagarlo.</span></div>
-<div class="s4">
-<section class="stagebox shk {{shakeCls}}" aria-label="Escenario de la banda">
+<div class="uright">
+<section id="tour-stage" class="stagebox slim shk {{shakeCls}}" aria-label="Escenario de la banda" style="{{hl.stage}}">
 <p role="status" aria-live="polite" class="sr">En el escenario: {{stageNames}}</p>
 <div class="stagebg" aria-hidden="true">
 <img decoding="async" class="{{frameAnim}}" src="{{frameUrl}}" alt="">
-<div class="fade"></div><div class="horizon"></div>
+<div class="fade"></div><div class="floor"></div>
 <div style="position: absolute; left: 0; top: 0; width: 100%; height: 70%; overflow: hidden"><div class="scanline" style="left: {{scanLeft}}; height: 100%"></div></div>
 </div>
 <div class="flash {{flashCls}}" aria-hidden="true"></div>
-<div role="group" aria-label="Músicos en escena" style="position: relative; z-index: 2; flex: 1 1 auto; display: flex; justify-content: space-evenly; align-items: flex-end; gap: 6px; padding: 40px 6% 22px">
+<div role="group" aria-label="Músicos en escena" style="position: relative; z-index: 2; flex: 1 1 auto; min-height: 0; display: flex; justify-content: space-evenly; align-items: flex-end; gap: 4px; padding: 8px 3% 6px">
 <sc-for list="{{stage}}" as="m" hint-placeholder-count="5">
 <div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}">
 <div class="cone" style="background: linear-gradient(180deg, {{m.coneC}}, transparent); opacity: {{m.coneOp}}"></div>
 <div class="sp {{m.cls}}" style="color: {{m.color}}">
-<div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}; --s: 96px"></div>
+<div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}; --s: 64px"></div>
 <span class="pt" style="background-image: url({{m.partUrl}}); --pf: {{m.pf}}"></span>
 </div>
-<div class="tag" style="margin-top: 8px; color: {{m.color}}">{{m.name}}</div>
+<div class="pix" style="color: {{m.color}}; font-size: 0.5em">{{m.name}}</div>
 </div>
 </sc-for>
 </div>
 <sc-if value="{{stageEmpty}}" hint-placeholder-val="{{ false }}">
-<div style="position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: none"><p class="tag" style="line-height: 2; background: rgba(0,0,0,.7); padding: 12px 18px; border: 1px solid var(--line)">Escenario vacío<br>Enciende a un músico abajo</p></div>
+<div style="position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; pointer-events: none"><p class="pix" style="line-height: 2; background: rgba(0,0,0,.7); padding: 8px 12px; border: 1px solid var(--line)">Escenario vacío<br>enciende un músico</p></div>
 </sc-if>
 <div class="stagebar">
-<span class="muted">En escena · {{stageNames}}</span>
-<span aria-hidden="true" style="display: flex; gap: 5px; align-items: center"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{bd.c}}; transition: background-color 0.08s"></span></sc-for></span>
-<span>{{chordHud}}</span>
+<span aria-hidden="true" style="display: flex; gap: 4px; align-items: center"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="width: 7px; height: 7px; background: {{bd.c}}; transition: background-color 0.08s"></span></sc-for></span>
+<span class="pix amber">{{chordHud}}</span>
 </div>
 </section>
+
+<aside id="tour-lead" aria-label="Protagonista del disco" class="lead lh {{lead.pop}}" style="border-color: {{lead.color}}; {{hl.lead}}">
+<div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
+<div class="sp {{lead.cls}}" style="color: {{lead.color}}; max-width: none; aspect-ratio: auto; width: 100%; display: flex; justify-content: center">
+<div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
+<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 6px; right: 8px"></span>
+</div>
+</div>
+<div class="meta">
+<span class="pix amber">Protagonista</span>
+<div class="name" style="color: {{lead.color}}"><span>{{lead.name}}</span></div>
+<small class="mono muted" style="font-size: 0.68em">{{lead.state}}</small>
+<button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
+</div>
+</aside>
+
 <div id="tour-band" style="{{hl.band}}">
+<div class="row" style="justify-content: space-between; padding-bottom: 8px"><span class="pix amber">La banda</span>
+<span class="row" style="gap: 6px"><button type="button" class="btn sm quiet" onClick="{{bandAll}}">Todos</button><button type="button" class="btn sm quiet" onClick="{{bandNone}}">Ninguno</button></span></div>
 <p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
-<div class="band" role="group" aria-label="Banda">
+<div class="band two" role="group" aria-label="Banda">
 <sc-for list="{{band}}" as="b" hint-placeholder-count="5">
 <button type="button" class="bchip" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" style="border-color: {{b.btnBorder}}">
 <span class="bst" aria-hidden="true" style="background-image: url({{b.bustUrl}}); --bi: {{b.bi}}"></span>
-<span style="flex: 1 1 auto; min-width: 0"><span class="nm" style="color: {{b.color}}">{{b.name}}</span><span class="state">{{b.muteLabel}}</span><span class="bar" aria-hidden="true"><i style="width: {{b.lvlW}}; background: {{b.color}}"></i></span></span>
+<span style="flex: 1 1 auto; min-width: 0"><span class="nm" style="color: {{b.color}}">{{b.name}}</span><span class="bar" aria-hidden="true"><i style="width: {{b.lvlW}}; background: {{b.color}}"></i></span></span>
 </button>
 </sc-for>
 </div>
-<div class="row" style="padding-top: 10px"><button type="button" class="btn sm quiet" onClick="{{bandAll}}">Encender a todos</button><button type="button" class="btn sm quiet" onClick="{{bandNone}}">Apagar a todos</button></div>
+</div>
+</div>
+
 </div>
 </div>
 </sc-if>
-
-<!-- JUKEBOX · 5 · Más opciones -->
-<sc-if value="{{scr.jMore}}" hint-placeholder-val="{{ false }}">
-<div class="title"><span class="n">04</span><h2 class="h2">Más opciones</h2><span class="muted" style="font-size: 0.85em">No hace falta tocar nada de esto para disfrutar la música.</span></div>
-<div id="tour-more" class="s5" style="{{hl.more}}">
-<div class="col">
-<span class="tag">Qué ves y qué oyes</span>
-<p style="font-size: 0.88em">{{seeText}}</p>
-<p style="font-size: 0.88em">{{hearText}}</p>
-<div class="chips" aria-label="Progresión de acordes"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
-<p class="muted" style="font-size: 0.8em">{{moodText}}</p>
-</div>
-<div class="col">
-<span class="tag">Sonido</span>
-<div class="engines" role="group" aria-label="Motor de sonido">
-<sc-for list="{{engines}}" as="e" hint-placeholder-count="4"><button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" title="{{e.label}}">{{e.short}}</button></sc-for>
-</div>
-<p class="muted" style="font-size: 0.8em">{{engineDesc}}</p>
-<label class="field">Velocidad del escaneo
-<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">Lenta</option><option value="110">Normal</option><option value="70">Rápida</option></select></label>
-</div>
-<div class="col">
-<span class="tag">Lo que oye la máquina · 28×16</span>
-<div aria-hidden="true" class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="aspect-ratio: 1 / 1; background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
-<p class="mono muted" style="font-size: 0.74em">Cálido {{stats.warm}} · Frío {{stats.cold}} · Extremo {{stats.hot}} · Costa del Perú {{stats.coast}}</p>
-</div>
-<div class="col">
-<span class="tag">Las cuatro decisiones</span>
-<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.92em">{{w.title}}</strong><span class="muted" style="font-size: 0.78em">{{w.body}}</span></div></sc-for>
-</div>
-</div>
 </sc-if>
 
-<!-- LA BANDA · un personaje por pantalla -->
-<sc-if value="{{scr.bChar}}" hint-placeholder-val="{{ false }}">
-<div class="title"><span class="n">{{bandCur.num}}</span><h2 class="h2">La banda del Pacífico</h2><span class="muted" style="font-size: 0.85em">Cinco músicos con nombres de la cosmovisión andina y moche.</span></div>
-<div class="bchar">
-<div class="portrait">
-<div class="face" role="img" aria-label="Retrato de {{bandCur.name}}, del pecho a la cabeza" style="width: 100%; border: 1px solid {{bandCur.color}}; max-height: 48vh"><img decoding="async" class="fstrip" src="{{bandCur.faceUrl}}" alt="" style="--n: {{bandCur.faceN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s"></div>
-<div class="spr" role="img" aria-label="Sprite de 32 por 32 de {{bandCur.name}}" style="--img: url({{bandCur.sprUrl}}); --n: {{bandCur.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 64px"></div>
+<!-- LA BANDA · una sola pantalla -->
+<sc-if value="{{scr.bPage}}" hint-placeholder-val="{{ false }}">
+<div class="bpage">
+<div class="bshow" style="{{bandCur.glowStyle}}">
+<div class="bface" style="border-color: {{bandCur.color}}">
+<div class="face" role="img" aria-label="Retrato de {{bandCur.name}}, del pecho a la cabeza"><img decoding="async" class="fstrip" src="{{bandCur.faceUrl}}" alt="" style="--n: {{bandCur.faceN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s"></div>
+<div class="bsprite" aria-hidden="true"><div class="spr" style="--img: url({{bandCur.sprUrl}}); --n: {{bandCur.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 64px"></div></div>
 </div>
-<div class="info">
-<div><h1 class="h1" style="color: {{bandCur.color}}; font-size: clamp(2em, 4.2vw, 3.4em)">{{bandCur.name}}</h1><div class="muted">{{bandCur.origin}}</div></div>
-<dl>
+</div>
+<div class="binfo">
+<p class="eyebrow">La banda del Pacífico · cinco músicos andinos</p>
+<div class="bpick" role="group" aria-label="Elegir músico">
+<sc-for list="{{bandSel}}" as="p" hint-placeholder-count="5">
+<button type="button" class="bsel" onClick="{{p.pick}}" aria-pressed="{{p.on}}" style="border-color: {{p.border}}"><span class="bst" aria-hidden="true" style="background-image: url({{p.bustUrl}}); --bi: {{p.bi}}"></span><span>{{p.name}}</span></button>
+</sc-for>
+</div>
+<div><h1 class="h1" style="color: {{bandCur.color}}; font-size: clamp(2em, 4vw, 3.3em)">{{bandCur.name}}</h1><div class="muted">{{bandCur.origin}}</div></div>
+<dl class="bdl">
 <dt class="muted">Protagoniza</dt><dd>{{bandCur.disc}}</dd>
 <dt class="muted">Escucha</dt><dd>{{bandCur.listens}}</dd>
 <dt class="muted">Toca</dt><dd>{{bandCur.plays}}</dd>
 <dt class="muted">Carácter</dt><dd>{{bandCur.persona}}</dd>
 <dt class="muted">Instrumento</dt><dd>{{bandCur.ins}}</dd>
 </dl>
-<p class="muted" style="font-style: italic; border-top: 1px solid var(--line); padding-top: 12px; max-width: 60ch">«{{bandCur.quote}}»</p>
+<p class="muted" style="font-style: italic; border-top: 1px solid var(--line); padding-top: 12px">«{{bandCur.quote}}»</p>
+<div class="row"><button type="button" class="btn primary" onClick="{{bandGo}}">Armar la banda y escuchar</button></div>
 </div>
-</div>
-</sc-if>
-<sc-if value="{{scr.bFull}}" hint-placeholder-val="{{ false }}">
-<div class="fullband">
-<p class="eyebrow">Banda completa</p>
-<h1 class="h1">Los cinco,<br>a la vez</h1>
-<p class="lede">Cada disco enciende solo a su protagonista. Aquí puedes juntar a los cinco y escucharlos tocar a la vez.</p>
-<div class="chars" aria-hidden="true"><sc-for list="{{band}}" as="b" hint-placeholder-count="5"><div class="spr" style="--img: url({{b.sprUrl}}); --n: {{b.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 72px"></div></sc-for></div>
-<button type="button" class="btn primary" onClick="{{bandGo}}">Armar la banda y escuchar</button>
 </div>
 </sc-if>
 
@@ -647,7 +747,8 @@ Terrasonic
 </div>
 </main>
 
-<footer class="bar" style="{{hl.nav}}">
+<sc-if value="{{nav.show}}" hint-placeholder-val="{{ false }}">
+<footer class="bar">
 <div class="in2">
 <div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" aria-label="Pantalla anterior">← Atrás</button></div>
 <div class="mid">
@@ -660,6 +761,27 @@ Terrasonic
 </div>
 </div>
 </footer>
+</sc-if>
+
+<sc-if value="{{moreOpen}}" hint-placeholder-val="{{ false }}">
+<div class="mdim" onClick="{{closeMore}}" aria-hidden="true"></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="more-t">
+<div class="mhead"><h2 id="more-t" class="h2">Más opciones</h2><button type="button" class="btn sm" onClick="{{closeMore}}">Cerrar</button></div>
+<div class="col">
+<span class="pix amber">Sonido</span>
+<div class="engines" role="group" aria-label="Motor de sonido">
+<sc-for list="{{engines}}" as="e" hint-placeholder-count="4"><button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" title="{{e.label}}">{{e.short}}</button></sc-for>
+</div>
+<p class="muted" style="font-size: 0.82em">{{engineDesc}}</p>
+<label class="field">Velocidad del escaneo
+<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">Lenta</option><option value="110">Normal</option><option value="70">Rápida</option></select></label>
+</div>
+<div class="col">
+<span class="pix amber">Las cuatro decisiones de la música</span>
+<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.9em">{{w.title}}</strong><span class="muted" style="font-size: 0.8em">{{w.body}}</span></div></sc-for>
+</div>
+</div>
+</sc-if>
 
 <sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
 <div class="wipe" aria-hidden="true"><div class="wp"></div><div class="wp wp2"></div><div class="wl"><small>Sección {{transNum}}</small>{{transName}}</div></div>
@@ -704,14 +826,17 @@ var DISC_SETS = {
 var DISCS = DISC_SETS.eic.slice();
 DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] });
 var TOUR = [
-  { t: 'Bienvenido a Terrasonic', b: 'En un minuto aprenderás a escuchar cómo se calienta el océano Pacífico. Puedes salir cuando quieras y volver a abrir esta guía con el botón «Guía».', id: '', sub: 0, pos: 'bottom' },
-  { t: 'Elige un disco', b: 'Cada disco es un periodo de seis meses con mapas reales de la NASA. Toca uno para cargarlo. Arriba a la derecha puedes cambiar entre los datos del EIC y los de NASA GIBS.', id: 'tour-discs', sub: 0, pos: 'bottom' },
-  { t: 'Mira el mapa', b: 'Naranja y rojo: el mar está más caliente de lo normal. Azul: más frío. Una línea blanca recorre el mapa de oeste a este y cada columna se convierte en sonido.', id: 'tour-frame', sub: 1, pos: 'bottom' },
-  { t: 'Pulsa reproducir', b: 'La banda toca lo que ve en el mapa. Cuando el océano se calienta mucho, la música se vuelve más grave y nostálgica, en tonos menores.', id: 'tour-play', sub: 1, pos: 'top', extra: 'Reproducir por mí' },
-  { t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.', id: 'tour-strip', sub: 1, pos: 'top' },
-  { t: 'Conoce a la banda', b: 'Cinco músicos, cada uno atento a un rasgo distinto del mapa. Toca a uno para encenderlo o apagarlo y escucha la diferencia.', id: 'tour-band', sub: 2, pos: 'top' },
-  { t: 'Más opciones, cuando quieras', b: 'La velocidad, el motor de sonido y lo que oye la máquina están aquí: no hace falta tocarlos para empezar.', id: 'tour-more', sub: 3, pos: 'bottom' },
-  { t: 'Muévete con los botones', b: 'Usa Atrás y Siguiente, o los puntos, para cambiar de pantalla. Arriba están las secciones: La banda, Tus datos para subir tu propio archivo, Método y Tecnología.', id: 'tour-nav', sub: 3, pos: 'top' }
+  { t: 'Bienvenido a Terrasonic', b: 'En un minuto verás cómo escuchar el calentamiento del océano Pacífico. Todo está en esta pantalla: te iremos señalando cada parte. Puedes salir cuando quieras y reabrir la guía con el botón «Guía».', id: '', sub: 0, pos: 'bottom' },
+  { t: 'Elige un disco', b: 'Cada disco es un periodo de seis meses con mapas reales de la NASA. Toca uno para cargarlo. A la derecha cambias entre los datos del EIC y los de NASA GIBS.', id: 'tour-discs', sub: 0, pos: 'bottom' },
+  { t: 'Lo que ves tú', b: 'Este es el mapa de la NASA. Naranja y rojo: el mar está más caliente de lo normal; azul: más frío. La línea blanca lo recorre de oeste a este.', id: 'tour-frame', sub: 0, pos: 'bottom' },
+  { t: 'Lo que ve la máquina', b: 'La máquina reduce el mapa a 28×16 píxeles de color. Cada columna que toca la línea blanca se convierte en notas: más calor, más grave y nostálgico.', id: 'tour-machine', sub: 0, pos: 'bottom' },
+  { t: 'Pulsa reproducir', b: 'Aquí empieza la música. Si no hay nadie encendido, se activa el protagonista del disco.', id: 'tour-play', sub: 0, pos: 'top', extra: 'Reproducir por mí' },
+  { t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.', id: 'tour-strip', sub: 0, pos: 'top' },
+  { t: 'El escenario', b: 'Aquí tocan los músicos encendidos. Cada uno se mueve al ritmo de la música y el acorde que suena aparece abajo.', id: 'tour-stage', sub: 0, pos: 'bl' },
+  { t: 'El protagonista', b: 'Cada disco tiene un protagonista que escucha un rasgo distinto del mapa. Su cara cambia con la intensidad de la música.', id: 'tour-lead', sub: 0, pos: 'tl' },
+  { t: 'La banda', b: 'Toca a un músico para encenderlo o apagarlo y escucha la diferencia. Con «Todos» y «Ninguno» cambias a toda la banda a la vez.', id: 'tour-band', sub: 0, pos: 'tl' },
+  { t: 'Más opciones', b: 'La velocidad, el motor de sonido y el porqué de la música están en esta ventana: no hace falta tocarlos para empezar.', id: 'tour-more', sub: 0, pos: 'tr' },
+  { t: 'Otras secciones', b: 'Arriba tienes La banda, para conocer a cada músico; Tus datos, para subir tu propia imagen o CSV; Método y Tecnología.', id: 'tour-top', sub: 0, pos: 'bottom' }
 ];
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
 var CARA = {"silbo": {"strip": "sprites/silbo/cara.webp", "off": "sprites/silbo/cara-apagado.webp", "n": 6}, "inti": {"strip": "sprites/inti/cara.webp", "off": "sprites/inti/cara-apagado.webp", "n": 6}, "mama": {"strip": "sprites/mama/cara.webp", "off": "sprites/mama/cara-apagado.webp", "n": 6}, "yaku": {"strip": "sprites/yaku/cara.webp", "off": "sprites/yaku/cara-apagado.webp", "n": 6}, "illapa": {"strip": "sprites/illapa/cara.webp", "off": "sprites/illapa/cara-apagado.webp", "n": 5}};
@@ -921,7 +1046,7 @@ function makeLogo() {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { tab: 'juke', sub: 0, tour: 0, set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+    this.state = { tab: 'juke', sub: 0, tour: 0, more: false, bsel: 0, set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
       trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
       mute: { silbo: true, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: 'Elige un disco y pulsa Reproducir. La banda empieza apagada: cada disco enciende a su protagonista.' };
@@ -987,7 +1112,7 @@ class Component extends DCLogic {
   }
   subCount() {
     var t = this.state.tab;
-    return t === 'juke' ? 4 : t === 'band' ? 6 : t === 'data' ? 2 : t === 'how' ? 3 : this.techPages().length;
+    return t === 'juke' ? 1 : t === 'band' ? 1 : t === 'data' ? 2 : t === 'how' ? 3 : this.techPages().length;
   }
   techPages() {
     var pages = [];
@@ -1000,8 +1125,8 @@ class Component extends DCLogic {
   }
   subTitles() {
     var t = this.state.tab;
-    if (t === 'juke') return ['Elige un disco', 'Mira y escucha', 'La banda en escena', 'Más opciones'];
-    if (t === 'band') return BAND.map(function (b) { return b.name; }).concat(['Banda completa']);
+    if (t === 'juke') return ['Escuchar'];
+    if (t === 'band') return ['La banda'];
     if (t === 'data') return ['Tu archivo', 'Escucha'];
     if (t === 'how') return ['Del mapa al sonido', 'Escala de color', 'Retos del Space Apps'];
     return this.techPages().map(function (p) { return p.title; });
@@ -1434,7 +1559,7 @@ class Component extends DCLogic {
           border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
     });
     var tstep = s.tour ? TOUR[s.tour - 1] : null;
-    var hlOf = function (id) { return tstep && tstep.id === id ? 'position: relative; z-index: 70; outline: 2px solid var(--fg); outline-offset: 6px; background: var(--bg)' : ''; };
+    var hlOf = function (id) { return tstep && tstep.id === id ? 'position: relative; z-index: 70; outline: 2px solid var(--fg); outline-offset: 6px; background: var(--bg); animation: tourpulse 1.6s ease-in-out infinite' : ''; };
     var tourVm = { on: !!tstep, n: s.tour, total: TOUR.length, title: tstep ? tstep.t : '', body: tstep ? tstep.b : '', pos: tstep ? tstep.pos : 'bottom',
       dots: TOUR.map(function (x, i) { return { cls: i < s.tour ? 'on' : '' }; }), showBack: s.tour > 1, hasExtra: !!(tstep && tstep.extra), extraLabel: tstep && tstep.extra ? tstep.extra : '',
       nextLabel: s.tour === TOUR.length ? 'Empezar' : s.tour === 1 ? 'Comenzar guía' : 'Siguiente',
@@ -1445,15 +1570,14 @@ class Component extends DCLogic {
     var lastSub = sub === cnt - 1, techPgs = s.tab === 'tech' ? this.techPages() : [], techCur = techPgs[sub] || { title: '', items: [] };
     var navVm = { label: titles[sub], n: sub + 1, total: cnt,
       dots: titles.map(function (x, i) { return { cls: i === sub ? 'on' : '', aria: 'Ir a ' + x, go: function () { self.goSub(i); } }; }),
-      prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
+      show: cnt > 1, prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
       nextLabel: lastSub ? (s.tab === 'tech' ? 'Inicio' : PAGES[pgNext][1].charAt(0) + PAGES[pgNext][1].slice(1).toLowerCase()) : 'Siguiente',
       prev: function () { self.goSub(sub - 1); },
       next: function () { if (lastSub) self.goTab(pgNext); else self.goSub(sub + 1); },
       showMini: (s.tab === 'juke' && sub !== 1) || (s.tab === 'data' && sub === 0 && hasCustom) };
     var scrDir = this.navDir == null ? 0 : this.navDir, scrCls = 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + ((this.navCount || 0) % 2 ? '-a' : '-b');
-    var scrVm = { jDisc: s.tab === 'juke' && sub === 0, jBand: s.tab === 'juke' && sub === 2, jMore: s.tab === 'juke' && sub === 3,
-      play: (s.tab === 'juke' && sub === 1) || (s.tab === 'data' && sub === 1), dUp: s.tab === 'data' && sub === 0,
-      bChar: s.tab === 'band' && sub < 5, bFull: s.tab === 'band' && sub === 5, hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
+    var scrVm = { play: (s.tab === 'juke' && sub === 0) || (s.tab === 'data' && sub === 1), dUp: s.tab === 'data' && sub === 0, bPage: s.tab === 'band',
+      hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
       tPage: s.tab === 'tech' && !techCur.credits, tCred: s.tab === 'tech' && !!techCur.credits };
     var prof = this.profile(), factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
     var chordLabels = prof.prog.map(function (c) { return chordOf(prof, c).label; });
@@ -1521,7 +1645,6 @@ class Component extends DCLogic {
             var who = k < 5 ? DISC_CHAR[k] : (self.state.an['5_0'] && self.state.an['5_0'].cold > self.state.an['5_0'].warm ? 'mama' : 'inti');
             self.setState({ disc: k, frame: 0, col: -1, mute: self.only(who), caption: 'Disco ' + x.n + ': ' + x.title + '. Se enciende ' + BAND.filter(function (b) { return b.k === who; })[0].name + '. Pulsa Reproducir.' });
             self.loadDisc(k);
-            self.goSub(1);
           } };
       }),
       disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),
@@ -1532,10 +1655,13 @@ class Component extends DCLogic {
       capL: s.disc === 5 ? 'inicio' : '140°O', capM: s.disc === 5 ? 'escaneo de izquierda a derecha' : 'Pacífico ecuatorial · 25°S–15°N', capR: s.disc === 5 ? 'fin' : '70°O',
       cells: cells,
       stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) } : { warm: '…', cold: '…', hot: '…', coast: '…' },
-      hl: { discs: hlOf('tour-discs'), frame: hlOf('tour-frame'), play: hlOf('tour-play'), band: hlOf('tour-band'), strip: hlOf('tour-strip'), more: hlOf('tour-more'), nav: hlOf('tour-nav') },
+      hl: { discs: hlOf('tour-discs'), frame: hlOf('tour-frame'), machine: hlOf('tour-machine'), play: hlOf('tour-play'), strip: hlOf('tour-strip'), stage: hlOf('tour-stage'), lead: hlOf('tour-lead'), band: hlOf('tour-band'), more: hlOf('tour-more'), top: hlOf('tour-top') },
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
       techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
-      bandCur: Object.assign({ num: ('0' + (sub + 1)).slice(-2) }, band[Math.min(sub, 4)]),
+      bandCur: Object.assign({ glowStyle: 'background: radial-gradient(ellipse at 50% 55%, ' + BAND[Math.min(s.bsel, 4)].color + '2e, transparent 68%)' }, band[Math.min(s.bsel, 4)]),
+      bandSel: band.map(function (x, i) { var on = i === s.bsel; return { name: x.name, bustUrl: x.bustUrl, bi: on ? 2 : 1, on: on, border: on ? x.color : 'transparent', pick: function () { self.setState({ bsel: i }); } }; }),
+      moreOpen: s.more, toggleMore: function () { self.setState({ more: !s.more }); }, closeMore: function () { self.setState({ more: false }); },
+      fileName: hasCustom ? s.custom.name : 'Tu archivo',
       noFile: s.tab === 'data' && !hasCustom,
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
