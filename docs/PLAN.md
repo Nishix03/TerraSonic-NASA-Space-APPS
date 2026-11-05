@@ -1,7 +1,7 @@
-# Silbador — Plan de desarrollo
+# Terrasonic — Plan de desarrollo
 ### NASA Space Apps 2026 · Reto 5: *The Earth Information Jukebox*
 
-> **En una frase:** hace más de 1500 años, los huacos silbadores moche ya convertían el agua en sonido. **Silbador** es una *jukebox* retro pixelada que escanea los fotogramas de las visualizaciones del **Earth Information Center (EIC)** de la NASA y los convierte en música en tiempo real, tocada por una banda de cinco personajes andinos. Así cualquiera, incluso quien no ve, puede **escuchar** cómo se calienta el Pacífico.
+> **En una frase:** hace más de 1500 años, los huacos silbadores moche ya convertían el agua en sonido. **Terrasonic** es una *jukebox* retro pixelada que escanea los fotogramas de las visualizaciones del **Earth Information Center (EIC)** de la NASA y los convierte en música en tiempo real, tocada por una banda de cinco personajes andinos. Así cualquiera, incluso quien no ve, puede **escuchar** cómo se calienta el Pacífico.
 
 - **Prototipo interactivo (Claude Design):** https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(privado hasta que el dueño lo comparta)*
 - **Reto oficial:** https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/
@@ -18,7 +18,7 @@
 6. [Tecnología: lo mínimo que funciona](#6-tecnología-lo-mínimo-que-funciona)
 7. [Arquitectura y contratos](#7-arquitectura-y-contratos)
 8. [Reparto: 6 miembros, 6 módulos](#8-reparto-6-miembros-6-módulos)
-9. [Plan de sprites con IA](#9-plan-de-sprites-con-ia)
+9. [Plan de avatares anime con IA](#9-plan-de-avatares-anime-con-ia)
 10. [Cronograma de las 48 horas](#10-cronograma-de-las-48-horas)
 11. [Uso de IA: declaración honesta](#11-uso-de-ia-declaración-honesta)
 12. [Criterios de evaluación](#12-criterios-de-evaluación)
@@ -40,6 +40,7 @@
 | E6 | **Contar el proceso** | "sharing the why behind your artistic choices or explaining the algorithms" | Pestaña "Cómo suena", más `docs/METODO.md` |
 | E7 | **Impacto emocional** | "reflect the urgency of climate change or the beauty of our planet" | Personajes con personalidad. Cuando Mamacocha calla, algo anda mal |
 | E8 | **Formato libre** (web, app, API o playlist) | "interactive web-based jukebox…" | Web estática, más una playlist de audios exportados como respaldo |
+| E9 | **Traducción exploratoria** | "the translation from sight to sound is exploratory" | Zona **«Tus datos»**: la persona sube su propia imagen o CSV y lo escucha (sección 4.1) |
 
 ### 1.2 De la charla de orientación (audio "Reto 5 y 6", transcripción en `docs/orientacion_transcripcion.md`)
 | ID | Requerimiento | Minuto | Cobertura |
@@ -53,7 +54,7 @@
 | R7 | **Dar voz** a algo que no la tenía (ejemplo de ElevenLabs con edificios) | 00:43 | Le damos voz al océano a través de cinco personajes |
 | R8 | **Prototipo funcional** aunque sea simple | 04:16, 05:48 | MVP congelado en la hora 30 |
 | R9 | **Tecnología simple** (HTML, canvas) | 04:54 | HTML, CSS y JS con Canvas y Web Audio. Sin backend |
-| R10 | **Declarar el uso de IA** (con marca de agua) | 06:03–06:52 | Sección 11 y etiqueta en cada sprite generado con IA |
+| R10 | **Declarar el uso de IA** (con marca de agua) | 06:03–06:52 | Sección 11 y etiqueta en cada avatar generado con IA |
 | R11 | **Supervisar el código generado por IA** | 07:03 | Revisión cruzada de PRs |
 | R12 | **Reutilizar repositorios y citarlos** | 07:21 | `docs/CREDITOS.md` |
 
@@ -65,7 +66,7 @@
 
 **El conflicto.** El Pacífico frente al Perú cambia de color en los mapas de la NASA, y cuando se pone rojo (El Niño) el desierto de Chiclayo se inunda. En 2017, el Niño Costero trajo 62 veces la lluvia normal (NASA POWER). Pero esos mapas son pura vista: una persona ciega no puede "leerlos".
 
-**La resolución.** Silbador es una jukebox con 5 discos, y cada disco es una secuencia de fotogramas de anomalía de temperatura del mar:
+**La resolución.** Terrasonic es una jukebox con 5 discos, y cada disco es una secuencia de fotogramas de anomalía de temperatura del mar:
 
 | Disco | Periodo | Lo que se oye (medido por nuestro analizador) |
 |---|---|---|
@@ -79,9 +80,20 @@
 
 **Nombre del equipo:** *Los Silbadores de Ñaylamp*. Según la leyenda, Ñaylamp, fundador de Lambayeque, llegó por el mar, igual que El Niño.
 
+### Identidad de marca: **Terrasonic**
+| Elemento | Decisión |
+|---|---|
+| **Nombre** | **Terrasonic** · *Earth Information Jukebox*. En inglés y profesional: *Terra* = Tierra (y el nombre de un satélite de observación de la NASA) + *sonic* = sonido. Eslogan: *"Hear the Earth."* Alternativas que descartamos: Echo Earth, Orbitone, Earthsong |
+| **Mascota** | Silbo, el huaco silbador, sigue siendo el hilo cultural de la historia. El nombre del producto ya no depende de él |
+| **Logo** | Planeta Tierra en pixel art con un anillo orbital y un satélite que emite tres ondas de sonido (amarillo → naranja → rojo, la escala de calor de los mapas). El prototipo trae una primera versión; M4 la pule |
+| **Fondo animado** | Campo de estrellas que titila, un satélite que cruza, estrellas fugaces y un horizonte de la Tierra cuyo resplandor **cambia con el fotograma** (cian si domina el frío, naranja si hay calor, rojo con extremos). Una línea de escaneo recorre el horizonte, igual que el cabezal de la jukebox. Se desactiva con alto contraste y `prefers-reduced-motion` |
+| **Transiciones y efectos** | Entrada escalonada de las secciones, elevación al pasar el cursor, fundido con desenfoque al cambiar de fotograma, cabezal de escaneo con brillo y movimiento suave, celdas y medidores que se animan, el protagonista entra deslizando y el botón principal late mientras espera. Todo se apaga con `prefers-reduced-motion` |
+| **Logos de la NASA** | Solo se usan los **oficiales** del reto. El kit de logos y la guía de marca de Space Apps se descargan desde https://www.spaceappschallenge.org/brand/. **No dibujamos réplicas** del emblema de la NASA. Para el uso del emblema de la NASA se consulta la guía de marca o se escribe al equipo de Space Apps. El prototipo reserva el espacio y lleva el aviso *"Proyecto independiente, no respaldado por NASA"* |
+| **Nombre del equipo** | *Los Silbadores de Ñaylamp* se mantiene como nombre del equipo (distinto del nombre del producto). Si quieren cambiarlo también, queda como decisión del kickoff |
+
 ---
 
-## 3. La banda: cinco personajes, cinco conjuntos de sonidos
+## 3. La banda: cinco avatares anime, cinco conjuntos de sonidos
 
 Cada personaje es **un conjunto de sonidos ligado a un rasgo visual**. La personalidad ayuda a contar la historia ("Illapa casi nunca aparece; si aparece, es en serio") y hace que la sonificación se entienda sin explicar teoría.
 
@@ -92,6 +104,8 @@ Cada personaje es **un conjunto de sonidos ligado a un rasgo visual**. La person
 | **MAMACOCHA** | Madre del mar (cosmovisión andina) | Promedio de píxeles fríos | Bajo profundo | Calma protectora. Si calla, algo anda mal |
 | **YAKU** | Agua (quechua) | Densidad de celdas con anomalía ±2 o más por columna, y su latitud | Gotas en pentatónica andina, más agudas hacia el norte | Inquieto y travieso |
 | **ILLAPA** | Rayo y trueno (cosmovisión andina) | Columnas con ≥25% de píxeles extremos (+4,5/+5) | Truenos graves | Aparece poco. Cuando llega, todos callan |
+
+**Cómo se ven:** cada personaje es un **avatar 2D original, detallado y animado, de estética anime**, con ropa aesthetic que fusiona motivos andinos con techwear/streetwear, y comparte el estilo visual de la página (paleta de la escala de anomalías, contornos de 4 px y marco pixelado). Acompañan cada fotograma y reaccionan al sonido de su voz. Diseño y producción: sección 9.
 
 Respeto cultural: M5 valida los nombres y las descripciones con fuentes, como el Museo Tumbas Reales de Sipán y el Museo Brüning, y evita caricaturizar a las divinidades.
 
@@ -105,16 +119,31 @@ Respeto cultural: M5 valida los nombres y las descripciones con fuentes, como el
 3. **La banda** sonando en tiempo real: 5 voces, con mezclador para silenciar a cada personaje.
 4. **Visualización**: cabezal de escaneo sobre el fotograma, vista "lo que oye la máquina" y medidores por personaje.
 5. **Accesibilidad**: subtítulos de sonido, botón "Describir fotograma" (texto y voz), vibración, alto contraste, texto grande, fuente legible y todo con teclado.
-6. **Identidad retro pixelada** con los sprites de los 5 personajes (ver sección 9).
+6. **Identidad Terrasonic** (logo, fondo espacial animado que reacciona al fotograma) y los **5 avatares en dos versiones**: modelo anime grande junto al fotograma y sprite 32×32 (respiración, parpadeo y 3 estados según su voz; ver sección 9).
+7. **«Tus datos»**: subir una imagen o un CSV y escucharlo con la misma banda (sección 4.1). Va dentro del MVP, pero **después del núcleo** (horas 24–30).
+8. **Página «Tecnología»**: una pestaña de la app que muestra qué tecnologías, datos y herramientas de IA se usaron, con su estado (*en el prototipo* o *planeado*) y la declaración de uso de IA (sección 6.1).
 
 ### Extras (solo con el MVP cerrado)
-7. Más discos del EIC: **Global Temperature Anomalies 1880–2023** (SVS 5207) y **Seasonal Global Precipitation, GPM** (SVS 4897). Para el de lluvia, Yaku pasa a escuchar la densidad de precipitación.
-8. **Eco de Chiclayo** (R4): tras cada disco suena la lluvia mensual real de Chiclayo de NASA POWER (ya descargada en `data/`).
-9. **Exportar .wav** de cada disco (playlist de respaldo para el envío).
-10. Sprites animados que reaccionan: bailan cuando su voz está activa.
+9. Más discos del EIC: **Global Temperature Anomalies 1880–2023** (SVS 5207) y **Seasonal Global Precipitation, GPM** (SVS 4897). Para el de lluvia, Yaku pasa a escuchar la densidad de precipitación.
+10. **Eco de Chiclayo** (R4): tras cada disco suena la lluvia mensual real de Chiclayo de NASA POWER (ya descargada en `data/`).
+11. **Exportar .wav** de cada disco (playlist de respaldo para el envío).
+12. **Ropa alternativa por disco** (variante según el evento), efectos de gotas y destellos, y animación avanzada de los avatares (Live2D/Spine solo si alguien ya lo domina).
 
 ### Fuera de alcance
 Backend, login, base de datos, entrenar modelos de ML, app nativa.
+
+### 4.1 «Tus datos»: subir un archivo y escucharlo
+| Aspecto | Decisión |
+|---|---|
+| **Qué acepta** | Una **imagen** (PNG, JPG, WebP, GIF) o un **CSV/TSV/TXT** con una columna numérica (mínimo 8 valores, hasta 5000 filas). Máximo 8 MB |
+| **Imagen** | Misma cuadrícula 28×16 y mismo escaneo. Dos modos: **Mapa de anomalía** (paleta NASA, para mapas del EIC) y **Color libre** (cualquier imagen: lo cálido suma, lo frío resta y los grises siguen el brillo) |
+| **CSV** | La serie se resume en 28 columnas (se conserva el valor más extremo de cada grupo). Lo que está **sobre la media** se lee como cálido (Inti y Yaku, y Illapa si es extremo) y lo que está **bajo la media** como frío (Mamacocha). La persona elige la columna; por defecto se evita una columna que sea solo un índice (año, número de fila) |
+| **Ejemplo incluido** | Lluvia mensual de Chiclayo 2015–2018 (NASA POWER) para probar sin tener archivos |
+| **Privacidad** | Todo se procesa en el navegador. **El archivo no se sube a ningún servidor** |
+| **Accesibilidad** | Zona de carga con teclado (`label` + `input`), mensajes de estado en `aria-live` y descripción por voz del resultado |
+| **Límites honestos** | Es una sonificación artística: los niveles de una imagen libre no son magnitudes físicas. El silbido de Silbo (costa del Perú) solo aplica a los fotogramas del EIC |
+| **Responsables** | M2 (análisis), M4 (interfaz), M5 (accesibilidad), M6 (integración) |
+| **Prioridad** | Dentro del MVP, después del núcleo (horas 24–30). Si no llega, pasa a extra |
 
 ---
 
@@ -150,6 +179,23 @@ Validación: el algoritmo se probó con los 30 fotogramas. La Niña da frío ≈
 
 **Fuente de los fotogramas.** La visualización EIC *Sea Surface Temperature (SST) Anomaly – Near Real Time* (SVS 5176) usa el producto **GHRSST MUR**. Como esa visualización solo cubre los últimos ~2,5 años, para los eventos de 2010–2023 descargamos el **mismo producto MUR** desde NASA GIBS/Worldview (capa `GHRSST_L4_MUR25_Sea_Surface_Temperature_Anomalies`), con el mismo encuadre para todos. Los discos extra salen directamente de los videos del EIC (SVS 5207 y 4897). Esto se declara tal cual en la app y en el envío.
 
+### 6.1 Página «Tecnología» y herramientas de IA
+La app incluye una **pestaña «Tecnología»** (ya existe en el prototipo) que lista, agrupado por categoría, todo lo que se usó para construirla: *Interfaz y código*, *Datos de la NASA* e *IA y herramientas*. Cada ficha indica para qué se usó, el módulo responsable y un estado: **En el prototipo** o **Planeado**. Tiene filtros por estado, un contador y la **declaración de uso de IA**. Dueño: M4 (interfaz) con el contenido revisado por M5; la lista se actualiza con cada herramienta nueva.
+
+Herramientas de IA acordadas por el equipo, con su estado real:
+| Herramienta | Uso | Estado |
+|---|---|---|
+| **Claude Design y Claude Code (Anthropic)** | Boceto interactivo, plan, análisis del audio y del reto, cálculos y estructura del repositorio | Usadas en el prototipo |
+| **Whisper (OpenAI, en local)** | Transcribir la charla de orientación | Usada |
+| **ChatGPT Codex (OpenAI)** | Programar **ciertas funciones** de la versión final. Propuesta: exportar .wav (M3), parser de CSV y pruebas del analizador (M2), animación por capas de los avatares (M4) y pruebas del bus (M6) | Planeada |
+| **ChatGPT (OpenAI), generación de imágenes** | Conceptos de los 5 avatares (modelo anime detallado y sprite 32×32) | Planeada. **Confirmar la herramienta exacta y sus condiciones de uso antes de generar** |
+
+Reglas para el código y las imágenes generadas con IA (R10 y R11):
+- Cada función generada con Codex lleva un comentario `// Generado con ChatGPT Codex · revisado por <nombre>`, se integra con un cambio aparte, la revisa otra persona y se prueba en el navegador. Si algo no se entiende, no se integra.
+- Cada imagen generada se retoca a mano, pasa la búsqueda inversa de originalidad y lleva la etiqueta visible «generado con IA».
+- Cada uso se anota en `docs/USO_DE_IA.md` (fecha, quién, herramienta y prompt).
+- La página «Tecnología» nunca marca como *usado* algo que todavía es *planeado*.
+
 ---
 
 ## 7. Arquitectura y contratos
@@ -161,9 +207,9 @@ index.html
     ├── src/fotogramas/        (M1) manifiesto de discos → URLs de fotogramas
     ├── src/analizador/        (M2) fotograma → cuadrícula 28×16 + estadísticas
     ├── src/sonido/            (M3) cuadrícula + columna → la banda suena
-    ├── src/arte/              (M4) visor, tira, cuadrícula, medidores, sprites
+    ├── src/arte/              (M4) visor, tira, cuadrícula, medidores, avatares
     ├── src/accesibilidad/     (M5) teclado, subtítulos, voz, vibración, temas
-    └── assets/sprites/        (M4) hojas de sprites PNG
+    └── assets/avatares/       (M4) capas PNG y manifiesto de los 5 avatares
 ```
 
 Regla de oro: ningún módulo importa archivos internos de otro. Solo se usa su `index.js` público y los eventos del bus, todo documentado en [`CONTRATOS.md`](CONTRATOS.md).
@@ -188,6 +234,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] `analizar(urlImagen)` → `{ celdas[448], calido, frio, extremo, costa }`, con canvas y `getImageData`.
 - [ ] Clasificador HSV → nivel −5…+5, calibrado con los píxeles reales (la tabla está en la sección 5).
 - [ ] `columna(analisis, c)` → `{ calido, frio, fuertes: [[fila, nivel]], extremo }`.
+- [ ] **«Tus datos»**: `analizarArchivo(file, modo)` para imágenes (modo paleta NASA o color libre) y `analizarSerie(valores)` para CSV (sobre/bajo la media). Máximo 8 MB, mensajes claros de error.
 - [ ] Test con los 30 fotogramas: que La Niña dé frío > cálido y que el Niño Costero dé costa ≥ 2.
 - [ ] *(Extra)* Clasificador para la paleta de precipitación de GPM.
 - **Hecho cuando:** los valores coinciden con la tabla de la sección 2 (±0,2).
@@ -201,12 +248,17 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] *(Extra)* Grabar una réplica real de huaco silbador y usarla como muestra de Silbo.
 - **Hecho cuando:** con los ojos cerrados se distingue el disco 1 del disco 2.
 
-### M4 · Arte pixel, sprites y componentes visuales (`src/arte/`, `assets/`)
-- [ ] **Sprites de los 5 personajes** (ver sección 9).
+### M4 · Arte, avatares anime y componentes visuales (`src/arte/`, `assets/`)
+- [ ] **Sprites 32×32 de los 5 personajes** (primero: son la red de seguridad) y **modelos anime detallados** por capas PNG en `assets/avatares/` (diseño, proceso y prioridades en la sección 9).
+- [ ] **Pulido visual**: transiciones y efectos de la sección 2 (entradas escalonadas, hover, fundido entre fotogramas, escaneo con brillo), siempre con `prefers-reduced-motion`.
+- [ ] Página **«Tecnología»** (§6.1): fichas por categoría, filtros, contador y declaración de IA. Se mantiene al día.
+- [ ] **Jukebox**: el panel de visualización y el de selección de discos miden lo mismo de alto (se estiran juntos; la zona «Tus datos» queda abajo).
+- [ ] Interfaz de **«Tus datos»** (zona de arrastrar y soltar, selector de modo y de columna, ejemplo de Chiclayo).
+- [ ] Marca **Terrasonic**: logo final, fondo espacial animado y cabecera con el espacio del logo oficial de Space Apps (§2, identidad de marca).
 - [ ] Kit visual retro: bordes de 4 px, sombras duras, tipografías Press Start 2P (títulos cortos), Pixelify Sans (encabezados) e IBM Plex (texto) y paleta derivada de la escala de anomalías.
 - [ ] Componentes: visor de fotograma con cabezal y recuadro de Silbo, cuadrícula "lo que oye la máquina", tira de fotogramas y tarjetas de la banda con medidores.
-- [ ] Animación de los sprites (2 frames idle y 2 activos), respetando `prefers-reduced-motion`.
-- **Hecho cuando:** la interfaz se ve como el prototipo, con los sprites reales.
+- [ ] Animación de los avatares (respiración, parpadeo, balanceo y 3 estados calmo/activo/intenso según el evento `voces`), respetando `prefers-reduced-motion`.
+- **Hecho cuando:** la interfaz se ve como el prototipo, con los avatares reales acompañando cada fotograma. Es el módulo con más carga: aplicar las prioridades de la sección 9.5.
 
 ### M5 · Accesibilidad, textos y narrativa (`src/accesibilidad/`, `docs/pitch/`)
 - [ ] Teclado: espacio (play), ←/→ (fotograma), 1–5 (disco), M+número (silenciar personaje), D (describir).
@@ -214,6 +266,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] Vibración en truenos y en gotas densas. Modos: alto contraste, texto grande y fuente legible (sin tipografía pixel).
 - [ ] Prueba real con NVDA o TalkBack, idealmente con una persona ciega o con baja visión. Grabar la prueba para el pitch.
 - [ ] Textos de los personajes y del pitch, validando los nombres andinos con fuentes.
+- [ ] Accesibilidad de **«Tus datos»**: carga con teclado, estados en `aria-live` y descripción por voz del resultado.
 - **Hecho cuando:** se recorre la jukebox completa sin mirar la pantalla.
 
 ### M6 · App, integración, despliegue y entrega (`index.html`, `src/app/`, `.github/`)
@@ -222,31 +275,86 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] GitHub Pages e integraciones en las horas 12, 24 y 36.
 - [ ] `docs/METODO.md` (E6) y `docs/CREDITOS.md`.
 - [ ] Coordina el video y el formulario de envío con M5.
+- [ ] Conectar **«Tus datos»**: evento `datos:subidos` → M2 → `fotograma:listo`, con un solo disco temporal «Tus datos».
 - **Hecho cuando:** la URL pública funciona en Chrome de escritorio y de Android.
 
 ---
 
-## 9. Plan de sprites con IA
+## 9. Plan de avatares anime con IA
 
-**Responsable:** M4 (con apoyo de M5 en los textos y la validación cultural).
+**Decisión del equipo:** cada personaje tendrá **dos versiones**: un **modelo 2D original, detallado y grande, de estética anime**, que se muestra **al lado del fotograma** que analiza la jukebox, y un **sprite de 32×32** para los lugares pequeños. Cada diseño (peinado, ropa, paleta, gestos) expresa la personalidad del conjunto de sonidos que representa.
 
+**Responsable:** M4 (arte), con M5 en textos y validación cultural. Los avatares **no los genera este plan: se producen durante la hackathon**; aquí queda la especificación.
+
+### 9.0 Dos versiones por avatar
+| Versión | Formato | Dónde se usa |
+|---|---|---|
+| **Modelo detallado** | PNG por capas de 512×768 px, con fondo transparente (se muestra a ~200–240 px) | En la jukebox, **junto al fotograma**, como "protagonista" del fotograma: el personaje con la voz más fuerte en ese momento (si no está sonando, el que mejor describe el fotograma). Y en la pestaña *La banda* |
+| **Sprite 32×32** | Hoja horizontal de 4 frames (2 reposo + 2 activos) con la paleta compartida | En la barra de la banda con los medidores, el mezclador, la tira de fotogramas y como icono de cada voz |
+
+Ambas versiones salen del **mismo diseño**: primero se cierra el concepto, y el sprite se deriva simplificando el modelo (unas 1–2 horas extra por personaje). Así se ven como la misma familia.
+
+### 9.1 Reglas de diseño comunes (para que parezcan de la misma banda y de la misma página)
+| Regla | Detalle |
+|---|---|
+| **Originales** | Diseños propios. Los prompts **no** nombran series, estudios, artistas ni personajes existentes. Antes de publicar, M4 hace una búsqueda inversa de imagen de cada avatar para descartar parecidos |
+| **Estilo anime** | Cel-shading con 2 tonos de sombra, línea de contorno gruesa y ojos expresivos. Retrato de cuerpo entero o de 3/4 |
+| **Moda alternativa / aesthetic** | Ropa con identidad: fusión de **motivos andinos y moches** (chakana, escalonados, ceramios, tejidos) con *techwear*, *streetwear* y capas largas. Evitar disfraces folclóricos caricaturescos |
+| **Coherencia con la página** | Misma paleta que la escala de anomalías (azules, verdes, grises, amarillos, rojos, magentas), contorno de 4 px y sombra dura como las tarjetas, marco con bordes pixelados y *scanlines* CRT encima. Cada avatar vive dentro de un marco igual al del resto de la interfaz |
+| **Paleta limitada** | Máximo ~24 colores por personaje, más una paleta compartida de 16. Así se ven pixel-coherentes y pesan poco |
+| **Tamaño** | Modelo de 512×768 px con fondo transparente (se muestra a ~200–240 px) y sprite de 32×32 (se amplía con `image-rendering: pixelated`) |
+| **Accesibles** | Cada avatar tiene texto alternativo y una ficha de texto con su personalidad (para lectores de pantalla). No transmiten información solo con el color |
+
+### 9.2 Diseño por personaje (según la personalidad de su sonido)
+| Personaje | Personalidad del sonido | Diseño propuesto | Paleta | Gesto y animación característicos |
+|---|---|---|---|---|
+| **SILBO** | Viejo y sabio. Silbido solitario, aparece poco | Anciano de pelo plateado trenzado, lentes redondos y poncho-chaqueta ocre con bordado escalonado. Lleva colgada una botella silbadora en miniatura | Ocre, arcilla, plata | Respira lento. Al sonar su silbido se lleva la botella a los labios y salen gotas |
+| **INTI** | Entusiasta y brillante. Acordes cálidos y fuertes | Joven de pelo corto y desordenado, chaqueta *bomber* amarilla con rayos escalonados y auriculares con forma de sol | Amarillo, naranja, rojo | Rebota al ritmo. Cuanto más calor hay en el mapa, más brilla la aureola |
+| **MAMACOCHA** | Calma y protección. Bajo profundo | Figura serena de pelo largo turquesa y abrigo oversize con olas bordadas, pies descalzos sobre agua | Turquesa, azul profundo | Pelo y abrigo ondulan lento. **Se apaga y se entristece cuando el mar se calienta y su sonido casi desaparece** |
+| **YAKU** | Inquieto y travieso. Gotas rápidas | Niña/niño bajito con pelo corto, pasadores en forma de gota e impermeable transparente verde-amarillo con botas de goma | Verde, cian, amarillo claro | Salta y guiña. Su velocidad sigue la densidad de gotas |
+| **ILLAPA** | Aparece poco, pero con fuerza. Truenos graves | Figura alta de capa oscura asimétrica con vetas magenta tipo rayo, honda como accesorio y mirada intensa (estilo *storm punk*) | Violeta oscuro, magenta | Quieto y serio; al sonar un trueno hay destello, la capa se agita y la pantalla vibra |
+
+La historia se cuenta con ellos: cuando Mamacocha se apaga y Silbo se pone alerta, el público entiende que algo pasa en el océano sin ver el mapa.
+
+### 9.3 Cómo se animan (tecnología simple)
+**Plan A (recomendado, sin librerías nuevas): avatar por capas + CSS/Canvas.**
+- Cada avatar se exporta en capas PNG: cuerpo, cabeza, ojos abiertos/cerrados, 3 bocas, pelo trasero/delantero, ropa y accesorio.
+- Animaciones con transformaciones de CSS: respiración, parpadeo cada 3–5 s, balanceo del pelo y rebote.
+- **Reactividad:** M4 escucha el evento `voces` y cambia el estado de cada avatar: *calmo* (nivel < 0,15), *activo* (0,15–0,6) e *intenso* (> 0,6), con cambio de expresión y pose de boca.
+- Con `prefers-reduced-motion` los avatares quedan estáticos con expresión según el estado.
+
+**Sprite 32×32:** hoja de 4 frames que alterna con `steps()` en CSS: 2 de reposo y 2 activos según el estado de la voz.
+
+**Plan A+ (extras):**
+- **Ropa alternativa por disco:** una variante de color/atuendo según el evento (por ejemplo, abrigos más fríos en La Niña, ropa más cálida y roja en El Niño). La versión barata es un cambio de paleta con filtros de color sobre la capa de ropa.
+- Efectos extra: partículas de gotas, destellos y viento.
+
+**Plan B+ (solo si alguien del equipo ya domina la herramienta):** **Live2D Cubism** o **Spine** para modelos con malla deformable. Da un resultado más "modelo animado", pero tiene curva de aprendizaje de varios días y licencias propias (revisar condiciones de uso antes de publicar). **No** es parte del MVP.
+
+### 9.4 Proceso de producción
 | Paso | Detalle |
 |---|---|
-| 1. Brief | Una ficha por personaje con nombre, rasgo visual, sonido y personalidad (sección 3 y pestaña "La banda" del prototipo). Paleta común de 16 colores tomada de la escala de anomalías (azules, verdes, grises, amarillos, rojos y magentas) |
-| 2. Referencias | Fotos de huacos silbadores (Museo Tumbas Reales de Sipán, Museo Brüning) e iconografía andina. Se citan en `docs/CREDITOS.md` |
-| 3. Generación con IA | Generador especializado en pixel art (por ejemplo PixelLab o Retro Diffusion) o uno general (ChatGPT/DALL·E, Gemini). Se guarda cada prompt y la herramienta en `docs/USO_DE_IA.md` |
-| 4. Retoque humano | En **Aseprite**, **LibreSprite** o **Piskel** (estos dos son gratis): ajustar a 32×32, limpiar píxeles sueltos, forzar la paleta de 16 colores y dibujar 2 frames idle + 2 activos |
-| 5. Exportar | `assets/sprites/<personaje>.png` en hoja horizontal de 4 frames de 32×32 con fondo transparente |
-| 6. Declarar | Etiqueta "Sprite generado con IA y retocado por el equipo" en la pestaña La banda y en el video (R10: la marca de agua da credibilidad) |
+| 1. Brief | Ficha por personaje (sección 9.2) y paleta común. Un `ficha.md` en cada carpeta de avatar |
+| 2. Concepto con IA | Generar hojas de personaje con **ChatGPT (generación de imágenes)**, que es la herramienta acordada por el equipo; se le piden varias vistas del mismo personaje para mantener la coherencia. **Se anota la herramienta y el prompt de cada imagen en `docs/USO_DE_IA.md`**. M4 revisa las condiciones de uso de la herramienta (uso comercial y concursos) antes de elegirla |
+| 3. Rediseño humano | La IA no entrega capas ni dibujo limpio. M4 repinta y corrige a mano en **Krita** (gratis), Clip Studio o Photopea, unifica la paleta y separa las capas |
+| 4. Animación | Capas del modelo en `assets/avatares/<personaje>/capas/`, hoja `sprite.png` (4 frames de 32×32) y estados en `assets/avatares/avatares.json` |
+| 5. Validación | M5 revisa los textos y que nombres y símbolos andinos se usen con respeto (fuentes: Museo Tumbas Reales de Sipán, Museo Brüning) |
+| 6. Declarar | Etiqueta visible "Avatar generado con IA y rediseñado por el equipo" en la pestaña *La banda*, en el pie y en el video (R10) |
 
-Prompts base, a ajustar por M4:
-- **Silbo:** *"32x32 pixel art sprite, pre-Columbian Moche whistling vessel (stirrup-spout clay bottle), ochre clay, small kind eyes, water droplets from the spout, transparent background, limited 16-color palette, game character, front view"*
-- **Inti:** *"32x32 pixel art sprite, cheerful sun character with stepped Andean rays, yellow-orange-red palette, expressive face, transparent background"*
-- **Mamacocha:** *"32x32 pixel art sprite, calm female figure made of ocean waves, blue and turquoise, foam hair, transparent background"*
-- **Yaku:** *"32x32 pixel art sprite, small playful water drop with tiny legs and big eyes, green-cyan highlights, transparent background"*
-- **Illapa:** *"32x32 pixel art sprite, Andean storm warrior holding a sling and a zigzag magenta lightning bolt, dark cloud behind, transparent background"*
+### 9.5 Prioridad y presupuesto de tiempo (con honestidad)
+Un modelo detallado por capas es mucho trabajo: se estima **4–8 horas por personaje** entre concepto, repintado, capas y animación, más **1–2 horas** para su sprite 32×32. Los cinco modelos en 48 horas son exigentes para una sola persona.
 
-Plan B: si la IA no da buen resultado en 3 horas, M4 dibuja versiones simples de 16×16 a mano en Piskel.
+| Prioridad | Qué entra | Cuándo |
+|---|---|---|
+| 0 | **Los 5 sprites 32×32** (red de seguridad: con ellos la interfaz ya tiene personajes) | Horas 2–8 |
+| 1 | **Silbo** (la mascota): modelo detallado, parpadeo y animación de silbido | Horas 8–18 |
+| 2 | Modelos de **Illapa** y **Mamacocha** (los que mejor cuentan la historia) | Horas 18–28 |
+| 3 | Modelos de **Inti** y **Yaku** | Horas 28–36 |
+| 4 | Ropa alternativa por disco, efectos y mejoras | Solo en extras |
+
+Recomendación: si alguien más del equipo sabe dibujar, sumarlo **como apoyo de M4** (aporta archivos y M4 los integra, para no cruzar carpetas).
+
+**Plan B:** si un modelo detallado no llega, ese personaje se muestra con su **sprite 32×32 ampliado** junto al fotograma. El contrato solo pide "un avatar por personaje con estados calmo/activo/intenso", así que el resto del plan no cambia.
 
 ---
 
@@ -255,10 +363,10 @@ Plan B: si la IA no da buen resultado en 3 horas, M4 dibuja versiones simples de
 | Hora | Hito | Quién |
 |---|---|---|
 | Antes | Clonar el repo, instalar VS Code + Live Server, ffmpeg (M1) y Aseprite/Piskel (M4). Conseguir una réplica de huaco | Todos |
-| 0–2 | Kickoff: leer el plan, firmar los contratos, crear ramas. Brief de sprites | Todos (lidera M6) |
-| 2–12 | Construcción en paralelo, con datos simulados donde haga falta. M4 genera los sprites (horas 2–8) | Todos |
+| 0–2 | Kickoff: leer el plan, firmar los contratos, crear ramas. Brief de avatares (§9) | Todos (lidera M6) |
+| 2–12 | Construcción en paralelo, con datos simulados donde haga falta. M4 produce los avatares por prioridad (§9.5) | Todos |
 | 12 | **Integración 1**: play → escaneo → sonido → cabezal y subtítulo | M6 + todos |
-| 12–24 | MVP completo con sprites reales | Todos |
+| 12–24 | MVP completo con los primeros avatares (Silbo, Illapa, Mamacocha) | Todos |
 | 24 | **Integración 2** en GitHub Pages | M6 |
 | 24–30 | Bugs y prueba con lector de pantalla | M5 lidera |
 | 30 | **Congelar el MVP** | Todos |
@@ -277,7 +385,8 @@ Stand-up de 5 minutos cada 6 horas: ¿qué terminé?, ¿qué me bloquea?, ¿qué
 | **Claude Code (Anthropic)** | Redactar este plan, analizar la charla y el enunciado, calibrar el analizador de color, armar el repo | El equipo revisa el plan en el kickoff |
 | **Claude Design (Anthropic)** | Prototipo interactivo (interfaz, analizador y sonido) | Es un boceto. El código final lo escribe y prueba el equipo |
 | **Whisper (OpenAI, modelo abierto, ejecutado en local)** | Transcribir la charla de orientación | Se revisaron a mano los fragmentos citados |
-| **Generador de imágenes con IA** (PixelLab / Retro Diffusion / ChatGPT / Gemini, según elija M4) | **Sprites de los 5 personajes**, con retoque manual | Retoque a mano, prompts guardados y etiqueta visible |
+| **ChatGPT (OpenAI), generación de imágenes** | **Conceptos de los 5 avatares (modelo anime detallado y sprite 32×32)** | Repintado y separación en capas a mano (Krita), prompts guardados, búsqueda inversa de originalidad y etiqueta visible |
+| **ChatGPT Codex (OpenAI)** | **Ciertas funciones de código de la versión final** (exportar .wav, parser de CSV, pruebas, animación por capas) | Revisión cruzada de cada cambio, prueba manual y comentario de autoría en la función |
 | **Asistente de código (Claude / Copilot), si se usa** | Funciones durante la hackathon | Revisión cruzada de cada PR y prueba manual |
 | **ElevenLabs (opcional)** | Voz del video | Guion escrito por el equipo |
 
@@ -303,7 +412,10 @@ Stand-up de 5 minutos cada 6 horas: ¿qué terminé?, ¿qué me bloquea?, ¿qué
 |---|---|
 | Sin internet en la demo | Fotogramas en `data/` y audio generado en el navegador |
 | Canvas "contaminado" por CORS | Servimos los fotogramas desde el mismo dominio (GitHub Pages) |
-| Los sprites de IA no convencen | Sprites de 16×16 a mano en Piskel (sección 9) |
+| Los avatares anime no llegan a tiempo o no convencen | Priorizar por orden (§9.5). Plan B: mostrar el sprite 32×32 (ya hecho como red de seguridad) en lugar del modelo detallado |
+| La herramienta de IA tiene condiciones de uso restrictivas o el diseño se parece a un personaje existente | Revisar términos antes de elegirla, no nombrar obras ni artistas en los prompts y hacer búsqueda inversa de imagen |
+| Archivos del usuario enormes, corruptos o con formatos raros | Límite de 8 MB, validación y mensajes claros, más un ejemplo incluido para la demo |
+| El código de Codex no encaja con los contratos o tiene errores | Pedirle funciones pequeñas con la firma del contrato, revisarlas y probarlas antes de integrarlas. Si no convence, se escribe a mano |
 | Conflictos de Git | Carpetas separadas, CODEOWNERS y merges pequeños |
 | No llegamos a los extras | El MVP se congela en la hora 30 |
 | El audio no arranca solo | Arranca tras el clic en Reproducir (política del navegador) |

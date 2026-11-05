@@ -1,10 +1,10 @@
-# Silbador · Earth Information Jukebox
+# Terrasonic · Earth Information Jukebox
 
 > Hace más de 1500 años, el agua ya cantaba en el norte del Perú. Ahora canta el Pacífico visto por la NASA.
 
 Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/)**.
 
-**Silbador** es una jukebox retro pixelada que escanea, de oeste a este, los fotogramas de anomalía de temperatura del mar de las visualizaciones del **Earth Information Center** y los convierte en música en tiempo real. La toca una banda de cinco personajes:
+**Terrasonic** es una jukebox retro pixelada que escanea, de oeste a este, los fotogramas de anomalía de temperatura del mar de las visualizaciones del **Earth Information Center** y los convierte en música en tiempo real. La toca una banda de cinco personajes:
 
 | Personaje | Escucha | Toca |
 |---|---|---|
@@ -29,7 +29,7 @@ Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth
 | `data/`, `scripts/`, `src/fotogramas/` | M1 · Fotogramas EIC y datos | [Miembro 1] |
 | `src/analizador/` | M2 · Analizador visual | [Miembro 2] |
 | `src/sonido/` | M3 · Motor de sonido: la banda | [Miembro 3] |
-| `src/arte/`, `assets/` | M4 · Arte pixel, sprites y componentes | [Miembro 4] |
+| `src/arte/`, `assets/` | M4 · Arte, avatares anime y componentes | [Miembro 4] |
 | `src/accesibilidad/`, `docs/pitch/` | M5 · Accesibilidad, textos y narrativa | [Miembro 5] |
 | `index.html`, `src/app/`, `.github/` | M6 · App, integración y entrega | [Miembro 6] |
 
