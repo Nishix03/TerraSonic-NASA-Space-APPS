@@ -24,7 +24,6 @@ a{color:inherit}
 .px :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .px ::selection{background:var(--fg);color:var(--bg)}
 .px .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.px .skyfix{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 78% 12%,#cfd8ff,transparent),radial-gradient(1px 1px at 34% 64%,#fff,transparent),radial-gradient(1px 1px at 91% 72%,#fff,transparent),radial-gradient(1px 1px at 56% 38%,#cfd8ff,transparent),radial-gradient(1px 1px at 6% 86%,#fff,transparent),radial-gradient(1px 1px at 67% 91%,#fff,transparent),radial-gradient(1px 1px at 45% 8%,#fff,transparent)}
 .px .wrap{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:0 32px}
 
 /* tipografía */
@@ -206,12 +205,12 @@ a{color:inherit}
 /* ===== estructura sin scroll: la interfaz ocupa la ventana y se navega con botones ===== */
 .px.app{height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 .px .top{flex:0 0 auto;position:relative;z-index:40;background:rgba(0,0,0,.72);border-bottom:1px solid var(--line)}
-.px .top .wrap{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:20px;min-height:60px}
+.px .top .wrap{max-width:min(1760px,100%);margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:20px;min-height:60px}
 .px .viewport{flex:1 1 auto;min-height:0;position:relative}
 .px .scr{position:absolute;inset:0;overflow:hidden}
-.px .in{max-width:1320px;width:100%;height:100%;margin:0 auto;padding:22px 32px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.px .in{max-width:min(1760px,100%);width:100%;height:100%;margin:0 auto;padding:22px 32px;display:flex;flex-direction:column;gap:16px;min-height:0}
 .px .bar{flex:0 0 auto;position:relative;z-index:40;border-top:1px solid var(--line);background:rgba(0,0,0,.72)}
-.px .bar .in2{max-width:1320px;margin:0 auto;padding:8px 32px;min-height:68px;display:flex;align-items:center;gap:14px}
+.px .bar .in2{max-width:min(1760px,100%);margin:0 auto;padding:8px 32px;min-height:68px;display:flex;align-items:center;gap:14px}
 .px .bar .mid{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px}
 .px .bar .lbl{font-family:var(--head);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.72em;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .px .bar .dots{display:flex;gap:0;flex-wrap:wrap;justify-content:center}
@@ -430,7 +429,7 @@ a{color:inherit}
 .px .tour.br{right:24px;bottom:24px;left:auto;transform:none}
 .px .tour.tr{right:24px;top:74px;left:auto;transform:none}
 @keyframes tourpulse{0%,100%{outline-offset:5px;outline-color:#fff}50%{outline-offset:10px;outline-color:rgba(255,255,255,.35)}}
-@media (max-width:1100px){.px .umain{grid-template-columns:minmax(0,1fr)}.px .views{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:900px){.px .umain{grid-template-columns:minmax(0,1fr)}.px .views{grid-template-columns:minmax(0,1fr)}}
 
 /* ===== llenar todo el alto de la pantalla ===== */
 .px .umain{align-items:stretch}
@@ -443,18 +442,140 @@ a{color:inherit}
 .px .uni .timeline img{height:44px}
 .px .uni .uright .stagebox.slim{flex:1 1 auto;height:auto;min-height:150px}
 .px .uni .uright .lead,.px .uni .uright #tour-band{flex:0 0 auto}
-@media (max-width:1100px){.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:560/320;flex:0 0 auto;height:auto}.px .uleft,.px .uright{height:auto}}
+@media (max-width:900px){.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:560/320;flex:0 0 auto;height:auto}.px .uleft,.px .uright{height:auto}}
+
+/* ===== fondo espacial ===== */
+.px .skyfix{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:1}
+.px .skyfix .neb{position:absolute;width:70vw;height:70vw;border-radius:50%;filter:blur(70px);will-change:transform}
+.px .skyfix .n1{left:-22vw;top:-28vw;background:radial-gradient(circle,rgba(86,66,200,.36),transparent 66%);animation:nebA 46s ease-in-out infinite alternate}
+.px .skyfix .n2{right:-28vw;bottom:-34vw;background:radial-gradient(circle,rgba(24,128,180,.30),transparent 66%);animation:nebB 58s ease-in-out infinite alternate}
+@keyframes nebA{to{transform:translate(9vw,6vw) scale(1.16)}}
+@keyframes nebB{to{transform:translate(-8vw,-5vw) scale(1.12)}}
+.px .skyfix .stl{position:absolute;background-repeat:repeat;will-change:transform}
+.px .skyfix .s1{top:-180px;left:-200px;right:0;bottom:0;opacity:.65;background-size:200px 180px;background-image:radial-gradient(1px 1px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 120px,#cfd8ff,transparent),radial-gradient(1px 1px at 160px 60px,#fff,transparent),radial-gradient(1px 1px at 50px 150px,#ffe9a8,transparent);animation:d1 16s linear infinite}
+.px .skyfix .s2{top:-300px;left:-320px;right:0;bottom:0;opacity:.75;background-size:320px 300px;background-image:radial-gradient(1.5px 1.5px at 40px 70px,#fff,transparent),radial-gradient(1.5px 1.5px at 210px 190px,#cfd8ff,transparent),radial-gradient(1.5px 1.5px at 120px 260px,#fff,transparent);animation:d2 30s linear infinite}
+.px .skyfix .s3{top:-480px;left:-520px;right:0;bottom:0;background-size:520px 480px;background-image:radial-gradient(2px 2px at 70px 90px,#fff,transparent),radial-gradient(2px 2px at 380px 230px,#ffe9a8,transparent),radial-gradient(2px 2px at 220px 420px,#fff,transparent);animation:d3 52s linear infinite,twk 4.5s ease-in-out infinite}
+@keyframes d1{to{transform:translate(200px,180px)}}
+@keyframes d2{to{transform:translate(320px,300px)}}
+@keyframes d3{to{transform:translate(520px,480px)}}
+@keyframes twk{0%,100%{opacity:.4}50%{opacity:1}}
+.px .skyfix .shoot{position:absolute;top:12%;left:82%;width:120px;height:2px;background:linear-gradient(90deg,#fff,transparent);opacity:0;animation:shootS 14s linear infinite}
+.px .skyfix .shoot.b{top:52%;left:38%;width:90px;animation-delay:7s;animation-duration:19s}
+@keyframes shootS{0%,92%{opacity:0;transform:translate(0,0) rotate(28deg)}93%{opacity:1}100%{opacity:0;transform:translate(-48vw,26vh) rotate(28deg)}}
+.px .skyfix .sat{position:absolute;top:18%;left:-5%;width:3px;height:3px;background:#fff;box-shadow:0 0 6px #fff,-8px 0 0 rgba(255,255,255,.35),-16px 0 0 rgba(255,255,255,.18);animation:crossS 52s linear infinite}
+@keyframes crossS{from{transform:translate(0,0)}to{transform:translate(112vw,18vh)}}
+.px .skyfix .limb{position:absolute;left:-25%;right:-25%;bottom:-62vh;height:82vh;border-radius:50%;background:radial-gradient(ellipse at 50% 0,rgba(46,100,214,.2),transparent 62%);box-shadow:0 -1px 0 rgba(140,185,255,.3)}
+.px .brandmark{display:block;color:var(--fg)}
+
+/* ===== auditoría visual: legibilidad, escalado y pantallas pequeñas ===== */
+.px .pix,.px .tag,.px .eyebrow,.px .title .n{font-size:max(.64em,10.5px)}
+.px .vcap .pix{font-size:max(.66em,10.5px)}
+.px .readout .pix{flex:0 0 54px}
+.px .stagebox.slim .pix,.px .stagebar .pix{font-size:10.5px}
+.px .seg.v button{font-size:max(.62em,10px)}
+.px .dchip .t{white-space:normal;line-height:1.15;font-size:.8em}
+.px .umain{grid-template-columns:minmax(0,1fr) clamp(380px,27vw,540px)}
+.px .uleft .views{flex:0 0 auto;grid-template-rows:auto}
+.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:1.6;flex:0 0 auto;height:auto}
+.px .uleft .readout{flex:1 1 auto;justify-content:center;min-height:0}
+.px .stagebox.slim{--s:clamp(56px,12vh,124px)}
+.px .stagebox.slim .sp{max-width:calc(var(--s) * 1.35)}
+.px .dgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;flex:1 1 auto;min-height:0}
+.px .dgrid .panel{justify-content:center}
+.px .dgrid .drop{flex:1 1 auto}
+.px .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;flex:1 1 auto;min-height:0}
+.px .cgrid .panel{justify-content:center}
+.px .cards4,.px .cards3{align-content:stretch;grid-auto-rows:minmax(0,1fr)}
+.px .cardx.compact{justify-content:center;font-size:1.06em}
+.px .cards3 .cardx.compact,.px .cards4 .cardx.compact{font-size:1.2em}
+.px .cards3 .cardx.compact{justify-content:flex-start}
+@media (max-width:900px){
+  .px .top .wrap{flex-wrap:wrap;gap:6px 12px;min-height:54px;padding-top:6px;padding-bottom:0}
+  .px .nav{order:3;flex:1 0 100%;margin-left:0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  .px .nav button{flex:0 0 auto}
+  .px .nav::-webkit-scrollbar{display:none}
+  .px .dgrid,.px .cgrid{grid-template-columns:minmax(0,1fr)}
+  .px .drow{flex-direction:column}
+  .px .seg.v{flex-direction:row;align-self:flex-start}
+  .px .dchips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .px .dchip{flex-direction:column;align-items:stretch;padding:5px}
+  .px .dchip img{width:100%;height:42px;aspect-ratio:auto}
+  .px .readout .pix{flex:0 0 46px}
+  .px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:1.75}
+  .px .stagebox.slim{height:180px;flex:0 0 auto}
+}
+@media (max-width:520px){
+  .px .wordmark{display:none}
+  .px .btn.sm.quiet{padding:0 10px}
+}
+
+/* ===== auditoría, ronda 2 ===== */
+.px .mem.gone{display:none}
+.px .uleft{justify-content:space-between}
+.px .uleft .readout{flex:0 0 auto}
+.px .uleft .controls,.px .uleft #tour-strip,.px .uleft .views{flex:0 0 auto}
+.px .uni .timeline img{height:clamp(38px,4.6vh,66px)}
+
+/* ===== auditoría, ronda 3: pantallas bajas ===== */
+@media (max-height:780px) and (min-width:901px){
+  .px .in{padding-top:14px;padding-bottom:12px;gap:10px}
+  .px .uni{gap:10px}
+  .px .uleft{gap:8px}
+  .px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:1.8}
+  .px .readout{padding:6px 10px;gap:3px;font-size:.8em}
+  .px .uni .timeline img{height:32px}
+  .px .stagebox.slim{min-height:120px}
+  .px .uright{gap:8px}
+  .px .band.two .bchip{min-height:44px}
+}
+@media (max-height:680px) and (min-width:901px){
+  .px .readout .row .muted{display:none}
+  .px .lead.lh .leadface{width:120px}
+  .px .controls .when b{font-size:1.25em}
+}
+
+.px .wordmark{font-size:max(.7em,10.5px)}
+.px .chip{font-size:max(.8em,10.5px)}
+.px .readout .row .muted{font-size:max(.78em,10.5px) !important}
+.px .vfoot,.px .timeline span,.px .dchip .s,.px .tagbox{font-size:max(.66em,10.5px)}
+
+/* ===== ronda 4: portátiles pequeños y tabletas ===== */
+@media (max-width:1100px){
+  .px .top .wrap{gap:10px}
+  .px .nav{margin-left:4px}
+  .px .nav button{padding:0 9px;font-size:.66em;letter-spacing:.12em}
+  .px .nav button svg{display:none}
+  .px .dchip{flex-direction:column;align-items:stretch;padding:5px}
+  .px .dchip img{width:100%;height:36px;aspect-ratio:auto}
+  .px .dchips{gap:8px}
+  .px .drow{gap:8px}
+}
+
+/* ===== bloque final: pantallas estrechas (va al final para ganar a las reglas anteriores) ===== */
+@media (max-width:900px){
+  .px .umain{grid-template-columns:minmax(0,1fr)}
+  .px .views{grid-template-columns:minmax(0,1fr)}
+  .px .uleft,.px .uright{height:auto}
+  .px .uleft{justify-content:flex-start}
+  .px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:1.75}
+  .px .uni .uright .stagebox.slim{flex:0 0 auto;height:200px}
+  .px .uni{height:auto}
+  .px .in{height:auto;min-height:100%}
+  .px .bpage{grid-template-columns:minmax(0,1fr);gap:18px;height:auto}
+  .px .bface{width:min(100%,380px)}
+  .px .twocol,.px .dgrid{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </helmet>
 <div class="px app" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; font-size: {{th.fs}}">
 
-<div class="skyfix" aria-hidden="true"></div>
+<div class="skyfix" aria-hidden="true"><div class="neb n1"></div><div class="neb n2"></div><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div><div class="limb"></div><div class="shoot"></div><div class="shoot b"></div><div class="sat"></div></div>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
 <header class="top" style="{{hl.top}}">
 <div class="wrap">
 <button type="button" class="brand" onClick="{{goHome}}" aria-label="Terrasonic, ir al inicio">
-<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="15" r="8"></circle><path d="M3.5 12.5c4 2.2 9.5 2.2 15 0M4 18c4-1.4 8.6-1.4 13.5 0"></path><path d="M19 3.5l3.5 3.5M16.5 6l3.5 3.5" stroke-linecap="round"></path><circle cx="22.5" cy="3.5" r="1.4" fill="currentColor" stroke="none"></circle></svg>
+<svg class="brandmark" width="38" height="24" viewBox="0 0 25 16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h8v1h-8zM20 0h1v1h-1zM2 1h3v1h-3zM11 1h3v1h-3zM18 1h6v1h-6zM1 2h2v1h-2zM13 2h2v1h-2zM20 2h2v1h-2zM1 3h1v1h-1zM14 3h1v1h-1zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h2v1h-2zM14 11h2v1h-2zM1 12h1v1h-1zM14 12h1v1h-1zM1 13h2v1h-2zM13 13h2v1h-2zM2 14h3v1h-3zM11 14h3v1h-3zM4 15h8v1h-8z"></path><path d="M19 4h1v1h-1zM3 5h2v1h-2zM9 5h2v1h-2zM18 5h1v1h-1zM21 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM8 6h1v1h-1zM11 6h1v1h-1zM17 6h1v1h-1zM20 6h1v1h-1zM6 7h2v1h-2zM12 7h2v1h-2zM19 7h1v1h-1zM3 9h2v1h-2zM9 9h2v1h-2zM2 10h1v1h-1zM5 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM6 11h2v1h-2zM12 11h2v1h-2z" fill="#FFD447"></path></svg>
 <span class="wordmark">Terrasonic</span>
 </button>
 <nav class="nav" aria-label="Secciones">
@@ -483,7 +604,7 @@ a{color:inherit}
 <!-- TUS DATOS · 1 · Subir -->
 <sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
 <div class="title"><span class="n">01</span><h2 class="h2">Convierte tu archivo en música</h2><span class="muted" style="font-size: 0.85em">Todo ocurre en tu navegador: el archivo no sale de tu equipo.</span></div>
-<div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; min-height: 0">
+<div class="dgrid">
 <div class="panel">
 <label class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}">
 <input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}">
@@ -613,10 +734,10 @@ a{color:inherit}
 <div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}">
 <div class="cone" style="background: linear-gradient(180deg, {{m.coneC}}, transparent); opacity: {{m.coneOp}}"></div>
 <div class="sp {{m.cls}}" style="color: {{m.color}}">
-<div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}; --s: 64px"></div>
+<div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}"></div>
 <span class="pt" style="background-image: url({{m.partUrl}}); --pf: {{m.pf}}"></span>
 </div>
-<div class="pix" style="color: {{m.color}}; font-size: 0.5em">{{m.name}}</div>
+<div class="pix" style="color: {{m.color}}">{{m.name}}</div>
 </div>
 </sc-for>
 </div>
@@ -736,7 +857,7 @@ a{color:inherit}
 </sc-if>
 <sc-if value="{{scr.tCred}}" hint-placeholder-val="{{ false }}">
 <div class="title"><span class="n">{{techCur.num}}</span><h2 class="h2">Datos, créditos y uso de IA</h2></div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-content: start; min-height: 0">
+<div class="cgrid">
 <div class="panel"><span class="tag">Datos</span><p class="muted" style="font-size: 0.86em">Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio.</p><p class="muted" style="font-size: 0.86em">Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview.</p></div>
 <div class="panel"><span class="tag">Declaración de uso de IA</span><p class="muted" style="font-size: 0.86em">Este prototipo se hizo con Claude Design y Claude Code, y la charla se transcribió con Whisper. Los sprites y modelos de los personajes se generaron con ChatGPT Codex e imágenes de ChatGPT, con revisión manual. Todo código generado se revisa y se prueba antes de integrarlo, y toda imagen generada lleva una etiqueta visible. Cada uso queda anotado en el repositorio.</p></div>
 <div class="panel" style="border-color: var(--fg)"><span class="tag">Aviso</span><p style="font-size: 0.9em">Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</p></div>
@@ -828,8 +949,8 @@ DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', col
 var TOUR = [
   { t: 'Bienvenido a Terrasonic', b: 'En un minuto verás cómo escuchar el calentamiento del océano Pacífico. Todo está en esta pantalla: te iremos señalando cada parte. Puedes salir cuando quieras y reabrir la guía con el botón «Guía».', id: '', sub: 0, pos: 'bottom' },
   { t: 'Elige un disco', b: 'Cada disco es un periodo de seis meses con mapas reales de la NASA. Toca uno para cargarlo. A la derecha cambias entre los datos del EIC y los de NASA GIBS.', id: 'tour-discs', sub: 0, pos: 'bottom' },
-  { t: 'Lo que ves tú', b: 'Este es el mapa de la NASA. Naranja y rojo: el mar está más caliente de lo normal; azul: más frío. La línea blanca lo recorre de oeste a este.', id: 'tour-frame', sub: 0, pos: 'bottom' },
-  { t: 'Lo que ve la máquina', b: 'La máquina reduce el mapa a 28×16 píxeles de color. Cada columna que toca la línea blanca se convierte en notas: más calor, más grave y nostálgico.', id: 'tour-machine', sub: 0, pos: 'bottom' },
+  { t: 'Lo que ves tú', b: 'Este es el mapa de la NASA. Naranja y rojo: el mar está más caliente de lo normal; azul: más frío. La línea blanca lo recorre de oeste a este.', id: 'tour-frame', sub: 0, pos: 'br' },
+  { t: 'Lo que ve la máquina', b: 'La máquina reduce el mapa a 28×16 píxeles de color. Cada columna que toca la línea blanca se convierte en notas: más calor, más grave y nostálgico.', id: 'tour-machine', sub: 0, pos: 'br' },
   { t: 'Pulsa reproducir', b: 'Aquí empieza la música. Si no hay nadie encendido, se activa el protagonista del disco.', id: 'tour-play', sub: 0, pos: 'top', extra: 'Reproducir por mí' },
   { t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.', id: 'tour-strip', sub: 0, pos: 'top' },
   { t: 'El escenario', b: 'Aquí tocan los músicos encendidos. Cada uno se mueve al ritmo de la música y el acorde que suena aparece abajo.', id: 'tour-stage', sub: 0, pos: 'bl' },
@@ -839,16 +960,16 @@ var TOUR = [
   { t: 'Otras secciones', b: 'Arriba tienes La banda, para conocer a cada músico; Tus datos, para subir tu propia imagen o CSV; Método y Tecnología.', id: 'tour-top', sub: 0, pos: 'bottom' }
 ];
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
-var CARA = {"silbo": {"strip": "sprites/silbo/cara.webp", "off": "sprites/silbo/cara-apagado.webp", "n": 6}, "inti": {"strip": "sprites/inti/cara.webp", "off": "sprites/inti/cara-apagado.webp", "n": 6}, "mama": {"strip": "sprites/mama/cara.webp", "off": "sprites/mama/cara-apagado.webp", "n": 6}, "yaku": {"strip": "sprites/yaku/cara.webp", "off": "sprites/yaku/cara-apagado.webp", "n": 6}, "illapa": {"strip": "sprites/illapa/cara.webp", "off": "sprites/illapa/cara-apagado.webp", "n": 5}};
+var CARA = {"silbo": {"strip": "sprites/silbo/cara.webp", "off": "sprites/silbo/cara-apagado.webp", "sm": "sprites/silbo/cara-s.webp", "offSm": "sprites/silbo/cara-apagado-s.webp", "n": 6}, "inti": {"strip": "sprites/inti/cara.webp", "off": "sprites/inti/cara-apagado.webp", "sm": "sprites/inti/cara-s.webp", "offSm": "sprites/inti/cara-apagado-s.webp", "n": 6}, "mama": {"strip": "sprites/mama/cara.webp", "off": "sprites/mama/cara-apagado.webp", "sm": "sprites/mama/cara-s.webp", "offSm": "sprites/mama/cara-apagado-s.webp", "n": 6}, "yaku": {"strip": "sprites/yaku/cara.webp", "off": "sprites/yaku/cara-apagado.webp", "sm": "sprites/yaku/cara-s.webp", "offSm": "sprites/yaku/cara-apagado-s.webp", "n": 6}, "illapa": {"strip": "sprites/illapa/cara.webp", "off": "sprites/illapa/cara-apagado.webp", "sm": "sprites/illapa/cara-s.webp", "offSm": "sprites/illapa/cara-apagado-s.webp", "n": 5}};
 var ART = {"silbo": {"comp": "sprites/silbo/compuesto.png", "part": "sprites/silbo/particula.png", "bust": "sprites/silbo/busto.png", "n": 37, "ps": 2, "pn": 4, "pfi": 1}, "inti": {"comp": "sprites/inti/compuesto.png", "part": "sprites/inti/particula.png", "bust": "sprites/inti/busto.png", "n": 28, "ps": 2, "pn": 4, "pfi": 9}, "mama": {"comp": "sprites/mama/compuesto.png", "part": "sprites/mama/particula.png", "bust": "sprites/mama/busto.png", "n": 30, "ps": 2, "pn": 4, "pfi": 13}, "yaku": {"comp": "sprites/yaku/compuesto.png", "part": "sprites/yaku/particula.png", "bust": "sprites/yaku/busto.png", "n": 43, "ps": 2, "pn": 4, "pfi": 5}, "illapa": {"comp": "sprites/illapa/compuesto.png", "part": "sprites/illapa/particula.png", "bust": "sprites/illapa/busto.png", "n": 25, "ps": 2, "pn": 3, "pfi": 9}};
 var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var MESC = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 var PAGES = { juke: ['01', 'JUKEBOX'], band: ['02', 'LA BANDA'], data: ['03', 'TUS DATOS'], how: ['04', 'CÓMO SUENA'], tech: ['05', 'TECNOLOGÍA'] };
 var BAND = [
   { k: 'silbo', name: 'SILBO', color: '#FFD447', disc: 'Invierno 2025', glyph: '♪', ins: 'FLAUTA', clip: 'tocar_flauta', clips: 'idle · tocar_flauta · nota · motivo_silbo · aparecer / salir', origin: 'Huaco silbador moche, 1500 años', listens: 'Solo el recuadro de la costa norte del Perú (82°–76°O, 3°–18°S).', plays: 'Un silbido de vasija con vibrato. Aparece cuando la costa supera el nivel +2.', persona: 'Viejo, sabio, de pocas palabras. Es el narrador y el que da la alarma.', quote: 'Cuando yo silbo, en Chiclayo va a llover.', brief: 'botella silbadora moche de barro ocre con asa puente, ojos pequeños, gotas de agua saliendo de su pico; 3 frames de reposo y 2 de silbido.' },
-  { k: 'inti', name: 'INTI', color: '#FF5A36', disc: 'Verano 2024–25', glyph: '♫', ins: 'MARIMBA', clip: 'tocar_marimba', clips: 'idle · tocar_marimba · golpe_izq / golpe_der · acento · aparecer / salir', origin: 'El sol, en quechua', listens: 'El promedio de los píxeles cálidos (amarillo → rojo) de cada grupo de 4 columnas.', plays: 'Acordes de marimba: Do, Fa, Sol y, si hace demasiado calor, Mi mayor tenso.', persona: 'Entusiasta y ruidoso. A veces se emociona demasiado.', quote: '¡Más calor, más fiesta! …¿no?', brief: 'sol pixelado con rayos escalonados y cara expresiva, paleta amarillo-naranja-rojo; brilla más con la intensidad.' },
+  { k: 'inti', name: 'INTI', color: '#FF5A36', disc: 'Verano 2024–25', glyph: '♫', ins: 'MARIMBA', clip: 'tocar_marimba', clips: 'idle · tocar_marimba · golpe_izq / golpe_der · acento · aparecer / salir', origin: 'El sol, en quechua', listens: 'El promedio de los píxeles cálidos (amarillo → rojo) de cada grupo de 4 columnas.', plays: 'Acordes lentos de marimba en Mi menor: Mim7, Domaj7, Sol y Re. Cuanto más calor, más grave.', persona: 'Cálido y nostálgico. Antes festejaba el sol; ahora canta lo que el calor se lleva.', quote: '¿Cuánto calor puede aguantar el mar?', brief: 'sol pixelado con rayos escalonados y cara expresiva, paleta amarillo-naranja-rojo; brilla más con la intensidad.' },
   { k: 'mama', name: 'MAMACOCHA', color: '#38C6E8', disc: 'Invierno 2024', glyph: '♩', ins: 'BAJO + COLCHÓN', clip: 'tocar_pad', clips: 'idle · tocar_pad · acorde · apagarse · aparecer / salir', origin: 'Madre del mar en la cosmovisión andina', listens: 'El promedio de los píxeles fríos (verde → azul) del fotograma.', plays: 'Un bajo profundo y calmado. En La Niña domina; en El Niño casi desaparece.', persona: 'Tranquila y protectora. Cuando ella calla, algo anda mal.', quote: 'Mientras yo cante, el mar está en calma.', brief: 'figura femenina hecha de olas en azul y turquesa, cabello de espuma; se encoge cuando el agua se calienta.' },
-  { k: 'yaku', name: 'YAKU', color: '#7BE38A', disc: 'Verano 2025–26', glyph: '▾', ins: 'GOTERO', clip: 'saltar', clips: 'idle · saltar · gota · salpicadura · aparecer / salir', origin: 'El agua, en quechua', listens: 'Cuántas celdas de cada columna tienen anomalía fuerte (±2 o más) y en qué latitud.', plays: 'Gotas en escala pentatónica andina: más al norte, más agudas.', persona: 'Inquieto y travieso. Nunca se queda quieto.', quote: '¡Plic, plic! Te digo dónde está pasando algo.', brief: 'gotita de agua con patas, ojos grandes y brillo pixelado; salta al ritmo.' },
+  { k: 'yaku', name: 'YAKU', color: '#7BE38A', disc: 'Verano 2025–26', glyph: '▾', ins: 'GOTERO', clip: 'saltar', clips: 'idle · saltar · gota · salpicadura · aparecer / salir', origin: 'El agua, en quechua', listens: 'Cuántas celdas de cada columna tienen anomalía fuerte (±2 o más) y en qué latitud.', plays: 'Gotas en escala pentatónica andina: más al norte, más agudas. Si el mar está muy cálido, pasa a tono menor.', persona: 'Inquieto y travieso. Nunca se queda quieto.', quote: '¡Plic, plic! Te digo dónde está pasando algo.', brief: 'gotita de agua con patas, ojos grandes y brillo pixelado; salta al ritmo.' },
   { k: 'illapa', name: 'ILLAPA', color: '#E0459B', disc: 'Invierno 2026', glyph: '✦', ins: 'TIMBAL', clip: 'latido', clips: 'idle · latido · trueno · aparecer / salir', origin: 'Rayo y trueno en la cosmovisión andina', listens: 'Los píxeles de anomalía extrema (rojo oscuro y magenta) de cada columna.', plays: 'Truenos graves. Solo aparece cuando una columna supera un 25 % de valores extremos.', persona: 'Aparece poco, pero cuando llega todos callan.', quote: 'No me llames. Si vengo, es en serio.', brief: 'guerrero de tormenta con honda y rayo zigzag magenta; nube oscura detrás; frame de destello.' }
 ];
 var TECH = [
@@ -1048,8 +1169,8 @@ class Component extends DCLogic {
     super(props);
     this.state = { tab: 'juke', sub: 0, tour: 0, more: false, bsel: 0, set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
       trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
-      mute: { silbo: true, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
-      caption: 'Elige un disco y pulsa Reproducir. La banda empieza apagada: cada disco enciende a su protagonista.' };
+      mute: { silbo: false, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
+      caption: 'Elige un disco y pulsa Reproducir: cada disco enciende a su protagonista.' };
     this.timer = null; this.ac = null; this.lastThunder = -9; this.tm = []; this.melDeg = null;
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
     this.tbars = []; for (var i = 0; i < 14; i++) this.tbars.push({ delay: (i * 0.02).toFixed(2) + 's' });
@@ -1058,14 +1179,12 @@ class Component extends DCLogic {
     try { if (!localStorage.getItem('ts_tour')) this.setState({ tour: 1 }); } catch (e) { this.setState({ tour: 1 }); }
   }
   preloadArt() {
-    var order = [DISC_CHAR[this.state.disc]].concat(Object.keys(CARA).filter(function (k) { return k !== DISC_CHAR[this.state.disc]; }, this)), i = 0;
-    var idle = window.requestIdleCallback ? function (f) { window.requestIdleCallback(f, { timeout: 1500 }); } : function (f) { setTimeout(f, 300); };
-    Object.keys(CARA).forEach(function (k) { new Image().src = ART[k].comp; new Image().src = ART[k].part; });
-    (function next() {
-      if (i >= order.length) return;
-      var k = order[i++], im = new Image(), go = function () { idle(next); };
-      im.onload = go; im.onerror = go; im.src = CARA[k].strip; new Image().src = CARA[k].off;
-    })();
+    var self = this; this.keep = [];
+    var load = function (url, done) { var im = new Image(); self.keep.push(im); im.onload = function () { if (im.decode) im.decode().catch(function () {}); if (done) done(); }; im.onerror = function () { if (done) done(); }; im.src = url; };
+    Object.keys(CARA).forEach(function (k) { load(CARA[k].sm); load(CARA[k].offSm); load(ART[k].comp); load(ART[k].part); load(ART[k].bust); });
+    var idle = window.requestIdleCallback ? function (f) { window.requestIdleCallback(f, { timeout: 2500 }); } : function (f) { setTimeout(f, 800); };
+    var keys = Object.keys(CARA), i = 0;
+    (function next() { if (i >= keys.length) return; var k = keys[i++]; load(CARA[k].strip, function () { idle(next); }); })();
   }
   tourGo(n) {
     if (n < 1 || n > TOUR.length) { this.tourEnd(); return; }
@@ -1212,7 +1331,7 @@ class Component extends DCLogic {
     var state = off ? 'apagado' : lv > 0.6 ? 'intenso' : lv >= 0.15 ? 'activo' : 'calmo';
     if (k !== this.lastLead) { this.lastLead = k; this.leadCount++; }
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, AL = ART[k];
-    return { faceUrl: off ? CARA[k].off : CARA[k].strip, faceN: off ? 1 : CARA[k].n, fx0: off ? 0 : vm.x0, fx1: off ? 0 : vm.x1, fF: off ? 1 : vm.sprF, fDur: vm.sprDur, partUrl: vm.partUrl, pf: vm.pf,
+    return { faceUrl: off ? CARA[k].offSm : CARA[k].sm, faceN: off ? 1 : CARA[k].n, fx0: off ? 0 : vm.x0, fx1: off ? 0 : vm.x1, fF: off ? 1 : vm.sprF, fDur: vm.sprDur, partUrl: vm.partUrl, pf: vm.pf,
       cls: vm.cls, dur: vm.dur, clip: vm.clip, ins: vm.ins, glyph: vm.glyph, coneC: vm.coneC, coneOp: vm.coneOp, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', quote: b.quote, state: state, on: !off,
       anim: !off && s.playing && lv >= 0.15 ? 'bob' : '', toggleLabel: off ? 'Activar a ' + b.name : 'Desactivar a ' + b.name,
       btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A',
@@ -1538,7 +1657,7 @@ class Component extends DCLogic {
     var s = this.state, self = this, hc = s.contrast;
     var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF9A7A', cold: '#5CE1FF', magenta: '#FF7AD0' }
                 : { bg: '#05070C', panel: 'rgba(255,255,255,0.03)', line: 'rgba(255,255,255,0.18)', shadow: '#000000', fg: '#FFFFFF', muted: '#A9B0BF', accent: '#FFFFFF', hot: '#FF8A5B', cold: '#5CC8FF', magenta: '#F06BB0' };
-    th.fs = s.big ? '19px' : '16px';
+    th.fs = s.big ? '19px' : 'clamp(15px, calc(7.2px + 0.65vw), 23px)';
     th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
     th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
