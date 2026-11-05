@@ -61,7 +61,8 @@ export function montarJukebox(contenedor: HTMLElement, discos: Disco[]): void
 export function montarBanda(contenedor: HTMLElement): void
 export function montarEscenario(contenedor: HTMLElement): void   // escucha 'voces', 'silenciar' y 'banda:preset'
 export function montarAvatares(contenedor: HTMLElement): void   // escucha 'voces', 'fotograma:listo' y 'tema'
-// Avatares: assets/avatares/<silbo|inti|mama|yaku|illapa>/ con capas PNG (cuerpo, cabeza, ojos, bocas, pelo, ropa, accesorio)
+// Avatares: assets/avatares/<silbo|inti|mama|yaku|illapa>/ con cuerpo.png, instrumento.png, particula.png, busto.png, icono.png,
+// modelo/capas/*.png y poses/*.png (nombres y medidas en docs/PLAN.md §9.6.6). Atrezo (satélite, atril, micrófono): assets/avatares/atrezo/
 // y assets/avatares/avatares.json: { id, nombre, alt, ficha, modelo: { capas[], tam: '768x1152' }, sprite: 'sprite.png (4 frames 32x32)', estados: ['calmo','activo','intenso'] }
 // El modelo detallado (~400x600 px) va junto al fotograma y es el protagonista del disco (`disco.protagonista`); el sprite 32x32 va en el mezclador de la banda y en la tira.
 // Estado por nivel de 'voces': calmo < 0,15 · activo 0,15–0,6 · intenso > 0,6

@@ -435,6 +435,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] **Jukebox sin espacios en blanco** (§4.2): columna de discos y banda, y panel de visualización de la misma altura; **personaje grande (~400×600 px)** a la derecha del fotograma; mezclador de la banda con ON/OFF, «Banda completa» y «Apagar banda».
 - [ ] **Transición del satélite** entre páginas (§4.2): satélite, estela, 14 barras y rótulo «PÁGINA 0N».
 - [ ] **Flechas animadas** de fotograma, tarjeta **«Motor de sonido»**, panel **«Por qué suena así»** y la sección de **objetivos del reto** en *Cómo suena* (§4.2).
+- [ ] **Sprites de los cinco personajes según la biblia visual** (§9.6): cuerpo 32×32, instrumento, partícula, busto, icono 16×16, modelo por capas y hoja de poses, con los nombres de archivo de §9.6.6. Se empieza por los sets mínimos.
 - [ ] **Escenario de la banda** (§4.3): telón, tarima, reflectores, metrónomo, entrada y salida de cada músico, y animaciones (placeholders ya hechos; sustituir por sprites y clips reales). El panel del protagonista usa el mismo estado.
 - [ ] **Diseño móvil** (§4.4): maqueta en Claude Design, CSS responsivo, barra de pestañas inferior, reproductor fijo, acordeones y hoja «Ver grande».
 - [ ] Página **«Tus datos»** (zona de arrastrar y soltar, selector de modo y de columna, ejemplo de Chiclayo, y estado vacío con explicación).
@@ -453,6 +454,7 @@ Cada persona es dueña de sus carpetas (`.github/CODEOWNERS`) y trabaja en la ra
 - [ ] Accesibilidad de **«Tus datos»**: carga con teclado, estados en `aria-live` y descripción por voz del resultado.
 - [ ] **Cambio de página**: anuncio «Página: NOMBRE» en `aria-live` y cambio inmediato con `prefers-reduced-motion`.
 - [ ] **Prueba de escucha** del motor Melodía con personas ciegas o con baja visión: ¿entienden qué pasa en el fotograma solo con el sonido y la descripción?
+- [ ] **Revisión cultural** de los cinco diseños (§9.6.5) con fuentes de museos y comunidades (Sipán, Sicán, Huanchaco, Chan Chan, Galápagos y la sierra norte), y registro de cada referencia en `docs/CREDITOS.md`.
 - [ ] Pruebas con **TalkBack y VoiceOver** en móvil, y comprobar que el escenario es decorativo (la información equivalente está en los subtítulos y en «En el escenario: …»).
 - **Hecho cuando:** se recorre la jukebox completa sin mirar la pantalla.
 
@@ -495,6 +497,8 @@ Ambas versiones salen del **mismo diseño**: primero se cierra el concepto, y el
 | **Accesibles** | Cada avatar tiene texto alternativo y una ficha de texto con su personalidad (para lectores de pantalla). No transmiten información solo con el color |
 
 ### 9.2 Diseño por personaje (según la personalidad de su sonido)
+*Es el resumen. La ficha completa de cada personaje (procedencia, vestimenta, paleta, expresiones y prompts) está en §9.6.*
+
 | Personaje | Personalidad del sonido | Diseño propuesto | Paleta | Gesto y animación característicos |
 |---|---|---|---|---|
 | **SILBO** | Viejo y sabio. Silbido solitario, aparece poco | Anciano de pelo plateado trenzado, lentes redondos y poncho-chaqueta ocre con bordado escalonado. Lleva colgada una botella silbadora en miniatura | Ocre, arcilla, plata | Respira lento. Al sonar su silbido se lleva la botella a los labios y salen gotas |
@@ -535,7 +539,7 @@ Un modelo detallado por capas es mucho trabajo: se estima **4–8 horas por pers
 
 | Prioridad | Qué entra | Cuándo |
 |---|---|---|
-| 0 | **Los 5 sprites 32×32** (red de seguridad: con ellos la interfaz ya tiene personajes) | Horas 2–8 |
+| 0 | **Los 5 sets mínimos** (red de seguridad): cuerpo 32×32 con `idle` y `tocar`, instrumento, partícula e icono 16×16, según §9.6 | Horas 2–10 |
 | 1 | **Silbo** (la mascota): modelo detallado, parpadeo y animación de silbido | Horas 8–18 |
 | 2 | Modelos de **Illapa** y **Mamacocha** (los que mejor cuentan la historia) | Horas 18–28 |
 | 3 | Modelos de **Inti** y **Yaku** | Horas 28–36 |
@@ -544,6 +548,157 @@ Un modelo detallado por capas es mucho trabajo: se estima **4–8 horas por pers
 Recomendación: si alguien más del equipo sabe dibujar, sumarlo **como apoyo de M4** (aporta archivos y M4 los integra, para no cruzar carpetas).
 
 **Plan B:** si un modelo detallado no llega, ese personaje se muestra con su **sprite 32×32 ampliado** junto al fotograma. El contrato solo pide "un avatar por personaje con estados calmo/activo/intenso", así que el resto del plan no cambia.
+
+### 9.6 Biblia visual y fichas de los sprites
+Esta sección es la referencia para dibujar a los cinco personajes. La tabla de §9.2 es el resumen; aquí está el detalle. Los diseños son **inspirados** en lugares y piezas reales; no son réplicas ni representaciones religiosas.
+
+#### 9.6.1 De dónde sale la identidad
+Los fotogramas de los discos muestran el **Pacífico oriental** (140°O–70°O, 25°S–15°N): la **costa norte del Perú** (Lambayeque, Piura y La Libertad), la **corriente de Humboldt** y **Galápagos**, con los **Andes** detrás. Cada personaje toma rasgos reales de un lugar de esa mirada y los mezcla con un **giro alternativo** (techwear, streetwear y un toque de *andino-futurismo*), para que se vean de hoy y combinen con la estética retro de la app.
+
+| Personaje | Lugar de origen | Referencia real | Giro alternativo |
+|---|---|---|---|
+| **Silbo** | Lambayeque y Chiclayo (cultura moche y sicán) | Tocado de media luna y orejeras de oro del Señor de Sipán, botellas silbadoras moche, quena | Chaleco techwear, lentes ahumados y orejeras que son auriculares retro |
+| **Inti** | Piura y Catacaos (y la artesanía en paja de Monsefú) | Sombrero de paja de ala ancha, algodón pima de Piura, marimba de chonta del Pacífico ecuatoriano y colombiano | Bomber amarillo, auriculares con forma de sol y zapatillas altas |
+| **Mamacocha** | Huanchaco (Trujillo): pescadores y **caballitos de totora**, y la corriente de Humboldt | Frisos de Chan Chan (olas, peces y pelícanos), totora, redes | Abrigo oversize translúcido con costuras luminosas |
+| **Yaku** | Galápagos (Puerto Ayora): donde la charla de orientación cuenta la historia de la lluvia | Piquero de patas azules, iguana marina, pinzones de Darwin | Impermeable holográfico y gafas de buceo en la frente |
+| **Illapa** | Sierra norte (Cajamarca y la sierra de Lambayeque), de donde bajan las tormentas | Sombrero de fieltro cajamarquino, poncho oscuro, honda andina, wankara (bombo andino), geometría de textiles andinos | Capa asimétrica *storm punk*, guantes con luces y gafas |
+
+#### 9.6.2 Reglas visuales comunes (para que encajen con la app)
+| Regla | Detalle |
+|---|---|
+| **Escala de píxel** | Se dibuja a 32×32 y se amplía solo en **múltiplos enteros** (×4 = 128 px; ×3 en móvil). Sin suavizado |
+| **Contorno** | 1 px de `#05070F` alrededor de todo. Ampliado ×4 da los **4 px de borde** que usa toda la interfaz |
+| **Sombra dura** | Sombra proyectada de 1 px abajo y a la derecha en `#05070F`, igual que las tarjetas de la app |
+| **Luz** | Siempre desde arriba a la izquierda, con 2 tonos de sombra. Tramado (*dithering*) solo en degradados pequeños |
+| **Paleta** | 8 colores por personaje, tomados de la **rampa de anomalías** y de los colores de la interfaz (`#FFD447`, `#FF5A36`, `#38C6E8`, `#7BE38A`, `#E0459B`, `#F4EFE6`, `#AEB6DA`, `#2E3A6E`, `#0A0D1A`). Como máximo 3 colores nuevos para todo el elenco: arcilla `#8A5A2B`, violeta noche `#2A1B4D` y paja `#F2E6A0` |
+| **Color de identidad** | Cada personaje tiene su color en bufanda, lazo o detalle: Silbo amarillo, Inti rojo-naranja, Mamacocha cian, Yaku verde e Illapa magenta |
+| **Ancla de familia** | Todos llevan un **pin de órbita**: un anillo pequeño con un satélite de 1 px en su color. Conecta con el logo de Terrasonic y con el tema del reto |
+| **Proporciones del sprite** | Chibi de 3 cabezas: cabeza de ~12×11 px y cuerpo de ~14 px. El modelo grande usa proporciones anime de ~5,5 cabezas |
+| **Ojos** | 2×2 px con 1 px de brillo, y un frame de parpadeo. En *intenso*, ojos más abiertos o cerrados con fuerza, según el personaje |
+| **Capas del sprite** | `cuerpo` (24×28), `instrumento` (12×12, aparte para animarlo solo) y `partícula` (8×8). Coincide con el prototipo, que ya anima el cuerpo y el instrumento por separado |
+| **Accesibilidad** | Los cinco se distinguen por **silueta y luminosidad**, no solo por color (ver §9.6.5) |
+
+#### 9.6.3 Qué sprite aparece en cada apartado de la app
+| Apartado | Sprite | Personaje | Qué hace |
+|---|---|---|---|
+| **Jukebox · Escenario** | Cuerpo 32×32 + instrumento + partícula (×4 en escritorio, ×3 en móvil) | Los encendidos | Los clips de §4.3: *idle*, *tocar*, gestos por nota, *aparecer* y *salir* |
+| **Jukebox · Protagonista del disco** | Modelo de 768×1152 por capas (se muestra a ~400×600) | El del disco | Los mismos clips y disparos que su sprite del escenario |
+| **Jukebox · Banda en vivo (mezclador)** | Busto 32×32 dentro de cada interruptor | Los cinco | Apagado: en escala de grises y con los ojos cerrados. Encendido: parpadea y cabecea al pulso si suena |
+| **Jukebox · Selector de discos** | Icono 16×16 junto al número del disco | El protagonista de cada disco | Se anima solo en el disco elegido |
+| **Jukebox · Visor del fotograma** | Icono 16×16 de Silbo en el recuadro «Casa de Silbo» | Silbo | Se asoma y parpadea cuando la costa del Perú supera +2 |
+| **La banda (página)** | Modelo + hoja de 5 poses (neutra, tocar, intensa, apagada y saludo) + cuerpo 32×32 | Los cinco | Al tocar o pulsar una tarjeta, el personaje saluda |
+| **Ver grande (móvil)** | Modelo a pantalla completa | El protagonista | Igual que en el panel de escritorio |
+| **Tus datos** | Cuerpo 32×32 ampliado ×6 con clips extra: `asomarse` (sin archivo), `recibir` (al soltar el archivo), `celebrar` (cargado) y `confundido` (formato no admitido) | **Yaku**, el guía curioso | Reacciona a cada paso de la carga |
+| **Cómo suena** | Modelo en 2 poses: `señalar` y `escuchar` | **Silbo**, el narrador | Cambia de pose según el paso que se lee |
+| **Tecnología** | Icono 16×16 como marcador de categoría | Interfaz y código: Inti. Datos de la NASA: Mamacocha. Música y sonido: Silbo. IA y herramientas: Illapa | Estático, con un parpadeo al pasar el cursor |
+| **Accesibilidad (hoja)** | Busto con la mano en la oreja (pose `escuchar`) en la cabecera | Silbo | Estático |
+| **Transición de página** | El **satélite** (24×12, panel solar azul y antena dorada, 3 frames de brillo) | No es un personaje | Cruza la pantalla (§4.2) |
+| **Carga y estados vacíos** | Escenario vacío: atril y micrófono de 32×32 sin nadie. Carga del análisis: `saltar` de Yaku en pequeño | Yaku y atrezo | Indican que la app está esperando |
+| **Marca y sistema** | Icono 16×16 de la **botella silbadora** como favicon e icono de la PWA (192 y 512 px, ampliado en múltiplos enteros) | Silbo | Estático |
+
+Los iconos de la barra de pestañas (Jukebox, Banda, Datos, Método y Tecnología) **no** son personajes: siguen siendo los pictogramas pixel de la maqueta móvil.
+
+#### 9.6.4 Fichas por personaje
+
+##### SILBO · el abuelo guardián de Lambayeque
+- **Identidad:** anciano sabio y de pocas palabras. Vigila la costa y da la alarma. Es el **narrador** de la app. Su sonido es la flauta andina y el silbido.
+- **De dónde sale:** Lambayeque y Chiclayo, cultura moche y sicán (Huaca Rajada–Sipán y Ferreñafe).
+- **Rasgos regionales:** tocado de **media luna dorada** inspirado en el del Señor de Sipán; orejeras circulares de oro; collar de cuentas; túnica ocre con **bordado escalonado**; una **botella silbadora** de asa estribo colgada al cinto, con gotas.
+- **Giro alternativo:** chaleco techwear con paneles plateados reflectantes sobre la túnica; lentes redondos ahumados con borde dorado; trenza plateada con cuentas luminosas; las orejeras de oro son **auriculares retro**.
+- **Paleta:** `#FFD447`, `#FFA62B`, `#8A5A2B` (arcilla), `#F4EFE6` (cabello plateado), `#AEB6DA`, `#2E3A6E`, `#05070F`, más el ocre `#E39A4F` de la interfaz.
+- **Silueta del sprite:** ~30 px de alto. La **media luna ancha** arriba y la túnica trapezoidal. Lo que se debe leer a 32 px: media luna + botella.
+- **Instrumento (12×12):** quena (flauta con muesca) con los agujeros marcados; la botella silbadora es otro sprite pequeño para el *motivo*.
+- **Expresiones:** *calmo* ojos entrecerrados y serenos; *activo* ojos abiertos y mejillas infladas al soplar; *intenso* ojos cerrados con fuerza y la botella en los labios; *apagado* ojos cerrados y cabeza ladeada.
+- **Modelo grande (capas):** cuerpo, túnica, chaleco, tocado, orejeras (auriculares), 3 collares, trenza, lentes, brazos, quena, botella silbadora y pies con sandalias.
+- **Cuidado cultural:** basarse en piezas de museo (Museo Tumbas Reales de Sipán y Museo Nacional Sicán). Sin plumas de otras culturas ni disfraces caricaturescos.
+- **Prompt base (modelo):** *"original character design, elderly sage from the Peruvian north coast, crescent-shaped golden headdress inspired by Moche goldwork, gold ear spools that are retro headphones, ochre tunic with stepped embroidery, techwear vest with silver reflective panels, round smoked glasses, silver braid with glowing beads, small stirrup-spout whistling bottle at the belt, holding a quena flute, full body, 5.5 heads tall, anime-inspired cel shading, flat background"*
+- **Prompt base (sprite):** *"32x32 pixel art character, elderly sage with a wide golden crescent headdress, ochre tunic, tiny whistling bottle at belt, 1px dark outline, 8 colors, top-left light, transparent background, front view"*
+
+##### INTI · el joven del sol de Piura
+- **Identidad:** entusiasta, ruidoso y generoso; a veces se emociona demasiado. Su sonido es la marimba y los acordes cálidos.
+- **De dónde sale:** Piura y Catacaos, donde el calor y El Niño se sienten con fuerza; la marimba viene del Pacífico de Ecuador y Colombia.
+- **Rasgos regionales:** **sombrero de paja de ala ancha** con una corona de **rayos escalonados** que brilla con el calor; camisa de algodón claro (el algodón pima es de Piura); pulseras de chaquira.
+- **Giro alternativo:** bomber amarillo-naranja con parches de rayos; auriculares con forma de sol; shorts cargo; zapatillas altas; guantes sin dedos.
+- **Paleta:** `#FF5A36`, `#FFA62B`, `#FFD447`, `#E8283A`, `#F2E6A0` (paja), `#7A0F1E`, `#F4EFE6`, `#05070F`.
+- **Silueta del sprite:** ~28 px. **Sombrero redondo de ala ancha** con rayos. Lo que se debe leer: sombrero + marimba.
+- **Instrumento (12×12):** marimba con 5 teclas de chonta y **dos mazos** que son sprites aparte (golpean alternos).
+- **Expresiones:** *calmo* sonrisa leve; *activo* sonrisa grande y ojos brillantes; *intenso* boca abierta y ojos cerrados de alegría, con rayos que salen del sombrero; *apagado* sombrero caído sobre los ojos.
+- **Modelo grande (capas):** cuerpo, camisa, bomber, sombrero con corona de rayos, auriculares-sol, brazos con pulseras, mazos, marimba y zapatillas.
+- **Cuidado cultural:** la marimba de chonta es una tradición afro del Pacífico; se acredita y se dibuja con respeto, sin estereotipos.
+- **Prompt base (modelo):** *"original character design, energetic teenager from Piura, wide-brim straw hat with a crown of stepped sun rays, yellow-orange bomber jacket with lightning-ray patches over a light cotton shirt, sun-shaped headphones, beaded bracelets, high-top sneakers, holding two marimba mallets, full body, 5.5 heads tall, anime-inspired cel shading, warm palette, flat background"*
+- **Prompt base (sprite):** *"32x32 pixel art character, cheerful kid with a wide straw hat with stepped sun rays, yellow-orange jacket, 1px dark outline, 8 colors, top-left light, transparent background, front view"*
+
+##### MAMACOCHA · la pescadora del mar frío
+- **Identidad:** calma y protección; canta grave. **Cuando ella calla, algo anda mal** (se apaga cuando el mar se calienta). Su sonido es el bajo y el colchón de cuerdas.
+- **De dónde sale:** Huanchaco (Trujillo), con sus caballitos de totora y su pesca artesanal, y la corriente de Humboldt, que es fría y rica en peces.
+- **Rasgos regionales:** abrigo largo con **olas, peces y pelícanos bordados**, inspirados en los frisos de Chan Chan; trenzas con **juncos de totora**; red de pesca como chal; pies descalzos sobre el agua; colgante de pelícano.
+- **Giro alternativo:** abrigo oversize **translúcido** con costuras luminosas cian; botas altas; guantes largos; cabello que pasa de turquesa a espuma blanca.
+- **Paleta:** `#38C6E8`, `#3FE0B5`, `#2F4FD0`, `#1B2A80`, `#B8F0A0`, `#F4EFE6` (espuma), `#2E3A6E`, `#05070F`.
+- **Silueta del sprite:** ~31 px. **Cabello largo en triángulo** que cae como una ola. Lo que se debe leer: pelo azul + arpa.
+- **Instrumento (12×12):** **arpa de totora** (marco de juncos con cuerdas); hace el bajo y el colchón.
+- **Expresiones:** *calmo* ojos serenos; *activo* ojos abiertos y brillo en el cabello; *intenso* las olas del abrigo se agitan; *apagado* se encoge y se vuelve gris azulado (clip `apagarse`).
+- **Modelo grande (capas):** cuerpo, abrigo con bordado, trenzas con totora, red, colgante, pies, brazos, arpa y el cabello en 2 capas para ondularlo.
+- **Cuidado cultural:** Mamacocha es una deidad del mar en el mundo andino; el personaje está **inspirado**, no la representa, y se evita todo tono religioso o sexualizado. Se acredita a los pescadores de Huanchaco y a Chan Chan.
+- **Prompt base (modelo):** *"original character design, calm fisherwoman from Huanchaco, long turquoise hair fading to white foam, braids with totora reeds, oversize translucent coat with glowing cyan seams and embroidered waves and fish inspired by Chimu friezes, fishing net shawl, pelican pendant, barefoot on water, holding a small reed harp, full body, 5.5 heads tall, anime-inspired cel shading, flat background"*
+- **Prompt base (sprite):** *"32x32 pixel art character, calm fisherwoman with long turquoise hair, long cyan coat with wave pattern, reed harp, 1px dark outline, 8 colors, top-left light, transparent background, front view"*
+
+##### YAKU · el explorador de lluvias de Galápagos
+- **Identidad:** inquieto, travieso y curioso; nunca se queda quieto. Es el **guía** de la página *Tus datos*. Su sonido son las gotas.
+- **De dónde sale:** Galápagos (Puerto Ayora), el lugar de la lluvia que cuenta la charla de orientación.
+- **Rasgos regionales:** capucha con **cresta de iguana marina**; botas azules con forma de **patas de piquero de patas azules**; mochila con un pinzón de peluche; pasadores en forma de gota.
+- **Giro alternativo:** impermeable **holográfico verde-amarillo**; gafas de buceo en la frente; guantes de goma; correas con hebillas.
+- **Paleta:** `#7BE38A`, `#3FE0B5`, `#B8F0A0`, `#FFD447`, `#2F6FE0` (patas del piquero), `#F4EFE6`, `#2E3A6E`, `#05070F`.
+- **Silueta del sprite:** ~24 px, **el más pequeño**. **Capucha redonda con 3 púas** de cresta. Lo que se debe leer: capucha con púas + botas azules.
+- **Instrumento (12×12):** **botellas afinadas** con distintos niveles de agua (3 botellas); un guiño a las botellas moche.
+- **Expresiones:** *calmo* ojos grandes y curiosos; *activo* guiño y lengua afuera; *intenso* salta con los brazos arriba; *apagado* se esconde bajo la capucha.
+- **Modelo grande (capas):** cuerpo, impermeable, capucha con cresta, mochila con pinzón, gafas, pasadores, brazos, botas, botellas y gotas sueltas.
+- **Cuidado cultural y ambiental:** se ilustran especies protegidas con respeto; nada de partes reales de animales como accesorio ni estampas de turismo caricaturesco.
+- **Prompt base (modelo):** *"original character design, curious small kid from the Galapagos, hooded iridescent green-yellow raincoat with a marine iguana spine crest on the hood, blue rubber boots shaped like blue-footed booby feet, diving goggles on forehead, droplet hair clips, small backpack with a finch plush, holding three tuned water bottles, full body, 5 heads tall, anime-inspired cel shading, flat background"*
+- **Prompt base (sprite):** *"32x32 pixel art character, small kid with a round green hood with three spikes, blue boots, droplet clips, three water bottles, 1px dark outline, 8 colors, top-left light, transparent background, front view"*
+
+##### ILLAPA · el guardián de la tormenta
+- **Identidad:** serio y callado; **aparece poco, pero cuando llega todos callan**. Su sonido son el bombo y el trueno.
+- **De dónde sale:** la sierra norte (Cajamarca y la sierra de Lambayeque), de donde bajan las tormentas hacia la costa.
+- **Rasgos regionales:** **sombrero de fieltro de ala baja** de estilo cajamarquino; poncho oscuro con **geometría de textil andino** y bordes con grecas; **honda andina** enrollada al brazo; ojotas.
+- **Giro alternativo:** capa **asimétrica** *storm punk* con vetas magenta en forma de rayo; guantes con luces LED; gafas protectoras; hombrera con un resorte eléctrico.
+- **Paleta:** `#E0459B`, `#C21F7A`, `#7A0F1E`, `#2A1B4D` (violeta noche), `#F4EFE6` (rayo), `#2E3A6E`, `#0A0D1A`, `#05070F`.
+- **Silueta del sprite:** ~32 px, **el más alto**. **Capa asimétrica en punta** y sombrero bajo. Lo que se debe leer: capa en punta + bombo.
+- **Instrumento (12×12):** **wankara** (bombo andino) con su baqueta; el prototipo lo llama «timbal» y en el arte final es un bombo andino.
+- **Expresiones:** *calmo* mirada fija e inmóvil; *activo* golpea el bombo con el ceño fruncido; *intenso* ojos blancos eléctricos y chispas, con destello; *apagado* la capa cae y se ve solo la silueta.
+- **Modelo grande (capas):** cuerpo, poncho, capa en 2 capas (para agitarla), sombrero, honda, guantes LED, gafas, hombrera, bombo, baqueta y chispas.
+- **Cuidado cultural:** Illapa es una deidad del rayo en el mundo andino; el personaje está **inspirado**, no la representa. Se evita todo tono religioso y se acreditan los textiles y la honda.
+- **Prompt base (modelo):** *"original character design, serious storm guardian from the northern Peruvian Andes, low-brim felt hat in Cajamarca style, dark violet asymmetric poncho-cape with magenta lightning veins and Andean geometric trims, coiled sling around the arm, fingerless gloves with LED lights, protective goggles, holding a large Andean drum and a beater, full body, 6 heads tall, storm punk, anime-inspired cel shading, flat background"*
+- **Prompt base (sprite):** *"32x32 pixel art character, tall silhouette with an asymmetric pointed dark violet cape with magenta lightning lines, low hat, big drum, 1px dark outline, 8 colors, top-left light, transparent background, front view"*
+
+#### 9.6.5 Prueba de siluetas y control de calidad
+Antes de dar un sprite por terminado, M4 revisa esta lista:
+
+| Prueba | Criterio |
+|---|---|
+| **Silueta** | Los cinco, pintados de negro a 32 px, se distinguen sin duda: media luna (Silbo), sombrero redondo (Inti), cabello largo (Mamacocha), capucha con púas (Yaku) y capa en punta (Illapa) |
+| **Altura** | Illapa 32 px · Mamacocha 31 · Silbo 30 · Inti 28 · Yaku 24. Se nota quién es quién incluso sin color |
+| **Luminosidad** | Si se pasan a escala de grises siguen siendo distintos (la app también se usa sin distinguir colores) |
+| **16 px** | El icono de 16×16 se reconoce solo por su rasgo principal (media luna, sombrero, cabello, capucha, capa) |
+| **Coherencia** | Contorno de 1 px, sombra dura, luz arriba a la izquierda y la misma paleta de 8 colores. Se ven bien junto a las tarjetas de la app |
+| **Originalidad** | Búsqueda inversa de imagen sin parecidos con personajes existentes |
+| **Cultura** | M5 revisa cada diseño con fuentes (Museo Tumbas Reales de Sipán, Museo Nacional Sicán, Museo Brüning y el sitio de Chan Chan), y se anota cada referencia en `docs/CREDITOS.md` |
+| **IA** | Etiqueta «generado con IA y retocado por el equipo» y el prompt registrado en `docs/USO_DE_IA.md` |
+
+#### 9.6.6 Entregables y nombres de archivo
+Cada personaje (`silbo`, `inti`, `mama`, `yaku`, `illapa`) entrega, dentro de `assets/avatares/<id>/`:
+
+| Archivo | Contenido |
+|---|---|
+| `cuerpo.png` | Hoja de sprites 32×32 con todos los clips de §4.3 (y los extra de Yaku y Silbo) |
+| `instrumento.png` | Instrumento de 12×12 (y los mazos de Inti, la baqueta de Illapa y la botella de Silbo, si son sprites aparte) |
+| `particula.png` | Partículas de 8×8: nota (♪ ♫ ♩), gota, chispa |
+| `busto.png` | Retrato de 32×32 en 4 estados (apagado, calmo, activo e intenso) |
+| `icono.png` | Icono de 16×16 |
+| `modelo/capas/*.png` | Capas del modelo de 768×1152 |
+| `poses/*.png` | Hoja de poses del modelo (neutra, tocar, intensa, apagada y saludo; Silbo suma `señalar` y `escuchar`) |
+| `ficha.md` | Esta ficha con los prompts usados, las fuentes y las decisiones de diseño |
+
+Además, `assets/avatares/atrezo/` guarda el **satélite** (24×12), el atril y el micrófono del escenario vacío. `assets/avatares/avatares.json` enlaza cada clip con sus frames y su velocidad.
 
 ---
 
