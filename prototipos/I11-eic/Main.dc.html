@@ -237,6 +237,11 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <h2 style="margin: 0 0 2px; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">DISCOS</h2>
+<div role="group" aria-label="Origen de los discos" style="display: flex; gap: 6px">
+<sc-for list="{{sets}}" as="o" hint-placeholder-count="2">
+<button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="flex: 1 1 0; min-width: 0; min-height: 44px; padding: 4px 6px; text-align: center; line-height: 1.25; font-size: 0.78em; border: 3px solid {{o.border}}; background: {{o.bg}}; color: {{th.fg}}"><strong style="display: block; font-family: {{th.headFont}}">{{o.label}}</strong><span style="color: {{th.muted}}">{{o.sub}}</span></button>
+</sc-for>
+</div>
 <sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
 <button type="button" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="text-align: left; display: flex; gap: 12px; align-items: center; padding: 8px 10px; min-height: 52px; border: 3px solid {{d.border}}; background: {{d.bg}}; color: {{th.fg}}">
 <span aria-hidden="true" style="flex: 0 0 auto; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: {{d.color}}; color: #0A0D1A; border: 3px solid {{th.shadow}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{d.ic}}"></path></svg></span>
@@ -303,7 +308,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 </sc-for>
 </div>
 
-<p style="margin: auto 0 0; font-size: 0.72em; color: {{th.muted}}">Fotogramas: visualización «Sea Surface Temperature Anomaly» del Earth Information Center de la NASA (SVS 5176, variante Pacífico), recortados. Crédito: NASA's Scientific Visualization Studio.</p>
+<p style="margin: auto 0 0; font-size: 0.72em; color: {{th.muted}}">Fotogramas: visualización «Sea Surface Temperature Anomaly» del Earth Information Center de la NASA (SVS 5176, variante Pacífico), recortados. Crédito: NASA's Scientific Visualization Studio. Discos «NASA GIBS»: NASA JPL GHRSST MUR 0,25° vía GIBS/Worldview.</p>
 </div>
 
 <sc-if value="{{showPlayer}}" hint-placeholder-val="{{ true }}">
@@ -594,7 +599,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 </sc-if>
 
 <footer style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; border-top: 4px solid {{th.line}}; padding-top: 14px; font-size: 0.8em; color: {{th.muted}}">
-<div style="flex: 1 1 380px; max-width: 72ch"><strong style="color: {{th.fg}}">Datos:</strong> fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</div>
+<div style="flex: 1 1 380px; max-width: 72ch"><strong style="color: {{th.fg}}">Datos:</strong> fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio. Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</div>
 <div style="flex: 1 1 300px; max-width: 60ch"><strong style="color: {{th.fg}}">Uso de IA, declarado:</strong> boceto de interfaz y código generados con Claude (Anthropic) y revisados por el equipo. Los avatares finales (modelo anime y sprite 32×32) se generarán con ChatGPT y se retocarán a mano, y ChatGPT Codex programará algunas funciones de la versión final. Detalle en la página Tecnología.</div>
 </footer>
 
@@ -603,13 +608,23 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
 var B = '/_blob/';
-var DISCS = [
+var DISC_SETS = {
+  eic: [
   { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.png", "fotogramas/inv2024_1.png", "fotogramas/inv2024_2.png", "fotogramas/inv2024_3.png", "fotogramas/inv2024_4.png", "fotogramas/inv2024_5.png"] },
   { id: 'ver2025', n: '2', title: 'Verano 2024–25', period: 'nov 2024 – abr 2025', color: '#FF5A36', dates: ["2024-11-12", "2024-12-12", "2025-01-11", "2025-02-10", "2025-03-12", "2025-04-11"], files: ["fotogramas/ver2025_0.png", "fotogramas/ver2025_1.png", "fotogramas/ver2025_2.png", "fotogramas/ver2025_3.png", "fotogramas/ver2025_4.png", "fotogramas/ver2025_5.png"] },
   { id: 'inv2025', n: '3', title: 'Invierno 2025', period: 'may 2025 – oct 2025', color: '#FFD447', dates: ["2025-05-11", "2025-06-10", "2025-07-10", "2025-08-09", "2025-09-08", "2025-10-08"], files: ["fotogramas/inv2025_0.png", "fotogramas/inv2025_1.png", "fotogramas/inv2025_2.png", "fotogramas/inv2025_3.png", "fotogramas/inv2025_4.png", "fotogramas/inv2025_5.png"] },
   { id: 'ver2026', n: '4', title: 'Verano 2025–26', period: 'nov 2025 – abr 2026', color: '#7BE38A', dates: ["2025-11-07", "2025-12-07", "2026-01-06", "2026-02-05", "2026-03-07", "2026-04-06"], files: ["fotogramas/ver2026_0.png", "fotogramas/ver2026_1.png", "fotogramas/ver2026_2.png", "fotogramas/ver2026_3.png", "fotogramas/ver2026_4.png", "fotogramas/ver2026_5.png"] },
   { id: 'inv2026', n: '5', title: 'Invierno 2026', period: 'may 2026 – oct 2026', color: '#E0459B', dates: ["2026-05-06", "2026-06-05", "2026-07-05", "2026-08-04", "2026-09-03", "2026-10-03"], files: ["fotogramas/inv2026_0.png", "fotogramas/inv2026_1.png", "fotogramas/inv2026_2.png", "fotogramas/inv2026_3.png", "fotogramas/inv2026_4.png", "fotogramas/inv2026_5.png"] }
-];
+  ],
+  prev: [
+  { id: 'nina2010', n: '1', title: 'La Niña', period: 'ago 2010 – ene 2011', color: '#38C6E8', start: [2010, 7], legacy: true, files: ['fotogramas-anteriores/nina2010_0.png', 'fotogramas-anteriores/nina2010_1.png', 'fotogramas-anteriores/nina2010_2.png', 'fotogramas-anteriores/nina2010_3.png', 'fotogramas-anteriores/nina2010_4.png', 'fotogramas-anteriores/nina2010_5.png'] },
+  { id: 'nino2015', n: '2', title: 'El Niño «Godzilla»', period: 'jul – dic 2015', color: '#FF5A36', start: [2015, 6], legacy: true, files: ['fotogramas-anteriores/nino2015_0.png', 'fotogramas-anteriores/nino2015_1.png', 'fotogramas-anteriores/nino2015_2.png', 'fotogramas-anteriores/nino2015_3.png', 'fotogramas-anteriores/nino2015_4.png', 'fotogramas-anteriores/nino2015_5.png'] },
+  { id: 'costero2017', n: '3', title: 'Niño Costero', period: 'dic 2016 – may 2017', color: '#FFD447', start: [2016, 11], legacy: true, files: ['fotogramas-anteriores/costero2017_0.png', 'fotogramas-anteriores/costero2017_1.png', 'fotogramas-anteriores/costero2017_2.png', 'fotogramas-anteriores/costero2017_3.png', 'fotogramas-anteriores/costero2017_4.png', 'fotogramas-anteriores/costero2017_5.png'] },
+  { id: 'yaku2023', n: '4', title: 'Yaku', period: 'ene – jun 2023', color: '#7BE38A', start: [2023, 0], legacy: true, files: ['fotogramas-anteriores/yaku2023_0.png', 'fotogramas-anteriores/yaku2023_1.png', 'fotogramas-anteriores/yaku2023_2.png', 'fotogramas-anteriores/yaku2023_3.png', 'fotogramas-anteriores/yaku2023_4.png', 'fotogramas-anteriores/yaku2023_5.png'] },
+  { id: 'nino2023', n: '5', title: 'El Niño 2023', period: 'jul – dic 2023', color: '#E0459B', start: [2023, 6], legacy: true, files: ['fotogramas-anteriores/nino2023_0.png', 'fotogramas-anteriores/nino2023_1.png', 'fotogramas-anteriores/nino2023_2.png', 'fotogramas-anteriores/nino2023_3.png', 'fotogramas-anteriores/nino2023_4.png', 'fotogramas-anteriores/nino2023_5.png'] }
+  ]
+};
+var DISCS = DISC_SETS.eic.slice();
 DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] });
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
 var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -635,6 +650,7 @@ var TECH = [
   { cat: 'Interfaz y código', name: 'GitHub (repositorio)', use: 'Repositorio público, una rama por módulo y revisión de cambios entre compañeros.', st: 'done', mod: 'M6' },
   { cat: 'Interfaz y código', name: 'GitHub Pages', use: 'Publicación de la versión final con una URL pública.', st: 'plan', mod: 'M6' },
   { cat: 'Datos de la NASA', name: 'EIC · SST Anomaly (SVS 5176)', use: 'Los 30 fotogramas de los 5 discos, extraídos del video oficial del EIC «SST Anomaly» (SVS 5176, Pacífico).', st: 'done', mod: 'M1' },
+  { cat: 'Datos de la NASA', name: 'GHRSST MUR · anomalía de temperatura del mar (GIBS)', use: 'Los 30 fotogramas de los 5 discos «NASA GIBS» (2010–2023), vía NASA GIBS / Worldview.', st: 'done', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'NASA POWER API', use: 'Lluvia y temperatura mensuales (1981–2024) de Chiclayo, Galápagos e Iquitos. Alimenta el ejemplo de «Tus datos».', st: 'done', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'Galería del Earth Information Center (SVS)', use: 'Fuente oficial de las visualizaciones. Los discos extra saldrán de SVS 5207 y 4897.', st: 'plan', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'ffmpeg', use: 'Recortar y reducir los fotogramas del video del EIC (y los de los discos extra).', st: 'done', mod: 'M1' },
@@ -736,6 +752,17 @@ function score(r, g, b) {
   for (var i = 0; i < EIC_SCALE.length; i++) { var e = EIC_SCALE[i], dd = (r - e[0]) * (r - e[0]) + (g - e[1]) * (g - e[1]) + (b - e[2]) * (b - e[2]); if (dd < dmin) { dmin = dd; best = i; } }
   return (best - 16) / 4 * 1.25;
 }
+function scoreOld(r, g, b) {
+  var q = hsv(r, g, b), h = q[0], s = q[1], v = q[2];
+  if (s < 0.15) return 0;
+  if (v < 0.6 && (h < 20 || h > 330)) return 5;
+  if (h >= 300 && h < 345) return 4.5;
+  if (h >= 345 || h < 7) return 4;
+  if (h < 27) return 3; if (h < 43) return 2; if (h < 53) return 1;
+  if (h < 75) return s > 0.3 ? 0.5 : 0;
+  if (h < 118) return -0.5; if (h < 145) return -1; if (h < 170) return -2; if (h < 190) return -3; if (h < 250) return -4;
+  return -5;
+}
 function freeScore(r, g, b) {
   var q = hsv(r, g, b), h = q[0], s = q[1], v = q[2];
   if (s < 0.12 || v < 0.12) return (v - 0.5) * 2;
@@ -804,7 +831,7 @@ function makeLogo() {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { tab: 'juke', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+    this.state = { tab: 'juke', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
       trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
       mute: { silbo: true, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: 'Elige un disco y pulsa Reproducir. La banda empieza apagada: cada disco enciende a su protagonista.' };
@@ -816,6 +843,14 @@ class Component extends DCLogic {
   componentWillUnmount() { this.stop(); this.tm.forEach(clearTimeout); if (this.ac) this.ac.close(); }
   url(d, f) { if (d === 5) return this.state.custom ? this.state.custom.url : ''; return DISCS[d].files[f]; }
   frameDate(d, f) { var dt = DISCS[d].dates && DISCS[d].dates[f]; if (dt) { var q = dt.split('-'); return { m: +q[1] - 1, y: +q[0] }; } var s = DISCS[d].start, m = s[1] + f, y = s[0] + Math.floor(m / 12); return { m: m % 12, y: y }; }
+  applySet(name) {
+    var s = this.state; this.stop(); this.lastThunder = -9;
+    for (var k = 0; k < 5; k++) DISCS[k] = DISC_SETS[name][k];
+    var keep = s.an['5_0'] ? { '5_0': s.an['5_0'] } : {}, disc = s.disc, self = this;
+    this.setState({ set: name, frame: s.disc < 5 ? Math.min(s.frame, DISCS[s.disc].files.length - 1) : s.frame, col: -1, an: keep,
+      caption: (name === 'eic' ? 'Discos con fotogramas oficiales del EIC (2024–2026).' : 'Discos con imágenes de NASA GIBS / Worldview (2010–2023).') + ' Elige uno y pulsa Reproducir.' },
+      function () { if (disc < 5) self.loadDisc(disc); });
+  }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
   allMute(v) { var m = {}; BAND.forEach(function (b) { m[b.k] = v; }); return m; }
   leadChar() {
@@ -850,7 +885,7 @@ class Component extends DCLogic {
   analyze(d, f, force) {
     var key = d + '_' + f, self = this;
     if (this.state.an[key] && !force) return;
-    var free = d === 5 && this.state.custom && this.state.custom.mode === 'free';
+    var free = d === 5 && this.state.custom && this.state.custom.mode === 'free', legacy = d < 5 && !!DISCS[d].legacy;
     var img = new Image();
     img.onerror = function () { self.setState({ upMsg: 'No se pudo leer la imagen.' }); };
     img.onload = function () {
@@ -863,8 +898,8 @@ class Component extends DCLogic {
           var sum = 0, cnt = 0;
           for (var yy = 0; yy < 5; yy++) for (var xx = 0; xx < 5; xx++) {
             var x = cxi * 5 + xx, y = cy * 5 + yy, i = (y * 140 + x) * 4;
-            if (px[i + 3] < 128 || (!free && isLand(px[i], px[i + 1], px[i + 2]))) continue;
-            var sc = free ? freeScore(px[i], px[i + 1], px[i + 2]) : score(px[i], px[i + 1], px[i + 2]); sum += sc; cnt++; n++;
+            if (px[i + 3] < 128 || (!free && !legacy && isLand(px[i], px[i + 1], px[i + 2]))) continue;
+            var sc = free ? freeScore(px[i], px[i + 1], px[i + 2]) : legacy ? scoreOld(px[i], px[i + 1], px[i + 2]) : score(px[i], px[i + 1], px[i + 2]); sum += sc; cnt++; n++;
             if (sc > 0) warm += sc; else cold -= sc; if (sc >= 4) hot++;
             if (x >= 116 && x <= 128 && y >= 36 && y <= 66) { cs += sc; cn++; }
           }
@@ -1285,7 +1320,7 @@ class Component extends DCLogic {
       isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
       showMain: isJuke || isData, showPlayer: isJuke || (isData && hasCustom), dataEmpty: isData && !hasCustom,
       showStrip: s.disc !== 5, showSilbo: s.disc !== 5,
-      heroStats: [{ k: '5', l: 'discos' }, { k: '30', l: 'fotogramas del EIC' }, { k: '5', l: 'personajes' }],
+      heroStats: [{ k: '10', l: 'discos' }, { k: '60', l: 'fotogramas NASA' }, { k: '5', l: 'personajes' }],
       dataStats: [{ k: '2', l: 'formatos' }, { k: '8 MB', l: 'máximo' }, { k: '0', l: 'bytes enviados' }],
       howData: [
         { tag: 'IMAGEN', color: th.accent, title: 'Se lee por colores', body: 'Cada imagen se reduce a una cuadrícula de 28×16. Lo cálido suena como Inti y Yaku; lo frío, como Mamacocha. Elige entre la paleta de anomalías de la NASA o color libre.' },
@@ -1294,6 +1329,10 @@ class Component extends DCLogic {
       ],
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      sets: [{ key: 'eic', label: 'EIC', sub: 'SVS 5176 · 2024 – 2026' }, { key: 'prev', label: 'NASA GIBS', sub: 'Worldview · 2010 – 2023' }].map(function (o) {
+        var on = s.set === o.key;
+        return { label: o.label, sub: o.sub, on: on, bg: on ? th.bg : 'transparent', border: on ? th.accent : th.line, pick: function () { if (!on) self.applySet(o.key); } };
+      }),
       discs: DISCS.filter(function (x, k) { return k < 5 || hasCustom; }).map(function (x, k) {
         var on = k === s.disc, hero = k < 5 ? BAND.filter(function (b) { return b.k === DISC_CHAR[k]; })[0].name : 'según tus datos';
         return { ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
@@ -1326,7 +1365,7 @@ class Component extends DCLogic {
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: 'Banda completa activada. Pulsa Reproducir.' }); self.goTab('juke'); },
       band: BAND.map(function (b, bi) {
         var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
-        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, disc: b.disc, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
+        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
           on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? 'Activar a ' : 'Desactivar a ') + b.name,
           btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A', btnBorder: off ? th.line : b.color,
           border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
