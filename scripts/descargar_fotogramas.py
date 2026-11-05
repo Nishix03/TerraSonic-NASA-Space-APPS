@@ -1,7 +1,7 @@
 """M1 · Fotogramas oficiales del Earth Information Center (EIC).
 
 Descarga el video «SST Anomaly – Pacific» (NASA SVS 5176, 4096×2048, un fotograma por día desde el 16 may 2024),
-recorta la región del Pacífico sudeste (140°–70°O, 25°S–15°N), la reduce a 560×320 y genera data/discos.json
+recorta la región del Pacífico sudeste (140°–70°O, 25°S–15°N), la reduce a 560×320 (WebP, calidad 90: unos 50 KB por fotograma) y genera data/discos.json
 con 5 discos de 6 fotogramas (uno cada 30 días, 150 días por disco).
 
 Requisitos: ffmpeg en el PATH. Solo usa la librería estándar de Python.
@@ -52,9 +52,9 @@ def main():
 
     numeros = [numero_de_fotograma(d, i) for d in range(len(DISCOS)) for i in range(POR_DISCO)]
     seleccion = "+".join(f"eq(n\\,{n})" for n in numeros)
-    temporal = carpeta / "_tmp_%02d.png"
+    temporal = carpeta / "_tmp_%02d.webp"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(VIDEO), "-vf",
-                    f"select='{seleccion}',{CROP},{TAM}", "-fps_mode", "vfr", str(temporal)], check=True)
+                    f"select='{seleccion}',{CROP},{TAM}", "-fps_mode", "vfr", "-c:v", "libwebp", "-quality", "90", "-compression_level", "6", str(temporal)], check=True)
 
     manifiesto = []
     k = 0
@@ -62,9 +62,9 @@ def main():
         fotogramas = []
         for i in range(POR_DISCO):
             k += 1
-            destino = carpeta / f"{id_}_{i}.png"
+            destino = carpeta / f"{id_}_{i}.webp"
             destino.unlink(missing_ok=True)
-            (carpeta / f"_tmp_{k:02d}.png").rename(destino)
+            (carpeta / f"_tmp_{k:02d}.webp").rename(destino)
             fecha = PRIMER_DIA + timedelta(days=numero_de_fotograma(d, i))
             fotogramas.append({"url": f"data/fotogramas/{destino.name}", "fecha": fecha.isoformat()})
         ini, fin = date.fromisoformat(fotogramas[0]["fecha"]), date.fromisoformat(fotogramas[-1]["fecha"])

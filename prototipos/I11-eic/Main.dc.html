@@ -9,6 +9,7 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Pixelify+Sans:wght@500;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
@@ -81,7 +82,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 .px .mem:not(.gone) .sp{animation:pop .5s cubic-bezier(.2,1.4,.3,1) both}
 .px .cone{position:absolute;left:50%;top:0;bottom:6px;width:150%;transform:translateX(-50%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);transition:opacity .35s;pointer-events:none}
 .px .sp{position:relative;width:100%;max-width:132px;aspect-ratio:112 / 140;z-index:1}
-.px .sp.big{flex:1 1 auto;max-width:none;width:auto;aspect-ratio:auto;min-height:380px;margin:18px 22px 18px 18px}
+.px .sp.big{flex:1 1 auto;max-width:none;width:auto;aspect-ratio:auto;min-height:0;margin:8px 10px}
 .px .sp .body{position:absolute;left:6%;top:4%;width:72%;height:88%;box-sizing:border-box;border:3px dashed currentColor;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;font-family:'Press Start 2P',monospace;font-size:7px;line-height:1.5;background:rgba(10,13,26,.6);transform-origin:50% 100%;animation:breathe 3s ease-in-out infinite}
 .px .sp.big .body{font-size:11px;border-width:4px;gap:8px}
 .px .sp .ins{position:absolute;right:0;bottom:6%;width:38%;height:30%;box-sizing:border-box;border:3px dashed currentColor;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Press Start 2P',monospace;font-size:5px;line-height:1.4;background:rgba(10,13,26,.78);transform-origin:50% 100%}
@@ -89,6 +90,19 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 .px .sp .pt{position:absolute;right:10%;top:0;opacity:0;font-family:'Press Start 2P',monospace;font-size:14px}
 .px .sp.big .pt{font-size:26px}
 .px .sp.off{opacity:.4;filter:grayscale(.7)}
+.px .sp.big{display:flex;align-items:center;justify-content:center}
+.px .face{position:relative;width:100%;aspect-ratio:530 / 500;overflow:hidden;flex:0 0 auto}
+.px .face .fstrip{position:absolute;left:0;top:0;height:100%;width:calc(var(--n) * 100%);max-width:none;display:block;pointer-events:none;animation:fplay var(--dur) steps(var(--f)) infinite}
+@keyframes fplay{from{transform:translateX(calc(var(--x0) * 100% / var(--n)))}to{transform:translateX(calc(var(--x1) * 100% / var(--n)))}}
+.px .spr{width:var(--s);height:var(--s);background-repeat:no-repeat;image-rendering:pixelated;background-image:var(--img);background-size:calc(var(--n) * var(--s)) var(--s);background-position:calc(var(--x0) * var(--s)) 0;animation:sprplay var(--dur) steps(var(--f)) infinite}
+@keyframes sprplay{from{background-position:calc(var(--x0) * var(--s)) 0}to{background-position:calc(var(--x1) * var(--s)) 0}}
+.px .sp .spr{position:absolute;left:50%;bottom:4%;margin-left:calc(var(--s) / -2)}
+.px .sp.off .spr{animation-play-state:paused}
+.px .sp .pt{width:24px;height:24px;font-size:0;background-repeat:no-repeat;background-size:384px 24px;background-position:calc(var(--pf) * -24px) 0;image-rendering:pixelated}
+.px .sp.big .pt{width:40px;height:40px;background-size:640px 40px;background-position:calc(var(--pf) * -40px) 0}
+.px .bst{flex:0 0 auto;width:32px;height:32px;background-repeat:no-repeat;background-size:128px 32px;background-position:calc(var(--bi) * -32px) 0;image-rendering:pixelated}
+.px .sat{width:144px;height:72px;background-repeat:no-repeat;background-size:432px 72px;image-rendering:pixelated;animation:satanim .375s steps(3) infinite}
+@keyframes satanim{from{background-position:0 0}to{background-position:-432px 0}}
 @keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.035)}}
 @keyframes swayS{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 @keyframes bounceI{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
@@ -163,14 +177,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 </div>
 <div class="tsat">
 <div class="ttrail"></div>
-<svg width="144" height="72" viewBox="0 0 24 12" shape-rendering="crispEdges" aria-hidden="true">
-<rect x="10" y="0" width="3" height="1" fill="#FFD447"></rect><rect x="11" y="1" width="1" height="2" fill="#BFD0FF"></rect>
-<rect x="0" y="4" width="8" height="4" fill="#2F6FE0"></rect><rect x="2" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="5" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="0" y="6" width="8" height="1" fill="#0A0D1A"></rect>
-<rect x="16" y="4" width="8" height="4" fill="#2F6FE0"></rect><rect x="18" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="21" y="4" width="1" height="4" fill="#0A0D1A"></rect><rect x="16" y="6" width="8" height="1" fill="#0A0D1A"></rect>
-<rect x="8" y="5" width="1" height="2" fill="#E8ECFF"></rect><rect x="15" y="5" width="1" height="2" fill="#E8ECFF"></rect>
-<rect x="9" y="3" width="6" height="6" fill="#E8ECFF"></rect><rect x="9" y="7" width="6" height="2" fill="#AEB6DA"></rect><rect x="11" y="4" width="2" height="2" fill="#38C6E8"></rect>
-<rect x="11" y="9" width="2" height="1" fill="#FF8A2B"></rect>
-</svg>
+<div class="sat" aria-hidden="true" style="background-image: url(sprites/atrezo/satelite.png)"></div>
 </div>
 </div>
 </sc-if>
@@ -301,7 +308,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
 <sc-for list="{{band}}" as="b" hint-placeholder-count="5">
 <button type="button" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" class="fx" style="display: flex; gap: 10px; align-items: center; min-height: 48px; padding: 6px 10px; border: 0; border-left: 4px solid {{b.btnBorder}}; background: {{b.rowBg}}; color: {{th.fg}}; text-align: left; opacity: {{b.rowOp}}">
-<svg width="22" height="22" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="flex: 0 0 auto; color: {{b.color}}"><path d="{{b.ic}}"></path></svg>
+<span class="bst" aria-hidden="true" style="background-image: url({{b.bustUrl}}); --bi: {{b.bi}}"></span>
 <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px"><span style="font-family: {{th.headFont}}; font-weight: 700; color: {{b.color}}">{{b.name}}</span><span aria-hidden="true" style="display: block; height: 4px; background: {{th.line}}"><span style="display: block; height: 4px; width: {{b.lvlW}}; background: {{b.color}}; transition: width 0.12s"></span></span></span>
 <svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="flex: 0 0 auto; color: {{b.pwColor}}"><path d="{{ic.none}}"></path></svg>
 </button>
@@ -328,7 +335,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
 <figure style="margin: 0; display: flex; flex-direction: column; gap: 6px">
 <div style="position: relative; border: 4px solid {{th.shadow}}; background: #2A3157; aspect-ratio: 560 / 320; overflow: hidden">
-<img class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}" style="display: block; width: 100%; height: 100%; object-fit: cover">
+<img decoding="async" class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}" style="display: block; width: 100%; height: 100%; object-fit: cover">
 <div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; background: linear-gradient(90deg, rgba(255,212,71,0.04), rgba(255,212,71,0.38)); border-right: 3px solid {{th.accent}}; box-shadow: 0 0 16px {{th.accent}}; transition: left 110ms linear"></div>
 <sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
 <div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 3px dashed {{silboBox}}; transition: border-color .4s"></div>
@@ -360,12 +367,11 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 
 <aside aria-label="Protagonista del disco" class="{{lead.pop}}" style="flex: 1 1 300px; max-width: 440px; display: flex; flex-direction: column; gap: 8px">
 <div style="font-family: {{th.pixelFont}}; font-size: 0.5em; color: {{th.muted}}">PROTAGONISTA DEL DISCO</div>
-<div role="img" aria-label="{{lead.spriteAria}}" style="position: relative; flex: 1 1 auto; min-height: 420px; border: 4px solid {{lead.color}}; background: {{th.bg}}; box-shadow: 4px 4px 0 {{th.shadow}}, inset 0 0 48px {{lead.glow}}; overflow: hidden; display: flex; align-items: stretch">
+<div role="img" aria-label="{{lead.spriteAria}}" style="position: relative; flex: 0 0 auto; border: 4px solid {{lead.color}}; background: {{th.bg}}; box-shadow: 4px 4px 0 {{th.shadow}}, inset 0 0 48px {{lead.glow}}; overflow: hidden; display: flex; align-items: stretch">
 <div class="cone" aria-hidden="true" style="background: linear-gradient(180deg, {{lead.coneC}}, transparent); opacity: {{lead.coneOp}}; width: 120%"></div>
 <div class="sp big {{lead.cls}}" style="color: {{lead.color}}">
-<div class="body" style="animation-duration: {{lead.dur}}"><span>MODELO ANIME</span><span>DETALLADO</span><span>768×1152</span><span>POR GENERAR</span><span style="opacity: 0.8">clip: {{lead.clip}}</span></div>
-<div class="ins">{{lead.ins}}</div>
-<span class="pt">{{lead.glyph}}</span>
+<div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
+<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}"></span>
 </div>
 </div>
 <div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline">
@@ -409,7 +415,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <div role="group" aria-label="Fotogramas del disco" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
 <sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
 <button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}" style="padding: 0; border: 3px solid {{f.border}}; background: {{th.bg}}; color: {{th.fg}}; display: flex; flex-direction: column">
-<img class="pximg" src="{{f.url}}" alt="" style="display: block; width: 100%; aspect-ratio: 560 / 320; object-fit: cover">
+<img decoding="async" class="pximg" src="{{f.url}}" alt="" style="display: block; width: 100%; aspect-ratio: 560 / 320; object-fit: cover">
 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; padding: 2px 0">{{f.label}}</span>
 </button>
 </sc-for>
@@ -447,7 +453,7 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <p role="status" aria-live="polite" class="sr">En el escenario: {{stageNames}}</p>
 <div class="shk {{shakeCls}}" style="position: relative; flex: 1 1 auto; display: flex; flex-direction: column; min-height: 360px">
 <div aria-hidden="true" class="stage">
-<img class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="" style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; object-fit: cover; opacity: 0.3; filter: saturate(1.4)">
+<img decoding="async" class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="" style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; object-fit: cover; opacity: 0.3; filter: saturate(1.4)">
 <div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; background: linear-gradient(180deg, rgba(7,9,20,0.1), #070914)"></div>
 <div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; overflow: hidden"><div style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; border-right: 3px solid {{th.accent}}; box-shadow: 0 0 14px {{th.accent}}; background: linear-gradient(90deg, transparent, rgba(255,212,71,0.2)); transition: left 110ms linear"></div></div>
 <div class="crt" style="position: absolute; inset: 0"></div>
@@ -459,9 +465,8 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}">
 <div class="cone" style="background: linear-gradient(180deg, {{m.coneC}}, transparent); opacity: {{m.coneOp}}"></div>
 <div class="sp {{m.cls}}" style="color: {{m.color}}">
-<div class="body" style="animation-duration: {{m.dur}}"><span>{{m.name}}</span><span class="clipname" style="opacity: 0.8">{{m.clip}}</span></div>
-<div class="ins">{{m.ins}}</div>
-<span class="pt">{{m.glyph}}</span>
+<div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}; --s: 96px"></div>
+<span class="pt" style="background-image: url({{m.partUrl}}); --pf: {{m.pf}}"></span>
 </div>
 <div style="margin-top: 8px; font-family: {{th.pixelFont}}; font-size: 0.55em; color: {{m.color}}; text-align: center">{{m.name}}</div>
 <div style="width: 70%; height: 4px; margin-top: 4px; background: {{th.line}}"><div style="height: 4px; width: {{m.lvPct}}; background: {{m.color}}; transition: width 0.12s"></div></div>
@@ -492,8 +497,8 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <article class="fx rise" style="animation-delay: {{b.delay}}; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: {{th.panel}}; border: 4px solid {{b.color}}; box-shadow: 6px 6px 0 {{th.shadow}}">
 <div style="display: flex; gap: 14px; align-items: flex-end">
 <div style="flex: 0 0 auto; display: flex; gap: 10px; align-items: flex-end">
-<div role="img" aria-label="Marcador del modelo anime detallado de {{b.name}}" style="width: 104px; aspect-ratio: 2 / 3; border: 4px dashed {{b.color}}; background: {{th.bg}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.38em; color: {{b.color}}; line-height: 1.7">MODELO<br>DETALLADO<br>768×1152</div>
-<div role="img" aria-label="Marcador del sprite de 32 por 32 de {{b.name}}" style="width: 64px; height: 64px; border: 3px dashed {{b.color}}; background: {{th.bg}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.36em; color: {{b.color}}; line-height: 1.7">SPRITE<br>32×32</div>
+<div class="face" role="img" aria-label="Retrato de {{b.name}}, del pecho a la cabeza" style="width: 128px; border: 4px solid {{b.color}}; background: {{th.bg}}"><img decoding="async" loading="lazy" class="fstrip" src="{{b.faceUrl}}" alt="" style="--n: {{b.faceN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s"></div>
+<div class="spr" role="img" aria-label="Sprite de 32 por 32 de {{b.name}}" style="--img: url({{b.sprUrl}}); --n: {{b.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 64px; border: 3px solid {{b.color}}; background-color: {{th.bg}}; box-sizing: content-box"></div>
 </div>
 <div>
 <h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.95em; color: {{b.color}}">{{b.name}}</h2>
@@ -610,11 +615,11 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 var B = '/_blob/';
 var DISC_SETS = {
   eic: [
-  { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.png", "fotogramas/inv2024_1.png", "fotogramas/inv2024_2.png", "fotogramas/inv2024_3.png", "fotogramas/inv2024_4.png", "fotogramas/inv2024_5.png"] },
-  { id: 'ver2025', n: '2', title: 'Verano 2024–25', period: 'nov 2024 – abr 2025', color: '#FF5A36', dates: ["2024-11-12", "2024-12-12", "2025-01-11", "2025-02-10", "2025-03-12", "2025-04-11"], files: ["fotogramas/ver2025_0.png", "fotogramas/ver2025_1.png", "fotogramas/ver2025_2.png", "fotogramas/ver2025_3.png", "fotogramas/ver2025_4.png", "fotogramas/ver2025_5.png"] },
-  { id: 'inv2025', n: '3', title: 'Invierno 2025', period: 'may 2025 – oct 2025', color: '#FFD447', dates: ["2025-05-11", "2025-06-10", "2025-07-10", "2025-08-09", "2025-09-08", "2025-10-08"], files: ["fotogramas/inv2025_0.png", "fotogramas/inv2025_1.png", "fotogramas/inv2025_2.png", "fotogramas/inv2025_3.png", "fotogramas/inv2025_4.png", "fotogramas/inv2025_5.png"] },
-  { id: 'ver2026', n: '4', title: 'Verano 2025–26', period: 'nov 2025 – abr 2026', color: '#7BE38A', dates: ["2025-11-07", "2025-12-07", "2026-01-06", "2026-02-05", "2026-03-07", "2026-04-06"], files: ["fotogramas/ver2026_0.png", "fotogramas/ver2026_1.png", "fotogramas/ver2026_2.png", "fotogramas/ver2026_3.png", "fotogramas/ver2026_4.png", "fotogramas/ver2026_5.png"] },
-  { id: 'inv2026', n: '5', title: 'Invierno 2026', period: 'may 2026 – oct 2026', color: '#E0459B', dates: ["2026-05-06", "2026-06-05", "2026-07-05", "2026-08-04", "2026-09-03", "2026-10-03"], files: ["fotogramas/inv2026_0.png", "fotogramas/inv2026_1.png", "fotogramas/inv2026_2.png", "fotogramas/inv2026_3.png", "fotogramas/inv2026_4.png", "fotogramas/inv2026_5.png"] }
+  { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.webp", "fotogramas/inv2024_1.webp", "fotogramas/inv2024_2.webp", "fotogramas/inv2024_3.webp", "fotogramas/inv2024_4.webp", "fotogramas/inv2024_5.webp"] },
+  { id: 'ver2025', n: '2', title: 'Verano 2024–25', period: 'nov 2024 – abr 2025', color: '#FF5A36', dates: ["2024-11-12", "2024-12-12", "2025-01-11", "2025-02-10", "2025-03-12", "2025-04-11"], files: ["fotogramas/ver2025_0.webp", "fotogramas/ver2025_1.webp", "fotogramas/ver2025_2.webp", "fotogramas/ver2025_3.webp", "fotogramas/ver2025_4.webp", "fotogramas/ver2025_5.webp"] },
+  { id: 'inv2025', n: '3', title: 'Invierno 2025', period: 'may 2025 – oct 2025', color: '#FFD447', dates: ["2025-05-11", "2025-06-10", "2025-07-10", "2025-08-09", "2025-09-08", "2025-10-08"], files: ["fotogramas/inv2025_0.webp", "fotogramas/inv2025_1.webp", "fotogramas/inv2025_2.webp", "fotogramas/inv2025_3.webp", "fotogramas/inv2025_4.webp", "fotogramas/inv2025_5.webp"] },
+  { id: 'ver2026', n: '4', title: 'Verano 2025–26', period: 'nov 2025 – abr 2026', color: '#7BE38A', dates: ["2025-11-07", "2025-12-07", "2026-01-06", "2026-02-05", "2026-03-07", "2026-04-06"], files: ["fotogramas/ver2026_0.webp", "fotogramas/ver2026_1.webp", "fotogramas/ver2026_2.webp", "fotogramas/ver2026_3.webp", "fotogramas/ver2026_4.webp", "fotogramas/ver2026_5.webp"] },
+  { id: 'inv2026', n: '5', title: 'Invierno 2026', period: 'may 2026 – oct 2026', color: '#E0459B', dates: ["2026-05-06", "2026-06-05", "2026-07-05", "2026-08-04", "2026-09-03", "2026-10-03"], files: ["fotogramas/inv2026_0.webp", "fotogramas/inv2026_1.webp", "fotogramas/inv2026_2.webp", "fotogramas/inv2026_3.webp", "fotogramas/inv2026_4.webp", "fotogramas/inv2026_5.webp"] }
   ],
   prev: [
   { id: 'nina2010', n: '1', title: 'La Niña', period: 'ago 2010 – ene 2011', color: '#38C6E8', start: [2010, 7], legacy: true, files: ['fotogramas-anteriores/nina2010_0.png', 'fotogramas-anteriores/nina2010_1.png', 'fotogramas-anteriores/nina2010_2.png', 'fotogramas-anteriores/nina2010_3.png', 'fotogramas-anteriores/nina2010_4.png', 'fotogramas-anteriores/nina2010_5.png'] },
@@ -627,6 +632,8 @@ var DISC_SETS = {
 var DISCS = DISC_SETS.eic.slice();
 DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] });
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
+var CARA = {"silbo": {"strip": "sprites/silbo/cara.webp", "off": "sprites/silbo/cara-apagado.webp", "n": 6}, "inti": {"strip": "sprites/inti/cara.webp", "off": "sprites/inti/cara-apagado.webp", "n": 6}, "mama": {"strip": "sprites/mama/cara.webp", "off": "sprites/mama/cara-apagado.webp", "n": 6}, "yaku": {"strip": "sprites/yaku/cara.webp", "off": "sprites/yaku/cara-apagado.webp", "n": 6}, "illapa": {"strip": "sprites/illapa/cara.webp", "off": "sprites/illapa/cara-apagado.webp", "n": 5}};
+var ART = {"silbo": {"comp": "sprites/silbo/compuesto.png", "part": "sprites/silbo/particula.png", "bust": "sprites/silbo/busto.png", "n": 37, "ps": 2, "pn": 4, "pfi": 1}, "inti": {"comp": "sprites/inti/compuesto.png", "part": "sprites/inti/particula.png", "bust": "sprites/inti/busto.png", "n": 28, "ps": 2, "pn": 4, "pfi": 9}, "mama": {"comp": "sprites/mama/compuesto.png", "part": "sprites/mama/particula.png", "bust": "sprites/mama/busto.png", "n": 30, "ps": 2, "pn": 4, "pfi": 13}, "yaku": {"comp": "sprites/yaku/compuesto.png", "part": "sprites/yaku/particula.png", "bust": "sprites/yaku/busto.png", "n": 43, "ps": 2, "pn": 4, "pfi": 5}, "illapa": {"comp": "sprites/illapa/compuesto.png", "part": "sprites/illapa/particula.png", "bust": "sprites/illapa/busto.png", "n": 25, "ps": 2, "pn": 3, "pfi": 9}};
 var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var MESC = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 var PAGES = { juke: ['01', 'JUKEBOX'], band: ['02', 'LA BANDA'], data: ['03', 'TUS DATOS'], how: ['04', 'CÓMO SUENA'], tech: ['05', 'TECNOLOGÍA'] };
@@ -839,8 +846,23 @@ class Component extends DCLogic {
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
     this.tbars = []; for (var i = 0; i < 14; i++) this.tbars.push({ delay: (i * 0.02).toFixed(2) + 's' });
   }
-  componentDidMount() { this.loadDisc(this.state.disc); }
-  componentWillUnmount() { this.stop(); this.tm.forEach(clearTimeout); if (this.ac) this.ac.close(); }
+  componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); }, 200); }
+  preloadArt() {
+    var order = [DISC_CHAR[this.state.disc]].concat(Object.keys(CARA).filter(function (k) { return k !== DISC_CHAR[this.state.disc]; }, this)), i = 0;
+    var idle = window.requestIdleCallback ? function (f) { window.requestIdleCallback(f, { timeout: 1500 }); } : function (f) { setTimeout(f, 300); };
+    Object.keys(CARA).forEach(function (k) { new Image().src = ART[k].comp; new Image().src = ART[k].part; });
+    (function next() {
+      if (i >= order.length) return;
+      var k = order[i++], im = new Image(), go = function () { idle(next); };
+      im.onload = go; im.onerror = go; im.src = CARA[k].strip; new Image().src = CARA[k].off;
+    })();
+  }
+  syncAnims() {
+    if (!document.getAnimations || document.hidden) return;
+    var t0 = this.state.playing ? (this.playT0 || 0) : 0;
+    document.getAnimations().forEach(function (an) { var n = an.animationName; if ((n === 'sprplay' || n === 'fplay') && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
+  }
+  componentWillUnmount() { clearInterval(this.syncTimer); this.stop(); this.tm.forEach(clearTimeout); if (this.ac) this.ac.close(); }
   url(d, f) { if (d === 5) return this.state.custom ? this.state.custom.url : ''; return DISCS[d].files[f]; }
   frameDate(d, f) { var dt = DISCS[d].dates && DISCS[d].dates[f]; if (dt) { var q = dt.split('-'); return { m: +q[1] - 1, y: +q[0] }; } var s = DISCS[d].start, m = s[1] + f, y = s[0] + Math.floor(m / 12); return { m: m % 12, y: y }; }
   applySet(name) {
@@ -939,10 +961,12 @@ class Component extends DCLogic {
     var off = s.mute[k], lv = s.levels[k] || 0, vm = this.spriteVm(k);
     var state = off ? 'apagado' : lv > 0.6 ? 'intenso' : lv >= 0.15 ? 'activo' : 'calmo';
     if (k !== this.lastLead) { this.lastLead = k; this.leadCount++; }
-    return { cls: vm.cls, dur: vm.dur, clip: vm.clip, ins: vm.ins, glyph: vm.glyph, coneC: vm.coneC, coneOp: vm.coneOp, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', quote: b.quote, state: state, on: !off,
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, AL = ART[k];
+    return { faceUrl: off ? CARA[k].off : CARA[k].strip, faceN: off ? 1 : CARA[k].n, fx0: off ? 0 : vm.x0, fx1: off ? 0 : vm.x1, fF: off ? 1 : vm.sprF, fDur: vm.sprDur, partUrl: vm.partUrl, pf: vm.pf,
+      cls: vm.cls, dur: vm.dur, clip: vm.clip, ins: vm.ins, glyph: vm.glyph, coneC: vm.coneC, coneOp: vm.coneOp, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', quote: b.quote, state: state, on: !off,
       anim: !off && s.playing && lv >= 0.15 ? 'bob' : '', toggleLabel: off ? 'Activar a ' + b.name : 'Desactivar a ' + b.name,
       btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A',
-      spriteAria: 'Marcador del modelo anime detallado de ' + b.name + ', ' + state,
+      spriteAria: 'Retrato de ' + b.name + ', del pecho a la cabeza, ' + state,
       toggle: function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); } };
   }
   revokeCustom() { var c = this.state.custom; if (c && c.url && c.url.indexOf('blob:') === 0) URL.revokeObjectURL(c.url); }
@@ -1113,7 +1137,9 @@ class Component extends DCLogic {
     var s = this.state, b = BAND.filter(function (x) { return x.k === k; })[0], off = s.mute[k], lv = s.levels[k] || 0;
     var play = s.playing && !off && lv >= 0.15, hitN = (s.hits && s.hits[k]) || 0;
     var bpm = s.engine === 'melody' ? Math.round(MUSIC[this.leadChar()].bpm * this.speedFactor()) : 100;
-    return { color: b.color, name: b.name, glyph: b.glyph, ins: b.ins, clip: play ? b.clip : 'idle', dur: play ? (60 / bpm).toFixed(2) + 's' : '3s',
+    var A = ART[k], seg = play ? [A.ps, A.pn] : [0, 2];
+    return { sprUrl: A.comp, sprN: A.n, x0: -seg[0], x1: -(seg[0] + seg[1]), sprF: seg[1], sprDur: play ? (60 / bpm).toFixed(3) + 's' : '1.2s', partUrl: A.part, pf: A.pfi,
+      color: b.color, name: b.name, glyph: b.glyph, ins: b.ins, clip: play ? b.clip : 'idle', dur: play ? (60 / bpm).toFixed(2) + 's' : '3s',
       cls: 'sp-' + k + (play ? ' play' : '') + (off ? ' off' : '') + (hitN && !off ? (hitN % 2 ? ' ha' : ' hb') : ''),
       coneC: b.color + '66', coneOp: play ? '1' : '0.4', lvPct: Math.round((off ? 0 : lv) * 100) + '%' };
   }
@@ -1240,7 +1266,7 @@ class Component extends DCLogic {
   play() {
     this.ensureAudio(); var self = this, s = this.state;
     var allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
-    var go = function () { self.melDeg = null; self.setState({ playing: true, col: -1 }); self.timer = setInterval(function () { self.tick(); }, self.stepMs()); };
+    var go = function () { self.melDeg = null; self.playT0 = document.timeline.currentTime; self.setState({ playing: true, col: -1 }); self.timer = setInterval(function () { self.tick(); }, self.stepMs()); };
     if (allOff) {
       var nm = BAND.filter(function (b) { return b.k === k; })[0].name;
       this.setState({ mute: this.only(k), caption: 'La banda estaba apagada: activé a ' + nm + ', protagonista de este disco.' }, go);
@@ -1365,7 +1391,7 @@ class Component extends DCLogic {
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: 'Banda completa activada. Pulsa Reproducir.' }); self.goTab('juke'); },
       band: BAND.map(function (b, bi) {
         var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
-        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
+        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, faceUrl: CARA[b.k].strip, faceN: CARA[b.k].n, sprUrl: ART[b.k].comp, sprN: ART[b.k].n, bustUrl: ART[b.k].bust, bi: off ? 0 : lvl > 0.6 ? 3 : lvl >= 0.15 ? 2 : 1, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
           on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? 'Activar a ' : 'Desactivar a ') + b.name,
           btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A', btnBorder: off ? th.line : b.color,
           border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
