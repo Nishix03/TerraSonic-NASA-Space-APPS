@@ -10,457 +10,492 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Pixelify+Sans:wght@500;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0}
+body{margin:0;background:#000}
 html{scroll-behavior:smooth}
-a{color:#FFD447}a:hover{color:#FFE88A}
-.px button{font:inherit;cursor:pointer}
-.px button:focus-visible,.px input:focus-visible,.px select:focus-visible{outline:4px solid #FFD447;outline-offset:3px}
-.px ::selection{background:#FFD447;color:#0A0D1A}
-.px .pximg{image-rendering:pixelated;image-rendering:crisp-edges}
-.px .crt{background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+a{color:inherit}
+.px{min-height:100vh;background-color:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased;position:relative}
+.px *{box-sizing:border-box}
+.px h1,.px h2,.px h3,.px h4,.px p,.px dl,.px dd,.px ol,.px ul{margin:0}
+.px button,.px select,.px input,.px summary{font:inherit;color:inherit}
+.px button{cursor:pointer;background:none;border:1px solid var(--line);border-radius:2px;transition:background-color .2s,border-color .2s,color .2s,opacity .2s}
+.px button:disabled{opacity:.35;cursor:not-allowed}
+.px :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.px ::selection{background:var(--fg);color:var(--bg)}
 .px .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.px .bob{animation:bob 1.2s steps(2) infinite}
-.px .bgfix{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-.px .farstars{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(1px 1px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 120px,#cfd8ff,transparent),radial-gradient(1px 1px at 160px 60px,#fff,transparent),radial-gradient(1px 1px at 50px 150px,#ffe9a8,transparent);background-size:200px 180px;animation:starpan 160s linear infinite}
-@keyframes starpan{to{background-position:-1600px 900px}}
-@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
-@keyframes cross{from{transform:translate(0,0)}to{transform:translate(115vw,22vh)}}
-@keyframes shoot{0%,90%{opacity:0;transform:translate(0,0) rotate(28deg)}92%{opacity:1}100%{opacity:0;transform:translate(-40vw,24vh) rotate(28deg)}}
-@keyframes sweep{from{transform:translateX(-30vw)}to{transform:translateX(105vw)}}
-@keyframes glowpulse{0%,100%{opacity:.5}50%{opacity:.9}}
-.px .sat{position:absolute;top:16%;left:-4%;width:6px;height:6px;background:#fff;box-shadow:0 0 8px #fff,-10px 0 0 rgba(255,255,255,.35),-20px 0 0 rgba(255,255,255,.18);animation:cross 46s linear infinite}
-.px .shoot{position:absolute;top:8%;left:78%;width:90px;height:2px;background:linear-gradient(90deg,#fff,transparent);animation:shoot 17s linear infinite}
-.px .glow{position:absolute;left:0;right:0;bottom:0;height:55vh;animation:glowpulse 7s ease-in-out infinite}
-.px .planet{position:absolute;left:-30vw;top:88vh;width:160vw;height:160vw;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1d3a8f 0%,#0f1f55 14%,#0a0d1a 42%)}
-.px .sweep{position:absolute;top:calc(88vh - 2px);left:0;width:30vw;height:4px;background:linear-gradient(90deg,transparent,#FFD447,transparent);animation:sweep 7s linear infinite}
-.px button{transition:transform .15s cubic-bezier(.2,.7,.2,1),filter .15s,background-color .2s,border-color .2s,box-shadow .2s,color .2s}
-.px button:hover:not(:disabled){transform:translate(-2px,-2px);filter:brightness(1.12)}
-.px button:active:not(:disabled){transform:translate(2px,2px);filter:brightness(.95)}
-.px .fxc{transition:opacity .15s,background-color .35s}
-.px .fxm{transition:background-color .12s}
-.px .fx{transition:border-color .3s,box-shadow .3s,transform .3s}
-.px .fx:hover{transform:translateY(-3px)}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes fa{from{opacity:0;filter:blur(4px) saturate(1.6)}to{opacity:1;filter:none}}
-@keyframes fb{from{opacity:0;filter:blur(4px) saturate(1.6)}to{opacity:1;filter:none}}
-@keyframes pa{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
-@keyframes pb{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
-@keyframes btnpulse{0%,100%{box-shadow:4px 4px 0 #05070F,0 0 0 0 rgba(255,212,71,.55)}50%{box-shadow:4px 4px 0 #05070F,0 0 0 9px rgba(255,212,71,0)}}
-.px .rise{animation:rise .65s cubic-bezier(.2,.7,.2,1) both}
-.px .d1{animation-delay:.08s}.px .d2{animation-delay:.16s}.px .d3{animation-delay:.24s}
-.px .fa{animation:fa .55s ease both}.px .fb{animation:fb .55s ease both}
-.px .pa{animation:pa .45s ease both}.px .pb{animation:pb .45s ease both}
-.px .pulse{animation:btnpulse 2.4s ease-in-out infinite}
-.px .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:14px;border:3px dashed #2E3A6E;cursor:pointer;transition:border-color .2s,background-color .2s,transform .2s}
-.px .drop:hover,.px .drop:focus-within{border-color:#FFD447;background-color:rgba(255,212,71,.08)}
-.px .drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
-.px .drop.over{border-color:#FFD447;background-color:rgba(255,212,71,.16);transform:scale(1.01)}
-.px .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:980px){.px .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.px .grid3{grid-template-columns:minmax(0,1fr)}}
-.px .fillrow>:last-child{grid-column:auto / -1}
-.px .arrow:disabled{opacity:.3;cursor:not-allowed}
-.px .arrow svg{display:block}
-.px .arrowL svg{animation:nudgeL 1.3s steps(3) infinite}
-.px .arrowR svg{animation:nudgeR 1.3s steps(3) infinite}
-.px .arrow:hover:not(:disabled) svg{animation-duration:.45s}
-.px .arrow:disabled svg{animation:none}
-@keyframes nudgeL{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
-@keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-.px .stage{position:absolute;inset:0;background:#070914}
-.px .stage .floor{position:absolute;left:0;right:0;bottom:0;height:30%;background:repeating-linear-gradient(90deg,#241a3d 0 72px,#1a1230 72px 74px);border-top:4px solid #3b2a63;box-shadow:inset 0 16px 30px rgba(0,0,0,.55)}
-.px .stage .curtL,.px .stage .curtR{position:absolute;top:0;bottom:0;width:7%;background:repeating-linear-gradient(90deg,#4a1330 0 10px,#33091f 10px 20px)}
-.px .stage .curtL{left:0;border-right:4px solid #1c0612}
-.px .stage .curtR{right:0;border-left:4px solid #1c0612}
-.px .stage .valance{position:absolute;left:0;right:0;top:0;height:26px;background:repeating-linear-gradient(90deg,#5a1738 0 24px,#3d0f27 24px 48px);border-bottom:4px solid #8b2a5a}
+.px .skyfix{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 78% 12%,#cfd8ff,transparent),radial-gradient(1px 1px at 34% 64%,#fff,transparent),radial-gradient(1px 1px at 91% 72%,#fff,transparent),radial-gradient(1px 1px at 56% 38%,#cfd8ff,transparent),radial-gradient(1px 1px at 6% 86%,#fff,transparent),radial-gradient(1px 1px at 67% 91%,#fff,transparent),radial-gradient(1px 1px at 45% 8%,#fff,transparent)}
+.px .wrap{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:0 32px}
+
+/* tipografía */
+.px .eyebrow{font-family:var(--head);font-weight:600;letter-spacing:.24em;text-transform:uppercase;font-size:.72em;color:var(--muted)}
+.px .h1{font-family:var(--head);font-weight:600;text-transform:uppercase;letter-spacing:.03em;line-height:1.02;font-size:clamp(2.2em,5.4vw,4.4em)}
+.px .h2{font-family:var(--head);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:1.15em}
+.px .lede{color:var(--muted);max-width:62ch;font-size:1.05em}
+.px .muted{color:var(--muted)}
+.px .mono{font-family:'IBM Plex Mono',monospace}
+
+/* botones */
+.px .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:0 24px;font-family:var(--head);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.78em;color:var(--fg);border-color:var(--fg)}
+.px .btn:hover:not(:disabled){background:var(--fg);color:var(--bg)}
+.px .btn.primary{background:var(--fg);color:var(--bg)}
+.px .btn.primary:hover:not(:disabled){background:transparent;color:var(--fg)}
+.px .btn.quiet{border-color:var(--line);color:var(--muted)}
+.px .btn.quiet:hover:not(:disabled){border-color:var(--fg);background:transparent;color:var(--fg)}
+.px .btn.sm{min-height:36px;padding:0 14px;font-size:.7em}
+.px .iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.px .iconbtn:hover:not(:disabled){border-color:var(--fg)}
+.px .pulse{animation:ring 2.6s ease-in-out infinite}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.45)}50%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+
+/* barra superior */
+.px .brand{display:flex;align-items:center;gap:12px;font-family:var(--head);font-weight:700;letter-spacing:.3em;font-size:.95em;text-transform:uppercase;background:none;border:0;padding:0;color:var(--fg)}
+.px .nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:12px}
+.px .nav button{border:0;border-bottom:2px solid transparent;border-radius:0;min-height:44px;padding:0 14px;font-family:var(--head);font-weight:600;font-size:.74em;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.px .nav button:hover{color:var(--fg)}
+.px .nav button[aria-current="page"]{color:var(--fg);border-bottom-color:var(--fg)}
+.px .top .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.px details.menu{position:relative}
+.px details.menu>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border:1px solid var(--line);border-radius:2px;font-family:var(--head);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.7em;color:var(--muted)}
+.px details.menu>summary::-webkit-details-marker{display:none}
+.px details.menu[open]>summary,.px details.menu>summary:hover{color:var(--fg);border-color:var(--fg)}
+.px details.menu .pop{position:absolute;right:0;top:calc(100% + 8px);z-index:60;min-width:240px;background:#05070C;border:1px solid var(--line);padding:8px;display:flex;flex-direction:column;gap:2px}
+.px .opt{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding:0 12px;border:0;text-align:left;font-size:.9em;width:100%}
+.px .opt:hover{background:rgba(255,255,255,.06)}
+.px .opt .sw{width:34px;height:18px;border:1px solid var(--fg);border-radius:9px;position:relative;flex:0 0 auto}
+.px .opt .sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--fg);transition:transform .2s}
+.px .opt[aria-pressed="true"] .sw{background:var(--fg)}
+.px .opt[aria-pressed="true"] .sw::after{background:var(--bg);transform:translateX(16px)}
+
+/* portada */
+
+/* secciones */
+.px .stepbar{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.px .stepbar .n{font-family:var(--head);font-weight:600;font-size:.8em;letter-spacing:.2em;color:var(--muted)}
+.px .seg{display:inline-flex;border:1px solid var(--line);border-radius:2px;margin-left:auto}
+.px .seg button{border:0;border-radius:0;min-height:36px;padding:0 14px;font-family:var(--head);font-weight:600;font-size:.7em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.px .seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.px .discs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.px .dcard{display:flex;flex-direction:column;gap:6px;text-align:left;padding:14px 16px;min-height:88px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.px .dcard:hover{border-color:var(--fg)}
+.px .dcard[aria-pressed="true"]{background:rgba(255,255,255,.07)}
+.px .dcard .t{font-family:var(--head);font-weight:600;font-size:1.1em;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.px .dcard .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.px .dcard .s{font-size:.78em;color:var(--muted);line-height:1.35}
+
+/* reproductor */
+.px .mapbox{position:relative;border:1px solid var(--line);background:#0a0f1c;aspect-ratio:560/320;overflow:hidden}
+.px .mapbox img.map{display:block;width:100%;height:100%;object-fit:cover}
+.px .scanline{position:absolute;top:0;bottom:0;width:3.6%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.28));border-right:2px solid #fff;box-shadow:0 0 18px rgba(255,255,255,.7);transition:left 110ms linear}
+.px .arrow{position:absolute;top:50%;margin-top:-22px;z-index:2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;padding:0;background:rgba(0,0,0,.55);border-color:rgba(255,255,255,.4)}
+.px .arrow:hover:not(:disabled){background:#fff;color:#000}
+.px .tagbox{position:absolute;left:12px;bottom:12px;padding:5px 10px;background:rgba(0,0,0,.6);font-family:'IBM Plex Mono',monospace;font-size:.72em;letter-spacing:.04em}
+.px .caps{display:flex;justify-content:space-between;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:.7em;color:var(--muted);padding-top:8px}
+.px .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px 0 4px}
+.px .controls .when{display:flex;flex-direction:column;line-height:1.15}
+.px .controls .when b{font-family:var(--head);font-weight:600;font-size:1.7em;letter-spacing:.04em;text-transform:uppercase}
+.px .controls .grow{flex:1 1 auto}
+.px .timeline{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding-top:8px}
+.px .timeline button{padding:0;border-width:1px;display:flex;flex-direction:column;background:#0a0f1c}
+.px .timeline button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 -3px 0 var(--fg)}
+.px .timeline img{display:block;width:100%;aspect-ratio:560/320;object-fit:cover;opacity:.7}
+.px .timeline button[aria-pressed="true"] img,.px .timeline button:hover img{opacity:1}
+.px .timeline span{font-family:'IBM Plex Mono',monospace;font-size:.68em;padding:4px 0;color:var(--muted)}
+.px .status{margin-top:14px;padding:10px 14px;border-left:2px solid var(--fg);background:rgba(255,255,255,.04);font-size:.85em;color:var(--fg)}
+
+/* protagonista y banda */
+.px .lead{border:1px solid var(--line);background:rgba(255,255,255,.02);display:flex;flex-direction:column}
+.px .leadface{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+.px .lead .meta{display:flex;flex-direction:column;gap:8px;padding:16px}
+.px .lead .name{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:1.3em;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.px .lead .name small{font-family:'IBM Plex Mono',monospace;font-size:.55em;letter-spacing:.04em;color:var(--muted);text-transform:none}
+.px .lead q{font-size:.9em;color:var(--muted);quotes:"«" "»"}
+.px .band{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.px .bchip{display:flex;align-items:center;gap:12px;padding:10px 14px;min-height:64px;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+.px .bchip:hover{border-color:var(--fg)}
+.px .bchip[aria-pressed="false"]{opacity:.55}
+.px .bchip .nm{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.85em;display:block}
+.px .bchip .bar{display:block;height:2px;background:var(--line);margin-top:7px}
+.px .bchip .bar i{display:block;height:2px;transition:width .12s}
+.px .bchip .state{font-size:.66em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.px .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.px .more{border:1px solid var(--line)}
+.px .more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 18px;font-family:var(--head);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.78em}
+.px .more>summary::-webkit-details-marker{display:none}
+.px .more>summary::after{content:"+";font-size:1.4em;font-weight:400}
+.px .more[open]>summary::after{content:"–"}
+.px .more .inner{padding:6px 18px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.px .more .col{display:flex;flex-direction:column;gap:10px}
+.px .field{display:flex;flex-direction:column;gap:6px;font-size:.82em;color:var(--muted)}
+.px select{background:#05070C;border:1px solid var(--line);border-radius:2px;min-height:44px;padding:0 10px;color:var(--fg)}
+.px .heard{display:grid;grid-template-columns:repeat(28,minmax(0,1fr));gap:1px;border:1px solid var(--line);background:var(--line)}
+.px .chips{display:flex;flex-wrap:wrap;gap:6px}
+.px .chip{font-family:'IBM Plex Mono',monospace;font-size:.8em;padding:3px 10px;border:1px solid var(--line);transition:background-color .15s,color .15s}
+.px .engines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.px .engines button{min-height:44px;font-size:.82em;padding:0 8px}
+.px .engines button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+/* escenario */
+.px .stagebox{position:relative;overflow:hidden;border:1px solid var(--line);background:#03060d;min-height:340px;display:flex;flex-direction:column}
+.px .stagebg{position:absolute;inset:0;z-index:0}
+.px .stagebg img{position:absolute;left:0;top:0;width:100%;height:70%;object-fit:cover;opacity:.22}
+.px .stagebg .fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,13,.2),#03060d 78%)}
+.px .stagebg .horizon{position:absolute;left:0;right:0;bottom:28%;height:1px;background:rgba(255,255,255,.18)}
+.px .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:4}
+.px .flash.fl1{animation:flashA .45s ease-out}.px .flash.fl2{animation:flashB .45s ease-out}
+@keyframes flashA{0%{opacity:.22}100%{opacity:0}}
+@keyframes flashB{0%{opacity:.22}100%{opacity:0}}
+@keyframes shA{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes shB{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.px .shk.sh1{animation:shA .3s}.px .shk.sh2{animation:shB .3s}
 .px .mem{flex:1 1 0;min-width:0;max-width:190px;display:flex;flex-direction:column;align-items:center;position:relative;transition:max-width .45s cubic-bezier(.2,.8,.2,1),opacity .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
 .px .mem.gone{max-width:0;opacity:0;transform:translateY(26px) scale(.7);pointer-events:none}
 @keyframes pop{0%{transform:scale(.4) translateY(20px);opacity:0}70%{transform:scale(1.08)}100%{transform:none;opacity:1}}
 .px .mem:not(.gone) .sp{animation:pop .5s cubic-bezier(.2,1.4,.3,1) both}
 .px .cone{position:absolute;left:50%;top:0;bottom:6px;width:150%;transform:translateX(-50%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);transition:opacity .35s;pointer-events:none}
-.px .sp{position:relative;width:100%;max-width:132px;aspect-ratio:112 / 140;z-index:1}
-.px .sp.big{flex:1 1 auto;max-width:none;width:auto;aspect-ratio:auto;min-height:0;margin:8px 10px}
-.px .sp .body{position:absolute;left:6%;top:4%;width:72%;height:88%;box-sizing:border-box;border:3px dashed currentColor;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;font-family:'Press Start 2P',monospace;font-size:7px;line-height:1.5;background:rgba(10,13,26,.6);transform-origin:50% 100%;animation:breathe 3s ease-in-out infinite}
-.px .sp.big .body{font-size:11px;border-width:4px;gap:8px}
-.px .sp .ins{position:absolute;right:0;bottom:6%;width:38%;height:30%;box-sizing:border-box;border:3px dashed currentColor;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Press Start 2P',monospace;font-size:5px;line-height:1.4;background:rgba(10,13,26,.78);transform-origin:50% 100%}
-.px .sp.big .ins{font-size:8px;border-width:4px}
-.px .sp .pt{position:absolute;right:10%;top:0;opacity:0;font-family:'Press Start 2P',monospace;font-size:14px}
-.px .sp.big .pt{font-size:26px}
+.px .sp{position:relative;width:100%;max-width:132px;aspect-ratio:112/140;z-index:1}
 .px .sp.off{opacity:.4;filter:grayscale(.7)}
-.px .sp.big{display:flex;align-items:center;justify-content:center}
-.px .face{position:relative;width:100%;aspect-ratio:530 / 500;overflow:hidden;flex:0 0 auto}
+.px .stagebar{position:relative;z-index:3;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 14px;padding:10px 16px;border-top:1px solid var(--line);background:rgba(0,0,0,.6);font-family:'IBM Plex Mono',monospace;font-size:.76em}
+
+/* sprites (arte de Codex) */
+.px .face{position:relative;width:100%;aspect-ratio:530/500;overflow:hidden;flex:0 0 auto}
 .px .face .fstrip{position:absolute;left:0;top:0;height:100%;width:calc(var(--n) * 100%);max-width:none;display:block;pointer-events:none;animation:fplay var(--dur) steps(var(--f)) infinite}
 @keyframes fplay{from{transform:translateX(calc(var(--x0) * 100% / var(--n)))}to{transform:translateX(calc(var(--x1) * 100% / var(--n)))}}
 .px .spr{width:var(--s);height:var(--s);background-repeat:no-repeat;image-rendering:pixelated;background-image:var(--img);background-size:calc(var(--n) * var(--s)) var(--s);background-position:calc(var(--x0) * var(--s)) 0;animation:sprplay var(--dur) steps(var(--f)) infinite}
 @keyframes sprplay{from{background-position:calc(var(--x0) * var(--s)) 0}to{background-position:calc(var(--x1) * var(--s)) 0}}
 .px .sp .spr{position:absolute;left:50%;bottom:4%;margin-left:calc(var(--s) / -2)}
 .px .sp.off .spr{animation-play-state:paused}
-.px .sp .pt{width:24px;height:24px;font-size:0;background-repeat:no-repeat;background-size:384px 24px;background-position:calc(var(--pf) * -24px) 0;image-rendering:pixelated}
-.px .sp.big .pt{width:40px;height:40px;background-size:640px 40px;background-position:calc(var(--pf) * -40px) 0}
-.px .bst{flex:0 0 auto;width:32px;height:32px;background-repeat:no-repeat;background-size:128px 32px;background-position:calc(var(--bi) * -32px) 0;image-rendering:pixelated}
-.px .sat{width:144px;height:72px;background-repeat:no-repeat;background-size:432px 72px;image-rendering:pixelated;animation:satanim .375s steps(3) infinite}
-@keyframes satanim{from{background-position:0 0}to{background-position:-432px 0}}
-@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.035)}}
-@keyframes swayS{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-@keyframes bounceI{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@keyframes waveM{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}}
-@keyframes hopY{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-14px) scaleY(1.06)}70%{transform:translateY(0) scaleY(.94)}}
-@keyframes stompL{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.px .sp-silbo.play .body{animation-name:swayS}
-.px .sp-inti.play .body{animation-name:bounceI;animation-timing-function:steps(2)}
-.px .sp-mama.play .body{animation-name:waveM}
-.px .sp-yaku.play .body{animation-name:hopY}
-.px .sp-illapa.play .body{animation-name:stompL;animation-timing-function:steps(2)}
-@keyframes mallA{0%{transform:rotate(-30deg)}100%{transform:rotate(0)}}
-@keyframes mallB{0%{transform:rotate(30deg)}100%{transform:rotate(0)}}
-@keyframes fluteA{0%{transform:translateY(-9px) rotate(-12deg)}100%{transform:none}}
-@keyframes fluteB{0%{transform:translateY(-9px) rotate(-12deg)}100%{transform:none}}
-@keyframes ringA{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
-@keyframes ringB{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 16px rgba(0,0,0,0)}}
-@keyframes dropA{0%{transform:translateY(-18px)}60%{transform:translateY(5px)}100%{transform:none}}
-@keyframes dropB{0%{transform:translateY(-18px)}60%{transform:translateY(5px)}100%{transform:none}}
-@keyframes stickA{0%{transform:rotate(-38deg)}100%{transform:none}}
-@keyframes stickB{0%{transform:rotate(-38deg)}100%{transform:none}}
+.px .pt{position:absolute;right:10%;top:0;opacity:0;width:24px;height:24px;font-size:0;background-repeat:no-repeat;background-size:384px 24px;background-position:calc(var(--pf) * -24px) 0;image-rendering:pixelated}
+.px .sp.ha .pt{animation:noteA .9s ease-out}.px .sp.hb .pt{animation:noteB .9s ease-out}
 @keyframes noteA{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
 @keyframes noteB{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
-.px .sp-inti.ha .ins{animation:mallA .28s ease-out}.px .sp-inti.hb .ins{animation:mallB .28s ease-out}
-.px .sp-silbo.ha .ins{animation:fluteA .5s ease-out}.px .sp-silbo.hb .ins{animation:fluteB .5s ease-out}
-.px .sp-mama.ha .ins{animation:ringA .8s ease-out}.px .sp-mama.hb .ins{animation:ringB .8s ease-out}
-.px .sp-yaku.ha .ins{animation:dropA .4s ease-out}.px .sp-yaku.hb .ins{animation:dropB .4s ease-out}
-.px .sp-illapa.ha .ins{animation:stickA .3s ease-out}.px .sp-illapa.hb .ins{animation:stickB .3s ease-out}
-.px .sp.ha .pt{animation:noteA .9s ease-out}.px .sp.hb .pt{animation:noteB .9s ease-out}
-@keyframes flashA{0%{opacity:.35}100%{opacity:0}}
-@keyframes flashB{0%{opacity:.35}100%{opacity:0}}
-@keyframes shA{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-@keyframes shB{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
-.px .flash{position:absolute;inset:0;background:#E0459B;opacity:0;pointer-events:none;z-index:4}
-.px .flash.fl1{animation:flashA .45s ease-out}.px .flash.fl2{animation:flashB .45s ease-out}
-.px .shk.sh1{animation:shA .3s}.px .shk.sh2{animation:shB .3s}
-@media (max-width:640px){.px .clipname{display:none}.px .sp .body{font-size:5px}}
-.px .trans{position:fixed;inset:0;z-index:50;overflow:hidden;pointer-events:auto}
-.px .tbars{position:absolute;inset:0;display:flex}
-.px .tbar{flex:1 1 0;background:#0A0D1A;border-right:1px solid rgba(255,212,71,.22);transform:scaleY(0);transform-origin:top;animation:tbar .8s cubic-bezier(.65,0,.35,1) both}
-@keyframes tbar{0%{transform:scaleY(0)}30%{transform:scaleY(1)}70%{transform:scaleY(1)}100%{transform:scaleY(0)}}
-.px .tscan{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px);opacity:0;animation:tlabel 1s ease both}
-.px .tlabel{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;opacity:0;animation:tlabel 1s ease both .05s}
-@keyframes tlabel{0%,22%{opacity:0}38%{opacity:1}62%{opacity:1}78%,100%{opacity:0}}
-.px .tsat{position:absolute;top:34%;left:0;width:144px;height:72px;animation:tsat 1.05s cubic-bezier(.45,.05,.55,.95) both}
-@keyframes tsat{from{transform:translate(-200px,16vh) rotate(-8deg)}to{transform:translate(calc(100vw + 80px),-14vh) rotate(-8deg)}}
-.px .ttrail{position:absolute;right:100%;top:50%;width:46vw;height:6px;margin-top:-3px;background:linear-gradient(90deg,transparent,rgba(255,138,43,.85),#FFD447)}
+.px .bst{flex:0 0 auto;width:32px;height:32px;background-repeat:no-repeat;background-size:128px 32px;background-position:calc(var(--bi) * -32px) 0;image-rendering:pixelated}
+
+/* tus datos */
+.px .drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:28px 18px;min-height:190px;border:1px dashed rgba(255,255,255,.35);cursor:pointer;transition:border-color .2s,background-color .2s}
+.px .drop:hover,.px .drop:focus-within,.px .drop.over{border-color:var(--fg);background:rgba(255,255,255,.05)}
+.px .drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.px .panel{border:1px solid var(--line);background:rgba(255,255,255,.02);padding:20px;display:flex;flex-direction:column;gap:14px}
+.px .twocol{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.px .twocol{grid-template-columns:minmax(0,1fr)}}
+.px .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.px .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.px .grid3{grid-template-columns:minmax(0,1fr)}}
+.px .cardx{border:1px solid var(--line);background:rgba(255,255,255,.02);padding:18px;display:flex;flex-direction:column;gap:10px}
+.px .tag{font-family:var(--head);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.7em;color:var(--muted)}
+
+/* tutorial */
+.px .tour .tn{font-family:var(--head);font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:.7em;color:var(--muted)}
+.px .tour h3{font-family:var(--head);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:1.35em;line-height:1.15}
+.px .tour p{color:#D6DBE6;font-size:.95em}
+.px .tour .tdots{display:flex;gap:6px}
+.px .tour .tdots i{width:22px;height:2px;background:rgba(255,255,255,.22)}
+.px .tour .tdots i.on{background:#fff}
+.px .tour .tact{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.px .tour .tact .skip{margin-left:auto;border:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;min-height:36px;padding:0 6px;font-size:.8em}
 @media (prefers-reduced-motion: reduce){.px *{animation:none !important;transition:none !important}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.px .rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fa{from{opacity:0}to{opacity:1}}
+@keyframes fb{from{opacity:0}to{opacity:1}}
+.px .fa{animation:fa .5s ease both}.px .fb{animation:fb .5s ease both}
+@keyframes pa{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+@keyframes pb{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.px .pa{animation:pa .45s ease both}.px .pb{animation:pb .45s ease both}
+
+/* ===== estructura sin scroll: la interfaz ocupa la ventana y se navega con botones ===== */
+.px.app{height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+.px .top{flex:0 0 auto;position:relative;z-index:40;background:rgba(0,0,0,.72);border-bottom:1px solid var(--line)}
+.px .top .wrap{max-width:1320px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:20px;min-height:60px}
+.px .viewport{flex:1 1 auto;min-height:0;position:relative;z-index:1}
+.px .scr{position:absolute;inset:0;overflow:hidden}
+.px .in{max-width:1320px;width:100%;height:100%;margin:0 auto;padding:22px 32px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.px .bar{flex:0 0 auto;position:relative;z-index:40;border-top:1px solid var(--line);background:rgba(0,0,0,.72)}
+.px .bar .in2{max-width:1320px;margin:0 auto;padding:8px 32px;min-height:68px;display:flex;align-items:center;gap:14px}
+.px .bar .mid{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.px .bar .lbl{font-family:var(--head);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.72em;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.px .bar .dots{display:flex;gap:0;flex-wrap:wrap;justify-content:center}
+.px .bar .dots button{width:30px;height:26px;padding:0;border:0;display:flex;align-items:center;justify-content:center;background:none}
+.px .bar .dots button i{display:block;width:20px;height:2px;background:rgba(255,255,255,.25);transition:background-color .2s,width .2s}
+.px .bar .dots button:hover i{background:rgba(255,255,255,.7)}
+.px .bar .dots button.on i{background:#fff;width:26px}
+.px .bar .side{flex:0 0 auto;min-width:150px;display:flex;gap:8px}
+.px .bar .side.r{justify-content:flex-end}
+.px .title{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.px .title .n{font-family:var(--head);font-weight:600;font-size:.8em;letter-spacing:.2em;color:var(--muted)}
+.px .grow{flex:1 1 auto;min-height:0}
+
+/* portada */
+.px .scr.home::before{content:"";position:absolute;left:50%;top:66%;width:170%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 50% 0,#12347a 0,#081a3d 14%,#030813 40%);box-shadow:0 -1px 0 rgba(140,185,255,.7),0 -26px 90px rgba(70,130,255,.28);pointer-events:none}
+.px .scr.home .in{justify-content:center;position:relative;gap:20px}
+.px .scr.home .cta{display:flex;gap:12px;flex-wrap:wrap}
+.px .facts{display:flex;gap:40px;flex-wrap:wrap;padding-top:18px;border-top:1px solid var(--line);max-width:640px}
+.px .facts div{display:flex;flex-direction:column}
+.px .facts b{font-family:var(--head);font-weight:600;font-size:1.7em;letter-spacing:.04em;line-height:1}
+.px .facts span{font-size:.72em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* discos */
+.px .discs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-content:center;flex:1 1 auto;min-height:0}
+.px .dcard{display:flex;flex-direction:column;text-align:left;padding:0;border:1px solid var(--line);background:rgba(255,255,255,.02);min-height:0;overflow:hidden}
+.px .dcard img{display:block;width:100%;aspect-ratio:560/320;object-fit:cover;opacity:.78;transition:opacity .2s}
+.px .dcard:hover img,.px .dcard[aria-pressed="true"] img{opacity:1}
+.px .dcard .tx{display:flex;flex-direction:column;gap:6px;padding:14px 16px 16px}
+.px .dcard .t{font-family:var(--head);font-weight:600;font-size:1.1em;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.px .dcard .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.px .dcard .s{font-size:.78em;color:var(--muted);line-height:1.4}
+.px .dcard:hover{border-color:var(--fg)}
+.px .dcard[aria-pressed="true"]{background:rgba(255,255,255,.07)}
+
+/* escuchar */
+.px .s3{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:26px;flex:1 1 auto;min-height:0;align-items:start}
+.px .s3 .left{min-width:0;display:flex;flex-direction:column;gap:10px}
+.px .mapbox{position:relative;border:1px solid var(--line);background:#0a0f1c;aspect-ratio:560/320;overflow:hidden;width:min(100%,calc((100dvh - 440px) * 1.75))}
+.px .mapbox img.map{display:block;width:100%;height:100%;object-fit:cover}
+.px .caps{display:flex;justify-content:space-between;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:.7em;color:var(--muted);width:min(100%,calc((100dvh - 440px) * 1.75))}
+.px .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.px .controls .when{display:flex;flex-direction:column;line-height:1.1}
+.px .controls .when b{font-family:var(--head);font-weight:600;font-size:1.5em;letter-spacing:.04em;text-transform:uppercase}
+.px .timeline{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;width:min(100%,calc((100dvh - 440px) * 1.75))}
+.px .timeline button{padding:0;display:flex;flex-direction:column;background:#0a0f1c}
+.px .timeline button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 -3px 0 var(--fg)}
+.px .timeline img{display:block;width:100%;aspect-ratio:560/320;object-fit:cover;opacity:.7}
+.px .timeline button[aria-pressed="true"] img,.px .timeline button:hover img{opacity:1}
+.px .timeline span{font-family:'IBM Plex Mono',monospace;font-size:.66em;padding:3px 0;color:var(--muted)}
+.px .status{padding:8px 14px;border-left:2px solid var(--fg);background:rgba(255,255,255,.04);font-size:.8em;max-width:min(100%,calc((100dvh - 440px) * 1.75));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px .lead .leadface{max-height:36vh}
+
+/* banda y escenario */
+.px .s4{display:flex;flex-direction:column;gap:14px;flex:1 1 auto;min-height:0}
+.px .s4 .stagebox{flex:1 1 auto;min-height:0}
+.px .s4 .band{flex:0 0 auto}
+
+/* más opciones */
+.px .s5{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;align-content:start;flex:1 1 auto;min-height:0}
+.px .s5 .col{display:flex;flex-direction:column;gap:10px;min-width:0}
+
+/* la banda (personajes) */
+.px .bchar{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:48px;align-items:center;flex:1 1 auto;min-height:0}
+.px .bchar .portrait{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.px .bchar .info{display:flex;flex-direction:column;gap:14px;min-width:0}
+.px .bchar dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:.95em}
+.px .fullband{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:20px;flex:1 1 auto;min-height:0}
+.px .fullband .chars{display:flex;gap:18px;flex-wrap:wrap}
+
+/* método y tecnología */
+.px .cards4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-content:start;flex:1 1 auto;min-height:0}
+.px .cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-content:start;flex:1 1 auto;min-height:0}
+.px .cardx{border:1px solid var(--line);background:rgba(255,255,255,.02);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0;text-align:left}
+.px .cardx.compact{padding:14px;gap:6px}
+.px .legendgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 18px;align-content:center;flex:1 1 auto}
+
+/* transiciones */
+.px .scr.sr-a{animation:srA .42s cubic-bezier(.2,.7,.2,1) both}
+.px .scr.sr-b{animation:srB .42s cubic-bezier(.2,.7,.2,1) both}
+.px .scr.sl-a{animation:slA .42s cubic-bezier(.2,.7,.2,1) both}
+.px .scr.sl-b{animation:slB .42s cubic-bezier(.2,.7,.2,1) both}
+.px .scr.sf-a{animation:sfA .5s ease both}
+.px .scr.sf-b{animation:sfB .5s ease both}
+@keyframes srA{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
+@keyframes srB{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
+@keyframes slA{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
+@keyframes slB{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
+@keyframes sfA{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes sfB{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+.px .wipe{position:fixed;inset:0;z-index:95;pointer-events:auto;overflow:hidden}
+.px .wipe .wp{position:absolute;inset:0;background:#000;border-right:1px solid rgba(255,255,255,.8);animation:wipeGo .9s cubic-bezier(.65,0,.35,1) both}
+.px .wipe .wp2{background:#06080f;animation-delay:.07s;border-right:1px solid rgba(255,255,255,.35)}
+@keyframes wipeGo{0%{transform:translateX(-101%)}42%,58%{transform:translateX(0)}100%{transform:translateX(101%)}}
+.px .wipe .wl{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-family:var(--head);font-weight:600;letter-spacing:.4em;text-transform:uppercase;font-size:1.3em;opacity:0;animation:wlab .9s ease both;z-index:2}
+.px .wipe .wl small{display:block;letter-spacing:.3em;font-size:.55em;color:var(--muted);margin-bottom:10px}
+@keyframes wlab{0%,36%{opacity:0}48%,56%{opacity:1}68%,100%{opacity:0}}
+
+/* guía */
+.px .tourdim{position:fixed;inset:0;z-index:66;background:rgba(0,0,0,.74)}
+.px .tour{position:fixed;left:50%;transform:translateX(-50%);z-index:90;width:min(460px,calc(100vw - 24px));background:#06080f;border:1px solid rgba(255,255,255,.55);padding:16px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
+.px .tour.bottom{bottom:88px}
+.px .tour.top{top:74px}
+
+/* pantallas pequeñas: se permite desplazar solo dentro de la pantalla para no perder contenido */
+@media (max-width:1100px){
+  .px .discs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .px .s5,.px .cards4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .px .legendgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:900px),(max-height:620px){
+  .px .scr{overflow-y:auto}
+  .px .in{height:auto;min-height:100%}
+  .px .s3{grid-template-columns:minmax(0,1fr)}
+  .px .mapbox,.px .caps,.px .timeline,.px .status{width:100%;max-width:100%}
+  .px .bchar{grid-template-columns:minmax(0,1fr);gap:20px}
+  .px .cards3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .px .top .wrap,.px .in,.px .bar .in2{padding-left:14px;padding-right:14px}
+  .px .nav button{padding:0 8px;font-size:.62em;letter-spacing:.12em}
+  .px .brand{letter-spacing:.18em}
+  .px .discs,.px .s5,.px .cards4,.px .cards3{grid-template-columns:minmax(0,1fr)}
+  .px .bar .side{min-width:0}
+  .px .legendgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style>
 </helmet>
-<div class="px" style="min-height: 100vh; background: {{th.bg}}; color: {{th.fg}}; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: {{th.fs}}; line-height: 1.5">
+<div class="px app" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; font-size: {{th.fs}}">
 
-<sc-if value="{{showBg}}" hint-placeholder-val="{{ true }}">
-<div class="bgfix" aria-hidden="true">
-<div class="farstars"></div>
-<sc-for list="{{stars}}" as="s" hint-placeholder-count="70"><div style="position: absolute; {{s.st}}"></div></sc-for>
-<div class="sat"></div>
-<div class="shoot"></div>
-<div class="glow" style="background: radial-gradient(ellipse at 50% 100%, {{glowA}}, transparent 70%)"></div>
-<div class="planet" style="box-shadow: 0 -4px 0 {{glow}}, 0 -16px 56px {{glowSoft}}"></div>
-<div class="sweep"></div>
-</div>
-</sc-if>
+<div class="skyfix" aria-hidden="true"></div>
+<div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
-<sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
-<div class="trans" aria-hidden="true">
-<div class="tbars"><sc-for list="{{tbars}}" as="tb" hint-placeholder-count="14"><div class="tbar" style="animation-delay: {{tb.delay}}"></div></sc-for></div>
-<div class="tscan"></div>
-<div class="tlabel">
-<div style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.muted}}">PÁGINA {{transNum}}</div>
-<div style="font-family: {{th.pixelFont}}; font-size: 1.7em; color: {{th.accent}}; margin-top: 12px">{{transName}}</div>
-</div>
-<div class="tsat">
-<div class="ttrail"></div>
-<div class="sat" aria-hidden="true" style="background-image: url(sprites/atrezo/satelite.png)"></div>
-</div>
-</div>
-</sc-if>
-
-<div role="status" aria-live="polite" class="sr">Página: {{pageName}}</div>
-
-<div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 18px 24px 48px; display: flex; flex-direction: column; gap: 24px">
-
-<div class="rise" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 8px 14px; background: {{th.panel}}; border: 3px solid {{th.line}}">
-<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
-<div role="img" aria-label="Espacio reservado para el logo oficial de NASA Space Apps Challenge" style="width: 140px; height: 40px; border: 3px dashed {{th.muted}}; display: flex; align-items: center; justify-content: center; text-align: center; font-family: {{th.pixelFont}}; font-size: 0.4em; color: {{th.muted}}; line-height: 1.5">LOGO OFICIAL<br>NASA SPACE APPS</div>
-<span style="font-family: {{th.headFont}}; font-size: 1.05em">NASA Space Apps Challenge 2026 · Chiclayo</span>
-</div>
-<span style="font-size: 0.78em; color: {{th.muted}}">Reto 5 · The Earth Information Jukebox · Proyecto independiente, no respaldado por NASA</span>
-</div>
-
-<header class="rise d1" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}, inset 0 1px 0 rgba(255,255,255,0.07)">
-<div style="display: flex; align-items: center; gap: 14px">
-<div role="img" aria-label="Logo de Terrasonic: planeta Tierra con un satélite que emite ondas de sonido" style="position: relative; flex: 0 0 auto; width: 84px; height: 54px">
-<sc-for list="{{logoPx}}" as="p" hint-placeholder-count="150"><div style="position: absolute; width: 3px; height: 3px; {{p.st}}"></div></sc-for>
-</div>
-<div>
-<div style="font-family: {{th.pixelFont}}; font-size: 1.05em; letter-spacing: 0.04em; color: {{th.accent}}; line-height: 1.2">TERRASONIC</div>
-<div style="font-family: {{th.headFont}}; font-size: 1.05em; color: {{th.muted}}">Earth Information Jukebox</div>
-</div>
-</div>
-<nav aria-label="Páginas" style="display: flex; flex-wrap: wrap; gap: 8px">
+<header class="top">
+<div class="wrap">
+<button type="button" class="brand" onClick="{{goHome}}" aria-label="Terrasonic, ir al inicio">
+<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="15" r="8"></circle><path d="M3.5 12.5c4 2.2 9.5 2.2 15 0M4 18c4-1.4 8.6-1.4 13.5 0"></path><path d="M19 3.5l3.5 3.5M16.5 6l3.5 3.5" stroke-linecap="round"></path><circle cx="22.5" cy="3.5" r="1.4" fill="currentColor" stroke="none"></circle></svg>
+Terrasonic
+</button>
+<nav class="nav" aria-label="Secciones">
 <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
-<button type="button" onClick="{{t.go}}" aria-current="{{t.cur}}" style="display: flex; align-items: center; gap: 8px; font-family: {{th.headFont}}; font-size: 1.02em; padding: 8px 14px; min-height: 44px; border: 3px solid {{t.border}}; background: {{t.bg}}; color: {{t.fg}}; box-shadow: 3px 3px 0 {{th.shadow}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{t.ic}}"></path></svg>{{t.label}}</button>
+<button type="button" onClick="{{t.go}}" aria-current="{{t.cur}}">{{t.label}}</button>
 </sc-for>
 </nav>
-<div role="group" aria-label="Accesibilidad" style="display: flex; flex-wrap: wrap; gap: 6px">
+<div class="right">
+<button type="button" class="btn sm quiet" onClick="{{tourOpen}}">Guía</button>
+<details class="menu">
+<summary aria-label="Opciones de accesibilidad">Accesibilidad</summary>
+<div class="pop" role="group" aria-label="Accesibilidad">
 <sc-for list="{{a11y}}" as="a" hint-placeholder-count="5">
-<button type="button" onClick="{{a.toggle}}" aria-pressed="{{a.on}}" aria-label="{{a.label}}" title="{{a.label}}" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 2px solid {{th.line}}; background: {{a.bg}}; color: {{a.fg}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{a.ic}}"></path></svg></button>
-</sc-for>
-</div>
-</header>
-
-<sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
-<section class="rise d2" aria-labelledby="hero" style="display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; justify-content: space-between">
-<div style="flex: 999 1 520px; min-width: 0">
-<p style="margin: 0 0 8px; font-family: {{th.pixelFont}}; font-size: 0.62em; color: {{th.hot}}; letter-spacing: 0.06em">NASA SPACE APPS 2026 · RETO 5 · EARTH INFORMATION JUKEBOX</p>
-<h1 id="hero" style="margin: 0; font-family: {{th.headFont}}; font-weight: 700; font-size: 2.9em; line-height: 1.05">Elige un disco. Escucha cómo se calienta el Pacífico.</h1>
-<p style="margin: 10px 0 0; color: {{th.muted}}; max-width: 70ch">Cada fotograma de anomalía de temperatura del mar de la NASA se escanea de oeste a este, columna por columna. Cada disco enciende a su protagonista; suma a los demás para armar la banda completa.</p>
-</div>
-</section>
-</sc-if>
-
-<sc-if value="{{isData}}" hint-placeholder-val="{{ false }}">
-<section class="rise d2" aria-labelledby="data-t" style="display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; justify-content: space-between">
-<div style="flex: 999 1 520px; min-width: 0">
-<p style="margin: 0 0 8px; font-family: {{th.pixelFont}}; font-size: 0.62em; color: {{th.hot}}; letter-spacing: 0.06em">TUS DATOS · TRADUCCIÓN EXPLORATORIA</p>
-<h1 id="data-t" style="margin: 0; font-family: {{th.headFont}}; font-weight: 700; font-size: 2.9em; line-height: 1.05">Convierte tu propio archivo en música.</h1>
-<p style="margin: 10px 0 0; color: {{th.muted}}; max-width: 70ch">Sube una imagen o una tabla CSV y la banda la escanea igual que a un fotograma de la NASA. Todo ocurre en tu navegador: el archivo no sale de tu equipo.</p>
-</div>
-</section>
-</sc-if>
-
-<sc-if value="{{showMain}}" hint-placeholder-val="{{ true }}">
-<section class="rise d3" aria-label="Jukebox" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
-
-<div style="flex: 1 1 300px; max-width: 360px; display: flex; flex-direction: column; gap: 12px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
-
-<sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<h2 style="margin: 0 0 2px; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">DISCOS</h2>
-<div role="group" aria-label="Origen de los discos" style="display: flex; gap: 6px">
-<sc-for list="{{sets}}" as="o" hint-placeholder-count="2">
-<button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" style="flex: 1 1 0; min-width: 0; min-height: 44px; padding: 4px 6px; text-align: center; line-height: 1.25; font-size: 0.78em; border: 3px solid {{o.border}}; background: {{o.bg}}; color: {{th.fg}}"><strong style="display: block; font-family: {{th.headFont}}">{{o.label}}</strong><span style="color: {{th.muted}}">{{o.sub}}</span></button>
-</sc-for>
-</div>
-<sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
-<button type="button" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="text-align: left; display: flex; gap: 12px; align-items: center; padding: 8px 10px; min-height: 52px; border: 3px solid {{d.border}}; background: {{d.bg}}; color: {{th.fg}}">
-<span aria-hidden="true" style="flex: 0 0 auto; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: {{d.color}}; color: #0A0D1A; border: 3px solid {{th.shadow}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{d.ic}}"></path></svg></span>
-<span style="display: flex; flex-direction: column; min-width: 0">
-<span style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.05em">{{d.title}}</span>
-<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; color: {{th.muted}}">{{d.period}} · protagoniza {{d.hero}}</span>
-</span>
-</button>
-</sc-for>
-</div>
-</sc-if>
-
-<sc-if value="{{isData}}" hint-placeholder-val="{{ false }}">
-<div style="display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">TU ARCHIVO</h2>
-<label class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}" style="position: relative; color: {{th.fg}}; min-height: 150px">
-<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}">
-<svg width="30" height="30" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.data}}"></path></svg>
-<strong style="font-family: {{th.headFont}}; font-size: 1.15em">Suelta un archivo o pulsa aquí</strong>
-<span style="font-size: 0.8em; color: {{th.muted}}">Imagen (PNG, JPG, WebP) o CSV con una columna numérica. Máx. 8 MB.</span>
-</label>
-<button type="button" onClick="{{useSample}}" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 44px; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}; text-align: left"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.cold}}"><path d="{{ic.drop}}"></path></svg>Probar con la lluvia de Chiclayo (NASA POWER)</button>
-<sc-if value="{{isImageUp}}" hint-placeholder-val="{{ false }}">
-<label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85em">Cómo leer los colores
-<select onChange="{{onUpMode}}" value="{{customMode}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
-<option value="palette">Mapa de anomalía (paleta NASA)</option><option value="free">Color libre (cualquier imagen)</option>
-</select></label>
-</sc-if>
-<sc-if value="{{isCsvUp}}" hint-placeholder-val="{{ false }}">
-<label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85em">Columna a escuchar
-<select onChange="{{onCol}}" value="{{colIdx}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
-<sc-for list="{{colOpts}}" as="o" hint-placeholder-count="2"><option value="{{o.v}}">{{o.l}}</option></sc-for>
-</select></label>
-</sc-if>
-<p role="status" aria-live="polite" style="margin: 0; font-size: 0.8em; color: {{th.muted}}">{{upMsg}}</p>
-</div>
-</sc-if>
-
-<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 3px dashed {{th.line}}">
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">MOTOR DE SONIDO</h2>
-<div role="group" aria-label="Motor de sonido" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
-<sc-for list="{{engines}}" as="e" hint-placeholder-count="4">
-<button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" aria-label="{{e.label}}" title="{{e.label}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; min-height: 52px; border: 3px solid {{e.border}}; background: {{e.bg}}; color: {{e.fg}}; opacity: {{e.op}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{e.ic}}"></path></svg><span style="font-size: 0.68em">{{e.short}}</span></button>
-</sc-for>
-</div>
-<p style="margin: 0; font-size: 0.76em; color: {{th.muted}}">{{engineDesc}}</p>
-</div>
-
-<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 3px dashed {{th.line}}">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">BANDA EN VIVO</h2>
-<div style="display: flex; gap: 6px">
-<button type="button" onClick="{{bandAll}}" aria-label="Banda completa" title="Banda completa" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.accent}}; background: transparent; color: {{th.accent}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.all}}"></path></svg></button>
-<button type="button" onClick="{{bandNone}}" aria-label="Apagar banda" title="Apagar banda" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.none}}"></path></svg></button>
-</div>
-</div>
-<p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
-<sc-for list="{{band}}" as="b" hint-placeholder-count="5">
-<button type="button" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" class="fx" style="display: flex; gap: 10px; align-items: center; min-height: 48px; padding: 6px 10px; border: 0; border-left: 4px solid {{b.btnBorder}}; background: {{b.rowBg}}; color: {{th.fg}}; text-align: left; opacity: {{b.rowOp}}">
-<span class="bst" aria-hidden="true" style="background-image: url({{b.bustUrl}}); --bi: {{b.bi}}"></span>
-<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px"><span style="font-family: {{th.headFont}}; font-weight: 700; color: {{b.color}}">{{b.name}}</span><span aria-hidden="true" style="display: block; height: 4px; background: {{th.line}}"><span style="display: block; height: 4px; width: {{b.lvlW}}; background: {{b.color}}; transition: width 0.12s"></span></span></span>
-<svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="flex: 0 0 auto; color: {{b.pwColor}}"><path d="{{ic.none}}"></path></svg>
-</button>
-</sc-for>
-</div>
-
-<p style="margin: auto 0 0; font-size: 0.72em; color: {{th.muted}}">Fotogramas: visualización «Sea Surface Temperature Anomaly» del Earth Information Center de la NASA (SVS 5176, variante Pacífico), recortados. Crédito: NASA's Scientific Visualization Studio. Discos «NASA GIBS»: NASA JPL GHRSST MUR 0,25° vía GIBS/Worldview.</p>
-</div>
-
-<sc-if value="{{showPlayer}}" hint-placeholder-val="{{ true }}">
-<div style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-end">
-<div>
-<div style="font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.muted}}">DISCO {{disc.n}} · {{disc.title}} · {{frameCount}}</div>
-<div style="font-family: {{th.headFont}}; font-weight: 700; font-size: 2.3em; line-height: 1">{{frameLabel}}</div>
-</div>
-<div style="display: flex; gap: 8px; flex-wrap: wrap">
-<button type="button" class="{{playPulse}}" onClick="{{togglePlay}}" style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.15em; padding: 10px 22px; min-height: 52px; border: 4px solid {{th.shadow}}; background: {{th.accent}}; color: #0A0D1A; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; gap: 10px; align-items: center"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
-<button type="button" onClick="{{describe}}" aria-label="Describir fotograma" title="Describir fotograma" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid {{th.line}}; background: transparent; color: {{th.fg}}"><svg width="22" height="22" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.describe}}"></path></svg></button>
-</div>
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
-<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
-<figure style="margin: 0; display: flex; flex-direction: column; gap: 6px">
-<div style="position: relative; border: 4px solid {{th.shadow}}; background: #2A3157; aspect-ratio: 560 / 320; overflow: hidden">
-<img decoding="async" class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}" style="display: block; width: 100%; height: 100%; object-fit: cover">
-<div aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; background: linear-gradient(90deg, rgba(255,212,71,0.04), rgba(255,212,71,0.38)); border-right: 3px solid {{th.accent}}; box-shadow: 0 0 16px {{th.accent}}; transition: left 110ms linear"></div>
-<sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
-<div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 3px dashed {{silboBox}}; transition: border-color .4s"></div>
-<div aria-hidden="true" style="position: absolute; left: 76%; top: 84%; font-family: {{th.pixelFont}}; font-size: 0.45em; color: #0A0D1A; background: {{silboBox}}; padding: 3px 5px; transition: background-color .4s">CASA DE SILBO</div>
-</sc-if>
-<div aria-hidden="true" class="crt" style="position: absolute; inset: 0"></div>
-<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<button type="button" class="arrow arrowL" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="Fotograma anterior" style="position: absolute; left: 8px; top: 50%; margin-top: -26px; z-index: 2; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border: 3px solid {{th.accent}}; background: rgba(10, 13, 26, 0.72); color: {{th.accent}}; padding: 0"><svg width="20" height="22" viewBox="0 0 8 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M6 0h2v1H6zM5 1h2v1H5zM4 2h2v1H4zM3 3h2v1H3zM2 4h2v1H2zM3 5h2v1H3zM4 6h2v1H4zM5 7h2v1H5zM6 8h2v1H6z"></path></svg></button>
-<button type="button" class="arrow arrowR" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="Fotograma siguiente" style="position: absolute; right: 8px; top: 50%; margin-top: -26px; z-index: 2; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border: 3px solid {{th.accent}}; background: rgba(10, 13, 26, 0.72); color: {{th.accent}}; padding: 0"><svg width="20" height="22" viewBox="0 0 8 9" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M0 0h2v1H0zM1 1h2v1H1zM2 2h2v1H2zM3 3h2v1H3zM4 4h2v1H4zM3 5h2v1H3zM2 6h2v1H2zM1 7h2v1H1zM0 8h2v1H0z"></path></svg></button>
-</sc-if>
-</div>
-<figcaption style="display: flex; justify-content: space-between; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></figcaption>
-</figure>
-<div style="display: flex; flex-direction: column; gap: 6px">
-<div style="font-family: {{th.pixelFont}}; font-size: 0.55em; color: {{th.muted}}">LO QUE OYE LA MÁQUINA · 28×16</div>
-<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(28, minmax(0, 1fr)); gap: 1px; background: {{th.shadow}}; border: 4px solid {{th.shadow}}">
-<sc-for list="{{cells}}" as="c" hint-placeholder-count="448">
-<div class="fxc" style="aspect-ratio: 1 / 1; background: {{c.bg}}; opacity: {{c.o}}"></div>
-</sc-for>
-</div>
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em">
-<span title="Cálido" aria-label="Cálido {{stats.warm}}" style="display: flex; gap: 6px; align-items: center; color: {{th.hot}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.sun}}"></path></svg>{{stats.warm}}</span>
-<span title="Frío" aria-label="Frío {{stats.cold}}" style="display: flex; gap: 6px; align-items: center; color: {{th.cold}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.snow}}"></path></svg>{{stats.cold}}</span>
-<span title="Extremo" aria-label="Extremo {{stats.hot}}" style="display: flex; gap: 6px; align-items: center; color: {{th.magenta}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.bolt}}"></path></svg>{{stats.hot}}</span>
-<span title="Costa del Perú" aria-label="Costa del Perú {{stats.coast}}" style="display: flex; gap: 6px; align-items: center; color: {{th.accent}}"><svg width="16" height="16" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><path d="{{ic.wave}}"></path></svg>{{stats.coast}}</span>
-</div>
-</div>
-
-<aside aria-label="Protagonista del disco" class="{{lead.pop}}" style="flex: 1 1 300px; max-width: 440px; display: flex; flex-direction: column; gap: 8px">
-<div style="font-family: {{th.pixelFont}}; font-size: 0.5em; color: {{th.muted}}">PROTAGONISTA DEL DISCO</div>
-<div role="img" aria-label="{{lead.spriteAria}}" style="position: relative; flex: 0 0 auto; border: 4px solid {{lead.color}}; background: {{th.bg}}; box-shadow: 4px 4px 0 {{th.shadow}}, inset 0 0 48px {{lead.glow}}; overflow: hidden; display: flex; align-items: stretch">
-<div class="cone" aria-hidden="true" style="background: linear-gradient(180deg, {{lead.coneC}}, transparent); opacity: {{lead.coneOp}}; width: 120%"></div>
-<div class="sp big {{lead.cls}}" style="color: {{lead.color}}">
-<div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
-<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}"></span>
-</div>
-</div>
-<div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline">
-<span style="font-family: {{th.headFont}}; font-weight: 700; font-size: 1.4em; color: {{lead.color}}">{{lead.name}}</span>
-<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.78em; color: {{th.muted}}">{{lead.state}}</span>
-</div>
-<div style="font-size: 0.9em; font-style: italic">«{{lead.quote}}»</div>
-<button type="button" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="padding: 8px 12px; min-height: 44px; border: 3px solid {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
-</aside>
-</div>
-
-<div style="display: flex; flex-direction: column; gap: 10px">
-<div style="display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: stretch">
-<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
-<span style="display: flex; align-items: center; gap: 6px; color: {{th.hot}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.eye}}"></path></svg><span class="sr">Lo que ves</span></span>
-<span style="font-size: 0.88em">{{seeText}}</span>
-</div>
-<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px">
-<span style="display: flex; align-items: center; gap: 6px; color: {{th.cold}}"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.ears}}"></path></svg><span class="sr">Lo que oyes</span></span>
-<span style="font-size: 0.88em">{{hearText}}</span>
-<div aria-label="Progresión de acordes" style="display: flex; flex-wrap: wrap; gap: 6px">
-<sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.82em; padding: 3px 10px; border: 2px solid {{c.border}}; background: {{c.bg}}; color: {{c.fg}}; transition: background-color .15s, color .15s">{{c.label}}</span></sc-for>
-</div>
-</div>
-</div>
-<details style="border-top: 2px dashed {{th.line}}; padding-top: 6px">
-<summary style="cursor: pointer; min-height: 32px; font-size: 0.85em; color: {{th.accent}}">Ver las cuatro decisiones</summary>
-<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; padding-top: 8px">
-<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4">
-<div style="display: flex; flex-direction: column; gap: 3px">
-<span style="font-family: {{th.pixelFont}}; font-size: 0.5em; color: {{th.accent}}">{{w.tag}}</span>
-<strong style="font-family: {{th.headFont}}">{{w.title}}</strong>
-<span style="font-size: 0.8em; color: {{th.muted}}">{{w.body}}</span>
-</div>
+<button type="button" class="opt" onClick="{{a.toggle}}" aria-pressed="{{a.on}}"><span>{{a.label}}</span><span class="sw" aria-hidden="true"></span></button>
 </sc-for>
 </div>
 </details>
 </div>
+</div>
+</header>
 
-<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<div role="group" aria-label="Fotogramas del disco" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
-<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
-<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}" style="padding: 0; border: 3px solid {{f.border}}; background: {{th.bg}}; color: {{th.fg}}; display: flex; flex-direction: column">
-<img decoding="async" class="pximg" src="{{f.url}}" alt="" style="display: block; width: 100%; aspect-ratio: 560 / 320; object-fit: cover">
-<span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.7em; padding: 2px 0">{{f.label}}</span>
+<main class="viewport">
+<div class="scr {{scrCls}}">
+<div class="in">
+
+<!-- JUKEBOX · 1 · Elegir disco -->
+<sc-if value="{{scr.jDisc}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">01</span><h2 class="h2">Elige un disco</h2><span class="muted" style="font-size: 0.85em">Cada disco son seis meses de mapas reales de la NASA.</span>
+<div class="seg" role="group" aria-label="Origen de los datos">
+<sc-for list="{{sets}}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{o.pick}}" aria-pressed="{{o.on}}" title="{{o.sub}}">{{o.label}} · {{o.years}}</button></sc-for>
+</div></div>
+<div id="tour-discs" class="discs" role="group" aria-label="Discos" style="{{hl.discs}}">
+<sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
+<button type="button" class="dcard" onClick="{{d.pick}}" aria-pressed="{{d.on}}" style="border-color: {{d.border}}">
+<img decoding="async" src="{{d.thumb}}" alt="">
+<span class="tx"><span class="t"><span class="dot" aria-hidden="true" style="background: {{d.color}}"></span>{{d.title}}</span>
+<span class="s">{{d.period}}<br>Protagoniza {{d.hero}}</span></span>
 </button>
 </sc-for>
 </div>
+<p class="muted" style="font-size: 0.74em; max-width: 90ch">Terrasonic convierte mapas de la temperatura del mar de la NASA en música. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</p>
 </sc-if>
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
-<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<!-- TUS DATOS · 1 · Subir -->
+<sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">01</span><h2 class="h2">Convierte tu archivo en música</h2><span class="muted" style="font-size: 0.85em">Todo ocurre en tu navegador: el archivo no sale de tu equipo.</span></div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; min-height: 0">
+<div class="panel">
+<label class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}">
+<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}">
+<strong style="font-family: var(--head); letter-spacing: 0.12em; text-transform: uppercase">Suelta un archivo o pulsa aquí</strong>
+<span class="muted" style="font-size: 0.82em">Imagen (PNG, JPG, WebP) o CSV con una columna numérica. Máx. 8 MB.</span>
+</label>
+<button type="button" class="btn quiet" onClick="{{useSample}}">Probar con la lluvia de Chiclayo</button>
+<sc-if value="{{isImageUp}}" hint-placeholder-val="{{ false }}">
+<label class="field">Cómo leer los colores
+<select onChange="{{onUpMode}}" value="{{customMode}}"><option value="palette">Mapa de anomalía (escala NASA)</option><option value="free">Color libre (cualquier imagen)</option></select></label>
 </sc-if>
-<label title="Velocidad del escaneo" style="display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 0.9em"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.clock}}"></path></svg><span class="sr">Velocidad del escaneo</span>
-<select onChange="{{onSpeed}}" value="{{speed}}" style="background: {{th.bg}}; color: {{th.fg}}; border: 3px solid {{th.line}}; padding: 6px; min-height: 44px">
-<option value="180">Lenta</option><option value="110">Normal</option><option value="70">Rápida</option>
-</select></label>
-</div>
-<p role="status" aria-live="polite" style="margin: auto 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; padding: 4px 0 4px 10px; border-left: 4px solid {{th.accent}}">{{caption}}</p>
-</div>
+<sc-if value="{{isCsvUp}}" hint-placeholder-val="{{ false }}">
+<label class="field">Columna a escuchar
+<select onChange="{{onCol}}" value="{{colIdx}}"><sc-for list="{{colOpts}}" as="o" hint-placeholder-count="2"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
 </sc-if>
-
-<sc-if value="{{dataEmpty}}" hint-placeholder-val="{{ false }}">
-<div style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}">
-<h2 style="margin: 0; font-family: {{th.headFont}}; font-size: 1.6em">Así se lee tu archivo</h2>
+<p role="status" aria-live="polite" class="muted" style="font-size: 0.84em">{{upMsg}}</p>
+</div>
+<div class="panel">
 <sc-for list="{{howData}}" as="h" hint-placeholder-count="3">
-<div class="fx" style="flex: 1 1 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 16px; background: {{th.bg}}; border: 3px solid {{h.color}}">
-<span style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{h.color}}">{{h.tag}}</span>
-<strong style="font-family: {{th.headFont}}; font-size: 1.3em">{{h.title}}</strong>
-<span style="color: {{th.muted}}">{{h.body}}</span>
-</div>
+<div style="display: flex; flex-direction: column; gap: 3px"><span class="tag">{{h.tag}}</span><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase">{{h.title}}</strong><span class="muted" style="font-size: 0.86em">{{h.body}}</span></div>
 </sc-for>
 </div>
+</div>
 </sc-if>
 
-</section>
+<!-- ESCUCHAR (Jukebox 3 y Tus datos 2) -->
+<sc-if value="{{scr.play}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{noFile}}" hint-placeholder-val="{{ false }}">
+<div class="panel" style="margin: auto; max-width: 520px; text-align: center; align-items: center"><h2 class="h2">Aún no hay archivo</h2><p class="muted">Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.</p><button type="button" class="btn primary" onClick="{{backToUpload}}">Subir un archivo</button></div>
+</sc-if>
+<sc-if value="{{showPlayer}}" hint-placeholder-val="{{ true }}">
+<div class="title"><span class="n">02</span><h2 class="h2">Mira y escucha</h2><span class="muted mono" style="font-size: 0.78em">{{disc.title}} · {{frameCount}}</span></div>
+<div class="s3">
+<div class="left">
+<div id="tour-frame" style="{{hl.frame}}; width: fit-content; max-width: 100%">
+<div class="mapbox">
+<img decoding="async" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
+<div aria-hidden="true" class="scanline" style="left: {{scanLeft}}"></div>
+<sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 1px dashed {{silboBox}}; transition: border-color .4s"></div>
+</sc-if>
+<span class="tagbox" aria-hidden="true">{{frameLabel}}</span>
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="arrow" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="Fotograma anterior" style="left: 10px"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5"></path></svg></button>
+<button type="button" class="arrow" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="Fotograma siguiente" style="right: 10px"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5"></path></svg></button>
+</sc-if>
+</div>
+</div>
+<div class="caps"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></div>
+<div class="controls">
+<div id="tour-play" style="{{hl.play}}; display: inline-flex">
+<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" style="min-width: 180px"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
+</div>
+<div class="when"><span class="tag">{{disc.title}}</span><b>{{frameLabel}}</b></div>
+<span class="grow"></span>
+<button type="button" class="btn sm quiet" onClick="{{describe}}">Describir en voz alta</button>
+</div>
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<div id="tour-strip" style="{{hl.strip}}; width: fit-content; max-width: 100%">
+<div class="timeline" role="group" aria-label="Línea de tiempo del disco">
+<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
+<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<p role="status" aria-live="polite" class="status mono">{{caption}}</p>
+</div>
 
-<section class="rise d3" aria-label="Escenario de la banda" style="position: relative; overflow: hidden; display: flex; flex-direction: column; border: 4px solid {{th.line}}; box-shadow: 6px 6px 0 {{th.shadow}}; background: #070914">
+<aside aria-label="Protagonista del disco" class="lead {{lead.pop}}" style="border-color: {{lead.color}}">
+<div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
+<div class="cone" aria-hidden="true" style="background: linear-gradient(180deg, {{lead.coneC}}, transparent); opacity: {{lead.coneOp}}; width: 120%"></div>
+<div class="sp {{lead.cls}}" style="color: {{lead.color}}; max-width: none; aspect-ratio: auto; width: 100%; display: flex; justify-content: center">
+<div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
+<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 12px; right: 14px"></span>
+</div>
+</div>
+<div class="meta">
+<span class="tag">Protagonista del disco</span>
+<div class="name" style="color: {{lead.color}}"><span>{{lead.name}}</span><small>{{lead.state}}</small></div>
+<q>{{lead.quote}}</q>
+<button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
+</div>
+</aside>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- JUKEBOX · 4 · Banda y escenario -->
+<sc-if value="{{scr.jBand}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">03</span><h2 class="h2">La banda en escena</h2><span class="muted" style="font-size: 0.85em">Toca a un músico para encenderlo o apagarlo.</span></div>
+<div class="s4">
+<section class="stagebox shk {{shakeCls}}" aria-label="Escenario de la banda">
 <p role="status" aria-live="polite" class="sr">En el escenario: {{stageNames}}</p>
-<div class="shk {{shakeCls}}" style="position: relative; flex: 1 1 auto; display: flex; flex-direction: column; min-height: 360px">
-<div aria-hidden="true" class="stage">
-<img decoding="async" class="pximg {{frameAnim}}" src="{{frameUrl}}" alt="" style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; object-fit: cover; opacity: 0.3; filter: saturate(1.4)">
-<div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; background: linear-gradient(180deg, rgba(7,9,20,0.1), #070914)"></div>
-<div style="position: absolute; left: 7%; top: 26px; width: 86%; height: 62%; overflow: hidden"><div style="position: absolute; top: 0; bottom: 0; left: {{scanLeft}}; width: 3.6%; border-right: 3px solid {{th.accent}}; box-shadow: 0 0 14px {{th.accent}}; background: linear-gradient(90deg, transparent, rgba(255,212,71,0.2)); transition: left 110ms linear"></div></div>
-<div class="crt" style="position: absolute; inset: 0"></div>
-<div class="curtL"></div><div class="curtR"></div><div class="valance"></div><div class="floor"></div>
+<div class="stagebg" aria-hidden="true">
+<img decoding="async" class="{{frameAnim}}" src="{{frameUrl}}" alt="">
+<div class="fade"></div><div class="horizon"></div>
+<div style="position: absolute; left: 0; top: 0; width: 100%; height: 70%; overflow: hidden"><div class="scanline" style="left: {{scanLeft}}; height: 100%"></div></div>
 </div>
 <div class="flash {{flashCls}}" aria-hidden="true"></div>
-<div role="group" aria-label="Músicos en escena" style="position: relative; z-index: 2; flex: 1 1 auto; display: flex; justify-content: space-evenly; align-items: flex-end; gap: 6px; padding: 60px 9% 30px">
+<div role="group" aria-label="Músicos en escena" style="position: relative; z-index: 2; flex: 1 1 auto; display: flex; justify-content: space-evenly; align-items: flex-end; gap: 6px; padding: 40px 6% 22px">
 <sc-for list="{{stage}}" as="m" hint-placeholder-count="5">
 <div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}">
 <div class="cone" style="background: linear-gradient(180deg, {{m.coneC}}, transparent); opacity: {{m.coneOp}}"></div>
@@ -468,150 +503,187 @@ a{color:#FFD447}a:hover{color:#FFE88A}
 <div class="spr" style="--img: url({{m.sprUrl}}); --n: {{m.sprN}}; --x0: {{m.x0}}; --x1: {{m.x1}}; --f: {{m.sprF}}; --dur: {{m.sprDur}}; --s: 96px"></div>
 <span class="pt" style="background-image: url({{m.partUrl}}); --pf: {{m.pf}}"></span>
 </div>
-<div style="margin-top: 8px; font-family: {{th.pixelFont}}; font-size: 0.55em; color: {{m.color}}; text-align: center">{{m.name}}</div>
-<div style="width: 70%; height: 4px; margin-top: 4px; background: {{th.line}}"><div style="height: 4px; width: {{m.lvPct}}; background: {{m.color}}; transition: width 0.12s"></div></div>
+<div class="tag" style="margin-top: 8px; color: {{m.color}}">{{m.name}}</div>
 </div>
 </sc-for>
 </div>
 <sc-if value="{{stageEmpty}}" hint-placeholder-val="{{ false }}">
-<div style="position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: none"><p style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; line-height: 1.9; color: {{th.muted}}; background: rgba(5,7,15,0.75); padding: 12px 16px; border: 3px dashed {{th.line}}">ESCENARIO VACÍO<br>Enciende a un personaje en «Banda en vivo»</p></div>
+<div style="position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: none"><p class="tag" style="line-height: 2; background: rgba(0,0,0,.7); padding: 12px 18px; border: 1px solid var(--line)">Escenario vacío<br>Enciende a un músico abajo</p></div>
 </sc-if>
-<div style="position: relative; z-index: 3; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; padding: 8px 12px; background: rgba(5,7,15,0.85); border-top: 3px solid {{th.line}}; font-family: 'IBM Plex Mono', monospace; font-size: 0.78em">
-<span style="color: {{th.muted}}">EN ESCENA · {{stageNames}}</span>
-<span aria-hidden="true" style="display: flex; gap: 5px; align-items: center"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="width: 10px; height: 10px; background: {{bd.c}}; transition: background-color 0.08s"></span></sc-for></span>
-<span style="color: {{th.accent}}">{{chordHud}}</span>
-</div>
+<div class="stagebar">
+<span class="muted">En escena · {{stageNames}}</span>
+<span aria-hidden="true" style="display: flex; gap: 5px; align-items: center"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{bd.c}}; transition: background-color 0.08s"></span></sc-for></span>
+<span>{{chordHud}}</span>
 </div>
 </section>
-</sc-if>
-
-<sc-if value="{{isBand}}" hint-placeholder-val="{{ false }}">
-<section class="rise d2" aria-labelledby="band-t" style="display: flex; flex-direction: column; gap: 16px">
-<div style="max-width: 72ch">
-<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">PERSONAJES · CADA UNO ES UN CONJUNTO DE SONIDOS</p>
-<h1 id="band-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">La banda del Pacífico</h1>
-<p style="margin: 8px 0 0; color: {{th.muted}}">Cinco músicos con nombres de la cosmovisión andina y moche. Cada uno escucha un rasgo visual del fotograma y lo toca con su instrumento, y cada uno protagoniza un disco. Tendrán dos versiones: un modelo anime grande y un sprite de 32×32 (ver el plan, módulo M4). Aquí hay marcadores de posición.</p>
-</div>
-<div class="grid3">
+<div id="tour-band" style="{{hl.band}}">
+<p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
+<div class="band" role="group" aria-label="Banda">
 <sc-for list="{{band}}" as="b" hint-placeholder-count="5">
-<article class="fx rise" style="animation-delay: {{b.delay}}; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: {{th.panel}}; border: 4px solid {{b.color}}; box-shadow: 6px 6px 0 {{th.shadow}}">
-<div style="display: flex; gap: 14px; align-items: flex-end">
-<div style="flex: 0 0 auto; display: flex; gap: 10px; align-items: flex-end">
-<div class="face" role="img" aria-label="Retrato de {{b.name}}, del pecho a la cabeza" style="width: 128px; border: 4px solid {{b.color}}; background: {{th.bg}}"><img decoding="async" loading="lazy" class="fstrip" src="{{b.faceUrl}}" alt="" style="--n: {{b.faceN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s"></div>
-<div class="spr" role="img" aria-label="Sprite de 32 por 32 de {{b.name}}" style="--img: url({{b.sprUrl}}); --n: {{b.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 64px; border: 3px solid {{b.color}}; background-color: {{th.bg}}; box-sizing: content-box"></div>
-</div>
-<div>
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.95em; color: {{b.color}}">{{b.name}}</h2>
-<div style="font-size: 0.85em; color: {{th.muted}}">{{b.origin}}</div>
-</div>
-</div>
-<dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 0.9em">
-<dt style="color: {{th.muted}}">Protagoniza</dt><dd style="margin: 0">{{b.disc}}</dd>
-<dt style="color: {{th.muted}}">Escucha</dt><dd style="margin: 0">{{b.listens}}</dd>
-<dt style="color: {{th.muted}}">Toca</dt><dd style="margin: 0">{{b.plays}}</dd>
-<dt style="color: {{th.muted}}">Carácter</dt><dd style="margin: 0">{{b.persona}}</dd>
-<dt style="color: {{th.muted}}">Instrumento</dt><dd style="margin: 0">{{b.ins}}</dd>
-<dt style="color: {{th.muted}}">Animaciones</dt><dd style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em">{{b.clips}}</dd>
-</dl>
-<p style="margin: 0; font-style: italic; border-top: 2px dashed {{th.line}}; padding-top: 8px">«{{b.quote}}»</p>
-<p style="margin: auto 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}">Brief del sprite: {{b.brief}}</p>
-</article>
-</sc-for>
-<article class="fx rise" style="animation-delay: 0.4s; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 16px; background: {{th.panel}}; border: 4px solid {{th.accent}}; box-shadow: 6px 6px 0 {{th.shadow}}">
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.95em; color: {{th.accent}}">BANDA COMPLETA</h2>
-<p style="margin: 0">Cada disco enciende solo a su protagonista. Aquí puedes juntar a los cinco y escucharlos tocar a la vez.</p>
-<button type="button" onClick="{{bandGo}}" style="padding: 10px 16px; min-height: 48px; border: 4px solid {{th.shadow}}; background: {{th.accent}}; color: #0A0D1A; font-family: {{th.headFont}}; font-weight: 700; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; gap: 10px; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{ic.all}}"></path></svg>Armar la banda y escuchar</button>
-</article>
-</div>
-</section>
-</sc-if>
-
-<sc-if value="{{isHow}}" hint-placeholder-val="{{ false }}">
-<section class="rise d2" aria-labelledby="how-t" style="display: flex; flex-direction: column; gap: 18px">
-<div style="max-width: 72ch">
-<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">MÉTODO · DE LA IMAGEN AL SONIDO</p>
-<h1 id="how-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">Cómo suena un fotograma</h1>
-<p style="margin: 8px 0 0; color: {{th.muted}}">Todo ocurre en el navegador y en tiempo real, con Canvas y Web Audio. No hay modelos ni servidores: son reglas artísticas explícitas, así que cada sonido se puede explicar.</p>
-</div>
-<ol class="fillrow" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px">
-<sc-for list="{{steps}}" as="s" hint-placeholder-count="7">
-<li class="fx rise" style="animation-delay: {{s.delay}}; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}; display: flex; flex-direction: column; gap: 6px">
-<span style="font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">{{s.n}}</span>
-<strong style="font-family: {{th.headFont}}; font-size: 1.15em">{{s.title}}</strong>
-<span style="font-size: 0.88em; color: {{th.muted}}">{{s.body}}</span>
-</li>
-</sc-for>
-</ol>
-<div style="padding: 16px; background: {{th.panel}}; border: 4px solid {{th.line}}">
-<h2 style="margin: 0 0 10px; font-family: {{th.headFont}}; font-size: 1.3em">Paleta de la NASA → nivel → músico</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px">
-<sc-for list="{{legend}}" as="l" hint-placeholder-count="10">
-<div style="display: flex; gap: 8px; align-items: center; font-size: 0.85em"><span aria-hidden="true" style="width: 22px; height: 22px; flex: 0 0 auto; background: {{l.c}}; border: 2px solid {{th.shadow}}"></span><span><strong>{{l.v}}</strong> · {{l.who}}</span></div>
-</sc-for>
-</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-family: {{th.headFont}}; font-size: 1.5em">Lo que pide el reto y dónde verlo</h2>
-<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px">
-<sc-for list="{{objectives}}" as="o" hint-placeholder-count="8">
-<button type="button" onClick="{{o.go}}" aria-label="{{o.goLabel}}: {{o.title}}" class="fx rise" style="text-align: left; display: flex; flex-direction: column; gap: 6px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}; color: {{th.fg}}">
-<span style="display: flex; justify-content: space-between; align-items: center"><span style="font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.accent}}">{{o.tag}}</span><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" style="color: {{th.accent}}"><path d="{{ic.arrow}}"></path></svg></span>
-<strong style="font-family: {{th.headFont}}; font-size: 1.1em">{{o.title}}</strong>
-<span style="font-size: 0.86em; color: {{th.muted}}">{{o.where}}</span>
+<button type="button" class="bchip" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" style="border-color: {{b.btnBorder}}">
+<span class="bst" aria-hidden="true" style="background-image: url({{b.bustUrl}}); --bi: {{b.bi}}"></span>
+<span style="flex: 1 1 auto; min-width: 0"><span class="nm" style="color: {{b.color}}">{{b.name}}</span><span class="state">{{b.muteLabel}}</span><span class="bar" aria-hidden="true"><i style="width: {{b.lvlW}}; background: {{b.color}}"></i></span></span>
 </button>
 </sc-for>
 </div>
+<div class="row" style="padding-top: 10px"><button type="button" class="btn sm quiet" onClick="{{bandAll}}">Encender a todos</button><button type="button" class="btn sm quiet" onClick="{{bandNone}}">Apagar a todos</button></div>
 </div>
-</section>
+</div>
 </sc-if>
 
-<sc-if value="{{isTech}}" hint-placeholder-val="{{ false }}">
-<section aria-labelledby="tech-t" class="rise d2" style="display: flex; flex-direction: column; gap: 18px">
-<div style="max-width: 74ch">
-<p style="margin: 0 0 6px; font-family: {{th.pixelFont}}; font-size: 0.6em; color: {{th.hot}}">STACK · QUÉ HAY DETRÁS</p>
-<h1 id="tech-t" style="margin: 0; font-family: {{th.headFont}}; font-size: 2.6em; line-height: 1.05">Tecnología del prototipo</h1>
-<p style="margin: 8px 0 0; color: {{th.muted}}">Esto es lo que se usó para construir este boceto y lo que se usará en la versión final. Lo marcado como <strong style="color: {{th.fg}}">Planeado</strong> todavía no está hecho.</p>
+<!-- JUKEBOX · 5 · Más opciones -->
+<sc-if value="{{scr.jMore}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">04</span><h2 class="h2">Más opciones</h2><span class="muted" style="font-size: 0.85em">No hace falta tocar nada de esto para disfrutar la música.</span></div>
+<div id="tour-more" class="s5" style="{{hl.more}}">
+<div class="col">
+<span class="tag">Qué ves y qué oyes</span>
+<p style="font-size: 0.88em">{{seeText}}</p>
+<p style="font-size: 0.88em">{{hearText}}</p>
+<div class="chips" aria-label="Progresión de acordes"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
+<p class="muted" style="font-size: 0.8em">{{moodText}}</p>
 </div>
-<div role="group" aria-label="Filtrar tecnologías" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
-<sc-for list="{{techFilters}}" as="f" hint-placeholder-count="3">
-<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; min-height: 44px; border: 3px solid {{f.border}}; background: {{f.bg}}; color: {{f.fg}}; font-family: {{th.headFont}}"><svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="{{f.ic}}"></path></svg>{{f.label}}</button>
+<div class="col">
+<span class="tag">Sonido</span>
+<div class="engines" role="group" aria-label="Motor de sonido">
+<sc-for list="{{engines}}" as="e" hint-placeholder-count="4"><button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" title="{{e.label}}">{{e.short}}</button></sc-for>
+</div>
+<p class="muted" style="font-size: 0.8em">{{engineDesc}}</p>
+<label class="field">Velocidad del escaneo
+<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">Lenta</option><option value="110">Normal</option><option value="70">Rápida</option></select></label>
+</div>
+<div class="col">
+<span class="tag">Lo que oye la máquina · 28×16</span>
+<div aria-hidden="true" class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="aspect-ratio: 1 / 1; background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
+<p class="mono muted" style="font-size: 0.74em">Cálido {{stats.warm}} · Frío {{stats.cold}} · Extremo {{stats.hot}} · Costa del Perú {{stats.coast}}</p>
+</div>
+<div class="col">
+<span class="tag">Las cuatro decisiones</span>
+<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.92em">{{w.title}}</strong><span class="muted" style="font-size: 0.78em">{{w.body}}</span></div></sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- LA BANDA · un personaje por pantalla -->
+<sc-if value="{{scr.bChar}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">{{bandCur.num}}</span><h2 class="h2">La banda del Pacífico</h2><span class="muted" style="font-size: 0.85em">Cinco músicos con nombres de la cosmovisión andina y moche.</span></div>
+<div class="bchar">
+<div class="portrait">
+<div class="face" role="img" aria-label="Retrato de {{bandCur.name}}, del pecho a la cabeza" style="width: 100%; border: 1px solid {{bandCur.color}}; max-height: 48vh"><img decoding="async" class="fstrip" src="{{bandCur.faceUrl}}" alt="" style="--n: {{bandCur.faceN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s"></div>
+<div class="spr" role="img" aria-label="Sprite de 32 por 32 de {{bandCur.name}}" style="--img: url({{bandCur.sprUrl}}); --n: {{bandCur.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 64px"></div>
+</div>
+<div class="info">
+<div><h1 class="h1" style="color: {{bandCur.color}}; font-size: clamp(2em, 4.2vw, 3.4em)">{{bandCur.name}}</h1><div class="muted">{{bandCur.origin}}</div></div>
+<dl>
+<dt class="muted">Protagoniza</dt><dd>{{bandCur.disc}}</dd>
+<dt class="muted">Escucha</dt><dd>{{bandCur.listens}}</dd>
+<dt class="muted">Toca</dt><dd>{{bandCur.plays}}</dd>
+<dt class="muted">Carácter</dt><dd>{{bandCur.persona}}</dd>
+<dt class="muted">Instrumento</dt><dd>{{bandCur.ins}}</dd>
+</dl>
+<p class="muted" style="font-style: italic; border-top: 1px solid var(--line); padding-top: 12px; max-width: 60ch">«{{bandCur.quote}}»</p>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{scr.bFull}}" hint-placeholder-val="{{ false }}">
+<div class="fullband">
+<p class="eyebrow">Banda completa</p>
+<h1 class="h1">Los cinco,<br>a la vez</h1>
+<p class="lede">Cada disco enciende solo a su protagonista. Aquí puedes juntar a los cinco y escucharlos tocar a la vez.</p>
+<div class="chars" aria-hidden="true"><sc-for list="{{band}}" as="b" hint-placeholder-count="5"><div class="spr" style="--img: url({{b.sprUrl}}); --n: {{b.sprN}}; --x0: 0; --x1: -2; --f: 2; --dur: 1.2s; --s: 72px"></div></sc-for></div>
+<button type="button" class="btn primary" onClick="{{bandGo}}">Armar la banda y escuchar</button>
+</div>
+</sc-if>
+
+<!-- MÉTODO -->
+<sc-if value="{{scr.hA}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">01</span><h2 class="h2">Cómo suena un mapa</h2><span class="muted" style="font-size: 0.85em">Todo ocurre en el navegador y en tiempo real, con Canvas y Web Audio. Sin modelos ni servidores.</span></div>
+<ol class="cards4" style="list-style: none; padding: 0">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="7">
+<li class="cardx compact"><span class="tag">{{s.n}}</span><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase">{{s.title}}</strong><span class="muted" style="font-size: 0.82em">{{s.body}}</span></li>
 </sc-for>
-<span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.8em; color: {{th.muted}}">{{techSummary}}</span>
+</ol>
+</sc-if>
+<sc-if value="{{scr.hB}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">02</span><h2 class="h2">Escala de color de la NASA → nivel → músico</h2></div>
+<div class="legendgrid">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="10"><div style="display: flex; gap: 12px; align-items: center"><span aria-hidden="true" style="width: 28px; height: 28px; flex: 0 0 auto; background: {{l.c}}"></span><span><strong>{{l.v}}</strong><br><span class="muted" style="font-size: 0.85em">{{l.who}}</span></span></div></sc-for>
 </div>
-<sc-for list="{{techGroups}}" as="g" hint-placeholder-count="3">
-<div style="display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-family: {{th.pixelFont}}; font-size: 0.7em; color: {{th.accent}}">{{g.title}}</h2>
-<div class="fillrow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px">
-<sc-for list="{{g.items}}" as="t" hint-placeholder-count="3">
-<article class="fx rise" style="animation-delay: {{t.delay}}; display: flex; flex-direction: column; gap: 8px; padding: 14px; background: {{th.panel}}; border: 4px solid {{th.line}}; box-shadow: 4px 4px 0 {{th.shadow}}">
-<div style="display: flex; justify-content: space-between; gap: 8px; align-items: flex-start">
-<strong style="font-family: {{th.headFont}}; font-size: 1.1em">{{t.name}}</strong>
-<span style="flex: 0 0 auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.68em; padding: 3px 8px; background: {{t.chipBg}}; color: #0A0D1A; font-weight: 500">{{t.chip}}</span>
+</sc-if>
+<sc-if value="{{scr.hC}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">03</span><h2 class="h2">Lo que pide el reto y dónde verlo</h2></div>
+<div class="cards4">
+<sc-for list="{{objectives}}" as="o" hint-placeholder-count="8">
+<button type="button" onClick="{{o.go}}" aria-label="{{o.goLabel}}: {{o.title}}" class="cardx compact"><span class="tag">{{o.tag}} →</span><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.98em">{{o.title}}</strong><span class="muted" style="font-size: 0.8em">{{o.where}}</span></button>
+</sc-for>
 </div>
-<span style="font-size: 0.9em; color: {{th.muted}}">{{t.use}}</span>
-<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 0.8em; padding: 6px 8px; border: 2px dashed {{th.line}}">{{t.note}}</span></sc-if>
-<span style="margin-top: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.72em; color: {{th.muted}}">Módulo {{t.mod}}</span>
+</sc-if>
+
+<!-- TECNOLOGÍA -->
+<sc-if value="{{scr.tPage}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">{{techCur.num}}</span><h2 class="h2">{{techCur.title}}</h2>
+<div class="seg" role="group" aria-label="Filtrar tecnologías"><sc-for list="{{techFilters}}" as="f" hint-placeholder-count="3"><button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}">{{f.label}}</button></sc-for></div>
+<span class="mono muted" style="font-size: 0.74em">{{techSummary}}</span></div>
+<div class="cards3">
+<sc-for list="{{techCur.items}}" as="t" hint-placeholder-count="6">
+<article class="cardx compact">
+<div style="display: flex; justify-content: space-between; gap: 8px; align-items: flex-start"><strong style="font-family: var(--head); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.98em">{{t.name}}</strong><span class="mono" style="flex: 0 0 auto; font-size: 0.62em; padding: 3px 8px; background: {{t.chipBg}}; color: #0A0D1A; font-weight: 500">{{t.chip}}</span></div>
+<span class="muted" style="font-size: 0.84em">{{t.use}}</span>
+<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 0.76em; padding: 5px 8px; border: 1px dashed var(--line)">{{t.note}}</span></sc-if>
+<span class="mono muted" style="margin-top: auto; font-size: 0.7em">Módulo {{t.mod}}</span>
 </article>
 </sc-for>
 </div>
+</sc-if>
+<sc-if value="{{scr.tCred}}" hint-placeholder-val="{{ false }}">
+<div class="title"><span class="n">{{techCur.num}}</span><h2 class="h2">Datos, créditos y uso de IA</h2></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-content: start; min-height: 0">
+<div class="panel"><span class="tag">Datos</span><p class="muted" style="font-size: 0.86em">Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio.</p><p class="muted" style="font-size: 0.86em">Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview.</p></div>
+<div class="panel"><span class="tag">Declaración de uso de IA</span><p class="muted" style="font-size: 0.86em">Este prototipo se hizo con Claude Design y Claude Code, y la charla se transcribió con Whisper. Los sprites y modelos de los personajes se generaron con ChatGPT Codex e imágenes de ChatGPT, con revisión manual. Todo código generado se revisa y se prueba antes de integrarlo, y toda imagen generada lleva una etiqueta visible. Cada uso queda anotado en el repositorio.</p></div>
+<div class="panel" style="border-color: var(--fg)"><span class="tag">Aviso</span><p style="font-size: 0.9em">Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</p></div>
 </div>
-</sc-for>
-<div style="padding: 14px 16px; background: {{th.panel}}; border: 4px solid {{th.accent}}">
-<h2 style="margin: 0 0 6px; font-family: {{th.headFont}}; font-size: 1.2em">Declaración de uso de IA</h2>
-<p style="margin: 0; font-size: 0.92em">Este boceto se hizo con Claude Design y Claude Code, y la charla se transcribió con Whisper. ChatGPT Codex (funciones de código) y ChatGPT (imágenes) se usarán en la versión final. Todo código generado se revisa y se prueba antes de integrarlo, y toda imagen generada se retoca a mano y lleva una etiqueta visible. Cada uso queda anotado en el repositorio.</p>
-</div>
-</section>
 </sc-if>
 
-<footer style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; border-top: 4px solid {{th.line}}; padding-top: 14px; font-size: 0.8em; color: {{th.muted}}">
-<div style="flex: 1 1 380px; max-width: 72ch"><strong style="color: {{th.fg}}">Datos:</strong> fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA's Scientific Visualization Studio. Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview. Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.</div>
-<div style="flex: 1 1 300px; max-width: 60ch"><strong style="color: {{th.fg}}">Uso de IA, declarado:</strong> boceto de interfaz y código generados con Claude (Anthropic) y revisados por el equipo. Los avatares finales (modelo anime y sprite 32×32) se generarán con ChatGPT y se retocarán a mano, y ChatGPT Codex programará algunas funciones de la versión final. Detalle en la página Tecnología.</div>
+</div>
+</div>
+</main>
+
+<footer class="bar" style="{{hl.nav}}">
+<div class="in2">
+<div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" aria-label="Pantalla anterior">← Atrás</button></div>
+<div class="mid">
+<div class="dots" role="group" aria-label="Pantallas de esta sección"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="5"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-label="{{d.aria}}"><i></i></button></sc-for></div>
+<span class="lbl">{{nav.n}} / {{nav.total}} · {{nav.label}}</span>
+</div>
+<div class="side r">
+<sc-if value="{{nav.showMini}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm" onClick="{{togglePlay}}">{{playLabel}}</button></sc-if>
+<button type="button" class="btn primary sm" onClick="{{nav.next}}" disabled="{{nav.nextOff}}" aria-label="Pantalla siguiente">{{nav.nextLabel}} →</button>
+</div>
+</div>
 </footer>
 
+<sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
+<div class="wipe" aria-hidden="true"><div class="wp"></div><div class="wp wp2"></div><div class="wl"><small>Sección {{transNum}}</small>{{transName}}</div></div>
+</sc-if>
+
+<sc-if value="{{tour.on}}" hint-placeholder-val="{{ false }}">
+<div class="tourdim" aria-hidden="true"></div>
+<div class="tour {{tour.pos}}" role="dialog" aria-modal="false" aria-labelledby="tour-t" aria-describedby="tour-b">
+<span class="tn">Guía · paso {{tour.n}} de {{tour.total}}</span>
+<h3 id="tour-t">{{tour.title}}</h3>
+<p id="tour-b" aria-live="polite">{{tour.body}}</p>
+<div class="tdots" aria-hidden="true"><sc-for list="{{tour.dots}}" as="d" hint-placeholder-count="8"><i class="{{d.cls}}"></i></sc-for></div>
+<div class="tact">
+<sc-if value="{{tour.showBack}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn sm quiet" onClick="{{tour.back}}">Atrás</button></sc-if>
+<sc-if value="{{tour.hasExtra}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm" onClick="{{tour.extra}}">{{tour.extraLabel}}</button></sc-if>
+<button type="button" class="btn sm primary" onClick="{{tour.next}}">{{tour.nextLabel}}</button>
+<button type="button" class="skip" onClick="{{tour.skip}}">Saltar guía</button>
 </div>
+</div>
+</sc-if>
+
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 var B = '/_blob/';
 var DISC_SETS = {
   eic: [
@@ -631,6 +703,16 @@ var DISC_SETS = {
 };
 var DISCS = DISC_SETS.eic.slice();
 DISCS.push({ id: 'custom', n: '+', title: 'Tus datos', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] });
+var TOUR = [
+  { t: 'Bienvenido a Terrasonic', b: 'En un minuto aprenderás a escuchar cómo se calienta el océano Pacífico. Puedes salir cuando quieras y volver a abrir esta guía con el botón «Guía».', id: '', sub: 0, pos: 'bottom' },
+  { t: 'Elige un disco', b: 'Cada disco es un periodo de seis meses con mapas reales de la NASA. Toca uno para cargarlo. Arriba a la derecha puedes cambiar entre los datos del EIC y los de NASA GIBS.', id: 'tour-discs', sub: 0, pos: 'bottom' },
+  { t: 'Mira el mapa', b: 'Naranja y rojo: el mar está más caliente de lo normal. Azul: más frío. Una línea blanca recorre el mapa de oeste a este y cada columna se convierte en sonido.', id: 'tour-frame', sub: 1, pos: 'bottom' },
+  { t: 'Pulsa reproducir', b: 'La banda toca lo que ve en el mapa. Cuando el océano se calienta mucho, la música se vuelve más grave y nostálgica, en tonos menores.', id: 'tour-play', sub: 1, pos: 'top', extra: 'Reproducir por mí' },
+  { t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.', id: 'tour-strip', sub: 1, pos: 'top' },
+  { t: 'Conoce a la banda', b: 'Cinco músicos, cada uno atento a un rasgo distinto del mapa. Toca a uno para encenderlo o apagarlo y escucha la diferencia.', id: 'tour-band', sub: 2, pos: 'top' },
+  { t: 'Más opciones, cuando quieras', b: 'La velocidad, el motor de sonido y lo que oye la máquina están aquí: no hace falta tocarlos para empezar.', id: 'tour-more', sub: 3, pos: 'bottom' },
+  { t: 'Muévete con los botones', b: 'Usa Atrás y Siguiente, o los puntos, para cambiar de pantalla. Arriba están las secciones: La banda, Tus datos para subir tu propio archivo, Método y Tecnología.', id: 'tour-nav', sub: 3, pos: 'top' }
+];
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
 var CARA = {"silbo": {"strip": "sprites/silbo/cara.webp", "off": "sprites/silbo/cara-apagado.webp", "n": 6}, "inti": {"strip": "sprites/inti/cara.webp", "off": "sprites/inti/cara-apagado.webp", "n": 6}, "mama": {"strip": "sprites/mama/cara.webp", "off": "sprites/mama/cara-apagado.webp", "n": 6}, "yaku": {"strip": "sprites/yaku/cara.webp", "off": "sprites/yaku/cara-apagado.webp", "n": 6}, "illapa": {"strip": "sprites/illapa/cara.webp", "off": "sprites/illapa/cara-apagado.webp", "n": 5}};
 var ART = {"silbo": {"comp": "sprites/silbo/compuesto.png", "part": "sprites/silbo/particula.png", "bust": "sprites/silbo/busto.png", "n": 37, "ps": 2, "pn": 4, "pfi": 1}, "inti": {"comp": "sprites/inti/compuesto.png", "part": "sprites/inti/particula.png", "bust": "sprites/inti/busto.png", "n": 28, "ps": 2, "pn": 4, "pfi": 9}, "mama": {"comp": "sprites/mama/compuesto.png", "part": "sprites/mama/particula.png", "bust": "sprites/mama/busto.png", "n": 30, "ps": 2, "pn": 4, "pfi": 13}, "yaku": {"comp": "sprites/yaku/compuesto.png", "part": "sprites/yaku/particula.png", "bust": "sprites/yaku/busto.png", "n": 43, "ps": 2, "pn": 4, "pfi": 5}, "illapa": {"comp": "sprites/illapa/compuesto.png", "part": "sprites/illapa/particula.png", "bust": "sprites/illapa/busto.png", "n": 25, "ps": 2, "pn": 3, "pfi": 9}};
@@ -738,11 +820,12 @@ var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','
 var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11] };
 var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7' };
 var MUSIC = {
-  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], story: 'la calma y la profundidad del mar frío' },
-  inti:   { name: 'Inti', key: 'Mi', mode: 'mayor', root: 52, scale: [0, 2, 4, 5, 7, 9, 11], bpm: 108, prog: [[0, 'maj'], [7, 'maj'], [9, 'min'], [5, 'maj']], story: 'el calor y la energía de un océano rojo' },
-  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], story: 'el aire andino de un huayno melancólico' },
-  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], story: 'el juego de las gotas de lluvia' },
-  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 84, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], story: 'la tensión de la tormenta' }
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
+          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
 };
 
 function hsv(r, g, b) {
@@ -838,7 +921,7 @@ function makeLogo() {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { tab: 'juke', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+    this.state = { tab: 'juke', sub: 0, tour: 0, set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
       trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
       mute: { silbo: true, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: 'Elige un disco y pulsa Reproducir. La banda empieza apagada: cada disco enciende a su protagonista.' };
@@ -846,7 +929,9 @@ class Component extends DCLogic {
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
     this.tbars = []; for (var i = 0; i < 14; i++) this.tbars.push({ delay: (i * 0.02).toFixed(2) + 's' });
   }
-  componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); }, 200); }
+  componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); }, 200);
+    try { if (!localStorage.getItem('ts_tour')) this.setState({ tour: 1 }); } catch (e) { this.setState({ tour: 1 }); }
+  }
   preloadArt() {
     var order = [DISC_CHAR[this.state.disc]].concat(Object.keys(CARA).filter(function (k) { return k !== DISC_CHAR[this.state.disc]; }, this)), i = 0;
     var idle = window.requestIdleCallback ? function (f) { window.requestIdleCallback(f, { timeout: 1500 }); } : function (f) { setTimeout(f, 300); };
@@ -857,6 +942,13 @@ class Component extends DCLogic {
       im.onload = go; im.onerror = go; im.src = CARA[k].strip; new Image().src = CARA[k].off;
     })();
   }
+  tourGo(n) {
+    if (n < 1 || n > TOUR.length) { this.tourEnd(); return; }
+    var st = TOUR[n - 1], s = this.state;
+    this.navDir = st.sub >= s.sub || s.tab !== 'juke' ? 1 : -1; this.navCount = (this.navCount || 0) + 1;
+    this.setState({ tour: n, tab: 'juke', sub: st.sub, trans: false });
+  }
+  tourEnd() { this.setState({ tour: 0 }); try { localStorage.setItem('ts_tour', '1'); } catch (e) {} }
   syncAnims() {
     if (!document.getAnimations || document.hidden) return;
     var t0 = this.state.playing ? (this.playT0 || 0) : 0;
@@ -872,6 +964,10 @@ class Component extends DCLogic {
     this.setState({ set: name, frame: s.disc < 5 ? Math.min(s.frame, DISCS[s.disc].files.length - 1) : s.frame, col: -1, an: keep,
       caption: (name === 'eic' ? 'Discos con fotogramas oficiales del EIC (2024–2026).' : 'Discos con imágenes de NASA GIBS / Worldview (2010–2023).') + ' Elige uno y pulsa Reproducir.' },
       function () { if (disc < 5) self.loadDisc(disc); });
+  }
+  profile() {
+    var p = MUSIC[this.leadChar()], a = this.cur();
+    return p.dark && a && a.warm - a.cold > 0.9 ? p.dark : p;
   }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
   allMute(v) { var m = {}; BAND.forEach(function (b) { m[b.k] = v; }); return m; }
@@ -889,20 +985,49 @@ class Component extends DCLogic {
     if (key !== this.lastFrameKey) { this.lastFrameKey = key; this.frameCount++; }
     return this.frameCount % 2 ? 'fa' : 'fb';
   }
-  goTab(k) {
+  subCount() {
+    var t = this.state.tab;
+    return t === 'juke' ? 4 : t === 'band' ? 6 : t === 'data' ? 2 : t === 'how' ? 3 : this.techPages().length;
+  }
+  techPages() {
+    var pages = [];
+    this.techGroups({}).forEach(function (g) {
+      var n = g.items.length, per = Math.ceil(n / Math.ceil(n / 6)), parts = Math.ceil(n / per);
+      for (var i = 0; i < parts; i++) pages.push({ title: g.title + (parts > 1 ? ' · ' + (i + 1) + '/' + parts : ''), items: g.items.slice(i * per, (i + 1) * per) });
+    });
+    pages.push({ title: 'Datos, créditos y uso de IA', credits: true, items: [] });
+    return pages;
+  }
+  subTitles() {
+    var t = this.state.tab;
+    if (t === 'juke') return ['Elige un disco', 'Mira y escucha', 'La banda en escena', 'Más opciones'];
+    if (t === 'band') return BAND.map(function (b) { return b.name; }).concat(['Banda completa']);
+    if (t === 'data') return ['Tu archivo', 'Escucha'];
+    if (t === 'how') return ['Del mapa al sonido', 'Escala de color', 'Retos del Space Apps'];
+    return this.techPages().map(function (p) { return p.title; });
+  }
+  goSub(i) {
+    var s = this.state, cnt = this.subCount();
+    if (i < 0 || i >= cnt || i === s.sub || s.trans) return;
+    this.navDir = i > s.sub ? 1 : -1; this.navCount = (this.navCount || 0) + 1;
+    this.setState({ sub: i });
+  }
+  goTab(k, sub) {
     var s = this.state, self = this;
-    if (k === s.tab || s.trans) return;
+    if ((k === s.tab && (sub == null || sub === s.sub)) || s.trans) return;
+    if (k === s.tab) { this.goSub(sub); return; }
     this.stop();
     var swap = function () {
-      var patch = { tab: k, col: -1 };
-      if (k === 'data' && self.state.custom) { patch.disc = 5; patch.frame = 0; }
+      self.navDir = 0; self.navCount = (self.navCount || 0) + 1;
+      var patch = { tab: k, col: -1, sub: sub || 0 };
+      if (k === 'data' && self.state.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
       self.setState(patch);
     };
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) { swap(); return; }
     this.setState({ trans: true, transTo: k });
-    this.tm.push(setTimeout(swap, 520));
-    this.tm.push(setTimeout(function () { self.setState({ trans: false }); }, 1100));
+    this.tm.push(setTimeout(swap, 400));
+    this.tm.push(setTimeout(function () { self.setState({ trans: false }); }, 920));
   }
   analyze(d, f, force) {
     var key = d + '_' + f, self = this;
@@ -973,7 +1098,7 @@ class Component extends DCLogic {
   showCustom(custom, an, msg) {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
-    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, mute: this.only(an.cold > an.warm ? 'mama' : 'inti'), upMsg: msg, caption: 'Cargado: ' + custom.name + '. Pulsa Reproducir para escucharlo.' });
+    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: this.only(an.cold > an.warm ? 'mama' : 'inti'), upMsg: msg, caption: 'Cargado: ' + custom.name + '. Pulsa Reproducir para escucharlo.' });
   }
   handleFile(f) {
     var self = this, name = f.name;
@@ -983,7 +1108,7 @@ class Component extends DCLogic {
       var custom = { name: name, kind: 'image', url: URL.createObjectURL(f), mode: this.state.customMode };
       var ans = Object.assign({}, this.state.an); delete ans['5_0'];
       this.stop(); this.lastThunder = -9;
-      this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, upMsg: 'Analizando la imagen…' }, function () { self.analyze(5, 0, true); });
+      this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, upMsg: 'Analizando la imagen…' }, function () { self.analyze(5, 0, true); });
       return;
     }
     if (/\.(csv|tsv|txt)$/i.test(name) || /^text\//.test(f.type)) {
@@ -1136,7 +1261,7 @@ class Component extends DCLogic {
   spriteVm(k) {
     var s = this.state, b = BAND.filter(function (x) { return x.k === k; })[0], off = s.mute[k], lv = s.levels[k] || 0;
     var play = s.playing && !off && lv >= 0.15, hitN = (s.hits && s.hits[k]) || 0;
-    var bpm = s.engine === 'melody' ? Math.round(MUSIC[this.leadChar()].bpm * this.speedFactor()) : 100;
+    var bpm = s.engine === 'melody' ? Math.round(this.profile().bpm * this.speedFactor()) : 100;
     var A = ART[k], seg = play ? [A.ps, A.pn] : [0, 2];
     return { sprUrl: A.comp, sprN: A.n, x0: -seg[0], x1: -(seg[0] + seg[1]), sprF: seg[1], sprDur: play ? (60 / bpm).toFixed(3) + 's' : '1.2s', partUrl: A.part, pf: A.pfi,
       color: b.color, name: b.name, glyph: b.glyph, ins: b.ins, clip: play ? b.clip : 'idle', dur: play ? (60 / bpm).toFixed(2) + 's' : '3s',
@@ -1151,7 +1276,7 @@ class Component extends DCLogic {
   speedFactor() { return { 180: 0.75, 110: 1, 70: 1.4 }[this.state.speed] || 1; }
   stepMs() {
     var s = this.state; if (s.engine !== 'melody') return s.speed;
-    return Math.round(30000 / (MUSIC[this.leadChar()].bpm * this.speedFactor()));
+    return Math.round(30000 / (this.profile().bpm * this.speedFactor()));
   }
   setEngine(k) {
     this.stop(); this.melDeg = null;
@@ -1203,7 +1328,7 @@ class Component extends DCLogic {
   stepMelody(col) {
     var a = this.cur(); if (!a) return;
     var self = this, s = this.state, m = s.mute, t = this.ac.currentTime + 0.03, sp = this.stepMs() / 1000;
-    var prof = MUSIC[this.leadChar()], cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
+    var prof = this.profile(), cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
     var ch = chordOf(prof, prof.prog[cIdx]), info = this.colInfo(a, col), onBeat = col % 4 === 0, pan = (col / 27) * 1.2 - 0.6;
     var lv = { silbo: s.levels.silbo * 0.8, inti: s.levels.inti * 0.8, mama: s.levels.mama * 0.85, yaku: s.levels.yaku * 0.7, illapa: s.levels.illapa * 0.85 }, notes = [];
     var lv0 = Object.assign({}, lv);
@@ -1286,22 +1411,51 @@ class Component extends DCLogic {
 
   renderVals() {
     var s = this.state, self = this, hc = s.contrast;
-    var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF7A5C', cold: '#5CE1FF', magenta: '#FF7AD0' }
-                : { bg: '#0A0D1A', panel: 'rgba(18, 24, 52, 0.88)', line: '#2E3A6E', shadow: '#05070F', fg: '#F4EFE6', muted: '#AEB6DA', accent: '#FFD447', hot: '#FF7A5C', cold: '#38C6E8', magenta: '#F06BB0' };
+    var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF9A7A', cold: '#5CE1FF', magenta: '#FF7AD0' }
+                : { bg: '#05070C', panel: 'rgba(255,255,255,0.03)', line: 'rgba(255,255,255,0.18)', shadow: '#000000', fg: '#FFFFFF', muted: '#A9B0BF', accent: '#FFFFFF', hot: '#FF8A5B', cold: '#5CC8FF', magenta: '#F06BB0' };
     th.fs = s.big ? '19px' : '16px';
-    th.pixelFont = s.legible ? "'IBM Plex Mono', monospace" : "'Press Start 2P', monospace";
-    th.headFont = s.legible ? "'IBM Plex Sans', sans-serif" : "'Pixelify Sans', sans-serif";
+    th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
+    th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
     var cells = []; for (var i = 0; i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); }; };
     var tog = function (k) { return function () { var p = {}; p[k] = !s[k]; self.setState(p); if (k === 'voice' && s.voice && window.speechSynthesis) window.speechSynthesis.cancel(); }; };
-    var tabDef = [{ k: 'juke', l: 'Jukebox' }, { k: 'band', l: 'La banda' }, { k: 'data', l: 'Tus datos' }, { k: 'how', l: 'Cómo suena' }, { k: 'tech', l: 'Tecnología' }];
+    var tabDef = [{ k: 'juke', l: 'Escuchar' }, { k: 'band', l: 'La banda' }, { k: 'data', l: 'Tus datos' }, { k: 'how', l: 'Método' }, { k: 'tech', l: 'Tecnología' }];
     var a11yDef = [{ k: 'contrast', l: 'Alto contraste' }, { k: 'big', l: 'Texto grande' }, { k: 'legible', l: 'Fuente legible' }, { k: 'voice', l: 'Voz' }, { k: 'vibe', l: 'Vibración' }];
     var activeN = BAND.filter(function (b) { return !s.mute[b.k]; }).length;
     var isJuke = s.tab === 'juke', isData = s.tab === 'data', hasCustom = !!s.custom;
     var gl = this.glowFor(a);
-    var prof = MUSIC[this.leadChar()], factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
+    var band = BAND.map(function (b, bi) {
+        var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
+        return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, faceUrl: CARA[b.k].strip, faceN: CARA[b.k].n, sprUrl: ART[b.k].comp, sprN: ART[b.k].n, bustUrl: ART[b.k].bust, bi: off ? 0 : lvl > 0.6 ? 3 : lvl >= 0.15 ? 2 : 1, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
+          on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? 'Activar a ' : 'Desactivar a ') + b.name,
+          btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A', btnBorder: off ? th.line : b.color,
+          border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
+    });
+    var tstep = s.tour ? TOUR[s.tour - 1] : null;
+    var hlOf = function (id) { return tstep && tstep.id === id ? 'position: relative; z-index: 70; outline: 2px solid var(--fg); outline-offset: 6px; background: var(--bg)' : ''; };
+    var tourVm = { on: !!tstep, n: s.tour, total: TOUR.length, title: tstep ? tstep.t : '', body: tstep ? tstep.b : '', pos: tstep ? tstep.pos : 'bottom',
+      dots: TOUR.map(function (x, i) { return { cls: i < s.tour ? 'on' : '' }; }), showBack: s.tour > 1, hasExtra: !!(tstep && tstep.extra), extraLabel: tstep && tstep.extra ? tstep.extra : '',
+      nextLabel: s.tour === TOUR.length ? 'Empezar' : s.tour === 1 ? 'Comenzar guía' : 'Siguiente',
+      next: function () { if (s.tour >= TOUR.length) self.tourEnd(); else self.tourGo(s.tour + 1); },
+      back: function () { self.tourGo(s.tour - 1); }, skip: function () { self.tourEnd(); },
+      extra: function () { if (!s.playing) self.play(); } };
+    var titles = this.subTitles(), cnt = titles.length, sub = Math.min(s.sub, cnt - 1), pgOrder = ['juke', 'band', 'data', 'how', 'tech'], pgNext = pgOrder[(pgOrder.indexOf(s.tab) + 1) % 5];
+    var lastSub = sub === cnt - 1, techPgs = s.tab === 'tech' ? this.techPages() : [], techCur = techPgs[sub] || { title: '', items: [] };
+    var navVm = { label: titles[sub], n: sub + 1, total: cnt,
+      dots: titles.map(function (x, i) { return { cls: i === sub ? 'on' : '', aria: 'Ir a ' + x, go: function () { self.goSub(i); } }; }),
+      prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
+      nextLabel: lastSub ? (s.tab === 'tech' ? 'Inicio' : PAGES[pgNext][1].charAt(0) + PAGES[pgNext][1].slice(1).toLowerCase()) : 'Siguiente',
+      prev: function () { self.goSub(sub - 1); },
+      next: function () { if (lastSub) self.goTab(pgNext); else self.goSub(sub + 1); },
+      showMini: (s.tab === 'juke' && sub !== 1) || (s.tab === 'data' && sub === 0 && hasCustom) };
+    var scrDir = this.navDir == null ? 0 : this.navDir, scrCls = 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + ((this.navCount || 0) % 2 ? '-a' : '-b');
+    var scrVm = { jDisc: s.tab === 'juke' && sub === 0, jBand: s.tab === 'juke' && sub === 2, jMore: s.tab === 'juke' && sub === 3,
+      play: (s.tab === 'juke' && sub === 1) || (s.tab === 'data' && sub === 1), dUp: s.tab === 'data' && sub === 0,
+      bChar: s.tab === 'band' && sub < 5, bFull: s.tab === 'band' && sub === 5, hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
+      tPage: s.tab === 'tech' && !techCur.credits, tCred: s.tab === 'tech' && !!techCur.credits };
+    var prof = this.profile(), factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
     var chordLabels = prof.prog.map(function (c) { return chordOf(prof, c).label; });
     var progItems = chordLabels.map(function (l) { var on = s.playing && l === s.chord; return { label: l, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line }; });
     var seeText = a ? this.describeText() : 'Analizando el fotograma.';
@@ -1355,18 +1509,19 @@ class Component extends DCLogic {
       ],
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
-      sets: [{ key: 'eic', label: 'EIC', sub: 'SVS 5176 · 2024 – 2026' }, { key: 'prev', label: 'NASA GIBS', sub: 'Worldview · 2010 – 2023' }].map(function (o) {
+      sets: [{ key: 'eic', label: 'EIC', years: '2024–26', sub: 'SVS 5176 · 2024 – 2026' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23', sub: 'Worldview · 2010 – 2023' }].map(function (o) {
         var on = s.set === o.key;
-        return { label: o.label, sub: o.sub, on: on, bg: on ? th.bg : 'transparent', border: on ? th.accent : th.line, pick: function () { if (!on) self.applySet(o.key); } };
+        return { label: o.label, years: o.years, sub: o.sub, on: on, bg: on ? th.bg : 'transparent', border: on ? th.accent : th.line, pick: function () { if (!on) self.applySet(o.key); } };
       }),
       discs: DISCS.filter(function (x, k) { return k < 5 || hasCustom; }).map(function (x, k) {
         var on = k === s.disc, hero = k < 5 ? BAND.filter(function (b) { return b.k === DISC_CHAR[k]; })[0].name : 'según tus datos';
-        return { ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
+        return { thumb: self.url(k, 0), ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
           pick: function () {
             self.stop(); self.lastThunder = -9;
             var who = k < 5 ? DISC_CHAR[k] : (self.state.an['5_0'] && self.state.an['5_0'].cold > self.state.an['5_0'].warm ? 'mama' : 'inti');
             self.setState({ disc: k, frame: 0, col: -1, mute: self.only(who), caption: 'Disco ' + x.n + ': ' + x.title + '. Se enciende ' + BAND.filter(function (b) { return b.k === who; })[0].name + '. Pulsa Reproducir.' });
             self.loadDisc(k);
+            self.goSub(1);
           } };
       }),
       disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),
@@ -1377,6 +1532,17 @@ class Component extends DCLogic {
       capL: s.disc === 5 ? 'inicio' : '140°O', capM: s.disc === 5 ? 'escaneo de izquierda a derecha' : 'Pacífico ecuatorial · 25°S–15°N', capR: s.disc === 5 ? 'fin' : '70°O',
       cells: cells,
       stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) } : { warm: '…', cold: '…', hot: '…', coast: '…' },
+      hl: { discs: hlOf('tour-discs'), frame: hlOf('tour-frame'), play: hlOf('tour-play'), band: hlOf('tour-band'), strip: hlOf('tour-strip'), more: hlOf('tour-more'), nav: hlOf('tour-nav') },
+      tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
+      techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
+      bandCur: Object.assign({ num: ('0' + (sub + 1)).slice(-2) }, band[Math.min(sub, 4)]),
+      noFile: s.tab === 'data' && !hasCustom,
+      backToUpload: function () { self.goSub(0); },
+      startFlow: function () { self.goSub(1); },
+      moodText: prof.mood ? 'Ánimo de la música: ' + prof.mood + ' (' + prof.key + ' ' + prof.mode + '). Los acordes menores suenan nostálgicos; los mayores, alegres.' : '',
+      tourOpen: function () { self.tourGo(1); },
+      goHome: function () { self.goTab('juke'); },
+      heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
       lead: this.leadInfo(th),
       strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: 'Ver ' + MES[fd.m] + ' de ' + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playLabel: s.playing ? 'Pausar' : 'Reproducir', playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
@@ -1389,7 +1555,8 @@ class Component extends DCLogic {
       bandAll: function () { self.setState({ mute: self.allMute(false) }); },
       bandNone: function () { self.setState({ mute: self.allMute(true) }); },
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: 'Banda completa activada. Pulsa Reproducir.' }); self.goTab('juke'); },
-      band: BAND.map(function (b, bi) {
+      band: band,
+      bandOLD: BAND.map(function (b, bi) {
         var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
         return { ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, faceUrl: CARA[b.k].strip, faceN: CARA[b.k].n, sprUrl: ART[b.k].comp, sprN: ART[b.k].n, bustUrl: ART[b.k].bust, bi: off ? 0 : lvl > 0.6 ? 3 : lvl >= 0.15 ? 2 : 1, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
           on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? 'Activar a ' : 'Desactivar a ') + b.name,
