@@ -20,6 +20,7 @@ Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth
 | Contratos entre módulos | [`docs/CONTRATOS.md`](docs/CONTRATOS.md) |
 | Prototipo interactivo (boceto) | https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(privado: el dueño debe compartirlo)* |
 | Uso de IA | [`docs/USO_DE_IA.md`](docs/USO_DE_IA.md) |
+| Historial de iteraciones del prototipo (qué cambió y quién) | [`docs/ITERACIONES.md`](docs/ITERACIONES.md) · código en [`prototipos/`](prototipos/README.md) |
 | Créditos | [`docs/CREDITOS.md`](docs/CREDITOS.md) |
 
 ## Módulos y dueños
