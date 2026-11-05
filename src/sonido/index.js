@@ -1,35 +1,32 @@
-// M2 · Motor de sonificación. Contrato: docs/CONTRATOS.md
-// STUB: emite 'tick' sin sonido para que los demás módulos puedan integrar desde la hora 0.
-// Referencia de sonido funcionando con Web Audio: ver el prototipo enlazado en README.
+// M3 · Motor de sonido: la banda. Contrato: docs/CONTRATOS.md
+// STUB: calcula los niveles de cada personaje y emite 'voces', todavía sin audio.
+// El audio funcionando (Web Audio) está en el prototipo: copiar tone(), noiseBurst(), whistle() y step().
 import { bus } from '../app/bus.js';
+import { columna } from '../analizador/index.js';
 
-let timer = null;
-let msPorMes = 160;
+const silenciados = new Set();
+let ctx = null;
 
-export function play(series, desde = 0) {
-  pause();
-  let i = desde;
-  bus.emit('estado', { reproduciendo: true });
-  timer = setInterval(() => {
-    if (i >= series[0].lluvia.length) return pause();
-    playStep(series, i++);
-  }, msPorMes);
+export function iniciarAudio() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!ctx) ctx = new AC();
+  if (ctx.state === 'suspended') ctx.resume();
 }
 
-export function pause() {
-  if (timer) clearInterval(timer);
-  timer = null;
-  bus.emit('estado', { reproduciendo: false });
-}
+bus.on('silenciar', ({ personaje, silenciado }) => (silenciado ? silenciados.add(personaje) : silenciados.delete(personaje)));
 
-export function seek(i) { bus.emit('seek', { i }); }
-
-export function playStep(series, i) {
-  for (const s of series) {
-    const lluvia = s.lluvia[i], ratio = s.ratio[i];
-    const gotas = lluvia > 0.02 ? Math.min(9, Math.max(1, Math.round(Math.sqrt(ratio) * 2))) : 0;
-    bus.emit('tick', { i, lugar: s.lugar, lluvia, temp: s.temp[i], ratio, gotas, silba: ratio >= 10 && lluvia >= 1 });
-  }
-}
-
-export function setVelocidad(ms) { msPorMes = ms; }
+bus.on('paso', ({ columna: c, analisis }) => {
+  const info = columna(analisis, c);
+  const niveles = {
+    inti: Math.min(1, info.calido / 3),
+    mama: Math.min(1, info.frio / 2),
+    yaku: Math.min(1, info.fuertes.length / 10),
+    illapa: info.extremo >= 0.25 ? Math.min(1, info.extremo * 1.5) : 0,
+    silbo: c === 23 && analisis.costa >= 2 ? Math.min(1, analisis.costa / 5) : 0,
+  };
+  for (const p of silenciados) niveles[p] = 0;
+  const eventos = [];
+  if (niveles.illapa) eventos.push('¡Illapa truena!');
+  if (niveles.silbo) eventos.push('Silbo silba: la costa del Perú está caliente');
+  bus.emit('voces', { columna: c, niveles, eventos });
+});

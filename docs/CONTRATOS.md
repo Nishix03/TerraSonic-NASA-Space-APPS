@@ -6,81 +6,59 @@ Esto es lo **único** que un módulo puede usar de otro. Si algo cambia aquí, s
 
 ```js
 import { bus } from '../app/bus.js';
-bus.on('tick', (e) => { /* ... */ });
+bus.on('paso', (e) => { /* ... */ });
 bus.emit('play:toggle');
 ```
 
 | Evento | Quién emite | Datos (payload) | Quién escucha |
 |---|---|---|---|
-| `datos:listos` | M1 | `{ lugares: ['chiclayo','galapagos','iquitos'] }` | M6 |
-| `play:toggle` | M4 (UI y teclado), M6 | — | M6 → llama a M2 |
-| `seek` | M4, M3 (clic en el gráfico) | `{ i }` | M2, M3 |
-| `tick` | M2 | `{ i, lugar, lluvia, temp, ratio, gotas, silba }` | M3, M4, M5 |
-| `estado` | M2 | `{ reproduciendo: boolean }` | M4 (etiqueta del botón) |
-| `capitulo` | M5 | `{ id, titulo, texto, narracion }` | M3 (panel), M4 (voz) |
-| `opciones` | M6 (Laboratorio) | `{ escala, instrumento, alturaSigue, capas }` | M2 |
-| `tema` | M4 | `{ contraste: boolean, grande: boolean }` | M3 (colores del canvas) |
+| `disco:elegido` | M4 (UI), M5 (teclas 1–5) | `{ disco }` | M6 |
+| `fotograma:elegido` | M4 (tira), M5 (←/→) | `{ fotograma }` | M6 |
+| `play:toggle` | M4, M5 | — | M6 |
+| `fotograma:listo` | M6 | `{ disco, fotograma, analisis }` | M4, M5 |
+| `paso` | M6 (reloj del escaneo) | `{ disco, fotograma, columna, analisis }` | M3, M4 |
+| `voces` | M3 | `{ columna, niveles: {silbo,inti,mama,yaku,illapa}, eventos: ['Silbo silba', ...] }` | M4 (medidores, sprites), M5 (subtítulo, vibración) |
+| `estado` | M6 | `{ reproduciendo }` | M4, M5 |
+| `silenciar` | M4, M5 | `{ personaje, silenciado }` | M3 |
+| `tema` | M5 | `{ contraste, grande, legible }` | M4 |
+| `velocidad` | M4 | `{ msPorColumna }` (70, 110 o 180) | M6 |
 
-`i` es el índice del mes: `0` = enero de 1981 y `527` = diciembre de 2024 (`año = 1981 + floor(i/12)`, `mes = i % 12`).
-
-## M1 · `src/datos/index.js`
-
+## M1 · `src/fotogramas/index.js`
 ```js
-export async function cargarSeries(): Promise<void>
-export function getSerie(lugar: 'chiclayo'|'galapagos'|'iquitos'): Serie
-
-type Serie = {
-  lugar: string, nombre: string, lat: number, lon: number,
-  lluvia: number[],   // mm/día, 528 valores (PRECTOTCORR)
-  temp: number[],     // °C (T2M)
-  humedad: number[],  // % (RH2M)
-  ratio: number[],    // lluvia / mediana
-  stats: { mediana, maxLluvia, tMin, tMax },
-  anual: number[]     // promedio anual de lluvia, 44 valores
-}
+export async function cargarDiscos(): Promise<Disco[]>
+type Disco = { id, n, titulo, periodo, color, fuente, fotogramas: [{ url, fecha: 'YYYY-MM-DD' }] }  // 6 por disco
 ```
 
-## M2 · `src/sonido/index.js`
-
+## M2 · `src/analizador/index.js`
 ```js
-export function play(series: Serie[], desde: number): void   // 1 serie = historia, 3 = orquesta
-export function pause(): void
-export function seek(i: number): void
-export function playStep(series: Serie[], i: number): void   // un solo mes (modo explorar)
-export function setVelocidad(msPorMes: number): void           // 70 | 160 | 320
-// Lee las opciones por el evento 'opciones'
+export async function analizar(url: string): Promise<Analisis>
+type Analisis = { celdas: (number|null)[448],   // 28 columnas × 16 filas, nivel −5…+5, null = tierra
+                  calido, frio, extremo, costa } // promedios del fotograma
+export function columna(a: Analisis, c: number): { calido, frio, fuertes: [fila, nivel][], extremo, celdas }
+export function nivel(r, g, b): number          // clasificador de color
+```
+Recuadro de la costa (Silbo): píxeles x 116–128 e y 36–66 de la imagen reducida a 140×80.
+
+## M3 · `src/sonido/index.js`
+```js
+export function iniciarAudio(): void              // llamar tras un clic (política del navegador)
+// Escucha 'paso' y 'silenciar'. Emite 'voces'.
+```
+Reglas musicales (cambian solo con acuerdo del equipo): ver `docs/PLAN.md` §5.
+
+## M4 · `src/arte/index.js`
+```js
+export function montarJukebox(contenedor: HTMLElement, discos: Disco[]): void
+export function montarBanda(contenedor: HTMLElement): void
+// Sprites: assets/sprites/<silbo|inti|mama|yaku|illapa>.png, hoja horizontal de 4 frames de 32×32
 ```
 
-Reglas de mapeo (no cambian sin acuerdo del equipo):
-- gotas = `min(9, max(1, round(sqrt(ratio) * 2)))` si lluvia > 0,02.
-- silba = `ratio >= 10 && lluvia >= 1`.
-- tono de fondo = `55 Hz * 2^((T - tMin)/(tMax - tMin))`.
-
-## M3 · `src/visual/index.js`
-
+## M5 · `src/accesibilidad/index.js`
 ```js
-export function montarHistoria(contenedor: HTMLElement, serie: Serie): void
-export function montarOrquesta(contenedor: HTMLElement, series: Serie[]): void
-```
-
-## M4 · `src/accesibilidad/index.js`
-
-```js
-export function montarControles(contenedor: HTMLElement): void  // botones, slider, atajos
-export function decir(texto: string): void                       // speechSynthesis es-PE
-export function describirMes(serie: Serie, i: number): string    // texto para voz y subtítulo
-```
-
-## M5 · `src/historia/`
-
-```js
-// capitulos.json
-[{ "id": "c1", "inicio": 0, "kicker": "Capítulo 1 · 1981–1996", "titulo": "...", "texto": "...", "narracion": "..." }]
-// index.js
-export async function cargarCapitulos(): Promise<Capitulo[]>
-export function capituloEn(i: number): Capitulo
+export function montarAccesibilidad(contenedor: HTMLElement): void   // teclado, aria-live, botones de tema
+export function describirFotograma(disco: Disco, f: number, a: Analisis): string
+export function decir(texto: string): void                          // speechSynthesis es-PE
 ```
 
 ## M6 · `src/app/`
-
-`main.js` es el único archivo que importa todos los módulos. `index.html` solo tiene los contenedores vacíos con estos `id`: `#controles`, `#historia`, `#orquesta`, `#laboratorio`, `#creditos`.
+`main.js` es el único archivo que importa todos los módulos. `index.html` tiene los contenedores `#jukebox`, `#banda`, `#metodo`, `#accesibilidad` y `#creditos`.

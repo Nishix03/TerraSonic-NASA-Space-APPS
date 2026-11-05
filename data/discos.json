@@ -1,0 +1,172 @@
+[
+  {
+    "id": "nina2010",
+    "n": "1",
+    "titulo": "La Niña",
+    "periodo": "ago 2010 – ene 2011",
+    "color": "#38C6E8",
+    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "fotogramas": [
+      {
+        "url": "data/fotogramas/nina2010_0.png",
+        "fecha": "2010-08-15"
+      },
+      {
+        "url": "data/fotogramas/nina2010_1.png",
+        "fecha": "2010-09-15"
+      },
+      {
+        "url": "data/fotogramas/nina2010_2.png",
+        "fecha": "2010-10-15"
+      },
+      {
+        "url": "data/fotogramas/nina2010_3.png",
+        "fecha": "2010-11-15"
+      },
+      {
+        "url": "data/fotogramas/nina2010_4.png",
+        "fecha": "2010-12-15"
+      },
+      {
+        "url": "data/fotogramas/nina2010_5.png",
+        "fecha": "2011-01-15"
+      }
+    ]
+  },
+  {
+    "id": "nino2015",
+    "n": "2",
+    "titulo": "El Niño «Godzilla»",
+    "periodo": "jul – dic 2015",
+    "color": "#FF5A36",
+    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "fotogramas": [
+      {
+        "url": "data/fotogramas/nino2015_0.png",
+        "fecha": "2015-07-15"
+      },
+      {
+        "url": "data/fotogramas/nino2015_1.png",
+        "fecha": "2015-08-15"
+      },
+      {
+        "url": "data/fotogramas/nino2015_2.png",
+        "fecha": "2015-09-15"
+      },
+      {
+        "url": "data/fotogramas/nino2015_3.png",
+        "fecha": "2015-10-15"
+      },
+      {
+        "url": "data/fotogramas/nino2015_4.png",
+        "fecha": "2015-11-15"
+      },
+      {
+        "url": "data/fotogramas/nino2015_5.png",
+        "fecha": "2015-12-15"
+      }
+    ]
+  },
+  {
+    "id": "costero2017",
+    "n": "3",
+    "titulo": "Niño Costero",
+    "periodo": "dic 2016 – may 2017",
+    "color": "#FFD447",
+    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "fotogramas": [
+      {
+        "url": "data/fotogramas/costero2017_0.png",
+        "fecha": "2016-12-15"
+      },
+      {
+        "url": "data/fotogramas/costero2017_1.png",
+        "fecha": "2017-01-15"
+      },
+      {
+        "url": "data/fotogramas/costero2017_2.png",
+        "fecha": "2017-02-15"
+      },
+      {
+        "url": "data/fotogramas/costero2017_3.png",
+        "fecha": "2017-03-15"
+      },
+      {
+        "url": "data/fotogramas/costero2017_4.png",
+        "fecha": "2017-04-15"
+      },
+      {
+        "url": "data/fotogramas/costero2017_5.png",
+        "fecha": "2017-05-15"
+      }
+    ]
+  },
+  {
+    "id": "yaku2023",
+    "n": "4",
+    "titulo": "Yaku",
+    "periodo": "ene – jun 2023",
+    "color": "#7BE38A",
+    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "fotogramas": [
+      {
+        "url": "data/fotogramas/yaku2023_0.png",
+        "fecha": "2023-01-15"
+      },
+      {
+        "url": "data/fotogramas/yaku2023_1.png",
+        "fecha": "2023-02-15"
+      },
+      {
+        "url": "data/fotogramas/yaku2023_2.png",
+        "fecha": "2023-03-15"
+      },
+      {
+        "url": "data/fotogramas/yaku2023_3.png",
+        "fecha": "2023-04-15"
+      },
+      {
+        "url": "data/fotogramas/yaku2023_4.png",
+        "fecha": "2023-05-15"
+      },
+      {
+        "url": "data/fotogramas/yaku2023_5.png",
+        "fecha": "2023-06-15"
+      }
+    ]
+  },
+  {
+    "id": "nino2023",
+    "n": "5",
+    "titulo": "El Niño 2023",
+    "periodo": "jul – dic 2023",
+    "color": "#E0459B",
+    "fuente": "NASA JPL GHRSST L4 MUR 0.25° SST Anomalies vía NASA GIBS/Worldview (producto de EIC SVS 5176)",
+    "fotogramas": [
+      {
+        "url": "data/fotogramas/nino2023_0.png",
+        "fecha": "2023-07-15"
+      },
+      {
+        "url": "data/fotogramas/nino2023_1.png",
+        "fecha": "2023-08-15"
+      },
+      {
+        "url": "data/fotogramas/nino2023_2.png",
+        "fecha": "2023-09-15"
+      },
+      {
+        "url": "data/fotogramas/nino2023_3.png",
+        "fecha": "2023-10-15"
+      },
+      {
+        "url": "data/fotogramas/nino2023_4.png",
+        "fecha": "2023-11-15"
+      },
+      {
+        "url": "data/fotogramas/nino2023_5.png",
+        "fecha": "2023-12-15"
+      }
+    ]
+  }
+]
