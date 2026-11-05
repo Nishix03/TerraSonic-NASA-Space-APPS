@@ -8,7 +8,7 @@ Copias del código de cada iteración del prototipo, para no perder la historia.
 | [`I09-maqueta-movil/`](I09-maqueta-movil/) | I09 · Maqueta móvil (estado de la v17 del artefacto) | `Main.dc.html` (prototipo jugable de escritorio) y 7 maquetas móviles `Movil-*.dc.html`, más `canvas.json` |
 
 ## Cómo verlos
-- **Lo más fácil:** el prototipo publicado: https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(privado hasta que su dueño lo comparta)*.
+- **Lo más fácil:** el prototipo publicado: https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(compartido con cualquiera que tenga el enlace)*.
 - Los archivos `.dc.html` son el formato de **Claude Design**: no se abren directo en el navegador. Para trabajar con ellos se publican en un lienzo de Claude Design (`canvas.json` es el índice con la posición de cada pantalla).
 - Los fotogramas del prototipo se cargan desde el almacén de ese artefacto (`/_blob/...`); los mismos 30 fotogramas están en [`data/fotogramas/`](../data/fotogramas/).
 

@@ -2,7 +2,7 @@
 
 Aquí queda documentado **cómo evolucionó el prototipo**, qué cambió en cada iteración y **quién la hizo**. Se actualiza con cada iteración nueva.
 
-- **Prototipo interactivo (Claude Design):** https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(privado hasta que su dueño lo comparta)*
+- **Prototipo interactivo (Claude Design):** https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(compartido con cualquiera que tenga el enlace)*
 - **Autoría:** hasta ahora, **solo Nishix03** (dirige, decide y aprueba cada iteración). El código del prototipo lo **genera una IA** (Claude Design y Claude Code, de Anthropic) a partir de sus pedidos y él lo revisa. Esto también está en [`USO_DE_IA.md`](USO_DE_IA.md).
 - **Cuando se sumen más personas**, cada iteración anota en la columna *Autor* quién la hizo.
 
@@ -36,7 +36,7 @@ Todos los commits son de la cuenta **nishix_03 / Nishix03**, con la IA como coau
 | `ba027c4` | 2026-11-05 00:53 | Plan: maqueta móvil hecha (7 pantallas en Claude Design) |
 | `443fa44` | 2026-11-05 01:05 | Plan: biblia visual y fichas de sprites por personaje (§9.6) |
 
-*(El repo se llamaba `silbador` y se renombró a `terrasonic` el 2026-11-05.)*
+*(El repo se llamaba `silbador`, se renombró a `terrasonic` y después a `TerraSonic-NASA-Space-APPS`, todo el 2026-11-05. GitHub redirige los nombres anteriores.)*
 
 ## Qué fuentes se guardan y cuáles no
 
