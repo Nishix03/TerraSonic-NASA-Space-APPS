@@ -1,0 +1,54 @@
+{
+  "origen": "imagegen",
+  "ancho": 512,
+  "alto": 768,
+  "repeticiones": 1,
+  "keyframes": [
+    {
+      "archivo": "00.png",
+      "gesto": "reposo"
+    },
+    {
+      "archivo": "01.png",
+      "gesto": "movimiento"
+    },
+    {
+      "archivo": "02.png",
+      "gesto": "pico con ojos abiertos"
+    },
+    {
+      "archivo": "03.png",
+      "gesto": "parpadeo"
+    }
+  ],
+  "secuencia": [
+    {
+      "keyframe": 0,
+      "ms": 320
+    },
+    {
+      "keyframe": 1,
+      "ms": 180
+    },
+    {
+      "keyframe": 2,
+      "ms": 130
+    },
+    {
+      "keyframe": 3,
+      "ms": 95
+    },
+    {
+      "keyframe": 2,
+      "ms": 130
+    },
+    {
+      "keyframe": 1,
+      "ms": 180
+    },
+    {
+      "keyframe": 0,
+      "ms": 440
+    }
+  ]
+}
