@@ -300,13 +300,20 @@ a{color:inherit}
 @keyframes slB{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
 @keyframes sfA{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
 @keyframes sfB{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
-.px .wipe{position:fixed;inset:0;z-index:95;pointer-events:auto;overflow:hidden}
-.px .wipe .wp{position:absolute;inset:0;background:#000;border-right:1px solid rgba(255,255,255,.8);animation:wipeGo .9s cubic-bezier(.65,0,.35,1) both}
-.px .wipe .wp2{background:#06080f;animation-delay:.07s;border-right:1px solid rgba(255,255,255,.35)}
-@keyframes wipeGo{0%{transform:translateX(-101%)}42%,58%{transform:translateX(0)}100%{transform:translateX(101%)}}
-.px .wipe .wl{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-family:var(--head);font-weight:600;letter-spacing:.4em;text-transform:uppercase;font-size:1.3em;opacity:0;animation:wlab .9s ease both;z-index:2}
-.px .wipe .wl small{display:block;letter-spacing:.3em;font-size:.55em;color:var(--muted);margin-bottom:10px}
-@keyframes wlab{0%,36%{opacity:0}48%,56%{opacity:1}68%,100%{opacity:0}}
+.px .wipe{position:fixed;inset:0;z-index:95;overflow:hidden;display:grid;place-items:center;color:var(--route-color)}
+.px .route-shutter{position:absolute;inset:-18% -24%;border-inline:2px solid currentColor;background:linear-gradient(115deg,#070916 25%,color-mix(in srgb,currentColor 20%,#070916) 72%,#070916 95%);animation:route-sweep 720ms cubic-bezier(.65,0,.35,1) both}
+.px .route-shutter::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 8%,color-mix(in srgb,currentColor 8%,transparent) 8% 8.12%)}
+.px .route-card{position:relative;display:grid;justify-items:center;gap:9px;width:min(88vw,420px);text-align:center;animation:route-card 480ms ease-out 170ms both}
+.px .route-card svg{width:112px;height:112px;animation:bcut-aperture 250ms cubic-bezier(.16,1,.3,1) 185ms both}
+.px .route-card .route-mark{stroke-dasharray:1;animation:bcut-trace 210ms ease-out 235ms both}
+.px .route-card strong{font:700 clamp(1.15rem,3vw,2rem) var(--head);letter-spacing:.11em;text-transform:uppercase;animation:bcut-cascade 200ms ease-out 280ms both}
+.px .route-card small{font:600 .67em var(--head);letter-spacing:.26em;text-transform:uppercase;animation:bcut-cascade 200ms ease-out 235ms both}
+@keyframes route-sweep{0%{transform:translateX(-105%) skewX(-17deg)}38%,53%{transform:translateX(0) skewX(-17deg)}100%{transform:translateX(105%) skewX(-17deg)}}
+@keyframes route-card{0%,8%{opacity:0;transform:translateY(10px) scale(.95)}32%,67%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px) scale(1.025)}}
+.px .scr.route-arrive{animation:route-reveal 390ms cubic-bezier(.24,.7,.25,1) both}
+.px .scr.route-arrive .in{animation:bcut-cascade 340ms cubic-bezier(.16,1,.3,1) 35ms both}
+@keyframes route-reveal{from{clip-path:circle(0 at 50% 43%)}to{clip-path:circle(145% at 50% 43%)}}
+@media(prefers-reduced-motion:reduce){.px .wipe{display:none}}
 
 /* guía */
 .px .tourdim{position:fixed;inset:0;z-index:66;background:rgba(0,0,0,.74)}
@@ -362,6 +369,13 @@ a{color:inherit}
 .px .lead.lh .leadface{width:150px;flex:0 0 auto;border-bottom:0;border-right:1px solid var(--line);max-height:none;align-items:flex-end}
 .px .lead.lh .meta{padding:12px;gap:6px;min-width:0;justify-content:center}
 .px .lead.lh .name{font-size:1.05em}
+.px .lead-choice{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:5px}
+.px .lead-choice button{display:grid;place-items:center;min-width:44px;min-height:44px;color:var(--lead-color)}
+.px .lead-choice button:hover{background:color-mix(in srgb,var(--lead-color) 16%,var(--bg))}
+.px .lead-choice button:focus-visible,.px .lead-auto:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.px .lead-choice .lead-index{text-align:center;font-size:.78em;font-variant-numeric:tabular-nums;color:var(--muted)}
+.px .lead-auto{min-height:44px;padding-inline:8px;font-size:.78em}
+.px .lead-auto[aria-pressed="true"]{color:var(--lead-color);border-color:var(--lead-color)}
 .px .band.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .px .band.two .bchip{min-height:50px;padding:6px 10px;gap:8px}
 .px .band.two .bchip .nm{font-size:.74em;letter-spacing:.1em}
@@ -379,9 +393,51 @@ a{color:inherit}
 /* ===== la banda · una pantalla ===== */
 .px .scr:has(.bpage){overflow-y:auto}
 .px .bpage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"stage pick" "stage info";grid-template-rows:auto 1fr;gap:22px clamp(24px,5vw,80px);align-content:center;max-width:1320px;margin:auto;padding-block:24px}
-.px .bshow{grid-area:stage;position:relative;isolation:isolate;display:grid;align-content:center;align-self:stretch;min-width:0;margin:0;padding:14px 0}
-.px .bshow::before{content:"";position:absolute;inset:10% 5% 8%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,color-mix(in srgb,var(--band) 8%,transparent),transparent 67%)}
-.px .bportrait{display:block;width:100%;height:clamp(340px,65dvh,610px);object-fit:contain}
+.px .bshow{grid-area:stage;position:relative;isolation:isolate;display:grid;align-content:center;align-self:stretch;min-width:0;margin:0;padding:12px 0 0;border-block:1px solid var(--line);background:radial-gradient(ellipse at 50% 62%,color-mix(in srgb,var(--band-light) 10%,transparent),transparent 69%)}
+.px .bstage-top{display:flex;justify-content:space-between;gap:12px;margin-inline:6%;align-items:center;font:600 .66em var(--head);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.px .bstage-top span:first-child{color:var(--band)}
+.px .bstage-top span:first-child::before{content:"✦";margin-right:8px}
+.px .bscene{position:relative;height:clamp(340px,65dvh,610px);isolation:isolate;contain:layout paint}
+.px .bscene-orbit{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--band-light);opacity:.27}
+.px .bplaying .bscene-orbit{animation:borbit-signal 900ms ease-out both}
+@keyframes borbit-signal{0%,100%{opacity:.27}38%{opacity:.55}}
+.px .bportrait{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.px .bportrait-motion{visibility:hidden}
+.px .bplaying .bportrait-motion{visibility:visible}
+.px .bplaying .bportrait-still{visibility:hidden}
+.px .bsilbo-note{position:absolute;inset:0;width:100%;height:100%;color:var(--band-light);pointer-events:none}
+.px .bsilbo-note path{opacity:0;transform-origin:41px 33px;animation:bsilbo-note 730ms cubic-bezier(.2,.7,.2,1) 360ms both}
+.px .bsilbo-note path:nth-child(2){animation-delay:510ms}
+.px .bsilbo-note path:nth-child(3){animation-delay:650ms}
+@keyframes bsilbo-note{
+  0%{opacity:0;transform:scale(.62)}
+  25%{opacity:.8}
+  100%{opacity:0;transform:translate(-5px,-7px) scale(1.32)}
+}
+@media (prefers-reduced-motion:reduce){
+  .px .bplaying .bportrait-still{visibility:visible}
+  .px .bplaying .bportrait-motion{visibility:hidden}
+  .px .bentry,.px .bsilbo-note{display:none}
+}
+.px .bfx,.px .bentry svg{position:absolute;inset:0;width:100%;height:100%;color:var(--band-light);pointer-events:none}
+.px .bfx{opacity:.5}
+.px .bplaying .bfx{animation:bfx-pulse 620ms ease-out both}
+@keyframes bfx-pulse{0%,100%{opacity:.5}35%{opacity:.8}}
+.px .bentry{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;--cut-ease:cubic-bezier(.16,1,.3,1);animation:bcut-out var(--band-entry) ease-out both}
+.px .bentry-sweep{position:absolute;inset:-20% auto -20% 0;width:64%;border-inline:1px solid var(--band-light);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--band-light) 30%,#080b18) 72%,color-mix(in srgb,var(--band-light) 65%,#080b18));animation:bcut-sweep 460ms var(--cut-ease) both}
+.px .bentry-scope{animation:bcut-aperture 400ms var(--cut-ease) 65ms both}
+.px .bentry-line{stroke-dasharray:1;animation:bcut-trace 290ms var(--cut-ease) 115ms both}
+.px .bentry-stars{animation:bcut-cascade 280ms var(--cut-ease) 175ms both}
+.px .bentry-wave{transform-origin:138px 387px;animation:bcut-spectrum 260ms var(--cut-ease) 205ms both}
+.px .bentry-label{font:600 12px var(--head);letter-spacing:.24em;animation:bcut-cascade 280ms var(--cut-ease) 235ms both}
+.px .bentering .bportrait-still{animation:bcut-reveal var(--band-entry) var(--cut-ease) both}
+@keyframes bcut-sweep{from{transform:translateX(-150%) skewX(-20deg)}to{transform:translateX(245%) skewX(-20deg)}}
+@keyframes bcut-aperture{from{clip-path:circle(0 at 88% 12%)}to{clip-path:circle(150% at 88% 12%)}}
+@keyframes bcut-trace{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes bcut-cascade{from{opacity:0;transform:translate(30px,12px) skewX(-8deg)}to{opacity:1;transform:none}}
+@keyframes bcut-spectrum{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+@keyframes bcut-out{0%,75%{opacity:1}100%{opacity:0}}
+@keyframes bcut-reveal{0%,67%{opacity:0;transform:translateY(12px) scale(.98)}100%{opacity:1;transform:none}}
 .px .bstage-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-inline:6%;padding-block:10px;border-top:1px solid var(--line);color:var(--muted);font:600 .72em var(--head);letter-spacing:.12em;text-transform:uppercase}
 .px .bstage-label strong{color:var(--band);font-variant-numeric:tabular-nums}
 .px .bchooser{grid-area:pick;min-width:0;padding-top:12px;border-top:1px solid var(--line)}
@@ -389,7 +445,7 @@ a{color:inherit}
 .px .bpick{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
 .px .bsel{display:grid;justify-items:center;align-content:center;gap:3px;min-height:72px;padding:4px 1px 6px;border:1px solid var(--line);border-bottom:2px solid var(--line);background:var(--bg);font:700 max(10px,.62em) var(--head);text-align:center;overflow-wrap:anywhere;color:var(--muted);transition:color .18s,border-color .18s,background-color .18s}
 .px .bsel img{display:block;width:100%;height:37px;object-fit:contain}
-.px .bsel[aria-pressed="true"]{color:var(--fg);border-bottom-color:var(--swatch);background:color-mix(in srgb,var(--swatch) 11%,var(--bg))}
+.px .bsel[aria-pressed="true"]{color:var(--fg);border-bottom-color:var(--swatch);background:linear-gradient(0deg,color-mix(in srgb,var(--swatch) 16%,var(--bg)),var(--bg))}
 .px .bsel:hover{color:var(--fg);border-color:var(--swatch)}
 .px .bsel:focus-visible{outline:2px solid var(--fg);outline-offset:2px;z-index:1}
 .px .binfo{grid-area:info;display:grid;align-content:start;gap:16px;min-width:0}
@@ -399,8 +455,8 @@ a{color:inherit}
 .px .bquote{padding:4px 0 4px 12px;border-left:2px solid var(--band);font-style:italic}
 @media (max-width:900px){
   .px .bpage{grid-template-areas:"pick" "stage" "info";grid-template-columns:minmax(0,1fr);grid-template-rows:auto;gap:14px;padding-block:12px 24px}
-  .px .bshow{padding:0}
-  .px .bportrait{height:clamp(245px,48dvh,460px)}
+  .px .bshow{padding-top:10px}
+  .px .bscene{height:clamp(245px,48dvh,460px)}
 }
 @media (max-width:900px){.px .uni .mapbox,.px .uni .timeline{width:100%}.px .umain{grid-template-columns:minmax(0,1fr)}.px .dchips{grid-template-columns:repeat(2,minmax(0,1fr))}.px .uni{height:auto}}
 
@@ -477,6 +533,9 @@ a{color:inherit}
 .px .skyfix .sat{position:absolute;top:18%;left:-5%;width:3px;height:3px;background:#fff;box-shadow:0 0 6px #fff,-8px 0 0 rgba(255,255,255,.35),-16px 0 0 rgba(255,255,255,.18);animation:crossS 52s linear infinite}
 @keyframes crossS{from{transform:translate(0,0)}to{transform:translate(112vw,18vh)}}
 .px .skyfix .limb{position:absolute;left:-25%;right:-25%;bottom:-62vh;height:82vh;border-radius:50%;background:radial-gradient(ellipse at 50% 0,rgba(46,100,214,.2),transparent 62%);box-shadow:0 -1px 0 rgba(140,185,255,.3)}
+.px.band-view .skyfix .neb,.px.band-view .skyfix .stl{animation:none;will-change:auto}
+.px.band-view .skyfix .neb{filter:none}
+.px.band-view .skyfix .shoot,.px.band-view .skyfix .sat{display:none;animation:none}
 .px .brandmark{display:block;color:var(--fg)}
 
 /* ===== auditoría visual: legibilidad, escalado y pantallas pequeñas ===== */
@@ -575,9 +634,57 @@ a{color:inherit}
   .px .in{height:auto;min-height:100%}
   .px .twocol,.px .dgrid{grid-template-columns:minmax(0,1fr)}
 }
+
+/* El marco del observatorio acompaña al mapa, el escenario y las fichas. */
+.px .top{background:var(--bg);border-bottom-color:color-mix(in srgb,var(--section) 28%,var(--line))}
+.px .top .brand{color:var(--fg)}
+.px .nav button[aria-current="page"]{color:var(--section);border-bottom-color:var(--section)}
+.px .scr{overflow-y:auto;overscroll-behavior:contain}
+.px .in{height:auto;min-height:100%;padding-top:16px}
+.px .skyfix .neb,.px .skyfix .stl{animation:none;filter:none;will-change:auto}
+.px .skyfix .shoot,.px .skyfix .sat{display:none}
+.px .observatory-line{display:flex;align-items:center;gap:12px;padding-bottom:9px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.78em}
+.px .observatory-line strong{color:var(--section);font:600 1em var(--head);letter-spacing:.12em}
+.px .observatory-line .signal-state{margin-left:auto;display:flex;align-items:center;gap:7px}
+.px .signal-state::before{content:"";width:7px;height:7px;border:1px solid currentColor;border-radius:50%}
+.px .signal-state.on{color:var(--section)}
+.px .signal-state.on::before{background:currentColor}
+.px .listen-intro{display:flex;align-items:end;justify-content:space-between;gap:10px 28px}
+.px .listen-intro h1{font:700 clamp(1.8rem,4vw,3.75rem)/1 var(--head);letter-spacing:-.02em}
+.px .listen-intro p{color:var(--muted);max-width:40ch;line-height:1.4;font-size:.86em}
+.px .uni,.px .uleft,.px .uright{height:auto}
+.px .uni .drow{padding:8px;border:1px solid var(--line);background:var(--bg)}
+.px .uni .dchip[aria-pressed="true"]{background:color-mix(in srgb,var(--section) 9%,var(--bg))}
+.px .uni .vpanel{gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.px .uni .vcap,.px .uni .vfoot{padding:8px 10px}
+.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{border-inline:0;box-shadow:none}
+.px .uni .vpanel .mapbox img.map{object-fit:contain}
+.px .uni .controls{border-block:1px solid var(--line);background:var(--bg);padding:8px}
+.px .uni .controls .primary{background:var(--section);border-color:var(--section);color:#080c18}
+.px .uni .uright .stagebox.slim{flex:0 0 auto;min-height:140px;height:clamp(150px,23vh,235px);border-radius:8px;box-shadow:none;background:radial-gradient(ellipse at 50% 95%,color-mix(in srgb,var(--section) 18%,var(--bg)),var(--bg) 70%)}
+.px .lead.lh{border-radius:8px;box-shadow:none;background:var(--bg)}
+.px .lead.lh .leadface{width:clamp(106px,10vw,150px);align-items:center}
+.px .lead.lh .meta{flex:1}
+.px .lead .meta .name{overflow-wrap:anywhere}
+.px .bpage{width:100%;padding-top:8px}
+.px .bshow{border:1px solid var(--line);border-radius:8px;background:radial-gradient(ellipse at 50% 65%,color-mix(in srgb,var(--band-light) 13%,var(--bg)),var(--bg) 76%)}
+.px .binfo{padding-top:6px}
+.px .bquote{background:color-mix(in srgb,var(--band-light) 7%,var(--bg))}
+.px .in > .title{padding:clamp(14px,2vw,28px) 0 12px;border-bottom:1px solid color-mix(in srgb,var(--section) 35%,var(--line))}
+.px .in > .title .h2{font-size:clamp(1.35rem,3vw,2.5rem);text-transform:none;letter-spacing:0}
+.px .in > .title .n{color:var(--section)}
+.px .in .cardx,.px .in .panel{background:color-mix(in srgb,var(--section) 5%,var(--bg));border-radius:8px}
+.px .bar{background:var(--bg);border-top-color:color-mix(in srgb,var(--section) 28%,var(--line))}
+.px .bar .dots button.on i{background:var(--section)}
+@media (min-width:1050px){.px .uni .views{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}}
+@media (max-width:640px){
+  .px .listen-intro{align-items:start;flex-direction:column}
+  .px .observatory-line{gap:8px}
+  .px .observatory-line .signal-state{font-size:.88em;white-space:nowrap}
+}
 </style>
 </helmet>
-<div class="px app" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; font-size: {{th.fs}}">
+<div class="px app {{bandViewClass}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
 
 <div class="skyfix" aria-hidden="true"><div class="neb n1"></div><div class="neb n2"></div><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div><div class="limb"></div><div class="shoot"></div><div class="shoot b"></div><div class="sat"></div></div>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
@@ -610,6 +717,10 @@ a{color:inherit}
 <main class="viewport">
 <div class="scr {{scrCls}}">
 <div class="in">
+<div class="observatory-line">
+  <strong>{{sectionNumber}}</strong><span>{{sectionName}}</span>
+  <sc-if value="{{scr.play}}"><span class="signal-state {{signalClass}}">{{signalLabel}}</span></sc-if>
+</div>
 
 <!-- TUS DATOS · 1 · Subir -->
 <sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
@@ -649,6 +760,10 @@ a{color:inherit}
 <div class="uni">
 
 <sc-if value="{{isJuke}}" hint-placeholder-val="{{ true }}">
+<div class="listen-intro">
+  <h1>Escucha el Pacífico</h1>
+  <p>Explora cómo la temperatura del océano se convierte en música.</p>
+</div>
 <div id="tour-discs" class="drow" style="{{hl.discs}}">
 <div class="dchips" role="group" aria-label="Discos">
 <sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
@@ -760,7 +875,7 @@ a{color:inherit}
 </div>
 </section>
 
-<aside id="tour-lead" aria-label="Protagonista del disco" class="lead lh {{lead.pop}}" style="border-color: {{lead.color}}; {{hl.lead}}">
+<aside id="tour-lead" aria-label="Protagonista de la reproducción" class="lead lh {{lead.pop}}" style="--lead-color: {{lead.color}}; border-color: {{lead.color}}; {{hl.lead}}">
 <div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
 <div class="sp {{lead.cls}}" style="color: {{lead.color}}; max-width: none; aspect-ratio: auto; width: 100%; display: flex; justify-content: center">
 <div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
@@ -769,8 +884,16 @@ a{color:inherit}
 </div>
 <div class="meta">
 <span class="pix amber">Protagonista</span>
-<div class="name" style="color: {{lead.color}}"><span>{{lead.name}}</span></div>
+<div class="name" style="color: {{lead.color}}" aria-live="polite" aria-atomic="true"><span>{{lead.name}}</span></div>
 <small class="mono muted" style="font-size: 0.68em">{{lead.state}}</small>
+<sc-if value="{{isJuke}}">
+<div class="lead-choice" role="group" aria-label="Cambiar protagonista">
+  <button type="button" onClick="{{prevLead}}" aria-label="Protagonista anterior"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 8H2m0 0 5-5M2 8l5 5"></path></svg></button>
+  <span class="lead-index">{{leadPosition}}</span>
+  <button type="button" onClick="{{nextLead}}" aria-label="Protagonista siguiente"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h12m0 0-5-5m5 5-5 5"></path></svg></button>
+</div>
+<button type="button" class="lead-auto" onClick="{{autoLead}}" aria-pressed="{{leadAuto}}">Según el disco</button>
+</sc-if>
 <button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
 </div>
 </aside>
@@ -797,7 +920,7 @@ a{color:inherit}
 
 <!-- LA BANDA · una sola pantalla -->
 <sc-if value="{{scr.bPage}}" hint-placeholder-val="{{ false }}">
-<div class="bpage" style="--band: {{bandCur.accent}}">
+<div class="bpage" style="--band: {{bandCur.accent}}; --band-light: {{bandCur.color}}; --band-entry: {{bandCur.entryDuration}}ms">
 <div class="bchooser">
 <p class="eyebrow">La banda del Pacífico</p>
 <div class="bpick" role="group" aria-label="Elegir músico">
@@ -807,8 +930,44 @@ a{color:inherit}
 </div>
 </div>
 <figure class="bshow">
-<img decoding="async" class="bportrait" src="{{bandCur.poseUrl}}" alt="{{bandCur.name}} en pose de cuerpo completo con su instrumento" width="512" height="768">
-<figcaption class="bstage-label"><span>Constelación · {{bandCur.ins}}</span><strong>{{bandCur.number}} / 05</strong></figcaption>
+<div class="bstage-top" aria-hidden="true"><span>En escena</span><span>{{bandCur.name}}</span></div>
+<div class="bscene {{bandCur.entrance}}" role="img" aria-label="{{bandCur.name}} en pose de cuerpo completo con su instrumento">
+<svg class="bscene-orbit" viewBox="0 0 480 550" aria-hidden="true" fill="none" stroke="currentColor">
+  <ellipse cx="240" cy="487" rx="159" ry="25" stroke-dasharray="3 5"></ellipse>
+  <ellipse cx="240" cy="487" rx="115" ry="16"></ellipse>
+  <path d="M62 127v-28h29m298 0h29v28M62 418v28h29m298 0h29v-28M240 92v12m-6-6h12M119 485h12m-6-6v12M349 485h12m-6-6v12"></path>
+</svg>
+<svg class="bfx" viewBox="0 0 480 550" aria-hidden="true">
+  <path d="{{bandCur.effect}}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path fill="currentColor" d="M76 120l2 6 6 2-6 2-2 6-2-6-6-2 6-2z M402 163l2 5 5 2-5 2-2 5-2-5-5-2 5-2z M107 387l1 4 4 1-4 1-1 4-1-4-4-1 4-1z M396 405l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"></path>
+</svg>
+<img class="bportrait bportrait-still" decoding="async" src="{{bandCur.poseUrl}}" alt="" width="360" height="540">
+<sc-if value="{{bandCur.moving}}"><img class="bportrait bportrait-motion" onLoad="{{bandCur.motionReady}}" src="{{bandCur.motionUrl}}" alt="" width="360" height="540"></sc-if>
+<sc-if value="{{bandCur.silboNotes}}">
+<svg class="bsilbo-note" viewBox="0 0 360 540" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.15">
+  <path d="M24 31q3-11 15-13"></path>
+  <path d="M17 29q4-17 22-22"></path>
+  <path d="M11 24q5-18 19-22 M49 9v8m-4-4h8"></path>
+</svg>
+</sc-if>
+<sc-if value="{{bandCur.entering}}">
+<div class="bentry" aria-hidden="true">
+  <div class="bentry-sweep"></div>
+  <svg class="bentry-scope" viewBox="0 0 480 550" aria-hidden="true">
+    <g fill="none" stroke="currentColor">
+      <circle cx="240" cy="258" r="130" fill="#080b16" fill-opacity=".9" stroke-opacity=".35"></circle>
+      <circle cx="240" cy="258" r="144" stroke-opacity=".32" stroke-dasharray="3 8"></circle>
+      <path d="M80 258h28m264 0h28M240 100v20m0 274v22M133 165l9 9m196 168 9 9m0-186-9 9M142 342l-9 9" stroke-opacity=".56"></path>
+      <path class="bentry-line" pathLength="1" d="{{bandCur.instrumentLine}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path class="bentry-wave" d="M138 387h25l5-6 5 12 7-21 8 32 8-27 6 16 8-6h11m38 0h11l8-6 6 12 8-23 8 30 7-19 5 12 5-6h25" stroke-width="1.25"></path>
+    </g>
+    <path class="bentry-stars" d="{{bandCur.instrumentStars}}" fill="currentColor"></path>
+    <text class="bentry-label" x="240" y="449" fill="currentColor" text-anchor="middle">{{bandCur.instrumentName}}</text>
+  </svg>
+</div>
+</sc-if>
+</div>
+<figcaption class="bstage-label"><span>Constelación · {{bandCur.instrumentName}}</span><strong>{{bandCur.number}} / 05</strong></figcaption>
 </figure>
 <div class="binfo">
 <div><h1 class="h1">{{bandCur.name}}</h1><p class="muted">{{bandCur.origin}}</p></div>
@@ -915,7 +1074,18 @@ a{color:inherit}
 </sc-if>
 
 <sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
-<div class="wipe" aria-hidden="true"><div class="wp"></div><div class="wp wp2"></div><div class="wl"><small>Sección {{transNum}}</small>{{transName}}</div></div>
+<div class="wipe" style="--route-color: {{route.color}}" aria-hidden="true">
+  <div class="route-shutter"></div>
+  <div class="route-card">
+    <svg viewBox="0 0 96 96" fill="none" stroke="currentColor" aria-hidden="true">
+      <circle cx="48" cy="48" r="40" opacity=".4" stroke-dasharray="2 5"></circle>
+      <path d="M48 4v8m0 72v8M4 48h8m72 0h8" opacity=".7"></path>
+      <path class="route-mark" d="{{route.mark}}" pathLength="1" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M19 22h8m-4-4v8M75 72h8m-4-4v8" opacity=".85"></path>
+    </svg>
+    <small>{{route.section}}</small><strong>{{route.title}}</strong>
+  </div>
+</div>
 </sc-if>
 
 <sc-if value="{{tour.on}}" hint-placeholder-val="{{ false }}">
@@ -961,10 +1131,10 @@ var TOUR = [
   { t: 'Elige un disco', b: 'Cada disco es un periodo de seis meses con mapas reales de la NASA. Toca uno para cargarlo. A la derecha cambias entre los datos del EIC y los de NASA GIBS.', id: 'tour-discs', sub: 0, pos: 'bottom' },
   { t: 'Lo que ves tú', b: 'Este es el mapa de la NASA. Naranja y rojo: el mar está más caliente de lo normal; azul: más frío. La línea blanca lo recorre de oeste a este.', id: 'tour-frame', sub: 0, pos: 'br' },
   { t: 'Lo que ve la máquina', b: 'La máquina reduce el mapa a 28×16 píxeles de color. Cada columna que toca la línea blanca se convierte en notas: más calor, más grave y nostálgico.', id: 'tour-machine', sub: 0, pos: 'br' },
-  { t: 'Pulsa reproducir', b: 'Aquí empieza la música. Si no hay nadie encendido, se activa el protagonista del disco.', id: 'tour-play', sub: 0, pos: 'top', extra: 'Reproducir por mí' },
+  { t: 'Pulsa reproducir', b: 'Aquí empieza la música. Si no hay nadie encendido, se activa el protagonista seleccionado.', id: 'tour-play', sub: 0, pos: 'top', extra: 'Reproducir por mí' },
   { t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.', id: 'tour-strip', sub: 0, pos: 'top' },
   { t: 'El escenario', b: 'Aquí tocan los músicos encendidos. Cada uno se mueve al ritmo de la música y el acorde que suena aparece abajo.', id: 'tour-stage', sub: 0, pos: 'bl' },
-  { t: 'El protagonista', b: 'Cada disco tiene un protagonista que escucha un rasgo distinto del mapa. Su cara cambia con la intensidad de la música.', id: 'tour-lead', sub: 0, pos: 'tl' },
+  { t: 'El protagonista', b: 'Elige aquí quién lidera o deja que lo decida el disco. Cada músico escucha un rasgo distinto del mapa.', id: 'tour-lead', sub: 0, pos: 'tl' },
   { t: 'La banda', b: 'Toca a un músico para encenderlo o apagarlo y escucha la diferencia. Con «Todos» y «Ninguno» cambias a toda la banda a la vez.', id: 'tour-band', sub: 0, pos: 'tl' },
   { t: 'Más opciones', b: 'La velocidad, el motor de sonido y el porqué de la música están en esta ventana: no hace falta tocarlos para empezar.', id: 'tour-more', sub: 0, pos: 'tr' },
   { t: 'Otras secciones', b: 'Arriba tienes La banda, para conocer a cada músico; Tus datos, para subir tu propia imagen o CSV; Método y Tecnología.', id: 'tour-top', sub: 0, pos: 'bottom' }
@@ -975,6 +1145,49 @@ var ART = {"silbo": {"comp": "sprites/silbo/compuesto.png", "part": "sprites/sil
 var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var MESC = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 var PAGES = { juke: ['01', 'JUKEBOX'], band: ['02', 'LA BANDA'], data: ['03', 'TUS DATOS'], how: ['04', 'CÓMO SUENA'], tech: ['05', 'TECNOLOGÍA'] };
+var ROUTE_LOOK = {
+  juke: { title: 'Escuchar', color: '#FFD447', mark: 'M20 48h9l7-13 8 26 8-35 9 44 8-22h7' },
+  band: { title: 'La banda', color: '#F06BB0', mark: 'M25 60l12-25 18 11 15-17m-33 6 7 33 26-39M22 60h6m-3-3v6M34 35h6m-3-3v6M52 46h6m-3-3v6M67 29h6m-3-3v6M41 68h6m-3-3v6' },
+  data: { title: 'Tus datos', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
+  how: { title: 'Método', color: '#7BE38A', mark: 'M25 69h46M30 64V52m9 12V41m9 23V27m9 37V36m9 28V48' },
+  tech: { title: 'Tecnología', color: '#AB9CFF', mark: 'M34 34h28v28H34zM42 42h12v12H42zM41 34V24m14 10V24m-14 38v10m14-10v10M34 41H24m10 14H24m38-14h10M62 55h10' }
+};
+var BAND_ENTRY_DURATION = 740;
+var BAND_INSTRUMENTS = {
+  silbo: {
+    name: 'QUENA',
+    line: 'M185 322l101-126 15 12-101 126z M286 196l-3 14 18-2 M196 308l15 12 M211 299l3-4m7-8 3-4m7-8 3-4m7-8 3-4m7-8 3-4m7-8 3-4 M165 300q-5-19 8-31m-20 26q-4-22 11-36',
+    stars: [[185,322],[200,334],[286,196],[301,208],[214,295],[224,283],[234,271],[244,259],[254,247],[264,235],[165,300]]
+  },
+  inti: {
+    name: 'MARIMBA',
+    line: 'M159 234h162l18 58H141z M177 234l-12 58m39-58-7 58m32-58-2 58m28-58 2 58m23-58 8 58m19-58 11 58 M176 292v27h12v-27m21 0v39h13v-39m19 0v33h13v-33m20 0v25h12v-25m21 0v16h11v-16 M174 190l51 36m81-36-51 36 M168 183l12 8m132-8-12 8',
+    stars: [[159,234],[321,234],[141,292],[339,292],[197,292],[227,292],[257,292],[288,292],[215,331],[247,325],[174,190],[306,190]]
+  },
+  mama: {
+    name: 'ARPA',
+    line: 'M177 329l6-140 15-9 108 42 15 93-144 14z M183 189l12 128 112-11-12-76-97-50 M214 187v128m20-120v118m20-110v108m20-100v98m20-90v88 M177 329l-10 9h155l-1-23',
+    stars: [[183,189],[198,180],[306,222],[321,315],[177,329],[167,338],[214,188],[234,196],[254,204],[274,212],[294,220],[254,311]]
+  },
+  yaku: {
+    name: 'GOTERO',
+    line: 'M218 225v-24a22 22 0 0 1 44 0v24z M209 225h62v13h-62z M223 238l7 43 10 12 10-12 7-43 M240 304l-10 17a10 10 0 0 0 20 0z M190 270l-8 13a8 8 0 0 0 16 0z M291 259l-7 12a7 7 0 0 0 14 0z M207 344q33 12 66 0m-81 11q48 20 96 0',
+    stars: [[218,201],[240,179],[262,201],[209,225],[271,225],[230,281],[240,293],[250,281],[240,304],[190,270],[291,259],[207,344],[273,344]]
+  },
+  illapa: {
+    name: 'TIMBAL',
+    line: 'M158 250a82 27 0 1 0 164 0 82 27 0 1 0-164 0z M158 250l19 68q63 33 126 0l19-68 M177 318l21-44 16 57 25-54 25 54 16-57 23 44 M173 184l52 48m82-48-52 48 M166 177l14 13m134-13-14 13',
+    stars: [[158,250],[240,223],[322,250],[240,277],[177,318],[214,331],[264,331],[303,318],[173,184],[307,184],[225,232],[255,232]]
+  }
+};
+// Motivos de la costa, el sol, el mar, el agua y la tormenta, respectivamente.
+var BAND_EFFECTS = {
+  silbo: 'M62 190h24v-16h21v-16h24 M349 188h20v-17h23v-17h23 M348 226q23-26 48-14t34-11 M357 241q22-22 39-13t26-10 M50 398q30-24 58 0t44 0',
+  inti: 'M61 262a70 70 0 0 1 72-92 M76 256a55 55 0 0 1 57-72 M55 239l-21-2m28-18-19-9m30-10-16-15m31 0-9-19 M358 158l23-18m-14 41 27-7m-24 33 29 4m-35 22 23 17 M367 359a59 59 0 0 0 33-55',
+  mama: 'M39 310q32-48 69-9t58-12 M48 327q28-39 60-4t49-10 M310 413q43-35 75 0t62-7 M320 433q36-31 67-1t50-9 M376 226q18-28 43-10t24-19',
+  yaku: 'M74 203q-16 22-16 29a16 16 0 0 0 32 0q0-7-16-29Z M399 251q-11 15-11 21a11 11 0 0 0 22 0q0-6-11-21Z M102 365q-9 12-9 17a9 9 0 0 0 18 0q0-5-9-17Z M56 428q33-18 65 0m-52 11q19-9 40 0 M378 374q-9 12-9 17a9 9 0 0 0 18 0q0-5-9-17Z M355 419q27-13 57 0',
+  illapa: 'M61 178q15-24 42-13 16-26 49-17 M346 137q20-19 42-7 25-13 45 7 M99 182l-26 39 24-6-14 33 42-49-26 7 16-24 M400 206l-24 36 21-5-16 31 41-45-24 5 13-22 M339 404q32-26 65-13m-54 30q25-20 52-13'
+};
 var BAND = [
   { k: 'silbo', name: 'SILBO', color: '#FFD447', disc: 'Invierno 2025', glyph: '♪', ins: 'FLAUTA', clip: 'tocar_flauta', clips: 'idle · tocar_flauta · nota · motivo_silbo · aparecer / salir', origin: 'Huaco silbador moche, 1500 años', listens: 'Solo el recuadro de la costa norte del Perú (82°–76°O, 3°–18°S).', plays: 'Un silbido de vasija con vibrato. Aparece cuando la costa supera el nivel +2.', persona: 'Viejo, sabio, de pocas palabras. Es el narrador y el que da la alarma.', quote: 'Cuando yo silbo, en Chiclayo va a llover.', brief: 'botella silbadora moche de barro ocre con asa puente, ojos pequeños, gotas de agua saliendo de su pico; 3 frames de reposo y 2 de silbido.' },
   { k: 'inti', name: 'INTI', color: '#FF5A36', disc: 'Verano 2024–25', glyph: '♫', ins: 'MARIMBA', clip: 'tocar_marimba', clips: 'idle · tocar_marimba · golpe_izq / golpe_der · acento · aparecer / salir', origin: 'El sol, en quechua', listens: 'El promedio de los píxeles cálidos (amarillo → rojo) de cada grupo de 4 columnas.', plays: 'Acordes lentos de marimba en Mi menor: Mim7, Domaj7, Sol y Re. Cuanto más calor, más grave.', persona: 'Cálido y nostálgico. Antes festejaba el sol; ahora canta lo que el calor se lleva.', quote: '¿Cuánto calor puede aguantar el mar?', brief: 'sol pixelado con rayos escalonados y cara expresiva, paleta amarillo-naranja-rojo; brilla más con la intensidad.' },
@@ -1020,7 +1233,7 @@ var OBJ = [
   { tag: 'MUSICAL', title: 'Agradable, no ruido', where: 'El motor Melodía usa escalas, acordes y una progresión por disco, no píxeles convertidos a tonos al azar.', page: 'juke' },
   { tag: 'ACCESIBLE', title: 'Para personas ciegas o con baja visión', where: 'Descripción por voz, subtítulos de sonido, vibración, teclado, alto contraste y texto grande.', page: 'juke' },
   { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen o un CSV y suena con la misma banda.', page: 'data' },
-  { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cada disco tiene un protagonista con personalidad. Mamacocha se apaga cuando el mar se calienta. El escenario muestra quién toca en cada momento.', page: 'band' },
+  { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cada disco sugiere un protagonista con personalidad. Mamacocha se apaga cuando el mar se calienta. El escenario muestra quién toca en cada momento.', page: 'band' },
   { tag: 'PROCESO', title: 'Documentar el método', where: 'La página Tecnología explica herramientas, datos y uso de IA, con lo hecho y lo planeado.', page: 'tech' }
 ];
 var STEPS = [
@@ -1031,7 +1244,7 @@ var STEPS = [
   { n: '05', title: 'Cinco músicos', body: 'Inti, Mamacocha, Yaku, Illapa y Silbo convierten esos niveles en acordes, bajo, gotas, truenos y silbidos. En modo Melodía, todos tocan en la tonalidad y la progresión del disco.' },
   { n: '06', title: 'Para todos', body: 'Subtítulos de sonido, descripción por voz, vibración, teclado y alto contraste.' },
   { n: '07', title: 'Tus datos', body: 'Sube una imagen o un CSV. Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Se procesa en tu navegador.' },
-  { n: '08', title: 'Un protagonista por disco', body: 'Cada disco enciende a su personaje. Suma a los demás para armar la banda completa.' }
+  { n: '08', title: 'Elige al protagonista', body: 'Cada disco sugiere un músico. Puedes elegir otro en Escuchar y sumar a los demás para armar la banda completa.' }
 ];
 var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
 var CHORDS = { Am: [[220,261.63,329.63],110], C: [[261.63,329.63,392],130.81], F: [[174.61,220,261.63],87.31], G: [[196,246.94,293.66],98], E: [[164.81,207.65,246.94],82.41] };
@@ -1177,13 +1390,13 @@ function makeLogo() {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { tab: 'juke', sub: 0, tour: 0, more: false, bsel: 0, set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
-      trans: false, transTo: 'juke', techFilter: 'all', engine: 'melody', chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
+    this.state = { tab: 'juke', sub: 0, tour: 0, more: false, bsel: 0, bphase: 'idle', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+      trans: false, routeArrived: false, route: ROUTE_LOOK.juke, techFilter: 'all', engine: 'melody', leadOverride: null, chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: 'Sube tu propia imagen o CSV y escúchalo.',
       mute: { silbo: false, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
-      caption: 'Elige un disco y pulsa Reproducir: cada disco enciende a su protagonista.' };
-    this.timer = null; this.ac = null; this.lastThunder = -9; this.tm = []; this.melDeg = null;
+      caption: 'Elige un disco y un protagonista, y pulsa Reproducir.' };
+    this.timer = null; this.ac = null; this.lastThunder = -9; this.routeTimers = []; this.melDeg = null;
+    this.bandTimer = null; this.bandTurn = 0;
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
-    this.tbars = []; for (var i = 0; i < 14; i++) this.tbars.push({ delay: (i * 0.02).toFixed(2) + 's' });
   }
   componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); }, 200);
     try { if (!localStorage.getItem('ts_tour')) this.setState({ tour: 1 }); } catch (e) { this.setState({ tour: 1 }); }
@@ -1198,17 +1411,42 @@ class Component extends DCLogic {
   }
   tourGo(n) {
     if (n < 1 || n > TOUR.length) { this.tourEnd(); return; }
+    this.routeTimers.forEach(clearTimeout);
     var st = TOUR[n - 1], s = this.state;
     this.navDir = st.sub >= s.sub || s.tab !== 'juke' ? 1 : -1; this.navCount = (this.navCount || 0) + 1;
-    this.setState({ tour: n, tab: 'juke', sub: st.sub, trans: false });
+    this.setState({ tour: n, tab: 'juke', sub: st.sub, trans: false, routeArrived: false });
   }
   tourEnd() { this.setState({ tour: 0 }); try { localStorage.setItem('ts_tour', '1'); } catch (e) {} }
   syncAnims() {
-    if (!document.getAnimations || document.hidden) return;
+    if (this.state.tab === 'band' || !document.getAnimations || document.hidden) return;
     var t0 = this.state.playing ? (this.playT0 || 0) : 0;
     document.getAnimations().forEach(function (an) { var n = an.animationName; if ((n === 'sprplay' || n === 'fplay') && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
   }
-  componentWillUnmount() { clearInterval(this.syncTimer); this.stop(); this.tm.forEach(clearTimeout); if (this.ac) this.ac.close(); }
+  componentWillUnmount() { clearInterval(this.syncTimer); clearTimeout(this.bandTimer); ++this.bandTurn; this.stop(); this.routeTimers.forEach(clearTimeout); if (this.ac) this.ac.close(); }
+  bandReduced() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  pickBand(index) {
+    clearTimeout(this.bandTimer);
+    var self = this, turn = ++this.bandTurn;
+    var begin = function () {
+      if (self.state.tab !== 'band' || turn !== self.bandTurn) return;
+      var reduce = self.bandReduced();
+      self.setState({ bsel: index, bphase: reduce ? 'idle' : 'entry' });
+      if (reduce) return;
+      self.bandTimer = setTimeout(function () {
+        if (self.state.tab !== 'band' || turn !== self.bandTurn) return;
+        self.setState({ bphase: self.bandReduced() ? 'idle' : 'loading' });
+      }, BAND_ENTRY_DURATION);
+    };
+    if (this.state.bphase === 'entry' && !this.bandReduced()) {
+      // Unmount the cut-in for one paint so every layer restarts on a rapid selection.
+      this.setState({ bsel: index, bphase: 'idle' });
+      requestAnimationFrame(function () { requestAnimationFrame(begin); });
+      return;
+    }
+    begin();
+  }
   url(d, f) { if (d === 5) return this.state.custom ? this.state.custom.url : ''; return DISCS[d].files[f]; }
   frameDate(d, f) { var dt = DISCS[d].dates && DISCS[d].dates[f]; if (dt) { var q = dt.split('-'); return { m: +q[1] - 1, y: +q[0] }; } var s = DISCS[d].start, m = s[1] + f, y = s[0] + Math.floor(m / 12); return { m: m % 12, y: y }; }
   applySet(name) {
@@ -1225,9 +1463,32 @@ class Component extends DCLogic {
   }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
   allMute(v) { var m = {}; BAND.forEach(function (b) { m[b.k] = v; }); return m; }
-  leadChar() {
-    var s = this.state; if (s.disc < 5) return DISC_CHAR[s.disc];
-    var a = this.cur(); return a && a.cold > a.warm ? 'mama' : 'inti';
+  discLead(disc, analysis) {
+    return DISC_CHAR[disc] || (analysis && analysis.cold > analysis.warm ? 'mama' : 'inti');
+  }
+  leadChar() { return this.state.leadOverride || this.discLead(this.state.disc, this.cur()); }
+  cycleLead(direction) {
+    var key = this.leadChar();
+    var current = BAND.findIndex(function (b) { return b.k === key; });
+    this.selectLead(BAND[(current + direction + BAND.length) % BAND.length].k);
+  }
+  selectLead(value) {
+    var lead = BAND.find(function (b) { return b.k === value; });
+    if (value !== 'auto' && !lead) return;
+    var override = lead ? lead.k : null, s = this.state;
+    if (s.leadOverride === override) return;
+    var key = override || this.discLead(s.disc, this.cur());
+    var mute = Object.assign({}, s.mute);
+    mute[key] = false;
+    this.melDeg = null;
+    var self = this;
+    this.setState({ leadOverride: override, mute: mute, chord: '',
+      caption: lead ? 'Protagonista: ' + lead.name + '.' : 'El protagonista sigue la sugerencia del disco.'
+    }, function () {
+      if (!self.state.playing || self.state.engine !== 'melody') return;
+      clearInterval(self.timer);
+      self.timer = setInterval(function () { self.tick(); }, self.stepMs());
+    });
   }
   loadDisc(d) { if (d === 5) return; for (var f = 0; f < DISCS[d].files.length; f++) this.analyze(d, f); }
   frameTag(d, f) {
@@ -1262,26 +1523,39 @@ class Component extends DCLogic {
   }
   goSub(i) {
     var s = this.state, cnt = this.subCount();
-    if (i < 0 || i >= cnt || i === s.sub || s.trans) return;
-    this.navDir = i > s.sub ? 1 : -1; this.navCount = (this.navCount || 0) + 1;
-    this.setState({ sub: i });
+    if (!Number.isInteger(i) || i < 0 || i >= cnt || i === s.sub || s.trans) return;
+    this.routeChange({ sub: i }, s.tab, this.subTitles()[i]);
   }
   goTab(k, sub) {
-    var s = this.state, self = this;
+    var s = this.state;
     if ((k === s.tab && (sub == null || sub === s.sub)) || s.trans) return;
     if (k === s.tab) { this.goSub(sub); return; }
+    if (s.tab === 'band') {
+      clearTimeout(this.bandTimer);
+      ++this.bandTurn;
+      this.setState({ bphase: 'idle' });
+    }
     this.stop();
+    var patch = { tab: k, col: -1, sub: sub || 0 };
+    if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
+    this.routeChange(patch, k);
+  }
+  routeChange(patch, tab, title) {
+    var self = this;
     var swap = function () {
-      self.navDir = 0; self.navCount = (self.navCount || 0) + 1;
-      var patch = { tab: k, col: -1, sub: sub || 0 };
-      if (k === 'data' && self.state.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
-      self.setState(patch);
+      self.navCount = 0;
+      self.setState(Object.assign({ routeArrived: self.state.trans }, patch), function () {
+        var screen = document.querySelector('.px .viewport > .scr');
+        if (screen) screen.scrollTop = 0;
+      });
     };
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { swap(); return; }
-    this.setState({ trans: true, transTo: k });
-    this.tm.push(setTimeout(swap, 400));
-    this.tm.push(setTimeout(function () { self.setState({ trans: false }); }, 920));
+    if (this.bandReduced() || this.state.tour) { swap(); return; }
+    var look = ROUTE_LOOK[tab];
+    this.setState({ trans: true, route: Object.assign({}, look, { section: look.title + ' · ' + PAGES[tab][0], title: title || look.title }) });
+    this.routeTimers = [
+      setTimeout(swap, 320),
+      setTimeout(function () { self.setState({ trans: false, routeArrived: false }); }, 720)
+    ];
   }
   analyze(d, f, force) {
     var key = d + '_' + f, self = this;
@@ -1352,7 +1626,8 @@ class Component extends DCLogic {
   showCustom(custom, an, msg) {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
-    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: this.only(an.cold > an.warm ? 'mama' : 'inti'), upMsg: msg, caption: 'Cargado: ' + custom.name + '. Pulsa Reproducir para escucharlo.' });
+    var mute = this.state.leadOverride ? this.state.mute : this.only(this.discLead(5, an));
+    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: 'Cargado: ' + custom.name + '. Pulsa Reproducir para escucharlo.' });
   }
   handleFile(f) {
     var self = this, name = f.name;
@@ -1534,7 +1809,7 @@ class Component extends DCLogic {
   }
   setEngine(k) {
     this.stop(); this.melDeg = null;
-    this.setState({ engine: k, caption: k === 'melody' ? 'Motor Melodía: la banda toca en una tonalidad y una progresión por disco.' : 'Motor Datos puros: cada color suena directo, sin armonía.' });
+    this.setState({ engine: k, caption: k === 'melody' ? 'Motor Melodía: el protagonista guía la tonalidad y la progresión.' : 'Motor Datos puros: cada color suena directo, sin armonía.' });
   }
   note(type, midi, t, dur, vol, o) {
     o = o || {};
@@ -1648,7 +1923,7 @@ class Component extends DCLogic {
     var go = function () { self.melDeg = null; self.playT0 = document.timeline.currentTime; self.setState({ playing: true, col: -1 }); self.timer = setInterval(function () { self.tick(); }, self.stepMs()); };
     if (allOff) {
       var nm = BAND.filter(function (b) { return b.k === k; })[0].name;
-      this.setState({ mute: this.only(k), caption: 'La banda estaba apagada: activé a ' + nm + ', protagonista de este disco.' }, go);
+      this.setState({ mute: this.only(k), caption: 'La banda estaba apagada: activé a ' + nm + ', el protagonista seleccionado.' }, go);
     } else go();
   }
   tick() {
@@ -1671,7 +1946,8 @@ class Component extends DCLogic {
     th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
     th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
-    var cells = []; for (var i = 0; i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
+    var isBand = s.tab === 'band';
+    var cells = []; for (var i = 0; !isBand && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); }; };
     var tog = function (k) { return function () { var p = {}; p[k] = !s[k]; self.setState(p); if (k === 'voice' && s.voice && window.speechSynthesis) window.speechSynthesis.cancel(); }; };
@@ -1688,10 +1964,10 @@ class Component extends DCLogic {
           border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
     });
     var bandIndex = Math.min(s.bsel, BAND.length - 1);
-    var bandReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var bandPose = function (i, animated) {
-      return 'sprites/' + BAND[i].k + (animated ? '/pose-banda-animada.webp' : '/pose-banda.webp');
-    };
+    var bandTurn = this.bandTurn, bandKey = BAND[bandIndex].k;
+    var bandFolder = 'sprites/' + bandKey + '/';
+    var bandInstrument = BAND_INSTRUMENTS[bandKey];
+    var bandPhase = this.bandReduced() ? 'idle' : s.bphase;
     var tstep = s.tour ? TOUR[s.tour - 1] : null;
     var hlOf = function (id) { return tstep && tstep.id === id ? 'position: relative; z-index: 70; outline: 2px solid var(--fg); outline-offset: 6px; background: var(--bg); animation: tourpulse 1.6s ease-in-out infinite' : ''; };
     var tourVm = { on: !!tstep, n: s.tour, total: TOUR.length, title: tstep ? tstep.t : '', body: tstep ? tstep.b : '', pos: tstep ? tstep.pos : 'bottom',
@@ -1709,7 +1985,8 @@ class Component extends DCLogic {
       prev: function () { self.goSub(sub - 1); },
       next: function () { if (lastSub) self.goTab(pgNext); else self.goSub(sub + 1); },
       showMini: (s.tab === 'juke' && sub !== 1) || (s.tab === 'data' && sub === 0 && hasCustom) };
-    var scrDir = this.navDir == null ? 0 : this.navDir, scrCls = 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + ((this.navCount || 0) % 2 ? '-a' : '-b');
+    var scrDir = this.navDir || 0, scrCls = this.navCount ? 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + (this.navCount % 2 ? '-a' : '-b') : '';
+    if (s.routeArrived) scrCls = 'route-arrive';
     var scrVm = { play: (s.tab === 'juke' && sub === 0) || (s.tab === 'data' && sub === 1), dUp: s.tab === 'data' && sub === 0, bPage: s.tab === 'band',
       hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
       tPage: s.tab === 'tech' && !techCur.credits, tCred: s.tab === 'tech' && !!techCur.credits };
@@ -1742,7 +2019,8 @@ class Component extends DCLogic {
         bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, sub: on ? '#0A0D1A' : th.muted, border: on ? th.accent : th.line, pick: function () { self.setEngine(e.key); } };
     });
     var objectives = OBJ.map(function (o) { var nm = PAGES[o.page][1]; return { tag: o.tag, title: o.title, where: o.where, goLabel: 'Ir a ' + nm.charAt(0) + nm.slice(1).toLowerCase(), go: function () { self.goTab(o.page); } }; });
-    var tp = PAGES[s.transTo] || PAGES.juke;
+    var leadKey = this.leadChar();
+    var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
       th: th, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
@@ -1754,7 +2032,12 @@ class Component extends DCLogic {
       engineDesc: (melody ? 'Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.' : 'Datos puros: cada color suena directo, sin armonía.') + ' IA local e IA en la nube: planeadas.',
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, objectives: objectives,
       frameCount: s.disc === 5 ? 'tus datos' : 'fotograma ' + (s.frame + 1) + ' de ' + d.files.length, prevOff: s.frame <= 0, nextOff: s.frame >= d.files.length - 1,
-      trans: s.trans, tbars: this.tbars, transNum: tp[0], transName: tp[1], pageName: PAGES[s.tab][1],
+      trans: s.trans, route: s.route, pageName: PAGES[s.tab][1],
+      sectionNumber: PAGES[s.tab][0],
+      sectionName: ROUTE_LOOK[s.tab].title,
+      sectionColor: hc ? th.fg : ROUTE_LOOK[s.tab].color,
+      signalClass: s.playing ? 'on' : '',
+      signalLabel: s.playing ? 'Reproduciendo' : 'En pausa',
       isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
       showMain: isJuke || isData, showPlayer: isJuke || (isData && hasCustom), dataEmpty: isData && !hasCustom,
       showStrip: s.disc !== 5, showSilbo: s.disc !== 5,
@@ -1776,8 +2059,11 @@ class Component extends DCLogic {
         return { thumb: self.url(k, 0), ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
           pick: function () {
             self.stop(); self.lastThunder = -9;
-            var who = k < 5 ? DISC_CHAR[k] : (self.state.an['5_0'] && self.state.an['5_0'].cold > self.state.an['5_0'].warm ? 'mama' : 'inti');
-            self.setState({ disc: k, frame: 0, col: -1, mute: self.only(who), caption: 'Disco ' + x.n + ': ' + x.title + '. Se enciende ' + BAND.filter(function (b) { return b.k === who; })[0].name + '. Pulsa Reproducir.' });
+            var manual = self.state.leadOverride;
+            var who = manual || self.discLead(k, self.state.an[k + '_0']);
+            var name = BAND.find(function (b) { return b.k === who; }).name;
+            self.setState({ disc: k, frame: 0, col: -1, mute: manual ? self.state.mute : self.only(who),
+              caption: 'Disco ' + x.n + ': ' + x.title + '. Protagonista: ' + name + '. Pulsa Reproducir.' });
             self.loadDisc(k);
           } };
       }),
@@ -1792,9 +2078,29 @@ class Component extends DCLogic {
       hl: { discs: hlOf('tour-discs'), frame: hlOf('tour-frame'), machine: hlOf('tour-machine'), play: hlOf('tour-play'), strip: hlOf('tour-strip'), stage: hlOf('tour-stage'), lead: hlOf('tour-lead'), band: hlOf('tour-band'), more: hlOf('tour-more'), top: hlOf('tour-top') },
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
       techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
-      bandCur: Object.assign({ poseUrl: bandPose(bandIndex, !bandReduced), accent: hc ? th.fg : band[bandIndex].color, number: '0' + (bandIndex + 1) }, band[bandIndex]),
+      bandViewClass: isBand ? 'band-view' : '',
+      bandCur: Object.assign({
+        poseUrl: bandFolder + 'pose-banda.webp',
+        motionUrl: bandFolder + 'pose-banda-animada.webp',
+        accent: hc ? th.fg : band[bandIndex].color,
+        effect: BAND_EFFECTS[bandKey],
+        silboNotes: bandKey === 'silbo' && bandPhase === 'play',
+        instrumentName: bandInstrument.name,
+        instrumentLine: bandInstrument.line,
+        instrumentStars: bandInstrument.stars.map(function (point) {
+          return 'M' + point[0] + ' ' + (point[1] - 5) + 'l1.4 3.6 3.6 1.4-3.6 1.4-1.4 3.6-1.4-3.6-3.6-1.4 3.6-1.4z';
+        }).join(' '),
+        number: '0' + (bandIndex + 1),
+        entryDuration: BAND_ENTRY_DURATION,
+        entering: bandPhase === 'entry',
+        entrance: bandPhase === 'entry' ? 'bentering' : bandPhase === 'play' ? 'bplaying' : '',
+        moving: bandPhase === 'loading' || bandPhase === 'play',
+        motionReady: function () {
+          if (self.state.tab === 'band' && self.state.bphase === 'loading' && bandTurn === self.bandTurn) self.setState({ bphase: 'play' });
+        }
+      }, band[bandIndex]),
       bandSel: band.map(function (x, i) {
-        return { name: x.name, poseUrl: bandPose(i, false), color: hc ? th.fg : x.color, on: i === bandIndex, pick: function () { self.setState({ bsel: i }); } };
+        return { name: x.name, poseUrl: 'sprites/' + BAND[i].k + '/miniatura-banda.webp', color: hc ? th.fg : x.color, on: i === bandIndex, pick: function () { self.pickBand(i); } };
       }),
       moreOpen: s.more, toggleMore: function () { self.setState({ more: !s.more }); }, closeMore: function () { self.setState({ more: false }); },
       fileName: hasCustom ? s.custom.name : 'Tu archivo',
@@ -1806,6 +2112,11 @@ class Component extends DCLogic {
       goHome: function () { self.goTab('juke'); },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
       lead: this.leadInfo(th),
+      leadPosition: (leadIndex + 1) + ' / ' + BAND.length,
+      leadAuto: !s.leadOverride,
+      prevLead: function () { self.cycleLead(-1); },
+      nextLead: function () { self.cycleLead(1); },
+      autoLead: function () { self.selectLead('auto'); },
       strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: 'Ver ' + MES[fd.m] + ' de ' + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playLabel: s.playing ? 'Pausar' : 'Reproducir', playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
@@ -1813,7 +2124,7 @@ class Component extends DCLogic {
       prevFrame: function () { self.gotoFrame(s.frame - 1); }, nextFrame: function () { self.gotoFrame(s.frame + 1); },
       speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
       caption: s.caption,
-      bandStatus: activeN === 0 ? 'Banda apagada. Cada disco enciende a su protagonista; suma a los demás para armar la banda completa.' : activeN === 5 ? 'Banda completa: suenan los cinco.' : activeN + ' de 5 personajes activos.',
+      bandStatus: activeN === 0 ? 'Banda apagada. Pulsa Reproducir para activar al protagonista.' : activeN === 5 ? 'Banda completa: suenan los cinco.' : activeN + ' de 5 personajes activos.',
       bandAll: function () { self.setState({ mute: self.allMute(false) }); },
       bandNone: function () { self.setState({ mute: self.allMute(true) }); },
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: 'Banda completa activada. Pulsa Reproducir.' }); self.goTab('juke'); },

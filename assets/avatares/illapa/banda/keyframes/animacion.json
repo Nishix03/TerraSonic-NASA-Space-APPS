@@ -24,31 +24,31 @@
   "secuencia": [
     {
       "keyframe": 0,
-      "ms": 320
+      "ms": 240
     },
     {
       "keyframe": 1,
-      "ms": 180
+      "ms": 210
     },
     {
       "keyframe": 2,
-      "ms": 130
+      "ms": 155
     },
     {
       "keyframe": 3,
-      "ms": 95
+      "ms": 150
     },
     {
       "keyframe": 2,
-      "ms": 130
+      "ms": 220
     },
     {
       "keyframe": 1,
-      "ms": 180
+      "ms": 175
     },
     {
       "keyframe": 0,
-      "ms": 440
+      "ms": 280
     }
   ]
 }
