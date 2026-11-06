@@ -158,8 +158,12 @@ a{color:inherit}
 
 /* sprites (arte de Codex) */
 .px .face{position:relative;width:100%;aspect-ratio:530/500;overflow:hidden;flex:0 0 auto}
-.px .face .fstrip{position:absolute;left:0;top:0;height:100%;width:calc(var(--n) * 100%);max-width:none;display:block;pointer-events:none;animation:fplay var(--dur) steps(var(--f)) infinite}
-@keyframes fplay{from{transform:translateX(calc(var(--x0) * 100% / var(--n)))}to{transform:translateX(calc(var(--x1) * 100% / var(--n)))}}
+.px .face .fstrip{position:absolute;left:0;top:0;height:100%;width:calc(var(--n) * 100%);max-width:none;display:block;pointer-events:none}
+.px .leadface .beat-a .fstrip{animation:lead-beat-a var(--dur) steps(var(--f),jump-none)}
+.px .leadface .beat-b .fstrip{animation:lead-beat-b var(--dur) steps(var(--f),jump-none)}
+@keyframes lead-beat-a{from{transform:translateX(calc(var(--x0) * 100% / var(--n)))}to{transform:translateX(calc(var(--x1) * 100% / var(--n)))}}
+@keyframes lead-beat-b{from{transform:translateX(calc(var(--x0) * 100% / var(--n)))}to{transform:translateX(calc(var(--x1) * 100% / var(--n)))}}
+.px .leadface .sp .pt{animation-duration:var(--dur)}
 .px .spr{width:var(--s);height:var(--s);background-repeat:no-repeat;image-rendering:pixelated;background-image:var(--img);background-size:calc(var(--n) * var(--s)) var(--s);background-position:calc(var(--x0) * var(--s)) 0;animation:sprplay var(--dur) steps(var(--f)) infinite}
 @keyframes sprplay{from{background-position:calc(var(--x0) * var(--s)) 0}to{background-position:calc(var(--x1) * var(--s)) 0}}
 .px .sp .spr{position:absolute;left:50%;bottom:4%;margin-left:calc(var(--s) / -2)}
@@ -822,7 +826,7 @@ a{color:inherit}
 </div>
 <div class="when"><span class="tag">{{disc.title}}</span><b>{{frameLabel}}</b></div>
 <span class="grow"></span>
-<button type="button" class="btn sm quiet" onClick="{{describe}}">Describir en voz alta</button>
+<button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
 <div id="tour-more" style="{{hl.more}}; display: inline-flex"><button type="button" class="btn sm" onClick="{{toggleMore}}" aria-haspopup="dialog">Más opciones</button></div>
 </div>
 
@@ -879,7 +883,7 @@ a{color:inherit}
 
 <aside id="tour-lead" aria-label="Protagonista de la reproducción" class="lead lh {{lead.pop}}" style="--lead-color: {{lead.color}}; border-color: {{lead.color}}; {{hl.lead}}">
 <div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
-<div class="sp {{lead.cls}}" style="color: {{lead.color}}">
+<div class="sp {{lead.cls}}" style="color: {{lead.color}}; --dur: {{lead.fDur}}">
 <div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
 <span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 6px; right: 8px"></span>
 </div>
@@ -943,7 +947,7 @@ a{color:inherit}
   <path fill="currentColor" d="M76 120l2 6 6 2-6 2-2 6-2-6-6-2 6-2z M402 163l2 5 5 2-5 2-2 5-2-5-5-2 5-2z M107 387l1 4 4 1-4 1-1 4-1-4-4-1 4-1z M396 405l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"></path>
 </svg>
 <img class="bportrait bportrait-still" decoding="async" src="{{bandCur.poseUrl}}" alt="" width="360" height="540">
-<sc-if value="{{bandCur.moving}}"><img class="bportrait bportrait-motion" onLoad="{{bandCur.motionReady}}" src="{{bandCur.motionUrl}}" alt="" width="360" height="540"></sc-if>
+<sc-if value="{{bandCur.moving}}"><img class="bportrait bportrait-motion" onLoad="{{bandCur.motionReady}}" onError="{{bandCur.motionError}}" src="{{bandCur.motionUrl}}" alt="" width="360" height="540"></sc-if>
 <sc-if value="{{bandCur.silboNotes}}">
 <svg class="bsilbo-note" viewBox="0 0 360 540" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.15">
   <path d="M24 31q3-11 15-13"></path>
@@ -1154,6 +1158,20 @@ var ROUTE_LOOK = {
   tech: { title: 'Tecnología', color: '#AB9CFF', mark: 'M34 34h28v28H34zM42 42h12v12H42zM41 34V24m14 10V24m-14 38v10m14-10v10M34 41H24m10 14H24m38-14h10M62 55h10' }
 };
 var BAND_ENTRY_DURATION = 740;
+var PAGE_CUES = {
+  juke: ['sine', [440, 659.25, 880]],
+  band: ['triangle', [392, 523.25, 783.99]],
+  data: ['sine', [349.23, 523.25, 698.46]],
+  how: ['triangle', [329.63, 493.88, 659.25]],
+  tech: ['triangle', [293.66, 440, 587.33]]
+};
+var BAND_CUES = {
+  silbo: ['sine', [659.25, 783.99, 987.77]],
+  inti: ['triangle', [523.25, 659.25, 783.99]],
+  mama: ['sine', [392, 523.25, 659.25, 783.99]],
+  yaku: ['sine', [783.99, 1046.5, 880]],
+  illapa: ['triangle', [196, 146.83]]
+};
 var BAND_INSTRUMENTS = {
   silbo: {
     name: 'QUENA',
@@ -1396,7 +1414,14 @@ class Component extends DCLogic {
       mute: { silbo: false, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: 'Elige un disco y un protagonista, y pulsa Reproducir.' };
     this.timer = null; this.ac = null; this.lastThunder = -9; this.routeTimers = []; this.melDeg = null;
+    this.state.sfx = true;
+    this.state.speaking = false;
+    this.state.leadPulse = null;
+    this.leadTimers = new Set();
+    this.leadPulseId = 0;
     this.bandTimer = null; this.bandTurn = 0;
+    this.bandClips = Object.create(null);
+    this.bandClipUrl = null;
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
   }
   componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); }, 200);
@@ -1414,22 +1439,65 @@ class Component extends DCLogic {
     if (n < 1 || n > TOUR.length) { this.tourEnd(); return; }
     this.routeTimers.forEach(clearTimeout);
     var st = TOUR[n - 1], s = this.state;
+    if (s.tab === 'band') this.cancelBandClip();
     this.navDir = st.sub >= s.sub || s.tab !== 'juke' ? 1 : -1; this.navCount = (this.navCount || 0) + 1;
-    this.setState({ tour: n, tab: 'juke', sub: st.sub, trans: false, routeArrived: false });
+    this.setState({ tour: n, tab: 'juke', sub: st.sub, trans: false, routeArrived: false, bphase: 'idle' });
   }
   tourEnd() { this.setState({ tour: 0 }); try { localStorage.setItem('ts_tour', '1'); } catch (e) {} }
   syncAnims() {
     if (this.state.tab === 'band' || !document.getAnimations || document.hidden) return;
     var t0 = this.state.playing ? (this.playT0 || 0) : 0;
-    document.getAnimations().forEach(function (an) { var n = an.animationName; if ((n === 'sprplay' || n === 'fplay') && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
+    document.getAnimations().forEach(function (an) { if (an.animationName === 'sprplay' && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
   }
-  componentWillUnmount() { clearInterval(this.syncTimer); clearTimeout(this.bandTimer); ++this.bandTurn; this.stop(); this.routeTimers.forEach(clearTimeout); if (this.ac) this.ac.close(); }
+  componentWillUnmount() {
+    clearInterval(this.syncTimer);
+    this.cancelBandClip();
+    this.utterance = null;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    this.stop();
+    this.routeTimers.forEach(clearTimeout);
+    if (this.ac) this.ac.close();
+  }
   bandReduced() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
-  pickBand(index) {
+  bandClipPath(key) { return 'sprites/' + key + '/pose-banda-animada.webp'; }
+  preloadBandClip(key, priority) {
+    if (location.protocol === 'file:') return Promise.resolve(null);
+    if (!this.bandClips[key]) {
+      var self = this;
+      this.bandClips[key] = fetch(this.bandClipPath(key), { priority: priority }).then(function (response) {
+        if (!response.ok) throw new Error('No se pudo precargar el gesto');
+        return response.blob();
+      }).catch(function () {
+        delete self.bandClips[key];
+        return null;
+      });
+    }
+    return this.bandClips[key];
+  }
+  warmBandClips() {
+    if (this.bandReduced() || (navigator.connection && navigator.connection.saveData)) return;
+    var self = this, first = BAND[this.state.bsel].k;
+    this.preloadBandClip(first, 'high');
+    // Warm the rest one at a time while the stage is open.
+    BAND.reduce(function (previous, musician) {
+      return previous.then(function () {
+        if (self.state.tab === 'band' && !self.bandReduced()) return self.preloadBandClip(musician.k, 'low');
+      });
+    }, this.bandClips[first] || Promise.resolve());
+  }
+  cancelBandClip() {
     clearTimeout(this.bandTimer);
-    var self = this, turn = ++this.bandTurn;
+    ++this.bandTurn;
+    if (this.bandClipUrl) URL.revokeObjectURL(this.bandClipUrl);
+    this.bandClipUrl = null;
+  }
+  pickBand(index) {
+    this.cancelBandClip();
+    var self = this, turn = this.bandTurn, key = BAND[index].k;
+    this.playCue(BAND_CUES[key]);
+    var clip = this.bandReduced() ? null : this.preloadBandClip(key, 'high');
     var begin = function () {
       if (self.state.tab !== 'band' || turn !== self.bandTurn) return;
       var reduce = self.bandReduced();
@@ -1437,7 +1505,12 @@ class Component extends DCLogic {
       if (reduce) return;
       self.bandTimer = setTimeout(function () {
         if (self.state.tab !== 'band' || turn !== self.bandTurn) return;
-        self.setState({ bphase: self.bandReduced() ? 'idle' : 'loading' });
+        self.setState({ bphase: 'buffering' });
+        Promise.resolve(clip).then(function (blob) {
+          if (self.state.tab !== 'band' || turn !== self.bandTurn || self.bandReduced()) return;
+          self.bandClipUrl = blob ? URL.createObjectURL(blob) : null;
+          self.setState({ bphase: 'loading' });
+        });
       }, BAND_ENTRY_DURATION);
     };
     if (this.state.bphase === 'entry' && !this.bandReduced()) {
@@ -1483,7 +1556,7 @@ class Component extends DCLogic {
     mute[key] = false;
     this.melDeg = null;
     var self = this;
-    this.setState({ leadOverride: override, mute: mute, chord: '',
+    this.setState({ leadOverride: override, leadPulse: null, mute: mute, chord: '',
       caption: lead ? 'Protagonista: ' + lead.name + '.' : 'El protagonista sigue la sugerencia del disco.'
     }, function () {
       if (!self.state.playing || self.state.engine !== 'melody') return;
@@ -1532,8 +1605,7 @@ class Component extends DCLogic {
     if ((k === s.tab && (sub == null || sub === s.sub)) || s.trans) return;
     if (k === s.tab) { this.goSub(sub); return; }
     if (s.tab === 'band') {
-      clearTimeout(this.bandTimer);
-      ++this.bandTurn;
+      this.cancelBandClip();
       this.setState({ bphase: 'idle' });
     }
     this.stop();
@@ -1543,11 +1615,13 @@ class Component extends DCLogic {
   }
   routeChange(patch, tab, title) {
     var self = this;
+    this.playCue(PAGE_CUES[tab]);
     var swap = function () {
       self.navCount = 0;
       self.setState(Object.assign({ routeArrived: self.state.trans }, patch), function () {
         var screen = document.querySelector('.px .viewport > .scr');
         if (screen) screen.scrollTop = 0;
+        if (tab === 'band') self.warmBandClips();
       });
     };
     if (this.bandReduced() || this.state.tour) { swap(); return; }
@@ -1612,13 +1686,14 @@ class Component extends DCLogic {
   }
   leadInfo(th) {
     var s = this.state, self = this, k = this.leadChar(), b = BAND.filter(function (x) { return x.k === k; })[0];
-    var off = s.mute[k], lv = s.levels[k] || 0, vm = this.spriteVm(k);
-    var state = off ? 'apagado' : lv > 0.6 ? 'intenso' : lv >= 0.15 ? 'activo' : 'calmo';
+    var off = s.mute[k], art = ART[k];
+    var pulse = s.playing && !off && s.leadPulse && s.leadPulse.key === k ? s.leadPulse : null;
+    var state = off ? 'apagado' : pulse ? 'tocando' : 'calmo';
     if (k !== this.lastLead) { this.lastLead = k; this.leadCount++; }
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches, AL = ART[k];
-    return { faceUrl: off ? CARA[k].offSm : CARA[k].sm, faceN: off ? 1 : CARA[k].n, fx0: off ? 0 : vm.x0, fx1: off ? 0 : vm.x1, fF: off ? 1 : vm.sprF, fDur: vm.sprDur, partUrl: vm.partUrl, pf: vm.pf,
-      cls: vm.cls, dur: vm.dur, clip: vm.clip, ins: vm.ins, glyph: vm.glyph, coneC: vm.coneC, coneOp: vm.coneOp, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', quote: b.quote, state: state, on: !off,
-      anim: !off && s.playing && lv >= 0.15 ? 'bob' : '', toggleLabel: off ? 'Activar a ' + b.name : 'Desactivar a ' + b.name,
+    var beat = pulse && !this.bandReduced() ? (pulse.id % 2 ? ' beat-a ha' : ' beat-b hb') : '';
+    return { faceUrl: off ? CARA[k].offSm : CARA[k].sm, faceN: off ? 1 : CARA[k].n, fx0: -art.ps, fx1: -(art.ps + art.pn - 1), fF: art.pn, fDur: (pulse ? pulse.duration : 0) + 's', partUrl: art.part, pf: art.pfi,
+      cls: 'sp-' + k + (off ? ' off' : '') + beat, pop: this.leadCount % 2 ? 'pa' : 'pb', name: b.name, color: b.color, glow: b.color + '33', state: state, on: !off,
+      toggleLabel: off ? 'Activar a ' + b.name : 'Desactivar a ' + b.name,
       btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A',
       spriteAria: 'Retrato de ' + b.name + ', del pecho a la cabeza, ' + state,
       toggle: function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); } };
@@ -1726,9 +1801,46 @@ class Component extends DCLogic {
     for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v === null) continue; k++; if (v > 0) w += v; else c -= v; if (Math.abs(v) >= 2) strong.push([r, v]); if (v >= 4.4) ext++; }
     return { w: k ? w / k : 0, c: k ? c / k : 0, strong: strong, ext: k ? ext / k : 0, k: k };
   }
-  ensureAudio() {
+  audioContext() {
     if (!this.ac) {
-      var AC = window.AudioContext || window.webkitAudioContext; this.ac = new AC();
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) this.ac = new AC();
+    }
+    return this.ac;
+  }
+  playCue(cue) {
+    if (!this.state.sfx || !cue || (navigator.userActivation && !navigator.userActivation.isActive)) return;
+    var ac;
+    try { ac = this.audioContext(); } catch (e) { return; }
+    if (!ac) return;
+    var self = this;
+    var sound = function () {
+      if (!self.state.sfx || ac.state !== 'running') return;
+      if (!self.cueBus) {
+        self.cueBus = ac.createGain();
+        self.cueBus.connect(ac.destination);
+      }
+      var start = ac.currentTime + 0.012;
+      cue[1].forEach(function (frequency, i) {
+        var t = start + i * 0.048;
+        var oscillator = ac.createOscillator(), envelope = ac.createGain();
+        oscillator.type = cue[0];
+        oscillator.frequency.value = frequency;
+        envelope.gain.setValueAtTime(0.0001, t);
+        envelope.gain.exponentialRampToValueAtTime(0.033, t + 0.012);
+        envelope.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+        oscillator.connect(envelope);
+        envelope.connect(self.cueBus);
+        oscillator.start(t);
+        oscillator.stop(t + 0.16);
+      });
+    };
+    if (ac.state === 'suspended') ac.resume().then(sound).catch(function () {});
+    else sound();
+  }
+  ensureAudio() {
+    this.audioContext();
+    if (!this.master) {
       this.master = this.ac.createGain(); this.master.gain.value = 0.8;
       var comp = this.ac.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ac.destination);
       this.bus = this.ac.createGain(); this.bus.connect(this.master);
@@ -1775,7 +1887,12 @@ class Component extends DCLogic {
     if (!m.yaku && info.strong.length) {
       var picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(3, Math.ceil(info.strong.length / 4)));
       var self2 = this;
-      picks.forEach(function (p, q) { var deg = 15 - p[0], oct = Math.floor(deg / 5), f = 440 * Math.pow(2, (oct * 12 + PENTA[deg % 5]) / 12) / 2; self2.tone('sine', f, t + q * sp / 3, 0.12, 0.22, pan, 1.4); });
+      picks.forEach(function (p, q) {
+        var deg = 15 - p[0], oct = Math.floor(deg / 5), f = 440 * Math.pow(2, (oct * 12 + PENTA[deg % 5]) / 12) / 2;
+        var onset = t + q * sp / 3;
+        self2.tone('sine', f, onset, 0.12, 0.22, pan, 1.4);
+        self2.leadNote('yaku', onset, Math.min(0.22, sp / 3));
+      });
       lv.yaku = Math.min(1, info.strong.length / 10);
     }
     if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push('¡Illapa truena!'); }
@@ -1785,7 +1902,12 @@ class Component extends DCLogic {
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? 'columna ' + (col + 1) + '/28' : lon + '°O';
     var feel = info.k === 0 ? 'tierra, silencio' : info.w > 2 ? 'muy cálido' : info.w > 0.8 ? 'cálido' : info.c > 0.8 ? 'frío' : 'casi normal';
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
-    var bp = this.bump({ inti: has('Inti'), mama: has('Mamacocha'), illapa: has('¡Illapa'), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 }, has('¡Illapa'));
+    var fired = { inti: has('Inti'), mama: has('Mamacocha'), illapa: has('¡Illapa'), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 };
+    if (fired.inti) this.leadNote('inti', t, sp * 3);
+    if (fired.mama) this.leadNote('mama', t, sp * 3.8);
+    if (fired.illapa) this.leadNote('illapa', t, 0.52);
+    if (fired.silbo) this.leadNote('silbo', t, Math.max(0.9, sp * 6));
+    var bp = this.bump(fired, fired.illapa);
     this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') });
   }
   spriteVm(k) {
@@ -1865,17 +1987,20 @@ class Component extends DCLogic {
     if (!m.mama && onBeat) {
       this.note('sine', ch.root - 12, t, sp * 3.8, 0.2 + 0.12 * Math.min(1, info.c / 2), { att: 0.03, rel: 0.25, cut: 500 });
       ch.notes.forEach(function (n, q) { self.note('triangle', n, t, sp * 4, 0.03, { att: 0.35, rel: 0.7, cut: 800 + 400 * Math.min(1, info.w), detune: q % 2 ? 7 : -7, pan: q % 2 ? 0.3 : -0.3 }); });
+      this.leadNote('mama', t, sp * 3.8);
       lv.mama = 0.45 + 0.55 * Math.min(1, info.c / 2); notes.push('Mamacocha: ' + ch.label);
     }
     if (!m.inti && info.k > 0 && (info.w > 0.15 || onBeat)) {
       var base = ch.notes[[0, 1, 2, 1][col % 4] % ch.notes.length] + 12 + (info.w > 2 ? 12 : 0);
       this.marimba(base, t, 0.06 + 0.1 * Math.min(1, info.w / 3), pan); lv.inti = Math.min(1, 0.3 + info.w / 3);
+      this.leadNote('inti', t, Math.min(0.45, sp * 0.85));
       if (onBeat) notes.push('Inti: ' + ch.label);
     }
     if (!m.silbo) {
       if (s.disc !== 5 && a.coast >= 2 && col >= 22 && col <= 25) {
         var md0 = scaleMidi(prof.scale, prof.root + 12, [4, 3, 1, 0][col - 22]);
         this.flute(md0, t, sp * 1.7, 0.13, pan); lv.silbo = 1; if (col === 22) notes.push('Silbo canta su motivo');
+        this.leadNote('silbo', t, sp * 1.7);
       } else {
         var best = null;
         for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v !== null && Math.abs(v) >= 1 && (!best || Math.abs(v) > Math.abs(best.v))) best = { r: r, v: v }; }
@@ -1884,21 +2009,28 @@ class Component extends DCLogic {
           var dg = prev + Math.max(-2, Math.min(2, target - prev)); this.melDeg = dg;
           var md = scaleMidi(prof.scale, prof.root + 12, dg); if (onBeat) md = snapChord(md, ch.notes);
           var nxt = col < 27 ? this.colInfo(a, col + 1) : null;
-          this.flute(md, t, sp * (nxt && nxt.strong.length > 0 ? 1.9 : 1.0), 0.05 + 0.1 * Math.min(1, Math.abs(best.v) / 4), pan);
+          var duration = sp * (nxt && nxt.strong.length > 0 ? 1.9 : 1.0);
+          this.flute(md, t, duration, 0.05 + 0.1 * Math.min(1, Math.abs(best.v) / 4), pan);
+          this.leadNote('silbo', t, duration);
           lv.silbo = Math.min(1, Math.abs(best.v) / 4 + 0.2); if (onBeat) notes.push('Silbo: ' + NOTE_ES[md % 12]);
         }
       }
     }
     if (!m.yaku && info.strong.length) {
       var pent = pentOf(prof), picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(2, Math.ceil(info.strong.length / 5)));
-      picks.forEach(function (p, q) { self.droplet(scaleMidi(pent, prof.root + 24, Math.round((15 - p[0]) / 15 * 7)), t + q * sp * 0.5, 0.09, pan); });
+      picks.forEach(function (p, q) {
+        var onset = t + q * sp * 0.5;
+        self.droplet(scaleMidi(pent, prof.root + 24, Math.round((15 - p[0]) / 15 * 7)), onset, 0.09, pan);
+        self.leadNote('yaku', onset, Math.min(0.22, sp * 0.5));
+      });
       lv.yaku = Math.min(1, 0.3 + info.strong.length / 10);
     }
     if (!m.illapa) {
       if (info.ext >= 0.25 && col - this.lastThunder >= 2) {
         this.timpani(ch.root - 12, t, Math.min(0.5, 0.25 + info.ext)); this.noiseBurst(t, 0.25, 1.0, 700);
+        this.leadNote('illapa', t, 0.52);
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push('¡Illapa truena!');
-      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); lv.illapa = Math.max(lv.illapa, 0.3); }
+      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); this.leadNote('illapa', t, 0.4); lv.illapa = Math.max(lv.illapa, 0.3); }
     }
     if (s.vibe && navigator.vibrate && lv.illapa > 0.5) navigator.vibrate(100);
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? 'columna ' + (col + 1) + '/28' : lon + '°O';
@@ -1917,7 +2049,40 @@ class Component extends DCLogic {
     var coast = a.coast >= 2 ? 'La costa del Perú está muy caliente, nivel ' + a.coast.toFixed(1) + ' de 5: Silbo silba.' : a.coast > 0.5 ? 'La costa del Perú está algo cálida.' : 'La costa del Perú está fría o normal.';
     return DISCS[s.disc].title + ', ' + MES[dt.m] + ' de ' + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + ' por ciento del mar visible tiene anomalías extremas. ' + coast;
   }
-  speak(text) { if (!this.state.voice || !window.speechSynthesis) return; window.speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.lang = 'es-PE'; window.speechSynthesis.speak(u); }
+  stopSpeech() {
+    this.utterance = null;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (this.state.speaking) this.setState({ speaking: false });
+  }
+  speak(text, manual) {
+    if ((!manual && !this.state.voice) || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+    var self = this, utterance = new window.SpeechSynthesisUtterance(text);
+    this.utterance = utterance;
+    window.speechSynthesis.cancel();
+    utterance.lang = 'es-PE';
+    utterance.onend = utterance.onerror = function () {
+      if (self.utterance !== utterance) return;
+      self.utterance = null;
+      self.setState({ speaking: false });
+    };
+    this.setState({ speaking: true });
+    window.speechSynthesis.speak(utterance);
+  }
+  leadNote(key, at, duration) {
+    if (key !== this.leadChar()) return;
+    var self = this;
+    var start = setTimeout(function () {
+      self.leadTimers.delete(start);
+      if (!self.state.playing || self.state.mute[key] || self.leadChar() !== key) return;
+      var id = ++self.leadPulseId;
+      self.setState({ leadPulse: { key: key, id: id, duration: duration } });
+      clearTimeout(self.leadRestTimer);
+      self.leadRestTimer = setTimeout(function () {
+        self.setState({ leadPulse: null });
+      }, duration * 1000);
+    }, Math.max(0, (at - this.ac.currentTime) * 1000));
+    this.leadTimers.add(start);
+  }
   play() {
     this.ensureAudio(); var self = this, s = this.state;
     var allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
@@ -1936,7 +2101,14 @@ class Component extends DCLogic {
     }
     if (s.engine === 'melody') this.stepMelody(col); else this.step(col);
   }
-  stop() { if (this.timer) clearInterval(this.timer); this.timer = null; if (this.state.playing) this.setState({ playing: false }); }
+  stop() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    this.leadTimers.forEach(clearTimeout);
+    this.leadTimers.clear();
+    clearTimeout(this.leadRestTimer);
+    if (this.state.playing) this.setState({ playing: false, leadPulse: null });
+  }
   gotoFrame(f) { var self = this; this.stop(); this.lastThunder = -9; this.setState({ frame: Math.max(0, Math.min(DISCS[this.state.disc].files.length - 1, f)), col: -1 }, function () { self.speak(self.describeText()); }); }
 
   renderVals() {
@@ -1951,9 +2123,13 @@ class Component extends DCLogic {
     var cells = []; for (var i = 0; !isBand && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); }; };
-    var tog = function (k) { return function () { var p = {}; p[k] = !s[k]; self.setState(p); if (k === 'voice' && s.voice && window.speechSynthesis) window.speechSynthesis.cancel(); }; };
+    var tog = function (k) { return function () {
+      var p = {}; p[k] = !s[k]; self.setState(p);
+      if (k === 'voice' && s.voice) self.stopSpeech();
+      if (k === 'sfx' && self.cueBus) self.cueBus.gain.value = p.sfx ? 1 : 0;
+    }; };
     var tabDef = [{ k: 'juke', l: 'Escuchar' }, { k: 'band', l: 'La banda' }, { k: 'data', l: 'Tus datos' }, { k: 'how', l: 'Método' }, { k: 'tech', l: 'Tecnología' }];
-    var a11yDef = [{ k: 'contrast', l: 'Alto contraste' }, { k: 'big', l: 'Texto grande' }, { k: 'legible', l: 'Fuente legible' }, { k: 'voice', l: 'Voz' }, { k: 'vibe', l: 'Vibración' }];
+    var a11yDef = [{ k: 'contrast', l: 'Alto contraste' }, { k: 'big', l: 'Texto grande' }, { k: 'legible', l: 'Fuente legible' }, { k: 'voice', l: 'Voz' }, { k: 'vibe', l: 'Vibración' }, { k: 'sfx', l: 'Efectos de sonido' }];
     var activeN = BAND.filter(function (b) { return !s.mute[b.k]; }).length;
     var isJuke = s.tab === 'juke', isData = s.tab === 'data', hasCustom = !!s.custom;
     var gl = this.glowFor(a);
@@ -2050,7 +2226,7 @@ class Component extends DCLogic {
         { tag: 'PRIVADO', color: th.magenta, title: 'Nada sale de tu equipo', body: 'El archivo se procesa dentro del navegador. No se sube a ningún servidor. Prueba primero con la lluvia de Chiclayo de NASA POWER.' }
       ],
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
-      a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26', sub: 'SVS 5176 · 2024 – 2026' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23', sub: 'Worldview · 2010 – 2023' }].map(function (o) {
         var on = s.set === o.key;
         return { label: o.label, years: o.years, sub: o.sub, on: on, bg: on ? th.bg : 'transparent', border: on ? th.accent : th.line, pick: function () { if (!on) self.applySet(o.key); } };
@@ -2082,7 +2258,7 @@ class Component extends DCLogic {
       bandViewClass: isBand ? 'band-view' : '',
       bandCur: Object.assign({
         poseUrl: bandFolder + 'pose-banda.webp',
-        motionUrl: bandFolder + 'pose-banda-animada.webp',
+        motionUrl: this.bandClipUrl || this.bandClipPath(bandKey),
         accent: hc ? th.fg : band[bandIndex].color,
         effect: BAND_EFFECTS[bandKey],
         silboNotes: bandKey === 'silbo' && bandPhase === 'play',
@@ -2098,6 +2274,12 @@ class Component extends DCLogic {
         moving: bandPhase === 'loading' || bandPhase === 'play',
         motionReady: function () {
           if (self.state.tab === 'band' && self.state.bphase === 'loading' && bandTurn === self.bandTurn) self.setState({ bphase: 'play' });
+        },
+        motionError: function () {
+          if (bandTurn !== self.bandTurn) return;
+          self.cancelBandClip();
+          delete self.bandClips[bandKey];
+          self.setState({ bphase: 'idle' });
         }
       }, band[bandIndex]),
       bandSel: band.map(function (x, i) {
@@ -2121,7 +2303,13 @@ class Component extends DCLogic {
       strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: 'Ver ' + MES[fd.m] + ' de ' + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playLabel: s.playing ? 'Pausar' : 'Reproducir', playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
-      describe: function () { var txt = self.describeText(); self.setState({ caption: txt }); if (window.speechSynthesis) { window.speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt); u.lang = 'es-PE'; window.speechSynthesis.speak(u); } },
+      describeLabel: s.speaking ? 'Detener voz' : 'Describir en voz alta',
+      describe: function () {
+        if (self.state.speaking) { self.stopSpeech(); return; }
+        var text = self.describeText();
+        self.setState({ caption: text });
+        self.speak(text, true);
+      },
       prevFrame: function () { self.gotoFrame(s.frame - 1); }, nextFrame: function () { self.gotoFrame(s.frame + 1); },
       speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
       caption: s.caption,
