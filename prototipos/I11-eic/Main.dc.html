@@ -373,8 +373,8 @@ a{color:inherit}
 .px .lead-choice button{display:grid;place-items:center;min-width:44px;min-height:44px;color:var(--lead-color)}
 .px .lead-choice button:hover{background:color-mix(in srgb,var(--lead-color) 16%,var(--bg))}
 .px .lead-choice button:focus-visible,.px .lead-auto:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
-.px .lead-choice .lead-index{text-align:center;font-size:.78em;font-variant-numeric:tabular-nums;color:var(--muted)}
-.px .lead-auto{min-height:44px;padding-inline:8px;font-size:.78em}
+.px .lead-choice .lead-index{font-variant-numeric:tabular-nums;color:var(--muted)}
+.px .lead-auto{display:grid;place-content:center;min-height:44px;padding:2px 4px;font-size:.72em;line-height:1.2}
 .px .lead-auto[aria-pressed="true"]{color:var(--lead-color);border-color:var(--lead-color)}
 .px .band.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .px .band.two .bchip{min-height:50px;padding:6px 10px;gap:8px}
@@ -663,7 +663,9 @@ a{color:inherit}
 .px .uni .controls .primary{background:var(--section);border-color:var(--section);color:#080c18}
 .px .uni .uright .stagebox.slim{flex:0 0 auto;min-height:140px;height:clamp(150px,23vh,235px);border-radius:8px;box-shadow:none;background:radial-gradient(ellipse at 50% 95%,color-mix(in srgb,var(--section) 18%,var(--bg)),var(--bg) 70%)}
 .px .lead.lh{border-radius:8px;box-shadow:none;background:var(--bg)}
-.px .lead.lh .leadface{width:clamp(106px,10vw,150px);align-items:center}
+.px .lead.lh .leadface{width:42%;max-width:210px}
+.px .lead.lh .leadface .sp{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;width:100%;max-width:none;aspect-ratio:auto}
+.px .lead.lh .leadface .face{width:auto;height:104%}
 .px .lead.lh .meta{flex:1}
 .px .lead .meta .name{overflow-wrap:anywhere}
 .px .bpage{width:100%;padding-top:8px}
@@ -877,7 +879,7 @@ a{color:inherit}
 
 <aside id="tour-lead" aria-label="Protagonista de la reproducción" class="lead lh {{lead.pop}}" style="--lead-color: {{lead.color}}; border-color: {{lead.color}}; {{hl.lead}}">
 <div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
-<div class="sp {{lead.cls}}" style="color: {{lead.color}}; max-width: none; aspect-ratio: auto; width: 100%; display: flex; justify-content: center">
+<div class="sp {{lead.cls}}" style="color: {{lead.color}}">
 <div class="face"><img decoding="async" class="fstrip" src="{{lead.faceUrl}}" alt="" style="--n: {{lead.faceN}}; --x0: {{lead.fx0}}; --x1: {{lead.fx1}}; --f: {{lead.fF}}; --dur: {{lead.fDur}}"></div>
 <span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 6px; right: 8px"></span>
 </div>
@@ -889,10 +891,9 @@ a{color:inherit}
 <sc-if value="{{isJuke}}">
 <div class="lead-choice" role="group" aria-label="Cambiar protagonista">
   <button type="button" onClick="{{prevLead}}" aria-label="Protagonista anterior"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 8H2m0 0 5-5M2 8l5 5"></path></svg></button>
-  <span class="lead-index">{{leadPosition}}</span>
+  <button type="button" class="lead-auto" onClick="{{autoLead}}" aria-label="Según el disco" aria-pressed="{{leadAuto}}"><span class="lead-index" aria-hidden="true">{{leadPosition}}</span><span>Según el disco</span></button>
   <button type="button" onClick="{{nextLead}}" aria-label="Protagonista siguiente"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h12m0 0-5-5m5 5-5 5"></path></svg></button>
 </div>
-<button type="button" class="lead-auto" onClick="{{autoLead}}" aria-pressed="{{leadAuto}}">Según el disco</button>
 </sc-if>
 <button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
 </div>
