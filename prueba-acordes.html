@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prueba de acordes · Terrasonic</title>
+<style>
+:root{--bg:#07090f;--card:#10141f;--fg:#e9edf5;--mut:#8b93a7;--line:#262c3b;--acc:#ffd447;--dim:#ff6b8a;--sus:#5fd4ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px}
+p.lead{color:var(--mut);margin:0 0 20px}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--mut);margin-bottom:18px}
+.leg b{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:14px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.top h2{font-size:1.1rem;margin:0}
+.top span{color:var(--mut);font-size:.85rem}
+.row{display:grid;grid-template-columns:70px 1fr auto;gap:10px;align-items:center;margin-top:10px}
+.row .lab{color:var(--mut);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:3px;padding:3px 9px;font-variant-numeric:tabular-nums;transition:background .15s,color .15s}
+.chip.dim{border-color:var(--dim);color:var(--dim)}
+.chip.sus4{border-color:var(--sus);color:var(--sus)}
+.chip.cad{border-style:dashed;opacity:.75}
+.chip.on{background:var(--acc);color:#0a0d1a;border-color:var(--acc);opacity:1}
+button{background:none;color:var(--fg);border:1px solid var(--line);border-radius:3px;padding:6px 14px;cursor:pointer;font:inherit;min-height:36px}
+button:hover{border-color:var(--fg)}
+button.playing{background:var(--fg);color:var(--bg)}
+footer{color:var(--mut);font-size:.82rem;margin-top:22px}
+@media(max-width:560px){.row{grid-template-columns:1fr}.row button{justify-self:start}}
+</style>
+</head>
+<body>
+<main>
+<h1>Prueba de acordes · rama acordes-musicales</h1>
+<p class="lead">Compara cada progresión antes (main) y ahora (rama). Pulsa «Escuchar» para oír un fotograma completo: 6 cambios de acorde y el cierre, al tempo de cada personaje.</p>
+<div class="leg"><span><b style="background:var(--dim)"></b>Disminuido (°), nuevo</span><span><b style="background:var(--sus)"></b>Suspendido (sus4), nuevo</span><span><b style="border:1px dashed var(--mut)"></b>Acorde de cierre</span></div>
+<div id="list"></div>
+<footer>Los acordes, tonalidades y tempos se copiaron automáticamente de <code>prototipos/I11-eic/Main.dc.html</code> (main y rama). El sonido es una versión simplificada (bajo, colchón y arpegio) para comparar la armonía; no reproduce la banda completa ni lee los fotogramas.</footer>
+</main>
+<script>
+var OLD=(function(){var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
+var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11] };
+var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7' };
+var MUSIC = {
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
+          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
+};;return MUSIC;})();
+var NEW=(function(){var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
+var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], dim: [0, 3, 6], sus4: [0, 5, 7] };
+var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7', dim: '°', sus4: 'sus4' };
+var MUSIC = {
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [5, 'sus4'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [2, 'dim'], [10, 'sus4'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'sus4'], [7, 'maj'], [11, 'dim']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'sus4'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
+          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [2, 'dim'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [2, 'dim'], [7, 'sus4'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
+};;return {MUSIC:MUSIC,QUAL:QUAL,SUF:SUF,NOTE_ES:NOTE_ES};})();
+var OLDQ=(function(){var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
+var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11] };
+var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7' };
+var MUSIC = {
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
+          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
+};;return {QUAL:QUAL,SUF:SUF};})();
+var NAMES = { mama: 'Mamacocha', inti: 'Inti', silbo: 'Silbo', yaku: 'Yaku', illapa: 'Illapa' };
+function chordOf(prof, ch, Q) { var r = prof.root + ch[0]; return { root: r, type: ch[1], notes: Q.QUAL[ch[1]].map(function (i) { return r + i; }), label: NEW.NOTE_ES[r % 12] + Q.SUF[ch[1]] }; }
+function slots(prof) { var out = []; for (var c = 0; c < 28; c += 4) { var i = c >= 24 ? 0 : Math.floor(c / 4) % prof.prog.length; out.push(i); } return out; }
+var entries = [];
+Object.keys(NEW.MUSIC).forEach(function (k) {
+  entries.push({ id: k, title: NAMES[k], oldP: OLD[k], newP: NEW.MUSIC[k] });
+  if (NEW.MUSIC[k].dark) entries.push({ id: k + '-dark', title: NAMES[k] + ' · variante cálida', oldP: OLD[k].dark, newP: NEW.MUSIC[k].dark });
+});
+var ac = null, timer = null, current = null;
+function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function voice(type, midi, t, dur, vol) {
+  var o = ac.createOscillator(), g = ac.createGain();
+  o.type = type; o.frequency.value = mtof(midi);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + dur + 0.05);
+}
+function stop() {
+  if (timer) clearTimeout(timer); timer = null;
+  document.querySelectorAll('.chip.on').forEach(function (c) { c.classList.remove('on'); });
+  if (current) { current.btn.classList.remove('playing'); current.btn.textContent = 'Escuchar'; }
+  current = null;
+}
+function play(prof, Q, chipsEl, btn) {
+  var same = current && current.btn === btn; stop(); if (same) return;
+  try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); } catch (e) { return; }
+  current = { btn: btn }; btn.classList.add('playing'); btn.textContent = 'Detener';
+  var seq = slots(prof), step = 30 / prof.bpm, chips = chipsEl.querySelectorAll('.chip'), i = 0;
+  (function next() {
+    chips.forEach(function (c) { c.classList.remove('on'); });
+    if (i >= seq.length) { stop(); return; }
+    var idx = seq[i], ch = chordOf(prof, prof.prog[idx], Q), t = ac.currentTime + 0.02, len = step * 4;
+    chips[i].classList.add('on');
+    voice('sine', ch.root - 12, t, len * 0.95, 0.22);
+    ch.notes.forEach(function (n) { voice('triangle', n, t, len, 0.045); });
+    [0, 1, 2, 1].forEach(function (q, j) { voice('sine', ch.notes[q % ch.notes.length] + 12, t + j * step, step * 1.6, 0.07); });
+    i++; timer = setTimeout(next, len * 1000);
+  })();
+}
+function row(label, prof, Q, isNew) {
+  var r = document.createElement('div'); r.className = 'row';
+  var l = document.createElement('div'); l.className = 'lab'; l.textContent = label;
+  var chips = document.createElement('div'); chips.className = 'chips';
+  slots(prof).forEach(function (idx, n) {
+    var ch = chordOf(prof, prof.prog[idx], Q), s = document.createElement('span');
+    s.className = 'chip' + (isNew && (ch.type === 'dim' || ch.type === 'sus4') ? ' ' + ch.type : '') + (n === 6 ? ' cad' : '');
+    s.textContent = ch.label; chips.appendChild(s);
+  });
+  var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Escuchar';
+  b.onclick = function () { play(prof, Q, chips, b); };
+  r.appendChild(l); r.appendChild(chips); r.appendChild(b); return r;
+}
+var list = document.getElementById('list');
+entries.forEach(function (e) {
+  var c = document.createElement('section'); c.className = 'card';
+  var top = document.createElement('div'); top.className = 'top';
+  var h = document.createElement('h2'); h.textContent = e.title;
+  var sp = document.createElement('span'); sp.textContent = e.newP.key + ' ' + e.newP.mode + ' · ' + e.newP.bpm + ' ppm';
+  top.appendChild(h); top.appendChild(sp); c.appendChild(top);
+  c.appendChild(row('Antes', e.oldP, OLDQ, false));
+  c.appendChild(row('Ahora', e.newP, NEW, true));
+  list.appendChild(c);
+});
+</script>
+</body>
+</html>
