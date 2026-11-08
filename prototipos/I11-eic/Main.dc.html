@@ -401,7 +401,7 @@ a{color:inherit}
 .px .bstage-top{display:flex;justify-content:space-between;gap:12px;margin-inline:6%;align-items:center;font:600 .66em var(--head);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .px .bstage-top span:first-child{color:var(--band)}
 .px .bstage-top span:first-child::before{content:"✦";margin-right:8px}
-.px .bscene{position:relative;height:clamp(340px,65dvh,610px);isolation:isolate;contain:layout paint}
+.px .bscene{position:relative;height:clamp(340px,65dvh,610px);isolation:isolate;contain:layout paint;--cut-ease:cubic-bezier(.16,1,.3,1)}
 .px .bscene-orbit{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--band-light);opacity:.27}
 .px .bplaying .bscene-orbit{animation:borbit-signal 900ms ease-out both}
 @keyframes borbit-signal{0%,100%{opacity:.27}38%{opacity:.55}}
@@ -427,7 +427,7 @@ a{color:inherit}
 .px .bfx{opacity:.5}
 .px .bplaying .bfx{animation:bfx-pulse 620ms ease-out both}
 @keyframes bfx-pulse{0%,100%{opacity:.5}35%{opacity:.8}}
-.px .bentry{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;--cut-ease:cubic-bezier(.16,1,.3,1);animation:bcut-out var(--band-entry) ease-out both}
+.px .bentry{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;animation:bcut-out var(--band-entry) ease-out both}
 .px .bentry-sweep{position:absolute;inset:-20% auto -20% 0;width:64%;border-inline:1px solid var(--band-light);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--band-light) 30%,#080b18) 72%,color-mix(in srgb,var(--band-light) 65%,#080b18));animation:bcut-sweep 460ms var(--cut-ease) both}
 .px .bentry-scope{animation:bcut-aperture 400ms var(--cut-ease) 65ms both}
 .px .bentry-line{stroke-dasharray:1;animation:bcut-trace 290ms var(--cut-ease) 115ms both}
@@ -845,13 +845,17 @@ a{color:inherit}
 .px .bchooser .kicker{margin-bottom:12px;color:var(--band)}
 .px .binfo .display{color:var(--band);font-size:clamp(2.4rem,4.6vw,4.4rem)}
 .px .bquote{background:transparent}
-/* Al cambiar de personaje: fondo desenfocado para que el texto y las líneas se lean bien. */
-/* Va fuera de .bentry: un ancestro con opacidad animada aislaría el desenfoque del retrato que está detrás. */
+/* Capa independiente: el desenfoque no hereda la opacidad animada de .bentry. */
 .px .bentry-blur{position:absolute;inset:0;z-index:1;pointer-events:none;background:rgba(3,5,10,.6);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);animation:bcut-out var(--band-entry) ease-out both}
 @media (prefers-reduced-motion:reduce){.px .bentry-blur{display:none}}
-.px .bentry-plate{fill:#05070d;fill-opacity:.9;stroke:currentColor;stroke-opacity:.35;animation:bcut-cascade 280ms var(--cut-ease) 220ms both}
-.px .bentry-label{font-weight:700}
+/* Rótulo y trazos por encima del desenfoque, con contraste localizado. */
+.px .bentry-underlay{stroke:rgba(0,0,0,.8);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.px .bentry-caption{position:absolute;z-index:1;left:12px;right:12px;bottom:12px;display:flex;justify-content:center}
+.px .bentry-label{display:block;max-width:100%;padding:10px 18px;border:1px solid rgba(255,255,255,.25);background:linear-gradient(90deg,rgba(4,7,13,.88),rgba(4,7,13,.72));-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);color:#fff;font:700 max(12px,.8em)/1.4 var(--head);letter-spacing:.16em;text-align:center;overflow-wrap:anywhere}
 .px .bentry-sweep{opacity:.7}
+.px .bstage-label{flex-wrap:wrap;line-height:1.5}
+.px .bstage-label>span{min-width:0;overflow-wrap:anywhere}
+@media (max-width:640px){.px .bentry-label{-webkit-backdrop-filter:none;backdrop-filter:none;padding:8px 12px}}
 /* Transición entre secciones: también con fondo desenfocado. */
 .px .wipe{background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);animation:wipeFade 720ms ease both}
 @keyframes wipeFade{0%{opacity:0}18%,78%{opacity:1}100%{opacity:0}}
@@ -1098,6 +1102,7 @@ a{color:inherit}
 </div>
 </div>
 
+<sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
 <div class="views">
 <figure id="tour-frame" class="vpanel">
 <figcaption class="vcap"><span class="tag">{{tx.youSee}}</span><span class="muted">{{tx.youSeeSub}}</span></figcaption>
@@ -1171,6 +1176,7 @@ a{color:inherit}
 <button type="button" class="btn primary sm" onClick="{{togglePlay}}"><svg width="12" height="12" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
 </div>
+<sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
 <div class="stagegrid">
 <section id="tour-stage" class="stagebox big shk {{shakeCls}}" aria-label="{{tx.stageAria}}">
 <p role="status" aria-live="polite" class="sr">{{tx.onStage}} {{stageNames}}</p>
@@ -1283,13 +1289,13 @@ a{color:inherit}
       <circle cx="240" cy="258" r="130" fill="#080b16" fill-opacity=".9" stroke-opacity=".35"></circle>
       <circle cx="240" cy="258" r="144" stroke-opacity=".32" stroke-dasharray="3 8"></circle>
       <path d="M80 258h28m264 0h28M240 100v20m0 274v22M133 165l9 9m196 168 9 9m0-186-9 9M142 342l-9 9" stroke-opacity=".56"></path>
+      <path class="bentry-line bentry-underlay" pathLength="1" d="{{bandCur.instrumentLine}}"></path>
       <path class="bentry-line" pathLength="1" d="{{bandCur.instrumentLine}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
       <path class="bentry-wave" d="M138 387h25l5-6 5 12 7-21 8 32 8-27 6 16 8-6h11m38 0h11l8-6 6 12 8-23 8 30 7-19 5 12 5-6h25" stroke-width="1.25"></path>
     </g>
     <path class="bentry-stars" d="{{bandCur.instrumentStars}}" fill="currentColor"></path>
-    <rect class="bentry-plate" x="170" y="430" width="140" height="28" rx="2"></rect>
-    <text class="bentry-label" x="240" y="449" fill="currentColor" text-anchor="middle">{{bandCur.instrumentName}}</text>
   </svg>
+  <div class="bentry-caption"><span class="bentry-label">{{bandCur.instrumentName}}</span></div>
 </div>
 </sc-if>
 </div>
@@ -1462,6 +1468,14 @@ var B = '/_blob/';
 var LANG = 'es';
 try { if (localStorage.getItem('ts_lang') === 'en') LANG = 'en'; } catch (e) {}
 function T(es, en) { return LANG === 'en' ? en : es; }
+// Los mensajes conservan sus parámetros; el idioma se resuelve al mostrarlos.
+function uiMessage(es, en, values) { return { es: es, en: en, values: values || {} }; }
+function uiText(value) {
+  if (value == null) return '';
+  if (typeof value !== 'object') return String(value);
+  return T(value.es, value.en).replace(/\{(\w+)\}/g, function (_, key) { return uiText(value.values[key]); });
+}
+function uiLabel(item) { return item ? uiText(item.nameText || item.name) : ''; }
 var DISC_SETS = {
   eic: [
   { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.webp", "fotogramas/inv2024_1.webp", "fotogramas/inv2024_2.webp", "fotogramas/inv2024_3.webp", "fotogramas/inv2024_4.webp", "fotogramas/inv2024_5.webp"] },
@@ -2042,14 +2056,16 @@ class Component extends DCLogic {
     if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourLayout); this.tourObserver.observe(document.body); }
   }
   setLang(code) {
-    if (code === LANG) return;
+    if ((code !== 'es' && code !== 'en') || code === LANG) return;
+    var self = this, s = this.state, profile = this.profile();
+    var chordIndex = profile.prog.map(function (ch) { return chordOf(profile, ch).label; }).indexOf(s.chord);
     LANG = code;
     try { localStorage.setItem('ts_lang', code); } catch (e) {}
     applyLang();
     this.stopSpeech();
-    var s = this.state;
-    this.setState({ lang: code, route: Object.assign({}, s.route, { title: ROUTE_LOOK[s.tab].title }),
-      caption: T('Idioma: español.', 'Language: English.'), upMsg: '' });
+    var chord = chordIndex < 0 ? s.chord : chordOf(this.profile(), this.profile().prog[chordIndex]).label;
+    this.setState({ lang: code, chord: chord, route: Object.assign({}, s.route, { title: this.subTitles()[s.sub] || ROUTE_LOOK[s.tab].title, section: ROUTE_LOOK[s.tab].title + ' · ' + PAGES[s.tab][0] }),
+      caption: T('Idioma: español.', 'Language: English.') }, function () { if (s.tour) self.focusTourTarget(); });
   }
   guideSteps(tab) { return GUIDES[tab || this.state.tab] || []; }
   guideStep() { var s = this.state; return s.tour ? this.guideSteps()[s.tour - 1] || null : null; }
@@ -2264,7 +2280,7 @@ class Component extends DCLogic {
   }
   loadDisc(d) { if (d === 5) return; for (var f = 0; f < DISCS[d].files.length; f++) this.analyze(d, f); }
   frameTag(d, f) {
-    if (d === 5) return this.state.custom ? this.state.custom.name : T('tu archivo', 'your file');
+    if (d === 5) return this.state.custom ? uiLabel(this.state.custom) : T('tu archivo', 'your file');
     var dt = this.frameDate(d, f); return MESC[dt.m] + ' ' + dt.y;
   }
   frameAnimClass() {
@@ -2339,7 +2355,7 @@ class Component extends DCLogic {
     if (this.state.an[key] && !force) return;
     var free = d === 5 && this.state.custom && this.state.custom.mode === 'free', legacy = d < 5 && !!DISCS[d].legacy;
     var img = new Image();
-    img.onerror = function () { self.setState({ upMsg: T('No se pudo leer la imagen.', 'The image could not be read.') }); };
+    img.onerror = function () { self.setState({ upMsg: uiMessage('No se pudo leer la imagen.', 'The image could not be read.') }); };
     img.onload = function () {
       try {
         var cv = document.createElement('canvas'); cv.width = 140; cv.height = 80;
@@ -2359,9 +2375,9 @@ class Component extends DCLogic {
         }
         var res = { cells: cells, warm: warm / n, cold: cold / n, hot: hot / n, coast: cn ? cs / cn : 0 };
         var an = Object.assign({}, self.state.an); an[key] = res;
-        var nm = self.state.custom ? self.state.custom.name : T('tu imagen', 'your image');
-        self.setState(d === 5 ? { an: an, mute: self.only(res.cold > res.warm ? 'mama' : 'inti'), upMsg: T('Listo: ', 'Ready: ') + nm + T('. Pulsa Reproducir.', '. Press Play.'), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
-      } catch (e) { self.setState({ caption: T('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.') }); }
+        var nm = self.state.custom ? uiLabel(self.state.custom) : T('tu imagen', 'your image');
+        self.setState(d === 5 ? { an: an, mute: self.only(res.cold > res.warm ? 'mama' : 'inti'), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
+      } catch (e) { self.setState({ upMsg: uiMessage('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.'), caption: T('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.') }); }
     };
     img.src = this.url(d, f);
   }
@@ -2405,31 +2421,31 @@ class Component extends DCLogic {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
     var mute = this.state.leadOverride ? this.state.mute : this.only(this.discLead(5, an));
-    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + custom.name + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') });
+    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') });
   }
   handleFile(f) {
     var self = this, name = f.name;
-    if (f.size > 8 * 1024 * 1024) { this.setState({ upMsg: T('El archivo pesa más de 8 MB. Prueba con uno más pequeño.', 'The file is larger than 8 MB. Try a smaller one.') }); return; }
+    if (f.size > 8 * 1024 * 1024) { this.setState({ upMsg: uiMessage('El archivo pesa más de 8 MB. Prueba con uno más pequeño.', 'The file is larger than 8 MB. Try a smaller one.') }); return; }
     if (/^image\//.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(name)) {
       this.revokeCustom();
       var custom = { name: name, kind: 'image', url: URL.createObjectURL(f), mode: this.state.customMode };
       var ans = Object.assign({}, this.state.an); delete ans['5_0'];
       this.stop(); this.lastThunder = -9;
-      this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, upMsg: T('Analizando la imagen…', 'Analyzing the image…') }, function () { self.analyze(5, 0, true); });
+      this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, upMsg: uiMessage('Analizando la imagen…', 'Analyzing the image…') }, function () { self.analyze(5, 0, true); });
       return;
     }
     if (/\.(csv|tsv|txt)$/i.test(name) || /^text\//.test(f.type)) {
       var rd = new FileReader();
       rd.onload = function () { self.loadCsv(name, String(rd.result)); };
-      rd.onerror = function () { self.setState({ upMsg: T('No se pudo leer el archivo.', 'The file could not be read.') }); };
+      rd.onerror = function () { self.setState({ upMsg: uiMessage('No se pudo leer el archivo.', 'The file could not be read.') }); };
       rd.readAsText(f);
       return;
     }
-    this.setState({ upMsg: T('Formato no admitido. Usa una imagen (PNG, JPG, WebP) o un CSV.', 'Unsupported format. Use an image (PNG, JPG, WebP) or a CSV.') });
+    this.setState({ upMsg: uiMessage('Formato no admitido. Usa una imagen (PNG, JPG, WebP) o un CSV.', 'Unsupported format. Use an image (PNG, JPG, WebP) or a CSV.') });
   }
   loadCsv(name, text) {
     var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); }).slice(0, 5001);
-    if (lines.length < 3) { this.setState({ upMsg: T('El CSV tiene muy pocas filas.', 'The CSV has too few rows.') }); return; }
+    if (lines.length < 3) { this.setState({ upMsg: uiMessage('El CSV tiene muy pocas filas.', 'The CSV has too few rows.') }); return; }
     var delim = lines[0].indexOf(';') >= 0 ? ';' : lines[0].indexOf('\t') >= 0 ? '\t' : ',';
     var rows = lines.map(function (l) { return l.split(delim).map(function (c) { return c.trim().replace(/^"|"$/g, ''); }); });
     var num = function (c) { if (c === undefined || c === '') return null; var v = Number(delim === ';' ? c.replace(',', '.') : c); return isFinite(v) ? v : null; };
@@ -2438,9 +2454,9 @@ class Component extends DCLogic {
     for (var j = 0; j < rows[0].length; j++) {
       var vals = [];
       for (var i = 0; i < body.length; i++) { var v = num(body[i][j]); if (v !== null) vals.push(v); }
-      if (vals.length >= 8 && vals.length >= body.length * 0.7) cols.push({ name: headerRow ? (rows[0][j] || T('columna ', 'column ') + (j + 1)) : T('columna ', 'column ') + (j + 1), values: vals });
+      if (vals.length >= 8 && vals.length >= body.length * 0.7) cols.push({ name: headerRow ? (rows[0][j] || T('columna ', 'column ') + (j + 1)) : T('columna ', 'column ') + (j + 1), nameText: headerRow && rows[0][j] ? rows[0][j] : uiMessage('columna {n}', 'column {n}', { n: j + 1 }), values: vals });
     }
-    if (!cols.length) { this.setState({ upMsg: T('No encontré una columna numérica con al menos 8 valores.', 'No numeric column with at least 8 values was found.') }); return; }
+    if (!cols.length) { this.setState({ upMsg: uiMessage('No encontré una columna numérica con al menos 8 valores.', 'No numeric column with at least 8 values was found.') }); return; }
     var pick = 0;
     for (var q = 0; q < cols.length; q++) { if (!this.isIndexLike(cols[q].values)) { pick = q; break; } }
     this.useSeries(name, cols, pick);
@@ -2472,12 +2488,13 @@ class Component extends DCLogic {
     cx.fillStyle = 'rgba(255,255,255,0.25)'; cx.fillRect(0, 160, 560, 1);
     cv.toBlob(function (b) { done(URL.createObjectURL(b)); });
   }
-  useSeries(name, cols, pick) {
+  useSeries(name, cols, pick, nameText) {
     var self = this, vals = cols[pick].values, an = this.seriesAnalysis(vals);
     this.drawSeries(an, function (url) {
       self.revokeCustom();
-      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), baseName: name, kind: 'csv', url: url, cols: cols, col: pick, mode: 'palette' }, an,
-        T('Listo: ', 'Ready: ') + vals.length + T(' valores de «', ' values from “') + cols[pick].name + T('». Pulsa Reproducir.', '”. Press Play.'));
+      var label = cols.length > 1 ? uiMessage('{file} · {column}', '{file} · {column}', { file: nameText || name, column: cols[pick].nameText || cols[pick].name }) : nameText || name;
+      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), nameText: label, baseName: name, baseNameText: nameText || name, kind: 'csv', url: url, cols: cols, col: pick, mode: 'palette' }, an,
+        uiMessage('Listo: {count} valores de «{column}». Pulsa Reproducir.', 'Ready: {count} values from “{column}”. Press Play.', { count: vals.length, column: cols[pick].nameText || cols[pick].name }));
     });
   }
   setCol(i) {
@@ -2485,7 +2502,8 @@ class Component extends DCLogic {
     var self = this, vals = c.cols[i].values, an = this.seriesAnalysis(vals);
     this.drawSeries(an, function (url) {
       self.revokeCustom(); var ans = Object.assign({}, self.state.an); ans['5_0'] = an; self.stop();
-      self.setState({ custom: Object.assign({}, c, { col: i, url: url, name: c.baseName + ' · ' + c.cols[i].name }), an: ans, col: -1, upMsg: T('Columna «', 'Column “') + c.cols[i].name + T('»: ', '”: ') + vals.length + T(' valores.', ' values.') });
+      var label = uiMessage('{file} · {column}', '{file} · {column}', { file: c.baseNameText || c.baseName, column: c.cols[i].nameText || c.cols[i].name });
+      self.setState({ custom: Object.assign({}, c, { col: i, url: url, name: c.baseName + ' · ' + c.cols[i].name, nameText: label }), an: ans, col: -1, upMsg: uiMessage('Columna «{column}»: {count} valores.', 'Column “{column}”: {count} values.', { column: c.cols[i].nameText || c.cols[i].name, count: vals.length }) });
     });
   }
   setMode(m) {
@@ -2493,10 +2511,10 @@ class Component extends DCLogic {
     this.setState({ customMode: m, custom: c ? Object.assign({}, c, { mode: m }) : c, col: -1 }, function () { if (self.state.custom && self.state.custom.kind === 'image') self.analyze(5, 0, true); });
   }
   loadSample() {
-    var self = this; this.setState({ upMsg: T('Cargando datos de NASA POWER…', 'Loading NASA POWER data…') });
+    var self = this; this.setState({ upMsg: uiMessage('Cargando datos de NASA POWER…', 'Loading NASA POWER data…') });
     fetch('/_blob/73710d959697d6b73c436a389b19a0de').then(function (r) { return r.json(); }).then(function (d) {
-      self.useSeries(T('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), [{ name: T('lluvia (mm/día)', 'rainfall (mm/day)'), values: d.chiclayo.p.slice(34 * 12, 38 * 12) }], 0);
-    }).catch(function () { self.setState({ upMsg: T('No se pudieron cargar los datos de ejemplo.', 'The sample data could not be loaded.') }); });
+      self.useSeries(T('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), [{ name: T('lluvia (mm/día)', 'rainfall (mm/day)'), nameText: uiMessage('lluvia (mm/día)', 'rainfall (mm/day)'), values: d.chiclayo.p.slice(34 * 12, 38 * 12) }], 0, uiMessage('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'));
+    }).catch(function () { self.setState({ upMsg: uiMessage('No se pudieron cargar los datos de ejemplo.', 'The sample data could not be loaded.') }); });
   }
   colInfo(a, col) {
     var w = 0, c = 0, strong = [], ext = 0, k = 0;
@@ -2745,7 +2763,7 @@ class Component extends DCLogic {
     if (!a) return T('Analizando el fotograma.', 'Analyzing the frame.');
     if (s.disc === 5) {
       var up = a.cold > a.warm ? T('Predominan los valores bajos o los colores fríos: Mamacocha canta fuerte.', 'Low values or cold colors dominate: Mamacocha sings loud.') : a.warm > 0.8 ? T('Predominan los valores altos o los colores cálidos: Inti y Yaku suenan fuerte.', 'High values or warm colors dominate: Inti and Yaku play loud.') : T('Los valores están cerca de lo normal.', 'The values are close to normal.');
-      return T('Tu archivo: ', 'Your file: ') + (s.custom ? s.custom.name : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + T(' por ciento de las celdas son extremas.', ' percent of the cells are extreme.');
+      return T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + T(' por ciento de las celdas son extremas.', ' percent of the cells are extreme.');
     }
     var lead = a.cold > a.warm ? T('Domina el agua más fría de lo normal: Mamacocha canta fuerte.', 'Colder-than-normal water dominates: Mamacocha sings loud.') : a.hot > 0.15 ? T('Una gran franja del océano está en rojo intenso: Inti e Illapa dominan.', 'A wide band of the ocean is deep red: Inti and Illapa take over.') : a.warm > 0.8 ? T('El océano está más cálido de lo normal: Inti toca acordes brillantes.', 'The ocean is warmer than normal: Inti plays bright chords.') : T('El océano está cerca de lo normal.', 'The ocean is close to normal.');
     var coast = a.coast >= 2 ? T('La costa del Perú está muy caliente, nivel ', 'The Peruvian coast is very hot, level ') + a.coast.toFixed(1) + T(' de 5: Silbo silba.', ' out of 5: Silbo whistles.') : a.coast > 0.5 ? T('La costa del Perú está algo cálida.', 'The Peruvian coast is somewhat warm.') : T('La costa del Perú está fría o normal.', 'The Peruvian coast is cold or normal.');
@@ -2957,9 +2975,9 @@ class Component extends DCLogic {
       heroBand: function () { self.goTab('band'); },
       goListen: function () { self.goSub(1); },
       goDiscs: function () { self.goSub(0); },
-      discPicked: T('Seleccionado: ', 'Selected: ') + (s.disc === 5 ? (hasCustom ? s.custom.name : '') : d.title + ' · ' + d.period),
+      discPicked: T('Seleccionado: ', 'Selected: ') + (s.disc === 5 ? (hasCustom ? uiLabel(s.custom) : '') : d.title + ' · ' + d.period),
       playKicker: isData ? tx.dataListenKicker : tx.listenKicker,
-      playTitle: isData ? (hasCustom ? s.custom.name : '') : d.title,
+      playTitle: isData ? (hasCustom ? uiLabel(s.custom) : '') : d.title,
       stageKicker: isData ? tx.dataStageKicker : tx.stageKicker,
       guideFace: CARA.silbo.sm,
       guideFabBottom: navVm.show ? 'lift' : '',
@@ -2971,7 +2989,7 @@ class Component extends DCLogic {
       }),
       discs: DISCS.filter(function (x, k) { return k < 5 || hasCustom; }).map(function (x, k) {
         var on = k === s.disc, hero = k < 5 ? BAND.filter(function (b) { return b.k === DISC_CHAR[k]; })[0].name : T('según tu archivo', 'based on your file');
-        return { thumb: self.url(k, 0), ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? s.custom.name : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
+        return { thumb: self.url(k, 0), ic: self.icons[k < 5 ? INS_ICON[DISC_CHAR[k]] : 'data'], n: x.n, title: x.title, hero: hero, period: k === 5 && hasCustom ? uiLabel(s.custom) : x.period, color: x.color, on: on, bg: on ? th.bg : 'transparent', border: on ? x.color : th.line,
           pick: function () {
             self.stop(); self.lastThunder = -9;
             var manual = self.state.leadOverride;
@@ -2983,7 +3001,7 @@ class Component extends DCLogic {
           } };
       }),
       disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),
-      frameAlt: (s.disc === 5 ? T('Tu archivo: ', 'Your file: ') + (s.custom ? s.custom.name : '') + '. ' : T('Mapa de anomalía de temperatura del mar del Pacífico oriental, ', 'Sea surface temperature anomaly map of the eastern Pacific, ') + MES[dt.m] + T(' de ', ' ') + dt.y + '. ') + (a ? this.describeText() : ''),
+      frameAlt: (s.disc === 5 ? T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' : T('Mapa de anomalía de temperatura del mar del Pacífico oriental, ', 'Sea surface temperature anomaly map of the eastern Pacific, ') + MES[dt.m] + T(' de ', ' ') + dt.y + '. ') + (a ? this.describeText() : ''),
       frameAnim: this.frameAnimClass(),
       scanLeft: s.col < 0 ? '-10%' : (s.col / 28 * 100).toFixed(2) + '%',
       silboBox: a && a.coast >= 2 ? th.accent : th.muted,
@@ -3023,7 +3041,7 @@ class Component extends DCLogic {
         return { name: x.name, poseUrl: 'sprites/' + BAND[i].k + '/miniatura-banda.webp', color: hc ? th.fg : x.color, on: i === bandIndex, pick: function () { self.pickBand(i); } };
       }),
       moreOpen: s.more, toggleMore: function () { self.setState({ more: !s.more }); }, closeMore: function () { self.setState({ more: false }); },
-      fileName: hasCustom ? s.custom.name : T('Tu archivo', 'Your file'),
+      fileName: hasCustom ? uiLabel(s.custom) : T('Tu archivo', 'Your file'),
       noFile: s.tab === 'data' && !hasCustom,
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
@@ -3065,8 +3083,9 @@ class Component extends DCLogic {
       overCls: s.over ? 'over' : '',
       isImageUp: hasCustom && s.custom.kind === 'image', isCsvUp: hasCustom && !!s.custom.cols && s.custom.cols.length > 1,
       customMode: s.customMode, colIdx: hasCustom && s.custom.cols ? String(s.custom.col) : '0',
-      colOpts: hasCustom && s.custom.cols ? s.custom.cols.map(function (cc, ci) { return { v: String(ci), l: cc.name }; }) : [],
-      upMsg: s.upMsg || T('Sube tu propia imagen o CSV y escúchalo.', 'Upload your own image or CSV and listen to it.'),
+      colOpts: hasCustom && s.custom.cols ? s.custom.cols.map(function (cc, ci) { return { v: String(ci), l: uiLabel(cc) }; }) : [],
+      uploadStatus: isData && !!s.upMsg,
+      upMsg: uiText(s.upMsg) || T('Sube tu propia imagen o CSV y escúchalo.', 'Upload your own image or CSV and listen to it.'),
       onFile: function (e) { var fl = e.target.files && e.target.files[0]; if (fl) self.handleFile(fl); e.target.value = ''; },
       onDragOver: function (e) { e.preventDefault(); if (!s.over) self.setState({ over: true }); },
       onDragLeave: function () { self.setState({ over: false }); },
@@ -3078,7 +3097,7 @@ class Component extends DCLogic {
       techFilters: [['all', T('Todo', 'All'), 'f_all'], ['done', T('En el prototipo', 'In the prototype'), 'f_done'], ['plan', T('Planeado', 'Planned'), 'f_plan']].map(function (x) { var on = s.techFilter === x[0]; return { ic: self.icons[x[2]], label: x[1], on: on, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, pick: function () { self.setState({ techFilter: x[0] }); } }; }),
       techSummary: TECH.filter(function (t) { return t.st === 'done'; }).length + T(' en el prototipo · ', ' in the prototype · ') + TECH.filter(function (t) { return t.st === 'plan'; }).length + T(' planeadas', ' planned'),
       steps: STEPS.map(function (x, i) { return { n: x.n, title: x.title, body: x.body, delay: (i * 0.07).toFixed(2) + 's' }; }),
-      legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa' }, { v: '+4,5', c: '#C21F7A', who: 'Illapa' }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku' }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku' }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku' }, { v: '+1', c: '#FFD447', who: 'Inti' }, { v: '0', c: '#7E849E', who: T('silencio', 'silence') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha' }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku' }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku' }]
+      legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa' }, { v: T('+4,5', '+4.5'), c: '#C21F7A', who: 'Illapa' }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku' }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku' }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku' }, { v: '+1', c: '#FFD447', who: 'Inti' }, { v: '0', c: '#7E849E', who: T('silencio', 'silence') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha' }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku' }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku' }]
     };
   }
 }

@@ -129,3 +129,106 @@ test('Silbo remains visible when a guide points to him; Escape closes the guide'
   c.componentWillUnmount();
   assert.equal(events.has('keydown'), false);
 });
+
+test('language changes retain upload errors, filenames and application state', () => {
+  const { component: c } = setup();
+  c.state.tab = 'data'; c.state.sub = 0;
+  c.handleFile({ name: 'mi archivo.csv', size: 9 * 1024 * 1024 });
+  const spanishError = c.renderVals().upMsg;
+  c.state.frame = 2; c.state.playing = true; c.state.tour = 2; c.state.more = true;
+  const snapshot = () => JSON.stringify([c.state.tab, c.state.sub, c.state.frame, c.state.disc,
+    c.state.playing, c.state.tour, c.state.more, c.state.mute, c.state.an, c.state.custom, c.state.bsel]);
+  const before = snapshot();
+  c.setLang('en');
+  assert.equal(snapshot(), before);
+  assert.match(c.renderVals().upMsg, /larger than 8 MB/);
+  c.setLang('es');
+  assert.equal(c.renderVals().upMsg, spanishError);
+});
+
+test('generated CSV column labels and status messages follow the selected language', () => {
+  const { component: c } = setup();
+  c.drawSeries = (_, done) => done('data:image/png;base64,test');
+  c.state.tab = 'data';
+  c.loadCsv('columna 1.csv', '1,11\n2,12\n3,13\n4,14\n5,15\n6,16\n7,17\n8,18');
+  const custom = c.state.custom;
+  c.setLang('en');
+  const v = c.renderVals();
+  assert.equal(c.state.custom, custom);
+  assert.equal(v.colOpts[0].l, 'column 1');
+  assert.match(v.fileName, /^columna 1\.csv · column /, 'user filename must remain untouched');
+  assert.match(v.upMsg, /^Ready:/);
+  c.setLang('es');
+  assert.equal(c.renderVals().colOpts[0].l, 'columna 1');
+});
+
+test('language switching keeps the current chord highlighted without changing musical values', () => {
+  const { component: c } = setup();
+  c.state.tab = 'juke'; c.state.sub = 2; c.state.playing = true;
+  c.state.chord = c.renderVals().progItems[0].label;
+  const numericProfile = () => JSON.stringify([c.profile().root, c.profile().scale, c.profile().bpm, c.profile().prog]);
+  const before = numericProfile();
+  c.setLang('en');
+  assert.equal(numericProfile(), before);
+  assert.equal(c.state.chord, c.renderVals().progItems[0].label);
+});
+
+test('all fixed UI keys, guides, method and technology content render in both languages', () => {
+  const { component: c, context } = setup();
+  assert.deepEqual(Object.keys(context.TX.es).sort(), Object.keys(context.TX.en).sort());
+  for (const [, key] of html.matchAll(/\{\{tx\.(\w+)\}\}/g)) {
+    assert(context.TX.es[key] && context.TX.en[key], 'missing UI translation: ' + key);
+  }
+  for (const tool of context.TECH) {
+    assert(context.TECH_EN[(tool.es || tool).name]?.use, 'missing technology translation: ' + tool.name);
+  }
+  for (const lang of ['es', 'en', 'es']) {
+    c.setLang(lang);
+    for (const tab of ['home', ...context.PAGE_ORDER]) {
+      c.state.tab = tab;
+      for (let sub = 0; sub < c.subCount(); sub++) {
+        c.state.sub = sub;
+        const v = c.renderVals();
+        assert.equal(Object.values(v.scr).filter(Boolean).length, 1);
+        for (const value of Object.values(v.tx)) assert.equal(typeof value, 'string');
+      }
+    }
+  }
+});
+
+test('sample labels translate without reloading or modifying their numerical values', async () => {
+  const { component: c, context } = setup();
+  c.state.tab = 'data';
+  const samples = Array.from({ length: 500 }, (_, i) => i);
+  context.fetch = async () => ({ json: async () => ({ chiclayo: { p: samples } }) });
+  c.drawSeries = (_, done) => done('data:image/png;base64,sample');
+  c.loadSample();
+  await new Promise(resolve => setImmediate(resolve));
+  const custom = c.state.custom, values = JSON.stringify(custom.cols[0].values);
+  assert.match(c.renderVals().fileName, /lluvia/);
+  c.setLang('en');
+  assert.equal(c.state.custom, custom);
+  assert.match(c.renderVals().fileName, /rainfall/);
+  assert.match(c.renderVals().upMsg, /rainfall \(mm\/day\)/);
+  assert.equal(JSON.stringify(custom.cols[0].values), values);
+  c.setLang('es');
+  assert.match(c.renderVals().fileName, /lluvia/);
+});
+
+test('reduced motion keeps all five portraits static at mobile and desktop widths', () => {
+  const { component: c, context, timers } = setup();
+  c.state.tab = 'band';
+  for (const width of [320, 390, 1200]) {
+    context.window.innerWidth = width;
+    for (let i = 0; i < 5; i++) {
+      c.pickBand(i);
+      const view = c.renderVals().bandCur;
+      assert.equal(c.state.bsel, i);
+      assert.equal(view.entering, false);
+      assert.equal(view.moving, false);
+      assert.equal(view.entrance, '');
+      assert(view.poseUrl.endsWith('/pose-banda.webp'));
+    }
+  }
+  assert.equal(timers.size, 0);
+});
