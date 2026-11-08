@@ -23,6 +23,7 @@ def build(destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_text(html, encoding="utf-8")
     copy2(root / "scripts" / "pages-support.js", destination / "support.js")
+    copy2(root / "prueba-acordes.html", destination / "prueba-acordes.html")
     for folder in ("sprites", "fotogramas", "fotogramas-anteriores"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     (destination / "data").mkdir(exist_ok=True)

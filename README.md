@@ -36,13 +36,20 @@ Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth
 
 ## Cómo correrlo
 
-No hay que instalar ni compilar nada. Basta con un servidor estático:
+La página completa de esta rama, con los acordes disminuidos (°) y suspendidos (sus4) de los cinco personajes y la variante cálida de Yaku, está publicada en:
+
+https://terrasonic-prueba-acordes.flutteringchinchilla2.chatgpt.site
+
+Para abrir la versión completa en tu equipo (Python 3):
 
 ```bash
-python -m http.server 8000
+python scripts/build_pages.py _site
+python -m http.server 8000 --bind 127.0.0.1 --directory _site
 ```
 
-Luego abre http://localhost:8000. También funciona con la extensión Live Server de VS Code.
+Abre http://127.0.0.1:8000. El empaquetador reúne la página interactiva, el soporte del navegador, las imágenes y los datos necesarios. La comparación independiente se abre en http://127.0.0.1:8000/prueba-acordes.html.
+
+Para verificar las progresiones y su reproducción con Node.js: `node --test scripts/acordes.test.cjs`.
 
 ## Datos
 

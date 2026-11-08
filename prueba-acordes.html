@@ -34,7 +34,8 @@ footer{color:var(--mut);font-size:.82rem;margin-top:22px}
 </head>
 <body>
 <main>
-<h1>Prueba de acordes · rama acordes-musicales</h1>
+<p><a href="./" style="color:var(--fg)">← Volver a Terrasonic</a></p>
+<h1>Prueba de acordes · rama prueba-acordes</h1>
 <p class="lead">Compara cada progresión antes (main) y ahora (rama). Pulsa «Escuchar» para oír un fotograma completo: 6 cambios de acorde y el cierre, al tempo de cada personaje.</p>
 <div class="leg"><span><b style="background:var(--dim)"></b>Disminuido (°), nuevo</span><span><b style="background:var(--sus)"></b>Suspendido (sus4), nuevo</span><span><b style="border:1px dashed var(--mut)"></b>Acorde de cierre</span></div>
 <div id="list"></div>
@@ -82,20 +83,23 @@ Object.keys(NEW.MUSIC).forEach(function (k) {
   entries.push({ id: k, title: NAMES[k], oldP: OLD[k], newP: NEW.MUSIC[k] });
   if (NEW.MUSIC[k].dark) entries.push({ id: k + '-dark', title: NAMES[k] + ' · variante cálida', oldP: OLD[k].dark, newP: NEW.MUSIC[k].dark });
 });
-var ac = null, timer = null, current = null;
+var ac = null, timer = null, current = null, voices = new Set();
 function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
 function voice(type, midi, t, dur, vol) {
   var o = ac.createOscillator(), g = ac.createGain();
   o.type = type; o.frequency.value = mtof(midi);
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + dur + 0.05);
+  voices.add(o); o.onended = function () { voices.delete(o); o.disconnect(); g.disconnect(); };
 }
 function stop() {
   if (timer) clearTimeout(timer); timer = null;
+  voices.forEach(function (o) { o.stop(); }); voices.clear();
   document.querySelectorAll('.chip.on').forEach(function (c) { c.classList.remove('on'); });
   if (current) { current.btn.classList.remove('playing'); current.btn.textContent = 'Escuchar'; }
   current = null;
 }
+window.addEventListener('pagehide', stop);
 function play(prof, Q, chipsEl, btn) {
   var same = current && current.btn === btn; stop(); if (same) return;
   try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); } catch (e) { return; }
