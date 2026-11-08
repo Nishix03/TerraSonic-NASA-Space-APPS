@@ -174,7 +174,7 @@ a{color:inherit}
 @keyframes noteB{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
 .px .bst{flex:0 0 auto;width:32px;height:32px;background-repeat:no-repeat;background-size:128px 32px;background-position:calc(var(--bi) * -32px) 0;image-rendering:pixelated}
 
-/* tus datos */
+/* convierte en música */
 .px .drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:28px 18px;min-height:190px;border:1px dashed rgba(255,255,255,.35);cursor:pointer;transition:border-color .2s,background-color .2s}
 .px .drop:hover,.px .drop:focus-within,.px .drop.over{border-color:var(--fg);background:rgba(255,255,255,.05)}
 .px .drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
@@ -702,7 +702,7 @@ a{color:inherit}
 /* tipografía */
 .px .kicker,.px .tag,.px .eyebrow,.px .pix,.px .title .n{font-family:var(--head);font-weight:600;font-size:max(.7em,11px);letter-spacing:.22em;text-transform:uppercase;line-height:1.4;color:var(--muted);margin:0}
 .px .amber{color:var(--muted)}
-.px .display{margin:0;font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.02;font-size:clamp(2rem,4.2vw,3.6rem);overflow-wrap:anywhere}
+.px .display{margin:0;font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.02;font-size:clamp(2rem,4.2vw,3.6rem);overflow-wrap:anywhere;text-wrap:balance}
 .px .display.md{font-size:clamp(1.45rem,2.5vw,2.3rem)}
 .px .display.xl{font-size:clamp(2.8rem,7.2vw,6.4rem);line-height:.95}
 .px .lede{color:#d2d2d2;max-width:56ch;font-size:1em;line-height:1.6}
@@ -710,12 +710,12 @@ a{color:inherit}
 .px .xsmall{font-size:.74em}
 
 /* botones */
-.px .btn{min-height:48px;padding:0 26px;border:1.5px solid var(--fg);border-radius:0;background:transparent;color:var(--fg);font-family:var(--head);font-weight:700;letter-spacing:.16em;font-size:.76em;box-shadow:none;transition:background-color .25s,color .25s,border-color .25s}
+.px .btn{min-height:48px;max-width:100%;padding:10px 26px;border:1.5px solid var(--fg);border-radius:0;background:transparent;color:var(--fg);font-family:var(--head);font-weight:700;letter-spacing:.16em;font-size:.76em;line-height:1.4;overflow-wrap:anywhere;box-shadow:none;transition:background-color .25s,color .25s,border-color .25s}
 .px .btn:hover:not(:disabled){background:var(--fg);color:var(--bg)}
 .px .btn.primary{background:var(--fg);color:var(--bg);box-shadow:none}
 .px .btn.primary:hover:not(:disabled){background:transparent;color:var(--fg);transform:none;box-shadow:none}
 .px .btn:active:not(:disabled){transform:none}
-.px .btn.sm{min-height:38px;padding:0 16px;font-size:.68em}
+.px .btn.sm{min-height:44px;padding:8px 16px;font-size:.72em}
 .px .btn.quiet{border-color:rgba(255,255,255,.28);color:#d6d6d6}
 .px .btn.quiet:hover:not(:disabled){border-color:var(--fg);background:transparent;color:var(--fg)}
 .px .pulse{animation:none}
@@ -727,20 +727,21 @@ a{color:inherit}
 .px .wordmark{font-family:var(--head);font-weight:700;font-size:1em;letter-spacing:.4em}
 .px .nav{margin-left:auto;gap:2px}
 .px .nav button{min-height:64px;padding:0 14px;border:0;border-bottom:2px solid transparent;border-radius:0;font-family:var(--head);font-size:.74em;font-weight:700;letter-spacing:.16em;color:rgba(255,255,255,.7)}
-.px .nav button:hover{color:#fff}
+.px .nav button:hover,.px .nav button:focus-visible{color:#fff}
 .px .nav button[aria-current="page"]{color:#fff;border-bottom-color:#fff}
 .px .top .right{margin-left:20px;gap:10px}
 .px .langsw{display:inline-flex;border:1px solid rgba(255,255,255,.3)}
-.px .langsw button{border:0;border-radius:0;min-width:42px;min-height:36px;padding:0 8px;font:700 .68em var(--head);letter-spacing:.14em;color:rgba(255,255,255,.65)}
+.px .langsw button{border:0;border-radius:0;min-width:44px;min-height:44px;padding:0 8px;font:700 .72em var(--head);letter-spacing:.14em;color:var(--muted)}
 .px .langsw button:hover{color:#fff}
 .px .langsw button[aria-pressed="true"]{background:#fff;color:#000}
-.px details.menu>summary{gap:8px;min-height:38px;border-color:rgba(255,255,255,.3);border-radius:0;color:rgba(255,255,255,.85);font-size:.68em;font-weight:700}
+.px details.menu>summary{gap:8px;min-width:44px;min-height:44px;border-color:rgba(255,255,255,.3);border-radius:0;color:rgba(255,255,255,.85);font-size:.72em;font-weight:700}
 .px details.menu .pop{background:#000;border-color:rgba(255,255,255,.22);border-radius:0}
 
 /* pantallas */
 .px .in{max-width:1480px;padding:28px 40px 40px;gap:24px}
 .px .pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px 40px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line)}
 .px .pagehead .kicker{margin-bottom:10px}
+.px .pagehead>div{min-width:0;max-width:100%}
 .px .pagehead.slim{padding-bottom:14px}
 .px .pagehead .lede{max-width:46ch;color:var(--muted)}
 .px .headtools{gap:12px}
@@ -755,7 +756,7 @@ a{color:inherit}
 .px .herobg img{width:100%;height:100%;object-fit:cover;animation:heroZoom 24s ease-out both}
 @keyframes heroZoom{from{transform:scale(1.14)}to{transform:scale(1.02)}}
 .px .heroshade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.7) 40%,rgba(0,0,0,.15) 100%),linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 45%)}
-.px .herotx{position:relative;z-index:1;display:flex;flex-direction:column;gap:22px;max-width:900px;padding:clamp(28px,6vw,96px) clamp(20px,5vw,84px) clamp(36px,8vh,96px)}
+.px .herotx{position:relative;z-index:1;display:flex;flex-direction:column;gap:22px;width:100%;max-width:900px;padding:clamp(28px,6vw,96px) clamp(20px,5vw,84px) clamp(36px,8vh,96px)}
 .px .herotx .kicker{color:#cfcfcf}
 .px .hero .cta{gap:14px;align-self:flex-start}
 .px .facts{display:flex;gap:44px;flex-wrap:wrap;max-width:560px;padding-top:22px;border-top:1px solid rgba(255,255,255,.22)}
@@ -775,17 +776,17 @@ a{color:inherit}
 .px .discgrid .dcard:hover,.px .discgrid .dcard[aria-pressed="true"]{background:transparent}
 .px .discgrid .dimg{position:relative;display:block;overflow:hidden;outline:1px solid var(--line);outline-offset:-1px}
 .px .discgrid .dimg img{display:block;width:100%;aspect-ratio:560/320;object-fit:cover;opacity:.66;transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .3s}
-.px .discgrid .dcard:hover .dimg img{transform:scale(1.05);opacity:1}
+.px .discgrid .dcard:hover .dimg img,.px .discgrid .dcard:focus-visible .dimg img{transform:scale(1.05);opacity:1}
 .px .discgrid .dcard[aria-pressed="true"] .dimg{outline:2px solid #fff;outline-offset:4px}
 .px .discgrid .dcard[aria-pressed="true"] .dimg img{opacity:1}
 .px .discgrid .tx{display:flex;flex-direction:column;gap:4px;padding:16px 2px 0}
 .px .discgrid .t{display:flex;align-items:center;gap:10px;font:700 1em var(--head);letter-spacing:.1em;text-transform:uppercase;white-space:normal}
-.px .discgrid .dot{width:8px;height:8px;border-radius:50%}
+.px .discgrid .dot{width:8px;height:8px;flex:0 0 auto;border-radius:50%}
 .px .discgrid .s{font-size:.8em;color:var(--muted)}
 .px .discgrid .who{color:#d6d6d6}
 .px .golisten{gap:18px}
 
-/* tu imagen a música */
+/* convierte en música */
 .px .dgrid{gap:40px}
 .px .dgrid .panel{border:0;padding:0;background:transparent;justify-content:flex-start}
 .px .drop{min-height:260px;gap:12px;border:1px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.015)}
@@ -887,7 +888,7 @@ a{color:inherit}
 .px .bar{background:rgba(0,0,0,.9);border-top:1px solid var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .px .bar .in2{max-width:none;min-height:64px;padding:10px 40px}
 .px .steps{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
-.px .steps button{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:0;border-bottom:2px solid transparent;border-radius:0;color:rgba(255,255,255,.5)}
+.px .steps button{display:inline-flex;align-items:center;gap:8px;min-width:44px;min-height:44px;padding:0 12px;border:0;border-bottom:2px solid transparent;border-radius:0;color:var(--muted)}
 .px .steps button b{font:700 .72em var(--head);letter-spacing:.1em}
 .px .steps button span{font:700 .7em var(--head);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
 .px .steps button:hover{color:#fff}
@@ -905,7 +906,6 @@ a{color:inherit}
 .px .guidefab{position:fixed;right:22px;bottom:22px;z-index:62;display:flex;align-items:center;padding:3px;border:1px solid rgba(255,212,71,.55);border-radius:40px;background:#000;box-shadow:0 12px 34px rgba(0,0,0,.65);transition:transform .25s,opacity .25s,bottom .25s,border-color .25s}
 .px .guidefab:hover{border-color:#FFD447;transform:translateY(-2px)}
 .px .guidefab.lift{bottom:88px}
-.px .guidefab.hide{opacity:0;pointer-events:none;transform:translateY(12px)}
 .px .guidefab .gface{width:52px;height:52px}
 .px .guidefab .glabel{max-width:0;overflow:hidden;white-space:nowrap;font:700 .7em var(--head);letter-spacing:.18em;text-transform:uppercase;color:#FFD447;transition:max-width .3s,padding .3s}
 .px .guidefab:hover .glabel,.px .guidefab:focus-visible .glabel{max-width:140px;padding:0 16px 0 10px}
@@ -914,10 +914,10 @@ a{color:inherit}
 
 /* guía: foco que sigue al elemento y tarjeta junto a él */
 .px .tourdim{position:fixed;inset:0;z-index:66;background:rgba(0,0,0,.72);pointer-events:none}
-.px .tourspot{position:fixed;z-index:66;border:1.5px solid #fff;box-shadow:0 0 0 200vmax rgba(0,0,0,.7);pointer-events:none;transition:left .3s cubic-bezier(.2,.7,.2,1),top .3s cubic-bezier(.2,.7,.2,1),width .3s cubic-bezier(.2,.7,.2,1),height .3s cubic-bezier(.2,.7,.2,1)}
+.px .tourspot{position:fixed;z-index:66;border:1.5px solid #fff;box-shadow:0 0 0 200vmax rgba(0,0,0,.7);pointer-events:none}
 .px .tourspot::after{content:"";position:absolute;inset:-7px;border:1px solid rgba(255,255,255,.55);animation:spotPulse 1.8s ease-out infinite}
 @keyframes spotPulse{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.03)}}
-.px .tour{position:fixed;z-index:90;transform:none;display:flex;flex-direction:column;gap:12px;padding:16px 18px 14px;border:1px solid rgba(255,255,255,.4);border-radius:0;background:#06070b;box-shadow:0 30px 80px rgba(0,0,0,.8);transition:left .3s cubic-bezier(.2,.7,.2,1),top .3s cubic-bezier(.2,.7,.2,1),bottom .3s cubic-bezier(.2,.7,.2,1)}
+.px .tour{position:fixed;z-index:90;transform:none;display:flex;flex-direction:column;gap:12px;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding:16px 18px 14px;border:1px solid rgba(255,255,255,.4);border-radius:0;background:#06070b;box-shadow:0 30px 80px rgba(0,0,0,.8)}
 .px .tour.center{top:50%;transform:translateY(-50%)}
 .px .tour::before{content:"";position:absolute;display:none;width:12px;height:12px;background:#06070b;border:1px solid rgba(255,255,255,.4);transform:rotate(45deg)}
 .px .tour.below::before{display:block;top:-7px;left:calc(var(--ax) - 6px);border-right:0;border-bottom:0}
@@ -938,7 +938,10 @@ a{color:inherit}
 
 /* pantallas estrechas */
 @media (max-width:1100px){
-  .px .top .wrap{padding:0 24px;gap:14px}
+  .px .top .wrap{padding:6px 24px 0;gap:6px 14px;flex-wrap:wrap}
+  .px .nav{order:3;flex:1 0 100%;min-width:0;margin-left:0;overflow-x:auto;flex-wrap:nowrap;scroll-padding-inline:4px}
+  .px .nav button{flex:0 0 auto;white-space:nowrap}
+  .px .top .right{margin-left:auto}
   .px .nav button{padding:0 10px;font-size:.68em;letter-spacing:.12em}
   .px .mlabel{display:none}
 }
@@ -963,6 +966,13 @@ a{color:inherit}
   .px .bar .side{min-width:0}
   .px .readout p{grid-template-columns:minmax(0,1fr);gap:2px}
   .px .tguide .gface{width:48px;height:48px}
+  .px .wordmark{letter-spacing:.22em}
+  .px .brand{gap:8px}
+  .px .top .right{gap:6px}
+  .px .hero .cta{width:100%;align-items:stretch}
+  .px .hero .cta .btn{flex:1 1 200px}
+  .px .discgrid .t{font-size:.9em;letter-spacing:.06em;overflow-wrap:anywhere}
+  .px .steps button.on span{max-width:18ch;white-space:normal;overflow-wrap:anywhere}
 }
 </style>
 </helmet>
@@ -1039,7 +1049,7 @@ a{color:inherit}
 <div class="row golisten"><button type="button" class="btn primary" onClick="{{goListen}}">{{tx.listenDisc}} →</button><span class="muted small">{{discPicked}}</span></div>
 </sc-if>
 
-<!-- TU IMAGEN A MÚSICA · 1 · Subir -->
+<!-- CONVIERTE EN MÚSICA · 1 · Subir -->
 <sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <div><p class="kicker">{{tx.dataKicker}}</p><h1 class="display">{{tx.dataTitle}}</h1></div>
@@ -1381,7 +1391,7 @@ a{color:inherit}
 </footer>
 </sc-if>
 
-<button id="tour-guide" type="button" class="guidefab {{guideFabCls}} {{guideFabBottom}}" onClick="{{tourOpen}}" aria-label="{{tx.guideOpen}}" title="{{tx.guideOpen}}">
+<button id="tour-guide" type="button" class="guidefab {{guideFabBottom}}" onClick="{{tourOpen}}" aria-expanded="{{tour.on}}" aria-label="{{tx.guideOpen}}" title="{{tx.guideOpen}}">
 <span class="gface"><img src="{{guideFace}}" alt=""></span><span class="glabel">{{tx.guide}}</span>
 </button>
 
@@ -1423,14 +1433,15 @@ a{color:inherit}
 <sc-if value="{{tour.on}}" hint-placeholder-val="{{ false }}">
 <sc-if value="{{tour.dim}}" hint-placeholder-val="{{ false }}"><div class="tourdim" aria-hidden="true"></div></sc-if>
 <sc-if value="{{tour.spot}}" hint-placeholder-val="{{ false }}"><div class="tourspot" aria-hidden="true" style="{{tour.spotSt}}"></div></sc-if>
-<div class="tour {{tour.place}}" role="dialog" aria-modal="false" aria-labelledby="tour-t" aria-describedby="tour-b" style="{{tour.cardSt}}">
+<div id="tour-card" class="tour {{tour.place}}" role="dialog" aria-modal="false" aria-labelledby="tour-t" aria-describedby="tour-b" style="{{tour.cardSt}}">
 <div class="tguide">
 <span class="gface talk {{tour.talk}}" aria-hidden="true"><img src="{{guideFace}}" alt=""></span>
 <div class="tmeta"><span class="tn">{{tour.who}}</span><span class="tn dim">{{tour.count}}</span></div>
 <button type="button" class="tsay" onClick="{{tour.say}}" aria-label="{{tx.guideListen}}" title="{{tx.guideListen}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg></button>
+<button type="button" class="tsay" onClick="{{tour.close}}" aria-label="{{tx.guideClose}}" title="{{tx.guideClose}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg></button>
 </div>
 <div class="tbubble">
-<h3 id="tour-t">{{tour.title}}</h3>
+<h3 id="tour-t" tabindex="-1">{{tour.title}}</h3>
 <p id="tour-b" aria-live="polite">{{tour.body}}</p>
 </div>
 <div class="tdots" aria-hidden="true"><sc-for list="{{tour.dots}}" as="d" hint-placeholder-count="6"><i class="{{d.cls}}"></i></sc-for></div>
@@ -1476,8 +1487,8 @@ var GUIDES = {
   home: [
     { id: '', t: '¡Hola! Soy Silbo', b: 'Soy un huaco silbador moche de hace 1500 años y seré tu guía. Terrasonic convierte los mapas de temperatura del océano de la NASA en música. Te muestro cómo moverte.',
       en: { t: 'Hi! I’m Silbo', b: 'I’m a 1,500-year-old Moche whistling vessel and I’ll be your guide. Terrasonic turns NASA ocean temperature maps into music. Let me show you around.' } },
-    { id: 'tour-nav', t: 'Las secciones', b: 'Cada sección hace una sola cosa: escuchar el Pacífico, conocer a la banda, convertir tu imagen en música, entender el método y ver la tecnología.',
-      en: { t: 'The sections', b: 'Each section does one thing: listen to the Pacific, meet the band, turn your image into music, understand the method and see the technology.' } },
+    { id: 'tour-nav', t: 'Las secciones', b: 'Cada sección hace una sola cosa: escuchar el Pacífico, conocer a la banda, convertir una imagen o un CSV en música, entender el método y ver la tecnología.',
+      en: { t: 'The sections', b: 'Each section does one thing: listen to the Pacific, meet the band, turn an image or a CSV into music, understand the method and see the technology.' } },
     { id: 'tour-lang', t: 'Español o inglés', b: 'Cambia el idioma de toda la página cuando quieras.',
       en: { t: 'Spanish or English', b: 'Switch the language of the whole page whenever you like.' } },
     { id: 'tour-a11y', t: 'Accesibilidad', b: 'Alto contraste, texto grande, fuente legible, voz y vibración, pensados para personas ciegas o con baja visión.',
@@ -1490,24 +1501,12 @@ var GUIDES = {
   juke: [
     { id: 'tour-discs', sub: 0, t: 'Elige un disco', b: 'Cada disco reúne seis meses de mapas reales de la NASA y tiene un músico protagonista. Toca uno para elegirlo.',
       en: { t: 'Pick a disc', b: 'Each disc holds six months of real NASA maps and has a lead musician. Tap one to choose it.' } },
-    { id: 'tour-sets', sub: 0, t: 'Origen de los datos', b: 'Cambia entre los fotogramas oficiales del Earth Information Center (2024–2026) y los de NASA GIBS (2010–2023), con El Niño y La Niña.',
-      en: { t: 'Data source', b: 'Switch between the official Earth Information Center frames (2024–2026) and the NASA GIBS ones (2010–2023), with El Niño and La Niña.' } },
-    { id: 'tour-subnav', sub: 0, t: 'Tres pantallas', b: 'Escuchar tiene tres pasos: elegir el disco, escucharlo y ver a la banda en el escenario. Muévete con esta barra.',
-      en: { t: 'Three screens', b: 'Listen has three steps: pick the disc, listen to it and watch the band on stage. Move with this bar.' } },
     { id: 'tour-frame', sub: 1, t: 'Lo que ves tú', b: 'Este es el mapa de la NASA. Naranja y rojo: el mar está más caliente de lo normal; azul: más frío. Una línea blanca lo recorre de oeste a este.',
       en: { t: 'What you see', b: 'This is the NASA map. Orange and red: the sea is warmer than normal; blue: colder. A white line sweeps it from west to east.' } },
-    { id: 'tour-machine', sub: 1, t: 'Lo que ve la máquina', b: 'La máquina reduce el mapa a 28×16 píxeles de color. Cada columna que toca la línea blanca se convierte en notas: más calor, más grave y nostálgico.',
-      en: { t: 'What the machine sees', b: 'The machine reduces the map to 28×16 colored pixels. Each column the white line touches becomes notes: the warmer, the lower and more nostalgic.' } },
     { id: 'tour-play', sub: 1, t: 'Pulsa reproducir', b: 'Aquí empieza la música. Si no hay nadie encendido, se activa el protagonista del disco.', extra: 'Reproducir por mí',
       en: { t: 'Press play', b: 'This is where the music starts. If nobody is switched on, the disc’s lead musician joins in.', extra: 'Play it for me' } },
-    { id: 'tour-strip', sub: 1, t: 'Viaja en el tiempo', b: 'Estas miniaturas son los meses del disco. Elige otra y compara cómo cambian el mapa y el sonido.',
-      en: { t: 'Travel in time', b: 'These thumbnails are the months of the disc. Pick another one and compare how the map and the sound change.' } },
-    { id: 'tour-more', sub: 1, t: 'Más opciones', b: 'La velocidad, el motor de sonido y el porqué de la música están en esta ventana. No hace falta tocarlos para empezar.',
-      en: { t: 'More options', b: 'Speed, the sound engine and why the music sounds this way are in this window. You don’t need them to get started.' } },
     { id: 'tour-stage', sub: 2, t: 'El escenario', b: 'Aquí tocan los músicos encendidos. Cada uno se mueve al ritmo de la música y abajo aparece el acorde que suena.',
       en: { t: 'The stage', b: 'The musicians who are switched on play here. Each one moves to the beat, and the current chord shows below.' } },
-    { id: 'tour-lead', sub: 2, t: 'El protagonista', b: 'Elige quién lidera la música o deja que lo decida el disco. Cada músico escucha un rasgo distinto del mapa.',
-      en: { t: 'The lead', b: 'Choose who leads the music or let the disc decide. Each musician listens to a different feature of the map.' } },
     { id: 'tour-band', sub: 2, t: 'La banda', b: 'Toca a un músico para encenderlo o apagarlo y escucha la diferencia. «Todos» y «Ninguno» cambian a toda la banda a la vez.',
       en: { t: 'The band', b: 'Tap a musician to switch them on or off and hear the difference. “All” and “None” change the whole band at once.' } }
   ],
@@ -1522,8 +1521,8 @@ var GUIDES = {
       en: { t: 'Let’s play', b: 'Switch the whole band on and go back to Listen to hear them together.' } }
   ],
   data: [
-    { id: 'tour-drop', sub: 0, t: 'Sube tu imagen', b: 'Suelta aquí una foto, un mapa o un CSV, o pulsa para elegirlo. La banda lo convertirá en música.',
-      en: { t: 'Upload your image', b: 'Drop a photo, a map or a CSV here, or tap to choose one. The band will turn it into music.' } },
+    { id: 'tour-drop', sub: 0, t: 'Convierte en música', b: 'Suelta aquí una foto, un mapa o un CSV, o pulsa para elegirlo. La banda lo convertirá en música.',
+      en: { t: 'Turn into music', b: 'Drop a photo, a map or a CSV here, or tap to choose one. The band will turn it into music.' } },
     { id: 'tour-sample', sub: 0, t: '¿Sin archivo?', b: 'Prueba con la lluvia de Chiclayo: datos reales de NASA POWER.',
       en: { t: 'No file?', b: 'Try Chiclayo’s rainfall: real NASA POWER data.' } },
     { id: 'tour-howdata', sub: 0, t: 'Cómo se lee', b: 'Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Nada sale de tu equipo.',
@@ -1562,7 +1561,7 @@ var ROUTE_LOOK = {
   home: { title: 'Inicio', color: '#FFFFFF', mark: 'M48 18a30 30 0 1 0 0 60a30 30 0 1 0 0-60z M22 52q13-10 26 0t26 0' },
   juke: { title: 'Escuchar', color: '#FFD447', mark: 'M20 48h9l7-13 8 26 8-35 9 44 8-22h7' },
   band: { title: 'La banda', color: '#F06BB0', mark: 'M25 60l12-25 18 11 15-17m-33 6 7 33 26-39M22 60h6m-3-3v6M34 35h6m-3-3v6M52 46h6m-3-3v6M67 29h6m-3-3v6M41 68h6m-3-3v6' },
-  data: { title: 'Imagen a música', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
+  data: { title: 'Convierte en música', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
   how: { title: 'Método', color: '#7BE38A', mark: 'M25 69h46M30 64V52m9 12V41m9 23V27m9 37V36m9 28V48' },
   tech: { title: 'Tecnología', color: '#AB9CFF', mark: 'M34 34h28v28H34zM42 42h12v12H42zM41 34V24m14 10V24m-14 38v10m14-10v10M34 41H24m10 14H24m38-14h10M62 55h10' }
 };
@@ -1638,7 +1637,7 @@ var TECH = [
   { cat: 'Interfaz y código', name: 'GitHub Pages', use: 'Publicación de la versión final con una URL pública.', st: 'plan', mod: 'M6' },
   { cat: 'Datos de la NASA', name: 'EIC · SST Anomaly (SVS 5176)', use: 'Los 30 fotogramas de los 5 discos, extraídos del video oficial del EIC «SST Anomaly» (SVS 5176, Pacífico).', st: 'done', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'GHRSST MUR · anomalía de temperatura del mar (GIBS)', use: 'Los 30 fotogramas de los 5 discos «NASA GIBS» (2010–2023), vía NASA GIBS / Worldview.', st: 'done', mod: 'M1' },
-  { cat: 'Datos de la NASA', name: 'NASA POWER API', use: 'Lluvia y temperatura mensuales (1981–2024) de Chiclayo, Galápagos e Iquitos. Alimenta el ejemplo de «Imagen a música».', st: 'done', mod: 'M1' },
+  { cat: 'Datos de la NASA', name: 'NASA POWER API', use: 'Lluvia y temperatura mensuales (1981–2024) de Chiclayo, Galápagos e Iquitos. Alimenta el ejemplo de «Convierte en música».', st: 'done', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'Galería del Earth Information Center (SVS)', use: 'Fuente oficial de las visualizaciones. Los discos extra saldrán de SVS 5207 y 4897.', st: 'plan', mod: 'M1' },
   { cat: 'Datos de la NASA', name: 'ffmpeg', use: 'Recortar y reducir los fotogramas del video del EIC (y los de los discos extra).', st: 'done', mod: 'M1' },
   { cat: 'Música y sonido', name: 'Compositor por reglas (teoría musical)', use: 'Una tonalidad, un tempo y una progresión de acordes por personaje. La melodía sale de los datos y se ajusta al acorde en los tiempos fuertes.', st: 'done', mod: 'M3' },
@@ -1672,7 +1671,7 @@ var STEPS = [
   { n: '04', title: 'Escaneo oeste → este', body: 'Un cabezal recorre las 28 columnas. Cada columna es un paso del ritmo.' },
   { n: '05', title: 'Cinco músicos', body: 'Inti, Mamacocha, Yaku, Illapa y Silbo convierten esos niveles en acordes, bajo, gotas, truenos y silbidos. En modo Melodía, todos tocan en la tonalidad y la progresión del disco.' },
   { n: '06', title: 'Para todos', body: 'Subtítulos de sonido, descripción por voz, vibración, teclado y alto contraste.' },
-  { n: '07', title: 'Imagen a música', body: 'Sube una imagen o un CSV. Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Se procesa en tu navegador.' },
+  { n: '07', title: 'Convierte en música', body: 'Sube una imagen o un CSV. Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Se procesa en tu navegador.' },
   { n: '08', title: 'Elige al protagonista', body: 'Cada disco sugiere un músico. Puedes elegir otro en Escuchar y sumar a los demás para armar la banda completa.' }
 ];
 var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
@@ -1773,7 +1772,7 @@ var TECH_EN = {
   'GitHub Pages': { use: 'Publishing the final version at a public URL.' },
   'EIC · SST Anomaly (SVS 5176)': { use: 'The 30 frames of the 5 discs, extracted from the official EIC “SST Anomaly” video (SVS 5176, Pacific).' },
   'GHRSST MUR · anomalía de temperatura del mar (GIBS)': { name: 'GHRSST MUR · sea surface temperature anomaly (GIBS)', use: 'The 30 frames of the 5 “NASA GIBS” discs (2010–2023), via NASA GIBS / Worldview.' },
-  'NASA POWER API': { use: 'Monthly rainfall and temperature (1981–2024) for Chiclayo, Galápagos and Iquitos. Feeds the “Image to music” sample.' },
+  'NASA POWER API': { use: 'Monthly rainfall and temperature (1981–2024) for Chiclayo, Galápagos and Iquitos. Feeds the “Turn into music” sample.' },
   'Galería del Earth Information Center (SVS)': { name: 'Earth Information Center gallery (SVS)', use: 'Official source of the visualizations. The extra discs will come from SVS 5207 and 4897.' },
   'ffmpeg': { use: 'Crops and downsizes the frames of the EIC video (and those of the extra discs).' },
   'Compositor por reglas (teoría musical)': { name: 'Rule-based composer (music theory)', use: 'One key, one tempo and one chord progression per character. The melody comes from the data and snaps to the chord on strong beats.' },
@@ -1807,10 +1806,10 @@ var STEPS_EN = [
   { title: 'West → east scan', body: 'A scan head crosses the 28 columns. Each column is one step of the rhythm.' },
   { title: 'Five musicians', body: 'Inti, Mamacocha, Yaku, Illapa and Silbo turn those levels into chords, bass, drops, thunder and whistles. In Melody mode they all play in the disc’s key and progression.' },
   { title: 'For everyone', body: 'Sound captions, spoken description, vibration, keyboard and high contrast.' },
-  { title: 'Image to music', body: 'Upload an image or a CSV. An image is read by its colors; a CSV by values above or below the mean. Everything is processed in your browser.' },
+  { title: 'Turn into music', body: 'Upload an image or a CSV. An image is read by its colors; a CSV by values above or below the mean. Everything is processed in your browser.' },
   { title: 'Pick the lead', body: 'Each disc suggests a musician. You can pick another one in Listen and add the others to build the full band.' }
 ];
-var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Image to music', how: 'Method', tech: 'Technology' };
+var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Turn into music', how: 'Method', tech: 'Technology' };
 
 /* Textos fijos de la interfaz */
 var TX = {
@@ -1831,10 +1830,10 @@ var TX = {
     theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
-    dataKicker: 'Imagen a música · paso 1', dataTitle: 'Convierte tu imagen en música', dataLede: 'Todo ocurre en tu navegador: el archivo no sale de tu equipo.',
+    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Transforma una imagen o un CSV en sonido. Todo ocurre en tu navegador: el archivo no sale de tu equipo.',
     dropTitle: 'Suelta un archivo o pulsa aquí', dropSub: 'Imagen (PNG, JPG, WebP) o CSV con una columna numérica. Máx. 8 MB.', sample: 'Probar con la lluvia de Chiclayo',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
-    dataListenKicker: 'Imagen a música · paso 2', dataStageKicker: 'Imagen a música · paso 3',
+    dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
     noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
     howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Todo ocurre en el navegador y en tiempo real, con Canvas y Web Audio. Sin modelos ni servidores.',
     howTitle2: 'Escala de color de la NASA → nivel → músico', howTitle3: 'Lo que pide el reto y dónde verlo',
@@ -1846,7 +1845,7 @@ var TX = {
     notice: 'Aviso', noticeP: 'Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.',
     back: 'Atrás', prevScreen: 'Pantalla anterior', nextScreen: 'Pantalla siguiente', screensAria: 'Pantallas de esta sección',
     close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad del escaneo', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
-    guide: 'Guía', guideOpen: 'Abrir la guía de esta sección', guideListen: 'Escuchar a Silbo', skipGuide: 'Saltar guía', guideBy: 'Silbo · tu guía'
+    guide: 'Guía', guideOpen: 'Abrir o cerrar la guía de esta sección', guideClose: 'Cerrar guía y continuar después', guideListen: 'Escuchar a Silbo', skipGuide: 'Saltar guía', guideBy: 'Silbo · tu guía'
   },
   en: {
     brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options',
@@ -1865,10 +1864,10 @@ var TX = {
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
-    dataKicker: 'Image to music · step 1', dataTitle: 'Turn your image into music', dataLede: 'Everything happens in your browser: the file never leaves your device.',
+    dataKicker: 'Turn into music · step 1', dataTitle: 'Turn into music', dataLede: 'Turn an image or a CSV into sound. Everything happens in your browser: the file never leaves your device.',
     dropTitle: 'Drop a file or tap here', dropSub: 'An image (PNG, JPG, WebP) or a CSV with a numeric column. 8 MB max.', sample: 'Try Chiclayo’s rainfall',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
-    dataListenKicker: 'Image to music · step 2', dataStageKicker: 'Image to music · step 3',
+    dataListenKicker: 'Turn into music · step 2', dataStageKicker: 'Turn into music · step 3',
     noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
     howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'Everything happens in the browser in real time, with Canvas and Web Audio. No models, no servers.',
     howTitle2: 'NASA color scale → level → musician', howTitle3: 'What the challenge asks for and where to see it',
@@ -1880,7 +1879,7 @@ var TX = {
     notice: 'Notice', noticeP: 'Independent project created for the NASA Space Apps Challenge; it is not affiliated with or endorsed by NASA.',
     back: 'Back', prevScreen: 'Previous screen', nextScreen: 'Next screen', screensAria: 'Screens in this section',
     close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Scan speed', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
-    guide: 'Guide', guideOpen: 'Open this section’s guide', guideListen: 'Listen to Silbo', skipGuide: 'Skip guide', guideBy: 'Silbo · your guide'
+    guide: 'Guide', guideOpen: 'Open or close this section’s guide', guideClose: 'Close guide and continue later', guideListen: 'Listen to Silbo', skipGuide: 'Skip guide', guideBy: 'Silbo · your guide'
   }
 };
 
@@ -2016,6 +2015,7 @@ class Component extends DCLogic {
     this.bandTimer = null; this.bandTurn = 0;
     this.bandClips = Object.create(null);
     this.bandClipUrl = null;
+    this.guideProgress = Object.create(null);
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
   }
   componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); if (self.state.tour) self.measureTour(); }, 200);
@@ -2027,13 +2027,19 @@ class Component extends DCLogic {
       self.tourRaf = requestAnimationFrame(function () { self.measureTour(); });
     };
     this.onTourVisible = function () { if (!document.hidden && self.state.tour) self.focusTourTarget(); };
-    window.addEventListener('resize', this.onTourLayout);
+    this.onTourResize = function () {
+      self.onTourLayout();
+      clearTimeout(self.tourResizeTimer);
+      if (self.state.tour) self.tourResizeTimer = setTimeout(function () { self.focusTourTarget(); }, 160);
+    };
+    this.onTourKey = function (e) { if (e.key === 'Escape' && self.state.tour) { e.preventDefault(); self.tourClose(); } };
+    window.addEventListener('resize', this.onTourResize);
     window.addEventListener('scroll', this.onTourLayout, true);
     document.addEventListener('visibilitychange', this.onTourVisible);
+    document.addEventListener('keydown', this.onTourKey);
     window.addEventListener('focus', this.onTourVisible);
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', this.onTourLayout);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', this.onTourResize);
     if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourLayout); this.tourObserver.observe(document.body); }
-    this.autoGuide();
   }
   setLang(code) {
     if (code === LANG) return;
@@ -2047,28 +2053,33 @@ class Component extends DCLogic {
   }
   guideSteps(tab) { return GUIDES[tab || this.state.tab] || []; }
   guideStep() { var s = this.state; return s.tour ? this.guideSteps()[s.tour - 1] || null : null; }
-  autoGuide() {
-    var self = this, tab = this.state.tab, seen = false;
-    try { seen = !!localStorage.getItem('ts_guide_' + tab); } catch (e) {}
-    if (seen || !GUIDES[tab]) return;
-    clearTimeout(this.guideTimer);
-    this.guideTimer = setTimeout(function () { if (self.state.tab === tab && !self.state.tour && !self.state.trans) self.tourGo(1); }, 650);
+  tourOpen() {
+    if (this.state.trans) return;
+    if (this.state.tour) { this.tourClose(); return; }
+    this.tourReturnFocus = document.activeElement;
+    this.tourGo(this.guideProgress[this.state.tab] || 1);
   }
   measureTour() {
     var st = this.guideStep(), rect = null;
-    if (!st) return;
+    if (!st || document.hidden || window.innerWidth < 1 || window.innerHeight < 1) return;
+    var vw = window.innerWidth, vh = window.innerHeight;
     if (st.id) {
       var el = document.getElementById(st.id);
       if (el) {
         var r = el.getBoundingClientRect();
-        if (r.width > 0 && r.height > 0) rect = { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
+        var clip = el.closest('.scr, .nav'), cr = clip ? clip.getBoundingClientRect() : { left: 0, top: 0, right: vw, bottom: vh };
+        var left = Math.max(0, r.left, cr.left), top = Math.max(0, r.top, cr.top);
+        var right = Math.min(vw, r.right, cr.right), bottom = Math.min(vh, r.bottom, cr.bottom);
+        if (right > left && bottom > top) rect = { x: Math.round(left), y: Math.round(top), w: Math.round(right - left), h: Math.round(bottom - top) };
+        if (this.tourObserver && this.tourTarget !== el) { if (this.tourTarget) this.tourObserver.unobserve(this.tourTarget); this.tourObserver.observe(el); this.tourTarget = el; }
       }
     }
-    var vw = window.innerWidth, vh = window.innerHeight;
-    var key = (rect ? [rect.x, rect.y, rect.w, rect.h].join(',') : 'none') + '|' + vw + 'x' + vh + '|' + this.state.tour;
+    var card = document.getElementById('tour-card'), cardH = card ? Math.ceil(card.getBoundingClientRect().height) : 0;
+    if (this.tourObserver && card && this.tourCard !== card) { if (this.tourCard) this.tourObserver.unobserve(this.tourCard); this.tourObserver.observe(card); this.tourCard = card; }
+    var key = (rect ? [rect.x, rect.y, rect.w, rect.h].join(',') : 'none') + '|' + vw + 'x' + vh + '|' + this.state.tour + '|' + cardH;
     if (key === this.tourKey) return;
     this.tourKey = key;
-    this.setState({ tourRect: rect, vw: vw, vh: vh });
+    this.setState({ tourRect: rect, vw: vw, vh: vh, tourCardH: cardH });
   }
   focusTourTarget() {
     // Se mide en el acto (el render es síncrono) y otra vez cuando terminan el desplazamiento y las transiciones.
@@ -2094,7 +2105,7 @@ class Component extends DCLogic {
   tourGo(n) {
     var steps = this.guideSteps(), s = this.state;
     if (n < 1 || n > steps.length) { this.tourEnd(); return; }
-    var st = steps[n - 1], patch = { tour: n, more: false };
+    var st = steps[n - 1], patch = { tour: n, tourRect: null };
     // Cada paso puede estar en otra pantalla de la misma sección: se va a ella sin salir de la sección.
     var reachable = !(s.tab === 'data' && st.sub > 0 && !s.custom);
     if (st.sub != null && st.sub !== s.sub && reachable && st.sub < this.subCount()) {
@@ -2102,15 +2113,24 @@ class Component extends DCLogic {
       patch.sub = st.sub;
     }
     this.tourTalk = (this.tourTalk || 0) + 1;
+    this.guideProgress[s.tab] = n;
     var self = this;
-    this.setState(patch, function () { self.focusTourTarget(); });
+    this.setState(patch, function () { self.focusTourTarget(); var heading = document.getElementById('tour-t'); if (heading) heading.focus({ preventScroll: true }); });
     if (s.voice) this.speak(st.t + '. ' + st.b);
   }
-  tourEnd() {
-    var tab = this.state.tab;
-    clearTimeout(this.guideTimer);
+  tourClose() {
+    if (!this.state.tour) return;
+    this.guideProgress[this.state.tab] = this.state.tour;
+    clearTimeout(this.tourSettle); clearTimeout(this.tourSettle2); clearTimeout(this.tourResizeTimer); cancelAnimationFrame(this.tourRaf);
+    this.stopSpeech();
     this.setState({ tour: 0, tourRect: null });
-    try { localStorage.setItem('ts_guide_' + tab, '1'); } catch (e) {}
+    var target = this.tourReturnFocus;
+    if (!target || !target.isConnected) target = document.getElementById('tour-guide');
+    if (target) target.focus({ preventScroll: true });
+  }
+  tourEnd() {
+    this.tourClose();
+    delete this.guideProgress[this.state.tab];
   }
   syncAnims() {
     if (this.state.tab === 'band' || !document.getAnimations || document.hidden) return;
@@ -2120,11 +2140,14 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearInterval(this.syncTimer);
     clearTimeout(this.guideTimer); clearTimeout(this.tourSettle); clearTimeout(this.tourSettle2);
-    window.removeEventListener('resize', this.onTourLayout);
+    cancelAnimationFrame(this.tourRaf);
+    clearTimeout(this.tourResizeTimer);
+    window.removeEventListener('resize', this.onTourResize);
     window.removeEventListener('scroll', this.onTourLayout, true);
     document.removeEventListener('visibilitychange', this.onTourVisible);
+    document.removeEventListener('keydown', this.onTourKey);
     window.removeEventListener('focus', this.onTourVisible);
-    if (window.visualViewport) window.visualViewport.removeEventListener('resize', this.onTourLayout);
+    if (window.visualViewport) window.visualViewport.removeEventListener('resize', this.onTourResize);
     if (this.tourObserver) this.tourObserver.disconnect();
     this.cancelBandClip();
     this.utterance = null;
@@ -2274,6 +2297,7 @@ class Component extends DCLogic {
   goSub(i) {
     var s = this.state, cnt = this.subCount();
     if (!Number.isInteger(i) || i < 0 || i >= cnt || i === s.sub || s.trans) return;
+    if (s.tour) this.tourClose();
     this.routeChange({ sub: i }, s.tab, this.subTitles()[i]);
   }
   goTab(k, sub) {
@@ -2285,14 +2309,14 @@ class Component extends DCLogic {
       this.setState({ bphase: 'idle' });
     }
     this.stop();
-    // Al cambiar de sección se cierra la guía de la sección anterior; la nueva abre la suya la primera vez.
-    clearTimeout(this.guideTimer);
+    // Cambiar de sección cierra la ayuda; Silbo la reanuda solo cuando se le pide.
+    if (s.tour) this.tourClose();
     var patch = { tab: k, col: -1, sub: sub || 0, tour: 0, tourRect: null, more: false };
     if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
     this.routeChange(patch, k);
   }
   routeChange(patch, tab, title) {
-    var self = this, changingTab = tab !== this.state.tab;
+    var self = this;
     this.playCue(PAGE_CUES[tab]);
     var swap = function () {
       self.navCount = 0;
@@ -2300,7 +2324,6 @@ class Component extends DCLogic {
         var screen = document.querySelector('.px .viewport > .scr');
         if (screen) screen.scrollTop = 0;
         if (tab === 'band') self.warmBandClips();
-        if (changingTab) self.autoGuide();
       });
     };
     if (this.bandReduced() || this.state.tour) { swap(); return; }
@@ -2794,7 +2817,7 @@ class Component extends DCLogic {
     var s = this.state, self = this, hc = s.contrast;
     var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF9A7A', cold: '#5CE1FF', magenta: '#FF7AD0' }
                 : { bg: '#000000', panel: 'rgba(255,255,255,0.03)', line: 'rgba(255,255,255,0.14)', shadow: '#000000', fg: '#FFFFFF', muted: '#A1A1A1', accent: '#FFFFFF', hot: '#FF8A5B', cold: '#5CC8FF', magenta: '#F06BB0' };
-    th.fs = s.big ? '19px' : 'clamp(15px, calc(8px + 0.5vw), 19px)';
+    th.fs = s.big ? '19px' : 'clamp(16px, calc(8px + 0.5vw), 19px)';
     th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
     var tx = TX[LANG];
     th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
@@ -2834,9 +2857,10 @@ class Component extends DCLogic {
       var pad = 8, sx = clamp(R.x - pad, 4, vw - 8), sy = clamp(R.y - pad, 4, vh - 8);
       var sw = Math.max(0, clamp(R.x + R.w + pad, 4, vw - 4) - sx), sh = Math.max(0, clamp(R.y + R.h + pad, 4, vh - 4) - sy);
       spotSt = 'left:' + sx + 'px;top:' + sy + 'px;width:' + sw + 'px;height:' + sh + 'px';
-      var need = 270, below = vh - (sy + sh), above = sy, right = vw - (sx + sw), left = sx;
+      var cardH = Math.min(s.tourCardH || 330, Math.max(0, vh - 24));
+      var need = cardH + 28, below = vh - (sy + sh), above = sy, right = vw - (sx + sw), left = sx;
       var cx = clamp(R.x + R.w / 2 - cardW / 2, 12, vw - cardW - 12), ax = clamp(R.x + R.w / 2 - cx, 22, cardW - 22);
-      var ty = clamp(sy + sh / 2 - 150, 12, Math.max(12, vh - 330)), ay = clamp(sy + sh / 2 - ty, 22, 300);
+      var ty = clamp(sy + sh / 2 - cardH / 2, 12, Math.max(12, vh - cardH - 12)), ay = clamp(sy + sh / 2 - ty, 22, Math.max(22, cardH - 22));
       if (vw >= 700 && below >= need) { place = 'below'; cardSt = 'left:' + cx + 'px;top:' + (sy + sh + 16) + 'px;width:' + cardW + 'px;--ax:' + ax + 'px'; }
       else if (vw >= 700 && above >= need) { place = 'above'; cardSt = 'left:' + cx + 'px;bottom:' + (vh - sy + 16) + 'px;width:' + cardW + 'px;--ax:' + ax + 'px'; }
       else if (right >= cardW + 32) { place = 'right'; cardSt = 'left:' + (sx + sw + 16) + 'px;top:' + ty + 'px;width:' + cardW + 'px;--ay:' + ay + 'px'; }
@@ -2849,7 +2873,7 @@ class Component extends DCLogic {
       dots: gsteps.map(function (x, i) { return { cls: i < s.tour ? 'on' : '' }; }), showBack: s.tour > 1, hasExtra: !!(tstep && tstep.extra), extraLabel: tstep && tstep.extra ? tstep.extra : '',
       nextLabel: s.tour === gsteps.length ? T('Entendido', 'Got it') : T('Siguiente', 'Next'),
       next: function () { if (s.tour >= gsteps.length) self.tourEnd(); else self.tourGo(s.tour + 1); },
-      back: function () { self.tourGo(s.tour - 1); }, skip: function () { self.tourEnd(); },
+      back: function () { self.tourGo(s.tour - 1); }, close: function () { self.tourClose(); }, skip: function () { self.tourEnd(); },
       say: function () { if (tstep) self.speak(tstep.t + '. ' + tstep.b, true); },
       extra: function () { if (!s.playing) self.play(); } };
     var titles = this.subTitles(), cnt = titles.length, sub = Math.min(s.sub, cnt - 1), pgOrder = PAGE_ORDER, pgNext = s.tab === 'home' ? 'juke' : pgOrder[(pgOrder.indexOf(s.tab) + 1) % pgOrder.length];
@@ -2938,7 +2962,6 @@ class Component extends DCLogic {
       playTitle: isData ? (hasCustom ? s.custom.name : '') : d.title,
       stageKicker: isData ? tx.dataStageKicker : tx.stageKicker,
       guideFace: CARA.silbo.sm,
-      guideFabCls: s.tour ? 'hide' : '',
       guideFabBottom: navVm.show ? 'lift' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
@@ -3005,7 +3028,7 @@ class Component extends DCLogic {
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
       moodText: prof.mood ? T('Ánimo de la música: ', 'Mood of the music: ') + prof.mood + ' (' + prof.key + ' ' + prof.mode + T('). Los acordes menores suenan nostálgicos; los mayores, alegres.', '). Minor chords sound nostalgic; major ones, joyful.') : '',
-      tourOpen: function () { self.tourGo(1); },
+      tourOpen: function () { self.tourOpen(); },
       goHome: function () { self.goTab('home'); },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
       lead: this.leadInfo(th),
