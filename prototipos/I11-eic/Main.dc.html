@@ -238,13 +238,6 @@ a{color:inherit}
 .px .grow{flex:1 1 auto;min-height:0}
 
 /* portada */
-.px .scr.home::before{content:"";position:absolute;left:50%;top:66%;width:170%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 50% 0,#12347a 0,#081a3d 14%,#030813 40%);box-shadow:0 -1px 0 rgba(140,185,255,.7),0 -26px 90px rgba(70,130,255,.28);pointer-events:none}
-.px .scr.home .in{justify-content:center;position:relative;gap:20px}
-.px .scr.home .cta{display:flex;gap:12px;flex-wrap:wrap}
-.px .facts{display:flex;gap:40px;flex-wrap:wrap;padding-top:18px;border-top:1px solid var(--line);max-width:640px}
-.px .facts div{display:flex;flex-direction:column}
-.px .facts b{font-family:var(--head);font-weight:600;font-size:1.7em;letter-spacing:.04em;line-height:1}
-.px .facts span{font-size:.72em;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 
 /* discos */
 .px .discs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-content:center;flex:1 1 auto;min-height:0}
@@ -313,18 +306,9 @@ a{color:inherit}
 @keyframes slB{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
 @keyframes sfA{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
 @keyframes sfB{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
-.px .wipe{position:fixed;inset:0;z-index:95;overflow:hidden;display:grid;place-items:center;color:var(--route-color)}
-.px .route-shutter{position:absolute;inset:-18% -24%;border-inline:2px solid currentColor;background:linear-gradient(115deg,#070916 25%,color-mix(in srgb,currentColor 20%,#070916) 72%,#070916 95%);will-change:transform;animation:route-sweep 720ms cubic-bezier(.65,0,.35,1) both}
-.px .route-shutter::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 8%,color-mix(in srgb,currentColor 8%,transparent) 8% 8.12%)}
-.px .route-card{position:relative;display:grid;justify-items:center;gap:9px;width:min(88vw,420px);text-align:center;will-change:transform,opacity;animation:route-card 480ms ease-out 170ms both}
-.px .route-card svg{width:112px;height:112px}
-.px .route-card strong{font:700 clamp(1.15rem,3vw,2rem) var(--head);letter-spacing:.11em;text-transform:uppercase}
-.px .route-card small{font:600 .67em var(--head);letter-spacing:.26em;text-transform:uppercase}
-@keyframes route-sweep{0%{transform:translateX(-105%) skewX(-17deg)}38%,53%{transform:translateX(0) skewX(-17deg)}100%{transform:translateX(105%) skewX(-17deg)}}
-@keyframes route-card{0%,8%{opacity:0;transform:translateY(10px) scale(.95)}32%,67%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px) scale(1.025)}}
-.px .scr.route-arrive{will-change:transform,opacity;animation:route-reveal 220ms cubic-bezier(.24,.7,.25,1) both}
-@keyframes route-reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@media(max-width:640px){.px .route-shutter::after{display:none}.px .route-card svg{width:80px;height:80px}}
+.px .wipe{position:fixed;inset:0 0 auto;height:2px;z-index:95;background:var(--route-color);pointer-events:none}
+.px .scr.route-arrive{animation:route-reveal 140ms ease-out both}
+@keyframes route-reveal{from{opacity:.75}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.px .wipe{display:none}}
 
 /* guía */
@@ -778,20 +762,25 @@ a{color:inherit}
 .px .signal-state.on{color:#fff}
 
 /* inicio */
-.px .scr.home::before{display:none}
-.px .scr.home .in{max-width:none;padding:0;gap:0;justify-content:stretch}
-.px .hero{position:relative;flex:1 1 auto;min-height:100%;display:flex;align-items:flex-end;overflow:hidden}
-.px .herobg{position:absolute;inset:0}
-.px .herobg img{width:100%;height:100%;object-fit:cover;animation:heroZoom 24s ease-out both}
-@keyframes heroZoom{from{transform:scale(1.14)}to{transform:scale(1.02)}}
-.px .heroshade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.94) 0%,rgba(0,0,0,.7) 40%,rgba(0,0,0,.15) 100%),linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 45%)}
-.px .herotx{position:relative;z-index:1;display:flex;flex-direction:column;gap:22px;width:100%;max-width:900px;padding:clamp(28px,6vw,96px) clamp(20px,5vw,84px) clamp(36px,8vh,96px)}
-.px .herotx .kicker{color:#cfcfcf}
-.px .hero .cta{gap:14px;align-self:flex-start}
-.px .facts{display:flex;gap:44px;flex-wrap:wrap;max-width:560px;padding-top:22px;border-top:1px solid rgba(255,255,255,.22)}
-.px .facts div{display:flex;flex-direction:column;gap:6px}
-.px .facts b{font:700 2em/1 var(--head)}
-.px .facts span{font-size:.7em;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.px .scr.home .in{max-width:1200px;justify-content:center}
+.px .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(16px,4vw,56px)}
+.px .herotx{display:grid;justify-items:center;gap:clamp(8px,1.6svh,14px);text-align:center;min-width:0}
+.px .herotx .kicker{color:var(--accent);letter-spacing:.12em}
+.px .hero .display{font-size:clamp(2rem,2rem + 2.6vw,4.6rem);line-height:.99}
+.px .hero .lede{max-width:44ch;font-size:.96em;line-height:1.45}
+.px .scr.home .cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:min(100%,440px);align-items:stretch}
+.px .hero .cta .primary{grid-column:1/-1}
+.px .hero .cta .btn{min-width:0;min-height:44px;padding:6px 8px;font-size:.87em;letter-spacing:.02em;text-transform:none;white-space:normal;text-align:center}
+.px .hero .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,440px);padding-top:10px;border-top:1px solid var(--line)}
+.px .facts div{display:grid;gap:3px;min-width:0}
+.px .facts b{font:700 1.55em/1 var(--head)}
+.px .facts span{font-size:max(.64em,.6875rem);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);overflow-wrap:anywhere}
+.px .home-demo{min-width:0;border:1px solid var(--line);background:var(--panel);border-radius:10px}
+.px .home-map{margin:0;position:relative;overflow:hidden;border-radius:9px 9px 0 0;background:var(--bg)}
+.px .home-map img{display:block;width:100%;aspect-ratio:560/320;object-fit:contain}
+.px .home-map figcaption{position:absolute;inset:auto 0 0;padding:6px 10px;background:#05070be8;color:#fff;font-size:.72em}
+.px .home-process{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px}
+.px .home-process .guidefab{margin:0;width:46px;height:46px}
 
 /* elegir disco */
 .px .disc-library{display:grid;gap:16px;width:100%;max-width:1120px;align-self:center}
@@ -814,7 +803,6 @@ a{color:inherit}
 .px .dgrid{gap:40px}
 .px .dgrid .panel{border:0;padding:0;background:transparent;justify-content:flex-start}
 .px .drop{min-height:260px;gap:12px;border:1px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.015)}
-.px .droptitle{font:700 1em var(--head);letter-spacing:.14em;text-transform:uppercase}
 .px .hrow{display:flex;flex-direction:column;gap:4px;padding:16px 0;border-top:1px solid var(--line)}
 .px .hrow strong{font:700 1em var(--head);letter-spacing:.06em;text-transform:uppercase}
 .px .panel.empty{margin:auto;max-width:560px;text-align:center;align-items:center;gap:16px;border:0;background:transparent}
@@ -888,12 +876,6 @@ a{color:inherit}
 .px .bstage-label{flex-wrap:wrap;line-height:1.5}
 .px .bstage-label>span{min-width:0;overflow-wrap:anywhere}
 @media (max-width:640px){.px .bentry-label{-webkit-backdrop-filter:none;backdrop-filter:none;padding:8px 12px}}
-/* Barrido entre secciones: velo estático, sin filtrar toda la pantalla en cada fotograma. */
-.px .wipe{background:rgba(0,0,0,.5);animation:wipeFade 720ms ease both}
-@keyframes wipeFade{0%{opacity:0}18%,78%{opacity:1}100%{opacity:0}}
-.px .route-shutter{opacity:.95}
-.px .route-card strong,.px .route-card small{text-shadow:0 2px 18px rgba(0,0,0,.9)}
-
 /* método y tecnología */
 .px .in .cardx,.px .in .panel{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;padding:18px 2px 8px}
 .px .in .dgrid .panel{border-top:0;padding:0}
@@ -906,10 +888,7 @@ a{color:inherit}
 .px .lg{display:flex;gap:12px;align-items:center}
 .px .lg .sw{width:30px;height:30px;flex:0 0 auto}
 .px .techtools{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.px .techtop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .px .techchip{flex:0 0 auto;padding:3px 8px;font:500 .62em 'IBM Plex Mono',monospace;color:#0A0D1A}
-.px .technote{padding:6px 8px;border:1px dashed var(--line);font-size:.76em}
-.px .techmod{margin-top:auto}
 .px .seg{margin-left:0;border-radius:0}
 .px .seg button[aria-pressed="true"]{background:#fff;color:#000}
 
@@ -951,23 +930,16 @@ a{color:inherit}
 .px .gface{position:relative;display:block;flex:0 0 auto;overflow:hidden;border-radius:50%;background:radial-gradient(circle at 50% 75%,rgba(255,212,71,.32),rgba(255,212,71,0) 70%),#0b0d14}
 .px .bottomnav{flex:0 0 auto;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;border-top:1px solid var(--line);background:rgba(0,0,0,.9);padding-bottom:env(safe-area-inset-bottom,0px)}
 .px .bottomnav:not(.with-pages){border-top:0;background:transparent}
-.px .homeflow{grid-column:1;grid-row:1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,3vw,48px);max-width:960px;padding:12px clamp(16px,3vw,40px);align-items:center}
-.px .flow-step{position:relative;display:flex;align-items:center;gap:12px;min-width:0}
-.px .flow-step:not(:last-child)::after{content:'→';position:absolute;right:calc(-1 * clamp(10px,2vw,30px));top:50%;transform:translateY(-50%);color:#7b8594;font-size:16px}
-.px .flow-art{width:48px;height:32px;flex:0 0 48px;border:1px solid #49505c;object-fit:cover}
-.px .flow-step strong{font:600 max(12px,.75em)/1.35 var(--head);letter-spacing:.08em;text-transform:uppercase;overflow-wrap:anywhere}
+.px .homeflow{list-style:none;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0}
+.px .flow-step{position:relative;display:grid;justify-items:center;align-content:start;gap:4px;min-width:0;text-align:center}
+.px .flow-step:not(:last-child)::after{content:'→';position:absolute;right:-9px;top:2px;color:var(--muted);font-size:14px}
+.px .flow-art{width:36px;height:24px;border:1px solid #49505c;object-fit:cover}
+.px .flow-step strong{font:700 max(.6875rem,.67em)/1.25 var(--head);overflow-wrap:anywhere}
 .px .flow-grid{border:0}
 .px .flow-wave{display:flex;align-items:center;justify-content:center;gap:3px;border:0}
-.px .flow-wave i{display:block;width:3px;height:22px;background:#b5c7ce;transform:scaleY(.45);animation:flowPulse 2.8s ease-in-out infinite alternate}
-.px .flow-wave i:nth-child(2n){animation-delay:-.8s;height:30px}.px .flow-wave i:nth-child(3n){animation-delay:-1.6s;height:16px}
+.px .flow-wave i{display:block;width:3px;height:18px;background:#b5c7ce;transform:scaleY(.45);animation:flowPulse 2.8s ease-in-out infinite alternate}
+.px .flow-wave i:nth-child(2n){animation-delay:-.8s;height:24px}.px .flow-wave i:nth-child(3n){animation-delay:-1.6s;height:12px}
 @keyframes flowPulse{to{transform:scaleY(1)}}
-@media(max-width:700px){
-  .px .homeflow{gap:14px;padding:10px 8px 10px 12px}
-  .px .flow-step{flex-direction:column;gap:4px;text-align:center}
-  .px .flow-art{flex-basis:auto;width:36px;height:24px}
-  .px .flow-step strong{font-size:12px;letter-spacing:.03em}
-  .px .flow-step:not(:last-child)::after{right:-12px;top:12px}
-}
 @media(prefers-reduced-motion:reduce){.px .flow-wave i{animation:none}}
 .px .bottomnav .bar{min-width:0;border-top:0}
 .px .guidefab{position:relative;grid-column:2;justify-self:end;right:auto;bottom:auto;z-index:62;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:8px max(14px,env(safe-area-inset-right,0px)) 8px 8px;padding:3px;border:1px solid rgba(255,212,71,.55);border-radius:40px;background:#000;box-shadow:0 12px 34px rgba(0,0,0,.65);transition:transform .25s,opacity .25s,border-color .25s}
@@ -1040,8 +1012,6 @@ a{color:inherit}
   .px .steps button.on span{display:inline}
 }
 @media (max-width:640px){
-  .px .heroshade{background:linear-gradient(0deg,#000 20%,rgba(0,0,0,.6) 70%,rgba(0,0,0,.35))}
-  .px .facts{gap:26px}
   .px .discgrid{grid-template-columns:minmax(0,1fr);gap:8px}
   .px .discgrid .dcard{min-height:66px}
   .px .uni .timeline{gap:4px}
@@ -1054,7 +1024,6 @@ a{color:inherit}
   .px .wordmark{letter-spacing:.22em}
   .px .brand{gap:8px}
   .px .top .right{gap:6px}
-  .px .hero .cta{width:100%;align-items:stretch}
   .px .steps button.on span{max-width:18ch;white-space:normal;overflow-wrap:anywhere}
 }
 /* Cabecera y pie adaptables: el personaje tiene espacio propio, sin cubrir contenido. */
@@ -1109,6 +1078,10 @@ a{color:inherit}
   .px .top .nav button{grid-column:span 2;padding-inline:3px}
   .px .top .nav button:nth-child(n+4){grid-column:span 3}
 }
+@media(min-width:320px) and (max-width:460px){
+  .px .top:not(.readable-nav) .nav{display:flex;gap:0}
+  .px .top:not(.readable-nav) .nav button{flex:1 1 auto;min-width:44px;padding-inline:2px;font-size:clamp(.6875rem,3.2vw,.8125rem);letter-spacing:0}
+}
 @media(max-width:280px){
   .px .top .brandmark{display:none}
 }
@@ -1117,72 +1090,28 @@ a{color:inherit}
   .px .top .nav{order:0;grid-column:auto;display:flex;gap:0}
   .px .top .nav button{padding-inline:3px;font-size:max(.6em,.6875rem);letter-spacing:0}
 }
-/* Method 02: a reading scale, independent of the application shell and music engine. */
-.px .color-method{display:grid;grid-template-columns:minmax(0,35fr) minmax(0,65fr);gap:clamp(24px,4vw,72px);align-items:start;padding-block:clamp(12px,2vh,28px) 28px;min-width:0}
-.px .scale-intro{min-width:0;padding-top:8px}
-.px .scale-title{font-family:Barlow,Inter,sans-serif;font-size:clamp(30px,3.7vw,62px);font-weight:800;line-height:1.06;text-transform:uppercase;letter-spacing:-.025em;margin:18px 0 24px;overflow-wrap:anywhere}
-.px .scale-intro p{line-height:1.6}
-.px .scale-intro .scale-lede{font-size:clamp(16px,1.3vw,20px);color:#e4e8f0;max-width:38ch}
-.px .scale-source{font-size:14px;color:#b8c0ce;border-top:1px solid #343a46;padding-top:18px;margin-top:24px;max-width:48ch}
-.px .scale-wave{display:block;width:100%;height:auto;max-height:150px;margin:28px 0 16px;overflow:visible}
-.px .scale-wave path{fill:none;stroke:url(#method-wave-spectrum);stroke-width:1.5;vector-effect:non-scaling-stroke}
-.px .scale-reading{border-block:1px solid #343a46;padding:14px 0;color:#c7cdd8;font-size:14px;max-width:48ch}
-.px .scale-reading summary{cursor:pointer;min-height:44px;align-content:center;color:#fff;font-weight:600}
-.px .scale-reading summary:focus-visible{outline:2px solid #b9ffb0;outline-offset:4px}
-.px .scale-reading p{margin:12px 0 0}
-.px .scale-panel{min-width:0}
-.px .scale-music{margin:0 0 10px 34px;color:#f0f2f7;font-size:14px;font-weight:600}
-.px .scale-direction{margin:0 0 14px 34px;color:#b8c0ce;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.px .scale-list{list-style:none;margin:0;padding:0 0 0 34px;position:relative;display:grid;gap:9px}
-.px .scale-list::before{content:'';position:absolute;left:9px;top:30px;bottom:30px;width:2px;background:linear-gradient(#7a0f1e,#c21f7a 12%,#e8283a 23%,#ff6a2b 34%,#ffa62b 45%,#ffd447 56%,#7e849e 66%,#7be38a 77%,#38c6e8 88%,#2f4fd0)}
-.px .scale-row{position:relative;min-width:0;display:grid;grid-template-columns:22px 100px minmax(105px,.9fr) minmax(0,1.4fr);gap:12px;align-items:center;min-height:64px;padding:12px 16px;border:1px solid #303643;border-left:3px solid var(--level-color);border-radius:7px;background:linear-gradient(100deg,var(--level-color) -440%,#10141df2 65%);transition:transform .16s ease,border-color .16s ease}
-.px .scale-row::before{content:'';position:absolute;left:-35px;top:50%;width:12px;height:12px;transform:translateY(-50%);border:1px solid #fff9;border-radius:50%;background:var(--level-color);box-shadow:0 0 12px var(--level-color)}
-.px .scale-row:hover{transform:translateX(2px);border-color:var(--level-color)}
-.px .scale-swatch{width:22px;height:22px;border:1px solid #ffffff40;border-radius:3px;background:var(--level-color)}
-.px .scale-value{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;color:#fff}
-.px .scale-musician{font-size:15px;line-height:1.35;color:#f0f2f7}
-.px .scale-sound{font-size:14px;line-height:1.45;color:#c7cdd8;border-left:1px solid #414957;padding-left:14px;overflow-wrap:anywhere}
-@media(max-width:1100px){
-  .px .color-method{grid-template-columns:minmax(0,30fr) minmax(0,70fr);gap:24px}
-  .px .scale-row{grid-template-columns:20px 100px minmax(0,1fr);gap:8px 12px;padding:12px}
-  .px .scale-sound{grid-column:2 / -1;border-left:0;padding-left:0}
-}
-@media(max-width:700px){
-  .px .color-method{grid-template-columns:minmax(0,1fr);gap:28px}
-  .px .scale-title{font-size:clamp(30px,7.5vw,44px);max-width:20ch;margin-block:14px 18px}
-  .px .scale-wave{max-width:400px;max-height:90px;margin-block:14px}
-  .px .scale-source{margin-top:18px}
-  .px .scale-list{padding-left:26px;gap:10px}
-  .px .scale-music{margin-left:26px}
-  .px .scale-direction{margin-left:26px;letter-spacing:.025em}
-  .px .scale-list::before{left:5px}
-  .px .scale-row::before{left:-29px;width:10px;height:10px}
-  .px .scale-row{grid-template-columns:18px 86px minmax(0,1fr);gap:8px;padding:12px 10px}
-  .px .scale-value{font-size:18px}
-  .px .scale-swatch{width:18px;height:22px}
-  .px .scale-musician{font-size:14px}
-}
-@media(prefers-reduced-motion:reduce){.px .scale-row{transition:none}.px .scale-row:hover{transform:none}}
+/* Espacio de trabajo común */
+.px .workspace > .in{max-width:1120px;gap:clamp(12px,2vw,18px)}
+.px .workspace .pagehead{align-items:center;gap:6px 18px;padding-bottom:10px}
+.px .workspace .pagehead .kicker{margin-bottom:4px}
+.px .workspace .pagehead .display{font-size:clamp(1.55rem,1.3rem + 1.5vw,2.5rem);text-transform:none;text-wrap:pretty}
+.px .workspace .pagehead .lede{max-width:54ch;font-size:.9em}
+.px .workspace .headtools{gap:6px}
+.px .workspace .headtools .btn{white-space:normal}
+.px .topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,154px),1fr));gap:4px;padding:4px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .topics button{min-width:0;min-height:44px;padding:5px 8px;border-color:transparent;border-radius:4px;font-size:.84em;line-height:1.25;text-wrap:balance;overflow-wrap:anywhere}
+.px .topics button:hover{border-color:var(--muted)}
+.px .topics button[aria-current="step"]{background:var(--fg);color:var(--bg);font-weight:700}
+.px .bottomnav.with-topics .bar .pagecount{display:block;font-size:.8em}
 
-/* Recorrido de la demo */
-.px .demo-page > .in{max-width:1240px}
-.px .demo-page .pagehead{align-items:start;gap:10px 24px;padding-bottom:16px}
-.px .demo-page .pagehead .display{font-size:clamp(1.7rem,4vw,3.6rem);overflow-wrap:anywhere}
-.px .demo-page .pagehead .lede{max-width:52ch}
-.px .herotx{gap:clamp(12px,2.3vh,22px);padding-block:clamp(20px,5vh,76px)}
-.px .hero .display{font-size:clamp(2rem,7.2vw,6.4rem)}
-.px .hero .facts{gap:clamp(12px,3vw,44px);padding-top:clamp(10px,2vh,22px)}
-.px .hero .facts div{min-width:0}
-.px .hero .cta .btn{min-width:0;white-space:normal;text-align:center}
-
-.px .bpage{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"stage pick" "stage identity" "stage info";grid-template-rows:auto auto 1fr;gap:14px clamp(18px,3vw,42px);align-items:start;margin:0 auto;padding:0}
+.px .bpage{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"stage pick" "stage identity" "stage info";grid-template-rows:auto auto 1fr;gap:10px clamp(12px,2vw,24px);align-items:start;margin:0 auto;padding:0}
 .px .bchooser{padding-top:0;border-top:0}
 .px .bchooser .kicker{margin-bottom:8px}
 .px .bidentity{grid-area:identity;min-width:0;padding-top:10px;border-top:1px solid var(--line)}
 .px .bidentity .display{color:var(--band);font-size:clamp(1.7rem,4vw,3.5rem);overflow-wrap:anywhere}
 .px .bidentity p{margin-top:4px}
 .px .bshow{align-content:start;border-radius:6px}
-.px .bscene{height:clamp(235px,48svh,510px)}
+.px .bscene{height:clamp(210px,43svh,435px)}
 .px .bstage-label{gap:8px;margin-inline:clamp(10px,2vw,22px)}
 .px .avatar-actions{width:100%;justify-content:flex-start}
 .px .avatar-actions .btn{min-height:44px;white-space:normal}
@@ -1191,40 +1120,90 @@ a{color:inherit}
 .px .bdl dt,.px .bdl dd{padding:7px 0;border-bottom:1px solid var(--line)}
 .px #tour-bgo .btn{white-space:normal;text-align:left}
 
-.px .dgrid{flex:0 0 auto;align-items:start;gap:clamp(18px,3vw,36px)}
-.px .dgrid .drop{flex:0 0 auto;min-height:clamp(132px,24svh,200px);padding:18px 14px;border-radius:6px;background:var(--panel)}
-.px .dgrid .panel{min-width:0;gap:10px}
-.px #tour-sample .btn{white-space:normal;text-align:left}
-.px #tour-howdata{border:1px solid var(--line);border-radius:6px;padding:0 clamp(12px,2vw,20px);background:var(--panel);gap:0}
-.px #tour-howdata .hrow{padding:12px 0}
-.px #tour-howdata .hrow:first-child{border-top:0}
-.px .dgrid .field,.px .dgrid .field select{min-width:0;max-width:100%}
+.px .dgrid{flex:0 0 auto;align-items:start;gap:clamp(12px,2vw,20px)}
+.px .dgrid .drop{flex:0 0 auto;min-height:0;gap:8px;padding:14px 12px;border-radius:7px;border-color:var(--muted);background:var(--panel)}
+.px .dgrid .drop:hover,.px .dgrid .drop.over{border-color:var(--accent)}
+.px .dgrid .drop .small{max-width:42ch}
+.px .dgrid .panel{min-width:0;gap:8px}
+.px .dgrid .upload-status:empty{display:none}
+.px #tour-sample .btn{width:100%;white-space:normal;text-align:center}
+.px #tour-howdata{border:1px solid var(--line);border-radius:7px;padding:10px 12px;background:var(--panel);gap:0}
+.px #tour-howdata h2{font:700 1.1em/1.3 var(--head);margin-bottom:4px}
+.px #tour-howdata .hrow{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;padding:8px 0}
+.px #tour-howdata .hrow:first-of-type{border-top:0}
 
-.px .demo-page :is(.cards3,.cards4){grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:clamp(10px,1.4vw,18px);flex:0 0 auto}
-.px .demo-page .cardx.compact{min-width:0;min-height:0;padding:clamp(12px,1.6vw,18px);border:1px solid var(--line);border-radius:6px;background:var(--panel);white-space:normal;overflow-wrap:anywhere}
-.px .demo-page button.cardx:hover,.px .demo-page button.cardx:focus-visible{border-color:var(--accent)}
-.px .demo-page .techtools{width:100%;gap:8px 16px}
+.px .workspace .cards4{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:8px;flex:0 0 auto}
+.px .workspace .cardx.compact{min-width:0;min-height:0;gap:5px;padding:10px 12px;border:1px solid var(--line);border-radius:7px;background:var(--panel);white-space:normal;overflow-wrap:anywhere}
+.px .workspace .cardx.compact strong{letter-spacing:0;text-transform:none}
+.px .workspace button.cardx:hover,.px .workspace button.cardx:focus-visible{border-color:var(--accent)}
+.px .workspace .techtools{width:100%;justify-content:space-between;gap:6px 12px}
 .px #tour-techfilter{max-width:100%;display:flex;flex-wrap:wrap;gap:4px;border:0}
-.px #tour-techfilter button{min-height:40px;white-space:normal;border:1px solid var(--line);padding:6px 10px}
-.px .techtop{flex-wrap:wrap}
-.px .techchip{flex:0 1 auto;max-width:100%;white-space:normal}
-.px .color-method{gap:clamp(16px,3vw,38px);padding-block:0 12px}
-.px .scale-title{margin-block:8px 12px}
-.px .scale-wave{max-height:96px;margin-block:12px}
-.px .scale-source{margin-top:10px;padding-top:10px}
-.px .scale-reading{padding-block:4px}
-.px .scale-row{min-height:52px;padding-block:8px}
-.px .credits-layout{gap:clamp(14px,2.6vw,32px)}
-.px .credit-section{padding-top:14px}
-.px .credit-heading{margin-bottom:10px}
+.px #tour-techfilter button{min-height:44px;white-space:normal;border:1px solid var(--line);padding:5px 9px}
+.px .tech-list{display:grid;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .tech-item{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 12px;padding:9px 12px;min-width:0;overflow-wrap:anywhere}
+.px .tech-item + .tech-item{border-top:1px solid var(--line)}
+.px .tech-item h2{font:700 1em/1.25 var(--head)}
+.px .tech-item p,.px .tech-item details{grid-column:1/-1}
+.px .tech-item details summary{min-height:28px;align-content:center;cursor:pointer}
+.px .tech-item details p{padding:4px 0}
+.px .tech-chipline{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.px .techchip{flex:0 1 auto;max-width:100%;white-space:normal;border-radius:3px}
+.px .tech-empty{padding:12px}
+.px .color-method{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.px .scale-source{max-width:72ch}
+.px .scale-reading{border-block:1px solid var(--line);color:var(--muted);font-size:.9em}
+.px .scale-reading summary{cursor:pointer;min-height:44px;align-content:center;color:var(--fg);font-weight:600}
+.px .scale-reading p{margin:0 0 8px}
+.px .scale-music,.px .scale-direction{margin:0 0 6px;font-size:.84em}
+.px .scale-music{font-weight:600}
+.px .scale-direction{color:var(--muted)}
+.px .scale-list{list-style:none;padding:0;border:1px solid var(--line);border-radius:7px;background:var(--panel);overflow:hidden}
+.px .scale-row{display:grid;grid-template-columns:16px minmax(62px,.55fr) minmax(0,1fr) minmax(0,2fr);align-items:center;gap:6px 10px;min-height:38px;padding:6px 10px;border-left:3px solid var(--level-color);font-size:.9em;overflow-wrap:anywhere}
+.px .scale-row + .scale-row{border-top:1px solid var(--line)}
+.px .scale-sound{color:var(--muted)}
+.px .scale-swatch{width:16px;height:16px;border:1px solid #ffffff50;border-radius:3px;background:var(--level-color)}
+.px .scale-value{font-variant-numeric:tabular-nums}
+.px .credits-layout{gap:8px}
+.px .credit-section{padding:10px 12px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .credit-heading{margin-bottom:6px}
+.px .credit-section p+p{margin-top:8px}
+.px .credit-tools{margin-bottom:8px}
+.px .uni{max-width:980px;gap:10px}
+.px .uni .controls{gap:6px 12px;padding:0 0 8px}
+.px .uni .controls .primary{min-height:44px}
+.px .uni .controls .when b{font-size:1.02em}
+.px .uni .headtools .btn,.px .uni #tour-more .btn{padding-inline:10px;letter-spacing:.06em;white-space:normal}
+.px .uni .controls .signal-state{letter-spacing:.05em}
+.px .file-settings .field{min-width:0;width:min(100%,340px)}
+.px .file-settings select{min-width:0;max-width:100%}
+.px .uni .views{gap:10px}
+.px .uni .vpanel{padding:8px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .uni .vcap{padding:0 0 5px}
+.px .uni .vfoot{padding:5px 0 0}
+.px .player-tools{padding-top:6px}
+.px .player-readout{border-top:1px solid var(--line)}
+.px .player-readout summary{min-height:44px;align-content:center;cursor:pointer;font-weight:600;font-size:.9em}
+.px .player-readout .readout{padding-bottom:8px}
+.px .stagegrid{grid-template-columns:minmax(0,1fr) minmax(240px,340px);gap:10px;align-items:start}
+.px .stagebox.big{min-height:clamp(225px,40svh,405px)}
+.px .stageside{gap:10px}
+.px .bandbox{padding-top:8px}
 .px .learn{grid-template-columns:minmax(0,1fr);max-width:1160px;align-self:center}
-.px .learn-panel{grid-template-columns:minmax(0,1fr);min-width:0}
+.px .learn-panel{grid-template-columns:minmax(0,1fr);min-width:0;gap:8px;padding:12px}
 .px .learn-tools label,.px .learn-tools select{min-width:0;max-width:100%}
 .px .pagehead .lede,.px .stagebar .chordhud{min-width:0;overflow-wrap:anywhere}
 .px .stagebar{flex-wrap:wrap;gap:6px 12px}
 .px .band.two .bchip{min-width:0}
 .px .band.two .bchip .nm{overflow-wrap:anywhere}
 .px .scale-musician{min-width:0;overflow-wrap:anywhere}
+@media(min-width:1100px){
+  .px .workspace .cards4{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(min-width:901px) and (max-height:700px){
+  .px .workspace > .in{padding-block:12px;gap:12px}
+  .px .uni{max-width:860px;gap:8px}
+  .px .uni .timeline img{height:20px}
+}
 @media(max-width:900px),(max-height:660px){
   /* El documento se desplaza desde la cabecera hasta el último control. */
   .px.app{height:auto;min-height:100svh;overflow:visible}
@@ -1233,18 +1212,17 @@ a{color:inherit}
   .px .in{min-height:0}
   .px .scr.home{display:flex;flex-direction:column}
   .px .scr.home .in{flex:1 1 auto}
-  .px .hero{min-height:0}
   .px .bottomnav:not(.with-pages){border-top:1px solid var(--line)}
   .px .steps button span{max-width:18ch;white-space:normal;overflow-wrap:anywhere}
-  .px .route-card{max-height:100svh;overflow:hidden}
 }
 @media(max-width:900px){
   .px .bpage{grid-template-columns:minmax(0,1fr);grid-template-areas:"pick" "identity" "stage" "info";grid-template-rows:auto;max-width:650px;gap:12px}
   .px .bscene{height:clamp(215px,36svh,360px)}
-  .px .stagebox.big{min-height:clamp(190px,55vw,360px)}
-  .px .uni .controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
-  .px .uni .controls .primary{width:100%;min-width:0;white-space:normal;padding-inline:6px}
-  .px .controls .when{min-width:0;text-align:center;overflow-wrap:anywhere}
+  .px .stagegrid{grid-template-columns:minmax(0,1fr)}
+  .px .stagebox.big{min-height:clamp(170px,45vw,310px)}
+  .px .uni .controls{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px}
+  .px .uni .controls .primary{min-width:0;white-space:normal;padding-inline:8px;letter-spacing:.05em}
+  .px .controls .when{min-width:0;overflow-wrap:anywhere}
   .px .player-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,125px),1fr))}
   .px .player-tools .btn{width:100%;padding:6px;letter-spacing:.04em}
   .px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1254,18 +1232,19 @@ a{color:inherit}
   .px .uni .vpanel{display:grid;grid-row:span 3;grid-template-rows:subgrid}
 }
 @media(max-width:640px){
-  .px .herotx{padding-inline:var(--gutter)}
-  .px .scr.home .cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .px .hero .cta .primary{grid-column:1/-1}
-  .px .hero .cta .btn{padding-inline:6px;letter-spacing:.06em}
-  .px .hero .facts{gap:10px 18px}
-  .px .hero .facts b{font-size:1.45em}
+  .px .hero{grid-template-columns:minmax(0,1fr);width:min(100%,440px);align-self:center;gap:10px}
+  .px .hero .display{font-size:clamp(1.65rem,7.5vw,2.8rem)}
+  .px .home-map{display:none}
+  .px .home-process{padding:6px 8px}
   .px .uni .views{grid-template-columns:minmax(0,1fr)}
+  .px .topics{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .px .topics button{grid-column:span 2;padding-inline:3px}
+  .px .topics:has(button:nth-child(5)) button:nth-child(n+4){grid-column:span 3}
+  .px .tech-item{grid-template-columns:minmax(0,1fr)}
+  .px .scale-row{grid-template-columns:16px minmax(58px,.55fr) minmax(0,1fr)}
+  .px .scale-row .scale-sound{grid-column:2/-1}
   .px .bsel{min-height:60px;padding-inline:3px}
   .px .avatar-actions .btn{flex:1 1 min(100%,76px);padding-inline:6px;letter-spacing:.04em}
-  .px .homeflow{gap:14px;padding:8px 0 8px var(--gutter)}
-  .px .flow-step:not(:last-child)::after{right:-12px}
-  .px .scale-wave{display:none}
 }
 @media(max-width:420px){
   .px .bpick{grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -1274,15 +1253,21 @@ a{color:inherit}
   .px .bsel ts-avatar{width:24px;height:28px;flex:0 0 24px}
   .px .bsel span{min-width:0}
 }
+@media(min-width:311px) and (max-width:460px){
+  .px .uni .controls{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,1fr)}
+  .px .uni .controls .btn{width:100%;padding:4px;letter-spacing:.01em}
+  .px .uni .controls .when b{font-size:.9em}
+}
 @media(max-width:310px){
+  .px .uni .controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .px .uni .timeline{grid-template-columns:repeat(3,minmax(0,1fr))}
   .px .band.two{grid-template-columns:minmax(0,1fr)}
   .px .scale-row{grid-template-columns:18px minmax(0,1fr)}
-  .px .scale-musician,.px .scale-sound{grid-column:2}
+  .px .scale-musician,.px .scale-row .scale-sound{grid-column:2}
 }
 @media(max-height:560px) and (min-width:901px){
   .px .bscene{height:clamp(175px,46svh,265px)}
-  .px .hero .display{font-size:clamp(2rem,8vh,4.5rem)}
+  .px .hero .display{font-size:clamp(2rem,8svh,3.5rem)}
 }
 </style>
 </helmet>
@@ -1322,10 +1307,15 @@ a{color:inherit}
 <div class="scr {{scrCls}} {{scrKind}}">
 <div class="in">
 
+<sc-if value="{{nav.topics}}">
+<nav id="tour-topics" class="topics" aria-label="{{tx.screensAria}}">
+<sc-for list="{{nav.dots}}" as="d"><button type="button" onClick="{{d.go}}" aria-current="{{d.cur}}">{{d.label}}</button></sc-for>
+</nav>
+</sc-if>
+
 <!-- INICIO -->
 <sc-if value="{{scr.home}}" hint-placeholder-val="{{ false }}">
 <section class="hero">
-<div class="herobg" aria-hidden="true"><img decoding="async" src="{{heroUrl}}" alt=""><div class="heroshade"></div></div>
 <div class="herotx">
 <p class="kicker">{{tx.heroKicker}}</p>
 <h1 class="display xl">{{tx.heroTitle}}</h1>
@@ -1336,6 +1326,19 @@ a{color:inherit}
 <button type="button" class="btn" onClick="{{openComparison}}">{{lesson.cta}}</button>
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
+</div>
+<div class="home-demo">
+<figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
+<div class="home-process">
+<ol class="homeflow" aria-label="{{tx.flowAria}}">
+<li class="flow-step"><img class="flow-art" src="{{heroUrl}}" alt=""><strong>{{tx.flowImage}}</strong></li>
+<li class="flow-step"><svg class="flow-art flow-grid" viewBox="0 0 112 64" aria-hidden="true"><defs><pattern id="home-pixel-grid" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#a4b9c8"/></pattern></defs><rect width="112" height="64" fill="url(#home-pixel-grid)"/></svg><strong>{{tx.flowPixels}}</strong></li>
+<li class="flow-step"><span class="flow-art flow-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>{{tx.flowMusic}}</strong></li>
+</ol>
+<button id="tour-guide" type="button" class="guidefab" onClick="{{tourOpen}}" aria-expanded="{{tour.on}}" aria-label="{{tx.guideOpen}}" title="{{tx.guideOpen}}">
+<ts-avatar class="gface" data-view="face" data-character="silbo" aria-hidden="true"></ts-avatar>
+</button>
+</div>
 </div>
 </section>
 </sc-if>
@@ -1372,27 +1375,20 @@ a{color:inherit}
 <div class="dgrid">
 <div class="panel">
 <label id="tour-drop" class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}">
-<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}">
+<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}" aria-labelledby="file-pick-label" aria-describedby="file-pick-help">
 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"></path></svg>
-<strong class="droptitle">{{tx.dropTitle}}</strong>
-<span class="muted small">{{tx.dropSub}}</span>
+<strong id="file-pick-label" class="btn primary sm">{{tx.dropTitle}}</strong>
+<span id="file-pick-help" class="muted small">{{tx.dropSub}}</span>
 </label>
 <div id="tour-sample" class="row"><button type="button" class="btn" onClick="{{useSample}}">{{tx.sample}}</button></div>
-<sc-if value="{{isImageUp}}" hint-placeholder-val="{{ false }}">
-<label class="field">{{tx.colorsHow}}
-<select onChange="{{onUpMode}}" value="{{customMode}}"><option value="palette">{{tx.modePalette}}</option><option value="free">{{tx.modeFree}}</option></select></label>
-</sc-if>
-<sc-if value="{{isCsvUp}}" hint-placeholder-val="{{ false }}">
-<label class="field">{{tx.column}}
-<select onChange="{{onCol}}" value="{{colIdx}}"><sc-for list="{{colOpts}}" as="o" hint-placeholder-count="2"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
-</sc-if>
-<p role="status" aria-live="polite" class="muted small">{{upMsg}}</p>
+<p role="status" aria-live="polite" class="upload-status muted small">{{upMsg}}</p>
 </div>
-<div id="tour-howdata" class="panel plain">
+<section id="tour-howdata" class="panel plain" aria-labelledby="data-explainer">
+<h2 id="data-explainer">{{tx.dataExplainer}}</h2>
 <sc-for list="{{howData}}" as="h" hint-placeholder-count="3">
-<div class="hrow"><span class="tag">{{h.tag}}</span><strong>{{h.title}}</strong><span class="muted small">{{h.body}}</span></div>
+<div class="hrow"><strong>{{h.title}}</strong><span class="muted small">{{h.body}}</span></div>
 </sc-for>
-</div>
+</section>
 </div>
 </sc-if>
 
@@ -1406,7 +1402,6 @@ a{color:inherit}
 <div class="pagehead slim">
 <div><p class="kicker">{{playKicker}}</p><h1 id="player-title" class="display md" tabindex="-1">{{playTitle}}</h1></div>
 <div class="row headtools">
-<span class="signal-state {{signalClass}}">{{signalLabel}}</span>
 <sc-if value="{{isJuke}}"><button type="button" class="btn sm quiet" onClick="{{goDiscs}}">{{tx.changeDisc}}</button></sc-if>
 <sc-if value="{{isData}}"><button type="button" class="btn sm quiet" onClick="{{backToUpload}}">{{tx.changeFile}}</button></sc-if>
 </div>
@@ -1418,8 +1413,21 @@ a{color:inherit}
 <div id="tour-play" class="playwrap">
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
-<div class="when"><b>{{frameLabel}}</b></div>
+<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
+<div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
 </div>
+<sc-if value="{{showFileSettings}}">
+<div class="file-settings">
+<sc-if value="{{isImageUp}}">
+<label class="field">{{tx.colorsHow}}
+<select onChange="{{onUpMode}}" value="{{customMode}}"><option value="palette">{{tx.modePalette}}</option><option value="free">{{tx.modeFree}}</option></select></label>
+</sc-if>
+<sc-if value="{{isCsvUp}}">
+<label class="field">{{tx.column}}
+<select onChange="{{onCol}}" value="{{colIdx}}"><sc-for list="{{colOpts}}" as="o"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+</sc-if>
+</div>
+</sc-if>
 
 <sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
 <div id="tour-strip">
@@ -1458,6 +1466,8 @@ a{color:inherit}
 </figure>
 </div>
 
+<details class="player-readout">
+<summary>{{tx.playerReadout}}</summary>
 <div class="readout">
 <p><span class="tag">{{tx.see}}</span><span>{{seeText}}</span></p>
 <p><span class="tag">{{tx.hear}}</span><span>{{hearText}}</span></p>
@@ -1466,11 +1476,11 @@ a{color:inherit}
 <span class="muted small">{{moodText}}</span>
 </div>
 </div>
+</details>
 <div class="player-tools">
 <sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{lesson.easy}}</button></sc-if>
 <button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
 <sc-if value="{{isJuke}}"><button type="button" class="btn sm quiet" onClick="{{openComparison}}">{{lesson.cta}}</button></sc-if>
-<div id="tour-more" class="playwrap"><button type="button" class="btn sm" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
 </div>
 <div id="easy-explanation">
 <sc-if value="{{easyVisible}}">
@@ -1714,18 +1724,9 @@ a{color:inherit}
 </sc-if>
 <sc-if value="{{scr.hB}}" hint-placeholder-val="{{ false }}">
 <div class="color-method">
-<div class="scale-intro">
-<p class="kicker">{{tx.howKicker}} · 02</p>
-<h1 class="scale-title">{{tx.howTitle2}}</h1>
-<p class="scale-lede">{{tx.scaleIntro}}</p>
-<svg class="scale-wave" viewBox="0 0 440 140" aria-hidden="true" focusable="false">
-<defs><linearGradient id="method-wave-spectrum"><stop stop-color="#38C6E8"/><stop offset=".3" stop-color="#7BE38A"/><stop offset=".5" stop-color="#FFD447"/><stop offset=".7" stop-color="#FF6A2B"/><stop offset="1" stop-color="#C21F7A"/></linearGradient></defs>
-<g opacity=".25"><path d="M0 75 C40 75 42 25 80 38 S127 115 170 76 S223 28 264 64 S319 104 357 57 S404 50 440 70"/><path d="M0 75 C40 75 42 45 80 52 S127 101 170 76 S223 42 264 66 S319 90 357 61 S404 56 440 70"/></g>
-<path d="M0 75 C40 75 42 35 80 45 S127 108 170 76 S223 35 264 65 S319 97 357 59 S404 53 440 70"/>
-<g opacity=".4"><path d="M0 75 C40 75 42 55 80 59 S127 94 170 76 S223 49 264 67 S319 83 357 63 S404 59 440 70"/><path d="M0 75 C40 75 42 65 80 66 S127 87 170 76 S223 56 264 68 S319 76 357 65 S404 62 440 70"/></g>
-</svg>
-<p class="scale-source">{{tx.scaleSource}}</p>
-<details class="scale-reading"><summary>{{tx.scaleRead}}</summary><p>{{tx.scaleContext}}</p></details>
+<div class="pagehead">
+<div><p class="kicker">{{tx.howKicker}} · 02</p><h1 class="display">{{tx.howTitle2}}</h1></div>
+<p class="lede">{{tx.scaleIntro}}</p>
 </div>
 <section id="tour-legend" class="scale-panel" aria-label="{{tx.scaleLabel}}">
 <p class="scale-music">{{tx.scaleMusic}}</p>
@@ -1739,6 +1740,7 @@ a{color:inherit}
 </sc-for>
 </ol>
 </section>
+<details class="scale-reading"><summary>{{tx.scaleRead}}</summary><p>{{tx.scaleContext}}</p><p class="scale-source">{{tx.scaleSource}}</p></details>
 </div>
 </sc-if>
 <sc-if value="{{scr.hC}}" hint-placeholder-val="{{ false }}">
@@ -1758,16 +1760,16 @@ a{color:inherit}
 <div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{techCur.title}}</h1></div>
 <div class="techtools">
 <div id="tour-techfilter" class="seg" role="group" aria-label="{{tx.techFilterAria}}"><sc-for list="{{techFilters}}" as="f" hint-placeholder-count="3"><button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}">{{f.label}}</button></sc-for></div>
-<span class="mono muted small">{{techSummary}}</span>
+<span class="muted small" role="status">{{techSummary}}</span>
 </div>
 </div>
-<div id="tour-techcards" class="cards3">
+<div id="tour-techcards" class="tech-list">
+<sc-if value="{{techCur.empty}}"><p class="tech-empty muted">{{tx.techEmpty}}</p></sc-if>
 <sc-for list="{{techCur.items}}" as="t" hint-placeholder-count="6">
-<article class="cardx compact">
-<div class="techtop"><strong>{{t.name}}</strong><span class="techchip" style="background: {{t.chipBg}}">{{t.chip}}</span></div>
-<span class="muted small">{{t.use}}</span>
-<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><span class="technote">{{t.note}}</span></sc-if>
-<span class="mono muted xsmall techmod">{{tx.module}} {{t.mod}}</span>
+<article class="tech-item">
+<h2>{{t.name}}</h2><div class="tech-chipline"><span class="techchip" style="background: {{t.chipBg}}">{{t.chip}}</span><span class="mono muted xsmall">{{tx.module}} {{t.mod}}</span></div>
+<p class="muted small">{{t.use}}</p>
+<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><details><summary class="small" aria-label="{{tx.techNote}} · {{t.name}}">{{tx.techNote}}</summary><p class="muted small">{{t.note}}</p></details></sc-if>
 </article>
 </sc-for>
 </div>
@@ -1801,20 +1803,14 @@ a{color:inherit}
 </div>
 </main>
 
+<sc-if value="{{showFooter}}">
 <div class="bottomnav {{bottomNavClass}}">
-<sc-if value="{{scr.home}}" hint-placeholder-val="{{ false }}">
-<div class="homeflow" role="group" aria-label="{{tx.flowAria}}">
-<div class="flow-step"><img class="flow-art" src="{{heroUrl}}" alt="" aria-hidden="true"><strong>{{tx.flowImage}}</strong></div>
-<div class="flow-step"><svg class="flow-art flow-grid" viewBox="0 0 112 64" aria-hidden="true"><defs><pattern id="home-pixel-grid" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#a4b9c8"/></pattern></defs><rect width="112" height="64" fill="url(#home-pixel-grid)"/></svg><strong>{{tx.flowPixels}}</strong></div>
-<div class="flow-step"><span class="flow-art flow-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>{{tx.flowMusic}}</strong></div>
-</div>
-</sc-if>
 <sc-if value="{{nav.show}}" hint-placeholder-val="{{ false }}">
 <footer id="tour-subnav" class="bar">
 <div class="in2">
 <div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" title="{{tx.prevScreen}}"><span aria-hidden="true">←</span> {{tx.back}}</button></div>
 <div class="mid">
-<div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-label="{{d.aria}}" aria-current="{{d.cur}}"><b>{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div>
+<sc-if value="{{nav.showDots}}"><div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-label="{{d.aria}}" aria-current="{{d.cur}}"><b aria-hidden="true">{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div></sc-if>
 <span class="pagecount" aria-label="{{nav.countAria}}">{{nav.counter}}</span>
 </div>
 <sc-if value="{{nav.showMini}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm nav-mini" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}">{{playLabel}}</button></sc-if>
@@ -1829,6 +1825,7 @@ a{color:inherit}
 <ts-avatar class="gface" data-view="face" data-character="silbo" aria-hidden="true"></ts-avatar><span class="glabel">{{tx.guide}}</span>
 </button>
 </div>
+</sc-if>
 
 <sc-if value="{{moreOpen}}" hint-placeholder-val="{{ false }}">
 <div class="mdim" onClick="{{closeMore}}" aria-hidden="true"></div>
@@ -1851,18 +1848,7 @@ a{color:inherit}
 </sc-if>
 
 <sc-if value="{{trans}}" hint-placeholder-val="{{ false }}">
-<div class="wipe" style="--route-color: {{route.color}}" aria-hidden="true">
-  <div class="route-shutter"></div>
-  <div class="route-card">
-    <svg viewBox="0 0 96 96" fill="none" stroke="currentColor" aria-hidden="true">
-      <circle cx="48" cy="48" r="40" opacity=".4" stroke-dasharray="2 5"></circle>
-      <path d="M48 4v8m0 72v8M4 48h8m72 0h8" opacity=".7"></path>
-      <path class="route-mark" d="{{route.mark}}" pathLength="1" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
-      <path d="M19 22h8m-4-4v8M75 72h8m-4-4v8" opacity=".85"></path>
-    </svg>
-    <small>{{route.section}}</small><strong>{{route.title}}</strong>
-  </div>
-</div>
+<div class="wipe" style="--route-color: {{route.color}}" aria-hidden="true"></div>
 </sc-if>
 
 <sc-if value="{{tour.on}}" hint-placeholder-val="{{ false }}">
@@ -2050,8 +2036,8 @@ var GUIDES = {
       en: { t: 'Filter', b: 'Show every technology, only those already in the prototype, or the planned ones.' } },
     { id: 'tour-techcards', sub: 0, t: 'Cada herramienta', b: 'Para qué se usa, si ya está hecha y qué módulo del equipo la lleva.',
       en: { t: 'Each tool', b: 'What it is used for, whether it is done, and which team module owns it.' } },
-    { id: 'tour-subnav', sub: 0, t: 'Más páginas', b: 'Las tecnologías se agrupan en varias páginas. La última reúne los datos, los créditos y el uso de IA.',
-      en: { t: 'More pages', b: 'Technologies are grouped across several pages. The last one gathers data sources, credits and AI use.' } }
+    { id: 'tour-topics', sub: 0, t: 'Categorías', b: 'Elige un tema en la parte superior. La última categoría reúne las fuentes, los créditos y el uso de IA.',
+      en: { t: 'Categories', b: 'Choose a topic at the top. The last category gathers sources, credits and AI use.' } }
   ]
 };
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
@@ -2321,24 +2307,26 @@ var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert 
 var TX = {
   es: {
     brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad',
-    heroKicker: 'NASA Space Apps Challenge 2026 · Earth Information Jukebox', heroTitle: 'Escucha el Pacífico',
-    heroLede: 'Hace más de 1500 años, el agua ya cantaba en el norte del Perú. Ahora canta el océano visto por la NASA: cada mapa de temperatura del mar se convierte en música en tiempo real.',
+    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
+    heroLede: 'El agua cantaba en el antiguo Perú. Hoy la banda convierte mapas de la NASA en música.',
     heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
+    homeMapAlt: 'Mapa del Pacífico con franjas de temperatura del mar más cálidas y más frías de lo habitual',
+    homeMapCaption: 'Pacífico · Anomalías de temperatura del mar · NASA',
     flowAria: 'Del mapa NASA al análisis de píxeles y a la música', flowImage: 'Imagen NASA', flowPixels: 'Análisis · 28×16', flowMusic: 'Música',
     discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Abre un disco para escuchar seis meses de cambios en la temperatura del Pacífico.',
     setsAria: 'Origen de los datos', discsAria: 'Discos',
     listenKicker: 'Escuchar · paso 2', changeDisc: 'Cambiar disco', changeFile: 'Cambiar archivo',
     youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: '28×16 píxeles de color',
     prevFrame: 'Fotograma anterior', nextFrame: 'Fotograma siguiente', warm: 'Cálido', cold: 'Frío', extreme: 'Extremo', coast: 'Costa',
-    moreOptions: 'Más opciones', timelineAria: 'Línea de tiempo del disco', see: 'Ves', hear: 'Oyes', chordsAria: 'Progresión de acordes',
+    moreOptions: 'Más opciones', timelineAria: 'Línea de tiempo del disco', see: 'Ves', hear: 'Oyes', chordsAria: 'Progresión de acordes', playerReadout: 'Qué ves y qué oyes',
     stageKicker: 'Escuchar · paso 3', stageTitle: 'La banda en escena', stageAria: 'Escenario de la banda', onStage: 'En el escenario:', musiciansAria: 'Músicos en escena',
     stageEmpty1: 'Escenario vacío', stageEmpty2: 'enciende un músico',
     leadAria: 'Protagonista de la reproducción', leadLabel: 'Protagonista', leadChange: 'Cambiar protagonista', leadPrev: 'Protagonista anterior', leadAuto: 'Según el disco', leadNext: 'Protagonista siguiente',
     theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
-    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Transforma una imagen o un CSV en sonido. Todo ocurre en tu navegador: el archivo no sale de tu equipo.',
-    dropTitle: 'Suelta un archivo o pulsa aquí', dropSub: 'Imagen (PNG, JPG, WebP) o CSV con una columna numérica. CSV: hasta 5000 filas de datos. Máx. 8 MB.', sample: 'Probar con la lluvia de Chiclayo',
+    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Escucha cómo suena una imagen o una serie de datos.',
+    dropTitle: 'Elegir una imagen o un CSV', dropSub: 'También puedes arrastrar el archivo aquí. Máx. 8 MB. CSV con al menos 8 valores numéricos y hasta 5000 filas.', sample: 'Probar con la lluvia de Chiclayo', dataExplainer: 'Cómo sonará tu archivo',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
     dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
     noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
@@ -2349,7 +2337,7 @@ var TX = {
     scaleDirection: 'Niveles · de cálido a frío ↓', scaleLabel: 'Leyenda de niveles y músicos de TerraSonic',
     scaleMusic: 'Representación musical · TerraSonic', scaleRead: 'Cómo leer esta escala',
     scaleContext: 'Son niveles de análisis, no temperaturas en grados. La leyenda resume asociaciones; el sonido real depende del conjunto de píxeles, el motor musical y los instrumentos activos. El nivel 0 no implica ausencia de calor ni silencio de toda la banda.', howTitle3: 'Lo que pide el reto y dónde verlo',
-    techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', module: 'Módulo', credTitle: 'Datos, créditos y uso de IA', credData: 'Datos',
+    techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', techNote: 'Detalle técnico', techEmpty: 'No hay herramientas con este filtro en la categoría. Elige «Todo» para verlas.', module: 'Módulo', credTitle: 'Datos, créditos y uso de IA', credData: 'Datos',
     credDataP1: 'Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA’s Scientific Visualization Studio.',
     credDataP2: 'Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview.',
     credScience: 'Fuentes científicas', credDev: 'Desarrollo y tecnología', credTools: 'Herramientas principales', credInstitution: 'Aviso institucional',
@@ -2364,24 +2352,26 @@ var TX = {
   },
   en: {
     brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options',
-    heroKicker: 'NASA Space Apps Challenge 2026 · Earth Information Jukebox', heroTitle: 'Listen to the Pacific',
-    heroLede: 'More than 1,500 years ago, water was already singing in northern Peru. Now the ocean seen by NASA sings: every sea temperature map becomes music in real time.',
+    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
+    heroLede: 'Water sang in ancient Peru. Today the band turns NASA maps into music.',
     heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
+    homeMapAlt: 'Pacific map showing bands of warmer and cooler than usual sea temperatures',
+    homeMapCaption: 'Pacific Ocean · Sea surface temperature anomalies · NASA',
     flowAria: 'From NASA imagery to pixel analysis and music', flowImage: 'NASA image', flowPixels: 'Analysis · 28×16', flowMusic: 'Music',
     discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Open a disc to hear six months of temperature changes in the Pacific.',
     setsAria: 'Data source', discsAria: 'Discs',
     listenKicker: 'Listen · step 2', changeDisc: 'Change disc', changeFile: 'Change file',
     youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: '28×16 colored pixels',
     prevFrame: 'Previous frame', nextFrame: 'Next frame', warm: 'Warm', cold: 'Cold', extreme: 'Extreme', coast: 'Coast',
-    moreOptions: 'More options', timelineAria: 'Disc timeline', see: 'See', hear: 'Hear', chordsAria: 'Chord progression',
+    moreOptions: 'More options', timelineAria: 'Disc timeline', see: 'See', hear: 'Hear', chordsAria: 'Chord progression', playerReadout: 'What you see and hear',
     stageKicker: 'Listen · step 3', stageTitle: 'The band on stage', stageAria: 'The band’s stage', onStage: 'On stage:', musiciansAria: 'Musicians on stage',
     stageEmpty1: 'Empty stage', stageEmpty2: 'switch a musician on',
     leadAria: 'Lead of the playback', leadLabel: 'Lead', leadChange: 'Change lead', leadPrev: 'Previous lead', leadAuto: 'Follow the disc', leadNext: 'Next lead',
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
-    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Turn an image or a CSV into sound. Everything happens in your browser: the file never leaves your device.',
-    dropTitle: 'Drop a file or tap here', dropSub: 'An image (PNG, JPG, WebP) or a CSV with a numeric column. CSV: up to 5000 data rows. 8 MB max.', sample: 'Try Chiclayo’s rainfall',
+    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Hear what an image or a data series sounds like.',
+    dropTitle: 'Choose an image or CSV', dropSub: 'You can also drag the file here. 8 MB max. CSV files need at least 8 numeric values and can have up to 5000 rows.', sample: 'Try Chiclayo’s rainfall', dataExplainer: 'How your file will sound',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
     dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
     noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
@@ -2392,7 +2382,7 @@ var TX = {
     scaleDirection: 'Levels · warm to cold ↓', scaleLabel: 'TerraSonic level and musician legend',
     scaleMusic: 'Musical representation · TerraSonic', scaleRead: 'How to read this scale',
     scaleContext: 'These are analysis levels, not temperatures in degrees. The legend summarizes associations; actual sound depends on the pixel ensemble, music engine and active instruments. Level 0 means neither an absence of heat nor silence across the entire band.', howTitle3: 'What the challenge asks for and where to see it',
-    techKicker: 'Technology', techFilterAria: 'Filter technologies', module: 'Module', credTitle: 'Data, credits and AI use', credData: 'Data',
+    techKicker: 'Technology', techFilterAria: 'Filter technologies', techNote: 'Technical detail', techEmpty: 'No tools in this category match the filter. Choose “All” to see them.', module: 'Module', credTitle: 'Data, credits and AI use', credData: 'Data',
     credDataP1: 'Frames from the Earth Information Center visualization “Sea Surface Temperature (SST) Anomaly – Near Real Time” (NASA SVS 5176, Pacific variant, 16 May 2024 – 2 Nov 2026), cropped to the southeast Pacific; JPL MUR SST data. Credit: NASA’s Scientific Visualization Studio.',
     credDataP2: 'The “NASA GIBS” discs (2010–2023) use NASA JPL GHRSST L4 MUR 0.25° SST Anomalies, the 15th of each month, via NASA GIBS/Worldview.',
     credScience: 'Scientific sources', credDev: 'Development and technology', credTools: 'Main tools', credInstitution: 'Institutional notice',
@@ -2969,11 +2959,7 @@ class Component extends DCLogic {
     return t === 'home' || t === 'band' ? 1 : t === 'juke' ? 4 : t === 'data' || t === 'how' ? 3 : this.techPages().length;
   }
   techPages() {
-    var pages = [];
-    this.techGroups({}).forEach(function (g) {
-      var n = g.items.length, per = Math.ceil(n / Math.ceil(n / 6)), parts = Math.ceil(n / per);
-      for (var i = 0; i < parts; i++) pages.push({ title: g.title + (parts > 1 ? ' · ' + (i + 1) + '/' + parts : ''), items: g.items.slice(i * per, (i + 1) * per) });
-    });
+    var pages = this.techGroups();
     pages.push({ title: T('Datos, créditos y uso de IA', 'Data, credits and AI use'), credits: true, items: [] });
     return pages;
   }
@@ -3055,7 +3041,7 @@ class Component extends DCLogic {
     var look = ROUTE_LOOK[tab];
     this.setState({ trans: true, route: Object.assign({}, look, { section: look.title + ' · ' + PAGES[tab][0], title: title || look.title }) });
     this.routeFinish = finish;
-    this.routeTimers = [setTimeout(function () { swap(false); }, 320), setTimeout(finish, 720)];
+    this.routeTimers = [setTimeout(function () { swap(false); }, 30), setTimeout(finish, 170)];
   }
   loadComparison(retry) {
     var self = this;
@@ -3286,11 +3272,11 @@ class Component extends DCLogic {
     if (a.warm > a.cold) return a.hot > 0.15 ? '#E8283A' : '#FF8A2B';
     return '#38C6E8';
   }
-  techGroups(th) {
+  techGroups() {
     var f = this.state.techFilter, groups = {}, order = [];
     TECH.forEach(function (t) {
-      if (f !== 'all' && t.st !== f) return;
       if (!groups[t.cat]) { groups[t.cat] = []; order.push(t.cat); }
+      if (f !== 'all' && t.st !== f) return;
       var done = t.st === 'done';
       groups[t.cat].push({ name: t.name, use: t.use, mod: t.mod, note: t.note || '', hasNote: !!t.note, chip: done ? T('En el prototipo', 'In the prototype') : T('Planeado', 'Planned'), chipBg: done ? '#7BE38A' : '#FFD447', delay: (groups[t.cat].length * 0.05).toFixed(2) + 's' });
     });
@@ -3933,13 +3919,15 @@ class Component extends DCLogic {
       extra: function () { if (!s.playing) self.play(); } };
     var titles = this.subTitles(), cnt = titles.length, sub = Math.min(s.sub, cnt - 1), pgOrder = PAGE_ORDER, pgNext = s.tab === 'home' ? 'juke' : pgOrder[(pgOrder.indexOf(s.tab) + 1) % pgOrder.length];
     var lastSub = sub === cnt - 1, techPgs = s.tab === 'tech' ? this.techPages() : [], techCur = techPgs[sub] || { title: '', items: [] };
+    var topics = s.tab === 'how' || s.tab === 'tech';
+    var playerStep = (s.tab === 'juke' || s.tab === 'data') && sub === 1;
     var navVm = { label: titles[sub], n: sub + 1, total: cnt, compact: cnt > 3 ? 'compact' : '',
       counter: ('0' + (sub + 1)).slice(-2) + ' / ' + ('0' + cnt).slice(-2),
       countAria: T('Pantalla ', 'Screen ') + (sub + 1) + T(' de ', ' of ') + cnt,
-      shortNext: T('Siguiente', 'Next'),
+      shortNext: playerStep ? T('Escenario', 'Stage') : T('Siguiente', 'Next'),
       dots: titles.map(function (x, i) { return { cls: i === sub ? 'on' : '', cur: i === sub ? 'step' : 'false', n: ('0' + (i + 1)).slice(-2), label: x, aria: T('Ir a ', 'Go to ') + x, go: function () { self.goSub(i); } }; }),
-      show: cnt > 1, prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
-      nextLabel: lastSub ? (s.tab === 'tech' ? ROUTE_LOOK.home.title : ROUTE_LOOK[pgNext].title) : T('Siguiente', 'Next'),
+      show: cnt > 1, topics: topics, showDots: !topics, prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
+      nextLabel: lastSub ? (s.tab === 'tech' ? ROUTE_LOOK.home.title : ROUTE_LOOK[pgNext].title) : playerStep ? T('Escenario', 'Stage') : T('Siguiente', 'Next'),
       prev: function () { self.goSub(sub - 1); },
       next: function () { if (lastSub) self.goTab(s.tab === 'tech' ? 'home' : pgNext); else self.goSub(sub + 1); },
       showMini: s.playing && (s.tab === 'juke' || s.tab === 'data') && sub === 0 };
@@ -4009,7 +3997,7 @@ class Component extends DCLogic {
       ],
       tx: tx,
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
-      scrKind: s.tab === 'home' ? 'home' : s.tab === 'band' ? 'bandscr demo-page' : (scrVm.dUp || s.tab === 'how' || s.tab === 'tech') ? 'demo-page' : '',
+      scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
       heroUrl: 'fotogramas/ver2025_2.webp',
       heroGo: function () { self.goTab('juke'); },
       heroBand: function () { self.goTab('band'); },
@@ -4031,7 +4019,8 @@ class Component extends DCLogic {
       playKicker: isData ? tx.dataListenKicker : tx.listenKicker,
       playTitle: isData ? (hasCustom ? uiLabel(s.custom) : '') : d.title,
       stageKicker: isData ? tx.dataStageKicker : tx.stageKicker,
-      bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : ''),
+      showFooter: s.tab !== 'home',
+      bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : '') + (topics ? ' with-topics' : ''),
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('Método','Method'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
@@ -4065,7 +4054,7 @@ class Component extends DCLogic {
       cells: cells,
       stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) } : { warm: '…', cold: '…', hot: '…', coast: '…' },
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
-      techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
+      techCur: { title: techCur.title, items: techCur.items, empty: !techCur.items.length, num: ('0' + (sub + 1)).slice(-2) },
       bandViewClass: isBand ? 'band-view' : '',
       avatarActions: [
         [T('Tocar', 'Play instrument'), 'Play'],
@@ -4137,6 +4126,7 @@ class Component extends DCLogic {
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
       overCls: s.over ? 'over' : '',
+      showFileSettings: s.disc === 5 && hasCustom && (s.custom.kind === 'image' || s.custom.cols?.length > 1),
       isImageUp: hasCustom && s.custom.kind === 'image', isCsvUp: hasCustom && !!s.custom.cols && s.custom.cols.length > 1,
       customMode: s.customMode, colIdx: hasCustom && s.custom.cols ? String(s.custom.col) : '0',
       colOpts: hasCustom && s.custom.cols ? s.custom.cols.map(function (cc, ci) { return { v: String(ci), l: uiLabel(cc) }; }) : [],
@@ -4149,13 +4139,12 @@ class Component extends DCLogic {
       useSample: function () { self.loadSample(); },
       onUpMode: function (e) { self.setMode(e.target.value); },
       onCol: function (e) { self.setCol(parseInt(e.target.value, 10)); },
-      techGroups: this.techGroups(th),
       techFilters: [['all', T('Todo', 'All')], ['done', T('En el prototipo', 'In the prototype')], ['plan', T('Planeado', 'Planned')]].map(function (x) {
         return { label: x[1], on: s.techFilter === x[0], pick: function () {
-          if (self.state.techFilter !== x[0]) self.setState({ techFilter: x[0], sub: 0 });
+          if (self.state.techFilter !== x[0]) self.setState({ techFilter: x[0] });
         } };
       }),
-      techSummary: TECH.filter(function (t) { return t.st === 'done'; }).length + T(' en el prototipo · ', ' in the prototype · ') + TECH.filter(function (t) { return t.st === 'plan'; }).length + T(' planeadas', ' planned'),
+      techSummary: techCur.items.length + (techCur.items.length === 1 ? T(' herramienta', ' tool') : T(' herramientas', ' tools')),
       steps: STEPS.map(function (x, i) { return { n: x.n, title: x.title, body: x.body, delay: (i * 0.07).toFixed(2) + 's' }; }),
       legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa', sound: T('Truenos y percusión de Illapa.', 'Illapa’s thunder and percussion.') }, { v: T('+4,5', '+4.5'), c: '#C21F7A', who: 'Illapa', sound: T('Percusión de Illapa en la zona cálida extrema.', 'Illapa’s percussion in the extreme warm range.') }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku', sound: T('Marimba de Inti y gotas de Yaku.', 'Inti’s marimba and Yaku’s droplets.') }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku', sound: T('Texturas cálidas de Inti y gotas de Yaku.', 'Inti’s warm textures and Yaku’s droplets.') }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku', sound: T('Inti y Yaku: armonía y gotas.', 'Inti and Yaku: harmony and droplets.') }, { v: '+1', c: '#FFD447', who: 'Inti', sound: T('Armonía cálida de Inti.', 'Inti’s warm harmony.') }, { v: '0', c: '#7E849E', who: T('silencio', 'silence'), sound: T('Referencia neutra de la leyenda.', 'Neutral reference in the legend.') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha', sound: T('Registro grave de Mamacocha.', 'Mamacocha’s low register.') }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku', sound: T('Graves de Mamacocha y gotas de Yaku.', 'Mamacocha’s bass and Yaku’s droplets.') }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku', sound: T('Texturas frías de Mamacocha y gotas de Yaku.', 'Mamacocha’s cold textures and Yaku’s droplets.') }]
     };

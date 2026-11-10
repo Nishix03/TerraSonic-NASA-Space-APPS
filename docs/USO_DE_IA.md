@@ -10,6 +10,7 @@ Como recomendaron en la orientación: declarar la IA da credibilidad. Se agrega 
 | *(hackathon)* | M4 | ChatGPT (generación de imágenes) | Conceptos de los avatares anime de Silbo, Inti, Mamacocha, Yaku e Illapa. **Pegar aquí cada prompt** y confirmar la herramienta exacta | Repintado y capas en Krita, búsqueda inversa de originalidad y etiqueta "generado con IA" |
 | *(hackathon)* | M2–M4, M6 | ChatGPT Codex | Funciones concretas de la versión final (exportar .wav, parser de CSV, pruebas, animación por capas). **Anotar aquí cada función** | Revisión cruzada, prueba manual y comentario de autoría |
 | 2026-11-09 | M6 | ChatGPT Codex | Auditoría de diseño y ajustes de navegación, espaciado, desplazamiento y controles táctiles en TerraSonic | Pruebas automatizadas y revisión visual. Pendiente la revisión del equipo |
+| 2026-11-09 | M6 | ChatGPT Codex | Rediseño de portada, reproductor, conversión, método y tecnología a partir de capturas y evaluación heurística | Pruebas automatizadas y revisión visual. Pendiente la revisión del equipo |
 | | | | | |
 
 **Para el envío a Space Apps:** "Este proyecto usó herramientas de IA (Claude de Anthropic y Whisper) para planificación, prototipado y asistencia de código. Todo fue revisado, probado y editado por el equipo. Los datos científicos provienen sin modificación de NASA POWER."

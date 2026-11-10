@@ -359,7 +359,7 @@ test('navigation has one transition in flight and releases completed timers', ()
   context.window.matchMedia = () => ({ matches: false });
   c.goTab('juke');
   assert.equal(c.state.trans, true);
-  assert.equal(c.state.tab, 'home', 'destination must not mount until the shutter covers it');
+  assert.equal(c.state.tab, 'home', 'the route remains stable until the scheduled swap');
   c.routeChange({ tab: 'tech', sub: 0 }, 'tech');
   assert.equal(timers.size, 2, 'a second request must not add another transition');
   const flush = () => { const tasks = [...timers]; timers.clear(); tasks.forEach(([, fn]) => fn()); };
@@ -894,21 +894,31 @@ test('successful and rejected audio activations release their deadline timers', 
   }
 });
 
-test('compact pagination keeps every Technology screen reachable in both languages at all requested sizes', () => {
+test('Technology categories remain reachable and selected when filtering in either language', () => {
   for (const [width, height] of [[320,568],[390,844],[660,900],[768,1024],[1366,768],[1920,1080]]) {
     const { component: c, context } = setup(); context.window.innerWidth = width; context.window.innerHeight = height;
     for (const lang of ['es', 'en']) {
       c.setLang(lang); c.state.tab = 'tech'; c.state.sub = 0;
       for (let sub = 0; sub < c.subCount(); sub++) {
         const v = c.renderVals();
-        assert.equal(v.nav.counter, ('0' + (sub + 1)).slice(-2) + ' / 07');
+        assert.equal(v.nav.counter, ('0' + (sub + 1)).slice(-2) + ' / 05');
         assert.equal(v.nav.shortNext, lang === 'es' ? 'Siguiente' : 'Next');
-        assert.equal(v.nav.dots.length, 7);
+        assert.equal(v.nav.dots.length, 5);
+        assert(v.nav.topics);
         assert(v.bottomNavClass.includes('with-pages'));
-        if (sub < 6) v.nav.next();
+        if (sub < 4) v.nav.next();
       }
-      for (let sub = 6; sub > 0; sub--) c.renderVals().nav.prev();
+      for (let sub = 4; sub > 0; sub--) c.renderVals().nav.prev();
       assert.equal(c.state.sub, 0);
+      c.renderVals().nav.dots[2].go();
+      const all = c.renderVals();
+      all.techFilters[1].pick();
+      const filtered = c.renderVals();
+      assert.equal(c.state.sub, 2);
+      assert.equal(filtered.techCur.title, all.techCur.title);
+      assert(filtered.techCur.items.length < all.techCur.items.length);
+      assert.equal(filtered.nav.dots.length, all.nav.dots.length);
+      filtered.techFilters[0].pick();
     }
   }
 });
