@@ -1812,14 +1812,14 @@ a{color:inherit}
 <sc-if value="{{nav.show}}" hint-placeholder-val="{{ false }}">
 <footer id="tour-subnav" class="bar">
 <div class="in2">
-<div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" aria-label="{{tx.prevScreen}}">← {{tx.back}}</button></div>
+<div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" title="{{tx.prevScreen}}"><span aria-hidden="true">←</span> {{tx.back}}</button></div>
 <div class="mid">
 <div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-label="{{d.aria}}" aria-current="{{d.cur}}"><b>{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div>
 <span class="pagecount" aria-label="{{nav.countAria}}">{{nav.counter}}</span>
 </div>
 <sc-if value="{{nav.showMini}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm nav-mini" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}">{{playLabel}}</button></sc-if>
 <div class="side r">
-<button type="button" class="btn primary sm" onClick="{{nav.next}}" disabled="{{nav.nextOff}}" aria-label="{{tx.nextScreen}}"><span class="nav-next-long">{{nav.nextLabel}}</span><span class="nav-next-short">{{nav.shortNext}}</span> →</button>
+<button type="button" class="btn primary sm" onClick="{{nav.next}}" disabled="{{nav.nextOff}}" title="{{tx.nextScreen}}"><span class="nav-next-long">{{nav.nextLabel}}</span><span class="nav-next-short">{{nav.shortNext}}</span> <span aria-hidden="true">→</span></button>
 </div>
 </div>
 </footer>
@@ -2029,7 +2029,7 @@ var GUIDES = {
   ],
   data: [
     { id: 'tour-drop', sub: 0, t: 'Convierte en música', b: 'Suelta aquí una foto, un mapa o un CSV, o pulsa para elegirlo. La banda lo convertirá en música.',
-      en: { t: 'Turn into music', b: 'Drop a photo, a map or a CSV here, or tap to choose one. The band will turn it into music.' } },
+      en: { t: 'Convert to music', b: 'Drop a photo, a map or a CSV here, or tap to choose one. The band will turn it into music.' } },
     { id: 'tour-sample', sub: 0, t: '¿Sin archivo?', b: 'Prueba con la lluvia de Chiclayo: datos reales de NASA POWER.',
       en: { t: 'No file?', b: 'Try Chiclayo’s rainfall: real NASA POWER data.' } },
     { id: 'tour-howdata', sub: 0, t: 'Cómo se lee', b: 'Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Nada sale de tu equipo.',
@@ -2278,7 +2278,7 @@ var TECH_EN = {
   'GitHub Pages': { use: 'Publishing the final version at a public URL.' },
   'EIC · SST Anomaly (SVS 5176)': { use: 'The 30 frames of the 5 discs, extracted from the official EIC “SST Anomaly” video (SVS 5176, Pacific).' },
   'GHRSST MUR · anomalía de temperatura del mar (GIBS)': { name: 'GHRSST MUR · sea surface temperature anomaly (GIBS)', use: 'The 30 frames of the 5 “NASA GIBS” discs (2010–2023), via NASA GIBS / Worldview.' },
-  'NASA POWER API': { use: 'Monthly rainfall and temperature (1981–2024) for Chiclayo, Galápagos and Iquitos. Feeds the “Turn into music” sample.' },
+  'NASA POWER API': { use: 'Monthly rainfall and temperature (1981–2024) for Chiclayo, Galápagos and Iquitos. Feeds the “Convert to music” sample.' },
   'Galería del Earth Information Center (SVS)': { name: 'Earth Information Center gallery (SVS)', use: 'Official source of the visualizations. The extra discs will come from SVS 5207 and 4897.' },
   'ffmpeg': { use: 'Crops and downsizes the frames of the EIC video (and those of the extra discs).' },
   'Compositor por reglas (teoría musical)': { name: 'Rule-based composer (music theory)', use: 'One key, one tempo and one chord progression per character. The melody comes from the data and snaps to the chord on strong beats.' },
@@ -2312,10 +2312,10 @@ var STEPS_EN = [
   { title: 'West → east scan', body: 'A scan head crosses the 28 columns. Each column is one step of the rhythm.' },
   { title: 'Five musicians', body: 'Inti, Mamacocha, Yaku, Illapa and Silbo turn those levels into chords, bass, drops, thunder and whistles. In Melody mode they all play in the disc’s key and progression.' },
   { title: 'For everyone', body: 'Sound captions, spoken description, vibration, keyboard and high contrast.' },
-  { title: 'Turn into music', body: 'Upload an image or a CSV. An image is read by its colors; a CSV by values above or below the mean. Everything is processed in your browser.' },
+  { title: 'Convert to music', body: 'Upload an image or a CSV. An image is read by its colors; a CSV by values above or below the mean. Everything is processed in your browser.' },
   { title: 'Pick the lead', body: 'Each disc suggests a musician. You can pick another one in Listen and add the others to build the full band.' }
 ];
-var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Turn into music', how: 'Method', tech: 'Technology' };
+var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert to music', how: 'Method', tech: 'Technology' };
 
 /* Textos fijos de la interfaz */
 var TX = {
@@ -2380,10 +2380,10 @@ var TX = {
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
-    dataKicker: 'Turn into music · step 1', dataTitle: 'Turn into music', dataLede: 'Turn an image or a CSV into sound. Everything happens in your browser: the file never leaves your device.',
+    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Turn an image or a CSV into sound. Everything happens in your browser: the file never leaves your device.',
     dropTitle: 'Drop a file or tap here', dropSub: 'An image (PNG, JPG, WebP) or a CSV with a numeric column. CSV: up to 5000 data rows. 8 MB max.', sample: 'Try Chiclayo’s rainfall',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
-    dataListenKicker: 'Turn into music · step 2', dataStageKicker: 'Turn into music · step 3',
+    dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
     noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
     howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'Everything happens in the browser in real time, with Canvas and Web Audio. No models, no servers.',
     howTitle2: 'NASA color scale',
@@ -4034,7 +4034,7 @@ class Component extends DCLogic {
       bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : ''),
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
-      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convertir','Convert'), how: T('Método','Method'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
+      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('Método','Method'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;

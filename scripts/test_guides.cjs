@@ -948,13 +948,14 @@ test('navigation keyboard supports arrows, Home and End without activating anoth
 test('compact navigation has five bilingual labels while preserving full section names and the active page', () => {
   const { component: c, context } = setup();
   c.state.tab = 'data'; c.state.sub = 1;
-  const expected = { es: ['Escuchar','Banda','Convertir','Método','Tecnología'], en: ['Listen','Band','Convert','Method','Technology'] };
+  const expected = { es: ['Escuchar','Banda','Convierte','Método','Tecnología'], en: ['Listen','Band','Convert','Method','Technology'] };
   for (const lang of ['es','en','es']) {
     c.setLang(lang);
     const tabs = c.renderVals().tabs;
     assert.deepEqual(JSON.parse(JSON.stringify(tabs.map(t => t.short))), expected[lang]);
     context.PAGE_ORDER.forEach((key,i) => assert.equal(tabs[i].label, context.ROUTE_LOOK[key].title));
-    assert.equal(tabs[2].label, lang === 'es' ? 'Convierte en música' : 'Turn into music');
+    assert.equal(tabs[2].label, lang === 'es' ? 'Convierte en música' : 'Convert to music');
+    tabs.forEach(tab => assert(tab.label.toLowerCase().includes(tab.short.toLowerCase())));
     assert.equal(tabs[2].cur, 'page'); assert.equal(tabs.filter(t => t.cur === 'page').length, 1);
     assert.equal(c.state.tab, 'data'); assert.equal(c.state.sub, 1);
   }
