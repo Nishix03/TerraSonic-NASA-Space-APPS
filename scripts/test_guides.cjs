@@ -8,6 +8,30 @@ const path = require('node:path');
 const html = fs.readFileSync(process.argv[2] || path.join(__dirname, '../prototipos/I11-eic/Main.dc.html'), 'utf8');
 const source = html.match(/<script[^>]*data-dc-script[^>]*>([\s\S]*?)<\/script>/)[1];
 
+test('the comparison uses the same valid sea cells, regions and note scale for both dates', () => {
+  const { context } = setup();
+  const a = Array(448).fill(null);
+  const b = Array(448).fill(null);
+  a[0] = 5; // The second map has no data here.
+  a[1] = -3; b[1] = 1;
+  const coastalCell = 7 * 28 + 23;
+  a[coastalCell] = 1; b[coastalCell] = 1;
+  const whole = context.compareTemperature(a, b, 'all');
+  assert.equal(whole.answer, 'B');
+  assert.deepEqual(Array.from(whole.levels), [-1, 1]);
+  assert.equal(whole.tones[0][0], -3);
+  assert.equal(whole.tones[1][0], 1);
+  assert.equal(whole.tones[0][1], null);
+  assert.equal(whole.tones[1][1], null);
+  const coastal = context.compareTemperature(a, b, 'coast');
+  assert.equal(coastal.answer, 'similar');
+  assert.deepEqual(Array.from(coastal.levels), [1, 1]);
+  assert.equal(context.compareTemperature(a, Array(448).fill(null), 'all'), null);
+  assert(context.learningFrequency(-3) < context.learningFrequency(0));
+  assert(context.learningFrequency(0) < context.learningFrequency(3));
+  assert.equal(context.learningFrequency(5), context.learningFrequency(50));
+});
+
 test('Method 02 preserves the ten legend mappings and translates its explanatory content without resetting state', () => {
   const { component: c } = setup();
   c.state.tab = 'how'; c.state.sub = 1;
@@ -302,19 +326,17 @@ test('reduced motion keeps all five portraits static at mobile and desktop width
       const view = c.renderVals().bandCur;
       assert.equal(c.state.bsel, i);
       assert.equal(view.entering, false);
-      assert.equal(view.moving, false);
+      assert.equal(view.modelCue, '');
       assert.equal(view.entrance, '');
-      assert(view.poseUrl.endsWith('/pose-banda.webp'));
+      assert.equal(view.key, c.renderVals().bandSel[i].key);
     }
   }
   assert.equal(timers.size, 0);
 });
 
-test('rapid character selection keeps the last choice and ignores canceled animation frames and clip responses', async () => {
+test('rapid character selection keeps the last choice and ignores canceled animation frames and gestures', () => {
   const { component: c, context, timers } = setup();
   context.window.matchMedia = () => ({ matches: false }); c.state.tab = 'band';
-  let resolveOld;
-  c.preloadBandClip = key => key === 'illapa' ? new Promise(resolve => { resolveOld = resolve; }) : Promise.resolve(null);
   c.pickBand(1); c.pickBand(2);
   const canceledFrame = timers.get(c.bandRaf);
   c.pickBand(4); const frameId = c.bandRaf;
@@ -324,10 +346,11 @@ test('rapid character selection keeps the last choice and ignores canceled anima
   }
   assert.equal(c.state.bsel, 4);assert.equal(c.state.bphase,'entry');
   const timer=c.bandTimer,finish=timers.get(timer);timers.delete(timer);finish();
-  assert.equal(c.state.bphase, 'buffering');
-  c.pickBand(2); resolveOld({}); await Promise.resolve();
+  assert.equal(c.state.bphase, 'play');
+  const oldGesture = timers.get(c.bandTimer);
+  c.pickBand(2); oldGesture();
   assert.equal(c.state.bsel, 2); assert.equal(c.state.bphase, 'entry');
-  assert.equal(c.bandClipUrl, null);assert.equal(c.renderVals().bandCur.hasOutgoing,true);
+  assert.equal(c.renderVals().bandCur.hasOutgoing,true);
   assert(context.BAND_ENTRY_DURATION >= 450 && context.BAND_ENTRY_DURATION <= 650);
 });
 
@@ -986,12 +1009,19 @@ test('leaving a playback screen stops immediately, clears activity and preserves
   }
 });
 
-test('changing discs stops music without replacing the configured band; returning never autoplays', async () => {
+test('opening a disc reaches the player at its first frame and preserves the configured band', async () => {
   const {component:c,intervals}=audioHarness(); c.state.tab='juke';c.state.sub=2;
   c.state.mute={silbo:false,inti:false,mama:true,yaku:false,illapa:true};
   const mute=JSON.stringify(c.state.mute); await c.play();
-  c.renderVals().discs[3].pick();
+  c.goSub(0);
+  c.state.frame=2;
+  const loaded=[];
+  c.loadDisc=disc=>loaded.push(disc);
+  const open=c.renderVals().discs[3].pick;
+  open();
+  open();
   assert.equal(c.state.playing,false);assert.equal(intervals.size,0);assert.equal(c.state.disc,3);
+  assert.equal(c.state.sub,1);assert.equal(c.state.frame,0);assert.deepEqual(loaded,[3]);
   assert.equal(JSON.stringify(c.state.mute),mute);
   c.goSub(0);c.goSub(2);assert.equal(c.state.playing,false);assert.equal(intervals.size,0);
   c.setLang('en');assert.match(c.renderVals().playLabel,/Play/);assert.equal(JSON.stringify(c.state.mute),mute);
@@ -1026,11 +1056,13 @@ test('stop fades and retires the old music graph; restarting reuses the context 
   assert(old.disconnected);assert.equal(current.disconnected,false);assert.equal(c.state.playing,true);
 });
 
-test('character transition owns its outgoing portrait and fully removes temporary state on completion', async () => {
+test('character transition owns its outgoing model and removes temporary state after its gesture', () => {
   const {component:c,context,timers}=setup();context.window.matchMedia=()=>({matches:false});c.state.tab='band';
-  c.preloadBandClip=()=>Promise.resolve(null);c.pickBand(1);
-  assert.equal(c.renderVals().bandCur.hasOutgoing,true);assert.match(c.renderVals().bandCur.previousUrl,/silbo/);
-  const id=c.bandTimer,finish=timers.get(id);timers.delete(id);finish();await Promise.resolve();
+  c.pickBand(1);
+  assert.equal(c.renderVals().bandCur.hasOutgoing,true);assert.equal(c.renderVals().bandCur.previousKey,'silbo');
+  const id=c.bandTimer,finish=timers.get(id);timers.delete(id);finish();
+  assert.match(c.renderVals().bandCur.modelCue, /^selection-/);
+  const gesture=c.bandTimer,settle=timers.get(gesture);timers.delete(gesture);settle();
   assert.equal(c.renderVals().bandCur.entering,false);assert.equal(c.renderVals().bandCur.hasOutgoing,false);assert.equal(c.bandTimer,null);
 });
 

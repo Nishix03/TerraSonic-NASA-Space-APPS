@@ -36,13 +36,18 @@ Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth
 
 ## Cómo correrlo
 
-No hay que instalar ni compilar nada. Basta con un servidor estático:
+Genera el paquete estático que usa GitHub Pages y sírvelo desde `_site`:
 
 ```bash
-python -m http.server 8000
+python scripts/build_pages.py _site
+python -m http.server 8765 --bind 127.0.0.1 --directory _site
 ```
 
-Luego abre http://localhost:8000. También funciona con la extensión Live Server de VS Code.
+Abre [la vista local](http://127.0.0.1:8765/). En [La banda](http://127.0.0.1:8765/#banda) puedes girar cada personaje y verlo tocar, caminar y bailar.
+
+La escena editable está en `assets/avatares/terrasonic-banda.blend`. Para regenerarla y exportar los cinco GLB de `prototipos/I11-eic/modelos/`, ejecuta `blender --background --factory-startup --python scripts/modelar_banda.py` y vuelve a generar `_site`.
+
+En la plantilla web, `ts-avatar` reutiliza cada GLB mediante `data-character`. Los atributos `data-view` y `data-cue` indican el encuadre y la señal que activa la animación. La vista de personajes requiere WebGL 2.
 
 ## Datos
 
