@@ -172,7 +172,7 @@ a{color:inherit}
 .px ts-avatar[data-rendered]>canvas{visibility:visible}
 .px ts-avatar.bst[data-muted="true"]>canvas{filter:grayscale(.8);opacity:.48}
 .px ts-avatar[data-view="mini"]{width:100%;height:44px}
-.px ts-avatar[data-view="portrait"]{touch-action:pan-y;cursor:grab}
+.px ts-avatar[data-view="portrait"]{touch-action:pan-y pinch-zoom;cursor:grab}
 .px ts-avatar[data-view="portrait"]:active{cursor:grabbing}
 .px ts-avatar[data-view="portrait"]:not([data-rendered])::before{content:attr(data-loading);position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:.9em}
 .px ts-avatar[data-view="portrait"][data-error]::before{content:attr(data-unavailable)}
@@ -706,7 +706,6 @@ a{color:inherit}
 .px .in .cardx,.px .in .panel{background:color-mix(in srgb,var(--section) 5%,var(--bg));border-radius:8px}
 .px .bar{background:var(--bg);border-top-color:color-mix(in srgb,var(--section) 28%,var(--line))}
 .px .bar .dots button.on i{background:var(--section)}
-@media (min-width:1050px){.px .uni .views{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}}
 @media (max-width:640px){
   .px .listen-intro{align-items:start;flex-direction:column}
   .px .observatory-line{gap:8px}
@@ -750,7 +749,7 @@ a{color:inherit}
 .px .top .wrap{min-height:64px;padding:0 40px;gap:24px;max-width:none}
 .px .wordmark{display:inline-block;font-family:var(--head);font-weight:700;font-size:1em;letter-spacing:.4em;white-space:nowrap}
 .px .top .wrap{width:100%;min-width:0}
-.px.app{min-height:0;min-width:0;max-width:100%}
+.px.app{min-height:0;min-width:0;max-width:100%;--gutter:clamp(12px,3vw,40px);--layout-gap:clamp(12px,2vw,24px)}
 .px .brand{flex-shrink:0}
 .px .nav{margin-left:auto;gap:2px;min-width:0;max-width:100%;flex-wrap:nowrap;overflow:visible;padding-block:4px;flex:1 1 auto;justify-content:space-evenly}
 .px .nav button{flex:0 0 auto;white-space:nowrap;justify-content:center}
@@ -768,7 +767,7 @@ a{color:inherit}
 .px details.menu .pop{background:#000;border-color:rgba(255,255,255,.22);border-radius:0}
 
 /* pantallas */
-.px .in{max-width:1480px;padding:28px 40px 40px;gap:24px}
+.px .in{max-width:1480px;padding:var(--layout-gap) max(var(--gutter),env(safe-area-inset-right,0px)) var(--layout-gap) max(var(--gutter),env(safe-area-inset-left,0px));gap:var(--layout-gap)}
 .px .pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px 40px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line)}
 .px .pagehead .kicker{margin-bottom:10px}
 .px .pagehead>div{min-width:0;max-width:100%}
@@ -822,16 +821,16 @@ a{color:inherit}
 
 /* reproductor */
 .px .uni{gap:14px;width:100%;max-width:1160px;align-self:center}
-.px .uni .views{gap:22px}
+.px .uni .views{gap:var(--layout-gap)}
 .px .uni .vpanel{gap:0;border:0;border-radius:0;background:transparent;overflow:visible}
-.px .uni .vcap{padding:0 0 10px;font-size:.8em}
-.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{border:1px solid var(--line);box-shadow:none}
-.px .uni .vfoot{padding:8px 0 0}
+.px .uni .vcap{padding:0 0 10px;font-size:.8em;flex-wrap:wrap}
+.px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:560/320;border:1px solid var(--line);box-shadow:none}
+.px .uni .vfoot{padding:8px 0 0;flex-wrap:wrap}
 .px .tagbox{background:rgba(0,0,0,.72);font-family:var(--head);font-weight:700;letter-spacing:.14em;text-transform:uppercase}
 .px .arrow{border-radius:0;background:rgba(0,0,0,.6)}
 .px .uni .controls{gap:8px 14px;padding:8px 0;border:0;border-bottom:1px solid var(--line);background:transparent}
-.px .player-tools{display:flex;flex-wrap:wrap;gap:6px;margin-inline-start:auto}
-.px .player-tools .btn{min-height:36px;white-space:normal;text-align:left}
+.px .player-tools{display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--line);padding-top:10px}
+.px .player-tools .btn{min-height:44px;white-space:normal;text-align:center}
 .px #easy-explanation:not(:has(section)){display:none}
 .px .uni .controls .primary{min-width:176px;background:#fff;border-color:#fff;color:#000}
 .px .uni .controls .primary:hover{background:transparent;color:#fff}
@@ -973,11 +972,12 @@ a{color:inherit}
 .px .bottomnav .bar{min-width:0;border-top:0}
 .px .guidefab{position:relative;grid-column:2;justify-self:end;right:auto;bottom:auto;z-index:62;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:8px max(14px,env(safe-area-inset-right,0px)) 8px 8px;padding:3px;border:1px solid rgba(255,212,71,.55);border-radius:40px;background:#000;box-shadow:0 12px 34px rgba(0,0,0,.65);transition:transform .25s,opacity .25s,border-color .25s}
 .px .guidefab:hover{border-color:#FFD447;transform:translateY(-2px)}
-.px .guidefab .gface{width:48px;height:48px}
+.px .guidefab .gface{width:100%;height:100%;flex:1 1 auto}
 .px .guidefab .glabel{max-width:0;overflow:hidden;white-space:nowrap;font:700 .7em var(--head);letter-spacing:.18em;text-transform:uppercase;color:#FFD447;transition:max-width .3s,padding .3s}
 .px .guidefab:hover .glabel,.px .guidefab:focus-visible .glabel{max-width:140px;padding:0 16px 0 10px}
 .px .guidefab .glabel{display:none}
-.px .guidefab::after{content:"";position:absolute;inset:-5px;border:1px solid rgba(255,212,71,.45);border-radius:46px;animation:fabRing 2.8s ease-out infinite;pointer-events:none}
+.px .guidefab::after{content:"";position:absolute;inset:0;outline:1px solid rgba(255,212,71,.45);border-radius:inherit;animation:fabRing 2.8s ease-out infinite;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.px .guidefab::after{animation:none}}
 @keyframes fabRing{0%{opacity:.8;transform:scale(.96)}70%,100%{opacity:0;transform:scale(1.18)}}
 
 /* guía: foco que sigue al elemento y tarjeta junto a él */
@@ -1034,7 +1034,6 @@ a{color:inherit}
   .px .nav{margin-left:0}
   .px .nav button{min-height:46px}
   .px .top .right{margin-left:auto}
-  .px .in{padding:20px 16px 32px}
   .px .stagegrid{grid-template-columns:minmax(0,1fr)}
   .px .bar .in2{padding:8px 16px}
   .px .steps button span{display:none}
@@ -1045,10 +1044,9 @@ a{color:inherit}
   .px .facts{gap:26px}
   .px .discgrid{grid-template-columns:minmax(0,1fr);gap:8px}
   .px .discgrid .dcard{min-height:66px}
-  .px .player-tools{width:100%;margin-inline-start:0}
-  .px .uni .timeline{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .px .uni .timeline{gap:4px}
   .px .uni .timeline img{display:none}
-  .px .uni .timeline button{min-height:32px;justify-content:center}
+  .px .uni .timeline button{min-height:44px;justify-content:center}
   .px .bar .side .btn{padding:0 10px}
   .px .bar .side{min-width:0}
   .px .readout p{grid-template-columns:minmax(0,1fr);gap:2px}
@@ -1057,61 +1055,67 @@ a{color:inherit}
   .px .brand{gap:8px}
   .px .top .right{gap:6px}
   .px .hero .cta{width:100%;align-items:stretch}
-  .px .hero .cta .btn{flex:1 1 200px}
   .px .steps button.on span{max-width:18ch;white-space:normal;overflow-wrap:anywhere}
 }
 /* Cabecera y pie adaptables: el personaje tiene espacio propio, sin cubrir contenido. */
 @media (max-width:1100px){
-  .px .top .wrap{padding-top:max(6px,env(safe-area-inset-top,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-  .px .nav{flex:0 0 100%;width:100%;min-width:0}
-  .px .bar .in2{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr);gap:6px;padding:8px 8px 8px max(12px,env(safe-area-inset-left,0px))}
+  .px .bar .in2{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);min-height:0;gap:6px;padding:6px 0 6px max(var(--gutter),env(safe-area-inset-left,0px))}
   .px .bar .side{min-width:0;grid-column:1}
   .px .bar .side.r{grid-column:3}
   .px .bar .mid{grid-column:2}
   .px .bar .steps,.px .nav-next-long{display:none}
   .px .pagecount{display:block;font:600 max(12px,.75em)/1.4 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
   .px .nav-next-short{display:inline;min-width:0}
-  .px .bar .side .btn{width:100%;min-width:0;gap:4px;padding:8px;letter-spacing:.08em}
+  .px .bar .side .btn{width:100%;min-width:0;gap:2px;padding:6px 2px;letter-spacing:.02em;white-space:normal;text-align:center}
   .px .bar .nav-mini{grid-column:1/-1;grid-row:1;justify-self:end}
   .px .bottomnav.has-mini .bar .side,.px .bottomnav.has-mini .bar .mid{grid-row:2}
-  .px .guidefab{margin-right:max(10px,env(safe-area-inset-right,0px));margin-left:6px}
+  .px .guidefab{width:46px;height:46px;margin:6px max(var(--gutter),env(safe-area-inset-right,0px)) 6px 8px}
 }
-@media (max-width:640px){
-  .px .wordmark{font-size:1em;letter-spacing:.08em}
-  .px .brand{gap:6px}
-  .px .brandmark{width:30px;height:22px;flex-shrink:0}
-  .px .top .wrap{column-gap:8px}
-}
-/* All five sections stay visible: full labels, compact labels, then a balanced 3 + 2 grid. */
+/* Las cinco secciones se mantienen visibles con etiquetas que se ajustan al espacio. */
 .px .nav-short{display:none}
 .px .nav button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+.px .top .wrap{max-width:1560px;padding-inline:max(var(--gutter),env(safe-area-inset-left,0px)) max(var(--gutter),env(safe-area-inset-right,0px))}
+.px .top .brand{min-height:44px;min-width:0}
+.px .top .brandmark{flex-shrink:0}
+.px .top .nav button{flex:0 1 auto;min-width:0;white-space:normal;text-wrap:balance}
+.px details.menu .pop{width:min(16rem,calc(100vw - 2 * var(--gutter)));min-width:0;max-height:calc(100dvh - 4.5rem);overflow-y:auto}
+.px details.menu .opt{padding:6px 8px;gap:8px;overflow-wrap:anywhere}
 @media(max-width:1279px){
-  .px .top .wrap{flex-wrap:wrap;padding:6px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));gap:6px 14px}
-  .px .top .right{margin-left:auto}
-  .px .nav{order:3;flex:0 0 100%;width:100%;margin-left:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;overflow:visible;padding-block:0}
-  .px .nav button{min-width:0;min-height:48px;padding-inline:clamp(4px,1vw,12px);font-size:clamp(13px,.8em,16px);letter-spacing:clamp(.025em,.12vw,.12em)}
-  .px .nav-full{display:none}
-  .px .nav-short{display:inline}
-  .px .mlabel{display:none}
+  .px .top .wrap{gap:4px 12px;min-height:0}
+  .px .top .nav button{min-height:48px;padding-inline:6px;font-size:max(.8em,.8125rem);letter-spacing:.04em}
+  .px .top .nav-full,.px .top .mlabel{display:none}
+  .px .top .nav-short{display:inline}
+  .px .top .right{margin-left:auto;gap:6px}
+  .px details.menu>summary{justify-content:center;padding:0}
+  .px .wordmark{letter-spacing:.12em}
 }
-@media(max-width:520px){
-  .px .nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:2px 6px;padding-bottom:4px}
-  .px .nav button{grid-column:span 2;min-height:44px;padding-inline:4px;font-size:max(13px,.8em);letter-spacing:.04em}
-  .px .nav button:nth-child(n+4){grid-column:span 3}
-}
-/* Larger and more readable type needs the compact layout sooner. */
-@media(max-width:1600px){
-  .px .top.readable-nav .wrap{flex-wrap:wrap;padding:6px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));gap:6px 14px}
-  .px .top.readable-nav .right{margin-left:auto}
-  .px .top.readable-nav .nav{order:3;flex:0 0 100%;width:100%;margin-left:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding-block:0}
-  .px .top.readable-nav .nav button{min-width:0;min-height:48px;padding-inline:clamp(4px,1vw,12px);font-size:max(13px,.8em);letter-spacing:.04em}
+@media(min-width:1280px) and (max-width:1600px){
+  .px .top.readable-nav .nav button{padding-inline:8px;letter-spacing:.04em}
   .px .top.readable-nav .nav-full,.px .top.readable-nav .mlabel{display:none}
   .px .top.readable-nav .nav-short{display:inline}
+  .px .top.readable-nav details.menu>summary{justify-content:center;padding:0}
 }
-@media(max-width:580px){
-  .px .top.readable-nav .nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:2px 6px;padding-bottom:4px}
-  .px .top.readable-nav .nav button{grid-column:span 2;min-height:44px;padding-inline:4px}
-  .px .top.readable-nav .nav button:nth-child(n+4){grid-column:span 3}
+@media(max-width:900px){
+  .px .top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 8px;padding-block:max(5px,env(safe-area-inset-top,0px)) 2px}
+  .px .top .brand{justify-self:start;gap:6px}
+  .px .top .brandmark{width:28px;height:22px}
+  .px .top .wordmark{white-space:normal;letter-spacing:.06em;overflow-wrap:anywhere}
+  .px .top .nav{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 4px;width:100%;margin:0;padding:0}
+  .px .top .nav button{min-height:44px;line-height:1.2;overflow-wrap:anywhere}
+  .px .top .nav button[aria-current="page"]{background:color-mix(in srgb,var(--section) 9%,transparent);border-bottom-color:var(--section)}
+}
+@media(max-width:460px){
+  .px .top .nav{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .px .top .nav button{grid-column:span 2;padding-inline:3px}
+  .px .top .nav button:nth-child(n+4){grid-column:span 3}
+}
+@media(max-width:280px){
+  .px .top .brandmark{display:none}
+}
+@media(min-width:620px) and (max-width:900px) and (max-height:500px){
+  .px .top .wrap{grid-template-columns:auto minmax(0,1fr) auto}
+  .px .top .nav{order:0;grid-column:auto;display:flex;gap:0}
+  .px .top .nav button{padding-inline:3px;font-size:max(.6em,.6875rem);letter-spacing:0}
 }
 /* Method 02: a reading scale, independent of the application shell and music engine. */
 .px .color-method{display:grid;grid-template-columns:minmax(0,35fr) minmax(0,65fr);gap:clamp(24px,4vw,72px);align-items:start;padding-block:clamp(12px,2vh,28px) 28px;min-width:0}
@@ -1161,12 +1165,12 @@ a{color:inherit}
 @media(prefers-reduced-motion:reduce){.px .scale-row{transition:none}.px .scale-row:hover{transform:none}}
 
 /* Recorrido de la demo */
-.px .demo-page > .in{max-width:1240px;gap:clamp(16px,2.4vw,28px);padding-block:clamp(16px,3vh,30px) 32px}
+.px .demo-page > .in{max-width:1240px}
 .px .demo-page .pagehead{align-items:start;gap:10px 24px;padding-bottom:16px}
 .px .demo-page .pagehead .display{font-size:clamp(1.7rem,4vw,3.6rem);overflow-wrap:anywhere}
 .px .demo-page .pagehead .lede{max-width:52ch}
 .px .herotx{gap:clamp(12px,2.3vh,22px);padding-block:clamp(20px,5vh,76px)}
-.px .hero .display{font-size:clamp(2rem,7.2vw,6.4rem);overflow-wrap:anywhere}
+.px .hero .display{font-size:clamp(2rem,7.2vw,6.4rem)}
 .px .hero .facts{gap:clamp(12px,3vw,44px);padding-top:clamp(10px,2vh,22px)}
 .px .hero .facts div{min-width:0}
 .px .hero .cta .btn{min-width:0;white-space:normal;text-align:center}
@@ -1181,7 +1185,7 @@ a{color:inherit}
 .px .bscene{height:clamp(235px,48svh,510px)}
 .px .bstage-label{gap:8px;margin-inline:clamp(10px,2vw,22px)}
 .px .avatar-actions{width:100%;justify-content:flex-start}
-.px .avatar-actions .btn{min-height:40px}
+.px .avatar-actions .btn{min-height:44px;white-space:normal}
 .px .binfo{gap:12px;padding-top:0}
 .px .bdl{grid-template-columns:minmax(0,1fr) minmax(0,1.75fr);gap:0 12px;overflow-wrap:anywhere}
 .px .bdl dt,.px .bdl dd{padding:7px 0;border-bottom:1px solid var(--line)}
@@ -1213,18 +1217,68 @@ a{color:inherit}
 .px .credits-layout{gap:clamp(14px,2.6vw,32px)}
 .px .credit-section{padding-top:14px}
 .px .credit-heading{margin-bottom:10px}
+.px .learn{grid-template-columns:minmax(0,1fr);max-width:1160px;align-self:center}
+.px .learn-panel{grid-template-columns:minmax(0,1fr);min-width:0}
+.px .learn-tools label,.px .learn-tools select{min-width:0;max-width:100%}
+.px .pagehead .lede,.px .stagebar .chordhud{min-width:0;overflow-wrap:anywhere}
+.px .stagebar{flex-wrap:wrap;gap:6px 12px}
+.px .band.two .bchip{min-width:0}
+.px .band.two .bchip .nm{overflow-wrap:anywhere}
+.px .scale-musician{min-width:0;overflow-wrap:anywhere}
+@media(max-width:900px),(max-height:660px){
+  /* El documento se desplaza desde la cabecera hasta el último control. */
+  .px.app{height:auto;min-height:100svh;overflow:visible}
+  .px .viewport{display:flex;flex-direction:column}
+  .px .scr,.px .scr:has(.bpage){position:relative;inset:auto;flex:1 1 auto;overflow:visible;overscroll-behavior:auto}
+  .px .in{min-height:0}
+  .px .scr.home{display:flex;flex-direction:column}
+  .px .scr.home .in{flex:1 1 auto}
+  .px .hero{min-height:0}
+  .px .bottomnav:not(.with-pages){border-top:1px solid var(--line)}
+  .px .steps button span{max-width:18ch;white-space:normal;overflow-wrap:anywhere}
+  .px .route-card{max-height:100svh;overflow:hidden}
+}
 @media(max-width:900px){
   .px .bpage{grid-template-columns:minmax(0,1fr);grid-template-areas:"pick" "identity" "stage" "info";grid-template-rows:auto;max-width:650px;gap:12px}
   .px .bscene{height:clamp(215px,36svh,360px)}
+  .px .stagebox.big{min-height:clamp(190px,55vw,360px)}
+  .px .uni .controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+  .px .uni .controls .primary{width:100%;min-width:0;white-space:normal;padding-inline:6px}
+  .px .controls .when{min-width:0;text-align:center;overflow-wrap:anywhere}
+  .px .player-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,125px),1fr))}
+  .px .player-tools .btn{width:100%;padding:6px;letter-spacing:.04em}
+  .px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:641px){
+  .px .uni .views{row-gap:0}
+  .px .uni .vpanel{display:grid;grid-row:span 3;grid-template-rows:subgrid}
 }
 @media(max-width:640px){
-  .px .herotx{padding-inline:16px}
-  .px .hero .cta{gap:8px}
-  .px .hero .cta .btn{flex:1 1 min(100%,148px);padding-inline:10px}
+  .px .herotx{padding-inline:var(--gutter)}
+  .px .scr.home .cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .px .hero .cta .primary{grid-column:1/-1}
+  .px .hero .cta .btn{padding-inline:6px;letter-spacing:.06em}
   .px .hero .facts{gap:10px 18px}
   .px .hero .facts b{font-size:1.45em}
-  .px .bsel{min-height:62px;padding-inline:2px}
+  .px .uni .views{grid-template-columns:minmax(0,1fr)}
+  .px .bsel{min-height:60px;padding-inline:3px}
+  .px .avatar-actions .btn{flex:1 1 min(100%,76px);padding-inline:6px;letter-spacing:.04em}
+  .px .homeflow{gap:14px;padding:8px 0 8px var(--gutter)}
+  .px .flow-step:not(:last-child)::after{right:-12px}
   .px .scale-wave{display:none}
+}
+@media(max-width:420px){
+  .px .bpick{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .px .bsel{grid-column:span 2;display:flex;justify-content:center;align-items:center;gap:4px;min-height:44px}
+  .px .bsel:nth-child(n+4){grid-column:span 3}
+  .px .bsel ts-avatar{width:24px;height:28px;flex:0 0 24px}
+  .px .bsel span{min-width:0}
+}
+@media(max-width:310px){
+  .px .uni .timeline{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .px .band.two{grid-template-columns:minmax(0,1fr)}
+  .px .scale-row{grid-template-columns:18px minmax(0,1fr)}
+  .px .scale-musician,.px .scale-sound{grid-column:2}
 }
 @media(max-height:560px) and (min-width:901px){
   .px .bscene{height:clamp(175px,46svh,265px)}
@@ -1365,22 +1419,6 @@ a{color:inherit}
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
 <div class="when"><b>{{frameLabel}}</b></div>
-<div class="player-tools">
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{lesson.easy}}</button></sc-if>
-<button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm quiet" onClick="{{openComparison}}">{{lesson.cta}}</button></sc-if>
-<div id="tour-more" class="playwrap"><button type="button" class="btn sm" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
-</div>
-</div>
-
-<div id="easy-explanation">
-<sc-if value="{{easyVisible}}">
-<section class="learn-panel easy-panel" aria-labelledby="easy-title">
-  <h2 id="easy-title">{{lesson.easy}}</h2>
-  <p>{{easyText}}</p>
-  <div class="row"><button type="button" class="btn sm" onClick="{{readEasy}}" disabled="{{speechUnavailable}}">{{readEasyLabel}}</button><span class="muted small">{{speechSupport}}</span></div>
-</section>
-</sc-if>
 </div>
 
 <sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
@@ -1427,6 +1465,21 @@ a{color:inherit}
 <div class="chips" aria-label="{{tx.chordsAria}}"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
 <span class="muted small">{{moodText}}</span>
 </div>
+</div>
+<div class="player-tools">
+<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{lesson.easy}}</button></sc-if>
+<button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
+<sc-if value="{{isJuke}}"><button type="button" class="btn sm quiet" onClick="{{openComparison}}">{{lesson.cta}}</button></sc-if>
+<div id="tour-more" class="playwrap"><button type="button" class="btn sm" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
+</div>
+<div id="easy-explanation">
+<sc-if value="{{easyVisible}}">
+<section class="learn-panel easy-panel" aria-labelledby="easy-title">
+  <h2 id="easy-title">{{lesson.easy}}</h2>
+  <p>{{easyText}}</p>
+  <div class="row"><button type="button" class="btn sm" onClick="{{readEasy}}" disabled="{{speechUnavailable}}">{{readEasyLabel}}</button><span class="muted small">{{speechSupport}}</span></div>
+</section>
+</sc-if>
 </div>
 <p role="status" aria-live="polite" class="sr">{{caption}}</p>
 </div>
@@ -2577,7 +2630,11 @@ class Component extends DCLogic {
     var nav = document.getElementById('tour-nav'), active = nav && nav.querySelector('[aria-current="page"]');
     if (active && nav.scrollWidth > nav.clientWidth) active.scrollIntoView(options);
     var step = document.querySelector('.px .steps [aria-current="step"]');
-    if (step && step.getClientRects().length) step.scrollIntoView(options);
+    if (step && step.getClientRects().length) {
+      var list = step.parentElement, bounds = list.getBoundingClientRect(), item = step.getBoundingClientRect();
+      var delta = item.left < bounds.left ? item.left - bounds.left : Math.max(0, item.right - bounds.right);
+      if (delta) list.scrollBy({ left: delta, behavior: options.behavior });
+    }
   }
   navKey(event) {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -2608,9 +2665,11 @@ class Component extends DCLogic {
     if (this.state.tour) { this.tourClose(); return; }
     this.tourReturnFocus = document.activeElement;
     var screen = document.querySelector('.px .scr'), app = document.querySelector('.px.app');
-    this.tourOrigin = { tab: this.state.tab, sub: this.state.sub, screen: screen, app: app,
+    var page = document.scrollingElement;
+    this.tourOrigin = { tab: this.state.tab, sub: this.state.sub, screen: screen, app: app, page: page,
       top: screen ? screen.scrollTop : 0, left: screen ? screen.scrollLeft : 0,
-      appTop: app ? app.scrollTop : 0, appLeft: app ? app.scrollLeft : 0 };
+      appTop: app ? app.scrollTop : 0, appLeft: app ? app.scrollLeft : 0,
+      pageTop: page ? page.scrollTop : 0 };
     this.tourGo(this.guideProgress[this.state.tab] || 1);
   }
   measureTour() {
@@ -2642,15 +2701,22 @@ class Component extends DCLogic {
     var self = this, st = this.guideStep();
     if (!st) return;
     var el = st.id ? document.getElementById(st.id) : null;
-    // scrollIntoView also scrolls overflow:hidden ancestors, shifting the entire app.
-    // Header/footer targets need no scroll; content targets may move only their screen.
+    // En escritorio se desplaza el panel. En pantallas compactas se desplaza el documento.
     var screen = el && el.closest('.scr');
-    if (screen && screen.scrollTo && screen.scrollHeight > screen.clientHeight) {
+    var page = document.scrollingElement;
+    var behavior = this.bandReduced() ? 'instant' : 'smooth';
+    if (el && page && page.scrollHeight > page.clientHeight) {
+      var target = el.getBoundingClientRect(), visible = window.visualViewport;
+      var viewportTop = visible ? visible.offsetTop : 0, viewportHeight = visible ? visible.height : window.innerHeight;
+      if (target.top < viewportTop || target.bottom > viewportTop + viewportHeight) {
+        page.scrollTo({ top: page.scrollTop + target.top - viewportTop - Math.max(0, (viewportHeight - target.height) / 2), behavior: behavior });
+      }
+    } else if (screen && screen.scrollTo && screen.scrollHeight > screen.clientHeight) {
       var r = el.getBoundingClientRect(), cr = screen.getBoundingClientRect();
       if (r.top < cr.top || r.bottom > cr.bottom) {
         var top = Math.max(0, Math.min(screen.scrollHeight - screen.clientHeight,
           screen.scrollTop + r.top - cr.top - Math.max(0, (screen.clientHeight - r.height) / 2)));
-        screen.scrollTo({ top: top, behavior: this.bandReduced() ? 'auto' : 'smooth' });
+        screen.scrollTo({ top: top, behavior: behavior });
       }
     }
     this.tourKey = '';
@@ -2697,6 +2763,7 @@ class Component extends DCLogic {
       if (!origin) return;
       if (origin.screen) { origin.screen.scrollTo?.({ top: origin.top, left: origin.left, behavior: 'instant' }); origin.screen.scrollTop = origin.top; origin.screen.scrollLeft = origin.left; }
       if (origin.app) { origin.app.scrollTop = origin.appTop; origin.app.scrollLeft = origin.appLeft; }
+      if (origin.page) origin.page.scrollTo({ top: origin.pageTop, behavior: 'instant' });
     });
     var target = this.tourReturnFocus;
     if (!target || !target.isConnected) target = document.getElementById('tour-guide');
@@ -2945,6 +3012,12 @@ class Component extends DCLogic {
     if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
     this.routeChange(patch, k);
   }
+  resetScreenScroll() {
+    var screen = document.querySelector('.px .viewport > .scr');
+    if (screen) screen.scrollTop = 0;
+    var page = document.scrollingElement;
+    if (page && page.scrollTop) page.scrollTo({ top: 0, behavior: 'instant' });
+  }
   routeChange(patch, tab, title) {
     if (this.state.trans) return;
     this.stopForScreen(tab, patch.sub == null ? this.state.sub : patch.sub);
@@ -2957,8 +3030,7 @@ class Component extends DCLogic {
       swapped = true;
       self.navCount = 0;
       self.setState(Object.assign({ routeArrived: !finished && self.state.trans }, patch, finished ? { trans: false, routeArrived: false } : {}), function () {
-        var screen = document.querySelector('.px .viewport > .scr');
-        if (screen) screen.scrollTop = 0;
+        self.resetScreenScroll();
         self.ensureNavVisible();
         if (self.state.tab === 'juke') {
           var sub = self.state.sub;
@@ -3260,7 +3332,12 @@ class Component extends DCLogic {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
     var mute = initialMute || (this.state.leadOverride ? this.state.mute : this.only(this.discLead(5, an)));
-    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') });
+    var self = this;
+    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
+      self.resetScreenScroll();
+      var heading = document.getElementById('player-title');
+      if (heading) heading.focus({ preventScroll: true });
+    });
   }
   handleFile(f) {
     if (this.disposed) return;
@@ -3955,8 +4032,8 @@ class Component extends DCLogic {
       playTitle: isData ? (hasCustom ? uiLabel(s.custom) : '') : d.title,
       stageKicker: isData ? tx.dataStageKicker : tx.stageKicker,
       bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : ''),
-      headerClass: s.big || s.legible ? 'readable-nav' : '',
       onNavKey: function (event) { self.navKey(event); },
+      headerClass: s.big || s.legible ? 'readable-nav' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convertir','Convert'), how: T('Método','Method'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {

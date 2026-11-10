@@ -147,11 +147,19 @@ class TerrasonicAvatar extends HTMLElement {
         this.addEventListener("pointerdown", event => {
           if (event.button !== 0 || !this.model) return;
           this.dragX = event.clientX;
+          this.dragY = event.clientY;
+          this.rotating = event.pointerType !== "touch";
           this.setPointerCapture(event.pointerId);
         });
         this.addEventListener("pointermove", event => {
           if (!this.hasPointerCapture(event.pointerId)) return;
-          this.targetYaw += (event.clientX - this.dragX) * .015;
+          const deltaX = event.clientX - this.dragX;
+          if (!this.rotating) {
+            const deltaY = event.clientY - this.dragY;
+            if (Math.abs(deltaX) < 8 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+            this.rotating = true;
+          }
+          this.targetYaw += deltaX * .015;
           this.dragX = event.clientX;
           queue(this);
         });
