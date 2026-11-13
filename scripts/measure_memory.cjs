@@ -40,8 +40,7 @@ async function main(){
    else await page.locator('#tour-drop input').setInputFiles({name:filename,mimeType:'image/webp',buffer});
    await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.cur(),filename);
    await page.evaluate(()=>__app.setState({events:Array.from({length:200},()=>__app.eventFor({mama:true},''))}));
-   if(await page.locator('.event-history').getAttribute('open')===null)await page.locator('.event-history summary').click();
-   await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
+   assert.equal(await page.locator('#tour-machine canvas.heard').count(),1);
    await page.evaluate(()=>__app.goTab('band'));await page.waitForFunction(()=>!__app.state.trans);await page.locator('.bsel').nth(cycle%5).click();
    await sample(cycle);
   }

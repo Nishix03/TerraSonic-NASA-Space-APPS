@@ -15,7 +15,7 @@ async function main(){
    const process=await page.locator('.home-process').boundingBox();assert(process.y>=0&&process.y+process.height<=viewport.height);
    assert(await page.evaluate(()=>document.fonts.check('700 16px Barlow')));await page.screenshot({path:path.join(output,'home-'+viewport.width+'.png')});
    await page.locator('#tour-nav button').first().click();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
-   assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),3);assert.equal(await page.locator('#tour-machine .heard > div').count(),448);
+   assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),3);assert.equal(await page.locator('#tour-machine canvas.heard').count(),1);
    await page.evaluate(()=>document.fonts.ready);
    const playerCore=await page.locator('.uni').evaluate(root=>({bandBottom:root.querySelector('.listen-band').getBoundingClientRect().bottom,controlsBottom:root.querySelector('.player-sidebar').getBoundingClientRect().bottom}));
    if(viewport.width>=1280)assert(playerCore.bandBottom<=viewport.height&&playerCore.controlsBottom<=viewport.height,'The initial player must fit the original desktop window: '+JSON.stringify(playerCore));

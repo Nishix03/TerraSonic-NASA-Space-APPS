@@ -1,4 +1,29 @@
-# Rendimiento y peso · medición local comparable
+# Rendimiento de EarthBeat
+
+## Rama piero-mejoras-v2
+
+La comparación parte de **3c890d7** y usa tres visitas frías por versión en Chromium 157, con ventana móvil emulada de 390 × 844, CPU ralentizada ×4, latencia de 150 ms, descarga de 200 KiB/s, texto comprimido con gzip y caché deshabilitada. La prueba desactiva los sonidos de navegación y la narración para aislar el reproductor. Los tiempos son medianas de tres ejecuciones.
+
+| Métrica | Antes | Optimizado |
+| --- | ---: | ---: |
+| Portada interactiva desde la navegación | 1.041 ms | 1.035 ms |
+| De abrir Escuchar a tener el primer mapa decodificado y analizado | 3.046 ms | 1.614 ms |
+| De abrir La banda a tener el primer retrato decodificado | 1.674 ms | 853 ms |
+| Respuestas completadas hasta el primer mapa, desde la portada | 530.740 B | 378.357 B |
+| Elementos HTML del reproductor con cinco músicos activos | 597 | 151 |
+| Trabajo acumulado de actualización hasta la columna 18, modo Datos | 173,5 ms | 58,7 ms |
+| Actualizaciones durante ese tramo | 34 | 21 |
+| Archivos publicados, peso total en disco | 10.694.070 B | 7.576.474 B |
+
+La portada dejó de precargar seis mapas ajenos al recorrido. El catálogo y la línea de tiempo usan miniaturas, y el escenario usa retratos ajustados a su tamaño. Los mapas originales siguen siendo la fuente del análisis y de la vista principal. La cuadrícula se dibuja una vez por fotograma o cambio de contraste. El cursor y el sombreado se actualizan por separado. La banda usa los niveles del secuenciador para su actividad visual. Se retiraron temporizadores de un retrato anterior que no se mostraba y un canal de reverberación que no recibía audio. La reverberación por instrumento se conserva.
+
+Las cinco animaciones WebP bajaron de 3,90 MB a 2,03 MB con la misma secuencia y duración de fotogramas. Las 50 narraciones bajaron de 2,99 MB a 1,47 MB y se descargan al reproducirlas. Esta comparación mide un navegador de laboratorio. El tiempo de portada fue similar en ambas versiones y los bytes transferidos corresponden a respuestas locales completadas en cada hito.
+
+La prueba de memoria repitió 25 cargas de imagen y cambios de sección mediante el control de archivos del navegador. Los conteos de nodos y escuchadores quedaron estables, y solo quedó una URL de imagen activa. Al cerrar la aplicación se liberó esa URL. La prueba de audio programó 108 pasos en los dos modos con un bloqueo inducido de 200 ms. Ningún oscilador se programó en el pasado.
+
+Para repetir la comparación, genera cada versión en un directorio nuevo y usa el mismo equipo y configuración de navegador. Ejecuta el benchmark con la opción `--gzip`.
+
+## Mediciones históricas de TerraSonic
 
 Se reconstruyó `origin/main` en `59310ac43cd25e76cc68022a109326ca5cb27712` mediante `git archive`, sin cambiar ninguna rama. Tanto esa base como la revisión se sirvieron por HTTP local con el mismo fixture: viewport 390×844, DPR 1, toque/móvil emulado, CPU ×4, latencia 150 ms, descarga 200 KiB/s, subida 100 KiB/s, caché deshabilitada y movimiento reducido. Cada serie usa tres contextos nuevos y una visita con idioma español/preferencias configuradas. No se ejecutaron otros recorridos del proyecto al mismo tiempo.
 

@@ -15,7 +15,7 @@ const measureVitals = process.argv.includes('--vitals');
 const useGzip = process.argv.includes('--gzip');
 const contentTypes = {
   ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
-  ".css": "text/css", ".woff2": "font/woff2",
+  ".mp3": "audio/mpeg", ".css": "text/css", ".woff2": "font/woff2",
   ".png": "image/png", ".webp": "image/webp", ".glb": "model/gltf-binary",
 };
 
@@ -53,7 +53,7 @@ async function main() {
   const report = { base, profile, browserVersion:browser.version(), recordedAt:new Date().toISOString(),host:{platform:os.platform(),release:os.release(),totalMemoryBytes:os.totalmem(),freeMemoryAtStart:os.freemem()},
     indexSha256:createHash('sha256').update(fs.readFileSync(path.join(site,'index.html'))).digest('hex'),
     visit:'Returning visitor: Spanish and configured preferences saved in a fresh browser context',
-    audioFixture:'Final gain output silenced in the fixture; sound-effect computation remains enabled as configured. No human listening.',
+    audioFixture:'Final output silenced. Narration and navigation effects are off to isolate playback.',
     bytesDefinition:'CDP encoded bytes of completed local responses at the milestone; cancelled/in-flight responses can be incomplete. File inventory is exact uncompressed disk size.',
     assets:{files:files.length,totalBytes:files.reduce((total,file)=>total+file.bytes,0),models:files.filter(file=>file.path.endsWith('.glb')),index:files.find(file=>file.path==='index.html')},
     samples: [], failures: [] };
@@ -64,8 +64,8 @@ async function main() {
         reducedMotion: profile.reducedMotion, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
       await context.addInitScript(() => {
         localStorage.setItem('ts_lang', 'es');
-        localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
-        Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
+        localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{voice:false,sfx:false}}));
+        Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;const before=performance.now();try{return original.apply(this,args);}finally{window.__stateTimes?.push(performance.now()-before);}};}});
         const Native=window.AudioContext||window.webkitAudioContext;
         if(typeof Native==='function')window.AudioContext=class extends Native{createGain(){const node=super.createGain(),connect=node.connect.bind(node);node.connect=(destination,...args)=>{if(destination===this.destination){const silent=super.createGain();silent.gain.value=0;connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return node;}};
       });
@@ -120,11 +120,29 @@ async function main() {
       await page.waitForFunction(()=>window.__app?.cur());
       await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
       const listenMs = performance.now() - listen;
+      const listenBytes = {...bytes};
+      const playback = await page.evaluate(() => {
+        const app = window.__app;
+        app.setEngine('raw');
+        app.setBandMute(app.allMute(false));
+        window.__stateTimes = [];
+        return { elements: document.querySelectorAll('.uni *').length };
+      });
+      await page.locator('#tour-play button').click();
+      await page.waitForFunction(() => window.__app?.state.playing);
+      await page.waitForFunction(() => window.__app?.state.col >= 18);
+      const work = await page.evaluate(() => {
+        const times = window.__stateTimes;
+        delete window.__stateTimes;
+        return { renders: times.length, renderMs: times.reduce((sum, value) => sum + value, 0), maxRenderMs: Math.max(...times) };
+      });
+      await page.locator('#tour-play button').click();
+      Object.assign(playback, work);
       const band = performance.now();
       await page.locator("#tour-nav button").nth(1).click();
       await page.locator('.bportrait-live').waitFor();
       const bandControlsMs=performance.now()-band;
-      await page.locator(".bportrait-live[data-rendered]").waitFor({ timeout: 120000 });
+      await page.waitForFunction(() => {const portrait=document.querySelector(".bportrait-live");return portrait instanceof HTMLImageElement ? portrait.complete && portrait.naturalWidth>0 : portrait?.hasAttribute("data-rendered");});
       const bandMs = performance.now() - band;
       let vitals;
       if(measureVitals)vitals=await page.evaluate(()=>{
@@ -135,9 +153,9 @@ async function main() {
         }
         return {...__labVitals,cls,maxScriptedInteractionMs:Math.max(0,...__labVitals.events.map(entry=>entry.duration))};
       });
-      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, totalBytes: { ...bytes },freeMemoryBeforeRun,freeMemoryAfterRun:os.freemem(),
+      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, listenBytes, playback, totalBytes: { ...bytes },freeMemoryBeforeRun,freeMemoryAfterRun:os.freemem(),
         ...(measureVitals?{homeVitals,vitals,diagnostic:'Extra 3 s before interaction; LCP/CLS and scripted Event Timing only, not field INP'}:{}),
-        modelsRendered: await page.locator("ts-avatar[data-rendered]").count() });
+        portraitDecoded: true });
       fs.mkdirSync(path.dirname(output), { recursive: true });
       fs.writeFileSync(output, JSON.stringify(report, null, 2));
       const latest=report.samples.at(-1);

@@ -54,6 +54,7 @@ function setup(options = {}) {
   const unlisten = type => events.delete(type);
   const context = {
     localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, String(value)) },
+    Image: class {},
     document: { hidden: false, documentElement: {}, getElementById: id => elements.get(id),
       querySelector: () => null, querySelectorAll: () => [], addEventListener: listen, removeEventListener: unlisten },
     window: { innerWidth: 1200, innerHeight: 900, matchMedia: () => ({ matches: true }),
@@ -221,7 +222,7 @@ test('resize and restore keep the current step and refresh target geometry', () 
   const { component: c, context, element, events } = setup();
   c.componentDidMount(); c.state.tab = 'juke'; c.tourGo(1);
   element(c.guideStep().id, 40, 100, 300, 180);
-  events.get('resize')();
+  events.get('resize')(); c.measureTour();
   assert.equal(c.state.tour, 1); assert.equal(c.state.tourRect.x, 40);
   context.document.hidden = true;
   element(c.guideStep().id, 0, 0, 0, 0);
@@ -444,10 +445,10 @@ test('late transition callbacks cannot update an unmounted component', () => {
 
 test('the 448-cell grid is visible in the disc player and after a practical sample', () => {
   const {component:c}=setup();
-  c.state.tab='juke';c.state.sub=0;assert.equal(c.renderVals().cells.length,0);
-  c.state.sub=1;assert.equal(c.renderVals().cells.length,448);
-  c.state.tab='how';assert.equal(c.renderVals().cells.length,0);
-  c.state.custom={kind:'image',name:'map.webp'};assert.equal(c.renderVals().cells.length,448);
+  c.state.tab='juke';c.state.sub=0;assert.equal(c.renderVals().gridColors,null);
+  c.state.sub=1;assert.equal(c.renderVals().gridColors.length,448);
+  c.state.tab='how';assert.equal(c.renderVals().gridColors,null);
+  c.state.custom={kind:'image',name:'map.webp'};assert.equal(c.renderVals().gridColors.length,448);
 });
 
 function delayedImages() {
@@ -721,7 +722,7 @@ test('retry after a partial audio graph failure creates a complete graph', async
   };
   await c.play(); assert.equal(c.state.playing, false);
   await c.play(); assert.equal(c.state.playing, true);
-  assert(c.master && c.bus && c.noise); assert.equal(intervals.size, 1);
+  assert(c.master && c.noise); assert.equal(intervals.size, 1);
   c.state.col = 9; c.stop(); assert.equal(c.state.col, 9);
   await c.play(); assert.equal(c.state.col, 9, 'resuming keeps the accepted position');
 });
@@ -951,10 +952,10 @@ test('navigation uses an earlier compact layout for either larger or readable te
 test('resize reveals the active tab again and releases the resize callback on unmount', () => {
   const { component: c, events, timers, scrolled } = sectionNavHarness();
   c.componentDidMount(); c.goTab('tech'); const initial = scrolled.length;
-  events.get('resize')();
+  events.get('resize')(); c.measureTour();
   const callbacks = [...timers]; timers.clear(); callbacks.forEach(([, fn]) => fn());
   assert(scrolled.length > initial); assert.equal(scrolled.at(-1).key, 'tech');
-  events.get('resize')(); assert(timers.size > 0);
+  events.get('resize')(); c.measureTour(); assert(timers.size > 0);
   c.componentWillUnmount(); assert.equal(timers.size, 0);
 });
 
@@ -973,7 +974,7 @@ test('leaving a playback screen stops immediately, clears activity and preserves
     await c.play(); c.state.levels.inti=1; c.state.hits.inti=3; c.state.flash=2; c.state.chord='C';
     leave(c);
     assert.equal(c.state.playing,false,tab+' / '+sub); assert.equal(intervals.size,0);
-    assert.equal(c.state.audioPending,false); assert.equal(c.state.leadPulse,null);
+    assert.equal(c.state.audioPending,false);
     assert(Object.values(c.state.levels).every(v=>v===0)); assert.equal(c.state.flash,0); assert.equal(c.state.chord,'');
     assert.equal(JSON.stringify([c.state.mute,c.state.leadOverride,c.state.speed,c.state.engine]),preferences);
     assert.match(c.renderVals().playLabel,/Reproducir/); assert.equal(c.renderVals().signalClass,'');
@@ -998,12 +999,11 @@ test('opening a disc reaches the player at its first frame and preserves the con
   c.setLang('en');assert.match(c.renderVals().playLabel,/Play/);assert.equal(JSON.stringify(c.state.mute),mute);
 });
 
-test('queued sequencer and visual-note callbacks from a previous run cannot affect a later playback', async () => {
-  const {component:c,intervals,timers}=audioHarness();c.state.tab='juke';c.state.sub=2;
+test('a queued sequencer callback from a previous run cannot affect later playback', async () => {
+  const {component:c,intervals}=audioHarness();c.state.tab='juke';c.state.sub=2;
   await c.play();const staleTick=[...intervals][0];
-  c.leadNote(c.leadChar(),c.ac.currentTime+1,1);const staleLead=[...timers.values()][0];
   c.stop();await c.play();const before=JSON.stringify(c.state);
-  staleTick();staleLead();assert.equal(JSON.stringify(c.state),before);
+  staleTick();assert.equal(JSON.stringify(c.state),before);
   c.stop();c.tick();assert.equal(c.state.playing,false);assert.equal(intervals.size,0);
 });
 

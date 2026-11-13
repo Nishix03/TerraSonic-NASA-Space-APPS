@@ -52,10 +52,10 @@ def build(destination: Path) -> None:
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
-    for folder in ("fotogramas", "fotogramas-anteriores", "brisa"):
+    for folder in ("fotogramas", "fotogramas-anteriores", "brisa", "miniaturas"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     for musician in sorted(musicians):
-        for filename in ("miniatura-banda.webp", "pose-banda.webp", "pose-banda-animada.webp"):
+        for filename in ("miniatura-banda.webp", "escenario.webp", "pose-banda.webp", "pose-banda-animada.webp"):
             sprite = Path("sprites") / musician / filename
             (destination / sprite).parent.mkdir(parents=True, exist_ok=True)
             copy2(prototype / sprite, destination / sprite)

@@ -1338,7 +1338,12 @@ a{color:inherit}
 .px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:12px}
 .px .uni .views>.vpanel{display:grid;grid-row:auto;grid-template-rows:auto auto auto;min-width:0;align-content:start}
 .px .uni .views .mapbox,.px .uni .views .mbox{aspect-ratio:560/320;min-height:0;height:auto;width:100%}
-.px .uni .views .mbox .heard{position:absolute;inset:0}
+.px .uni .views .mbox .heard{position:absolute;inset:0;display:block;width:100%;height:100%;image-rendering:pixelated}
+.px .grid-dim{position:absolute;inset-block:0;left:0;background:#070b1470;pointer-events:none}
+.px .uni .scanline{left:0;width:calc(100% / 28);transform:translateX(var(--scan-x));transition:transform 110ms linear}
+.px.reduce-motion .uni .scanline{transition:none}
+@media(prefers-reduced-motion:reduce){.px .uni .scanline{transition:none}}
+.px .grid-dim-after{right:0}
 .px .map-legend{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;min-width:0}
 .px .map-legend h2{grid-column:1/-1;font:600 .88em/1.3 var(--head)}
 .px .legend-scale,.px .legend-labels{display:grid;grid-column:1}
@@ -1682,7 +1687,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <figcaption class="vcap"><span class="muted">{{mapSource}}</span></figcaption>
 <div class="mapbox">
 <img decoding="async" fetchpriority="high" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
-<div aria-hidden="true" class="scanline" style="left: {{scanLeft}}"></div>
+<div aria-hidden="true" class="scanline" style="--scan-x: {{scanLeft}}"></div>
 <sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
 <div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 1px dashed {{silboBox}}; transition: border-color .4s"></div>
 </sc-if>
@@ -1697,8 +1702,10 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <figure id="tour-machine" class="vpanel">
 <figcaption class="vcap"><span class="sr">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
 <div class="mbox" aria-hidden="true">
-<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
-<div class="scanline" style="left: {{scanLeft}}"></div>
+<canvas class="heard" width="280" height="160" data-grid="{{gridColors}}"></canvas>
+<div class="grid-dim" style="width:{{gridBefore}}"></div>
+<div class="grid-dim grid-dim-after" style="left:{{gridAfter}}"></div>
+<div class="scanline" style="--scan-x: {{scanLeft}}"></div>
 </div>
 <aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
 <h2 id="map-legend-title">{{player.legendTitle}}</h2>
@@ -1730,7 +1737,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div id="tour-strip">
 <div class="timeline" role="group" aria-label="{{tx.timelineAria}}">
 <sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
-<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
+<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" loading="lazy" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
 </sc-for>
 </div>
 </div>
@@ -2910,16 +2917,15 @@ class Component extends DCLogic {
     this.state.tutorialFeedback = null;
     this.state.legendSelection = null;
     this.state.speaking = false;
-    this.state.leadPulse = null;
-    this.leadTimers = new Set();
-    this.leadPulseId = 0;
     this.bandTimer = null; this.bandTurn = 0; this.bandRaf = null; this.bandRaf2 = null; this.bandPrevious = null;
     this.guideProgress = Object.create(null);
     this.loadEpoch = 0; this.fileRun = 0; this.imageLoads = Object.create(null); this.disposed = false;
     this.pendingImageUrl = null;
+    this.frameColumns = new WeakMap();
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
   }
-  componentDidMount() { this.loadDisc(this.state.disc); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); if (self.state.tour) self.measureTour(); }, 200);
+  componentDidMount() {
+    var self = this;
     this.onDiscPointer = function (event) {
       if (!self.discPointerOpening) return;
       if (event.detail < 2) { self.discPointerOpening = false; return; }
@@ -2935,7 +2941,6 @@ class Component extends DCLogic {
     // La guía vuelve a medir su objetivo cuando la ventana cambia de tamaño, se desplaza, se minimiza o vuelve a estar visible.
     this.onTourLayout = function () {
       if (!self.state.tour) return;
-      self.measureTour();
       cancelAnimationFrame(self.tourRaf);
       self.tourRaf = requestAnimationFrame(function () { self.measureTour(); });
     };
@@ -2981,16 +2986,8 @@ class Component extends DCLogic {
     this.ensureNavVisible();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!self.disposed) self.ensureNavVisible(); });
     this.syncPreferenceMotion();
-    this.onVoicesChanged = function () {
-      if (self.disposed) return;
-      var voices = [];
-      try { voices = window.speechSynthesis.getVoices(); } catch (ignored) {}
-      self.setState({ voiceLanguages: voices.map(function (voice) { return voice.lang; }) });
-    };
-    if (window.speechSynthesis && typeof window.speechSynthesis.getVoices === 'function') {
-      this.onVoicesChanged();
-      window.speechSynthesis.addEventListener?.('voiceschanged', this.onVoicesChanged);
-    }
+    var viewport = window.visualViewport;
+    this.setState({ vw: viewport ? viewport.width : window.innerWidth, vh: viewport ? viewport.height : window.innerHeight });
     if (this.state.showPreferences) { this.setPreferencesInert(true); this.focusPreferences(); }
   }
   closeMenus(restoreFocus) {
@@ -3268,7 +3265,12 @@ class Component extends DCLogic {
     this.tourTalk = (this.tourTalk || 0) + 1;
     this.guideProgress[this.guideKey()] = n;
     var self = this;
-    this.setState(patch, function () { self.focusTourTarget(); var heading = document.getElementById('tour-t'); if (heading) heading.focus({ preventScroll: true }); });
+    this.setState(patch, function () {
+      if (patch.sub === 1 && s.tab === 'juke') self.loadDisc(self.state.disc);
+      self.focusTourTarget();
+      var heading = document.getElementById('tour-t');
+      if (heading) heading.focus({ preventScroll: true });
+    });
     if (s.voice) this.narrateBrisa(st);
   }
   tourClose(keepTutorialState) {
@@ -3353,15 +3355,9 @@ class Component extends DCLogic {
       (event.shiftKey ? last : first).focus({ preventScroll: true });
     }
   }
-  syncAnims() {
-    if (this.state.tab === 'band' || !document.getAnimations || document.hidden) return;
-    var t0 = this.state.playing ? (this.playT0 || 0) : 0;
-    document.getAnimations().forEach(function (an) { if (an.animationName === 'sprplay' && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
-  }
   componentWillUnmount() {
     if (this.disposed) return;
     this.setPreferencesInert(false);
-    if (window.speechSynthesis) window.speechSynthesis.removeEventListener?.('voiceschanged', this.onVoicesChanged);
     this.disposed = true;
     if (this.discPointerRoot) {
       this.discPointerRoot.removeEventListener('mousedown', this.onDiscPointer, true);
@@ -3371,7 +3367,6 @@ class Component extends DCLogic {
     this.revokeCustom();
     this.setMoreInert(false);
     this.moreReturnFocus = null;
-    clearInterval(this.syncTimer);
     clearTimeout(this.guideTimer); clearTimeout(this.tourSettle); clearTimeout(this.tourSettle2);
     cancelAnimationFrame(this.tourRaf);
     clearTimeout(this.tourResizeTimer);
@@ -3457,7 +3452,7 @@ class Component extends DCLogic {
     var keep = s.an['5_0'] ? { '5_0': s.an['5_0'] } : {}, disc = s.disc, self = this;
     this.setState({ set: name, frame: s.disc < 5 ? Math.min(s.frame, DISCS[s.disc].files.length - 1) : s.frame, col: -1, an: keep,
       caption: (name === 'eic' ? T('Discos con fotogramas oficiales del EIC (2024–2026).', 'Discs with official EIC frames (2024–2026).') : T('Discos con imágenes de NASA GIBS / Worldview (2010–2023).', 'Discs with NASA GIBS / Worldview images (2010–2023).')) + T(' Elige uno y pulsa Reproducir.', ' Pick one and press Play.') },
-      function () { if (disc < 5) self.loadDisc(disc); });
+      function () { if (disc < 5 && self.state.tab === 'juke' && self.state.sub === 1) self.loadDisc(disc); });
   }
   profile() {
     var a = arguments.length ? arguments[0] : this.cur();
@@ -3506,7 +3501,7 @@ class Component extends DCLogic {
     mute[key] = false;
     this.melDeg = null;
     var self = this;
-    this.setState({ leadOverride: override, leadPulse: null, mute: mute, chord: '',
+    this.setState({ leadOverride: override, mute: mute, chord: '',
       caption: lead ? T('Protagonista: ', 'Lead: ') + lead.name + '.' : T('El protagonista sigue la sugerencia del disco.', 'The lead follows the disc’s suggestion.')
     }, function () {
       if (was) self.play();
@@ -3517,6 +3512,19 @@ class Component extends DCLogic {
     var selected = d === this.state.disc ? Math.max(0, Math.min(DISCS[d].files.length - 1, this.state.frame)) : 0;
     this.analyze(d, selected);
     for (var f = 0; f < DISCS[d].files.length; f++) if (f !== selected) this.analyze(d, f);
+  }
+  thumbnail(d, f) {
+    return 'miniaturas/' + this.url(d, f).replace(/\.[^.]+$/, '.webp');
+  }
+  gridColors(analysis, contrast) {
+    var missing = contrast ? '#000000' : '#232A4A';
+    var cached = this.gridCache;
+    if (!cached || cached.analysis !== analysis || cached.missing !== missing) {
+      var colors = analysis ? analysis.cells.map(function (value) { return value === null ? missing : rampColor(value); })
+        : Array(448).fill(missing);
+      cached = this.gridCache = { analysis: analysis, missing: missing, colors: colors };
+    }
+    return cached.colors;
   }
   frameTag(d, f) {
     if (d === 5) return this.state.custom ? uiLabel(this.state.custom) : T('tu archivo', 'your file');
@@ -3604,7 +3612,7 @@ class Component extends DCLogic {
         if (self.state.voice && !self.state.tutorial && !self.state.showPreferences) self.narrateBrisa(self.sectionNarration());
         if (self.state.tab === 'juke') {
           var sub = self.state.sub;
-          if (sub === 1 && patch.disc != null) self.loadDisc(patch.disc);
+          if (sub === 1) self.loadDisc(self.state.disc);
           var headingId = ['disc-library-title', 'player-title', null][sub];
           var heading = headingId && document.getElementById(headingId);
           if (heading) heading.focus({ preventScroll: true });
@@ -3665,6 +3673,7 @@ class Component extends DCLogic {
     this.stop(); this.stopSpeech(); this.lastThunder = -9; this.melDeg = null;
     this.setState({ frame: frame, col: atEnd ? 27 : position % 28 - 1, ended: atEnd,
       playerAnnouncement: T('Posición ', 'Position ') + this.formatClock(this.playerSeconds(position)) + '. ' + (was && !atEnd ? T('Reproduciendo.', 'Playing.') : T('En pausa.', 'Paused.')) }, function () {
+      if (self.state.disc < 5) self.analyze(self.state.disc, frame);
       if (was && !atEnd) self.play();
     });
   }
@@ -3737,16 +3746,17 @@ class Component extends DCLogic {
   analyze(d, f, force, operation, pendingCustom) {
     var key = d + '_' + f, self = this;
     if (this.disposed) return;
-    if (this.state.an[key] && !force) return;
+    if (!force && (this.state.an[key] || this.imageLoads[key])) return;
     var custom = pendingCustom || this.state.custom;
     var file = d === 5 ? operation || this.startFileLoad() : null;
     if (file && !this.fileLoadCurrent(file)) return;
     var epoch = this.loadEpoch, marker = {};
     this.imageLoads[key] = marker;
     var current = function () { return !self.disposed && epoch === self.loadEpoch && self.imageLoads[key] === marker && (!file || self.fileLoadCurrent(file)); };
-    var canReport = function () { return current() && (d === 5 || (self.state.disc === d && self.state.frame === f)); };
     var fail = function (message) {
-      if (!canReport()) return;
+      if (!current()) return;
+      delete self.imageLoads[key];
+      if (d !== 5 && (self.state.disc !== d || self.state.frame !== f)) return;
       if (pendingCustom) self.releasePendingImage();
       var patch = { upMsg: message, caption: uiText(message) };
       if (file && file.previousCustom) { patch.custom = file.previousCustom; patch.customMode = file.previousCustom.mode; }
@@ -3770,6 +3780,11 @@ class Component extends DCLogic {
           self.pendingImageUrl = null;
           self.revokeCustom();
           self.showCustom(readyCustom, res, uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: uiLabel(readyCustom) }), self.only(res.cold > res.warm ? 'mama' : 'inti'));
+          return;
+        }
+        delete self.imageLoads[key];
+        if (d < 5 && (self.state.disc !== d || self.state.frame !== f)) {
+          self.state.an[key] = res;
           return;
         }
         var an = Object.assign({}, self.state.an); an[key] = res;
@@ -3937,14 +3952,20 @@ class Component extends DCLogic {
     });
   }
   colInfo(a, col) {
+    var columns = this.frameColumns.get(a);
+    if (!columns) {
+      columns = [];
+      this.frameColumns.set(a, columns);
+    }
+    if (columns[col]) return columns[col];
     var w = 0, c = 0, strong = [], ext = 0, k = 0;
     for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v === null) continue; k++; if (v > 0) w += v; else c -= v; if (Math.abs(v) >= 2) strong.push([r, v]); if (v >= 4.4) ext++; }
-    return { w: k ? w / k : 0, c: k ? c / k : 0, strong: strong, ext: k ? ext / k : 0, k: k };
+    return columns[col] = { w: k ? w / k : 0, c: k ? c / k : 0, strong: strong, ext: k ? ext / k : 0, k: k };
   }
   audioContext() {
     if (!this.ac || this.ac.state === 'closed') {
       var AC = window.AudioContext || window.webkitAudioContext;
-      this.ac = null; this.master = null; this.bus = null; this.noise = null; this.reverbImpulse = null; this.audioGraph = null; this.cueBus = null;
+      this.ac = null; this.master = null; this.noise = null; this.reverbImpulse = null; this.audioGraph = null; this.cueBus = null;
       if (typeof AC !== 'function') return null;
       this.ac = new AC();
     }
@@ -3991,23 +4012,21 @@ class Component extends DCLogic {
       if (!this.master) {
         this.master = this.ac.createGain(); this.master.gain.value = this.state.masterMuted ? 0 : 0.8 * this.state.volume / 100 * (this.state.speaking ? .3 : 1);
         var comp = this.ac.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ac.destination);
-        this.bus = this.ac.createGain(); this.bus.connect(this.master);
-        var conv = this.ac.createConvolver(), irLen = Math.floor(this.ac.sampleRate * 2.4), ir = this.reverbImpulse;
+        var irLen = Math.floor(this.ac.sampleRate * 2.4), ir = this.reverbImpulse;
         if (!ir) {
           ir = this.ac.createBuffer(2, irLen, this.ac.sampleRate);
           for (var cc = 0; cc < 2; cc++) { var dd = ir.getChannelData(cc); for (var jj = 0; jj < irLen; jj++) dd[jj] = (Math.random() * 2 - 1) * Math.pow(1 - jj / irLen, 2.6); }
           this.reverbImpulse = ir;
         }
-        conv.buffer = ir; var send = this.ac.createGain(); send.gain.value = 0.3; this.bus.connect(send); send.connect(conv); conv.connect(this.master);
         if (!this.noise) {
           var len = this.ac.sampleRate; this.noise = this.ac.createBuffer(1, len, len);
           var ch = this.noise.getChannelData(0); for (var i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
         }
-        this.audioGraph = [this.master, this.bus, comp, conv, send];
+        this.audioGraph = [this.master, comp];
       }
     } catch (e) {
-      [this.master, this.bus, comp, conv, send].forEach(function (node) { try { if (node && node.disconnect) node.disconnect(); } catch (ignored) {} });
-      this.master = null; this.bus = null; this.noise = null; this.audioGraph = null;
+      [this.master, comp].forEach(function (node) { try { if (node && node.disconnect) node.disconnect(); } catch (ignored) {} });
+      this.master = null; this.noise = null; this.audioGraph = null;
       throw e;
     }
     if (ac.state !== 'running') {
@@ -4052,8 +4071,7 @@ class Component extends DCLogic {
   setBandMute(mute) {
     var self = this, levels = Object.assign({}, this.state.levels), hits = Object.assign({}, this.state.hits);
     BAND.forEach(function (b) { if (mute[b.k]) { self.retireVoice(b.k); levels[b.k] = 0; hits[b.k] = 0; } });
-    this.setState({ mute: mute, mixCustomized: true, levels: levels, hits: hits,
-      leadPulse: this.state.leadPulse && mute[this.state.leadPulse.key] ? null : this.state.leadPulse });
+    this.setState({ mute: mute, mixCustomized: true, levels: levels, hits: hits });
   }
   async previewInstrument(key) {
     if (!MUSIC[key] || this.disposed) return;
@@ -4144,7 +4162,6 @@ class Component extends DCLogic {
         var deg = 15 - p[0], oct = Math.floor(deg / 5), f = 440 * Math.pow(2, (oct * 12 + PENTA[deg % 5]) / 12) / 2;
         var onset = t + q * sp / 3;
         self2.tone('sine', f, onset, 0.12, 0.22, pan, 1.4, 'yaku');
-        self2.leadNote('yaku', onset, Math.min(0.22, sp / 3));
       });
       lv.yaku = Math.min(1, info.strong.length / 10);
     }
@@ -4156,10 +4173,6 @@ class Component extends DCLogic {
     var feel = info.k === 0 ? T('sin valores utilizables en esta columna', 'no usable values in this column') : info.w > 2 ? T('nivel positivo alto', 'high positive level') : info.w > 0.8 ? T('predominio de niveles positivos', 'positive levels dominate') : info.c > 0.8 ? T('predominio de niveles negativos', 'negative levels dominate') : T('nivel cercano a la referencia', 'level near the reference');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
     var fired = { inti: has('Inti'), mama: has('Mamacocha'), illapa: has(T('¡Illapa', 'Illapa thunders')), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 };
-    if (fired.inti) this.leadNote('inti', t, sp * 3);
-    if (fired.mama) this.leadNote('mama', t, sp * 3.8);
-    if (fired.illapa) this.leadNote('illapa', t, 0.52);
-    if (fired.silbo) this.leadNote('silbo', t, Math.max(0.9, sp * 6));
     var bp = this.bump(fired, fired.illapa, s);
     this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, '', scheduled, vibration);
   }
@@ -4198,9 +4211,11 @@ class Component extends DCLogic {
       voiceEpoch: Object.assign({}, this.voiceEpoch) });
   }
   flushPlayback(now) {
-    var self = this;
+    var self = this, latest = null, vibration = 0;
+    var events = this.state.events, previousFrame = this.state.frame, announcement;
     while (this.playbackQueue && this.playbackQueue.length && this.playbackQueue[0].at <= now + .002) {
-      var event = this.playbackQueue.shift(), frameChanged = this.state.frame !== event.frame;
+      var event = this.playbackQueue.shift(), frameChanged = previousFrame !== event.frame;
+      previousFrame = event.frame;
       var patch = Object.assign({ frame: event.frame }, event.patch), fired = Object.assign({}, event.fired);
       patch.levels = Object.assign({}, patch.levels); patch.hits = Object.assign({}, patch.hits);
       BAND.forEach(function (member) { if (self.state.mute[member.k] || (self.voiceEpoch[member.k] || 0) !== (event.voiceEpoch[member.k] || 0)) { patch.levels[member.k] = 0; patch.hits[member.k] = 0; fired[member.k] = false; } });
@@ -4211,12 +4226,17 @@ class Component extends DCLogic {
       patch.caption = '[' + this.frameTag(this.state.disc, event.frame) + ' · ' + T('columna ', 'column ') + (patch.col + 1) + '/28] ' +
         (chord ? T('acorde ', 'chord ') + chord : T('cálido +', 'warm +') + event.info.w.toFixed(1) + T(' · frío −', ' · cold −') + event.info.c.toFixed(1)) +
         (names.length ? ' · ' + names.join(' · ') : T(' · sin ataque nuevo', ' · no new attack'));
-      if (frameChanged) patch.playerAnnouncement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
+      if (frameChanged) announcement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
       this.heardThunder = event.thunder;
-      patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
-      this.setState(patch);
-      if (event.vibration) this.vibrateSafely(event.vibration);
+      events = events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      latest = patch;
+      if (event.vibration) vibration = event.vibration;
     }
+    if (latest) {
+      if (announcement) latest.playerAnnouncement = announcement;
+      this.setState(Object.assign(latest, { events: events }));
+    }
+    if (vibration) this.vibrateSafely(vibration);
   }
   scheduleAudio() {
     if (!this.ac || !this.state.playing || !this.audioCursor) return;
@@ -4311,20 +4331,17 @@ class Component extends DCLogic {
     if (!m.mama && onBeat) {
       this.note('sine', ch.root - 12, t, sp * 3.8, 0.2 + 0.12 * Math.min(1, info.c / 2), { att: 0.03, rel: 0.25, cut: 500 });
       ch.notes.forEach(function (n, q) { self.note('triangle', n, t, sp * 4, 0.03, { att: 0.35, rel: 0.7, cut: 800 + 400 * Math.min(1, info.w), detune: q % 2 ? 7 : -7, pan: q % 2 ? 0.3 : -0.3 }); });
-      this.leadNote('mama', t, sp * 3.8);
       lv.mama = 0.45 + 0.55 * Math.min(1, info.c / 2); notes.push('Mamacocha: ' + ch.label);
     }
     if (!m.inti && info.k > 0 && (info.w > 0.15 || onBeat)) {
       var base = ch.notes[[0, 1, 2, 1][col % 4] % ch.notes.length] + 12 + (info.w > 2 ? 12 : 0);
       this.marimba(base, t, 0.06 + 0.1 * Math.min(1, info.w / 3), pan); lv.inti = Math.min(1, 0.3 + info.w / 3);
-      this.leadNote('inti', t, Math.min(0.45, sp * 0.85));
       if (onBeat) notes.push('Inti: ' + ch.label);
     }
     if (!m.silbo) {
       if (s.disc !== 5 && a.coast >= 2 && col >= 22 && col <= 25) {
         var md0 = scaleMidi(prof.scale, prof.root + 12, [4, 3, 1, 0][col - 22]);
         this.flute(md0, t, sp * 1.7, 0.13, pan); lv.silbo = 1; if (col === 22) notes.push(T('Silbo canta su motivo', 'Silbo sings his motif'));
-        this.leadNote('silbo', t, sp * 1.7);
       } else {
         var best = null;
         for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v !== null && Math.abs(v) >= 1 && (!best || Math.abs(v) > Math.abs(best.v))) best = { r: r, v: v }; }
@@ -4335,7 +4352,6 @@ class Component extends DCLogic {
           var nxt = col < 27 ? this.colInfo(a, col + 1) : null;
           var duration = sp * (nxt && nxt.strong.length > 0 ? 1.9 : 1.0);
           this.flute(md, t, duration, 0.05 + 0.1 * Math.min(1, Math.abs(best.v) / 4), pan);
-          this.leadNote('silbo', t, duration);
           lv.silbo = Math.min(1, Math.abs(best.v) / 4 + 0.2); if (onBeat) notes.push('Silbo: ' + NOTE_ES[md % 12]);
         }
       }
@@ -4345,16 +4361,14 @@ class Component extends DCLogic {
       picks.forEach(function (p, q) {
         var onset = t + q * sp * 0.5;
         self.droplet(scaleMidi(pent, prof.root + 24, Math.round((15 - p[0]) / 15 * 7)), onset, 0.09, pan);
-        self.leadNote('yaku', onset, Math.min(0.22, sp * 0.5));
       });
       lv.yaku = Math.min(1, 0.3 + info.strong.length / 10);
     }
     if (!m.illapa) {
       if (info.ext >= 0.25 && col - this.lastThunder >= 2) {
         this.timpani(ch.root - 12, t, Math.min(0.5, 0.25 + info.ext)); this.noiseBurst(t, 0.25, 1.0, 700);
-        this.leadNote('illapa', t, 0.52);
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push(T('¡Illapa truena!', 'Illapa thunders!'));
-      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); this.leadNote('illapa', t, 0.4); lv.illapa = Math.max(lv.illapa, 0.3); }
+      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); lv.illapa = Math.max(lv.illapa, 0.3); }
     }
     var vibration = s.vibe && lv.illapa > 0.5 ? 100 : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
@@ -4421,21 +4435,6 @@ class Component extends DCLogic {
     this.syncVolume();
     try { window.speechSynthesis.speak(utterance); } catch (ignored) { utterance.onerror(); }
   }
-  leadNote(key, at, duration) {
-    if (key !== this.leadChar()) return;
-    var self = this, run = this.audioRun, epoch = this.voiceEpoch[key] || 0;
-    var start = setTimeout(function () {
-      self.leadTimers.delete(start);
-      if (self.disposed || run !== self.audioRun || epoch !== (self.voiceEpoch[key] || 0) || !self.state.playing || self.state.mute[key] || self.leadChar() !== key) return;
-      var id = ++self.leadPulseId;
-      self.setState({ leadPulse: { key: key, id: id, duration: duration } });
-      clearTimeout(self.leadRestTimer);
-      self.leadRestTimer = setTimeout(function () {
-        if (!self.disposed && run === self.audioRun) self.setState({ leadPulse: null });
-      }, duration * 1000);
-    }, Math.max(0, (at - this.ac.currentTime) * 1000));
-    this.leadTimers.add(start);
-  }
   async play() {
     this.settleArrivedRoute();
     if (this.disposed || this.state.trans || this.state.playing || this.state.audioPending) return;
@@ -4447,7 +4446,7 @@ class Component extends DCLogic {
       if (this.disposed || run !== this.audioRun) return;
       var go = function () {
         BAND.forEach(function (member) { if (!self.state.mute[member.k]) self.voiceInput(member.k); });
-        self.melDeg = null; self.playT0 = document.timeline.currentTime;
+        self.melDeg = null;
         var restart = self.playerPosition() >= self.playerSteps();
         self.setState(Object.assign({ playing: true, audioPending: false, ended: false,
           playerAnnouncement: T('Reproduciendo.', 'Playing.') }, restart ? { frame: 0, col: -1 } : {}));
@@ -4505,8 +4504,8 @@ class Component extends DCLogic {
       group.sources.clear();
     });
     this.voiceGroups = Object.create(null);
-    var master = this.master, nodes = this.audioGraph || [master, this.bus];
-    this.master = null; this.bus = null; this.audioGraph = null;
+    var master = this.master, nodes = this.audioGraph || [master];
+    this.master = null; this.audioGraph = null;
     var cleanup = function () { nodes.forEach(function (node) { try { if (node) node.disconnect(); } catch (ignored) {} }); };
     // Stop scheduling immediately; fade the complete dry/wet output to avoid a click.
     // A new run gets a separate graph, so reopening its output cannot revive old notes or reverb.
@@ -4532,15 +4531,11 @@ class Component extends DCLogic {
     this.timer = null;
     this.playbackQueue = []; this.audioCursor = null;
     if (this.heardThunder != null) this.lastThunder = this.heardThunder;
-    this.leadTimers.forEach(clearTimeout);
-    this.leadTimers.clear();
-    clearTimeout(this.leadRestTimer);
-    this.leadRestTimer = null;
     clearTimeout(this.previewTimer); this.previewTimer = null;
     this.retireAudioGraph();
     this.vibrateSafely(0);
-    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
-      this.setState({ playing: false, audioPending: false, previewKey: '', leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
+    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
+      this.setState({ playing: false, audioPending: false, previewKey: '', chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
     }
   }
@@ -4560,7 +4555,7 @@ class Component extends DCLogic {
     var referenceCoast = s.disc !== 5;
     var isBand = s.tab === 'band';
     var showCells = s.sub === 1 && (s.tab === 'juke' || (s.tab === 'how' && !!s.custom));
-    var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
+    var gridColors = showCells ? this.gridColors(a, hc) : null;
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
     var tog = function (k) { return function () { self.setPreference(k, !self.state[k]); }; };
@@ -4673,7 +4668,7 @@ class Component extends DCLogic {
       th: th, highContrast: hc, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
       engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes.', 'Data: derived levels converted into tones, without a chord progression.')),
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, showHarmony: melody,
-      player: this.playerVm(),
+      player: showCells ? this.playerVm() : null,
       motionClass: s.reducedMotion ? 'reduce-motion' : '',
       preferences: {
         on: s.showPreferences, title: T('¿Cómo prefieres usar EarthBeat?', 'How would you like to use EarthBeat?'),
@@ -4749,7 +4744,7 @@ class Component extends DCLogic {
         return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };
       }),
       discs: DISCS.slice(0, 5).map(function (x, k) {
-        return { thumb: self.url(k, 0), title: x.title, period: x.period,
+        return { thumb: self.thumbnail(k, 0), title: x.title, period: x.period,
           pick: function (event) {
             self.settleArrivedRoute();
             if (self.state.tab !== 'juke' || self.state.sub !== 0 || self.state.trans) return;
@@ -4768,9 +4763,11 @@ class Component extends DCLogic {
       disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),
       frameAlt: (s.disc === 5 ? T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' : T('Mapa de anomalía de temperatura del mar del Pacífico oriental, ', 'Sea surface temperature anomaly map of the eastern Pacific, ') + MES[dt.m] + T(' de ', ' ') + dt.y + '. ') + (a ? this.describeText() : ''),
       frameAnim: this.frameAnimClass(),
-      scanLeft: s.col < 0 ? '-10%' : (s.col / 28 * 100).toFixed(2) + '%',
+      scanLeft: (s.col < 0 ? -3 : s.col) * 100 + '%',
       silboBox: a && a.coast >= 2 ? th.accent : th.muted,
-      cells: cells,
+      gridColors: gridColors,
+      gridBefore: Math.max(0, s.col) / 28 * 100 + '%',
+      gridAfter: (s.col < 0 ? 100 : (s.col + 1) / 28 * 100) + '%',
       stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: referenceCoast && a.coastPixels > 0 ? (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) : '—' } : { warm: '…', cold: '…', hot: '…', coast: referenceCoast ? '…' : '—' },
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
       techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
@@ -4813,7 +4810,7 @@ class Component extends DCLogic {
       goHome: function () { self.goTab('home'); },
       skipContent: function (event) { event.preventDefault(); var main = document.getElementById('main-content'); if (main) { main.focus({ preventScroll: true }); main.scrollIntoView({ block: 'start', behavior: 'instant' }); } },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
-      strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: MESC[fd.m] + ' ' + String(fd.y).slice(2) + ' · ' + T('Ver ', 'View ') + MES[fd.m] + T(' de ', ' ') + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
+      strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: s.disc < 5 ? self.thumbnail(s.disc, f) : '', label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: MESC[fd.m] + ' ' + String(fd.y).slice(2) + ' · ' + T('Ver ', 'View ') + MES[fd.m] + T(' de ', ' ') + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playPending: s.audioPending, audioError: uiText(s.audioError),
       playLabel: s.audioPending ? T('Preparando audio…', 'Preparing audio…') : s.playing ? T('Pausar', 'Pause') : s.ended ? T('Volver a reproducir', 'Play again') : s.col >= 0 ? T('Reanudar', 'Resume') : T('Reproducir', 'Play'), playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
@@ -4833,7 +4830,7 @@ class Component extends DCLogic {
       band: band,
       stageMusicians: band.filter(function (member) { return member.on; }).map(function (member) {
         var level = s.levels[member.key] || 0;
-        return { poseUrl: 'sprites/' + member.key + '/pose-banda.webp', color: member.color,
+        return { poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
           intensity: level, playingClass: s.playing && level > .04 ? 'playing' : '' };
       }),
       stageShowBeat: melody,

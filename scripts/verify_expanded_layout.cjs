@@ -40,10 +40,15 @@ async function main(){
     await page.evaluate(()=>{const events=Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''));__app.setState({events});});
     await page.getByRole('button',{name:language==='es'?'Explícamelo fácil':'Explain it simply',exact:true}).click();
     await page.locator('#easy-explanation .easy-panel').waitFor();
-    await page.waitForFunction(()=>document.querySelectorAll('#tour-machine .heard>div').length===448);
-    assert(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>new Set(cells.map(el=>el.style.background)).size>4),'the open grid must contain the current map analysis');
+    const grid=page.locator('#tour-machine canvas.heard');
+    const colors=await grid.evaluate(canvas=>{
+      const context=canvas.getContext('2d');
+      return new Set(Array.from({length:448},(_,index)=>context.getImageData(index%28*10+4,Math.floor(index/28)*10+4,1,1).data.join(','))).size;
+    });
+    assert(colors>4,'the grid must contain the current map analysis');
     await page.evaluate(()=>__app.seekPosition(69));
-    assert.equal(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16,'the visible grid keeps exactly the current scan column highlighted');
+    const shade=await page.locator('#tour-machine .grid-dim').first().evaluate(el=>parseFloat(el.style.width));
+    assert(Math.abs(shade-12/28*100)<.01,'the scan leaves the current column undimmed');
     const label=[width,height,setting,language,engine].join('-');
     const player=await audit(page,label+' player'),end=await checkEnd(page);
     await page.evaluate(()=>__app.goTab('how',1));await page.waitForFunction(()=>!__app.state.trans);await openDetails(page);const convert=await audit(page,label+' convert'),convertEnd=await checkEnd(page);

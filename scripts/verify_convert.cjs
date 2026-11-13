@@ -39,7 +39,7 @@ async function main() {
     assert.equal(await page.locator('input[type=file]').count(),1);
     await page.locator('#tour-sample button').click();
     await page.waitForFunction(() => __app.state.custom?.kind === 'rain' && __app.cur()?.cells.length === 448);
-    assert.equal(await page.locator('#tour-machine .heard > div').count(),448);
+    assert.equal(await page.locator('#tour-machine canvas.heard').count(),1);
     assert.match(await page.locator('#player-legend').textContent(),/Bajo el promedio/);
     checks.push('NASA POWER rainfall opens a playable analysis with the right units');
     await imageInput().setInputFiles(path.join(site, 'fotogramas/ver2025_2.webp'));

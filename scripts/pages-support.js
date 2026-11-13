@@ -59,7 +59,23 @@
     const updates = compile(node.childNodes);
     for (const { name, value } of Array.from(node.attributes)) {
       if (!dynamic(value)) continue;
-      if (name.startsWith("on")) {
+      if (name === "data-grid" && tag === "canvas") {
+        node.removeAttribute(name);
+        let previous;
+        updates.push(scope => {
+          const colors = direct(value, scope);
+          if (!colors || colors === previous) return;
+          const context = node.getContext("2d");
+          if (!context) return;
+          previous = colors;
+          context.fillStyle = "#383d50";
+          context.fillRect(0, 0, node.width, node.height);
+          colors.forEach((color, i) => {
+            context.fillStyle = color;
+            context.fillRect((i % 28) * 10, Math.floor(i / 28) * 10, 9, 9);
+          });
+        });
+      } else if (name.startsWith("on")) {
         node.removeAttribute(name);
         updates.push(scope => { node[name] = direct(value, scope) ?? null; });
       } else if (name === "disabled" || name === "hidden" || name === "checked" || name === "open") {
