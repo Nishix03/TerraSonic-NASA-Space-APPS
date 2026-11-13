@@ -2,7 +2,17 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Copia GitHub Pages actual
+## Actualización de temas · 13 noviembre, 11:17 Bogotá
+
+La misma copia independiente sirve la aplicación **`9c385358604f861d9af7dfe7ac032f330df7eaf2`**, commit estático **`4514abab30c7ce8b76ce2e45c60e52d4e19b2dfa`**, fast-forward desde `bd92415`. Pages confirmó `built` para ese commit. El build tiene 103 archivos / **7.160.398 bytes**; el HTML tiene **427.594 bytes**, SHA-256 **`910ff229be45757aaa5fa12c37d4e745d0a406e1c9e20c10b83d08e7e86d61e4`**.
+
+El cambio añade claro/pizarra y conserva las opciones de alto contraste. Pasan 142 pruebas de producto, 256 estados de temas por cada uno de tres motores y los recorridos del menú con nueve controles y texto ampliado. Dos recorridos HTTP locales del build exacto pasaron antes de actualizar. En público, `verify_public.cjs --full-player` repitió ambos catálogos y modos, normal/sin WebGL, los cinco modelos, CSV y 96 huellas, sin errores ni escrituras. Una comprobación adicional en 390×844 y 1342×605 accionó «Modo claro» mediante Espacio, conservó estado/archivo/columna y confirmó persistencia tras recargar, portada completa y ausencia de desbordamiento horizontal.
+
+Evidencias: `_work/github-preview/browser-public-9c38535-full/results.json`, `browser-public-9c38535-themes-settled/results.json`, `pushed-9c38535.json`, `readback-9c38535.json` y `official-after-9c38535.json`. La primera comprobación adicional capturó el CSV mientras aún terminaba su conversión; se conserva como fallo del fixture y se corrigió esperando el estado de la columna antes de comparar. No se cambió producto para resolver esa carrera de la prueba.
+
+A las 11:19 de Bogotá, main remoto seguía en `59310ac`, el local en `a8f8203`, `.github/` sin diferencias y la web oficial con su huella anterior. **Esta publicación no rehace los personajes:** siguen visibles los modelos rechazados por el usuario, hasta terminar y comprobar la nueva revisión artística por la interfaz de Blender. La copia de estudio no se exportó ni se presenta como trabajo terminado.
+
+## Copia GitHub Pages anterior · c4f7aca
 
 La copia estática independiente está en [Alvaro-mendoza-12/terrasonic-piero-preview-20261113](https://github.com/Alvaro-mendoza-12/terrasonic-piero-preview-20261113), repositorio público nuevo, ID `1456496176`. Se verificó identidad `Alvaro-mendoza-12`, ID `203316642`, y permiso administrador exclusivamente en esta copia antes de habilitar Pages. El conector GitHub disponible no ofrecía creación de repositorios/Pages; se usaron Git y la API oficial con el credencial existente del gestor, solo en memoria. No se copiaron credenciales al repositorio, archivos públicos ni URL.
 

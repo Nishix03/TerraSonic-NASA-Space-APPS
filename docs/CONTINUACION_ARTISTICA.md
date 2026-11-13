@@ -4,7 +4,7 @@ El 13 de noviembre el usuario rechazó los personajes volumétricos del checkpoi
 
 Se revisaron las cinco referencias `assets/avatares/*/banda/pose-epica.png`. La nueva dirección conserva tocado curvo, prendas/adornos y quena de Silbo; sombrero escalonado, chaqueta y marimba de Inti; cabello ondulado, vestido amplio y arpa de Mamacocha; cabeza/proporciones infantiles, capucha/capa y percusión de Yaku; sombrero/gafas, poncho y tambor de Illapa. El color de las ilustraciones es monocromático de acento: no acredita materiales o vestuario históricos nuevos.
 
-Blender 5.2.2 se abrió con Computer Use. La escena se guardó por su interfaz como `assets/avatares/terrasonic-banda-estudio.blend`, separada de la versión anterior. Se trabaja en edición de malla, con la referencia examinada; no se usa consola Python ni scripts para construir los nuevos cambios. La copia previa y sus GLB permanecen recuperables en Git y en los ZIP técnicos. El guardado inicial también actualizó los metadatos del .blend previo, sin nuevas modificaciones de geometría en esa copia.
+Blender 5.2.2 se abrió con Computer Use. La escena se guardó por su interfaz como `assets/avatares/terrasonic-banda-estudio.blend`, separada de la versión anterior. Se trabaja en edición de malla, con la referencia examinada; no se usa consola Python ni scripts para construir los nuevos cambios. La copia previa y sus GLB permanecen recuperables en Git y en los ZIP técnicos. Se restauró el .blend canónico exactamente al blob del checkpoint, conservando aparte el guardado GUI inicial; el trabajo nuevo solo vive en la copia de estudio.
 
 Trabajo en curso: Yaku aislado en vista frontal, selección de cabeza/capucha y ajuste de proporción 1,25. Falta desarrollar silueta, rostro, prendas y detalles, revisar perfil/reverso, materiales y animación antes de exportar o reemplazar los modelos publicados. Una escala parcial no es la entrega artística solicitada. Se añadirá tema claro y se suavizará el oscuro con contraste verificable. No se publica esta revisión de personajes como terminada.
 
@@ -14,4 +14,22 @@ Tema nuevo local: pizarra azul oscuro (#171E2B), superficies separadas y modo cl
 
 La repetición corregida completó **256 estados por motor** en Chromium, Firefox y WebKit: dos ventanas CSS (390×844 y 1342×605), español/inglés, claro/oscuro, alto contraste y las secciones/fichas. Cero errores JS, desbordamientos o infracciones detectadas por axe en esas pasadas; no es certificación ni zoom nativo. El control de tema se accionó con teclado y su persistencia se comprobó recargando. La elección no cambia archivo, fecha, posición, reproducción, mezcla ni ayuda. El menú de nueve controles pasó además los recorridos con texto ampliado. Evidencia: `_work/themes/readable-chromium/results.json`, `_work/themes/firefox/themes/results.json`, `_work/themes/webkit/themes/results.json` y sus `preferences`/`run.json`. Capturas claras de portada y ficha de Silbo revisadas visualmente.
 
-El tema se prepara para la misma vista independiente; hasta comprobar el despliegue no se atribuye a la URL. Los modelos publicados siguen siendo el checkpoint rechazado por el usuario: las pruebas técnicas anteriores no validan su calidad artística. La nueva escena de estudio todavía no se exporta a GLB.
+El tema ya está publicado y comprobado en la misma vista independiente, fuente `9c38535`, estático `4514aba`; [procedencia](PUBLICACION.md). Los modelos publicados siguen siendo el checkpoint rechazado por el usuario: las pruebas técnicas anteriores no validan su calidad artística. La nueva escena de estudio todavía no se exporta a GLB.
+
+La escena de estudio se guardó por Ctrl+S a las 11:17 de Bogotá. Además de cabeza y puntas, contiene una primera capa obtenida por edición de la pieza dorsal: hombros más estrechos, borde separado de la espalda y color verde mediante UV en el atlas existente. Se revisaron frente y reverso en el viewport. Sigue siendo una forma preliminar sin pliegues o confección suficientes. No hay nuevos clips, rig revisado ni exportación aprobada.
+
+El usuario confirmó que está utilizando Blender para inspeccionar los diseños. Computer Use detectó actividad concurrente y selecciones/contextos cambiantes; se dejó de enviar entradas para no interferir. Para retomar hace falta disponibilidad de la ventana, no autorización nueva para el encargo. El próximo trabajo es reconstruir las formas con las referencias visibles, no seguir dando por suficiente el volumen anterior.
+
+## Referencias originales comprobadas
+
+El enlace repetido por el usuario se revisó en GitHub y en el historial local. Las cinco `pose-epica.png` se incorporaron en `bcf1412`. Sus imágenes y los veinte keyframes coinciden por SHA-256 con `main` `59310ac`: **25 imágenes intactas**. También se examinaron las hojas de sprites anteriores de `104e7df` y el árbol completo de la rama `mejoras/pagina`: no apareció una referencia de modelado adicional. Los `*/imagegen/modelo-referencia.png` citados por los prompts no están en esos árboles; las cinco ilustraciones disponibles sí permiten trabajar su identidad. Evidencia de integridad: `_work/original-art-audit/results.json`.
+
+| Personaje | Rasgos que deben conservarse | Diferencia que aún debe resolverse |
+| --- | --- | --- |
+| Silbo | Tocado curvo amplio, rostro anciano amable, trenzas, túnica ornamentada y quena diagonal | Túnica demasiado rígida/corta, cabeza y tocado simplificados, postura poco expresiva |
+| Inti | Sombrero de ala muy ancha con corona escalonada y sol, cabello en mechones, chaqueta, marimba y dos baquetas | Sombrero y cabello con poca semejanza, cara genérica, indumentaria simplificada |
+| Mamacocha | Cabello ondulado abundante, trenzas, pendientes de pez, chal de red, vestido amplio y arpa | Silueta del vestido y cabello insuficiente, ornamentos y expresión ausentes |
+| Yaku | Cara infantil con ojos amplios, cabello ondulado, capucha amplia con tres puntas/gafas, abrigo con bolsillos, botas palmeadas, tres botellas y dos baquetas | Ojos saltones pequeños, pelo casi ausente, piernas largas, prenda rígida, botellas en una barra y falta de las baquetas visibles de la pose |
+| Illapa | Sombrero con gafas, cabello rizado, poncho con cenefa y flecos, sash, tambor y baqueta | Poncho y accesorios simplificados, cara/pelo genéricos y silueta poco fiel |
+
+La comparación debe hacerse primero frente a frente y después en perfil/reverso; rig y animación se revisan sobre una geometría reconocible. Estas observaciones no son aprobación cultural ni una promesa de calidad cinematográfica.

@@ -10,7 +10,7 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
-La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve el checkpoint `c4f7aca`, verificado sin credenciales: HTML y 96 activos idénticos al paquete, ambos catálogos/modos, saltos con teclado, CSV multicolumna, cinco personajes y respaldo sin WebGL. Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
+La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve `9c38535`, con modo claro y oscuro azul pizarra. Se verificaron sin credenciales el HTML y 96 activos, ambos catálogos/modos, teclado, CSV multicolumna y respaldo sin WebGL. El cambio de tema conserva el archivo y la columna y persiste al recargar. **Los personajes visibles todavía corresponden a la propuesta rechazada; la revisión artística no está terminada.** Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
 
 La entrega y sus comprobaciones se resumen en [ENTREGA_2026-11-13.md](docs/ENTREGA_2026-11-13.md).
 
