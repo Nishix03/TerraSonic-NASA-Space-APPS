@@ -1,7 +1,7 @@
 // The team's original 2D poses and four registered keyframes. No WebGL or mesh.
 const keys = new Set(['silbo','inti','mama','yaku','illapa']);
 const media = matchMedia('(prefers-reduced-motion: reduce)');
-const reduced = () => media.matches || document.documentElement.dataset.tsReducedMotion === 'true';
+const reduced = () => document.documentElement.dataset.tsMotionMode === 'full' ? false : document.documentElement.dataset.tsMotionMode === 'reduced' || media.matches || document.documentElement.dataset.tsReducedMotion === 'true';
 const lang = () => document.documentElement.lang.startsWith('es') ? 'es' : 'en';
 const t = (es,en) => lang()==='es' ? es : en;
 const version = new URL(import.meta.url).search;
@@ -154,6 +154,6 @@ class Controls extends HTMLElement {
 customElements.define('ts-sprite-controls',Controls);
 function refresh(resetPermission=false){for(const a of instances){if(resetPermission)a.allowMotion=false;if(a.motionBlocked()||document.hidden){a.epoch++;a.cancel(true);}else a.sync();}for(const c of document.querySelectorAll('ts-sprite-controls'))c.update();}
 media.addEventListener('change',()=>refresh(true));
-new MutationObserver(records=>refresh(records.some(r=>r.attributeName==='data-ts-reduced-motion'))).observe(document.documentElement,{attributes:true,attributeFilter:['data-ts-reduced-motion','lang']});
+new MutationObserver(records=>refresh(records.some(r=>r.attributeName==='data-ts-reduced-motion'||r.attributeName==='data-ts-motion-mode'))).observe(document.documentElement,{attributes:true,attributeFilter:['data-ts-reduced-motion','data-ts-motion-mode','lang']});
 document.addEventListener('visibilitychange',()=>refresh());
 window.addEventListener('pagehide',()=>{for(const a of instances){a.epoch++;a.cancel(true);}});

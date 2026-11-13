@@ -60,7 +60,7 @@ Preferir SVG inline y Web Animations API/CSS. Las órbitas, ondas, coordenadas y
 
 Mostrarla solo una vez por sesión. No repetir al refrescar ni navegar; incluir «Repetir introducción» para jurados. Siempre ofrecer «Saltar introducción», alcanzable con teclado, y Escape. No reproducir audio ni vibración. La bienvenida de accesibilidad tiene prioridad; si se elige la guía, la introducción no debe taparla.
 
-Si el sistema o la aplicación reducen movimiento, omitir la entrada y dejar una composición estática final. Si falla la animación o almacenamiento, conservar el contenido y la navegación. No dejar capas invisibles capturando clics, temporizadores sin cancelar o elementos permanentemente transparentes.
+Si el sistema o la aplicación reducen movimiento, omitir la entrada automática y mostrar una acción clara: «Activar animaciones y ver intro». Esa acción debe activar realmente movimiento para la web y reproducir la secuencia; no abrir una lámina estática. Guardar la elección expresa y ofrecer una pausa visible. No cambiar ajustes del dispositivo. Si falla la animación o el almacenamiento, conservar contenido y navegación. No dejar capas invisibles capturando clics, temporizadores sin cancelar o elementos permanentemente transparentes.
 
 ### 5. Universo persistente y estados visuales
 

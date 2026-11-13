@@ -1358,6 +1358,25 @@ test('the four preferences combine and persist without asking for a diagnosis or
   for (const key of ['voice','big','contrast','reducedMotion']) assert.equal(next.state[key],true);
 });
 
+test('explicit animation activation overrides reduced motion only for this site and persists', () => {
+  const {component:c,context,storage}=setup();context.window.matchMedia=()=>({matches:true});
+  assert.equal(!!c.bandReduced(),true);assert.equal(c.renderVals().preferences.choices.find(x=>x.id==='preferences-reducedMotion').on,true);
+  c.setPreference('reducedMotion',false);assert.equal(c.bandReduced(),false);assert.equal(c.renderVals().motionClass,'');assert.equal(c.renderVals().motionMode,'full');assert.equal(storage.get('ts_motion_mode'),'full');
+  const restored=setup({storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),false);
+  c.setPreference('reducedMotion',true);assert.equal(c.bandReduced(),true);assert.equal(storage.get('ts_motion_mode'),'reduced');
+});
+
+test('a legacy reduced-motion preference can be explicitly enabled without opening a static presentation', () => {
+  const {component:c,context}=setup({storage:{ts_prefs:JSON.stringify({version:1,configured:true,values:{reducedMotion:true}})}});context.window.matchMedia=()=>({matches:true});
+  let played=false;c.cinema={start(replay,trigger){played=replay&&trigger==='button';}};c.playAnimatedIntro({currentTarget:'button'});
+  assert.equal(played,true);assert.equal(c.bandReduced(),false);assert.equal(c.state.reducedMotion,false);assert.match(c.renderVals().intro.replayLabel,/animada|animated/);
+});
+
+test('the reduced-motion menu toggle reflects the effective OS setting and enables on its first click', () => {
+  const {component:c,context}=setup();context.window.matchMedia=()=>({matches:true});
+  const control=c.renderVals().a11y.find(x=>/Movimiento reducido|Reduced motion/.test(x.label));assert.equal(control.on,true);control.toggle();assert.equal(c.bandReduced(),false);assert.equal(c.renderVals().intro.motionOn,true);
+});
+
 test('stored preferences only accept known boolean values and recover from invalid JSON', () => {
   let c=setup({firstVisit:true,storage:{ts_prefs:'not JSON'}}).component;
   assert.equal(c.state.showPreferences,true);

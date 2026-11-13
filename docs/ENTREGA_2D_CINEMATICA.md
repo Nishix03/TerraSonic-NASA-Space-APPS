@@ -1,5 +1,7 @@
 # Entrega vigente · banda 2D y viaje al Pacífico
 
+**Checkpoint portátil previo a la reparación de activación de movimiento.** Este ZIP conserva la aplicación `2fec226`; no contiene los cambios posteriores de [MOVIMIENTO.md](MOVIMIENTO.md). La URL pública y `source.json` identifican la aplicación publicada más reciente.
+
 [Abrir la vista pública](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/). Aplicación `2fec2269fedde019ad05102afb5e1cfcf131f91d`, rama `piero-mejoras`; `source.json` identifica el build. Los commits posteriores de documentación no cambian el producto publicado.
 
 Se repararon los controles Animar, Caminar, Bailar, Pausar/Reanudar, Paso anterior/siguiente y Reposo de los cinco personajes. La preferencia de movimiento reducido se explica y permite una autorización temporal solo para el personaje elegido. Se conservan los originales 2D, sus cuatro dibujos y el desplazamiento escénico, sin afirmar un ciclo nuevo de piernas. Se amplió la tipografía del transporte y se mantuvieron superficies de al menos 44 px.

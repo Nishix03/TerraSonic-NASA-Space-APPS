@@ -233,7 +233,7 @@ a{color:inherit}
 .px .tour .tdots i.on{background:#fff}
 .px .tour .tact{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .px .tour .tact .skip{margin-left:auto;border:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;min-height:36px;padding:0 6px;font-size:.8em}
-@media (prefers-reduced-motion: reduce){.px *{animation:none !important;transition:none !important}}
+@media (prefers-reduced-motion: reduce){.px:not([data-motion-mode="full"]) *{animation:none !important;transition:none !important}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .px .rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
 @keyframes fa{from{opacity:0}to{opacity:1}}
@@ -337,7 +337,7 @@ a{color:inherit}
 .px .wipe{position:fixed;inset:0 0 auto;height:2px;z-index:95;background:var(--route-color);pointer-events:none}
 .px .scr.route-arrive{animation:route-reveal 140ms ease-out both}
 @keyframes route-reveal{from{opacity:.75}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.px .wipe{display:none}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .wipe{display:none}}
 
 /* guía */
 .px .tourdim{position:fixed;inset:0;z-index:66;background:rgba(0,0,0,.74)}
@@ -438,7 +438,7 @@ a{color:inherit}
   100%{opacity:0;transform:translate(-5px,-7px) scale(1.32)}
 }
 @media (prefers-reduced-motion:reduce){
-  .px .bentry,.px .bsilbo-note{display:none}
+  .px:not([data-motion-mode="full"]) .bentry,.px:not([data-motion-mode="full"]) .bsilbo-note{display:none}
 }
 .px .bfx,.px .bentry svg{position:absolute;inset:0;width:100%;height:100%;color:var(--band-light);pointer-events:none}
 .px .bfx{opacity:.5}
@@ -752,7 +752,7 @@ a{color:inherit}
 .px .nav{margin-left:auto;gap:2px;min-width:0;max-width:100%;flex-wrap:nowrap;overflow:visible;padding-block:4px;flex:1 1 auto;justify-content:space-evenly}
 .px .nav button{flex:0 0 auto;white-space:nowrap;justify-content:center}
 .px .top .right{flex-shrink:0}
-@media (prefers-reduced-motion:reduce){.px .nav,.px .steps{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .nav,.px:not([data-motion-mode="full"]) .steps{scroll-behavior:auto}}
 .px .nav button{min-height:64px;padding:0 14px;border:0;border-bottom:2px solid transparent;border-radius:0;font-family:var(--head);font-size:max(13px,.8em);font-weight:700;letter-spacing:.16em;color:rgba(255,255,255,.7)}
 .px .nav button:hover,.px .nav button:focus-visible{color:#fff}
 .px .nav button[aria-current="page"]{color:#fff;border-bottom-color:#fff}
@@ -880,7 +880,7 @@ a{color:inherit}
 .px .bquote{background:transparent}
 /* Capa independiente: el desenfoque no hereda la opacidad animada de .bentry. */
 .px .bentry-blur{position:absolute;inset:0;z-index:1;pointer-events:none;background:rgba(3,5,10,.6);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);animation:bcut-focus var(--band-entry) var(--cut-ease) both}
-@media (prefers-reduced-motion:reduce){.px .bentry-blur{display:none}}
+@media (prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .bentry-blur{display:none}}
 /* Rótulo y trazos por encima del desenfoque, con contraste localizado. */
 .px .bentry-underlay{stroke:rgba(0,0,0,.8);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .px .bentry-caption{position:absolute;z-index:1;left:12px;right:12px;bottom:12px;display:flex;justify-content:center}
@@ -953,7 +953,7 @@ a{color:inherit}
 .px .flow-wave i{display:block;width:3px;height:18px;background:#b5c7ce;transform:scaleY(.45);animation:flowPulse 2.8s ease-in-out infinite alternate}
 .px .flow-wave i:nth-child(2n){animation-delay:-.8s;height:24px}.px .flow-wave i:nth-child(3n){animation-delay:-1.6s;height:12px}
 @keyframes flowPulse{to{transform:scaleY(1)}}
-@media(prefers-reduced-motion:reduce){.px .flow-wave i{animation:none}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .flow-wave i{animation:none}}
 .px .bottomnav .bar{min-width:0;border-top:0}
 .px .guidefab{position:relative;grid-column:2;justify-self:end;right:auto;bottom:auto;z-index:62;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:8px max(14px,env(safe-area-inset-right,0px)) 8px 8px;padding:3px;border:1px solid rgba(255,212,71,.55);border-radius:40px;background:#000;box-shadow:0 12px 34px rgba(0,0,0,.65);transition:transform .25s,opacity .25s,border-color .25s}
 .px .guidefab:hover{border-color:#FFD447;transform:translateY(-2px)}
@@ -962,7 +962,7 @@ a{color:inherit}
 .px .guidefab:hover .glabel,.px .guidefab:focus-visible .glabel{max-width:140px;padding:0 16px 0 10px}
 .px .guidefab .glabel{display:none}
 .px .guidefab::after{content:"";position:absolute;inset:0;outline:1px solid rgba(255,212,71,.45);border-radius:inherit;animation:fabRing 2.8s ease-out infinite;pointer-events:none}
-@media(prefers-reduced-motion:reduce){.px .guidefab::after{animation:none}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .guidefab::after{animation:none}}
 @keyframes fabRing{0%{opacity:.8;transform:scale(.96)}70%,100%{opacity:0;transform:scale(1.18)}}
 
 /* guía: foco que sigue al elemento y tarjeta junto a él */
@@ -1701,7 +1701,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 /* Observatorio del Pacífico: one decorative layer, no layout or pointer surface. */
 .px .space-sky{
  --sky-solar:#ffc76b;--sky-lunar:#cfdeef;--sky-trail:#c4f2ff;
- --sky-orbit-time:96s;--sky-meteor-time:23s;--sky-flight-time:38s;
+ --sky-orbit-time:96s;--sky-meteor-time:12s;--sky-flight-time:38s;
  isolation:isolate;contain:strict;opacity:1;
 }
 .px .space-sky .space-atmosphere{position:absolute;inset:0;background:radial-gradient(ellipse at 0 36%,#764f2b20,transparent 42%),radial-gradient(ellipse at 100% 15%,#5c7bc52b,transparent 42%),radial-gradient(ellipse at 55% 110%,#24446c55,transparent 60%)}
@@ -1718,9 +1718,9 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .space-horizon{position:absolute;left:-25%;bottom:-46vh;width:150%;height:58vh;border:1px solid #8ecae52e;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at 50% 0,#274d7440,transparent 62%)}
 .px .space-meteor{position:absolute;width:clamp(55px,9vw,140px);height:1px;background:linear-gradient(90deg,transparent,var(--sky-trail));opacity:0;transform-origin:right center;animation:space-meteor var(--sky-meteor-time) linear infinite}
 .px .space-meteor::after{content:"";position:absolute;right:0;top:-1px;width:3px;height:3px;border-radius:50%;background:#e7faff;box-shadow:0 0 8px #c4f2ff88}
-.px .meteor-one{left:12%;top:16%;animation-delay:-3s}
-.px .meteor-two{left:58%;top:11%;--sky-meteor-time:31s;animation-delay:-16s}
-.px .meteor-three{left:4%;top:62%;--sky-meteor-time:43s;animation-delay:-30s}
+.px .meteor-one{left:8%;top:16%;animation-delay:-.3s}
+.px .meteor-two{left:38%;top:11%;--sky-meteor-time:17s;animation-delay:-12s}
+.px .meteor-three{left:4%;top:58%;--sky-meteor-time:23s;animation-delay:-16s}
 .px .space-flight{position:absolute;opacity:0;animation:space-flight var(--sky-flight-time) linear infinite}
 .px .space-rocket{display:block;width:25px;height:60px}
 .px .flight-one{left:-36px;top:90%;animation-delay:-24s}
@@ -1728,9 +1728,8 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .flight-two .space-rocket{width:18px;height:43px}
 @keyframes space-orbit{to{transform:rotate(360deg)}}
 @keyframes space-meteor{
- 0%,82%{opacity:0;transform:translate3d(0,0,0) rotate(30deg)}
- 83%{opacity:.7}89%{opacity:0;transform:translate3d(38vw,23vh,0) rotate(30deg)}
- 100%{opacity:0;transform:translate3d(38vw,23vh,0) rotate(30deg)}
+ 0%{opacity:0;transform:translate3d(0,0,0) rotate(30deg)}
+ 3%{opacity:.9}14%,100%{opacity:0;transform:translate3d(38vw,23vh,0) rotate(30deg)}
 }
 @keyframes space-flight{
  0%,68%{opacity:0;transform:translate3d(0,0,0) rotate(40deg)}
@@ -1751,7 +1750,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px.reduce-motion .space-meteor,.px.reduce-motion .space-flight{display:none}
 .px.reduce-motion .space-sky *{animation:none!important}
 html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important}
-@media(prefers-reduced-motion:reduce){.px .space-sky *{animation:none!important}.px .space-meteor,.px .space-flight{display:none}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-sky *{animation:none!important}.px:not([data-motion-mode="full"]) .space-meteor,.px:not([data-motion-mode="full"]) .space-flight{display:none}}
 @media(forced-colors:active){.px .space-sky{display:none}}
 @media(max-width:700px){
  .px .space-sun{width:80px;left:-34px;top:38%;opacity:.5}
@@ -1791,7 +1790,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px.app[data-theme="light"] .space-planet{opacity:.4}
 @media(max-width:700px){.px .space-sun{opacity:.65}.px .planet-ringed{width:66px;bottom:14%;right:0;opacity:.38}.px .planet-distant{display:none}.px .space-bright-stars{opacity:.35}.px .space-sun .solar-satellite svg{width:16px;height:11px;left:calc(50% - 8px)}}
 @media(max-height:450px){.px .space-planet{display:none}}
-@media(prefers-reduced-motion:reduce){.px .solar-eclipse{display:none}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .solar-eclipse{display:none}}
 /* Cinematic presentation: decorative illustration, never a NASA observation. */
 .ts-cinema{position:fixed;inset:0;z-index:120;overflow:hidden;pointer-events:none;background:#101d30;color:#eef3fa;font:400 16px/1.45 "Inter",sans-serif;isolation:isolate}
 .ts-cinema *{box-sizing:border-box}
@@ -1802,7 +1801,11 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .ts-cinema .cinema-world{position:absolute;width:min(68vh,48vw,650px);aspect-ratio:1;right:12%;top:8%;filter:drop-shadow(0 0 24px #63bbdb35);transform-origin:50% 55%}
 .ts-cinema .cinema-world svg{display:block;width:100%;height:100%}
 .ts-cinema .cinema-orbit{transform-origin:50% 50%}
-.ts-cinema .cinema-wave{position:absolute;width:min(560px,76vw);height:110px;left:calc(50% - min(280px,38vw));top:55%;color:#8be7e9}
+.ts-cinema .cinema-wave{position:absolute;width:40%;height:110px;left:54%;top:62%;color:#8be7e9}
+.ts-cinema .cinema-meteor{position:absolute;width:clamp(70px,16vw,220px);height:2px;left:8%;top:12%;background:linear-gradient(90deg,transparent,#8be7e9);opacity:0;transform-origin:right center}
+.ts-cinema .cinema-meteor::after{content:"";position:absolute;right:0;top:-1px;width:4px;height:4px;border-radius:50%;background:#e6faff;box-shadow:0 0 12px #8be7e9}
+.ts-cinema .cinema-meteor:nth-of-type(2){left:52%;top:8%;width:100px}
+.ts-cinema .cinema-meteor:nth-of-type(3){left:2%;top:40%;width:140px}
 .ts-cinema .cinema-copy{position:absolute;left:8%;bottom:17%;width:min(620px,84%);text-shadow:0 2px 24px #101d30}
 .ts-cinema .cinema-brand{font-size:clamp(1rem,1.5vw,1.4rem);font-weight:700;letter-spacing:.22em;margin:0 0 12px}
 .ts-cinema .cinema-copy h2{font-size:clamp(2rem,4.5vw,4rem);line-height:1.06;letter-spacing:-.025em;margin:0;max-width:15ch}
@@ -1816,6 +1819,12 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .home-cinema button{min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);font:600 .8em/1.3 var(--body);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
 .px .home-cinema button:hover{border-color:var(--accent);color:var(--fg)}
 .px .home-cinema svg{width:18px;height:18px;flex:0 0 18px}
+.px .home-experience{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:6px 8px;width:min(100%,440px)}
+.px .home-experience .home-cinema{min-width:0}
+.px .home-experience .home-cinema button{width:100%;color:var(--fg);border-color:var(--accent);font-size:.85em;line-height:1.4}
+.px .scene-motion-toggle{width:44px;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--panel);display:grid;place-items:center}
+.px .scene-motion-toggle svg{width:20px;height:20px}
+.px .home-motion-note{grid-column:1/-1;text-align:left;font-size:.78em;line-height:1.4;color:var(--muted)}
 .px .home-demo{box-shadow:0 12px 40px #050d191a;border-color:color-mix(in srgb,var(--accent) 42%,var(--line))}
 .px .hero .cta .btn{border-radius:8px}
 .px .hero .cta .primary{background:var(--fg);color:var(--bg)}
@@ -1828,10 +1837,11 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @keyframes space-music-pulse{from{transform:scaleY(.55);opacity:.35}to{transform:scaleY(1);opacity:.8}}
 .px.reduce-motion .space-ocean-wave path{animation:none!important}
 .px.app[data-theme="light"] .space-ocean-wave{color:#286d87}
-@media(max-width:640px){.ts-cinema .cinema-world{width:min(82vw,47vh);top:10%;right:9%}.ts-cinema .cinema-copy{left:8%;bottom:20%}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem)}.ts-cinema .cinema-copy p:last-child{font-size:.875rem}.ts-cinema .cinema-wave{top:48%;height:70px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}}
+@media(max-width:640px){.ts-cinema .cinema-world{width:min(82vw,47vh);top:10%;right:9%}.ts-cinema .cinema-copy{left:8%;bottom:20%}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem)}.ts-cinema .cinema-copy p:last-child{font-size:.875rem}.ts-cinema .cinema-wave{left:10%;width:80%;top:48%;height:70px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}}
 @media(max-height:450px){.ts-cinema .cinema-world{width:65vh;right:12%;top:0}.ts-cinema .cinema-copy{bottom:24%;width:55%;left:6%}.ts-cinema .cinema-copy h2{font-size:clamp(1.5rem,5vh,2.5rem)}.ts-cinema .cinema-brand{font-size:.8rem;margin-bottom:6px}.ts-cinema .cinema-copy p:last-child{display:none}.ts-cinema .cinema-toolbar{font-size:.7rem}.ts-cinema .cinema-toolbar p{max-width:23ch}}
-@media(prefers-reduced-motion:reduce){.px .space-ocean-wave path{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-ocean-wave path{animation:none!important}}
 @media(forced-colors:active){.ts-cinema .cinema-world,.ts-cinema .cinema-stars,.ts-cinema .cinema-sun,.ts-cinema .cinema-wave{display:none}.ts-cinema{background:Canvas;color:CanvasText}.ts-cinema button{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
+@media(max-height:450px){.ts-cinema .cinema-wave{display:none}}
 .px .haptics-settings{grid-column:1/-1;display:grid;gap:8px;border-top:1px solid var(--line);padding:12px 8px 4px;min-width:0}
 .px .haptics-settings h2{font-size:1em;line-height:1.3}
 .px .haptics-settings p{font-size:.85em;line-height:1.45;color:var(--muted);max-width:70ch}
@@ -1839,7 +1849,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .haptics-settings button{min-height:44px;white-space:normal;flex:1 1 140px;letter-spacing:.03em}
 </style>
 </helmet>
-<div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
+<div class="px app {{bandViewClass}} {{motionClass}}" data-motion-mode="{{motionMode}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
 
 <sc-if value="{{showBg}}">
 <div class="skyfix space-sky" aria-hidden="true" inert>
@@ -1923,7 +1933,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <button type="button" class="btn" onClick="{{heroBand}}">{{tx.heroBand}}</button>
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
-<div class="home-cinema"><button type="button" onClick="{{intro.replay}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div>
+<div class="home-experience"><div class="home-cinema"><button type="button" onClick="{{intro.replay}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div><button type="button" class="scene-motion-toggle" onClick="{{intro.toggle}}" aria-pressed="{{intro.motionOn}}" aria-label="{{intro.toggleLabel}}" title="{{intro.toggleLabel}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="{{intro.togglePath}}"/></svg></button><sc-if value="{{intro.paused}}"><p class="home-motion-note" role="status">{{intro.notice}}</p></sc-if></div>
 </div>
 <div class="home-demo">
 <figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
@@ -3332,17 +3342,16 @@ class HapticFeedback {
 // A finite, optional illustration. The application is already usable underneath.
 class CinematicIntro {
   constructor(owner) { this.owner=owner; this.animations=[]; this.timers=[]; this.seen=false; }
-  markSeen() { this.seen=true; try { sessionStorage.setItem('ts_intro_seen','1'); } catch (ignored) {} }
-  hasSeen() { try { return this.seen||sessionStorage.getItem('ts_intro_seen')==='1'; } catch (ignored) { return this.seen; } }
+  markSeen() { this.seen=true; try { sessionStorage.setItem('ts_intro_seen_v2','1'); } catch (ignored) {} }
+  hasSeen() { try { return this.seen||sessionStorage.getItem('ts_intro_seen_v2')==='1'; } catch (ignored) { return this.seen; } }
   start(replay=false,trigger=null) {
     var self=this, app=this.owner;
     if(typeof document.createElement!=='function'||!document.body?.append)return;
     if(app.disposed||app.state.tab!=='home'||app.state.showPreferences||app.state.tour||document.hidden||(!replay&&this.hasSeen()))return;
+    if(app.bandReduced()||(!replay&&(app.state.contrast||window.matchMedia?.('(forced-colors: active)').matches)))return;
     this.finish(false); this.markSeen();
-    var still=app.bandReduced()||app.state.contrast||window.matchMedia?.('(forced-colors: active)').matches;
-    if(still&&!replay)return;
-    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static=String(!!still);root.setAttribute('aria-label',T('Presentación de TerraSonic','TerraSonic presentation'));
-    root.innerHTML=`<div class="cinema-space" aria-hidden="true"><div class="cinema-stars"></div><div class="cinema-stars near"></div><div class="cinema-sun"></div></div>
+    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static='false';root.setAttribute('aria-label',T('Presentación de TerraSonic','TerraSonic presentation'));
+    root.innerHTML=`<div class="cinema-space" aria-hidden="true"><div class="cinema-stars"></div><div class="cinema-stars near"></div><div class="cinema-sun"></div><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i></div>
 <div class="cinema-world" aria-hidden="true"><svg viewBox="0 0 500 500"><defs>
 <radialGradient id="intro-ocean" cx="30%" cy="28%" r="77%"><stop stop-color="#3f9bb5"/><stop offset=".45" stop-color="#1e6088"/><stop offset=".8" stop-color="#14324e"/><stop offset="1" stop-color="#0d192b"/></radialGradient>
 <radialGradient id="intro-air"><stop offset=".82" stop-color="#5bbadc" stop-opacity="0"/><stop offset=".9" stop-color="#8be7e9" stop-opacity=".65"/><stop offset=".93" stop-color="#8be7e9" stop-opacity=".08"/><stop offset="1" stop-color="#8be7e9" stop-opacity="0"/></radialGradient>
@@ -3364,12 +3373,12 @@ class CinematicIntro {
     this.onPointer=function(event){if(!root.contains(event.target))self.finish(false);};
     this.onHidden=function(){if(document.hidden)self.finish(false);};
     document.addEventListener('keydown',this.onKey,true);document.addEventListener('pointerdown',this.onPointer,true);document.addEventListener('visibilitychange',this.onHidden);
-    if(still)return;
     var duration=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches?3000:5200;root.dataset.duration=String(duration);
     function animate(selector,frames,options={}){var el=selector==='root'?root:root.querySelector(selector);if(!el?.animate)throw Error('Animation unavailable');var animation=el.animate(frames,{duration:duration,fill:'both',easing:'linear',...options});self.animations.push(animation);return animation;}
     try{
       animate('.cinema-space',[{transform:'scale(1)',offset:0},{transform:'scale(1.07)',offset:1}]);
       animate('.cinema-stars.near',[{transform:'scale(.98)',opacity:0},{transform:'scale(1.15)',opacity:.45}]);
+      root.querySelectorAll('.cinema-meteor').forEach(function(el,i){var animation=el.animate([{opacity:0,transform:'translate(-10vw,-6vh) rotate(30deg)'},{opacity:.95,offset:.14},{opacity:.75,offset:.7},{opacity:0,transform:'translate(42vw,26vh) rotate(30deg)'}],{duration:900+i*140,delay:duration*(.04+i*.2),fill:'both',easing:'linear'});self.animations.push(animation);});
       animate('.cinema-sun',[{opacity:0,transform:'scale(.8)',offset:0},{opacity:1,transform:'scale(1)',offset:.25},{opacity:.7,transform:'scale(1.03)',offset:1}]);
       animate('.cinema-world',[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
       animate('.cinema-orbit',[{opacity:0,transform:'rotate(-12deg)',offset:0},{opacity:1,transform:'rotate(0deg)',offset:.5},{opacity:0,transform:'rotate(8deg)',offset:1}]);
@@ -3382,7 +3391,7 @@ class CinematicIntro {
       end.onfinish=function(){self.finish(true);};this.timers.push(setTimeout(function(){self.finish(true);},duration+250));
     }catch(ignored){this.finish(true);}
   }
-  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración artística · océano Pacífico','Artistic illustration · Pacific Ocean');this.root.querySelector('button').textContent=this.root.dataset.static==='true'?T('Cerrar presentación','Close presentation'):T('Saltar introducción','Skip intro');}
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración artística · océano Pacífico','Artistic illustration · Pacific Ocean');this.root.querySelector('button').textContent=T('Saltar introducción','Skip intro');}
   finish(restoreFocus=false){
     if(!this.root)return;
     var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
@@ -3423,6 +3432,9 @@ class Component extends DCLogic {
     this.preferencesConfigured = !!(preferences && preferences.configured);
     this.state.showPreferences = !this.preferencesConfigured;
     this.state.reducedMotion = !!this.state.reducedMotion;
+    this.state.motionMode = 'auto';
+    try { var motionMode = localStorage.getItem('ts_motion_mode'); if (motionMode==='full'||motionMode==='reduced') this.state.motionMode=motionMode; } catch (ignored) {}
+    if (this.state.motionMode!=='auto') this.state.reducedMotion=this.state.motionMode==='reduced';
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
     this.state.tutorialSkipped = {};
@@ -3507,7 +3519,9 @@ class Component extends DCLogic {
     if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourObservedResize); this.tourObserver.observe(document.body); }
     this.routeMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.onRouteMotion = function () {
-      if (!self.routeMedia.matches) return;
+      self.syncPreferenceMotion();
+      self.setState({ motionRevision: (self.state.motionRevision||0)+1 });
+      if (!self.bandReduced()) return;
       self.cinema?.finish(true);
       self.haptics.stop();
       if (self.routeFinish) self.routeFinish();
@@ -3545,6 +3559,10 @@ class Component extends DCLogic {
   setPreference(key, value) {
     if (PREFERENCE_KEYS.indexOf(key) < 0) return;
     var patch = {}; patch[key] = !!value;
+    if (key === 'reducedMotion') {
+      patch.motionMode = value ? 'reduced' : 'full';
+      try { localStorage.setItem('ts_motion_mode',patch.motionMode); } catch (ignored) {}
+    }
     this.setState(patch); this.savePreferences();
     if (key === 'contrast' && value) this.cinema?.finish(true);
     if (key === 'voice' && !value) this.stopSpeech();
@@ -3596,7 +3614,7 @@ class Component extends DCLogic {
     };
   }
   syncPreferenceMotion() {
-    if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion);
+    if (document.documentElement.dataset) { document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion); document.documentElement.dataset.tsMotionMode = this.state.motionMode || 'auto'; }
     if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') window.dispatchEvent(new window.CustomEvent('terrasonic:motion'));
   }
   setPreferencesInert(on) {
@@ -3936,7 +3954,13 @@ class Component extends DCLogic {
     if (this.ac) this.ac.close();
   }
   bandReduced() {
+    if (this.state.motionMode==='full') return false;
+    if (this.state.motionMode==='reduced') return true;
     return this.state.reducedMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  playAnimatedIntro(event) {
+    this.setPreference('reducedMotion',false);
+    this.cinema?.start(true,event?.currentTarget);
   }
   cancelBandClip() {
     clearTimeout(this.bandTimer);
@@ -5163,7 +5187,7 @@ class Component extends DCLogic {
     var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
-    var tog = function (k) { return function () { self.setPreference(k, !self.state[k]); }; };
+    var tog = function (k) { return function () { self.setPreference(k, k==='reducedMotion' ? !self.bandReduced() : !self.state[k]); }; };
     var tabDef = PAGE_ORDER.map(function (k) { return { k: k, l: ROUTE_LOOK[k].title }; });
     var a11yDef = [{ k: 'contrast', l: T('Alto contraste', 'High contrast') }, { k: 'big', l: T('Texto grande', 'Large text') }, { k: 'legible', l: T('Fuente legible', 'Readable font') }, { k: 'voice', l: T('Voz', 'Voice') }, { k: 'vibe', l: T('Vibración', 'Vibration') }, { k: 'sfx', l: T('Efectos de sonido', 'Sound effects') }, { k: 'reducedMotion', l: T('Movimiento reducido', 'Reduced motion') }];
     var activeN = BAND.filter(function (b) { return !s.mute[b.k]; }).length;
@@ -5289,7 +5313,7 @@ class Component extends DCLogic {
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
       th: th, ic: this.icons, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
-      intro: { replayLabel: this.bandReduced() ? T('Ver presentación sin movimiento','View presentation without motion') : T('Repetir introducción','Replay intro'), replay: function (event) { self.cinema?.start(true,event?.currentTarget); } },
+      intro: { replayLabel: this.bandReduced() ? T('Activar animaciones y ver intro','Enable animations and play intro') : T('Ver introducción animada','Play animated intro'), replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: T('El movimiento está pausado por tu configuración. Puedes activarlo aquí.','Motion is paused by your settings. You can enable it here.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.setPreference('reducedMotion',!self.bandReduced()); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
       stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),
@@ -5300,7 +5324,7 @@ class Component extends DCLogic {
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, showHarmony: melody, objectives: objectives,
       player: this.playerVm(),
       impact: this.impactVm(),
-      motionClass: s.reducedMotion ? 'reduce-motion' : '',
+      motionClass: this.bandReduced() ? 'reduce-motion' : '', motionMode: s.motionMode || 'auto',
       preferences: {
         on: s.showPreferences, title: T('¿Cómo prefieres usarlo?', 'Make it comfortable for you'),
         body: T('Puedes cambiarlo luego en Accesibilidad.', 'Change these later in Accessibility.'),
@@ -5309,7 +5333,7 @@ class Component extends DCLogic {
           ['big', T('Texto grande', 'Large text'), T('Aumenta el tamaño de lectura.', 'Increase the reading size.')],
           ['contrast', T('Alto contraste', 'High contrast'), T('Bordes y texto con mayor contraste.', 'Stronger contrast for borders and text.')],
           ['reducedMotion', T('Movimiento reducido', 'Reduced motion'), T('Personajes y transiciones sin animación.', 'Characters and transitions without animation.')]
-        ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
+        ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: option[0]==='reducedMotion' ? !!self.bandReduced() : !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
         continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Ver guía · 3 pasos', 'Try the guide · 3 steps'),
         continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); },
         reopenLabel: T('Cómo prefiero usar TerraSonic', 'How I prefer to use TerraSonic'), open: function () { self.openPreferences(); }
@@ -5375,7 +5399,7 @@ class Component extends DCLogic {
       headerClass: s.big || s.legible ? 'readable-nav' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('¿Cómo funciona?','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       haptic: this.hapticVm(),
-      a11y: a11yDef.map(function (o) { var disabled = o.k === 'vibe' && !self.haptics.supported(), on = !disabled && !!s[o.k]; return { disabled: disabled, ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      a11y: a11yDef.map(function (o) { var disabled = o.k === 'vibe' && !self.haptics.supported(), on = !disabled && (o.k==='reducedMotion' ? !!self.bandReduced() : !!s[o.k]); return { disabled: disabled, ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;
         return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };

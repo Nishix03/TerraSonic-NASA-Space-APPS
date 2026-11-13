@@ -1,5 +1,7 @@
 # Del espacio al Pacífico
 
+**Reparación vigente:** [MOVIMIENTO.md](MOVIMIENTO.md). Se eliminó la presentación estática y se añadió activación explícita que funciona con movimiento reducido del sistema, pausa y persistencia. Las cifras de la primera entrega al final de este documento son un checkpoint anterior.
+
 ## Auditoría y dirección
 
 El frontend continúa en HTML/CSS/JavaScript nativo. `Main.dc.html` contiene el componente, las preferencias, los mapas y el reproductor; `pages-support.js` resuelve sus enlaces de estado y `avatar2d.js` presenta las ilustraciones originales. No había una introducción narrativa ni GSAP, React, Framer Motion o un motor 3D vigente. La base ya incluía un cielo SVG/CSS con Sol, eclipse decorativo, Luna, estrellas, satélite, meteoros y pequeños planetas.
@@ -29,11 +31,11 @@ Se conserva la composición solicitada. El gesto memorable se concentra en el vi
 
 Secuencia: estrellas y luz solar; entrada de la Tierra; acercamiento al Pacífico, retícula y órbita ilustradas; transformación en onda; revelación escalonada de marca, cabecera, titular, explicación, acciones, mapa y cifras. El relieve lunar, eclipse, meteoros y satélite siguen en el cielo existente. La onda persistente solo se anima cuando el estado real del reproductor indica reproducción: no se presenta como medición acústica ni como flujo científico en directo.
 
-`sessionStorage.ts_intro_seen` evita repetirla al refrescar o navegar en la misma sesión. Si el almacenamiento está bloqueado, permanece una protección en memoria durante la vida del componente. La bienvenida de accesibilidad tiene prioridad; elegir la guía marca la introducción como vista. «Repetir introducción» está disponible en inicio. No cambia preferencias ni inicia audio o vibración.
+`sessionStorage.ts_intro_seen_v2` evita repetirla al refrescar o navegar en la misma sesión. Solo se marca al iniciar la secuencia, no por omitirla. Si el almacenamiento está bloqueado, permanece una protección en memoria durante la vida del componente. La bienvenida tiene prioridad; elegir la guía evita una entrada que la tape. El botón de inicio dice «Ver introducción animada», o «Activar animaciones y ver intro» si el movimiento está pausado. Esta segunda acción guarda una elección expresa para la web. No inicia audio o vibración.
 
 «Saltar introducción» y Escape terminan la secuencia. Tab sale de la presentación y devuelve el foco, sin atraparlo. Una interacción con el contenido subyacente también termina la capa, que no intercepta sus clics. Al finalizar se eliminan nodo, animaciones, temporizadores y listeners; se restaura el foco solo cuando estaba dentro de la presentación. Se cancela al ocultar la página, navegar, abrir preferencias o activar movimiento reducido. Un temporizador de respaldo y la captura de errores evitan una capa permanente.
 
-Con movimiento reducido del sistema o de la aplicación, alto contraste o colores forzados, no hay introducción automática. La repetición solicitada muestra una ilustración estática con botón de cerrar. El cielo respeta movimiento reducido y se pausa al ocultarse la página; el menú de accesibilidad ofrece la preferencia que lo detiene.
+En automático se respeta el movimiento reducido y se omite la introducción. Al activar expresamente las animaciones, la secuencia sí se reproduce y el cielo se mueve aun si el sistema solicita reducción; la elección no modifica el dispositivo. Pausar vuelve a detenerlas. Con alto contraste o colores forzados se omite la entrada automática. La lámina estática fue retirada porque no cumplía la intención de reproducir. El cielo se pausa al ocultarse la página.
 
 Los elementos reales de la aplicación son visibles por defecto: una animación fallida no los deja transparentes. En móvil se elimina una capa de estrellas y se compacta la escena. No se impide el desplazamiento vertical natural del documento cuando es necesario para texto grande.
 
@@ -41,9 +43,9 @@ Los elementos reales de la aplicación son visibles por defecto: una animación 
 
 La implementación sigue las orientaciones de [W3C sobre animación por interacción](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html), [control del movimiento automático](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html), [reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html), [diseño desde una columna](https://web.dev/learn/design/macro-layouts) y [animaciones con transform y opacity](https://web.dev/articles/animations-guide). No constituyen certificación WCAG ni garantía de velocidad en cualquier equipo.
 
-El [prompt detallado](PROMPT_CINEMATICO.md) conserva la especificación, los criterios de aceptación y las fuentes. `scripts/verify_cinema.cjs` comprueba la política de sesión, prioridad de bienvenida, salto, repetición, foco, navegación, reproducción nativa de la secuencia en 360/390/768/1024/1440 px, limpieza, ausencia de audio/vibración, ES/EN, versión estática, cancelación y fallo de la API. Las medidas de pantalla son viewports CSS de navegadores de escritorio; no se declara prueba en teléfono físico ni FPS medidos.
+El [prompt detallado](PROMPT_CINEMATICO.md) conserva la especificación, los criterios de aceptación y las fuentes. `scripts/verify_cinema.cjs` comprueba sesión, bienvenida, salto, repetición, foco, navegación, siete tamaños, limpieza, ausencia de audio/vibración, ES/EN, activación bajo movimiento reducido, desplazamiento real de meteoros y Sol, persistencia, pausa y fallo de la API. Las medidas son viewports CSS; no se declara prueba en teléfono físico ni FPS medidos.
 
-## Resultado de verificación
+## Checkpoint de verificación anterior a la reparación de activación
 
 Aplicación publicada: `2fec2269fedde019ad05102afb5e1cfcf131f91d`. El build archivado de ese commit pasó 134 pruebas de componente y 14 del controlador háptico. La pasada final de Chromium usa exactamente ese build, incluido el ajuste de tipografía con texto grande.
 

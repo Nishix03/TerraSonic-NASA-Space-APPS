@@ -12,7 +12,7 @@ La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](htt
 
 La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) permite revisar la aplicación sin modificar la web oficial. Consulta `source.json` en esa URL para identificar su código exacto y [PUBLICACION.md](docs/PUBLICACION.md) para la comprobación de publicación. La edición RETO 05 y sus criterios están en [RETO_05.md](docs/RETO_05.md).
 
-La entrega vigente y sus comprobaciones se resumen en [ENTREGA_2D_CINEMATICA.md](docs/ENTREGA_2D_CINEMATICA.md). El documento anterior de entrega conserva un checkpoint histórico con otro alcance.
+La corrección vigente de activación y pausa de animaciones se documenta en [MOVIMIENTO.md](docs/MOVIMIENTO.md). La [entrega portátil anterior](docs/ENTREGA_2D_CINEMATICA.md) conserva un checkpoint previo a esta reparación.
 
 El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
@@ -23,7 +23,7 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 - **Convertir:** lluvia de Chiclayo destacada o imagen propia, procesada localmente. Sustitución de la vista por la última imagen aceptada, límites y errores recuperables. Ya no importa CSV.
 - **Brisa y preferencias:** bienvenida y guía sin desplazamiento interno, práctica saltable/reabrible, voz opcional, idioma, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Modo claro y oscuro pizarra guardados.
 - **Fondo espacial:** sol luminoso, eclipse decorativo, luna, planetas, satélite y estrellas fugaces, con una composición más sencilla en móvil. Respeta Movimiento reducido y alto contraste. [Diseño y comprobaciones](docs/FONDO_ESPACIAL.md).
-- **Viaje al Pacífico:** introducción ilustrada de 5,2 segundos (3 en móvil), saltable y repetible, una vez por sesión. Sin audio automático; alternativa estática y limpieza al salir. [Implementación](docs/CINEMATICA.md) y [prompt detallado con referencias](docs/PROMPT_CINEMATICO.md).
+- **Viaje al Pacífico:** introducción animada de 5,2 segundos (3 en móvil), meteoros visibles, salto y repetición. Un botón permite activar movimiento expresamente aun con reducción del sistema; otro lo pausa. La elección se guarda. Sin audio automático ni lámina estática como sustituto de reproducir. [Activación y pruebas](docs/MOVIMIENTO.md), [implementación](docs/CINEMATICA.md) y [prompt detallado](docs/PROMPT_CINEMATICO.md).
 - **Vibración física opcional:** usa `navigator.vibrate()` cuando existe, con controles de prueba/parada, patrones limitados y cancelación. Sigue apagada inicialmente. La aceptación del navegador no demuestra que haya vibrado un motor: [compatibilidad, pruebas y comprobación desde Android](docs/HAPTICA.md).
 - **¿Cómo funciona? y Tecnología:** ocho tarjetas breves, fuentes y cuatro categorías completas sin filtros genéricos. Se retiran las pantallas Método, Retos del Space Apps y Escenario según el brief confirmado.
 
