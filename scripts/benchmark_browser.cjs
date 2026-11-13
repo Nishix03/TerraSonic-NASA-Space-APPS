@@ -34,7 +34,13 @@ async function main() {
   const profile = { viewport: { width: 390, height: 844 }, latency: 150,
     downloadBytesPerSecond: 204800, uploadBytesPerSecond: 102400, cpuRate: 4,
     cache: "disabled", reducedMotion: "reduce", deviceScaleFactor: 1 };
-  const report = { base, profile, samples: [], failures: [] };
+  const files=[];
+  const walk=directory=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.name.startsWith('.'))continue;const file=path.join(directory,entry.name);if(entry.isDirectory())walk(file);else files.push({path:path.relative(site,file).replaceAll('\\','/'),bytes:fs.statSync(file).size});}};
+  walk(site);
+  const report = { base, profile, visit:'Returning visitor: Spanish and configured preferences saved in a fresh browser context',
+    bytesDefinition:'CDP encoded bytes of completed local responses at the milestone; cancelled/in-flight responses can be incomplete. File inventory is exact uncompressed disk size.',
+    assets:{files:files.length,totalBytes:files.reduce((total,file)=>total+file.bytes,0),models:files.filter(file=>file.path.endsWith('.glb')),index:files.find(file=>file.path==='index.html')},
+    samples: [], failures: [] };
   try {
     for (let run = 0; run < 3; run++) {
       const context = await browser.newContext({ viewport: profile.viewport,

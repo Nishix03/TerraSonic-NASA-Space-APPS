@@ -1680,3 +1680,68 @@ test('vibration is initially off, handles absent or failing APIs, and stops on t
   assert.equal(c.vibrateSafely(25),false);assert.equal(c.vibrateSafely(25),false);assert.equal(attempts,1);
   assert.doesNotThrow(()=>c.stop());
 });
+
+function clockHarness() {
+  const h=playbackHarness(),c=h.component,scheduled=[];
+  for(let frame=0;frame<6;frame++)c.state.an['0_'+frame]={cells:Array(448).fill(1),warm:1,cold:0,coast:0,hot:0};
+  c.cur=()=>c.state.an[c.state.disc+'_'+c.state.frame];
+  c.stepMelody=c.step=function(col,options){
+    if(!options){this.setState({col});return;}
+    scheduled.push({frame:options.state.frame,col,at:options.at});
+    this.emitStep({col,levels:{silbo:1,inti:0,mama:0,yaku:0,illapa:0},hits:{silbo:col+1,inti:0,mama:0,yaku:0,illapa:0},flash:0}, {silbo:true}, '', options,25);
+  };
+  return {...h,scheduled};
+}
+
+test('audio clock schedules ahead while position, history and vibration follow the heard step', async()=>{
+  const {component:c,context,scheduled}=clockHarness(),pulses=[];context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
+  c.state.vibe=true;await c.play();c.scheduleAudio();
+  assert(scheduled.length>=1);assert(scheduled.every(event=>event.at>c.ac.currentTime));
+  assert.equal(c.state.col,-1);assert.equal(c.state.events.length,0);assert.deepEqual(pulses,[]);
+  c.ac.currentTime=scheduled[0].at;c.scheduleAudio();assert.equal(c.state.col,0);assert.equal(c.state.events.length,1);assert.equal(pulses.at(-1),25);
+  const event=c.state.events[0];assert.equal(event.column,1);assert.equal(event.frame,0);
+});
+
+test('a delayed UI callback retains exact planned spacing within the lookahead', async()=>{
+  const {component:c,scheduled}=clockHarness();c.state.engine='raw';await c.play();c.scheduleAudio();
+  c.ac.currentTime=.3;c.scheduleAudio();
+  assert(scheduled.length>=5);
+  for(let index=1;index<scheduled.length;index++)assert(Math.abs(scheduled[index].at-scheduled[index-1].at-.11)<1e-9);
+  assert(c.state.col<scheduled.at(-1).col,'visible position must not jump to the future cursor');
+});
+
+test('pause and seeking cancel the future visual queue without moving past the last heard step', async()=>{
+  const {component:c,scheduled}=clockHarness();c.state.engine='raw';await c.play();c.scheduleAudio();
+  c.ac.currentTime=.12;c.stop();assert.equal(c.state.col,0);assert.equal(c.playbackQueue.length,0);assert.equal(c.audioCursor,null);
+  c.ac.currentTime=2;c.flushPlayback(2);assert.equal(c.state.col,0);assert.equal(c.state.events.length,1);
+  c.seekPosition(84);assert.equal(c.state.frame,3);assert.equal(c.state.col,-1);assert.equal(c.state.playing,false);
+  await c.play();c.scheduleAudio();assert.equal(scheduled.at(-1).frame,3);
+});
+
+test('queued animation levels and event names respect a musician muted before its note', async()=>{
+  const {component:c,scheduled}=clockHarness();await c.play();c.scheduleAudio();
+  c.setBandMute(c.allMute(true));c.ac.currentTime=scheduled[0].at;c.flushPlayback(c.ac.currentTime);
+  assert.equal(c.state.levels.silbo,0);assert.equal(c.state.hits.silbo,0);assert.equal(c.state.events[0].musicians.length,0);
+  c.setBandMute(c.only('silbo'));c.ac.currentTime=1;c.flushPlayback(1);
+  assert.equal(c.state.hits.silbo,0,'reenabling does not animate notes cancelled by an earlier mute');
+});
+
+test('queued chords and event captions use the language selected at their actual playback time',async()=>{
+  const {component:c,context,scheduled}=clockHarness();
+  c.state.mute=c.only('mama');c.stepMelody=context.ComponentUnderTest.prototype.stepMelody;
+  c.note=c.marimba=c.flute=c.droplet=c.timpani=c.noiseBurst=c.leadNote=()=>{};
+  await c.play();c.scheduleAudio();assert(c.playbackQueue.length>0);const first=c.playbackQueue[0];
+  assert.equal(first.chord,'Rem7');c.setLang('en');c.ac.currentTime=first.at;c.flushPlayback(first.at);
+  assert.equal(c.state.chord,'Dm7');assert.match(c.state.caption,/chord Dm7/);assert.match(c.state.caption,/column 1\/28/);
+  assert.equal(c.state.events[0].chord,0);
+});
+
+test('the audio cursor crosses a month using that frame’s tempo while the map waits for its actual time',async()=>{
+  const {component:c,scheduled}=clockHarness();c.applySet('prev');c.state.disc=3;c.state.frame=2;c.state.col=26;
+  for(let frame=0;frame<6;frame++)c.state.an['3_'+frame]={cells:Array(448).fill(1),warm:1.1,cold:.1,coast:0,hot:0};
+  await c.play();c.scheduleAudio();
+  assert.equal(scheduled[0].frame,2);assert.equal(scheduled[0].col,27);assert.equal(scheduled[1].frame,3);assert.equal(scheduled[1].col,0);
+  assert(Math.abs(scheduled[1].at-scheduled[0].at-Math.round(30000/66)/1000)<1e-9);
+  assert.equal(c.state.frame,2);c.ac.currentTime=scheduled[1].at;c.flushPlayback(c.ac.currentTime);assert.equal(c.state.frame,3);assert.equal(c.state.col,0);
+  assert.equal(c.profile().bpm,76);assert.equal(c.state.events.at(-1).date.m,3);
+});

@@ -44,7 +44,7 @@ async function main() {
     assert.match(await page.locator('.player-impact').textContent(),/110 personas afectadas/);
     assert.match(await page.locator('.player-impact a').first().getAttribute('href'),/2529/);
     await page.evaluate(()=>{
-      window.__ticks=[];const original=__app.tick;__app.tick=function(...args){__ticks.push(this.ac.currentTime);return original.apply(this,args);};
+      window.__ticks=[];const original=__app.stepMelody;__app.stepMelody=function(col,scheduled){__ticks.push(scheduled?.at??this.ac.currentTime);return original.call(this,col,scheduled);};
       __app.setBandMute(__app.only('mama'));
     });
     await page.locator('#tour-play button').click();await page.waitForFunction(()=>__ticks.length>=6);

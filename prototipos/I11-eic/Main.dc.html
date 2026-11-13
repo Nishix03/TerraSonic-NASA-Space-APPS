@@ -3268,6 +3268,7 @@ class Component extends DCLogic {
     this.state.audioPending = false; this.state.audioError = ''; this.audioRun = 0; this.cancelAudioWait = null;
     this.audioGraph = null; this.audioRetirements = new Map(); this.reverbImpulse = null; this.cueRun = 0;
     this.voiceGroups = Object.create(null);
+    this.voiceEpoch = Object.create(null);
     this.state.previewKey = '';
     var preferences = readPreferences(), self = this;
     if (preferences) PREFERENCE_KEYS.forEach(function (key) { if (typeof preferences.values[key] === 'boolean') self.state[key] = preferences.values[key]; });
@@ -3996,6 +3997,7 @@ class Component extends DCLogic {
     });
   }
   seekSeconds(delta) {
+    if (this.state.playing && this.ac) this.flushPlayback(this.ac.currentTime);
     var seconds = Math.max(0, Math.min(this.playerSeconds(this.playerSteps()), this.playerSeconds(this.playerPosition()) + delta));
     var step = 0, elapsed = 0;
     while (step < this.playerSteps()) {
@@ -4413,6 +4415,7 @@ class Component extends DCLogic {
     source.onended = function () { group.sources.delete(source); };
   }
   retireVoice(key) {
+    this.voiceEpoch[key] = (this.voiceEpoch[key] || 0) + 1;
     var group = this.voiceGroups[key];
     if (!group) return;
     delete this.voiceGroups[key];
@@ -4442,6 +4445,7 @@ class Component extends DCLogic {
     try {
       await this.waitForAudio(this.ensureAudio());
       if (this.disposed || run !== this.audioRun || this.state.previewKey !== key) return;
+      this.voiceInput(key);
       var profile = MUSIC[key], t = this.ac.currentTime + .06, chord = chordOf(profile, profile.prog[0]);
       if (key === 'mama') {
         this.note('sine', chord.root - 12, t, 1.6, .2, { att: .03, rel: .3, cut: 500 });
@@ -4504,9 +4508,9 @@ class Component extends DCLogic {
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05 + 0.12 * amt, t + dur * 0.35); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.start(t); l.start(t); n.start(t); o.stop(t + dur + 0.05); l.stop(t + dur + 0.05); n.stop(t + dur + 0.05);
   }
-  step(col) {
-    var a = this.cur(); if (!a) return;
-    var s = this.state, m = s.mute, t = this.ac.currentTime + 0.02, sp = this.stepMs() / 1000, info = this.colInfo(a, col), pan = (col / 27) * 1.6 - 0.8;
+  step(col, scheduled) {
+    var a = scheduled ? scheduled.analysis : this.cur(); if (!a) return;
+    var s = scheduled ? scheduled.state : this.state, m = s.mute, t = scheduled ? scheduled.at : this.ac.currentTime + 0.02, sp = this.frameStepMs(s.frame) / 1000, info = this.colInfo(a, col), pan = (col / 27) * 1.6 - 0.8;
     var lv = { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, notes = [];
     if (col % 4 === 0) {
       var w = 0, c = 0, k = 0; for (var j = col; j < Math.min(28, col + 4); j++) { var ci = this.colInfo(a, j); if (!ci.k) continue; w += ci.w; c += ci.c; k++; }
@@ -4528,7 +4532,7 @@ class Component extends DCLogic {
     if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push(T('¡Illapa truena!', 'Illapa thunders!')); }
     if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push(T('Silbo silba: la costa del Perú está caliente', 'Silbo whistles: the Peruvian coast is hot')); }
     else if (col >= 23 && col <= 26) lv.silbo = s.levels.silbo * 0.85;
-    if (s.vibe && (lv.illapa > 0.3 || info.strong.length > 4)) this.vibrateSafely(lv.illapa > 0.3 ? 120 : 25);
+    var vibration = s.vibe && (lv.illapa > 0.3 || info.strong.length > 4) ? lv.illapa > 0.3 ? 120 : 25 : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var feel = info.k === 0 ? T('tierra, silencio', 'land, silence') : info.w > 2 ? T('muy cálido', 'very warm') : info.w > 0.8 ? T('cálido', 'warm') : info.c > 0.8 ? T('frío', 'cold') : T('casi normal', 'near normal');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
@@ -4537,9 +4541,8 @@ class Component extends DCLogic {
     if (fired.mama) this.leadNote('mama', t, sp * 3.8);
     if (fired.illapa) this.leadNote('illapa', t, 0.52);
     if (fired.silbo) this.leadNote('silbo', t, Math.max(0.9, sp * 6));
-    var bp = this.bump(fired, fired.illapa);
-    this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') });
-    this.recordEvent(fired, '');
+    var bp = this.bump(fired, fired.illapa, s);
+    this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, '', scheduled, vibration);
   }
   spriteVm(k) {
     var s = this.state, b = BAND.filter(function (x) { return x.k === k; })[0], off = s.mute[k], lv = s.levels[k] || 0;
@@ -4552,10 +4555,11 @@ class Component extends DCLogic {
       cls: 'sp-' + k + (play ? ' play' : '') + (off ? ' off' : '') + (hitN && !off ? (hitN % 2 ? ' ha' : ' hb') : ''),
       coneC: b.color + '66', coneOp: play ? '1' : '0.4', lvPct: Math.round((off ? 0 : lv) * 100) + '%' };
   }
-  bump(fired, thunder) {
-    var h = Object.assign({}, this.state.hits);
+  bump(fired, thunder, state) {
+    state = state || this.state;
+    var h = Object.assign({}, state.hits);
     BAND.forEach(function (b) { if (fired[b.k]) h[b.k] = (h[b.k] || 0) + 1; });
-    return { hits: h, flash: thunder ? this.state.flash + 1 : this.state.flash };
+    return { hits: h, flash: thunder ? state.flash + 1 : state.flash };
   }
   speedFactor() { return { 180: 0.75, 110: 1, 70: 1.4 }[this.state.speed] || 1; }
   stepMs() {
@@ -4565,7 +4569,71 @@ class Component extends DCLogic {
     var self = this, run = this.audioRun;
     if (this.timer != null) clearInterval(this.timer);
     this.sequencerMs = this.stepMs();
-    this.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.tick(); }, this.sequencerMs);
+    this.playbackQueue = [];
+    var s = this.state;
+    this.audioCursor = { frame: s.frame, column: s.col + 1, at: this.ac.currentTime + .075,
+      levels: Object.assign({}, s.levels), hits: Object.assign({}, s.hits), flash: s.flash };
+    this.heardThunder = this.lastThunder;
+    this.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.scheduleAudio(); }, 25);
+  }
+  emitStep(patch, fired, chord, scheduled, vibration) {
+    if (!scheduled) {
+      if (vibration) this.vibrateSafely(vibration);
+      this.setState(patch); this.recordEvent(fired, chord); return;
+    }
+    scheduled.patch = patch;
+    var profile = this.profile(scheduled.analysis, scheduled.state.frame);
+    this.playbackQueue.push({ at: scheduled.at, frame: scheduled.state.frame, patch: patch,
+      fired: fired, chord: chord, chordIndex: chord ? profile.prog.findIndex(function (item) { return chordOf(profile, item).label === chord; }) : -1,
+      info: this.colInfo(scheduled.analysis, patch.col), vibration: vibration, thunder: this.lastThunder,
+      voiceEpoch: Object.assign({}, this.voiceEpoch) });
+  }
+  flushPlayback(now) {
+    var self = this;
+    while (this.playbackQueue && this.playbackQueue.length && this.playbackQueue[0].at <= now + .002) {
+      var event = this.playbackQueue.shift(), frameChanged = this.state.frame !== event.frame;
+      var patch = Object.assign({ frame: event.frame }, event.patch), fired = Object.assign({}, event.fired);
+      patch.levels = Object.assign({}, patch.levels); patch.hits = Object.assign({}, patch.hits);
+      BAND.forEach(function (member) { if (self.state.mute[member.k] || (self.voiceEpoch[member.k] || 0) !== (event.voiceEpoch[member.k] || 0)) { patch.levels[member.k] = 0; patch.hits[member.k] = 0; fired[member.k] = false; } });
+      var profile = this.profile(this.state.an[this.state.disc + '_' + event.frame], event.frame);
+      var chord = event.chordIndex < 0 ? '' : chordOf(profile, profile.prog[event.chordIndex]).label;
+      var names = BAND.filter(function (member) { return fired[member.k]; }).map(function (member) { return member.name; });
+      patch.chord = chord;
+      patch.caption = '[' + this.frameTag(this.state.disc, event.frame) + ' · ' + T('columna ', 'column ') + (patch.col + 1) + '/28] ' +
+        (chord ? T('acorde ', 'chord ') + chord : T('cálido +', 'warm +') + event.info.w.toFixed(1) + T(' · frío −', ' · cold −') + event.info.c.toFixed(1)) +
+        (names.length ? ' · ' + names.join(' · ') : T(' · sin ataque nuevo', ' · no new attack'));
+      if (frameChanged) patch.playerAnnouncement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
+      this.heardThunder = event.thunder;
+      this.setState(patch); this.recordEvent(fired, chord);
+      if (event.vibration) this.vibrateSafely(event.vibration);
+    }
+  }
+  scheduleAudio() {
+    if (!this.ac || !this.state.playing || !this.audioCursor) return;
+    var now = this.ac.currentTime, cursor = this.audioCursor;
+    if (cursor.endAt != null && cursor.endAt <= now) { this.flushPlayback(now); this.tick(); return; }
+    for (var count = 0; count < 16 && cursor.at < now + .65; count++) {
+      now = this.ac.currentTime;
+      if (cursor.column >= 28) {
+        if (cursor.frame >= DISCS[this.state.disc].files.length - 1) { cursor.endAt = cursor.at; break; }
+        cursor.frame++; cursor.column = 0; this.lastThunder = -9;
+      }
+      var analysis = this.state.an[this.state.disc + '_' + cursor.frame];
+      if (!analysis) break;
+      // A stall beyond the lookahead resumes from the next unheard step instead
+      // of firing a burst of notes whose intended time has already passed.
+      if (cursor.at < now + .03) cursor.at = now + .075;
+      var snapshot = Object.assign({}, this.state, { frame: cursor.frame, col: cursor.column - 1,
+        levels: cursor.levels, hits: cursor.hits, flash: cursor.flash });
+      var scheduled = { at: cursor.at, state: snapshot, analysis: analysis };
+      this.sequencerMs = this.frameStepMs(cursor.frame);
+      if (snapshot.engine === 'melody') this.stepMelody(cursor.column, scheduled); else this.step(cursor.column, scheduled);
+      if (scheduled.patch) { cursor.levels = scheduled.patch.levels; cursor.hits = scheduled.patch.hits; cursor.flash = scheduled.patch.flash; }
+      cursor.at += this.sequencerMs / 1000; cursor.column++;
+    }
+    // Scheduling happens before DOM work: rendering a due UI update must not
+    // consume the safety margin of the next audio event.
+    this.flushPlayback(this.ac.currentTime);
   }
   setEngine(k) {
     if (['melody', 'raw'].indexOf(k) < 0 || k === this.state.engine) return;
@@ -4623,10 +4691,10 @@ class Component extends DCLogic {
     o.connect(g); g.connect(this.voiceInput('illapa')); this.trackSource(o, 'illapa'); o.start(t); o.stop(t + 1.2);
     this.noiseBurst(t, vol * 0.5, 0.25, 500);
   }
-  stepMelody(col) {
-    var a = this.cur(); if (!a) return;
-    var self = this, s = this.state, m = s.mute, t = this.ac.currentTime + 0.03, sp = this.stepMs() / 1000;
-    var prof = this.profile(), cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
+  stepMelody(col, scheduled) {
+    var a = scheduled ? scheduled.analysis : this.cur(); if (!a) return;
+    var self = this, s = scheduled ? scheduled.state : this.state, m = s.mute, t = scheduled ? scheduled.at : this.ac.currentTime + 0.03, sp = this.frameStepMs(s.frame) / 1000;
+    var prof = this.profile(a, s.frame), cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
     var ch = chordOf(prof, prof.prog[cIdx]), info = this.colInfo(a, col), onBeat = col % 4 === 0, pan = (col / 27) * 1.2 - 0.6;
     var lv = { silbo: s.levels.silbo * 0.8, inti: s.levels.inti * 0.8, mama: s.levels.mama * 0.85, yaku: s.levels.yaku * 0.7, illapa: s.levels.illapa * 0.85 }, notes = [];
     var lv0 = Object.assign({}, lv);
@@ -4678,12 +4746,11 @@ class Component extends DCLogic {
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push(T('¡Illapa truena!', 'Illapa thunders!'));
       } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); this.leadNote('illapa', t, 0.4); lv.illapa = Math.max(lv.illapa, 0.3); }
     }
-    if (s.vibe && lv.illapa > 0.5) this.vibrateSafely(100);
+    var vibration = s.vibe && lv.illapa > 0.5 ? 100 : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
-    var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }));
-    this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] ' + T('acorde ', 'chord ') + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') });
-    this.recordEvent(fired, ch.label);
+    var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }), s);
+    this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] ' + T('acorde ', 'chord ') + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, ch.label, scheduled, vibration);
   }
   describeText() {
     var a = this.cur(), s = this.state, dt = this.frameDate(s.disc, s.frame);
@@ -4740,10 +4807,10 @@ class Component extends DCLogic {
   }
   leadNote(key, at, duration) {
     if (key !== this.leadChar()) return;
-    var self = this, run = this.audioRun;
+    var self = this, run = this.audioRun, epoch = this.voiceEpoch[key] || 0;
     var start = setTimeout(function () {
       self.leadTimers.delete(start);
-      if (self.disposed || run !== self.audioRun || !self.state.playing || self.state.mute[key] || self.leadChar() !== key) return;
+      if (self.disposed || run !== self.audioRun || epoch !== (self.voiceEpoch[key] || 0) || !self.state.playing || self.state.mute[key] || self.leadChar() !== key) return;
       var id = ++self.leadPulseId;
       self.setState({ leadPulse: { key: key, id: id, duration: duration } });
       clearTimeout(self.leadRestTimer);
@@ -4763,6 +4830,7 @@ class Component extends DCLogic {
       if (this.disposed || run !== this.audioRun) return;
       var s = this.state, allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
       var go = function () {
+        BAND.forEach(function (member) { if (!self.state.mute[member.k]) self.voiceInput(member.k); });
         self.melDeg = null; self.playT0 = document.timeline.currentTime;
         var restart = self.playerPosition() >= self.playerSteps();
         self.setState(Object.assign({ playing: true, audioPending: false, ended: false,
@@ -4843,11 +4911,14 @@ class Component extends DCLogic {
     cleanup();
   }
   stop() {
+    if (this.state.playing && this.ac) this.flushPlayback(this.ac.currentTime);
     ++this.audioRun;
     ++this.cueRun;
     if (this.cancelAudioWait) this.cancelAudioWait();
     if (this.timer != null) clearInterval(this.timer);
     this.timer = null;
+    this.playbackQueue = []; this.audioCursor = null;
+    if (this.heardThunder != null) this.lastThunder = this.heardThunder;
     this.leadTimers.forEach(clearTimeout);
     this.leadTimers.clear();
     clearTimeout(this.leadRestTimer);
