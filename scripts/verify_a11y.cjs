@@ -44,6 +44,10 @@ async function main(){
     await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').nth(2).click();
     const legend=page.locator('.legend-detail summary');if(await legend.count())await legend.click();
     await audit(lang+'-player-legend-expanded');
+    await page.evaluate(()=>__app.setState({events:Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''))}));
+    for(const detail of await page.locator('.scr .in details').all())if(await detail.getAttribute('open')===null)await detail.locator(':scope > summary').click();
+    await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);await audit(lang+'-player-all-panels-expanded');
+    for(const detail of await page.locator('.scr .in details').all())if(await detail.getAttribute('open')!==null)await detail.locator(':scope > summary').click();
     await page.evaluate(()=>__app.openMore());await audit(lang+'-music-dialog');await page.keyboard.press('Escape');
     await page.locator('#tour-guide').click();await audit(lang+'-Brisa');await page.keyboard.press('Escape');
     await page.locator('#tour-a11y > summary').click();await audit(lang+'-accessibility-menu');await page.keyboard.press('Escape');

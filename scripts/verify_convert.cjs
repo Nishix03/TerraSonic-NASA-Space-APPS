@@ -85,6 +85,15 @@ async function main() {
     assert.equal(series.length, 20); checks.push('CSV parsed locally and a different numeric column selected');
     await page.locator('#tour-lang button').nth(1).click();
     assert.equal(await column.inputValue(), '2');
+    await back();await secondary();
+    const magnitudes=['large,tiny',...[6,7,8,9,10,6,7,8,9,10].map(value=>`${value*1e307},${value*1e-200}`)].join('\n');
+    await csvInput.setInputFiles({name:'finite-magnitudes.csv',mimeType:'text/csv',buffer:Buffer.from(magnitudes)});
+    await page.waitForFunction(()=>__app.state.custom?.baseName==='finite-magnitudes.csv'&&__app.state.sub===1);
+    const largeCells=await page.evaluate(()=>__app.cur().cells);assert(largeCells.every(Number.isFinite));assert(largeCells.some(value=>value>0)&&largeCells.some(value=>value<0));
+    await page.evaluate(()=>window.__previousAnalysis=__app.cur());await page.locator('.file-settings select').selectOption('1');
+    await page.waitForFunction(()=>__app.state.custom?.col===1&&__app.cur()!==window.__previousAnalysis);
+    const tinyCells=await page.evaluate(()=>__app.cur().cells);tinyCells.forEach((value,index)=>assert(Math.abs(value-largeCells[index])<1e-10));
+    checks.push('Finite large and tiny CSV magnitudes preserve the same normalized pattern without overflow or an arbitrary flat cutoff');
     await back(); await secondary(); await page.locator('#tour-sample button').click();
     await page.waitForFunction(() => __app.state.custom?.nameText?.en?.includes('rainfall') && __app.state.sub === 1);
     checks.push('NASA POWER Chiclayo sample preserved and opened in English'); await back();

@@ -13,7 +13,7 @@ python scripts/run_browser_checks.py --list
 Para los recorridos, `TERRASONIC_PLAYWRIGHT` debe apuntar a una instalación de `playwright-core`, y `TERRASONIC_CHROMIUM` al ejecutable de Chromium de prueba. Para axe se usa `TERRASONIC_AXE`. El runner mantiene los procesos secuenciales y guarda JSON con código de salida, duración real del proceso y log de cada caso; esa duración no se suma al tiempo efectivo de trabajo.
 
 ```powershell
-python scripts/run_browser_checks.py --site _site --evidence _work/qa/local --only home fonts preferences reflow keyboard a11y method characters convert image-geometry brisa player impacts models
+python scripts/run_browser_checks.py --site _site --evidence _work/qa/local --only home fonts preferences reflow keyboard a11y method characters convert image-geometry image-formats expanded-layout brisa player impacts models avatar-interactions
 ```
 
 La instalación utilizada es Playwright Core 1.58.2 y Chromium Headless Shell 156.0.8078.4. Las pruebas adicionales usan Firefox 146.0.1, revisión 1509, y WebKit 26.0, revisión 2248, correspondientes al catálogo de esa instalación de Playwright. Los binarios se obtuvieron de las URL oficiales del CLI y se extrajeron en D. El instalador inicial quedó atascado en la extracción; se detuvieron exclusivamente sus dos procesos identificados, y la descarga/extracción aislada por Python completó los paquetes. No se instalaron navegadores globales ni se usaron perfiles personales.
@@ -22,12 +22,14 @@ La instalación utilizada es Playwright Core 1.58.2 y Chromium Headless Shell 15
 
 ```powershell
 python scripts/run_browser_checks.py --browser firefox --site _site --evidence _work/qa/firefox
-python scripts/run_browser_checks.py --browser webkit --site _site --evidence _work/qa/webkit
+python scripts/run_browser_checks.py --browser webkit --site _site --evidence _work/qa/webkit --only home preferences reflow a11y method characters convert image-geometry image-formats expanded-layout brisa models avatar-interactions
 ```
 
 Estos son motores de prueba para Windows: WebKit no acredita Safari en iPhone, y un viewport móvil no equivale a un teléfono físico. Las pruebas con árboles de accesibilidad y eventos de teclado no equivalen a una persona con lector de pantalla. La voz usa stubs para cancelación/mezcla y APIs ausentes; no se ha escuchado su timbre.
 
 El binario WebKit 26.0 de Windows no expone `AudioContext` ni `webkitAudioContext` en la observación realizada. Sus intentos de recorridos de audio fallaron antes de corregir la instrumentación; no se presentan como reproducción verificada. La pasada de Brisa se adaptó para comprobar la alternativa escrita real y documenta `nativeAudioAvailable: false`. Chromium y Firefox sí completan los recorridos de audio/impactos. El audio en Safari y dispositivos Apple queda pendiente.
+
+El comando WebKit anterior selecciona deliberadamente las comprobaciones sin Web Audio; el conjunto predeterminado del runner incluye reproductor e impactos y no es apropiado para este binario sin audio. No se marcan esas pruebas como pasadas ni se reemplaza el motor nativo por un sintetizador falso.
 
 ## Hallazgos que cambiaron el producto
 
@@ -37,6 +39,9 @@ El binario WebKit 26.0 de Windows no expone `AudioContext` ni `webkitAudioContex
 - El selector CSV usaba una etiqueta personalizada dentro de `select`; Firefox perdía las opciones durante el análisis HTML. Se usa una plantilla nativa `template` y se comprueban las tres opciones, la elección y su conservación al cambiar idioma. [Modelo de contenido de select, HTML](https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element).
 - En WebKit, un clic en Brisa no trasladaba siempre el foco al botón como ocurre en Chromium. La ayuda recuerda ahora el elemento que la abre; al cerrarla devuelve el foco allí sin cambiar archivo, fecha ni posición.
 - Las imágenes propias se estiraban para el análisis y se recortaban en la vista. Ahora se centran sin deformar y se usa la misma imagen fija para ambas representaciones. [Detalles y evidencia](CONVERTIR.md).
+- La orientación JPG se verifica con las ocho combinaciones EXIF, y WebP con un archivo real. Nueve casos pasan en los tres motores sin aplicar una rotación adicional sobre la decodificación nativa. El runner los identifica como `image-formats`.
+- El análisis secundario distinguía mal «Extremo» de su cálculo real, que cuenta niveles positivos ≥ +4. Ahora se nombra el umbral y el denominador, y no se presenta una costa para archivos sin referencia geográfica. La leyenda de esos archivos también evita atribuir datos de mar.
+- El historial de 200 eventos no era alcanzable con Tab en WebKit. La lista desplazable recibe foco explícito cuando tiene contenido, conserva su semántica de lista y muestra contorno. La lista vacía no añade una parada. Se sigue la regla WAI de [contenido desplazable accesible mediante foco secuencial](https://www.w3.org/WAI/standards-guidelines/act/rules/0ssw9k/), sin sustituir las teclas nativas de desplazamiento.
 
 ## Interpretación de la evidencia
 
@@ -45,5 +50,7 @@ Se conservan los fallos iniciales y las pasadas corregidas por separado. El fixt
 axe informa infracciones detectadas y casos incompletos; un resultado cero no prueba conformidad completa. La redistribución comprueba desbordamiento y recorte, mientras las capturas y verificaciones específicas de texto detectan palabras partidas. No hay una línea base visual aprobada por el equipo; las capturas constituyen una revisión de la propuesta, no una certificación de igualdad con Figma ni una aprobación cultural.
 
 El zoom nativo no se pudo revisar por la herramienta de control de ventana y se mantiene pendiente. Sí se prueban anchos CSS de hasta 320 px, texto de base 32 px, espaciado WCAG y el tamaño original de captura 1342×605. El desplazamiento vertical con texto ampliado se conserva para no sacrificar lectura.
+
+La emulación de cambio de movimiento en WebKit de esta instalación dejó objetos `MediaQueryList` creados antes del cambio con `matches: true`, aunque una consulta nueva ya devolvía false. El diagnóstico se conserva; no se atribuye ese resultado a un teléfono ni al sistema operativo real. Los contextos nuevos con cada preferencia sí permiten verificar las poses iniciales y animaciones, y la preferencia manual de la aplicación detiene los clips. Chromium y Firefox mantienen además el recorrido de cambio de preferencia del sistema dentro de la sesión.
 
 Referencias: [Playwright y sus motores](https://playwright.dev/docs/browsers), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [COGA](https://www.w3.org/TR/coga-usable/).

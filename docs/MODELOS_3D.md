@@ -18,6 +18,10 @@ El conjunto ocupa 3 148 248 bytes, un 62 % menos que los GLB de la base. Cada mo
 
 ## Rig y movimiento
 
+El pulido posterior separó la muestra musical de los controles 3D: escuchar/detener sigue disponible sin WebGL o si no carga el runtime. El retrato cancela su arrastre al terminar/perder un puntero y no gira con dos punteros; `pan-y pinch-zoom` conserva los gestos del navegador. Las pruebas usan ratón real automatizado y PointerEvents sintéticos, no un teléfono físico ni zoom nativo.
+
+Una excepción provocada al dibujar reveló que el modelo podía permanecer en la escena compartida. Se retiró mediante `finally` incluso ante error; la pose sigue disponible y el siguiente personaje se renderiza sin el anterior. `verify_avatar_interactions.cjs` registra escena vacía tras el fallo y un solo personaje por dibujo. La prueba controla el error; no demuestra una pérdida física de GPU.
+
 Cada personaje tiene 17 huesos con jerarquía explícita de raíz, cadera, torso, cabeza, brazos, antebrazos, manos, muslos, piernas, pies e instrumento. Las piezas están ponderadas a su articulación. No se simula tela. Los clips Idle, Play, Walk, Dance y Speak son bucles cortos y mantienen la raíz en su sitio.
 
 Walk es un paso en el lugar para una presentación web. Se muestrearon inicio, cuartos, mitad y final de los cinco clips por personaje. Los mínimos de la malla evaluada están sobre el suelo, con diferencias numéricas menores que la tolerancia de 2 cm. La inspección visual incluye frente, perfil, espalda y frames de Play y Walk. La captura de hechos está en `_work/models/after/state.json`; los renders están en el mismo directorio.
@@ -59,10 +63,10 @@ node scripts/benchmark_browser.cjs _site _work/benchmarks/after.json
 
 La regresión de navegador prueba cinco personajes en seis situaciones: carga normal, movimiento reducido, ausencia de WebGL, modelo lento, modelo ausente y runtime ausente. Comprueba además los cuerpos completos en Escuchar y la activación compartida con Escenario. Las capturas y el JSON se guardan fuera del paquete público.
 
-## Rendimiento y evidencia pendiente
+## Rendimiento y límites
 
-El perfil local emula 390 × 844, latencia de 150 ms, descarga de 200 KiB/s, CPU ×4 y caché deshabilitada. Se hicieron tres recorridos por versión. La mediana inicial fue de 6,25 s hasta Inicio utilizable, 2,40 s desde elegir Escuchar hasta el control del reproductor y 37,83 s desde Banda hasta el primer render 3D. Con carga diferida y los nuevos modelos, una medición intermedia dio 2,60 s, 0,90 s y 10,67 s respectivamente. Son recorridos emulados en esta laptop, con SwiftShader. Las imágenes de respaldo son visibles durante la descarga. El conteo de bytes GLB por CDP resultó incompleto; el peso de los archivos se obtiene del disco.
+El perfil local emula 390 × 844, latencia de 150 ms, descarga de 200 KiB/s, CPU ×4 y caché deshabilitada. La comparación de tres recorridos entre la base `59310ac` y el checkpoint `122fd9d` dio medianas de 6,067 → 2,726 s hasta Inicio utilizable y 36,516 → 8,765 s desde Banda hasta el primer render 3D. Son recorridos emulados en esta laptop, con SwiftShader. Las imágenes de respaldo permanecen visibles durante la descarga. Los bytes GLB completos se obtienen del disco, pues CDP puede registrar transferencias parciales cuando se cambia de pantalla. Perfil, tiempos de Escuchar, muestras y límites: [RENDIMIENTO.md](RENDIMIENTO.md).
 
 Las fichas históricas y culturales ya se incorporaron a `data/characters.v1.json` y se explican en `docs/PERSONAJES.md`. Las menciones de tareas históricas pendientes en el inventario inicial de arriba quedan resueltas por ese catálogo; la revisión cultural externa y la referencia visual para una posible adaptación de Silbo siguen pendientes.
 
-Quedan por medir el paquete final completo, continuidad de audio con el nuevo reproductor, teléfono físico, escucha humana y revisión cultural. Esta revisión de modelos no acredita el cierre del encargo completo de TerraSonic.
+La continuidad del nuevo reproductor ya se midió bajo carga y en cuatro discos completos; [AUDIO_RELOJ.md](AUDIO_RELOJ.md) distingue programación, renders y salida sintetizada de escucha humana. El paquete `f0f5d06` tiene integridad comprobada y conserva los originales, pero las correcciones posteriores requieren otro checkpoint. Siguen pendientes teléfono físico, escucha humana y revisión cultural. Esta revisión de modelos no acredita el cierre del encargo completo de TerraSonic.

@@ -390,10 +390,12 @@ a{color:inherit}
 .px .stagebox.slim .stagebar{padding:4px 14px;font-size:.68em}
 .px .stagebox.slim .stagebar>span:first-child{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .px .mdim{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72)}
-.px .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:85;width:min(900px,94vw);max-height:90vh;overflow:auto;background:#06080f;border:1px solid rgba(255,255,255,.5);padding:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
-.px .modal .mhead{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.px .modal .col{display:flex;flex-direction:column;gap:10px;min-width:0}
-@media (max-width:760px){.px .modal{grid-template-columns:minmax(0,1fr)}}
+.px .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:85;width:min(720px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;background:#06080f;border:1px solid rgba(255,255,255,.5);padding:clamp(12px,2vw,20px);display:grid;grid-template-columns:minmax(0,1fr);gap:16px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
+.px .modal .mhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.px .modal .mhead h2{font-size:1.6em;min-width:0}
+.px .modal .mhead button{flex:0 0 auto}
+.px .modal .col{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16em),1fr));gap:16px;min-width:0}
+.px .modal .col>.tag{grid-column:1/-1}
 
 /* ===== la banda · una pantalla ===== */
 .px .scr:has(.bpage){overflow-y:auto}
@@ -1417,6 +1419,7 @@ a{color:inherit}
 .px .event-history{border-block:1px solid var(--line);padding:10px 0;min-width:0}
 .px .event-history summary{cursor:pointer;min-height:28px;font-size:.82em}
 .px .event-history ol{max-height:240px;overflow:auto;overscroll-behavior:contain;padding:0 0 0 26px;margin:10px 0;list-style:decimal}
+.px .event-history ol:focus-visible{outline-offset:-2px}
 .px .event-history li{padding:6px 4px;border-bottom:1px solid var(--line);font-size:.76em;line-height:1.5}
 .px .event-history li>span:first-child{margin-right:10px;color:var(--muted)}
 .px .player-impact{min-width:0;border-block:1px solid var(--line);padding-block:6px;font-size:.85em}
@@ -1721,7 +1724,8 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
 <div class="scanline" style="left: {{scanLeft}}"></div>
 </div>
-<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.extreme}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
+<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.strongWarm}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
+<p class="small muted">{{statsHelp}}</p>
 </figure>
 </details>
 
@@ -1750,7 +1754,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-if>
 </div>
 <p class="current-event small">{{caption}}</p>
-<details class="event-history" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
+<details class="event-history" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
 <p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
 </div>
 </sc-if>
@@ -2769,7 +2773,7 @@ var TECH = [
 var OBJ = [
   { tag: 'EMPAREJAR', title: 'Fotogramas del EIC + sonido en tiempo real', where: 'Cada fotograma suena mientras el cabezal lo escanea, columna por columna.', page: 'juke' },
   { tag: 'ELEGIR', title: 'Elegir una visualización y oírla', where: 'Dos colecciones de cinco discos, con seis fechas por disco y controles para saltar sin arrastrar.', page: 'juke' },
-  { tag: 'DE LA VISTA AL OÍDO', title: 'Del color al sonido', where: 'La cuadrícula «Lo que ve la máquina» muestra qué lee el algoritmo, y «Más opciones» explica por qué suena así.', page: 'juke' },
+  { tag: 'DE LA VISTA AL OÍDO', title: 'Del color al sonido', where: 'La cuadrícula «Lo que ve la máquina» muestra qué lee el algoritmo, y «Cómo suena» explica por qué suena así.', page: 'juke' },
   { tag: 'MUSICAL', title: 'Agradable, no ruido', where: 'El motor Melodía usa escalas, acordes y una progresión por disco, no píxeles convertidos a tonos al azar.', page: 'juke' },
   { tag: 'ACCESIBLE', title: 'Para personas ciegas o con baja visión', where: 'Descripción por voz, subtítulos de sonido, vibración, teclado, alto contraste y texto grande.', page: 'juke' },
   { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen o un CSV y suena con la misma banda.', page: 'data' },
@@ -2964,7 +2968,7 @@ var TECH_EN = {
 var OBJ_EN = [
   { tag: 'MATCH', title: 'EIC frames + real-time sound', where: 'Each frame plays while the scan head crosses it, column by column.' },
   { tag: 'CHOOSE', title: 'Pick a visualization and hear it', where: 'Two collections of five discs, with six dates per disc and controls to seek without dragging.' },
-  { tag: 'FROM SIGHT TO SOUND', title: 'From color to sound', where: 'The “What the machine sees” grid shows what the algorithm reads, and “More options” explains why it sounds that way.' },
+  { tag: 'FROM SIGHT TO SOUND', title: 'From color to sound', where: 'The “What the machine sees” grid shows what the algorithm reads, and “How it sounds” explains why it sounds that way.' },
   { tag: 'MUSICAL', title: 'Pleasant, not noise', where: 'The Melody engine uses scales, chords and a progression per disc, not pixels turned into random pitches.' },
   { tag: 'ACCESSIBLE', title: 'For blind and low-vision people', where: 'Spoken description, sound captions, vibration, keyboard, high contrast and large text.' },
   { tag: 'EXPLORE', title: 'Explore with your own data', where: 'Upload an image or a CSV and it plays with the same band.' },
@@ -3021,8 +3025,8 @@ var TX = {
     setsAria: 'Origen de los datos', discsAria: 'Discos',
     listenKicker: 'Escuchar · paso 2', changeDisc: 'Cambiar disco', changeFile: 'Cambiar archivo',
     youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: '28×16 píxeles de color',
-    prevFrame: 'Fotograma anterior', nextFrame: 'Fotograma siguiente', warm: 'Cálido', cold: 'Frío', extreme: 'Extremo', coast: 'Costa',
-    moreOptions: 'Más opciones', timelineAria: 'Línea de tiempo del disco', see: 'Ves', hear: 'Oyes', chordsAria: 'Progresión de acordes', playerReadout: 'Qué ves y qué oyes',
+    prevFrame: 'Fotograma anterior', nextFrame: 'Fotograma siguiente', warm: 'Cálido', cold: 'Frío', strongWarm: 'Nivel ≥ +4', coast: 'Costa',
+    moreOptions: 'Cómo suena', timelineAria: 'Línea de tiempo del disco', see: 'Ves', hear: 'Oyes', chordsAria: 'Progresión de acordes', playerReadout: 'Qué ves y qué oyes',
     stageKicker: 'Escuchar · paso 3', stageTitle: 'La banda en escena', stageAria: 'Escenario de la banda', onStage: 'En el escenario:', musiciansAria: 'Músicos en escena',
     stageEmpty1: 'Escenario vacío', stageEmpty2: 'enciende un músico',
     leadAria: 'Protagonista de la reproducción', leadLabel: 'Protagonista', leadChange: 'Cambiar protagonista', leadPrev: 'Protagonista anterior', leadAuto: 'Según el disco', leadNext: 'Protagonista siguiente',
@@ -3072,8 +3076,8 @@ var TX = {
     setsAria: 'Data source', discsAria: 'Discs',
     listenKicker: 'Listen · step 2', changeDisc: 'Change disc', changeFile: 'Change file',
     youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: '28×16 colored pixels',
-    prevFrame: 'Previous frame', nextFrame: 'Next frame', warm: 'Warm', cold: 'Cold', extreme: 'Extreme', coast: 'Coast',
-    moreOptions: 'More options', timelineAria: 'Disc timeline', see: 'See', hear: 'Hear', chordsAria: 'Chord progression', playerReadout: 'What you see and hear',
+    prevFrame: 'Previous frame', nextFrame: 'Next frame', warm: 'Warm', cold: 'Cold', strongWarm: 'Level ≥ +4', coast: 'Coast',
+    moreOptions: 'How it sounds', timelineAria: 'Disc timeline', see: 'See', hear: 'Hear', chordsAria: 'Chord progression', playerReadout: 'What you see and hear',
     stageKicker: 'Listen · step 3', stageTitle: 'The band on stage', stageAria: 'The band’s stage', onStage: 'On stage:', musiciansAria: 'Musicians on stage',
     stageEmpty1: 'Empty stage', stageEmpty2: 'switch a musician on',
     leadAria: 'Lead of the playback', leadLabel: 'Lead', leadChange: 'Change lead', leadPrev: 'Previous lead', leadAuto: 'Follow the disc', leadNext: 'Next lead',
@@ -4075,7 +4079,7 @@ class Component extends DCLogic {
       { symbol: '↑', color: '#FF6A2B', label: source === 'csv' ? T('Sobre la media', 'Above the mean') : source === 'image' ? T('Color cálido', 'Warm color') : T('Más cálido de lo esperado', 'Warmer than expected'), meaning: T('Nivel positivo · Inti, Yaku; extremos: Illapa.', 'Positive level · Inti, Yaku; extremes: Illapa.') },
       { symbol: '≈', color: '#7E849E', label: source === 'csv' ? T('Cerca de la media', 'Near the mean') : source === 'image' ? T('Nivel cercano a cero', 'Level near zero') : T('Cerca de lo esperado', 'Near expected'), meaning: T('Referencia · no implica silencio total.', 'Reference · does not mean complete silence.') },
       { symbol: '↓', color: '#38C6E8', label: source === 'csv' ? T('Bajo la media', 'Below the mean') : source === 'image' ? T('Color frío', 'Cool color') : T('Más frío de lo esperado', 'Cooler than expected'), meaning: T('Nivel negativo · Mamacocha y Yaku.', 'Negative level · Mamacocha and Yaku.') },
-      { symbol: '□', color: '#232A4A', label: T('Sin datos de mar', 'No ocean data'), meaning: T('Celda sin valor utilizable · sin nota de datos.', 'Cell without a usable value · no data note.') }
+      { symbol: '□', color: '#232A4A', label: source === 'image' || source === 'csv' ? T('Sin valor utilizable', 'No usable value') : T('Sin datos de mar', 'No ocean data'), meaning: T('Celda sin valor utilizable · sin nota de datos.', 'Cell without a usable value · no data note.') }
     ];
     legend.forEach(function (entry, index) {
       entry.on = s.legendSelection === index;
@@ -4105,7 +4109,7 @@ class Component extends DCLogic {
       paletteTitle: T('Mapa original y análisis', 'Original map and analysis'),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () { if (self.state.speaking) self.stopSpeech(); else self.speak(legend.map(function (l) { return l.label + '. ' + l.meaning; }).join(' ') + ' ' + paletteNote, true); },
-      historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length,
+      historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length, historyTabIndex: s.events.length ? 0 : -1,
       historyHelp: T('Últimos 200 pasos. Se conservan al pausar o cambiar de disco. El lector de pantalla los lee cuando tú los consultas.', 'Last 200 steps. They remain when you pause or change discs. Your screen reader reads them when you choose to browse them.'),
       events: s.eventsOpen ? s.events.slice().reverse().map(function (event) {
         var disc = DISC_SETS.eic.concat(DISC_SETS.prev).find(function (item) { return item.id === event.discId; });
@@ -4334,14 +4338,18 @@ class Component extends DCLogic {
     return true;
   }
   seriesAnalysis(values) {
+    // Scaling first keeps finite inputs finite and preserves very small ranges.
+    // It does not change units or values in the source column stored by the app.
+    var magnitude = Math.max.apply(null, values.map(function (value) { return Math.abs(value); }));
+    var normalized = values.map(function (value) { return magnitude ? value / magnitude : 0; });
     var G = 28, groups = [], i;
-    for (i = 0; i < G; i++) { var a0 = Math.floor(i * values.length / G), a1 = Math.max(a0 + 1, Math.floor((i + 1) * values.length / G)); groups.push(values.slice(a0, a1)); }
-    var mean = values.reduce(function (p, q) { return p + q; }, 0) / values.length;
+    for (i = 0; i < G; i++) { var a0 = Math.floor(i * normalized.length / G), a1 = Math.max(a0 + 1, Math.floor((i + 1) * normalized.length / G)); groups.push(normalized.slice(a0, a1)); }
+    var mean = normalized.reduce(function (p, q) { return p + q; }, 0) / normalized.length;
     var vs = groups.map(function (g) { var best = g[0]; g.forEach(function (v) { if (Math.abs(v - mean) > Math.abs(best - mean)) best = v; }); return best; });
-    var mn = Math.min.apply(null, values), mx = Math.max.apply(null, values), half = Math.max((mx - mn) / 2, 1e-9);
+    var mn = Math.min.apply(null, normalized), mx = Math.max.apply(null, normalized), half = (mx - mn) / 2;
     var cells = []; for (i = 0; i < 16 * G; i++) cells.push(0);
     vs.forEach(function (v, c) {
-      var z = Math.max(-1, Math.min(1, (v - mean) / half)), L = z * 5, h = Math.round(Math.abs(z) * 8);
+      var z = half ? Math.max(-1, Math.min(1, (v - mean) / half)) : 0, L = z * 5, h = Math.round(Math.abs(z) * 8);
       for (var k = 0; k < h; k++) cells[(z >= 0 ? 7 - k : 8 + k) * G + c] = L;
     });
     var warm = 0, cold = 0, hot = 0;
@@ -5016,6 +5024,7 @@ class Component extends DCLogic {
     var tx = TX[LANG];
     th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
+    var referenceCoast = s.disc !== 5 || s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette';
     var isBand = s.tab === 'band';
     var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1;
     var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
@@ -5243,7 +5252,10 @@ class Component extends DCLogic {
       silboBox: a && a.coast >= 2 ? th.accent : th.muted,
       capL: s.disc === 5 ? T('inicio', 'start') : T('140°O', '140°W'), capM: s.disc === 5 ? T('escaneo de izquierda a derecha', 'left-to-right scan') : T('Pacífico ecuatorial · 25°S–15°N', 'Equatorial Pacific · 25°S–15°N'), capR: s.disc === 5 ? T('fin', 'end') : T('70°O', '70°W'),
       cells: cells,
-      stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) } : { warm: '…', cold: '…', hot: '…', coast: '…' },
+      stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: referenceCoast && a.coastPixels > 0 ? (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) : '—' } : { warm: '…', cold: '…', hot: '…', coast: '…' },
+      statsHelp: T('Indicadores derivados, no grados: cálido y frío son promedios de intensidad. ', 'Derived indicators, not degrees: warm and cold are mean intensities. ') +
+        (s.disc === 5 && s.custom && s.custom.cols ? T('El porcentaje cuenta celdas dibujadas con nivel ≥ +4. No hay una costa de referencia.', 'The percentage counts drawn cells with level ≥ +4. There is no reference coast.') :
+          T('El porcentaje cuenta píxeles utilizables con nivel ≥ +4. ', 'The percentage counts usable pixels with level ≥ +4. ') + (referenceCoast ? T('Costa muestra el promedio de la zona de referencia cuando tiene datos.', 'Coast shows the reference area’s mean when data is available.') : T('Tu imagen no define una costa de referencia.', 'Your image does not define a reference coast.'))),
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
       techCur: { title: techCur.title, items: techCur.items, empty: !techCur.items.length, num: ('0' + (sub + 1)).slice(-2) },
       bandViewClass: isBand ? 'band-view' : '',

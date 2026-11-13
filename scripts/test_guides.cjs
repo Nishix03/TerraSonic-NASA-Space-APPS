@@ -1829,3 +1829,24 @@ test('an accepted local file preserves an edited mix and explicit lead choice',(
   const manual=c.allMute(true);c.setBandMute(manual);c.showCustom({name:'next.csv',url:'blob:next',cols:[]},analysis,'ready');
   assert.deepEqual(c.state.mute,manual);assert.equal(c.state.mixCustomized,true);
 });
+
+test('numeric series keep the same normalized pattern at very large and very small finite magnitudes',()=>{
+  const {component:c}=setup();const values=[6,7,8,9,10,6,7,8,9,10],expected=c.seriesAnalysis(values);
+  for(const factor of [1e307,1e-200]){
+    const result=c.seriesAnalysis(values.map(value=>value*factor));
+    assert(result.cells.every(Number.isFinite));assert(result.cells.some(value=>value>0));assert(result.cells.some(value=>value<0));
+    result.cells.forEach((value,index)=>assert(Math.abs(value-expected.cells[index])<1e-10));
+  }
+  assert(c.seriesAnalysis(Array(10).fill(1e308)).cells.every(value=>value===0));
+});
+
+test('analysis indicators name the positive threshold and never invent an ocean coast for a local file',()=>{
+  const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:2,coastPixels:8});
+  assert.equal(c.renderVals().stats.coast,'+2.0');assert.match(c.renderVals().tx.strongWarm,/≥ \+4/);
+  c.state.disc=5;c.state.custom={name:'drawing.png',mode:'free'};
+  assert.equal(c.renderVals().stats.coast,'—');assert.match(c.renderVals().statsHelp,/no define una costa/);assert.equal(c.playerVm().legend[3].label,'Sin valor utilizable');
+  c.state.custom={name:'values.csv',cols:[{name:'value'}]};assert.match(c.renderVals().statsHelp,/celdas dibujadas/);
+  c.setLang('en');assert.equal(c.playerVm().legend[3].label,'No usable value');assert.match(c.renderVals().statsHelp,/drawn cells/);
+  c.state.custom={name:'NASA',source:'eic',mode:'palette'};assert.equal(c.renderVals().stats.coast,'+2.0');assert.equal(c.playerVm().legend[3].label,'No ocean data');
+  c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:0,coastPixels:0});assert.equal(c.renderVals().stats.coast,'—');
+});

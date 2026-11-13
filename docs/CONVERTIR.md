@@ -1,5 +1,11 @@
 # Conversión local de imágenes y tablas
 
+La normalización de CSV se calcula tras escalar por el mayor valor absoluto, manteniendo intactos los números originales de la columna. Esto evita desbordar la suma con valores finitos cercanos a 10^308 y evita aplanar series pequeñas por un corte absoluto de 10^−9. Las constantes se representan en cero. La regresión compara patrones equivalentes a escalas muy grandes y muy pequeñas, y el recorrido de navegador selecciona ambas columnas. No convierte niveles artísticos en unidades físicas.
+
+El panel secundario nombra el porcentaje «Nivel ≥ +4», explica su denominador y no atribuye una costa a una imagen propia o una tabla. La leyenda de esos archivos dice «Sin valor utilizable»; la referencia al mar se conserva solo para los mapas NASA. La suma actual es de 136 pruebas de producto, que incluye esta distinción.
+
+`verify_image_formats.cjs` comprueba JPG mediante ocho orientaciones EXIF, incluidas las reflejadas, y un WebP real de cuatro colores. Verifica orden de los cuadrantes, proporciones, transparencia exterior y análisis disponible tras convertir a PNG. Los nueve casos pasan en Chromium, Firefox y WebKit para Windows. Los archivos son sintéticos, generados con Canvas: no se usaron fotos personales ni se acredita una cámara o teléfono físico. Las dimensiones naturales ya incluyen la orientación de metadatos según el [estándar HTML](https://html.spec.whatwg.org/multipage/embedded-content.html#dom-img-naturalwidth-dev); no se aplica una segunda rotación manual.
+
 La entrada principal ofrece una imagen NASA ya incluida y un selector de imagen propia. La muestra corresponde al fotograma EIC del 11 de enero de 2025. Se analiza con la paleta EIC; una imagen propia empieza en color libre y puede cambiar de lectura en el reproductor. Los dos resultados usan la misma cuadrícula y controles de reproducción.
 
 Lluvia de Chiclayo y CSV/TSV/TXT están en una sección secundaria desplegable. Se conserva la muestra mensual NASA POWER, su selección de columna y el procesamiento local. El archivo mensual original sigue en `data/nasa_power_monthly.json`; la interfaz usa los 48 valores del periodo seleccionado por el proyecto.

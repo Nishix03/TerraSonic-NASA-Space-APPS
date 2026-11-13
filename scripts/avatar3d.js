@@ -166,15 +166,23 @@ class TerrasonicAvatar extends HTMLElement {
       this.yaw = .32;
       this.targetYaw = .32;
       if (this.dataset.view === "portrait") {
+        this.pointers = new Set();
         this.addEventListener("pointerdown", event => {
           if (event.button !== 0 || !this.model) return;
+          this.pointers.add(event.pointerId);
+          this.setPointerCapture(event.pointerId);
+          if (this.pointers.size !== 1) {
+            this.dragPointer = null;
+            this.rotating = false;
+            return;
+          }
+          this.dragPointer = event.pointerId;
           this.dragX = event.clientX;
           this.dragY = event.clientY;
           this.rotating = event.pointerType !== "touch";
-          this.setPointerCapture(event.pointerId);
         });
         this.addEventListener("pointermove", event => {
-          if (!this.hasPointerCapture(event.pointerId)) return;
+          if (this.dragPointer !== event.pointerId || this.pointers.size !== 1 || !this.hasPointerCapture(event.pointerId)) return;
           const deltaX = event.clientX - this.dragX;
           if (!this.rotating) {
             const deltaY = event.clientY - this.dragY;
@@ -185,6 +193,17 @@ class TerrasonicAvatar extends HTMLElement {
           this.dragX = event.clientX;
           queue(this);
         });
+        const finishPointer = event => {
+          this.pointers.delete(event.pointerId);
+          if (this.dragPointer === event.pointerId) {
+            this.dragPointer = null;
+            this.rotating = false;
+          }
+          if (this.hasPointerCapture(event.pointerId)) this.releasePointerCapture(event.pointerId);
+        };
+        this.addEventListener("pointerup", finishPointer);
+        this.addEventListener("pointercancel", finishPointer);
+        this.addEventListener("lostpointercapture", finishPointer);
       }
     }
     intersection.observe(this);
@@ -202,6 +221,13 @@ class TerrasonicAvatar extends HTMLElement {
   }
 
   clearModel() {
+    const pointers = [...(this.pointers || [])];
+    this.pointers?.clear();
+    this.dragPointer = null;
+    this.rotating = false;
+    for (const id of pointers) {
+      if (this.hasPointerCapture(id)) this.releasePointerCapture(id);
+    }
     this.mixer?.stopAllAction();
     if (this.mixer && this.model) this.mixer.uncacheRoot(this.model);
     this.mixer = this.model = this.action = this.key = this.requested = null;
@@ -350,8 +376,11 @@ class TerrasonicAvatar extends HTMLElement {
       renderer.setSize(width, pixels, false);
     }
     scene.add(this.model);
-    renderer.render(scene, camera);
-    scene.remove(this.model);
+    try {
+      renderer.render(scene, camera);
+    } finally {
+      scene.remove(this.model);
+    }
     this.context.clearRect(0, 0, width, pixels);
     this.context.drawImage(renderer.domElement, 0, 0);
     this.setAttribute("data-rendered", "");

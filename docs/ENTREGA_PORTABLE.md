@@ -15,6 +15,8 @@ La vista Sites continúa sirviendo el checkpoint de aplicación `409f197`. El ZI
 
 ## Uso
 
+Un checkpoint posterior ya creado es `terrasonic-checkpoint-f0f5d06.zip`, del commit `f0f5d06d8db782dd44b665def42725ea4644be34`: 64.746.015 bytes, SHA-256 `f2ea84c502cd878004b6528b8079a959c757d232be4ad7331e67f98e198a4081`. Incluye 196 archivos, la referencia explícita al código de la preview `409f197` y `baseline-models.zip`. Se verificaron por SHA-256 sus seis archivos originales —escena y cinco GLB— contra Git `59310ac`. Es otro checkpoint recuperable; las correcciones numéricas posteriores aún no forman parte de ese ZIP.
+
 Extraer el ZIP en una carpeta nueva y ejecutar `python serve.py`. El servidor usa solo `127.0.0.1`, puerto 8765 por defecto; `--port` permite otro. Abrir http://127.0.0.1:8765/. No requiere Node, Blender, cuenta ni backend para usar el sitio. Audio requiere acción del usuario; voz y vibración dependen de capacidades del dispositivo. El texto y la pose estática permiten continuar sin esas APIs. Los enlaces documentales externos sí requieren red.
 
 `python verify_package.py` comprueba cada tamaño y huella y rechaza archivos extra. La fuente va en `source.zip`, separada del sitio listo para servir. Extrayendo la fuente se puede volver a construir con `python scripts/build_pages.py _site`. Los originales artísticos y el `.blend` editable permanecen en la fuente.

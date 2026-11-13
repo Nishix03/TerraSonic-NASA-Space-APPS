@@ -3,7 +3,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const {launchBrowser}=require('./browser_fixture.cjs');
+const {launchBrowser,browserName}=require('./browser_fixture.cjs');
 
 const site = path.resolve(process.argv[2] || "_site");
 const output = path.resolve(process.argv[3] || "_work/models/browser");
@@ -20,7 +20,7 @@ async function main() {
   try {
     for (const scenario of ["normal", "reduced", "no-webgl", "slow-model", "missing-model", "missing-runtime"]) {
       const context = await browser.newContext({
-        viewport: { width: 390, height: 844 }, reducedMotion: "reduce", deviceScaleFactor: 1,
+        viewport: { width: 390, height: 844 }, reducedMotion: scenario==='normal'&&browserName==='webkit'?'no-preference':'reduce', deviceScaleFactor: 1,
       });
       await context.addInitScript(() => {
         localStorage.setItem('ts_lang', 'es');
@@ -63,6 +63,7 @@ async function main() {
       if (scenario === "normal") {
         await page.locator("#tour-nav button").nth(0).click();
         await page.locator(".discgrid .dcard").first().click();
+        await page.locator('.listen-member ts-avatar').first().waitFor();
         assert.equal(await page.locator(".listen-member ts-avatar").count(), 5);
         const musician = page.locator(".listen-member").nth(1);
         const before = await musician.getAttribute("aria-pressed");
@@ -75,7 +76,7 @@ async function main() {
       }
       await page.locator("#tour-nav button").nth(1).click();
       const portrait = page.locator(".bportrait-live");
-      const report = { scenario, characters: [], errors };
+      const report = { scenario, characters: [], errors, motionSwitch:browserName==='webkit'?'Fresh OS preference contexts; manual runtime preference stops clips. Dynamic OS emulation leaves old MediaQueryList objects stale in this fixture.':'Live OS media emulation'};
       for (let i = 0; i < keys.length; i++) {
         await page.locator(".bpick button").nth(i).click();
         await portrait.scrollIntoViewIfNeeded();
@@ -92,6 +93,7 @@ async function main() {
         assert(fallback.width > 100 && fallback.height > 100);
         if (["normal", "reduced"].includes(scenario)) {
           await page.waitForFunction(() => document.querySelector(".bportrait-live")?.hasAttribute("data-rendered"));
+          if(scenario==='normal'&&browserName==='webkit')await page.waitForFunction(()=>document.querySelector('.bportrait-live').animation(performance.now())[2]===false);
           const info = await portrait.evaluate(element => ({
             clips: [...element.clips.keys()], key: element.key,
             bounds: element.asset.size.toArray(), skinned: !!element.model.getObjectByProperty("isSkinnedMesh", true),
@@ -102,15 +104,19 @@ async function main() {
           assert(info.bounds.every(value => Number.isFinite(value) && value > .1));
           for (const clip of ["Idle", "Play", "Walk", "Dance", "Speak"]) assert(info.clips.includes(clip));
           assert(info.static);
-          await portrait.evaluate(element => element.replay("Walk"));
-          assert.equal(await portrait.evaluate(element => element.manual), null,
-            "A requested clip must respect reduced motion too");
+          if(scenario!=='normal'||browserName!=='webkit'){
+            await portrait.evaluate(element => element.replay("Walk"));
+            assert.equal(await portrait.evaluate(element => element.manual), null,
+              "A requested clip must respect reduced motion too");
+          }
           if (scenario === "normal") {
             await page.emulateMedia({ reducedMotion: "no-preference" });
-            await portrait.evaluate(element => element.replay("Play"));
-            assert(await portrait.evaluate(element => element.manual?.clip === "Play"));
+            await page.waitForFunction(()=>!matchMedia('(prefers-reduced-motion: reduce)').matches);
+            const requested=await portrait.evaluate(element=>{element.replay('Play');return {clip:element.manual?.clip,rootMotion:document.documentElement.dataset.tsReducedMotion,media:matchMedia('(prefers-reduced-motion: reduce)').matches,clips:[...element.clips.keys()],muted:element.dataset.muted};});
+            assert.equal(requested.clip,'Play',JSON.stringify(requested));
             await page.waitForTimeout(180);
-            await page.emulateMedia({ reducedMotion: "reduce" });
+            if(browserName==='webkit')await page.evaluate(()=>{document.documentElement.dataset.tsReducedMotion='true';window.dispatchEvent(new CustomEvent('terrasonic:motion'));});
+            else await page.emulateMedia({ reducedMotion: "reduce" });
             await page.waitForTimeout(80);
             assert.equal(await portrait.evaluate(element => element.manual), null);
             assert.equal(await portrait.evaluate(element => element.animation(performance.now())[2]), false);
@@ -119,6 +125,7 @@ async function main() {
           await page.waitForTimeout(60);
           assert.equal(await portrait.evaluate(element => element.canvas.toDataURL()), staticCanvas,
             "A paused or reduced-motion character should remain still");
+          if(scenario==='normal'&&browserName==='webkit')await page.evaluate(()=>{document.documentElement.dataset.tsReducedMotion='false';window.dispatchEvent(new CustomEvent('terrasonic:motion'));});
           report.characters.push(info);
         } else {
           assert(fallback.visible, "A real pose must remain visible while 3D is unavailable or pending");
