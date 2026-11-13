@@ -1717,7 +1717,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <p>{{impact.rule}}</p><p class="small muted">{{impact.artistic}}</p><a href="data/impacts.v1.json" target="_blank" rel="noopener">{{impact.catalogLabel}}</a>
 </details>
 
-<details id="tour-machine" class="analysis-panel"><summary>{{tx.machineSees}} · 28×16</summary>
+<details id="tour-machine" class="analysis-panel" open="{{player.analysisOpen}}" onToggle="{{player.toggleAnalysis}}"><summary>{{tx.machineSees}} · 28×16</summary>
 <figure class="vpanel">
 <figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
 <div class="mbox" aria-hidden="true">
@@ -1754,7 +1754,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-if>
 </div>
 <p class="current-event small">{{caption}}</p>
-<details class="event-history" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
+<details class="event-history" open="{{player.eventsOpen}}" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
 <p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
 </div>
 </sc-if>
@@ -4109,7 +4109,9 @@ class Component extends DCLogic {
       paletteTitle: T('Mapa original y análisis', 'Original map and analysis'),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () { if (self.state.speaking) self.stopSpeech(); else self.speak(legend.map(function (l) { return l.label + '. ' + l.meaning; }).join(' ') + ' ' + paletteNote, true); },
-      historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length, historyTabIndex: s.events.length ? 0 : -1,
+      analysisOpen: !!s.analysisOpen,
+      toggleAnalysis: function (event) { if (!event.target.isConnected) return; var open = event.target.open; if (open !== !!self.state.analysisOpen) self.setState({ analysisOpen: open }); },
+      historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length, eventsOpen: !!s.eventsOpen, historyTabIndex: s.events.length ? 0 : -1,
       historyHelp: T('Últimos 200 pasos. Se conservan al pausar o cambiar de disco. El lector de pantalla los lee cuando tú los consultas.', 'Last 200 steps. They remain when you pause or change discs. Your screen reader reads them when you choose to browse them.'),
       events: s.eventsOpen ? s.events.slice().reverse().map(function (event) {
         var disc = DISC_SETS.eic.concat(DISC_SETS.prev).find(function (item) { return item.id === event.discId; });
@@ -4119,7 +4121,7 @@ class Component extends DCLogic {
           T('columna ', 'column ') + event.column + '/28 · ' + (event.engine === 'melody' ? T('Melodía', 'Melody') : T('Datos', 'Data')) +
           (chord ? ' · ' + T('acorde ', 'chord ') + chord : '') + ' · ' + (event.musicians.join(', ') || T('Sin entradas nuevas.', 'No new instrument entries.')) };
       }) : [],
-      toggleHistory: function (event) { var open = event.target.open; if (open !== !!self.state.eventsOpen) self.setState({ eventsOpen: open }); },
+      toggleHistory: function (event) { if (!event.target.isConnected) return; var open = event.target.open; if (open !== !!self.state.eventsOpen) self.setState({ eventsOpen: open }); },
       clearLabel: T('Vaciar historial', 'Clear history'), clearEvents: function () { self.setState({ events: [] }); },
       announcement: s.playerAnnouncement
     };
@@ -5026,7 +5028,7 @@ class Component extends DCLogic {
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
     var referenceCoast = s.disc !== 5 || s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette';
     var isBand = s.tab === 'band';
-    var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1;
+    var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1 && s.analysisOpen;
     var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };

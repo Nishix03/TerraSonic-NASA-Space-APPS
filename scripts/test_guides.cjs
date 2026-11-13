@@ -476,7 +476,7 @@ test('late transition callbacks cannot update an unmounted component', () => {
   assert.equal(JSON.stringify(c.state), before);
 });
 
-test('the 448-cell display model is built only when its player screen is visible', () => {
+test('the 448-cell display model is built only while its player analysis is open', () => {
   const { component: c } = setup();
   for (const tab of ['home', 'band', 'how', 'tech']) {
     c.state.tab = tab; c.state.sub = 0;
@@ -484,9 +484,9 @@ test('the 448-cell display model is built only when its player screen is visible
   }
   for (const tab of ['juke', 'data']) {
     c.state.tab = tab;
-    for (const sub of [0, 1, 2]) {
-      c.state.sub = sub;
-      assert.equal(c.renderVals().cells.length, sub === 1 ? 448 : 0);
+    for (const sub of [0, 1, 2]) for (const open of [false,true]) {
+      c.state.sub = sub; c.state.analysisOpen = open;
+      assert.equal(c.renderVals().cells.length, sub === 1 && open ? 448 : 0);
     }
   }
 });

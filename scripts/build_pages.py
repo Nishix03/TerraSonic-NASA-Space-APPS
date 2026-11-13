@@ -16,6 +16,7 @@ def build(destination: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     prototype = root / "prototipos" / "I11-eic"
     avatar_runtime = root / "scripts" / "avatar3d.js"
+    support_runtime = root / "scripts" / "pages-support.js"
     models = sorted((prototype / "modelos").glob("*.glb"))
     if len(models) != 5:
         raise ValueError("Se necesitan los cinco modelos GLB de TerraSonic.")
@@ -25,6 +26,7 @@ def build(destination: Path) -> None:
         for kind in ("pose", "face"):
             version.update((prototype / "sprites" / model.stem / f"{kind}-volume.webp").read_bytes())
     avatar_version = version.hexdigest()[:12]
+    support_version = sha256(lf_bytes(support_runtime)).hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
     impact_catalog = json.loads((root / "data" / "impacts.v1.json").read_text(encoding="utf-8"))
     if impact_catalog.get("version") != 1 or not isinstance(impact_catalog.get("records"), list):
@@ -48,6 +50,10 @@ def build(destination: Path) -> None:
     # Keep the prototype's bindings inert until the browser has resolved them.
     html = html.replace("<x-dc>", '<template id="terrasonic-template">', 1)
     html = html.replace("</x-dc>", "</template>", 1)
+    support_marker = 'src="./support.js"'
+    if support_marker not in html:
+        raise ValueError("Falta el script de enlaces de estado del prototipo.")
+    html = html.replace(support_marker, f'src="./support.js?v={support_version}"', 1)
     html = html.replace(
         "/_blob/73710d959697d6b73c436a389b19a0de", "./data/nasa_power_monthly.json"
     )
@@ -58,7 +64,7 @@ def build(destination: Path) -> None:
         html = html.replace(f"{kind}-volume.webp", f"{kind}-volume.webp?v={avatar_version}")
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_bytes(html.encode("utf-8"))
-    copy2(root / "scripts" / "pages-support.js", destination / "support.js")
+    copy2(support_runtime, destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)

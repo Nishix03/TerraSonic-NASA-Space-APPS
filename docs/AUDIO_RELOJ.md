@@ -10,7 +10,7 @@ La consulta de saltos relativos actualiza primero la posición oída. Una interr
 
 ## Medición inicial y después del cambio
 
-`scripts/measure_audio.cjs` utiliza Chromium, Web Audio real y salida final silenciada por el fixture. Emula 390×844, CPU ×4, latencia de 150 ms, descarga de 200 KiB/s, subida de 100 KiB/s y caché deshabilitada. Activa la banda completa, permite el 3D y observa al menos nueve segundos tras el comienzo del recorrido. Inyecta un bloqueo de 200 ms del hilo de interfaz como diagnóstico declarado, no como una acción normal del usuario.
+`scripts/measure_audio.cjs` utiliza Chromium, Web Audio real y salida final silenciada por el fixture. Emula 390×844, CPU ×4, latencia de 150 ms, descarga de 200 KiB/s, subida de 100 KiB/s y caché HTTP deshabilitada. Observa al menos nueve segundos e inyecta un bloqueo de 200 ms del hilo de interfaz como diagnóstico declarado, no como una acción normal del usuario. Las primeras pasadas permitían el 3D pero no registraban la mezcla efectiva; no acreditan cinco músicos/modelos activos.
 
 | Versión | Motor | Mayor retraso entre pasos | Inicios de oscilador programados en el pasado |
 | --- | --- | ---: | ---: |
@@ -42,3 +42,26 @@ La referencia técnica es [A tale of two clocks, Chris Wilson / web.dev](https:/
 El perfil de interfaz detectó dos renders por paso: posición/mapa y luego registro. Ahora el evento se construye para la nueva posición y ambos se publican en una sola actualización. Las regresiones comprueban el evento del mes correcto y un solo render por paso; el recorrido de cuatro discos completos observa el estado ya comprometido, no depende de interceptar un método interno de registro.
 
 En dos muestras individuales del mismo perfil de nueve segundos, Melodía pasó de 50 actualizaciones/580 ms de trabajo síncrono medido a 31/321 ms; Datos, de 192/2155 ms a 114/1323 ms. El máximo individual de Datos fue mayor en la segunda muestra (51 frente a 33 ms): no se presenta como una mejora de todos los tiempos. Ambos conservaron cero inicios de oscilador pasados. Son muestras diagnósticas, no estadística de campo ni una prueba de percepción. Evidencia: `audio-render-before.json` y `audio-render-after.json`.
+
+## Mezcla y modelos comprobados en la medición
+
+El pulido posterior encontró una condición de preparación del fixture: intentaba activar toda la banda antes de que terminara la entrada al disco, y el valor inicial de protagonista podía reemplazar esa mezcla. Se corrige la prueba para esperar el reproductor estable, usar la acción de mezcla y registrar los cinco estados al observar. No es un fallo de selección manual del producto: los recorridos funcionales la ejercitan por separado. Los reportes antiguos sin mezcla registrada se conservan como evidencia de reloj/interfaz, sin atribuirles una carga de cinco modelos.
+
+`audio-corrected-mix-before-lazy.json` registra explícitamente cinco músicos activados, pero cero modelos renderizados durante su ventana fría de nueve segundos; la red limitada todavía puede estar descargándolos. La variante `--warm-models` precarga los cinco activos en memoria, entra al reproductor y espera cinco modelos renderizados antes de observar. Sigue deshabilitada la caché HTTP; se declara la precarga de aplicación. La primera variante fallida al esperar cinco modelos se conserva con cero muestras y no se considera una prueba pasada.
+
+La pasada `audio-warm-models-corrected-before.json` del checkpoint 0fefefd confirma cinco modelos al inicio y final, cinco músicos activados y cero inicios de oscilador pasados en Melodía/Datos. Los JSON identifican versión de Chromium y SHA-256 del HTML; la comparación de la cuadrícula bajo demanda usa el mismo perfil y registra su resultado por separado. La salida permanece silenciada: esto no reemplaza escucha humana ni prueba de altavoces.
+
+## Cuadrícula solo al consultar el análisis
+
+Las 448 celdas del modelo de presentación y sus elementos se generan al abrir «Lo que ve la máquina». Cerrarlo retira esos elementos; el análisis completo de 448 valores sigue disponible para el motor musical. El atributo booleano nativo `open` se enlaza al estado para conservar la elección al cambiar de pantalla y no actualizar una vista oculta por accidente. La misma sincronización se aplica al historial. Los eventos de un panel ya retirado no alteran la pantalla actual.
+
+La comparación con cinco modelos ya renderizados usa `audio-warm-models-corrected-before.json` y `audio-warm-models-after-lazy.json`:
+
+| Motor | Trabajo medio síncrono por actualización, antes → después | Máximo de una actualización, antes → después | Inicios pasados |
+| --- | ---: | ---: | ---: |
+| Melodía | 17,37 → 9,36 ms | 44,7 → 23,7 ms | 0 en ambas |
+| Datos | 18,22 → 8,84 ms | 43,8 → 35,8 ms | 0 en ambas |
+
+Son dos muestras individuales con el mismo perfil y bloqueo declarado de 200 ms. La ventana después de la preparación dura al menos nueve segundos; hubo 19/18 pasos Melodía y 83/81 Datos dentro de las observaciones, por eso se presenta también la media por actualización. Se registran cinco modelos al inicio y final, y mezcla con cinco músicos activados en ambas versiones. La cuadrícula cerrada pasa de 448 a cero elementos. No se convierten estas diferencias en una garantía estadística, INP de campo o continuidad ante suspensión.
+
+Las regresiones de paneles comprueban apertura/cierre, 448 celdas con colores del mapa, retirada al cerrar y una sola columna de 16 celdas resaltada al saltar, en los tres motores. El control de caché de la entrega usa una versión de `support.js` derivada del archivo normalizado: un navegador con el runtime anterior recibe el nuevo antes de interpretar los atributos booleanos.

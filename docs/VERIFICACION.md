@@ -51,6 +51,12 @@ axe informa infracciones detectadas y casos incompletos; un resultado cero no pr
 
 El zoom nativo no se pudo revisar por la herramienta de control de ventana y se mantiene pendiente. Sí se prueban anchos CSS de hasta 320 px, texto de base 32 px, espaciado WCAG y el tamaño original de captura 1342×605. El desplazamiento vertical con texto ampliado se conserva para no sacrificar lectura.
 
+`verify_cached_release.cjs` usa HTTP real con un único contexto conservado: primero carga dos veces el checkpoint antiguo y comprueba que reutiliza su script desde caché; después cambia el servidor al build nuevo. El generador añade al URL de `support.js` una versión derivada de sus bytes LF, para que el navegador reciba la implementación nueva de atributos booleanos. La prueba comprueba una descarga por versión, reutilización posterior y cuadrícula cerrada/abierta con cero/448 celdas. El fixture simula las cabeceras de caché, sin cambiar las de producción.
+
+```powershell
+node scripts/verify_cached_release.cjs ruta/al/build-anterior ruta/al/build-nuevo _work/cache-release
+```
+
 La emulación de cambio de movimiento en WebKit de esta instalación dejó objetos `MediaQueryList` creados antes del cambio con `matches: true`, aunque una consulta nueva ya devolvía false. El diagnóstico se conserva; no se atribuye ese resultado a un teléfono ni al sistema operativo real. Los contextos nuevos con cada preferencia sí permiten verificar las poses iniciales y animaciones, y la preferencia manual de la aplicación detiene los clips. Chromium y Firefox mantienen además el recorrido de cambio de preferencia del sistema dentro de la sesión.
 
 Referencias: [Playwright y sus motores](https://playwright.dev/docs/browsers), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [COGA](https://www.w3.org/TR/coga-usable/).

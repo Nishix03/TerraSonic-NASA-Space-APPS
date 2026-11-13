@@ -38,6 +38,13 @@ async function main(){
     await page.waitForFunction(()=>__app.cur()&&!__app.state.trans);
     await page.evaluate(()=>{const events=Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''));__app.setState({events});});
     await openDetails(page);await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
+    await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
+    assert(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>new Set(cells.map(el=>el.style.background)).size>4),'the open grid must contain the current map analysis');
+    await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===0);
+    assert.equal(await page.locator('.analysis-panel').getAttribute('open'),null,'false must remove the native boolean open attribute');
+    await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
+    await page.evaluate(()=>__app.seekPosition(69));
+    assert.equal(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16,'the reopened grid keeps exactly the current scan column highlighted');
     await page.locator('.event-history summary').focus();await page.keyboard.press('Tab');
     assert(await page.locator('.event-history ol').evaluate(el=>el===document.activeElement),'the scrollable event list must be reachable by Tab');
     await page.keyboard.press('End');await page.waitForFunction(()=>{const el=document.querySelector('.event-history ol');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
