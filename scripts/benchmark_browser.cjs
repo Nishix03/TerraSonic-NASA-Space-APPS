@@ -1,0 +1,86 @@
+// Requires TERRASONIC_PLAYWRIGHT pointing to an installed playwright-core directory.
+// node scripts/benchmark_browser.cjs _site _work/benchmarks/before.json
+const fs = require("node:fs");
+const http = require("node:http");
+const path = require("node:path");
+const { performance } = require("node:perf_hooks");
+const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-core");
+
+const site = path.resolve(process.argv[2] || "_site");
+const output = path.resolve(process.argv[3] || "_work/benchmarks/result.json");
+const contentTypes = {
+  ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
+  ".png": "image/png", ".webp": "image/webp", ".glb": "model/gltf-binary",
+};
+
+async function main() {
+  const server = http.createServer((request, response) => {
+    const file = path.resolve(site, "." + decodeURIComponent(new URL(request.url, "http://local").pathname));
+    const target = file === site ? path.join(file, "index.html") : file;
+    if (!target.startsWith(site + path.sep) || !fs.existsSync(target)) {
+      response.writeHead(404).end();
+      return;
+    }
+    response.writeHead(200, { "Content-Type": contentTypes[path.extname(target)] || "application/octet-stream",
+      "Cache-Control": "no-store", "Content-Length": fs.statSync(target).size });
+    fs.createReadStream(target).pipe(response);
+  });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  const base = "http://127.0.0.1:" + server.address().port + "/";
+  const browser = await chromium.launch({
+    executablePath: process.env.TERRASONIC_CHROMIUM,
+    args: ["--no-sandbox", "--no-proxy-server", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+  });
+  const profile = { viewport: { width: 390, height: 844 }, latency: 150,
+    downloadBytesPerSecond: 204800, uploadBytesPerSecond: 102400, cpuRate: 4,
+    cache: "disabled", reducedMotion: "reduce", deviceScaleFactor: 1 };
+  const report = { base, profile, samples: [], failures: [] };
+  try {
+    for (let run = 0; run < 3; run++) {
+      const context = await browser.newContext({ viewport: profile.viewport,
+        reducedMotion: profile.reducedMotion, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
+      const page = await context.newPage();
+      const bytes = { local: 0, glb: 0 };
+      page.on("pageerror", error => report.failures.push(error.message));
+      const session = await context.newCDPSession(page);
+      await session.send("Network.enable");
+      await session.send("Network.setCacheDisabled", { cacheDisabled: true });
+      await session.send("Network.emulateNetworkConditions", { offline: false,
+        latency: profile.latency, downloadThroughput: profile.downloadBytesPerSecond,
+        uploadThroughput: profile.uploadBytesPerSecond });
+      await session.send("Emulation.setCPUThrottlingRate", { rate: profile.cpuRate });
+      const resources = new Map();
+      session.on("Network.responseReceived", event => resources.set(event.requestId, event.response.url));
+      session.on("Network.loadingFinished", event => {
+        const url = resources.get(event.requestId);
+        if (url?.startsWith(base)) bytes.local += event.encodedDataLength;
+        if (url?.includes(".glb")) bytes.glb += event.encodedDataLength;
+      });
+      const start = performance.now();
+      await page.goto(base, { waitUntil: "domcontentloaded" });
+      await page.locator(".hero .btn.primary").waitFor();
+      const homeMs = performance.now() - start;
+      const atHome = { ...bytes };
+      const listen = performance.now();
+      await page.locator("#tour-nav button").nth(0).click();
+      await page.locator(".discgrid .dcard").first().click();
+      await page.locator("#tour-play button:not([disabled])").waitFor();
+      const listenMs = performance.now() - listen;
+      const band = performance.now();
+      await page.locator("#tour-nav button").nth(1).click();
+      await page.locator(".bportrait-live[data-rendered]").waitFor({ timeout: 120000 });
+      const bandMs = performance.now() - band;
+      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, atHome, totalBytes: { ...bytes },
+        modelsRendered: await page.locator("ts-avatar[data-rendered]").count() });
+      fs.mkdirSync(path.dirname(output), { recursive: true });
+      fs.writeFileSync(output, JSON.stringify(report, null, 2));
+      console.log(JSON.stringify(report.samples.at(-1)));
+      await context.close();
+    }
+  } finally {
+    await browser.close();
+    server.close();
+  }
+}
+
+main().catch(error => { console.error(error); process.exitCode = 1; });

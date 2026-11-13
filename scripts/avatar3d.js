@@ -1,27 +1,39 @@
-import {
-  AmbientLight, AnimationMixer, Box3, DirectionalLight, GLTFLoader,
-  OrthographicCamera, Scene, SRGBColorSpace, Vector3, WebGLRenderer,
-} from "./vendor/three-gltf.js";
-
 const characters = new Set(["silbo", "inti", "mama", "yaku", "illapa"]);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
 const models = new Map();
 const pending = new Set();
 const visible = new Set();
-const camera = new OrthographicCamera();
-const scene = new Scene();
-scene.add(new AmbientLight(0xe6edff, 1.4));
-const keyLight = new DirectionalLight(0xfff0df, 2.4);
-keyLight.position.set(-3, 4, 5);
-scene.add(keyLight);
-const rimLight = new DirectionalLight(0x839dff, 2);
-rimLight.position.set(3, 2, -4);
-scene.add(rimLight);
+let engine;
+let enginePromise;
+let camera;
+let scene;
 
 let renderer;
 let frame;
 let lastPaint = -Infinity;
 let unavailable = false;
+
+async function prepareEngine() {
+  if (!enginePromise) {
+    enginePromise = import("./vendor/three-gltf.js").then(api => {
+      engine = api;
+      camera = new api.OrthographicCamera();
+      scene = new api.Scene();
+      scene.add(new api.AmbientLight(0xe6edff, 1.4));
+      const keyLight = new api.DirectionalLight(0xfff0df, 2.4);
+      keyLight.position.set(-3, 4, 5);
+      scene.add(keyLight);
+      const rimLight = new api.DirectionalLight(0x839dff, 2);
+      rimLight.position.set(3, 2, -4);
+      scene.add(rimLight);
+      return api;
+    }).catch(error => {
+      enginePromise = null;
+      throw error;
+    });
+  }
+  return enginePromise;
+}
 
 function schedule() {
   if (frame || unavailable || !pending.size || document.hidden) return;
@@ -34,7 +46,11 @@ function schedule() {
     lastPaint = now;
     for (const avatar of [...pending]) {
       pending.delete(avatar);
-      if (avatar.draw(now)) pending.add(avatar);
+      try {
+        if (avatar.draw(now)) pending.add(avatar);
+      } catch {
+        avatar.showError();
+      }
     }
     schedule();
   });
@@ -51,8 +67,8 @@ function prepareRenderer() {
   if (unavailable) return false;
   if (renderer) return true;
   try {
-    renderer = new WebGLRenderer({ alpha: true, antialias: true });
-    renderer.outputColorSpace = SRGBColorSpace;
+    renderer = new engine.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.outputColorSpace = engine.SRGBColorSpace;
     renderer.setClearColor(0, 0);
     renderer.domElement.addEventListener("webglcontextlost", event => {
       event.preventDefault();
@@ -75,15 +91,18 @@ function load(key) {
   if (!models.has(key)) {
     const url = new URL(`../modelos/${key}.glb`, import.meta.url);
     url.search = new URL(import.meta.url).search;
-    const request = new GLTFLoader().loadAsync(url.href).then(gltf => {
-      const box = new Box3().setFromObject(gltf.scene);
+    const request = prepareEngine().then(api => {
+      if (!prepareRenderer()) throw new Error("3D context unavailable");
+      return new api.GLTFLoader().loadAsync(url.href);
+    }).then(gltf => {
+      const box = new engine.Box3().setFromObject(gltf.scene);
       let face = { faceX: 0, faceY: box.max.y * .76 };
       gltf.scene.traverse(node => {
         if (typeof node.userData.faceY === "number") face = node.userData;
       });
       return {
         scene: gltf.scene, clips: gltf.animations,
-        size: box.getSize(new Vector3()), center: box.getCenter(new Vector3()), face,
+        size: box.getSize(new engine.Vector3()), center: box.getCenter(new engine.Vector3()), face,
       };
     }).catch(error => {
       models.delete(key);
@@ -181,7 +200,9 @@ class TerrasonicAvatar extends HTMLElement {
 
   clearModel() {
     this.mixer?.stopAllAction();
+    if (this.mixer && this.model) this.mixer.uncacheRoot(this.model);
     this.mixer = this.model = this.action = this.key = this.requested = null;
+    this.asset = this.clips = null;
     this.cue = "";
     this.manual = null;
     this.yaw = this.targetYaw = .32;
@@ -189,7 +210,7 @@ class TerrasonicAvatar extends HTMLElement {
   }
 
   replay(clip = "Play") {
-    if (!this.clips?.has(clip)) return;
+    if (reduced.matches || !this.clips?.has(clip)) return;
     this.manual = { clip, started: performance.now() };
     queue(this);
   }
@@ -216,12 +237,11 @@ class TerrasonicAvatar extends HTMLElement {
   sync() {
     const key = this.dataset.character;
     if (!this.inView || !this.context || !characters.has(key)) return;
-    if (this.dataset.view === "stage" && this.dataset.muted === "true") {
+    // Small thumbnails and guide portraits use the rendered static pose.
+    // Their text controls remain usable before the 3D runtime is downloaded.
+    if (["mini", "face", "bust"].includes(this.dataset.view)) return;
+    if (["stage", "member"].includes(this.dataset.view) && this.dataset.muted === "true" && !this.model) {
       pending.delete(this);
-      return;
-    }
-    if (!prepareRenderer()) {
-      this.showError();
       return;
     }
     if (this.key === key) {
@@ -231,10 +251,11 @@ class TerrasonicAvatar extends HTMLElement {
       this.requested = key;
       load(key).then(asset => {
         if (!this.isConnected || this.dataset.character !== key || this.requested !== key) return;
+        if (!prepareRenderer()) { this.showError(); return; }
         this.key = key;
         this.asset = asset;
         this.model = cloneModel(asset.scene);
-        this.mixer = new AnimationMixer(this.model);
+        this.mixer = new engine.AnimationMixer(this.model);
         this.clips = new Map(asset.clips.map(clip => [clip.name, clip]));
         this.updateCue();
         queue(this);
@@ -254,6 +275,11 @@ class TerrasonicAvatar extends HTMLElement {
   }
 
   animation(now) {
+    const idle = this.clips.get("Idle");
+    if (reduced.matches || this.dataset.muted === "true") {
+      this.manual = null;
+      return [idle, 0, false];
+    }
     if (this.manual) {
       const time = (now - this.manual.started) / 1000;
       const clip = this.clips.get(this.manual.clip);
@@ -262,8 +288,6 @@ class TerrasonicAvatar extends HTMLElement {
       }
       this.manual = null;
     }
-    const idle = this.clips.get("Idle");
-    if (reduced.matches || this.dataset.muted === "true") return [idle, 0, false];
     if (this.cue) {
       const name = this.cue.startsWith("entry-") ? "Walk" : this.cue.startsWith("speak-") ? "Speak" : "Play";
       const clip = this.clips.get(name);
@@ -271,11 +295,10 @@ class TerrasonicAvatar extends HTMLElement {
       const elapsed = Math.max(0, (now - this.started) / 1000);
       if (elapsed < duration) return [clip, elapsed / duration * clip.duration, true];
     }
-    if (this.dataset.view === "stage" && this.dataset.active === "true") {
+    if (["stage", "member"].includes(this.dataset.view) && this.dataset.active === "true") {
       const dance = this.clips.get("Dance");
       return [dance, now / 1000 % dance.duration, true];
     }
-    if (this.dataset.view === "portrait") return [idle, now / 1000 % idle.duration, true];
     return [idle, 0, false];
   }
 
@@ -336,6 +359,9 @@ class TerrasonicAvatar extends HTMLElement {
 
 customElements.define("ts-avatar", TerrasonicAvatar);
 reduced.addEventListener("change", () => {
-  for (const avatar of visible) queue(avatar);
+  for (const avatar of visible) {
+    if (reduced.matches) avatar.manual = null;
+    queue(avatar);
+  }
 });
 document.addEventListener("visibilitychange", schedule);

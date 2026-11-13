@@ -11,6 +11,7 @@ Como recomendaron en la orientación: declarar la IA da credibilidad. Se agrega 
 | *(hackathon)* | M2–M4, M6 | ChatGPT Codex | Funciones concretas de la versión final (exportar .wav, parser de CSV, pruebas, animación por capas). **Anotar aquí cada función** | Revisión cruzada, prueba manual y comentario de autoría |
 | 2026-11-09 | M6 | ChatGPT Codex | Auditoría de diseño y ajustes de navegación, espaciado, desplazamiento y controles táctiles en TerraSonic | Pruebas automatizadas y revisión visual. Pendiente la revisión del equipo |
 | 2026-11-09 | M6 | ChatGPT Codex | Rediseño de portada, reproductor, conversión, método y tecnología a partir de capturas y evaluación heurística | Pruebas automatizadas y revisión visual. Pendiente la revisión del equipo |
+| 2026-11-13 | M4–M6 | ChatGPT Codex y Blender 5.2.2 | Propuesta de cinco modelos articulados con geometría propia, atlas PBR, clips y poses WebP. Respaldo sin WebGL, carga diferida y cuerpos completos en Escuchar | Inventario, renders multivista, muestreo de clips y regresiones automatizadas. Revisión humana y cultural pendientes |
 | | | | | |
 
 **Para el envío a Space Apps:** "Este proyecto usó herramientas de IA (Claude de Anthropic y Whisper) para planificación, prototipado y asistencia de código. Todo fue revisado, probado y editado por el equipo. Los datos científicos provienen sin modificación de NASA POWER."

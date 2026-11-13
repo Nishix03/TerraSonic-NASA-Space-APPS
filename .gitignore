@@ -4,3 +4,5 @@ __pycache__/
 node_modules/
 data/eic/*.mp4
 /_site/
+/_work/
+*.blend1

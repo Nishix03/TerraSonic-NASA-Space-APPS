@@ -174,8 +174,18 @@ a{color:inherit}
 .px ts-avatar[data-view="mini"]{width:100%;height:44px}
 .px ts-avatar[data-view="portrait"]{touch-action:pan-y pinch-zoom;cursor:grab}
 .px ts-avatar[data-view="portrait"]:active{cursor:grabbing}
-.px ts-avatar[data-view="portrait"]:not([data-rendered])::before{content:attr(data-loading);position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:.9em}
-.px ts-avatar[data-view="portrait"][data-error]::before{content:attr(data-unavailable)}
+.px ts-avatar::before{content:"";position:absolute;inset:0;background:var(--avatar-image) center/contain no-repeat;pointer-events:none}
+.px ts-avatar[data-rendered]::before{display:none}
+.px ts-avatar[data-character="silbo"]{--avatar-image:url("./sprites/silbo/pose-volume.webp")}
+.px ts-avatar[data-character="inti"]{--avatar-image:url("./sprites/inti/pose-volume.webp")}
+.px ts-avatar[data-character="mama"]{--avatar-image:url("./sprites/mama/pose-volume.webp")}
+.px ts-avatar[data-character="yaku"]{--avatar-image:url("./sprites/yaku/pose-volume.webp")}
+.px ts-avatar[data-character="illapa"]{--avatar-image:url("./sprites/illapa/pose-volume.webp")}
+.px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="silbo"]{--avatar-image:url("./sprites/silbo/face-volume.webp")}
+.px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="inti"]{--avatar-image:url("./sprites/inti/face-volume.webp")}
+.px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="mama"]{--avatar-image:url("./sprites/mama/face-volume.webp")}
+.px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="yaku"]{--avatar-image:url("./sprites/yaku/face-volume.webp")}
+.px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="illapa"]{--avatar-image:url("./sprites/illapa/face-volume.webp")}
 .px .bentering .bportrait-live>canvas{animation:bcut-reveal var(--band-entry) var(--cut-ease) both}
 .px .bresetting .bportrait-live>canvas{opacity:0}
 .px .avatar-actions{display:none;gap:5px;flex-wrap:wrap;justify-content:center}
@@ -1176,6 +1186,18 @@ a{color:inherit}
 .px .uni .controls .signal-state{letter-spacing:.05em}
 .px .file-settings .field{min-width:0;width:min(100%,340px)}
 .px .file-settings select{min-width:0;max-width:100%}
+.px .listen-band{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:8px}
+.px .listen-band h2{font:700 1.05em/1.3 var(--head)}
+.px .listen-members{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.px .listen-member{min-width:0;display:grid;justify-items:center;gap:5px;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+.px .listen-member[aria-pressed="true"]{border-bottom-color:var(--member-color)}
+.px .listen-member[aria-pressed="false"] ts-avatar{filter:grayscale(.85);opacity:.65}
+.px .listen-member ts-avatar{width:100%;height:118px}
+.px .listen-member strong{max-width:100%;overflow-wrap:anywhere;font:700 max(.7em,.75rem)/1.3 var(--head)}
+.px .listen-member span{font-size:.75em;color:var(--muted)}
+.px .model-live-label{display:none}
+.px .bshow:has(.bportrait-live[data-rendered]) .model-live-label{display:inline}
+.px .bshow:has(.bportrait-live[data-rendered]) .model-static-label{display:none}
 .px .uni .views{gap:10px}
 .px .uni .vpanel{padding:8px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
 .px .uni .vcap{padding:0 0 5px}
@@ -1241,6 +1263,7 @@ a{color:inherit}
   .px .topics button{grid-column:span 2;padding-inline:3px}
   .px .topics:has(button:nth-child(5)) button:nth-child(n+4){grid-column:span 3}
   .px .tech-item{grid-template-columns:minmax(0,1fr)}
+  .px .listen-members{grid-template-columns:repeat(3,minmax(0,1fr))}
   .px .scale-row{grid-template-columns:16px minmax(58px,.55fr) minmax(0,1fr)}
   .px .scale-row .scale-sound{grid-column:2/-1}
   .px .bsel{min-height:60px;padding-inline:3px}
@@ -1466,6 +1489,18 @@ a{color:inherit}
 </figure>
 </div>
 
+<section class="listen-band" aria-labelledby="listen-band-title">
+<div class="row bandhead"><h2 id="listen-band-title">{{tx.theBand}}</h2><span class="muted small">{{tx.bandMixHelp}}</span></div>
+<div class="listen-members" role="group" aria-label="{{tx.bandAria}}">
+<sc-for list="{{band}}" as="b">
+<button type="button" class="listen-member" aria-label="{{b.muteAria}}" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="--member-color: {{b.color}}">
+<ts-avatar data-view="member" data-character="{{b.key}}" data-cue="{{b.modelCue}}" data-muted="{{b.muted}}" data-active="{{b.modelActive}}" aria-hidden="true"></ts-avatar>
+<strong>{{b.name}}</strong><span>{{b.mixLabel}}</span>
+</button>
+</sc-for>
+</div>
+</section>
+
 <details class="player-readout">
 <summary>{{tx.playerReadout}}</summary>
 <div class="readout">
@@ -1646,7 +1681,7 @@ a{color:inherit}
 </div>
 <div class="bidentity"><h1 class="display">{{bandCur.name}}</h1><p class="muted">{{bandCur.origin}}</p></div>
 <figure id="tour-bshow" class="bshow">
-<div class="bstage-top" aria-hidden="true"><span>{{tx.inScene}} · 3D</span><span>{{bandCur.name}}</span></div>
+<div class="bstage-top" aria-hidden="true"><span>{{tx.inScene}} · <span class="model-live-label">3D</span><span class="model-static-label">{{tx.staticPose}}</span></span><span>{{bandCur.name}}</span></div>
 <div class="bscene {{bandCur.entrance}}" role="img" aria-label="{{bandCur.name}} {{tx.fullBody}}">
 <svg class="bscene-orbit" viewBox="0 0 480 550" aria-hidden="true" fill="none" stroke="currentColor">
   <ellipse cx="240" cy="487" rx="159" ry="25" stroke-dasharray="3 5"></ellipse>
@@ -1691,7 +1726,7 @@ a{color:inherit}
   <strong>{{bandCur.number}} / 05</strong>
   <div class="avatar-actions">
     <sc-for list="{{avatarActions}}" as="action">
-      <button type="button" class="btn sm quiet" onClick="{{action.run}}">{{action.label}}</button>
+      <button type="button" class="btn sm quiet" disabled="{{action.off}}" onClick="{{action.run}}">{{action.label}}</button>
     </sc-for>
   </div>
 </figcaption>
@@ -1705,6 +1740,7 @@ a{color:inherit}
 <dt class="muted">{{tx.instrument}}</dt><dd>{{bandCur.ins}}</dd>
 </dl>
 <p class="bquote muted">«{{bandCur.quote}}»</p>
+<p class="muted small">{{tx.bandDesign}}</p>
 <div id="tour-bgo" class="row"><button type="button" class="btn primary" onClick="{{bandGo}}">{{tx.bandGo}} →</button></div>
 </div>
 </div>
@@ -2322,7 +2358,7 @@ var TX = {
     stageKicker: 'Escuchar · paso 3', stageTitle: 'La banda en escena', stageAria: 'Escenario de la banda', onStage: 'En el escenario:', musiciansAria: 'Músicos en escena',
     stageEmpty1: 'Escenario vacío', stageEmpty2: 'enciende un músico',
     leadAria: 'Protagonista de la reproducción', leadLabel: 'Protagonista', leadChange: 'Cambiar protagonista', leadPrev: 'Protagonista anterior', leadAuto: 'Según el disco', leadNext: 'Protagonista siguiente',
-    theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda',
+    theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Propuesta artística del proyecto. Las referencias culturales y las historias se documentan por separado.',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
     dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Escucha cómo suena una imagen o una serie de datos.',
@@ -2367,7 +2403,7 @@ var TX = {
     stageKicker: 'Listen · step 3', stageTitle: 'The band on stage', stageAria: 'The band’s stage', onStage: 'On stage:', musiciansAria: 'Musicians on stage',
     stageEmpty1: 'Empty stage', stageEmpty2: 'switch a musician on',
     leadAria: 'Lead of the playback', leadLabel: 'Lead', leadChange: 'Change lead', leadPrev: 'Previous lead', leadAuto: 'Follow the disc', leadNext: 'Next lead',
-    theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band',
+    theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic proposal for the project. Cultural references and stories are documented separately.',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
     dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Hear what an image or a data series sounds like.',
@@ -3874,7 +3910,8 @@ class Component extends DCLogic {
         var lvl = s.levels[b.k] || 0, off = s.mute[b.k];
         return { key: b.k, muted: off, modelCue: !off && s.playing && s.hits[b.k] ? 'note-' + s.hits[b.k] : '',
           ic: self.icons[INS_ICON[b.k]], lvlW: Math.round((off ? 0 : lvl) * 100) + '%', rowBg: off ? 'transparent' : th.bg, rowOp: off ? '0.55' : '1', pwColor: off ? th.muted : b.color, clips: b.clips, ins: b.ins, delay: (bi * 0.08).toFixed(2) + 's', name: b.name, color: b.color, disc: DISCS[DISC_CHAR.indexOf(b.k)].title, origin: b.origin, listens: b.listens, plays: b.plays, persona: b.persona, quote: b.quote, brief: b.brief,
-          on: !off, muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? T('Activar a ', 'Switch on ') : T('Desactivar a ', 'Switch off ')) + b.name,
+          on: !off, modelActive: s.playing && !off, mixLabel: off ? T('Silenciado', 'Muted') : T('Activado', 'Enabled'),
+          muteLabel: off ? 'OFF' : 'ON', muteAria: (off ? T('Activar a ', 'Switch on ') : T('Desactivar a ', 'Switch off ')) + b.name,
           btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A', btnBorder: off ? th.line : b.color,
           border: !off && lvl > 0.15 && s.playing ? b.color : th.line, anim: !off && lvl > 0.15 && s.playing ? 'bob' : '', meter: meterOf(off ? 0 : lvl, b.color), toggle: toggleBand(b.k) };
     });
@@ -4062,7 +4099,7 @@ class Component extends DCLogic {
         [T('Bailar', 'Dance'), 'Dance'],
         [T('Girar', 'Rotate'), 'rotate']
       ].map(function (action) {
-        return { label: action[0], run: function (event) {
+        return { label: action[0], off: action[1] !== 'rotate' && self.bandReduced(), run: function (event) {
           var avatar = event.currentTarget.closest('.bshow').querySelector('.bportrait-live');
           if (!avatar) return;
           if (action[1] === 'rotate') avatar.rotate?.();

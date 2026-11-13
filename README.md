@@ -49,6 +49,8 @@ La escena editable está en `assets/avatares/terrasonic-banda.blend`. Para regen
 
 En la plantilla web, `ts-avatar` reutiliza cada GLB mediante `data-character`. Los atributos `data-view` y `data-cue` indican el encuadre y la señal que activa la animación. La vista de personajes requiere WebGL 2.
 
+En `piero-mejoras` se está completando el encargo ampliado. El estado verificable y los pasos para reanudar están en [docs/PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). La revisión de modelos y sus comandos están en [docs/MODELOS_3D.md](docs/MODELOS_3D.md). Las vistas nuevas usan una pose estática durante la carga o cuando WebGL no está disponible.
+
 ## Datos
 
 - Fotogramas: los de la visualización oficial del EIC *SST Anomaly – Near Real Time*, variante Pacífico ([SVS 5176](https://svs.gsfc.nasa.gov/5176)), extraídos y recortados con `python scripts/descargar_fotogramas.py` (necesita ffmpeg; baja un video de ~340 MB que no se sube a git). Cubren del 16 may 2024 al 2 nov 2026: cinco discos de seis fotogramas, uno cada 30 días.

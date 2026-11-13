@@ -16,6 +16,8 @@ def build(destination: Path) -> None:
     version = sha256(avatar_runtime.read_bytes())
     for model in models:
         version.update(model.read_bytes())
+        for kind in ("pose", "face"):
+            version.update((prototype / "sprites" / model.stem / f"{kind}-volume.webp").read_bytes())
     avatar_version = version.hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
     html = html.replace(
@@ -32,15 +34,18 @@ def build(destination: Path) -> None:
     html = html.replace(
         "</head>", f'<script type="module" src="./runtime/avatar3d.js?v={avatar_version}"></script>\n</head>', 1
     )
+    for kind in ("pose", "face"):
+        html = html.replace(f"{kind}-volume.webp", f"{kind}-volume.webp?v={avatar_version}")
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_text(html, encoding="utf-8")
     copy2(root / "scripts" / "pages-support.js", destination / "support.js")
     for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     for model in models:
-        particle = Path("sprites") / model.stem / "particula.png"
-        (destination / particle).parent.mkdir(parents=True, exist_ok=True)
-        copy2(prototype / particle, destination / particle)
+        for filename in ("particula.png", "pose-volume.webp", "face-volume.webp"):
+            sprite = Path("sprites") / model.stem / filename
+            (destination / sprite).parent.mkdir(parents=True, exist_ok=True)
+            copy2(prototype / sprite, destination / sprite)
     runtime = destination / "runtime"
     runtime.mkdir(exist_ok=True)
     copy2(avatar_runtime, runtime)
