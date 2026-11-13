@@ -3334,7 +3334,7 @@ class CinematicIntro {
   constructor(owner) { this.owner=owner; this.animations=[]; this.timers=[]; this.seen=false; }
   markSeen() { this.seen=true; try { sessionStorage.setItem('ts_intro_seen','1'); } catch (ignored) {} }
   hasSeen() { try { return this.seen||sessionStorage.getItem('ts_intro_seen')==='1'; } catch (ignored) { return this.seen; } }
-  start(replay=false) {
+  start(replay=false,trigger=null) {
     var self=this, app=this.owner;
     if(typeof document.createElement!=='function'||!document.body?.append)return;
     if(app.disposed||app.state.tab!=='home'||app.state.showPreferences||app.state.tour||document.hidden||(!replay&&this.hasSeen()))return;
@@ -3357,7 +3357,7 @@ class CinematicIntro {
 <svg class="cinema-wave" viewBox="0 0 560 110" fill="none" aria-hidden="true"><path d="M0 55h80l16-9 16 18 16-29 16 46 16-65 16 81 16-66 16 42 16-28 16 20 16-17 16 13 16-18 16 25 16-36 16 43 16-36 16 25 16-16 16 9h80" stroke="currentColor" stroke-width="1.5"/></svg>
 <div class="cinema-copy" aria-hidden="true"><p class="cinema-brand">TERRASONIC</p><h2></h2><p class="cinema-description"></p></div>
 <div class="cinema-toolbar"><p></p><button type="button"></button></div>`;
-    this.update();this.returnFocus=document.activeElement;document.body.append(root);
+    this.update();this.returnFocus=trigger||document.activeElement;document.body.append(root);
     root.style.fontFamily=getComputedStyle(document.querySelector('.px.app')).fontFamily;
     var skip=root.querySelector('button');skip.addEventListener('click',function(){self.finish(true);});skip.focus({preventScroll:true});
     this.onKey=function(event){if(event.key==='Escape'||(event.key==='Tab'&&root.contains(document.activeElement))){event.preventDefault();event.stopPropagation();self.finish(true);}else if(!root.contains(event.target))self.finish(false);};
@@ -5289,7 +5289,7 @@ class Component extends DCLogic {
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
       th: th, ic: this.icons, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
-      intro: { replayLabel: this.bandReduced() ? T('Ver presentación sin movimiento','View presentation without motion') : T('Repetir introducción','Replay intro'), replay: function () { self.cinema?.start(true); } },
+      intro: { replayLabel: this.bandReduced() ? T('Ver presentación sin movimiento','View presentation without motion') : T('Repetir introducción','Replay intro'), replay: function (event) { self.cinema?.start(true,event?.currentTarget); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
       stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),
