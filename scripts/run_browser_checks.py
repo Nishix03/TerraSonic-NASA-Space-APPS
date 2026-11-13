@@ -29,6 +29,7 @@ CHECKS = {
     "sprites": "verify_sprites.cjs",
     "mobile-guide": "verify_mobile_guide.cjs",
     "reto05": "verify_reto05.cjs",
+    "short-viewport": "verify_short_viewport.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

@@ -12,7 +12,7 @@ Evidencias: `_work/github-preview/browser-local-ae85922/`, `browser-public-ae859
 
 A las 15:30, main remoto continuaba en `59310ac43cd25e76cc68022a109326ca5cb27712`, el local en `a8f8203e8de3097584987a5ba5635bc813181c44` y `.github/` sin diferencias. La web oficial devolvió 200 y mantuvo la huella **`a10648034b25fc4cda32a67d9c991960fab4f5c3a1ce0e4c180a57a708a98536`**. Se mantuvieron las copias recuperables del estudio 3D fuera del build.
 
-La entrega portátil se genera en `_work/delivery/terrasonic-reto05-2026-11-13.zip`, con su `.sha256`, manifiesto, build, fuente comprometida y evidencia seleccionada. La revisión documental posterior registra estos resultados; `source.json` sigue identificando el commit de aplicación efectivamente servido.
+La entrega portátil definitiva se genera en `_work/delivery/terrasonic-reto05-2026-11-13-final.zip`, con su `.sha256`, manifiesto, build, fuente comprometida y evidencia seleccionada. La revisión documental posterior registra estos resultados; `source.json` sigue identificando el commit de aplicación efectivamente servido. La copia anterior sin el sufijo final conserva la primera publicación como checkpoint.
 
 ## Registro histórico anterior
 

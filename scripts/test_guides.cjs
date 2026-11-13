@@ -1392,7 +1392,7 @@ test('tutorial next always permits skipping practice without marking an action c
   c.state.tab='data';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=9;
   c.state.custom={name:'kept.csv',url:'blob:kept',cols:[]};const before=JSON.stringify([c.state.tab,c.state.sub,c.state.disc,c.state.col,c.state.custom]);
   c.startTutorial();
-  for(let step=1;step<=3;step++){assert.equal(c.state.tour,step);const guide=c.renderVals().tour;assert.equal(guide.nextOff,false);assert.match(guide.nextLabel,/sin/);guide.next();}
+  for(let step=1;step<=3;step++){assert.equal(c.state.tour,step);const guide=c.renderVals().tour;assert.equal(guide.nextOff,false);assert.equal(guide.nextLabel,step===3?'Terminar guía':'Saltar paso');guide.next();}
   assert.equal(c.state.tour,0);assert.equal(c.state.playing,false);
   assert.equal(JSON.stringify([c.state.tab,c.state.sub,c.state.disc,c.state.col,c.state.custom]),before);
   assert.deepEqual(JSON.parse(JSON.stringify(c.state.tutorialDone)),{disc:false,play:false,legend:false});
