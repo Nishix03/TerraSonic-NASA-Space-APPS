@@ -72,6 +72,8 @@ La inspección visual posterior encontró un problema que no era desbordamiento:
 
 El historial necesitó una corrección adicional: WebKit no incluía su lista desplazable en Tab. Ahora tiene foco explícito solo cuando hay eventos y permite usar `Fin` para recorrerlos. Las diferencias entre `Control+Fin` y `Fin` se diagnosticaron como comportamiento nativo de los motores de prueba, sin interceptar esas teclas en la aplicación. El control final se comprueba contra el viewport visible además del contenedor, porque en móvil la página puede desplazar el documento completo.
 
+La pasada ampliada de axe añade el reproductor con todos esos paneles abiertos y 200 eventos: **90 estados y cero infracciones detectadas en cada uno de Chromium, Firefox y WebKit**. Los 36 recorridos de redistribución desplegada pasan también en cada motor. Evidencia nueva: `_work/a11y/expanded-{chromium,firefox,webkit}/` y `_work/layout/expanded-with-history-{chromium,firefox,webkit}/`. La lista larga es sintética y las pruebas de audio se mantienen separadas. Se conservan los casos incompletos de axe y todos los límites de revisión humana/nativa anteriores.
+
 ## Proyectos similares revisados
 
 [NASA GIBS Worldview](https://github.com/nasa-gibs/worldview) orienta la separación entre mapa, fuente y fechas. El README de [Earth Jukebox](https://github.com/jaherunhasanrimon/NasaSpaceApp1stPrototype_Earth-Jukebox-Listen-to-a-Changing-Planet) documenta transporte, leyenda y mapeo sonoro en navegador. Sus afirmaciones de accesibilidad/rendimiento no son evidencia de TerraSonic ni resultados verificados de aquel proyecto. Las [sonificaciones de NASA](https://www.nasa.gov/data-sonifications/) sirven de referencia para comunicar datos por sonido.

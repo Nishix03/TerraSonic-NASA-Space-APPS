@@ -1,6 +1,36 @@
 # Vista independiente y protección de la web oficial
 
-Vista de revisión: **https://terrasonic-piero-preview-20261113.satinkoi3.chatgpt.site**.
+Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
+
+## Copia GitHub Pages actual
+
+La copia estática independiente está en [Alvaro-mendoza-12/terrasonic-piero-preview-20261113](https://github.com/Alvaro-mendoza-12/terrasonic-piero-preview-20261113), repositorio público nuevo, ID `1456496176`. Se verificó identidad `Alvaro-mendoza-12`, ID `203316642`, y permiso administrador exclusivamente en esta copia antes de habilitar Pages. El conector GitHub disponible no ofrecía creación de repositorios/Pages; se usaron Git y la API oficial con el credencial existente del gestor, solo en memoria. No se copiaron credenciales al repositorio, archivos públicos ni URL.
+
+| Procedencia | Valor |
+| --- | --- |
+| Código de aplicación original | `0fefefd79358b20d9969314ffa59fac9a0a603c0` en `piero-mejoras` |
+| Commit estático de la copia | `cded88381a70f9fd534e3da1f8db89de0713726e` |
+| Rama de la copia y fuente Pages | `piero-mejoras`, directorio `/`, `build_type: legacy` |
+| Archivos de la copia | 107; 103 del build más README, procedencia y dos archivos de configuración estática |
+| HTML publicado | 420.438 bytes, SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90` |
+| HTTPS y acceso | Valores iniciales del proveedor: `https_enforced: true`, `public: true` |
+| Resultado | API Pages `built` para el commit estático exacto; navegador anónimo y Python reciben HTTP 200 |
+
+La preparación parte de `git archive` del commit identificado, sin archivos ignorados, y conserva las licencias incluidas. Se sirvió localmente bajo el mismo subdirectorio que usa Pages: dos recorridos reales por HTTP pasaron antes de crear/publicar el repositorio. La copia solo tiene la rama `piero-mejoras`, que GitHub seleccionó como predeterminada tras el primer push. No se creó una rama main en ella ni se añadió un workflow propio. No se modificaron la protección Vercel ni los ajustes de publicación del repositorio original, ni se contrataron pagos.
+
+`verify_public.cjs` abrió dos contextos nuevos sin credenciales, normal y sin WebGL. Pasaron portada completa móvil, EIC/GIBS, reproducir/pausar, leyenda, los cinco GLB/poses y la imagen de ejemplo. Las 96 huellas comprobadas incluyen fuentes/licencias locales además de los 81 activos de la primera copia. El HTML completo coincide sin necesitar excluir inserciones del proveedor. No hubo errores JavaScript ni respuestas HTTP fallidas del sitio. Evidencia: `_work/github-preview/browser-public/`, `pages-created.json`, `pushed.json` y `official-after-publication.json`. `source.json` en la URL pública identifica la fuente.
+
+```powershell
+node scripts/verify_public.cjs https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/ ruta/al/build-exacto _work/public/actual
+```
+
+La comprobación de las 06:10 de Bogotá mantuvo el remoto main original en `59310ac`, el main local en `a8f8203`, cero cambios de `.github/` y la web oficial con su SHA-256 `a10648034b25fc4cda32a67d9c991960fab4f5c3a1ce0e4c180a57a708a98536`. El push original solo actualizó `piero-mejoras` a `0fefefd`. Para publicar otro checkpoint se reutiliza esta misma copia, después de generar y verificar sus archivos; no se debe crear otra ni enviar el build a main del proyecto.
+
+Referencias de la operación: [GitHub Pages en repositorios públicos](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [API de creación de repositorio](https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user), [fuente Pages mediante API](https://docs.github.com/en/rest/pages/pages#create-a-github-pages-site).
+
+## Primera publicación Sites, conservada como checkpoint
+
+Vista inicial: **https://terrasonic-piero-preview-20261113.satinkoi3.chatgpt.site**. La información siguiente corresponde a esa versión, no a la copia GitHub Pages actual.
 
 Se publicó con la integración y skill Sites como una copia estática independiente, sin base de datos ni backend de aplicación. El código del visitante sigue ejecutándose localmente. La audiencia pública se configuró solo para este Site nuevo, conforme al requisito de un enlace sin credenciales. No se cambió la protección del proyecto Vercel existente ni la configuración de GitHub Pages.
 

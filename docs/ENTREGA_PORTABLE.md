@@ -2,6 +2,8 @@
 
 El build normaliza los saltos de línea de los archivos de texto distribuidos y de la clave de caché del runtime 3D. Git puede producir CRLF en `archive` según `core.autocrlf`, incluso cuando el blob del repositorio es LF. La normalización evita que esa preferencia local cambie las huellas del sitio. Los binarios y los cuatro avisos originales OFL con huellas fijadas se conservan byte por byte; no se cambia la configuración Git global.
 
+La prueba del commit `0fefefd` comparó exportaciones reales de Git con `core.autocrlf=true`, `false` y el árbol de trabajo: los 103 archivos generados coinciden byte por byte. Son 7.152.631 bytes, con HTML SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90`, y las doce fuentes/avisos originales siguen intactos. Evidencia en `_work/reproducible-0fefefd/results.json`. Esa misma salida sirve en la [vista pública actual](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/); los paquetes históricos de abajo conservan su procedencia anterior.
+
 El primer paquete verificado de esta revisión es un checkpoint del commit `122fd9d536393528b84d9871fe734ac93a761101`. No incluye las correcciones posteriores de este chat. Se conserva para recuperación y para comprobar el procedimiento de entrega.
 
 | Dato | Checkpoint verificado |
