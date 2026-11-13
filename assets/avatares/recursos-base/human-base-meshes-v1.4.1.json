@@ -1,0 +1,18 @@
+{
+  "name": "Human Base Meshes",
+  "version": "1.4.1",
+  "publisher": "Blender Studio and community contributors",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "https://www.blender.org/download/demo-files/",
+  "download": "https://download.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip",
+  "licenseEvidence": "https://projects.blender.org/blender/blender/commit/4c4293010c2e21122b54681cd22556b727efbb11",
+  "archiveBytes": 50643039,
+  "archiveSha256": "811f43accbb31a88266d932f8f5563b2d13586fca0ba2693aad1f5fe582b3515",
+  "blendRelativePath": "human-base-meshes-bundle-v1.4.1/human_base_meshes_bundle.blend",
+  "localCache": "_work/assets/human-base-meshes-v1.4.1",
+  "preparedAt": "2026-11-13T16:31:12.871003+00:00",
+  "archiveCrcVerified": true,
+  "importedIntoTerraSonic": false,
+  "purpose": "Candidate anatomical topology for manual Blender reconstruction against the team's original illustrations. Not a completed character, rig, animation, cultural reference or runtime asset."
+}
