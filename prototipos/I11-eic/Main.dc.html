@@ -1687,11 +1687,97 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
  .px .listen-member strong,.px .listen-member>span{font-size:.65em}
  .px .listen-member strong{font-size:max(10px,.6em);letter-spacing:0}
 }
+/* Observatorio del Pacífico: one decorative layer, no layout or pointer surface. */
+.px .space-sky{
+ --sky-solar:#ffc76b;--sky-lunar:#cfdeef;--sky-trail:#c4f2ff;
+ --sky-orbit-time:96s;--sky-meteor-time:23s;--sky-flight-time:38s;
+ isolation:isolate;contain:strict;opacity:1;
+}
+.px .space-sky .space-atmosphere{position:absolute;inset:0;background:radial-gradient(ellipse at 0 36%,#764f2b20,transparent 42%),radial-gradient(ellipse at 100% 15%,#5c7bc52b,transparent 42%),radial-gradient(ellipse at 55% 110%,#24446c55,transparent 60%)}
+.px .space-sky .stl{opacity:.32;animation:none;will-change:auto}
+.px .space-sky .s2{opacity:.26}
+.px .space-sky .s3{opacity:.4}
+.px .space-sun,.px .space-moon{position:absolute;pointer-events:none}
+.px .space-sun{left:clamp(-28px,1.3vw,28px);top:clamp(120px,28vh,250px);width:clamp(86px,10vw,154px);opacity:.8}
+.px .space-sun svg,.px .space-moon svg{display:block;width:100%;height:auto;overflow:visible}
+.px .solar-halo{position:absolute;inset:-45%;background:radial-gradient(circle,#ffc76b15,transparent 67%);border-radius:50%}
+.px .solar-corona{transform-origin:80px 80px;animation:space-orbit var(--sky-orbit-time) linear infinite}
+.px .space-moon{right:clamp(-26px,.9vw,20px);top:clamp(108px,18vh,200px);width:clamp(72px,9vw,130px);opacity:.68}
+.px .space-reading-shade{position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--bg) 24%,var(--bg) 76%,transparent);opacity:.52}
+.px .space-horizon{position:absolute;left:-25%;bottom:-46vh;width:150%;height:58vh;border:1px solid #8ecae52e;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at 50% 0,#274d7440,transparent 62%)}
+.px .space-meteor{position:absolute;width:clamp(55px,9vw,140px);height:1px;background:linear-gradient(90deg,transparent,var(--sky-trail));opacity:0;transform-origin:right center;animation:space-meteor var(--sky-meteor-time) linear infinite}
+.px .space-meteor::after{content:"";position:absolute;right:0;top:-1px;width:3px;height:3px;border-radius:50%;background:#e7faff;box-shadow:0 0 8px #c4f2ff88}
+.px .meteor-one{left:12%;top:16%;animation-delay:-3s}
+.px .meteor-two{left:58%;top:11%;--sky-meteor-time:31s;animation-delay:-16s}
+.px .meteor-three{left:4%;top:62%;--sky-meteor-time:43s;animation-delay:-30s}
+.px .space-flight{position:absolute;opacity:0;animation:space-flight var(--sky-flight-time) linear infinite}
+.px .space-rocket{display:block;width:25px;height:60px}
+.px .flight-one{left:-36px;top:90%;animation-delay:-24s}
+.px .flight-two{right:-40px;top:75%;--sky-flight-time:59s;animation-name:space-flight-return;animation-delay:-7s}
+.px .flight-two .space-rocket{width:18px;height:43px}
+@keyframes space-orbit{to{transform:rotate(360deg)}}
+@keyframes space-meteor{
+ 0%,82%{opacity:0;transform:translate3d(0,0,0) rotate(30deg)}
+ 83%{opacity:.7}89%{opacity:0;transform:translate3d(38vw,23vh,0) rotate(30deg)}
+ 100%{opacity:0;transform:translate3d(38vw,23vh,0) rotate(30deg)}
+}
+@keyframes space-flight{
+ 0%,68%{opacity:0;transform:translate3d(0,0,0) rotate(40deg)}
+ 70%{opacity:.72}85%{opacity:.72}
+ 88%,100%{opacity:0;transform:translate3d(112vw,-88vh,0) rotate(40deg)}
+}
+@keyframes space-flight-return{
+ 0%,74%{opacity:0;transform:translate3d(0,0,0) rotate(-50deg)}
+ 76%{opacity:.6}88%{opacity:.6}
+ 92%,100%{opacity:0;transform:translate3d(-112vw,-72vh,0) rotate(-50deg)}
+}
+.px.app[data-theme="light"] .space-sky{opacity:1;--sky-trail:#356887}
+.px.app[data-theme="light"] .space-sky .stl{opacity:.14;filter:invert(1)}
+.px.app[data-theme="light"] .space-atmosphere{opacity:.5}
+.px.app[data-theme="light"] .space-sun{opacity:.55}
+.px.app[data-theme="light"] .space-moon{opacity:.35}
+.px.app[data-theme="light"] .space-reading-shade{opacity:.75}
+.px.reduce-motion .space-meteor,.px.reduce-motion .space-flight{display:none}
+.px.reduce-motion .space-sky *{animation:none!important}
+html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.px .space-sky *{animation:none!important}.px .space-meteor,.px .space-flight{display:none}}
+@media(forced-colors:active){.px .space-sky{display:none}}
+@media(max-width:700px){
+ .px .space-sun{width:80px;left:-34px;top:38%;opacity:.5}
+ .px .space-moon{width:66px;right:-15px;top:24%;opacity:.38}
+ .px .space-reading-shade{background:linear-gradient(90deg,transparent,var(--bg) 20%,var(--bg) 80%,transparent);opacity:.75}
+ .px .space-rocket{width:18px;height:43px}
+ .px .space-flight{--sky-flight-time:46s}
+ .px .flight-two{display:none}
+ .px .meteor-three{display:none}
+}
+@media(max-height:400px){.px .space-sun{width:64px;top:28%}.px .space-moon{width:55px;top:30%}.px .space-horizon{bottom:-50vh}}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
 
-<div class="skyfix" aria-hidden="true"><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div></div>
+<sc-if value="{{showBg}}">
+<div class="skyfix space-sky" aria-hidden="true" inert>
+<div class="space-atmosphere"></div>
+<div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div>
+<div class="space-sun">
+<span class="solar-halo"></span>
+<svg viewBox="0 0 160 160" focusable="false"><defs><radialGradient id="ts-solar-disc" cx="35%" cy="30%" r="75%"><stop stop-color="#fff2b9"/><stop offset=".48" stop-color="#ffc76b"/><stop offset="1" stop-color="#e68839"/></radialGradient></defs>
+<g class="solar-corona" fill="none" stroke="#ffd18c"><circle cx="80" cy="80" r="64" opacity=".2"/><circle cx="80" cy="80" r="71" stroke-dasharray="1 13" stroke-width="2" opacity=".48"/><path d="M80 3v10m0 134v10M3 80h10m134 0h10M26 26l7 7m94 94 7 7M26 134l7-7m94-94 7-7" opacity=".4"/></g>
+<circle cx="80" cy="80" r="48" fill="url(#ts-solar-disc)"/><path d="M48 65c15-21 44-25 64-5M53 93c10 11 21 15 34 13" fill="none" stroke="#fff0bc" stroke-width="2" opacity=".22"/></svg>
+</div>
+<div class="space-moon">
+<svg viewBox="0 0 140 140" focusable="false"><defs><radialGradient id="ts-lunar-disc" cx="30%" cy="25%" r="82%"><stop stop-color="#e4eef6"/><stop offset=".6" stop-color="#aebfd4"/><stop offset="1" stop-color="#586c89"/></radialGradient><clipPath id="ts-lunar-edge"><circle cx="70" cy="70" r="52"/></clipPath></defs>
+<circle cx="70" cy="70" r="63" fill="none" stroke="#b8d5ef" stroke-width=".5" opacity=".2"/><circle cx="70" cy="70" r="52" fill="url(#ts-lunar-disc)"/>
+<g clip-path="url(#ts-lunar-edge)"><g fill="#6d829e" opacity=".38"><circle cx="49" cy="48" r="12"/><circle cx="83" cy="88" r="17"/><circle cx="39" cy="88" r="7"/><circle cx="93" cy="44" r="6"/><circle cx="67" cy="66" r="4"/></g><g fill="none" stroke="#eef5fa" opacity=".28"><path d="M39 49a12 12 0 0 1 20-8M69 88a17 17 0 0 1 26-14"/></g><circle cx="100" cy="57" r="61" fill="#13233d" opacity=".67"/></g>
+</svg>
+</div>
+<div class="space-reading-shade"></div><div class="space-horizon"></div>
+<i class="space-meteor meteor-one"></i><i class="space-meteor meteor-two"></i><i class="space-meteor meteor-three"></i>
+<div class="space-flight flight-one"><svg class="space-rocket" viewBox="0 0 40 96" focusable="false"><path d="M16 68 20 93 24 68" fill="#ffc76b"/><path d="M18 69 20 84 22 69" fill="#effaff"/><path d="M12 43 3 64l10-3m15-18 9 21-10-3" fill="#6e9bb8"/><path d="M20 3C9 15 9 39 13 66h14c4-27 4-51-7-63Z" fill="#dae6ee"/><path d="M20 3v63h7c4-27 4-51-7-63Z" fill="#8fa6bc"/><circle cx="20" cy="31" r="6" fill="#294d70" stroke="#f3f9fc" stroke-width="2"/><path d="M13 61h14v8H13Z" fill="#476682"/></svg></div>
+<div class="space-flight flight-two"><svg class="space-rocket" viewBox="0 0 40 96" focusable="false"><path d="M16 68 20 93 24 68" fill="#9cddeb"/><path d="M12 43 3 64l10-3m15-18 9 21-10-3" fill="#cc9a5d"/><path d="M20 3C9 15 9 39 13 66h14c4-27 4-51-7-63Z" fill="#cbdce8"/><path d="M20 3v63h7c4-27 4-51-7-63Z" fill="#879eb6"/><circle cx="20" cy="31" r="6" fill="#294d70" stroke="#f3f9fc" stroke-width="2"/><path d="M13 61h14v8H13Z" fill="#476682"/></svg></div>
+</div>
+</sc-if>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
 <header class="top {{headerClass}}">
@@ -3168,7 +3254,11 @@ class Component extends DCLogic {
       cancelAnimationFrame(self.tourRaf);
       self.tourRaf = requestAnimationFrame(function () { self.measureTour(); });
     };
-    this.onTourVisible = function () { if (!document.hidden && self.state.tour) self.focusTourTarget(); };
+    this.onTourVisible = function () {
+      document.documentElement?.toggleAttribute?.('data-ts-page-hidden', !!document.hidden);
+      if (!document.hidden && self.state.tour) self.focusTourTarget();
+    };
+    this.onTourVisible();
     this.onTourResize = function () {
       self.onTourLayout();
       clearTimeout(self.navResizeTimer);
