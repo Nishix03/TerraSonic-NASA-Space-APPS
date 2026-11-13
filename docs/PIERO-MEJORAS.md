@@ -23,7 +23,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | R1 | Escuchar | Posición, tiempos, saltos, pausa, volumen, silencio, repetición y velocidad en EIC y GIBS. Cancelación de notas. Modos claros, leyenda y eventos consultables. | Implementado en checkpoint del reproductor. 90 pruebas, cuatro recorridos de audio y cinco anchos. Salida cero tras pausar. Se corrigió la paleta GIBS y la tierra negra. Falta continuidad bajo carga y URL final. Ver docs/REPRODUCTOR.md. |
 | R2 | Retirar A/B | Eliminar vista, estado, audio, ayudas, traducciones, estilos y recursos exclusivos. Conservar fechas del reproductor. | Implementado. Se retiraron pantalla, entradas, hash, estilos, estado, análisis y audio exclusivo en ambos idiomas. La regresión recorre las seis fechas de los diez discos. 81 pruebas pasan. |
 | R3 | Banda en Escuchar | Cinco cuerpos completos, activación compartida con Escenario y respaldo estático con carga lenta o sin WebGL. | Implementado. Mezcla compartida y cancelación de notas/reverberación por músico comprobadas en Chromium. Falta reverificar en la URL independiente final. |
-| R4 | Convertir | Imagen de ejemplo y propia como acciones principales, CSV y lluvia secundarios. Casos inválidos, tamaño, columnas y procesamiento local. | Parcial en base. Falta prioridad de imagen. |
+| R4 | Convertir | Imagen de ejemplo y propia como acciones principales, CSV y lluvia secundarios. Casos inválidos, tamaño, columnas y procesamiento local. | Implementado. Ocho escenarios Chromium y cuatro anchos, 98 pruebas de producto. Comprobadas muestra NASA, imagen propia, CSV multicolumna, límites de bytes/píxeles y conservación ante errores. Ver docs/CONVERTIR.md. |
 | R5 | Brisa, preferencias e idioma | Guía separada, tutorial con acciones reales, foco y voz cancelable, primera visita y elección guardada. | Pendiente. Silbo todavía es guía. |
 | R6 | Accesibilidad | Teclado, estados, contraste, zoom, móvil, movimiento reducido y alternativas a sonido/vista/arrastre. Vibración optativa y cancelable. | Parcial en base. Requiere nueva verificación integral. |
 | R7 | Armonía | Seis perfiles con acordes y notas concretas, incluidos disminuidos y sus4. Concordancia entre rótulo y motor. | Implementado. 81 pruebas: seis progresiones, notas MIDI emitidas por el sintetizador, rótulos bilingües y umbral de Yaku cálido. Pendiente prueba de audio final en navegador. |
@@ -46,8 +46,9 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | 2 | 13 nov 2026, 00:19–00:45 | Modelado, inspección multivista, respaldo, carga diferida, integración y pruebas. 78 pruebas de producto, 5 de GLB y seis escenarios Chromium con cinco personajes, incluida mezcla compartida Escuchar/Escenario. | 23 |
 | 3 | 13 nov 2026, 00:45–01:09 | Armonía, retirada A/B, transporte, paletas oficiales, voz/volumen, historial y composición del reproductor. 90 pruebas y verificación de Web Audio en ambos catálogos/modos. | 22 |
 | 4 | 13 nov 2026, 01:09–01:17 | Salidas individuales con reverberación, cancelación de fuentes, cinco muestras de instrumento, cambio de protagonista y regresiones de audio. 94 pruebas y cinco muestras medidas en navegador. | 7 |
+| 5 | 13 nov 2026, 01:17–01:24 | Imágenes como entrada principal, lluvia/CSV secundarios, límites de memoria, concurrencia y errores recuperables. 98 pruebas y recorrido Chromium de conversión. | 6 |
 
-Total conservador acreditado: **56 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
+Total conservador acreditado: **62 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
 
 ## Decisiones
 

@@ -1275,6 +1275,20 @@ a{color:inherit}
 }
 
 /* Transport and map explanation: shared by NASA discs and local files. */
+.px .convert-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:100%}
+.px .convert-card{display:grid;align-content:start;gap:12px;border:1px solid var(--line);border-radius:7px;padding:16px;min-width:0;background:var(--panel)}
+.px .convert-card h2,.px .convert-data h2{font:700 1.15em/1.3 var(--head)}
+.px .convert-card .sample-preview{width:100%;height:clamp(120px,19dvh,180px);object-fit:contain;background:#080b12}
+.px .convert-card .drop{min-height:190px;padding:16px;gap:10px;margin:0}
+.px .convert-card .btn{min-height:44px;white-space:normal}
+.px .convert-secondary{border-block:1px solid var(--line);width:100%;min-width:0}
+.px .convert-secondary summary{min-height:44px;align-content:center;cursor:pointer;font-weight:600}
+.px .convert-data{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:14px 0}
+.px .convert-data section{display:grid;align-content:start;gap:10px;min-width:0}
+.px .csv-picker{display:grid;gap:8px;font-size:.85em}
+.px .csv-picker input{width:100%;min-width:0;min-height:44px;font-size:.85em}
+.px .convert-explainer{padding:8px 0;display:grid;gap:8px}
+@media(max-width:620px){.px .convert-options,.px .convert-data{grid-template-columns:minmax(0,1fr)}.px .convert-card .drop{min-height:160px}}
 .px .transport{display:grid;gap:10px;padding:12px 0;border-block:1px solid var(--line);min-width:0}
 .px .player-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:22px}
 .px .player-sidebar{grid-column:2;grid-row:1;display:grid;gap:8px;min-width:0}
@@ -1453,24 +1467,37 @@ a{color:inherit}
 <div><p class="kicker">{{tx.dataKicker}}</p><h1 class="display">{{tx.dataTitle}}</h1></div>
 <p class="lede">{{tx.dataLede}}</p>
 </div>
-<div class="dgrid">
-<div class="panel">
+<div class="convert-options">
+<section id="tour-image-sample" class="convert-card" aria-labelledby="image-sample-title">
+<img class="sample-preview" src="fotogramas/ver2025_2.webp" alt="{{convert.sampleAlt}}" decoding="async">
+<div><h2 id="image-sample-title">{{convert.sampleTitle}}</h2><p class="muted small">{{convert.sampleBody}}</p></div>
+<button type="button" class="btn primary" onClick="{{useImageSample}}">{{convert.sampleAction}}</button>
+</section>
+<section class="convert-card" aria-labelledby="own-image-title">
+<h2 id="own-image-title">{{convert.ownTitle}}</h2>
 <label id="tour-drop" class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}">
-<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.csv,.tsv,.txt,image/*,text/csv" onChange="{{onFile}}" aria-labelledby="file-pick-label" aria-describedby="file-pick-help">
+<input type="file" accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif" onChange="{{onFile}}" aria-labelledby="file-pick-label" aria-describedby="file-pick-help">
 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"></path></svg>
-<strong id="file-pick-label" class="btn primary sm">{{tx.dropTitle}}</strong>
-<span id="file-pick-help" class="muted small">{{tx.dropSub}}</span>
+<strong id="file-pick-label" class="btn primary sm">{{convert.chooseImage}}</strong>
+<span id="file-pick-help" class="muted small">{{convert.imageLimits}}</span>
 </label>
-<div id="tour-sample" class="row"><button type="button" class="btn" onClick="{{useSample}}">{{tx.sample}}</button></div>
-<p role="status" aria-live="polite" class="upload-status muted small">{{upMsg}}</p>
+<p class="muted small">{{convert.imagePrivacy}}</p>
+</section>
 </div>
-<section id="tour-howdata" class="panel plain" aria-labelledby="data-explainer">
-<h2 id="data-explainer">{{tx.dataExplainer}}</h2>
+<p role="status" aria-live="polite" class="upload-status muted small">{{upMsg}}</p>
+<details class="convert-secondary"><summary>{{convert.secondaryTitle}}</summary>
+<div class="convert-data">
+<section id="tour-sample"><h2>{{convert.rainTitle}}</h2><p class="muted small">{{convert.rainBody}}</p><button type="button" class="btn" onClick="{{useSample}}">{{tx.sample}}</button></section>
+<section><h2>{{convert.csvTitle}}</h2><label class="csv-picker"><span>{{convert.chooseCsv}}</span><input type="file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain" onChange="{{onFile}}" aria-describedby="csv-pick-help"></label><p id="csv-pick-help" class="muted small">{{convert.csvLimits}}</p></section>
+</div>
+</details>
+<details id="tour-howdata" class="convert-secondary"><summary id="data-explainer">{{tx.dataExplainer}}</summary>
+<div class="convert-explainer">
 <sc-for list="{{howData}}" as="h" hint-placeholder-count="3">
 <div class="hrow"><strong>{{h.title}}</strong><span class="muted small">{{h.body}}</span></div>
 </sc-for>
-</section>
 </div>
+</details>
 </sc-if>
 
 <!-- ESCUCHAR · 2 · Reproductor (también para tu imagen) -->
@@ -2554,6 +2581,31 @@ function makeLogo() {
   return Object.keys(g).map(function (k) { var p = k.split(','); return { st: 'left:' + (p[0] * 3) + 'px;top:' + (p[1] * 3) + 'px;background:' + g[k] }; });
 }
 
+function rasterDimensions(bytes) {
+  var b = bytes, u16 = function (i) { return b[i] * 256 + b[i + 1]; };
+  var u24le = function (i) { return b[i] + b[i + 1] * 256 + b[i + 2] * 65536; };
+  var u32 = function (i) { return b[i] * 16777216 + b[i + 1] * 65536 + b[i + 2] * 256 + b[i + 3]; };
+  var text = function (i, count) { return String.fromCharCode.apply(null, Array.from(b.slice(i, i + count))); };
+  if (b.length >= 24 && text(1, 3) === 'PNG' && text(12, 4) === 'IHDR') return [u32(16), u32(20)];
+  if (b.length >= 10 && /^GIF8[79]a$/.test(text(0, 6))) return [b[6] + b[7] * 256, b[8] + b[9] * 256];
+  if (b.length >= 30 && text(0, 4) === 'RIFF' && text(8, 4) === 'WEBP') {
+    if (text(12, 4) === 'VP8X') return [1 + u24le(24), 1 + u24le(27)];
+    if (text(12, 4) === 'VP8 ') return [(b[26] + b[27] * 256) & 16383, (b[28] + b[29] * 256) & 16383];
+    if (text(12, 4) === 'VP8L') return [1 + b[21] + (b[22] & 63) * 256, 1 + (b[22] >> 6) + b[23] * 4 + (b[24] & 15) * 1024];
+  }
+  if (b.length >= 4 && b[0] === 255 && b[1] === 216) {
+    var i = 2;
+    while (i + 8 < b.length) {
+      if (b[i++] !== 255) continue;
+      while (b[i] === 255) i++;
+      var marker = b[i++], length = u16(i);
+      if ([192,193,194,195,197,198,199,201,202,203,205,206,207].indexOf(marker) >= 0) return [u16(i + 5), u16(i + 3)];
+      if (!Number.isFinite(length) || length < 2) break;
+      i += length;
+    }
+  }
+  return null;
+}
 function analyzeMapImage(img, free, legacy) {
   var cv = document.createElement('canvas'); cv.width = 140; cv.height = 80;
   var cx = cv.getContext('2d'); cx.drawImage(img, 0, 0, 140, 80);
@@ -3152,7 +3204,7 @@ class Component extends DCLogic {
   playerVm() {
     var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
     var elapsed = this.formatClock(this.playerSeconds(position)), duration = this.formatClock(this.playerSeconds(steps));
-    var source = s.disc === 5 ? (s.custom && s.custom.kind === 'csv' ? 'csv' : 'image') : s.set;
+    var source = s.disc === 5 ? (s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette' ? 'eic' : s.custom && s.custom.cols ? 'csv' : 'image') : s.set;
     var legend = [
       { symbol: '↑', color: '#FF6A2B', label: source === 'csv' ? T('Sobre la media', 'Above the mean') : source === 'image' ? T('Color cálido', 'Warm color') : T('Más cálido de lo esperado', 'Warmer than expected'), meaning: T('Nivel positivo · Inti, Yaku; extremos: Illapa.', 'Positive level · Inti, Yaku; extremes: Illapa.') },
       { symbol: '≈', color: '#7E849E', label: source === 'csv' ? T('Cerca de la media', 'Near the mean') : source === 'image' ? T('Nivel cercano a cero', 'Level near zero') : T('Cerca de lo esperado', 'Near expected'), meaning: T('Referencia · no implica silencio total.', 'Reference · does not mean complete silence.') },
@@ -3227,6 +3279,10 @@ class Component extends DCLogic {
     img.onerror = function () { fail(uiMessage('No se pudo leer la imagen.', 'The image could not be read.')); };
     img.onload = function () {
       if (!current()) return;
+      if (d === 5 && img.naturalWidth * img.naturalHeight > 32000000) {
+        fail(uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.'));
+        return;
+      }
       try {
         var res = analyzeMapImage(img, free, legacy);
         if (!res) {
@@ -3281,10 +3337,10 @@ class Component extends DCLogic {
       toggleLabel: off ? T('Activar a ', 'Switch on ') + b.name : T('Desactivar a ', 'Switch off ') + b.name,
       btnBg: off ? 'transparent' : b.color, btnFg: off ? th.fg : '#0A0D1A',
       spriteAria: T('Retrato de ', 'Portrait of ') + b.name + T(', del pecho a la cabeza, ', ', chest up, ') + state,
-      toggle: function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); } };
+      toggle: function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); } };
   }
   releasePendingImage() {
-    if (this.pendingImageUrl) URL.revokeObjectURL(this.pendingImageUrl);
+    if (this.pendingImageUrl && this.pendingImageUrl.indexOf('blob:') === 0) URL.revokeObjectURL(this.pendingImageUrl);
     this.pendingImageUrl = null;
   }
   startFileLoad() {
@@ -3305,7 +3361,7 @@ class Component extends DCLogic {
     this.stop(); this.lastThunder = -9;
     var mute = initialMute || (this.state.leadOverride ? this.state.mute : this.only(this.discLead(5, an)));
     var self = this;
-    this.setState({ custom: custom, an: ans, disc: 5, frame: 0, col: -1, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
+    this.setState({ custom: custom, customMode: custom.mode || this.state.customMode, an: ans, disc: 5, frame: 0, col: -1, ended: false, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
       self.resetScreenScroll();
       var heading = document.getElementById('player-title');
       if (heading) heading.focus({ preventScroll: true });
@@ -3315,11 +3371,25 @@ class Component extends DCLogic {
     if (this.disposed) return;
     var self = this, name = f.name, operation = this.startFileLoad();
     if (f.size > 8 * 1024 * 1024) { this.setState({ upMsg: uiMessage('El archivo pesa más de 8 MB. Prueba con uno más pequeño.', 'The file is larger than 8 MB. Try a smaller one.') }); return; }
-    if (/^image\//.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(name)) {
-      var custom = { name: name, kind: 'image', url: URL.createObjectURL(f), mode: this.state.customMode };
-      this.pendingImageUrl = custom.url;
-      this.stop(); this.lastThunder = -9;
-      this.setState({ upMsg: uiMessage('Analizando la imagen…', 'Analyzing the image…') }, function () { self.analyze(5, 0, true, operation, custom); });
+    if (/^image\/(png|jpeg|webp|gif)$/.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(name)) {
+      var accept = function () {
+        if (!self.fileLoadCurrent(operation)) return;
+        var custom = { name: name, kind: 'image', url: URL.createObjectURL(f), mode: 'free' };
+        self.pendingImageUrl = custom.url;
+        self.stop(); self.lastThunder = -9;
+        self.setState({ upMsg: uiMessage('Analizando la imagen…', 'Analyzing the image…') }, function () { self.analyze(5, 0, true, operation, custom); });
+      };
+      if (typeof f.arrayBuffer === 'function') {
+        f.arrayBuffer().then(function (buffer) {
+          if (!self.fileLoadCurrent(operation)) return;
+          var dimensions = rasterDimensions(new Uint8Array(buffer));
+          if (dimensions && dimensions[0] * dimensions[1] > 32000000) {
+            self.setState({ upMsg: uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.') });
+            return;
+          }
+          accept();
+        }).catch(function () { if (self.fileLoadCurrent(operation)) self.setState({ upMsg: uiMessage('No se pudo leer la imagen. Prueba con otro archivo.', 'The image could not be read. Try another file.') }); });
+      } else accept();
       return;
     }
     if (/\.(csv|tsv|txt)$/i.test(name) || /^text\//.test(f.type)) {
@@ -3330,6 +3400,13 @@ class Component extends DCLogic {
       return;
     }
     this.setState({ upMsg: uiMessage('Formato no admitido. Usa una imagen (PNG, JPG, WebP) o un CSV.', 'Unsupported format. Use an image (PNG, JPG, WebP) or a CSV.') });
+  }
+  loadImageSample() {
+    var operation = this.startFileLoad(); this.stop();
+    var custom = { name: T('Mapa NASA de ejemplo', 'Sample NASA map'), nameText: uiMessage('Mapa NASA de ejemplo', 'Sample NASA map'),
+      kind: 'image', source: 'eic', url: 'fotogramas/ver2025_2.webp', mode: 'palette' };
+    this.setState({ customMode: 'palette', upMsg: uiMessage('Analizando la imagen de ejemplo…', 'Analyzing the sample image…') });
+    this.analyze(5, 0, true, operation, custom);
   }
   loadCsv(name, text, operation) {
     operation = operation || this.startFileLoad();
@@ -4092,6 +4169,17 @@ class Component extends DCLogic {
         { tag: T('PRIVADO', 'PRIVATE'), color: th.magenta, title: T('Nada sale de tu equipo', 'Nothing leaves your device'), body: T('El archivo se procesa dentro del navegador. No se sube a ningún servidor. Prueba primero con la lluvia de Chiclayo de NASA POWER.', 'The file is processed inside the browser and never uploaded to a server. Try Chiclayo’s NASA POWER rainfall first.') }
       ],
       tx: tx,
+      convert: {
+        sampleTitle: T('Prueba una imagen', 'Try an image'), sampleBody: T('Un mapa NASA de enero de 2025. Descubre cómo sus colores se convierten en música.', 'A NASA map from January 2025. Explore how its colors turn into music.'),
+        sampleAlt: T('Mapa NASA de anomalía del Pacífico, enero de 2025.', 'NASA Pacific anomaly map, January 2025.'), sampleAction: T('Usar imagen de ejemplo', 'Use sample image'),
+        ownTitle: T('Ahora, tu imagen', 'Now, your image'), chooseImage: T('Elegir imagen', 'Choose image'),
+        imageLimits: T('PNG, JPG, WebP o GIF. Hasta 8 MB y 32 millones de píxeles. También puedes arrastrar el archivo aquí.', 'PNG, JPG, WebP or GIF. Up to 8 MB and 32 million pixels. You can also drop the file here.'),
+        imagePrivacy: T('Se analiza una imagen fija, dentro de tu navegador. El archivo permanece en tu equipo.', 'A still image is analyzed inside your browser. Your file stays on your device.'),
+        secondaryTitle: T('También puedes escuchar lluvia o una tabla', 'You can also listen to rainfall or a table'),
+        rainTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), rainBody: T('Muestra mensual de NASA POWER. No necesitas preparar un archivo.', 'A monthly NASA POWER sample. No file preparation needed.'),
+        csvTitle: T('Tus datos en una columna', 'Your data in one column'), chooseCsv: T('Elegir CSV o tabla de texto', 'Choose CSV or text table'),
+        csvLimits: T('CSV, TSV o TXT. Hasta 8 MB y 5000 filas. Al menos ocho valores numéricos; podrás elegir la columna que quieres escuchar.', 'CSV, TSV or TXT. Up to 8 MB and 5000 rows. At least eight numeric values; you can choose the column to hear.')
+      },
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
       scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
       heroUrl: 'fotogramas/ver2025_2.webp',
@@ -4238,6 +4326,7 @@ class Component extends DCLogic {
       onDragLeave: function () { self.setState({ over: false }); },
       onDrop: function (e) { e.preventDefault(); self.setState({ over: false }); var fl = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (fl) self.handleFile(fl); },
       useSample: function () { self.loadSample(); },
+      useImageSample: function () { self.loadImageSample(); },
       onUpMode: function (e) { self.setMode(e.target.value); },
       onCol: function (e) { self.setCol(parseInt(e.target.value, 10)); },
       techFilters: [['all', T('Todo', 'All')], ['done', T('En el prototipo', 'In the prototype')], ['plan', T('Planeado', 'Planned')]].map(function (x) {

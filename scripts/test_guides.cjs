@@ -1380,3 +1380,43 @@ test('a new lead retires the previous harmony while keeping position and play st
   assert.equal(c.state.col, 0); assert.equal(c.state.leadOverride, 'inti');
   assert.equal(c.state.playing, true); assert.equal(intervals.size, 1); assert.notEqual(c.master, oldMaster);
 });
+
+test('the primary image example uses a bundled NASA asset and retains its source and language', () => {
+  const { component: c, images } = delayedImages();
+  c.loadImageSample(); assert.equal(images[0].url, 'fotogramas/ver2025_2.webp');
+  images[0].onload(); assert.equal(c.state.custom.kind, 'image');
+  assert.equal(c.state.custom.source, 'eic'); assert.equal(c.state.custom.mode, 'palette');
+  assert.equal(c.state.customMode, 'palette'); assert.equal(c.state.disc, 5); assert.equal(c.state.sub, 1);
+  c.setLang('en'); assert.equal(c.renderVals().fileName, 'Sample NASA map');
+  assert.match(c.playerVm().paletteNote, /EIC/);
+});
+
+test('oversized image dimensions are rejected before creating a URL or decoding the file', async () => {
+  const { component: c, images, revoked, upload } = delayedImages();
+  upload('accepted.png'); images[0].onload(); const accepted = c.state.custom;
+  const header = new Uint8Array(33); header.set([137,80,78,71,13,10,26,10]);
+  header.set([73,72,68,82], 12); header.set([0,0,156,64,0,0,156,64],16); // 40000 × 40000.
+  c.handleFile({ name: 'compressed-huge.png', type: 'image/png', size: 33, arrayBuffer: async () => header.buffer });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(images.length, 1); assert.equal(c.state.custom, accepted);
+  assert.match(c.renderVals().upMsg, /32 millones/); assert(!revoked.includes(accepted.url));
+});
+
+test('an older header read cannot replace a later accepted image', async () => {
+  const { component: c, images, upload } = delayedImages(); let release;
+  c.handleFile({ name: 'late.png', type: 'image/png', size: 20, arrayBuffer: () => new Promise(resolve => { release = resolve; }) });
+  upload('latest.png'); images[0].onload(); const accepted = c.state.custom;
+  release(new ArrayBuffer(0)); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(images.length, 1); assert.equal(c.state.custom, accepted); assert.equal(c.state.custom.name, 'latest.png');
+});
+
+test('failed local header reads and the file-size limit preserve an accepted file with recoverable feedback', async () => {
+  const { component: c, images, upload } = delayedImages();
+  upload('accepted.png'); images[0].onload(); const accepted = c.state.custom;
+  c.handleFile({ name: 'unreadable.jpg', type: 'image/jpeg', size: 3, arrayBuffer: async () => { throw new Error('read failed'); } });
+  await new Promise(resolve => setImmediate(resolve)); assert.equal(c.state.custom, accepted);
+  assert.match(c.renderVals().upMsg, /No se pudo leer/);
+  c.handleFile({ name: 'oversize.png', type: 'image/png', size: 8 * 1024 * 1024 + 1 });
+  assert.equal(c.state.custom, accepted); assert.match(c.renderVals().upMsg, /8 MB/);
+  c.setLang('en'); assert.match(c.renderVals().upMsg, /larger than 8 MB/);
+});
