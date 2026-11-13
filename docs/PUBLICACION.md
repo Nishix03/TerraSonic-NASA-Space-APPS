@@ -2,6 +2,20 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
+## Edición vigente · RETO 05 · 13 noviembre, 15:31 Bogotá
+
+La vista independiente sirve la aplicación **`ae859222721b655a9288ff745ad366fac4f0f03c`**, commit estático **`1813cad1f357e4a13f5b79de9d3818a383309509`**, publicado por fast-forward desde `4514aba`. Pages confirmó `built` a las 15:28. `source.json` identifica la procedencia. Esta edición utiliza exclusivamente la banda 2D original en el producto y aplica el brief confirmado, incluida la bienvenida/guía sin scroll interno, carga solo de imágenes, lluvia destacada y ¿Cómo funciona?. [Cambios, auditoría y límites](RETO_05.md).
+
+El build tiene 112 archivos / **16.623.062 bytes**; la copia publicada añade cuatro metadatos. HTML: **408.452 bytes**, SHA-256 **`3d12113221704e1d9100668887f85a0ef0d3dd58970494e4b43d06657938e640`**. La comprobación anónima repitió ambos catálogos/modos de sonido, reproducción/pausa, teclado, los cinco personajes, lluvia, imagen propia e idioma, normal/sin WebGL. **106 activos coinciden por SHA-256**, sin errores JS, respuestas fallidas ni solicitudes de escritura. Los dos recorridos HTTP del build exacto pasaron antes de publicarlo.
+
+Evidencias: `_work/github-preview/browser-local-ae85922/`, `browser-public-ae85922-full/`, `pushed-ae85922.json`, `readback-ae85922.json`, `http-ae85922.json` y `official-after-ae85922.json`. La matriz de producto queda en `_work/reto05-qa/`: 134 pruebas de lógica, 74 estados axe sin infracciones detectadas, 408 estados de redistribución y recorridos de sprites/guía en Chromium, Firefox y WebKit. No acredita teléfono físico, lector de pantalla, escucha humana ni revisión cultural. WebKit Windows conserva la alternativa escrita sin Web Audio nativo.
+
+A las 15:30, main remoto continuaba en `59310ac43cd25e76cc68022a109326ca5cb27712`, el local en `a8f8203e8de3097584987a5ba5635bc813181c44` y `.github/` sin diferencias. La web oficial devolvió 200 y mantuvo la huella **`a10648034b25fc4cda32a67d9c991960fab4f5c3a1ce0e4c180a57a708a98536`**. Se mantuvieron las copias recuperables del estudio 3D fuera del build.
+
+La entrega portátil se genera en `_work/delivery/terrasonic-reto05-2026-11-13.zip`, con su `.sha256`, manifiesto, build, fuente comprometida y evidencia seleccionada. La revisión documental posterior registra estos resultados; `source.json` sigue identificando el commit de aplicación efectivamente servido.
+
+## Registro histórico anterior
+
 ## Actualización de temas · 13 noviembre, 11:17 Bogotá
 
 La misma copia independiente sirve la aplicación **`9c385358604f861d9af7dfe7ac032f330df7eaf2`**, commit estático **`4514abab30c7ce8b76ce2e45c60e52d4e19b2dfa`**, fast-forward desde `bd92415`. Pages confirmó `built` para ese commit. El build tiene 103 archivos / **7.160.398 bytes**; el HTML tiene **427.594 bytes**, SHA-256 **`910ff229be45757aaa5fa12c37d4e745d0a406e1c9e20c10b83d08e7e86d61e4`**.
