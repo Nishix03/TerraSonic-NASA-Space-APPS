@@ -2242,15 +2242,15 @@ var ICONS = {
 };
 var INS_ICON = { silbo: 'flute', inti: 'marimba', mama: 'harp', yaku: 'drop', illapa: 'drum' };
 var NOTE_ES = ['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
-var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11] };
-var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7' };
+var QUAL = { maj: [0, 4, 7], min: [0, 3, 7], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], dim: [0, 3, 6], sus4: [0, 5, 7] };
+var SUF = { maj: '', min: 'm', m7: 'm7', maj7: 'maj7', dim: '°', sus4: 'sus4' };
 var MUSIC = {
-  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [7, 'm7'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
-  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
-  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'maj']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
-  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
-          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [3, 'maj'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
-  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
+  mama:   { name: 'Mamacocha', key: 'Re', mode: 'dórico', root: 50, scale: [0, 2, 3, 5, 7, 9, 10], bpm: 60, prog: [[0, 'm7'], [5, 'sus4'], [3, 'maj7'], [10, 'maj7']], mood: 'sereno y profundo', story: 'la calma y la profundidad del mar frío' },
+  inti:   { name: 'Inti', key: 'Mi', mode: 'menor natural', root: 52, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 72, prog: [[0, 'm7'], [8, 'maj7'], [3, 'maj'], [2, 'dim'], [10, 'sus4'], [10, 'maj']], mood: 'nostálgico y grave', story: 'el calor que se queda: un océano rojo y la nostalgia de lo que se pierde' },
+  silbo:  { name: 'Silbo', key: 'La', mode: 'menor pentatónico', root: 57, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [10, 'maj'], [8, 'maj'], [7, 'sus4'], [7, 'maj'], [11, 'dim']], mood: 'melancólico', story: 'el aire andino de un huayno melancólico' },
+  yaku:   { name: 'Yaku', key: 'Sol', mode: 'mayor pentatónico', root: 55, scale: [0, 2, 4, 7, 9], bpm: 96, prog: [[0, 'maj'], [9, 'min'], [5, 'maj'], [7, 'sus4'], [7, 'maj']], mood: 'juguetón', story: 'el juego de las gotas de lluvia',
+          dark: { name: 'Yaku', key: 'Sol', mode: 'menor pentatónico', root: 55, scale: [0, 3, 5, 7, 10], bpm: 76, prog: [[0, 'min'], [8, 'maj'], [2, 'dim'], [10, 'maj']], mood: 'agridulce, como una lluvia que ya no alegra', story: 'las gotas de una lluvia que preocupa' } },
+  illapa: { name: 'Illapa', key: 'Si', mode: 'menor natural', root: 47, scale: [0, 2, 3, 5, 7, 8, 10], bpm: 66, prog: [[0, 'm7'], [5, 'min'], [8, 'maj7'], [2, 'dim'], [7, 'sus4'], [7, 'min']], mood: 'tenso y sombrío', story: 'la tensión de la tormenta' }
 };
 
 /* ===== Traducciones al inglés ===== */

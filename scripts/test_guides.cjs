@@ -88,6 +88,60 @@ function setup() {
   return { component, context, elements, timers, events, element };
 }
 
+test('the six base harmonies preserve every specified chord, note, tempo and scale', () => {
+  const { context } = setup();
+  const cases = [
+    ['mama', 60, [0,2,3,5,7,9,10], ['Rem7','Solsus4','Famaj7','Domaj7'], [[50,53,57,60],[55,60,62],[53,57,60,64],[60,64,67,71]]],
+    ['inti', 72, [0,2,3,5,7,8,10], ['Mim7','Domaj7','Sol','Fa♯°','Resus4','Re'], [[52,55,59,62],[60,64,67,71],[55,59,62],[54,57,60],[62,67,69],[62,66,69]]],
+    ['silbo', 76, [0,3,5,7,10], ['Lam','Sol','Fa','Misus4','Mi','Sol♯°'], [[57,60,64],[67,71,74],[65,69,72],[64,69,71],[64,68,71],[68,71,74]]],
+    ['yaku', 96, [0,2,4,7,9], ['Sol','Mim','Do','Resus4','Re'], [[55,59,62],[64,67,71],[60,64,67],[62,67,69],[62,66,69]]],
+    ['yaku_dark', 76, [0,3,5,7,10], ['Solm','Re♯','La°','Fa'], [[55,58,62],[63,67,70],[57,60,63],[65,69,72]]],
+    ['illapa', 66, [0,2,3,5,7,8,10], ['Sim7','Mim','Solmaj7','Do♯°','Fa♯sus4','Fa♯m'], [[47,50,54,57],[52,55,59],[55,59,62,66],[49,52,55],[54,59,61],[54,57,61]]],
+  ];
+  for (const [key, bpm, scale, labels, notes] of cases) {
+    const profile = key === 'yaku_dark' ? context.MUSIC.yaku.dark : context.MUSIC[key];
+    assert.equal(profile.bpm, bpm, key);
+    assert.deepEqual(Array.from(profile.scale), scale, key);
+    const chords = Array.from(profile.prog, item => context.chordOf(profile, item));
+    assert.deepEqual(chords.map(chord => chord.label), labels, key);
+    assert.deepEqual(chords.map(chord => Array.from(chord.notes)), notes, key);
+  }
+});
+
+test('the chord label matches every actual synthesized chord, including diminished and sus4 notes', () => {
+  const { component: c, context } = setup();
+  const profiles = Object.values(context.MUSIC).concat(context.MUSIC.yaku.dark);
+  c.ac = { currentTime: 0 };
+  c.state.mute = c.allMute(true); c.state.mute.mama = false;
+  c.cur = () => ({ warm: 0, cold: 0, hot: 0, coast: 0, cells: Array(448).fill(0) });
+  c.leadNote = () => {};
+  for (const profile of profiles) {
+    c.profile = () => profile;
+    for (let i = 0; i < profile.prog.length; i++) {
+      const sounded = [];
+      c.note = (type, midi) => { if (type === 'triangle') sounded.push(midi); };
+      c.stepMelody(i * 4);
+      const expected = context.chordOf(profile, profile.prog[i]);
+      assert.equal(c.state.chord, expected.label);
+      assert.deepEqual(sounded, Array.from(expected.notes));
+    }
+  }
+});
+
+test('warm Yaku retains the strict existing activation threshold and bilingual chord labels', () => {
+  const { component: c, context } = setup();
+  c.state.leadOverride = 'yaku';
+  c.cur = () => ({ warm: 1.2, cold: .3 });
+  assert.equal(c.profile(), context.MUSIC.yaku);
+  c.cur = () => ({ warm: 1.21, cold: .3 });
+  assert.equal(c.profile(), context.MUSIC.yaku.dark);
+  c.setLang('en');
+  assert.equal(context.chordOf(context.MUSIC.inti, [2, 'dim']).label, 'F♯°');
+  assert.equal(context.chordOf(context.MUSIC.mama, [5, 'sus4']).label, 'Gsus4');
+  c.setLang('es');
+  assert.equal(context.chordOf(context.MUSIC.inti, [2, 'dim']).label, 'Fa♯°');
+});
+
 test('guides are optional on startup and when changing section', () => {
   const { component: c, timers } = setup();
   c.componentDidMount();
