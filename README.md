@@ -6,7 +6,7 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 ## Estado de esta rama
 
-**Revisión artística en curso:** el usuario pidió rehacer los cinco personajes con fidelidad a las ilustraciones y trabajo por la interfaz de Blender, además de temas claro/oscuro. La entrega técnica del 13 de noviembre queda como checkpoint; no representa aceptación visual ni cierre de la continuación. [Estado y punto de trabajo](docs/CONTINUACION_ARTISTICA.md).
+**Dirección vigente: banda 2D original.** El usuario descartó los modelos 3D y pidió conservar las ilustraciones del equipo, mejorar sus secuencias y corregir la introducción/guía en móvil. Esta edición usa poses y cuatro PNG originales por músico, con pausa e inspección por pasos. Los estudios 3D quedan archivados. [Implementación, pruebas y límites](docs/SPRITES_2D.md).
 
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
@@ -19,7 +19,7 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 ## Qué incluye
 
 - **Escuchar:** diez discos, sesenta mapas EIC/GIBS, selección de fechas, modos Melodía y Datos, posición/tiempo, pausa y reanudación, saltos, velocidad, volumen, silencio y repetición. Leyenda escrita, símbolos y registro consultable.
-- **Banda:** cinco cuerpos 3D, mezcla compartida con Escenario, muestras de instrumento detenibles y poses de respaldo sin WebGL o con recursos lentos/ausentes. Fuentes históricas y propuestas de ficción diferenciadas.
+- **Banda:** cinco ilustraciones 2D originales, Animar/Caminar/Bailar, pausa y pasos, inspector de los cuatro dibujos; mezcla compartida con Escenario y muestras de instrumento detenibles. Fuentes históricas y propuestas de ficción diferenciadas.
 - **Convertir:** muestra NASA e imagen propia como entradas principales; lluvia de Chiclayo y CSV como alternativas. Procesamiento local, elección de columna, límites y errores recuperables. Las imágenes se centran sin deformarse y usan la misma vista fija que el análisis.
 - **Brisa y preferencias:** tutorial saltable/reabrible, texto, voz opcional, idioma guardado, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Vibración optativa donde exista.
 - **Método y Tecnología:** fuentes NASA, niveles derivados, seis perfiles armónicos, catálogo estático de impactos y una regla editorial mensual verificable, con límites científicos explícitos.
@@ -32,11 +32,11 @@ Con Python 3.10 o posterior, desde la raíz del repositorio (revisión realizada
 
 ```bash
 python scripts/verify_fonts.py
-python scripts/build_pages.py _site
-python -m http.server 8765 --bind 127.0.0.1 --directory _site
+python scripts/build_pages.py _site_2d
+python -m http.server 8765 --bind 127.0.0.1 --directory _site_2d
 ```
 
-Abrir [http://127.0.0.1:8765/](http://127.0.0.1:8765/). Detener el servidor con Ctrl+C. El build incluye mapas, modelos, poses y tipografías locales. Abrir el HTML por `file://` no es el modo soportado. La reproducción requiere una acción del usuario; voz y vibración dependen del navegador/dispositivo.
+Abrir [http://127.0.0.1:8765/](http://127.0.0.1:8765/). Detener el servidor con Ctrl+C. El build incluye mapas, sprites originales y tipografías locales; no distribuye modelos 3D. Usar un destino nuevo si existe una salida anterior 3D. Abrir el HTML por `file://` no es el modo soportado. La reproducción requiere una acción del usuario; voz y vibración dependen del navegador/dispositivo.
 
 La fuente canónica es **`prototipos/I11-eic/Main.dc.html`**. `scripts/build_pages.py` genera el HTML y copia los recursos; editar solamente `_site/index.html` no cambia la aplicación fuente. El `index.html` de la raíz y parte de `src/` son material histórico de organización del equipo.
 

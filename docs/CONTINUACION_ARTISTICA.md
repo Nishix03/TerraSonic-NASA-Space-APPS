@@ -1,5 +1,7 @@
 # Continuación artística solicitada por el usuario
 
+**Dirección sustituida por instrucción posterior:** el usuario dejó disponible Blender, se inició una copia `terrasonic-banda-reconstruccion.blend` y después descartó el 3D. Solicitó las ilustraciones y fotogramas 2D originales, controles de movimiento y corrección de la guía móvil. Se detuvo el modelado; ya no hace falta esperar la ventana. El trabajo vigente y sus límites están en [SPRITES_2D.md](SPRITES_2D.md). El resto de este documento conserva el historial anterior.
+
 El 13 de noviembre el usuario rechazó los personajes volumétricos del checkpoint anterior y pidió trasladar fielmente las ilustraciones originales a 3D, trabajando mediante la interfaz de Blender, además de movimientos y temas claro/oscuro con un oscuro menos negro. La entrega anterior queda como checkpoint técnico; no acredita aceptación visual ni cierre de este encargo ampliado. El objetivo sigue activo.
 
 Se revisaron las cinco referencias `assets/avatares/*/banda/pose-epica.png`. La nueva dirección conserva tocado curvo, prendas/adornos y quena de Silbo; sombrero escalonado, chaqueta y marimba de Inti; cabello ondulado, vestido amplio y arpa de Mamacocha; cabeza/proporciones infantiles, capucha/capa y percusión de Yaku; sombrero/gafas, poncho y tambor de Illapa. El color de las ilustraciones es monocromático de acento: no acredita materiales o vestuario históricos nuevos.

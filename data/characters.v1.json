@@ -14,7 +14,10 @@
     {
       "key": "silbo",
       "discId": "costero2017",
-      "episode": { "es": "El Niño Costero 2017", "en": "Coastal El Niño 2017" },
+      "episode": {
+        "es": "El Niño Costero 2017",
+        "en": "Coastal El Niño 2017"
+      },
       "place": "Catacaos, Piura, Perú",
       "impactId": "bajo-piura-2017-03",
       "story": {
@@ -22,8 +25,8 @@
         "en": "In this proposal, Silbo visits Catacaos and listens to the water before playing. His short phrase invites us to remember what happened and consult the sources: he is a fictional narrator, not a rainfall warning system."
       },
       "instrument": {
-        "es": "Quena representada en 3D; flauta sintética con vibrato en el navegador. La referencia del equipo a las vasijas silbadoras es una inspiración distinta, no una reconstrucción acústica de una pieza arqueológica.",
-        "en": "A quena is represented in 3D; the browser synthesizes a flute with vibrato. The team's whistling-vessel reference is a separate inspiration, not an acoustic reconstruction of an archaeological object."
+        "es": "Quena en la ilustración 2D; flauta sintética con vibrato en el navegador. La referencia del equipo a las vasijas silbadoras es una inspiración distinta, no una reconstrucción acústica de una pieza arqueológica.",
+        "en": "A quena appears in the 2D illustration; the browser synthesizes a flute with vibrato. The team's whistling-vessel reference is a separate inspiration, not an acoustic reconstruction of an archaeological object."
       },
       "listens": {
         "es": "En Melodía toma la celda más intensa de la columna y su fila. En los mapas NASA añade un motivo cuando el recuadro costero tiene nivel medio ≥ +2; ese nivel es derivado, no una predicción.",
@@ -35,27 +38,42 @@
       },
       "culture": [
         {
-          "fact": { "es": "El Ministerio de Cultura declaró patrimonio los conocimientos y prácticas del tejido del sombrero de paja de Catacaos en 2013.", "en": "Peru's Ministry of Culture recognized the knowledge and practices of Catacaos straw-hat weaving as cultural heritage in 2013." },
+          "fact": {
+            "es": "El Ministerio de Cultura declaró patrimonio los conocimientos y prácticas del tejido del sombrero de paja de Catacaos en 2013.",
+            "en": "Peru's Ministry of Culture recognized the knowledge and practices of Catacaos straw-hat weaving as cultural heritage in 2013."
+          },
           "url": "https://transparencia.cultura.gob.pe/rvm-ndeg-033-2013-vmpcic-mc",
           "source": "Ministerio de Cultura · RVM 033-2013",
-          "limit": { "es": "El sombrero de Catacaos es una referencia contemporánea; no se presenta como un tocado moche ni se ha añadido sin la referencia visual pendiente.", "en": "The Catacaos hat is a contemporary reference; it is not described as a Moche headdress and has not been added without the pending visual reference." }
+          "limit": {
+            "es": "El sombrero de Catacaos es una referencia contemporánea; no se presenta como un tocado moche ni se ha añadido sin la referencia visual pendiente.",
+            "en": "The Catacaos hat is a contemporary reference; it is not described as a Moche headdress and has not been added without the pending visual reference."
+          }
         },
         {
-          "fact": { "es": "La literatura arqueológica del Ministerio de Cultura documenta instrumentos sonoros y vasijas silbadoras en el mundo moche.", "en": "Archaeological literature published by the Ministry of Culture documents sound instruments and whistling vessels in the Moche world." },
+          "fact": {
+            "es": "La literatura arqueológica del Ministerio de Cultura documenta instrumentos sonoros y vasijas silbadoras en el mundo moche.",
+            "en": "Archaeological literature published by the Ministry of Culture documents sound instruments and whistling vessels in the Moche world."
+          },
           "url": "https://museos.cultura.pe/sites/default/files/publicaciones/pdf/arqueologicas31_2022%20%281%29.pdf",
           "source": "Arqueológicas 31 · La Chioma y Leonel, 2022",
-          "limit": { "es": "Su tocado dorado y la combinación de quena y vasija son una adaptación del proyecto. No es una réplica histórica ni una representación de las personas afectadas de Catacaos.", "en": "The gold headdress and combination of quena and vessel are a project adaptation. This is neither a historical replica nor a portrayal of people affected in Catacaos." }
+          "limit": {
+            "es": "Su tocado dorado y la combinación de quena y vasija son una adaptación del proyecto. No es una réplica histórica ni una representación de las personas afectadas de Catacaos.",
+            "en": "The gold headdress and combination of quena and vessel are a project adaptation. This is neither a historical replica nor a portrayal of people affected in Catacaos."
+          }
         }
       ],
       "visual": {
-        "es": "Propuesta: figura mayor de túnica ocre, rostro con cejas y nariz definidos, tocado curvo, orejeras, vasija y quena sostenida con ambas manos.",
-        "en": "Proposal: an elder in an ochre tunic, with defined brows and nose, a curved headdress, ear ornaments, a vessel and a quena held in both hands."
+        "es": "Ilustración original del equipo: anciano de trazos dorados, tocado curvo, trenzas, túnica ornamentada y quena diagonal.",
+        "en": "Original team illustration: an elder in golden outlines, with a curved headdress, braids, patterned tunic and diagonal quena."
       }
     },
     {
       "key": "inti",
       "discId": "nino2015",
-      "episode": { "es": "El Niño 2015–2016", "en": "El Niño 2015–2016" },
+      "episode": {
+        "es": "El Niño 2015–2016",
+        "en": "El Niño 2015–2016"
+      },
       "place": "Paita, Piura, Perú",
       "impactId": "paita-2016-03-registro",
       "story": {
@@ -63,8 +81,8 @@
         "en": "We propose Inti as a musician accompanying an imagined day beside Paita's port. His marimba alternates persistence and rest to explore heat and daily work, without attributing memories or testimony to a real community."
       },
       "instrument": {
-        "es": "Marimba de láminas y resonadores representada en 3D; ataques sintéticos de seno y triángulo. La tradición documentada por UNESCO corresponde al Pacífico sur colombiano y Esmeraldas, Ecuador, no a Paita.",
-        "en": "A marimba with keys and resonators is represented in 3D; sine and triangle attacks are synthesized. UNESCO's documented tradition belongs to Colombia's South Pacific and Esmeraldas, Ecuador, not Paita."
+        "es": "Marimba de láminas y resonadores en la ilustración 2D; ataques sintéticos de seno y triángulo. La tradición documentada por UNESCO corresponde al Pacífico sur colombiano y Esmeraldas, Ecuador, no a Paita.",
+        "en": "A marimba with keys and resonators appears in the 2D illustration; sine and triangle attacks are synthesized. UNESCO's documented tradition belongs to Colombia's South Pacific and Esmeraldas, Ecuador, not Paita."
       },
       "listens": {
         "es": "El promedio de niveles cálidos de la columna. En Melodía también toca en los tiempos fuertes cuando hay datos.",
@@ -76,21 +94,30 @@
       },
       "culture": [
         {
-          "fact": { "es": "UNESCO documenta una marimba de láminas de madera de palma y resonadores de bambú dentro de prácticas musicales de Colombia y Ecuador.", "en": "UNESCO documents a marimba with palm-wood keys and bamboo resonators within musical practices in Colombia and Ecuador." },
+          "fact": {
+            "es": "UNESCO documenta una marimba de láminas de madera de palma y resonadores de bambú dentro de prácticas musicales de Colombia y Ecuador.",
+            "en": "UNESCO documents a marimba with palm-wood keys and bamboo resonators within musical practices in Colombia and Ecuador."
+          },
           "url": "https://ich.unesco.org/en/RL/marimba-music-traditional-chants-and-dances-from-the-colombia-south-pacific-region-and-esmeraldas-province-of-ecuador-01099",
           "source": "UNESCO · Inscripción 01099, 2015",
-          "limit": { "es": "La banda es una ficción que reúne referencias de lugares distintos. La chaqueta de faena, el sombrero y el medallón solar son propuestas visuales; no se presentan como vestuario típico certificado de Paita.", "en": "The fictional band brings together references from different places. The work jacket, hat and sun medallion are visual proposals, not certified traditional clothing from Paita." }
+          "limit": {
+            "es": "La banda es una ficción que reúne referencias de lugares distintos. La chaqueta de faena, el sombrero y el medallón solar son propuestas visuales; no se presentan como vestuario típico certificado de Paita.",
+            "en": "The fictional band brings together references from different places. The work jacket, hat and sun medallion are visual proposals, not certified traditional clothing from Paita."
+          }
         }
       ],
       "visual": {
-        "es": "Propuesta: chaqueta naranja sobre camisa clara, sombrero de ala, medallón solar y marimba con dos baquetas. La ropa de faena es una decisión narrativa, no una reconstrucción histórica.",
-        "en": "Proposal: an orange jacket over a light shirt, a brimmed hat, sun medallion and marimba with two mallets. The work clothing is a narrative decision, not a historical reconstruction."
+        "es": "Ilustración original del equipo: trazos naranja, sombrero amplio con corona escalonada, chaqueta, marimba y dos baquetas.",
+        "en": "Original team illustration: orange outlines, wide hat with a stepped crown, jacket, marimba and two mallets."
       }
     },
     {
       "key": "mama",
       "discId": "nina2010",
-      "episode": { "es": "La Niña 2010–2011", "en": "La Niña 2010–2011" },
+      "episode": {
+        "es": "La Niña 2010–2011",
+        "en": "La Niña 2010–2011"
+      },
       "place": "Santa Lucía, Atlántico, Colombia",
       "impactId": "santa-lucia-2010-12-coe",
       "story": {
@@ -111,21 +138,30 @@
       },
       "culture": [
         {
-          "fact": { "es": "Artesanías de Colombia documenta la tejeduría en palma de iraca en Usiacurí, municipio del Atlántico distinto de Santa Lucía.", "en": "Artesanías de Colombia documents iraca-palm weaving in Usiacurí, an Atlántico municipality distinct from Santa Lucía." },
+          "fact": {
+            "es": "Artesanías de Colombia documenta la tejeduría en palma de iraca en Usiacurí, municipio del Atlántico distinto de Santa Lucía.",
+            "en": "Artesanías de Colombia documents iraca-palm weaving in Usiacurí, an Atlántico municipality distinct from Santa Lucía."
+          },
           "url": "https://repositorio.artesaniasdecolombia.com.co/items/ad4424f8-ba9a-4b58-93d3-f8a65cd9f159",
           "source": "Artesanías de Colombia · La iraca en Usiacurí",
-          "limit": { "es": "El detalle geométrico del modelo es una propuesta inspirada en el tejido, no una copia de una obra artesanal ni prueba de vestimenta usada durante las inundaciones de 2010.", "en": "The model's geometric detail is a weaving-inspired proposal, not a copy of an artisan's work or evidence of clothing worn during the 2010 floods." }
+          "limit": {
+            "es": "El detalle geométrico del modelo es una propuesta inspirada en el tejido, no una copia de una obra artesanal ni prueba de vestimenta usada durante las inundaciones de 2010.",
+            "en": "The model's geometric detail is a weaving-inspired proposal, not a copy of an artisan's work or evidence of clothing worn during the 2010 floods."
+          }
         }
       ],
       "visual": {
-        "es": "Propuesta: abrigo azul, trenzas onduladas, medallón geométrico y arpa de ocho cuerdas. La forma mantiene la referencia acuática del equipo.",
-        "en": "Proposal: a blue coat, wave-like braids, geometric medallion and eight-string harp. The form retains the team's water reference."
+        "es": "Ilustración original del equipo: trazos cian, cabello ondulado y trenzas, vestido amplio, chal y arpa.",
+        "en": "Original team illustration: cyan outlines, wavy hair and braids, a flowing dress, shawl and harp."
       }
     },
     {
       "key": "yaku",
       "discId": "yaku2023",
-      "episode": { "es": "Marzo de 2023 · colección Yaku", "en": "March 2023 · Yaku collection" },
+      "episode": {
+        "es": "Marzo de 2023 · colección Yaku",
+        "en": "March 2023 · Yaku collection"
+      },
       "place": "Pacora, Lambayeque, Perú",
       "impactId": "pacora-2023-03-08",
       "story": {
@@ -146,21 +182,30 @@
       },
       "culture": [
         {
-          "fact": { "es": "El inventario de MINCETUR registra tejidos de algodón nativo y telar de cintura en Mórrope, Lambayeque.", "en": "MINCETUR's inventory records native-cotton weaving and backstrap-loom work in Mórrope, Lambayeque." },
+          "fact": {
+            "es": "El inventario de MINCETUR registra tejidos de algodón nativo y telar de cintura en Mórrope, Lambayeque.",
+            "en": "MINCETUR's inventory records native-cotton weaving and backstrap-loom work in Mórrope, Lambayeque."
+          },
           "url": "https://consultasenlinea.mincetur.gob.pe/fichaInventario/index.aspx?cod_Ficha=13353",
           "source": "MINCETUR · Ficha 13353, registro de 2024",
-          "limit": { "es": "Mórrope y Pacora son distritos distintos. El parche claro del modelo es una propuesta; la ficha no prueba vestimenta de Pacora ni daños de marzo de 2023.", "en": "Mórrope and Pacora are different districts. The model's light patch is a proposal; the inventory does not establish Pacora clothing or damage in March 2023." }
+          "limit": {
+            "es": "Mórrope y Pacora son distritos distintos. El parche claro del modelo es una propuesta; la ficha no prueba vestimenta de Pacora ni daños de marzo de 2023.",
+            "en": "Mórrope and Pacora are different districts. The model's light patch is a proposal; the inventory does not establish Pacora clothing or damage in March 2023."
+          }
         }
       ],
       "visual": {
-        "es": "Propuesta: silueta más pequeña, capucha de tres crestas, gafas, mochila, botas y bandeja de botellas. Un parche geométrico claro remite al tejido sin copiar un diseño artesanal.",
-        "en": "Proposal: a smaller silhouette, a three-crest hood, goggles, backpack, boots and bottle tray. A light geometric patch evokes weaving without copying an artisan's design."
+        "es": "Ilustración original del equipo: niño de trazos verdes, capucha de tres puntas, gafas, abrigo con bolsillos, botellas colgantes, baquetas y botas palmeadas.",
+        "en": "Original team illustration: a child in green outlines, three-spike hood, goggles, pocketed coat, hanging bottles, mallets and webbed boots."
       }
     },
     {
       "key": "illapa",
       "discId": "nino2023",
-      "episode": { "es": "El Niño 2023–2024 · disco julio–diciembre de 2023", "en": "El Niño 2023–2024 · July–December 2023 disc" },
+      "episode": {
+        "es": "El Niño 2023–2024 · disco julio–diciembre de 2023",
+        "en": "El Niño 2023–2024 · July–December 2023 disc"
+      },
       "place": "Tumbes, Perú",
       "impactId": "tumbes-2023-12-27",
       "story": {
@@ -181,15 +226,21 @@
       },
       "culture": [
         {
-          "fact": { "es": "La guía de Tumbes de PROMPERÚ describe artesanía en pasalla, fibra obtenida del tallo del plátano.", "en": "PROMPERÚ's Tumbes guide describes crafts made with pasalla, fibre obtained from banana stems." },
+          "fact": {
+            "es": "La guía de Tumbes de PROMPERÚ describe artesanía en pasalla, fibra obtenida del tallo del plátano.",
+            "en": "PROMPERÚ's Tumbes guide describes crafts made with pasalla, fibre obtained from banana stems."
+          },
           "url": "https://repositorio.promperu.gob.pe/server/api/core/bitstreams/354822f2-1e01-450c-93a2-ee46f6076285/content#page=6",
           "source": "PROMPERÚ · Guía de Tumbes 2023, página 6",
-          "limit": { "es": "La guía habla de artesanía; no demuestra que el poncho esté hecho de pasalla. Sus bordes geométricos son una propuesta. No se usan impactos de febrero de 2024 para este disco de 2023.", "en": "The guide concerns crafts; it does not establish that the poncho is made of pasalla. Its geometric borders are a proposal. February 2024 impacts are not used for this 2023 disc." }
+          "limit": {
+            "es": "La guía habla de artesanía; no demuestra que el poncho esté hecho de pasalla. Sus bordes geométricos son una propuesta. No se usan impactos de febrero de 2024 para este disco de 2023.",
+            "en": "The guide concerns crafts; it does not establish that the poncho is made of pasalla. Its geometric borders are a proposal. February 2024 impacts are not used for this 2023 disc."
+          }
         }
       ],
       "visual": {
-        "es": "Propuesta: figura alta con sombrero oscuro, poncho de borde magenta, gafas, tambor encordado y baqueta. La ropa y los motivos son una adaptación de ficción.",
-        "en": "Proposal: a tall figure with a dark hat, magenta-edged poncho, glasses, rope-tension drum and beater. Clothing and motifs are a fictional adaptation."
+        "es": "Ilustración original del equipo: trazos magenta, sombrero con gafas, cabello rizado, poncho con cenefa, tambor y baqueta.",
+        "en": "Original team illustration: magenta outlines, hat with goggles, curly hair, patterned poncho, drum and beater."
       }
     }
   ]

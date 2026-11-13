@@ -1,5 +1,7 @@
 # Entrega portable y recuperación
 
+Los paquetes siguientes son históricos y contienen los modelos 3D descartados. La edición vigente usa sprites originales; el paquete 2D, cuando esté verificado, se identifica en SPRITES_2D.md y PUBLICACION.md. No atribuir el contenido de estos ZIP a la nueva publicación.
+
 La copia final verificada es `terrasonic-review-f5522b9.zip`, fuente f5522b9, 58.337.305 bytes, SHA-256 `7a37523518d20702e222e64300a683d2b8e2f64154fcd9bea6107fabdff67a51`. Incluye los 103 archivos actuales idénticos a la vista pública c4f7aca y el registro de 420 minutos. [Entrega, pruebas y límites](ENTREGA_2026-11-13.md). Los checkpoints siguientes se conservan para recuperación.
 
 El build normaliza los saltos de línea de los archivos de texto distribuidos y de la clave de caché del runtime 3D. Git puede producir CRLF en `archive` según `core.autocrlf`, incluso cuando el blob del repositorio es LF. La normalización evita que esa preferencia local cambie las huellas del sitio. Los binarios y los cuatro avisos originales OFL con huellas fijadas se conservan byte por byte; no se cambia la configuración Git global.

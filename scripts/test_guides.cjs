@@ -265,7 +265,8 @@ test('guide geometry stays in the visual viewport when zoomed and panned', () =>
   assert.deepEqual(JSON.parse(JSON.stringify(c.state.tourRect)), { x:100, y:120, w:500, h:320 });
   const style = c.renderVals().tour.cardSt;
   const x = +style.match(/left:([\d.]+)px/)[1], y = +style.match(/top:([\d.]+)px/)[1];
-  assert(x >= 112 && x + 410 <= 588, style); assert(y >= 132 && y + 296 <= 428, style);
+  const width = +style.match(/width:([\d.]+)px/)[1], maxHeight = +style.match(/max-height:calc\(([\d.]+)px/)[1];
+  assert(x >= 112 && x + width <= 588, style); assert(y >= 132 && y + Math.min(296,maxHeight) <= 428, style);
 });
 
 test('card placement accounts for its measured height', () => {
@@ -1534,17 +1535,26 @@ test('contextual help never changes the active file, date, position or playback'
   }
 });
 
-test('the tutorial progresses only through choosing a disc, playback and interpreting the legend', async () => {
+test('practicing the three tutorial actions advances and retains the completed playback state', async () => {
   const {component:c}=playbackHarness();
-  c.startTutorial(); assert.equal(c.state.tour,1); assert(c.renderVals().tour.nextOff);
-  c.renderVals().tour.next(); assert.equal(c.state.tour,1);
+  c.startTutorial(); assert.equal(c.state.tour,1); assert.equal(c.renderVals().tour.nextOff,false);
   c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
-  c.renderVals().tour.next(); assert.equal(c.state.tour,2);
   await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
   c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
   c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
   c.renderVals().tour.next(); assert.equal(c.state.tour,0); assert.equal(c.state.tutorial,false);
   assert.equal(c.state.disc,2); assert.equal(c.state.sub,1); assert.equal(c.state.playing,true); c.stop();
+});
+
+test('tutorial next always permits skipping practice without marking an action complete or starting sound', () => {
+  const {component:c}=playbackHarness();
+  c.state.tab='data';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=9;
+  c.state.custom={name:'kept.csv',url:'blob:kept',cols:[]};const before=JSON.stringify([c.state.tab,c.state.sub,c.state.disc,c.state.col,c.state.custom]);
+  c.startTutorial();
+  for(let step=1;step<=3;step++){assert.equal(c.state.tour,step);const guide=c.renderVals().tour;assert.equal(guide.nextOff,false);assert.match(guide.nextLabel,/sin/);guide.next();}
+  assert.equal(c.state.tour,0);assert.equal(c.state.playing,false);
+  assert.equal(JSON.stringify([c.state.tab,c.state.sub,c.state.disc,c.state.col,c.state.custom]),before);
+  assert.deepEqual(JSON.parse(JSON.stringify(c.state.tutorialDone)),{disc:false,play:false,legend:false});
 });
 
 test('skipping the tutorial restores the previous file and paused position', () => {

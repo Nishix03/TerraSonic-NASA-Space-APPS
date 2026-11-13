@@ -2,6 +2,7 @@
 
 from hashlib import sha256
 import json
+import re
 from pathlib import Path
 from shutil import copy2, copytree
 from sys import argv
@@ -15,19 +16,21 @@ def lf_bytes(path: Path) -> bytes:
 def build(destination: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     prototype = root / "prototipos" / "I11-eic"
-    avatar_runtime = root / "scripts" / "avatar3d.js"
+    if any((destination / stale).exists() for stale in ("modelos", "runtime/avatar3d.js", "runtime/vendor")):
+        raise ValueError("La edición 2D necesita una carpeta de salida nueva; esta conserva un build 3D anterior. Elige otro destino para preservar esa copia.")
+    avatar_runtime = root / "scripts" / "avatar2d.js"
     support_runtime = root / "scripts" / "pages-support.js"
-    models = sorted((prototype / "modelos").glob("*.glb"))
-    if len(models) != 5:
-        raise ValueError("Se necesitan los cinco modelos GLB de TerraSonic.")
+    characters = ("silbo", "inti", "mama", "yaku", "illapa")
     version = sha256(lf_bytes(avatar_runtime))
-    for model in models:
-        version.update(model.read_bytes())
-        for kind in ("pose", "face"):
-            version.update((prototype / "sprites" / model.stem / f"{kind}-volume.webp").read_bytes())
+    for key in characters:
+        version.update((prototype / "sprites" / key / "pose-banda.webp").read_bytes())
+        for frame in range(4):
+            version.update((root / "assets" / "avatares" / key / "banda" / "keyframes" / f"{frame:02}.png").read_bytes())
     avatar_version = version.hexdigest()[:12]
     support_version = sha256(lf_bytes(support_runtime)).hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
+    # Keep bound image addresses inert during native template cloning too.
+    html = re.sub(r'(?<![\w-])src="(\{\{[^"\n]+\}\})"', r'data-ts-src="\1"', html)
     impact_catalog = json.loads((root / "data" / "impacts.v1.json").read_text(encoding="utf-8"))
     if impact_catalog.get("version") != 1 or not isinstance(impact_catalog.get("records"), list):
         raise ValueError("El catálogo de impactos necesita versión 1 y una lista de registros.")
@@ -36,7 +39,7 @@ def build(destination: Path) -> None:
         raise ValueError("Falta el marcador del catálogo estático de impactos.")
     html = html.replace(impact_marker, "var IMPACT_CATALOG = " + json.dumps(impact_catalog, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", 1)
     character_catalog = json.loads((root / "data" / "characters.v1.json").read_text(encoding="utf-8"))
-    if character_catalog.get("version") != 1 or {item["key"] for item in character_catalog.get("characters", [])} != {model.stem for model in models}:
+    if character_catalog.get("version") != 1 or {item["key"] for item in character_catalog.get("characters", [])} != set(characters):
         raise ValueError("El catálogo de personajes necesita versión 1 y los cinco músicos.")
     character_marker = "var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };"
     if character_marker not in html:
@@ -58,25 +61,28 @@ def build(destination: Path) -> None:
         "/_blob/73710d959697d6b73c436a389b19a0de", "./data/nasa_power_monthly.json"
     )
     html = html.replace(
-        "</head>", f'<script type="module" src="./runtime/avatar3d.js?v={avatar_version}"></script>\n</head>', 1
+        "</head>", f'<script type="module" src="./runtime/avatar2d.js?v={avatar_version}"></script>\n</head>', 1
     )
-    for kind in ("pose", "face"):
-        html = html.replace(f"{kind}-volume.webp", f"{kind}-volume.webp?v={avatar_version}")
+    html = html.replace("pose-banda.webp", f"pose-banda.webp?v={avatar_version}")
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
-    for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
+    for folder in ("fotogramas", "fotogramas-anteriores"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
-    for model in models:
-        for filename in ("particula.png", "pose-volume.webp", "face-volume.webp"):
-            sprite = Path("sprites") / model.stem / filename
+    for key in characters:
+        for filename in ("particula.png", "pose-banda.webp"):
+            sprite = Path("sprites") / key / filename
             (destination / sprite).parent.mkdir(parents=True, exist_ok=True)
             copy2(prototype / sprite, destination / sprite)
+        frames = Path("sprites") / key / "keyframes"
+        (destination / frames).mkdir(parents=True, exist_ok=True)
+        for frame in range(4):
+            filename = f"{frame:02}.png"
+            copy2(root / "assets" / "avatares" / key / "banda" / "keyframes" / filename, destination / frames / filename)
     runtime = destination / "runtime"
     runtime.mkdir(exist_ok=True)
     copy2(avatar_runtime, runtime)
-    copytree(root / "scripts" / "vendor", runtime / "vendor", dirs_exist_ok=True)
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")

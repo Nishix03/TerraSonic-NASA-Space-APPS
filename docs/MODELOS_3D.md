@@ -1,5 +1,7 @@
 # Revisión de la banda 3D
 
+**Archivo histórico.** El usuario descartó esta dirección y pidió recuperar los sprites originales. La edición vigente usa 2D y ya no carga estos modelos. Véase [SPRITES_2D.md](SPRITES_2D.md). Los archivos y estudios se conservan como copias recuperables; esta validación técnica no acredita aceptación artística.
+
 ## Línea base y propuestas
 
 La base `59310ac` tiene cinco relieves con textura frontal, derivados de las ilustraciones del equipo. Se inspeccionaron en Blender 5.2.2 LTS. Los perfiles mostraban volumen inflado sin anatomía independiente y la espalda conservaba partes del dibujo frontal. Los cinco tenían la misma altura de 2,9 unidades. El total de sus GLB era 8 274 192 bytes.

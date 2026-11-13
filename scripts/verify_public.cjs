@@ -33,7 +33,7 @@ async function main(){
    const flow=await page.locator('.home-process').boundingBox();assert(flow&&flow.y>=0&&flow.y+flow.height<=844,'The whole map-to-music strip fits in the initial mobile home');
    await page.screenshot({path:path.join(output,`${scenario}-home.png`)});
    if(scenario==='normal'){
-    const files=await page.evaluate(()=>[...DISC_SETS.eic,...DISC_SETS.prev].flatMap(disc=>disc.files).concat(['support.js','runtime/avatar3d.js','runtime/vendor/three-gltf.js','data/impacts.v1.json','data/characters.v1.json','data/nasa_power_monthly.json'],['silbo','inti','mama','yaku','illapa'].flatMap(key=>[`modelos/${key}.glb`,`sprites/${key}/pose-volume.webp`,`sprites/${key}/face-volume.webp`])));
+    const files=await page.evaluate(()=>[...DISC_SETS.eic,...DISC_SETS.prev].flatMap(disc=>disc.files).concat(['support.js','runtime/avatar2d.js','data/impacts.v1.json','data/characters.v1.json','data/nasa_power_monthly.json'],['silbo','inti','mama','yaku','illapa'].flatMap(key=>[`sprites/${key}/pose-banda.webp`,...[0,1,2,3].map(n=>`sprites/${key}/keyframes/0${n}.png`)])));
     if(fs.existsSync(path.join(site,'fonts')))files.push(...fs.readdirSync(path.join(site,'fonts')).map(file=>'fonts/'+file));
     for(const file of files){
      const result=await page.evaluate(async file=>{const response=await fetch(new URL(file,location.href),{credentials:'omit'});const bytes=await response.arrayBuffer(),hash=await crypto.subtle.digest('SHA-256',bytes);return {status:response.status,bytes:bytes.byteLength,sha256:[...new Uint8Array(hash)].map(v=>v.toString(16).padStart(2,'0')).join(''),contentType:response.headers.get('Content-Type')};},file);
@@ -62,9 +62,8 @@ async function main(){
    await page.locator('#tour-nav button').nth(1).click();
    for(const [index,key]of ['silbo','inti','mama','yaku','illapa'].entries()){
     await page.locator('.bsel').nth(index).click();const avatar=page.locator('.bportrait-live');await avatar.scrollIntoViewIfNeeded();assert.equal(await avatar.getAttribute('data-character'),key);
-    if(scenario==='normal')await page.waitForFunction(()=>document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'),{},{timeout:30000});
-    else await page.waitForFunction(()=>document.querySelector('.bportrait-live')?.hasAttribute('data-error'));
-    const decoded=await page.evaluate(async key=>{const img=new Image();img.src=`sprites/${key}/pose-volume.webp`;await img.decode();return img.naturalWidth>0&&img.naturalHeight>0;},key);assert(decoded);
+    await page.waitForFunction(()=>document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'),{},{timeout:30000});
+    const decoded=await page.evaluate(async key=>{const img=new Image();img.src=`sprites/${key}/pose-banda.webp`;await img.decode();return img.naturalWidth>0&&img.naturalHeight>0;},key);assert(decoded);
     await page.screenshot({path:path.join(output,`${scenario}-${key}.png`)});
    }
    await page.locator('#tour-nav button').nth(2).click();await page.evaluate(()=>__app.goSub(0));await page.getByRole('button',{name:'Usar imagen de ejemplo',exact:true}).click();await page.waitForFunction(()=>__app.state.custom&&__app.cur());assert.equal(await page.evaluate(()=>__app.state.custom.source),'eic');

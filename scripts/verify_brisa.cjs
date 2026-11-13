@@ -123,14 +123,14 @@ async function main() {
       // Start can be offered only on the first contextual step.
       while (await page.evaluate(() => __app.state.tour>1)) await page.locator('#tour-card .tact .quiet').click();
       await page.locator('#tour-card .tbubble .btn').first().click();
-      assert.equal(await page.evaluate(() => __app.state.tour),1); assert(await next(page).isDisabled());
+      assert.equal(await page.evaluate(() => __app.state.tour),1); assert.equal(await next(page).isDisabled(),false);
       await page.locator('.discgrid .dcard').first().click();
       await page.waitForFunction(() => __app.state.tour===2);
-      assert(await next(page).isDisabled());
+      assert.equal(await next(page).isDisabled(),false);
       await page.locator('#tour-play button').click();
       if(!nativeAudio){await page.waitForFunction(()=>!!__app.state.audioError);await page.locator('#tour-card .tbubble .btn').click();}
       await page.waitForFunction(() => __app.state.tour===3);
-      await page.locator('.legend-choice').first().click(); assert(await next(page).isDisabled());
+      await page.locator('.legend-choice').first().click(); assert.equal(await page.evaluate(()=>__app.state.tutorialDone.legend),false);
       await page.locator('.legend-choice').nth(2).click(); assert.equal(await next(page).isDisabled(),false);
       await page.screenshot({path:path.join(output,'tutorial-'+viewport.width+'.png')});
       await next(page).click(); assert.equal(await page.locator('#tour-card').count(),0);
@@ -141,11 +141,11 @@ async function main() {
     await page.locator('#tour-nav button').nth(1).click();
     await page.waitForFunction(() => document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'));
     await page.locator('.bportrait-live').evaluate(el => el.replay('Play'));
-    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.manual?.clip),'Play');
+    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.mode),'Play');
     await page.locator('#tour-a11y summary').click(); await page.locator('#tour-a11y .opt').nth(6).click();
     assert.equal(await page.locator('.bportrait-live').evaluate(el => el.manual),null);
-    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.animation(performance.now())[2]),false);
-    report.journeys.push('Manual reduced-motion preference stops a running 3D clip without requiring an OS setting');
+    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.running),false);
+    report.journeys.push('Manual reduced-motion preference stops the 2D sequence without requiring an OS setting');
     await context.close();
     for (const options of [{noAudio:true,noSpeech:true},{stubSpeech:true,emptyVoices:true}]) {
       const {context,page}=await create({configured:true,...options});

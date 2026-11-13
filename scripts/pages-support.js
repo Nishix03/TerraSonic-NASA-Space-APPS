@@ -69,10 +69,14 @@
         node.removeAttribute(name);
         updates.push(scope => { const selected = interpolate(value, scope); if (node.value !== selected) node.value = selected; });
       } else {
+        // Firefox may request unresolved image URLs when cloning a template.
+        // The packager keeps those bindings inert until this compilation step.
+        const targetName = name === "data-ts-src" ? "src" : name;
+        if (name === "data-ts-src") node.removeAttribute(name);
         updates.push(scope => {
           const result = interpolate(value, scope);
-          if ((name === "src" || name === "href") && result === "") node.removeAttribute(name);
-          else if (node.getAttribute(name) !== result) node.setAttribute(name, result);
+          if ((targetName === "src" || targetName === "href") && result === "") node.removeAttribute(targetName);
+          else if (node.getAttribute(targetName) !== result) node.setAttribute(targetName, result);
         });
       }
     }

@@ -26,7 +26,7 @@ async function main(){
    await page.locator('.csv-picker input').setInputFiles({name:'portable.csv',mimeType:'text/csv',buffer:Buffer.from('station,rain,temp\n1,3,25\n2,6,24\n3,2,26\n4,8,27\n5,4,23\n6,9,24\n7,2,25\n8,7,26\n')});
    await page.locator('.file-settings select option[value="2"]').waitFor({state:'attached'});await page.locator('.file-settings select').selectOption('2');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
    await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('html').getAttribute('lang'),'en');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
-   report.checks.push({viewport,home:true,fonts:true,mapAndLegend:true,playerCore,model3d:true,sample:true,csv:true,language:true});await page.screenshot({path:path.join(output,'csv-'+viewport.width+'.png')});await context.close();
+   report.checks.push({viewport,home:true,fonts:true,mapAndLegend:true,playerCore,originalSprite2d:true,sample:true,csv:true,language:true});await page.screenshot({path:path.join(output,'csv-'+viewport.width+'.png')});await context.close();
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);assert.deepEqual(report.externalRequests,[]);console.log('PASS standalone package journeys',report.checks.length,'real HTTP viewports');
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}
