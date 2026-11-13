@@ -26,7 +26,7 @@ async function main(){
    URL.createObjectURL=blob=>{const url=create(blob);__imageUrls.set(url,{type:blob.type,revoked:false});return url;};URL.revokeObjectURL=url=>{if(__imageUrls.has(url))__imageUrls.get(url).revoked=true;return revoke(url);};
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
   });
-  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);await page.locator('#tour-nav button').nth(2).click();
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
   const fixtures=[];
   for(const [name,width,height]of [['wide',800,200],['tall',200,800],['square',200,200],['transparent',200,200]]){
    const encoded=await page.evaluate(({name,width,height})=>{const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(name==='transparent'){ctx.fillStyle='#f22';ctx.fillRect(width/4,height/4,width/2,height/2);}else{ctx.fillStyle='#f22';ctx.fillRect(0,0,width/2,height);ctx.fillStyle='#22f';ctx.fillRect(width/2,0,width/2,height);}return canvas.toDataURL('image/png').split(',')[1];},{name,width,height});
@@ -46,7 +46,7 @@ async function main(){
    if(fixture.shape==='wide')assert(result.top.every(value=>value===null));
    else assert(result.left.every(value=>value===null));
    const url=await page.evaluate(()=>__app.state.custom.url);await page.evaluate(()=>__app.setMode('palette'));await page.waitForFunction(()=>__app.cur()&&__app.state.customMode==='palette');assert.equal(await page.evaluate(()=>__app.state.custom.url),url,'changing interpretation preserves the frozen image');
-   await page.locator('.headtools button').click();
+
   }
   assert.deepEqual(report.errors,[]);console.log('PASS image geometry',report.checks.length,'local fixtures');
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}

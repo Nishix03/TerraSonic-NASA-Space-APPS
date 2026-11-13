@@ -33,25 +33,29 @@ async function main() {
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
     await page.goto(base); await page.waitForFunction(() => window.__app);
     await page.evaluate(() => { __app.state.sfx = false; });
-    await page.locator('#tour-nav button').nth(2).click();
-    const back = async () => { await page.locator('.headtools button').click(); await page.locator('.convert-options').waitFor(); };
+    await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();
+    await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
     const imageInput = () => page.locator('#tour-drop input');
-    const secondary = async () => { const details = page.locator('.convert-secondary').first(); if (!(await details.evaluate(el => el.open))) await details.locator('summary').click(); };
-    await page.locator('#tour-image-sample button').click();
-    await page.waitForFunction(() => __app.state.custom?.source === 'eic' && __app.state.sub === 1);
-    assert.equal(await page.evaluate(() => __app.state.customMode), 'palette');
-    checks.push('Bundled NASA sample image analyzed and opened in the player'); await back();
+    assert.equal(await page.locator('input[type=file]').count(),1);
+    await page.locator('#tour-sample button').click();
+    await page.waitForFunction(() => __app.state.custom?.kind === 'rain' && __app.cur()?.cells.length === 448);
+    assert.equal(await page.locator('#tour-machine .heard > div').count(),448);
+    assert.match(await page.locator('#player-legend').textContent(),/Bajo el promedio/);
+    checks.push('NASA POWER rainfall opens a playable analysis with the right units');
     await imageInput().setInputFiles(path.join(site, 'fotogramas/ver2025_2.webp'));
     await page.waitForFunction(() => __app.state.custom?.name === 'ver2025_2.webp' && __app.state.sub === 1);
     assert.equal(await page.evaluate(() => __app.state.customMode), 'free');
+    assert.equal(await page.locator('#tour-sample').count(),0);
+    assert.match(await page.locator('.practice-example img').getAttribute('src'),/^blob:/);
     while(await page.locator('.listen-member[aria-pressed="true"]').count())await page.locator('.listen-member[aria-pressed="true"]').first().click();
     await page.evaluate(()=>window.__previousAnalysis=__app.cur());await page.locator('.file-settings select').selectOption('palette');
     await page.waitForFunction(()=>__app.cur()!==window.__previousAnalysis&&__app.state.customMode==='palette');
     assert(await page.evaluate(()=>Object.values(__app.state.mute).every(Boolean)),'changing image interpretation keeps the user’s instrument mix');
     assert.match(await page.locator('.listen-band [role="status"]').textContent(),/silenciados/);
     checks.push('Local WebP analyzed in free-color mode');
-    const accepted = await page.evaluate(() => __app.state.custom.url); await back();
+    const accepted = await page.evaluate(() => __app.state.custom.url);
     for (const fixture of [
+      { name: 'data.csv', mimeType: 'text/csv', buffer: Buffer.from('x,y\n1,2'), expected: /Formato no admitido/ },
       { name: 'invalid.pdf', mimeType: 'application/pdf', buffer: Buffer.from('not supported'), expected: /Formato no admitido/ },
       { name: 'broken.png', mimeType: 'image/png', buffer: Buffer.from('invalid image'), expected: /No se pudo leer la imagen/ },
       { name: 'large.png', mimeType: 'image/png', buffer: Buffer.alloc(8 * 1024 * 1024 + 1), expected: /8 MB/ },
@@ -68,35 +72,12 @@ async function main() {
     await page.waitForFunction(() => /32 millones/.test(__app.renderVals().upMsg));
     assert.equal(await page.evaluate(() => __app.state.custom.url), accepted);
     checks.push('A tiny file declaring 1.6 billion pixels rejected before image decode');
-    await secondary();
-    const csvInput = page.locator('.csv-picker input');
-    await csvInput.setInputFiles({ name: 'invalid.csv', mimeType: 'text/csv', buffer: Buffer.from('one\ntwo\nthree\nfour\n') });
-    await page.waitForFunction(() => /columna numérica/.test(__app.renderVals().upMsg));
-    assert.equal(await page.evaluate(() => __app.state.custom.url), accepted);
-    const csv = ['index,rain,temperature', ...Array.from({ length: 20 }, (_, i) => `${i},${i % 4 * i},${22 + i % 3 * 2}`)].join('\n');
-    await csvInput.setInputFiles({ name: 'three-columns.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
-    await page.waitForFunction(() => __app.state.custom?.cols?.length === 3 && __app.state.sub === 1);
-    const column = page.locator('.file-settings select');
-    assert.deepEqual(await column.locator('option').evaluateAll(options=>options.map(option=>option.value)),['0','1','2'],'all numeric columns survive native select parsing');
-    await column.selectOption('2');
-    await page.waitForFunction(() => __app.state.custom?.col === 2 && __app.cur());
-    assert.equal(await column.inputValue(), '2');
-    const series = await page.evaluate(() => __app.state.custom.cols[2].values);
-    assert.equal(series.length, 20); checks.push('CSV parsed locally and a different numeric column selected');
     await page.locator('#tour-lang button').nth(1).click();
-    assert.equal(await column.inputValue(), '2');
-    await back();await secondary();
-    const magnitudes=['large,tiny',...[6,7,8,9,10,6,7,8,9,10].map(value=>`${value*1e307},${value*1e-200}`)].join('\n');
-    await csvInput.setInputFiles({name:'finite-magnitudes.csv',mimeType:'text/csv',buffer:Buffer.from(magnitudes)});
-    await page.waitForFunction(()=>__app.state.custom?.baseName==='finite-magnitudes.csv'&&__app.state.sub===1);
-    const largeCells=await page.evaluate(()=>__app.cur().cells);assert(largeCells.every(Number.isFinite));assert(largeCells.some(value=>value>0)&&largeCells.some(value=>value<0));
-    await page.evaluate(()=>window.__previousAnalysis=__app.cur());await page.locator('.file-settings select').selectOption('1');
-    await page.waitForFunction(()=>__app.state.custom?.col===1&&__app.cur()!==window.__previousAnalysis);
-    const tinyCells=await page.evaluate(()=>__app.cur().cells);tinyCells.forEach((value,index)=>assert(Math.abs(value-largeCells[index])<1e-10));
-    checks.push('Finite large and tiny CSV magnitudes preserve the same normalized pattern without overflow or an arbitrary flat cutoff');
-    await back(); await secondary(); await page.locator('#tour-sample button').click();
-    await page.waitForFunction(() => __app.state.custom?.nameText?.en?.includes('rainfall') && __app.state.sub === 1);
-    checks.push('NASA POWER Chiclayo sample preserved and opened in English'); await back();
+    assert.match(await page.locator('#player-legend').textContent(),/Cooler.*Neutral.*Warmer/s);
+    await page.getByRole('button',{name:'From map to sound',exact:true}).click();
+    await page.getByRole('button',{name:'Try it',exact:true}).click();
+    assert.equal(await page.locator('.practice-example img').getAttribute('src'),accepted);
+    checks.push('The uploaded image replaces the rain sample and survives navigation and language changes');
     for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }]) {
       await page.setViewportSize(viewport); await page.evaluate(() => __app.resetScreenScroll());
       const sizes = await page.locator('.scr').evaluate(el => [el.clientWidth, el.scrollWidth]);

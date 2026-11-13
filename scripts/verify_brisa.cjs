@@ -89,8 +89,9 @@ async function main() {
     const nativeAudio=await page.evaluate(()=>typeof(window.AudioContext||window.webkitAudioContext)==='function');
     report.nativeAudioAvailable=nativeAudio;
     await page.locator('#tour-nav button').nth(2).click();
-    await page.locator('#tour-image-sample button').click();
-    await page.waitForFunction(() => __app.state.custom?.source === 'eic' && __app.state.sub === 1);
+    await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
+    await page.locator('#tour-drop input').setInputFiles(path.join(site,'fotogramas/ver2025_2.webp'));
+    await page.waitForFunction(() => __app.state.custom?.kind === 'image' && __app.state.sub === 1);
     await page.locator('#playback-position').evaluate(el => { el.value='8'; el.dispatchEvent(new Event('input',{bubbles:true})); });
     const snapshot = await page.evaluate(() => JSON.stringify([__app.state.tab,__app.state.sub,__app.state.disc,__app.state.frame,__app.state.col,__app.state.custom.url,__app.state.customMode,__app.state.mute,__app.state.playing]));
     await page.locator('#tour-guide').click();
@@ -102,7 +103,7 @@ async function main() {
     await next(page).click(); assert.equal(await page.evaluate(() => __app.state.speaking),false);
     await page.locator('#tour-card .tguide .tsay').first().click();
     await page.locator('#tour-lang button').nth(1).click(); assert.equal(await page.evaluate(() => __app.state.speaking),false);
-    assert.match(await page.locator('#tour-b').textContent(),/Text and symbols/);
+    assert.match(await page.locator('#tour-b').textContent(),/grid scale runs from blue/);
     await page.locator('#tour-lang button').first().click(); await close(page).click();
     assert.equal(await page.evaluate(() => JSON.stringify([__app.state.tab,__app.state.sub,__app.state.disc,__app.state.frame,__app.state.col,__app.state.custom.url,__app.state.customMode,__app.state.mute,__app.state.playing])),snapshot);
     assert.equal(await page.evaluate(() => document.activeElement.id),'tour-guide');
@@ -130,8 +131,8 @@ async function main() {
       await page.locator('#tour-play button').click();
       if(!nativeAudio){await page.waitForFunction(()=>!!__app.state.audioError);await page.locator('#tour-card .tbubble .btn').click();}
       await page.waitForFunction(() => __app.state.tour===3);
-      await page.locator('.legend-choice').first().click(); assert(await next(page).isDisabled());
-      await page.locator('.legend-choice').nth(2).click(); assert.equal(await next(page).isDisabled(),false);
+      await page.locator('.legend-choice').last().click(); assert(await next(page).isDisabled());
+      await page.locator('.legend-choice').first().click(); assert.equal(await next(page).isDisabled(),false);
       await page.screenshot({path:path.join(output,'tutorial-'+viewport.width+'.png')});
       await next(page).click(); assert.equal(await page.locator('#tour-card').count(),0);
       assert.equal(await page.evaluate(() => __app.state.playing),nativeAudio);
@@ -139,13 +140,13 @@ async function main() {
       report.journeys.push('Tutorial completed at '+viewport.width+'px with '+(nativeAudio?'real playback':'the written no-audio alternative'));
     }
     await page.locator('#tour-nav button').nth(1).click();
-    await page.waitForFunction(() => document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'));
-    await page.locator('.bportrait-live').evaluate(el => el.replay('Play'));
-    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.manual?.clip),'Play');
-    await page.locator('#tour-a11y summary').click(); await page.locator('#tour-a11y .opt').nth(6).click();
-    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.manual),null);
-    assert.equal(await page.locator('.bportrait-live').evaluate(el => el.animation(performance.now())[2]),false);
-    report.journeys.push('Manual reduced-motion preference stops a running 3D clip without requiring an OS setting');
+    await page.locator('.bpick button').nth(1).click();
+    await page.waitForFunction(() => document.querySelector('.bportrait-motion'));
+    await page.locator('#tour-a11y summary').click();
+    await page.getByRole('button',{name:'Movimiento reducido'}).click();
+    assert.equal(await page.locator('.bportrait-motion').count(),0);
+    assert.match(await page.locator('.bportrait-live').getAttribute('src'),/inti\/pose-banda\.webp$/);
+    report.journeys.push('The reduced-motion preference leaves the original 2D pose visible');
     await context.close();
     for (const options of [{noAudio:true,noSpeech:true},{stubSpeech:true,emptyVoices:true}]) {
       const {context,page}=await create({configured:true,...options});
@@ -160,7 +161,7 @@ async function main() {
         await page.locator('#tour-play button').click();
         await page.waitForFunction(()=>!!__app.state.audioError);
         await page.locator('#tour-card .tbubble .btn').click();
-        await page.locator('.legend-choice').nth(2).click(); await next(page).click();
+        await page.locator('.legend-choice').first().click(); await next(page).click();
         assert.equal(await page.locator('#tour-card').count(),0);
       }
       report.journeys.push(options.emptyVoices?'Empty voice list keeps written help':'Tutorial has a written fallback without Web Audio or speech APIs');

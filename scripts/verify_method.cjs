@@ -19,40 +19,32 @@ async function main(){
    const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);
    for(const lang of ['es','en']){
     await page.locator('#tour-lang button').nth(lang==='es'?0:1).click();
-    await page.locator('#tour-nav button').nth(3).click();
-    assert.equal(await page.locator('#tour-steps li').count(),8);
-    for(const detail of await page.locator('.method-notes details').all())await detail.locator('summary').click();
-    assert.match(await page.locator('.method-notes').textContent(),/140°–70°/);
-    assert.match(await page.locator('.method-notes').textContent(),/29/);
-    const sources=await page.locator('.method-sources a').evaluateAll(links=>links.map(link=>link.href));assert.equal(sources.length,5);
-    assert(sources.some(url=>url.includes('the-earth-information-jukebox')));
-    for(let sub=0;sub<3;sub++){
+    const nav = page.locator('#tour-nav button');
+    await nav.nth(2).click();
+    assert.equal(await page.locator('#tour-steps li').count(),6);
+    assert.equal(await page.locator('.topics button').count(),2);
+    for(let sub=0;sub<2;sub++){
      await page.locator('.topics button').nth(sub).click();
-     await checkOverflow(page,`${width} ${lang} method ${sub}`);
-     if(lang==='es'&&[390,1366].includes(width)){await resetScroll(page);await page.screenshot({path:path.join(output,`${width}-method-${sub}.png`)});}
+     await checkOverflow(page,`${width} ${lang} how it works ${sub}`);
+     if(lang==='es'&&[390,1366].includes(width)){await resetScroll(page);await page.screenshot({path:path.join(output,`${width}-how-${sub}.png`)});}
     }
-    await page.locator('#tour-nav button').nth(4).click();
+    await nav.nth(3).click();
     for(let sub=0;sub<5;sub++){
      await page.locator('.topics button').nth(sub).click();
      if(sub<4){
-      const title=await page.locator('.pagehead h1').textContent();
-      for(let filter=0;filter<4;filter++){
-       await page.locator('#tour-techfilter button').nth(filter).click();
-       assert.equal(await page.locator('.pagehead h1').textContent(),title);
-       assert.equal(await page.locator('#tour-techfilter button[aria-pressed="true"]').count(),1);
-       assert(!/Magenta|Lyria|ElevenLabs|Tonal\.js|Tone\.js|Planeado|Planned/.test(await page.locator('#tour-techcards').textContent()));
-       await checkOverflow(page,`${width} ${lang} technology ${sub} filter ${filter}`);
-      }
-      await page.locator('#tour-techfilter button').first().click();
-     }else assert.match(await page.locator('#credit-ai-title').locator('..').locator('..').textContent(),lang==='es'?/pendiente/:/pending/);
+      assert(await page.locator('#tour-techcards article').count()>0);
+      assert.equal(await page.locator('#tour-techfilter,.techchip').count(),0);
+      assert.doesNotMatch(await page.locator('#tour-techcards').textContent(),/Three\.js|GLTFLoader|Blender|Planeado|Planned/);
+      await checkOverflow(page,`${width} ${lang} technology ${sub}`);
+     }else assert.match(await page.locator('#credit-ai-title').locator('..').locator('..').textContent(),lang==='es'?/pendiente/:/awaiting review/);
      if(lang==='es'&&[390,1366].includes(width)){await resetScroll(page);await page.screenshot({path:path.join(output,`${width}-technology-${sub}.png`)});}
     }
    }
-   report.viewports.push({width,languages:2,methodScreens:3,technologyScreens:5,filters:4,horizontalOverflow:false});await context.close();
+   report.viewports.push({width,languages:2,howScreens:2,technologyScreens:5,horizontalOverflow:false});await context.close();
   }
-  assert.deepEqual(report.errors,[]);report.checks.push('Method and Technology in both languages at five viewport widths');
-  report.checks.push('Technology filters preserve the category and exclude unused planned services');
-  report.checks.push('Scientific limits, local sample, editorial rule and documented AI credit remain visible');
+  assert.deepEqual(report.errors,[]);report.checks.push('How it works and Technology in both languages at five viewport widths');
+  report.checks.push('Technology categories show the relevant tools without filters or status badges');
+  report.checks.push('Technology keeps documented AI credits');
   report.checks.forEach(check=>console.log('PASS',check));
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}
 }

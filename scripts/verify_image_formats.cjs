@@ -15,7 +15,7 @@ async function main(){
   const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
   await context.route('**/*',async route=>{const url=route.request().url();if(/^(blob:|data:)/.test(url))return route.continue();if(!url.startsWith(base))return route.abort();const file=path.resolve(site,new URL(url).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
   await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
-  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.locator('#tour-nav button').nth(2).click();
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
   const jpeg=Buffer.from(await page.evaluate(()=>{const c=document.createElement('canvas');c.width=400;c.height=200;const x=c.getContext('2d');['#ee2222','#22ee22','#2222ee','#eeee22'].forEach((color,i)=>{x.fillStyle=color;x.fillRect((i%2)*200,Math.floor(i/2)*100,200,100);});return c.toDataURL('image/jpeg',1).split(',')[1];}),'base64');
   const orders=[[0,1,2,3],[1,0,3,2],[3,2,1,0],[2,3,0,1],[0,2,1,3],[2,0,3,1],[3,1,2,0],[1,3,0,2]],colors=[[238,34,34],[34,238,34],[34,34,238],[238,238,34]];
   const fixtures=orders.map((order,i)=>({name:`orientation-${i+1}.jpg`,mimeType:'image/jpeg',buffer:exifJpeg(jpeg,i+1),order,portrait:i>=4}));fixtures.push({name:'quadrants.webp',mimeType:'image/webp',buffer:webp,order:orders[0],portrait:false});
@@ -29,7 +29,7 @@ async function main(){
    },fixture.portrait);
    assert.equal(result.width,560);assert.equal(result.height,320);assert(result.ready);assert.equal(result.outside[3],0,'letterboxing preserves the oriented aspect ratio');
    result.pixels.forEach((pixel,index)=>{assert.equal(pixel[3],255);colors[fixture.order[index]].forEach((channel,k)=>assert(Math.abs(pixel[k]-channel)<=12,`${fixture.name} quadrant ${index}: ${pixel}`));});
-   report.checks.push({name:fixture.name,orientedQuadrants:fixture.order,...result});await page.locator('.headtools button').click();
+   report.checks.push({name:fixture.name,orientedQuadrants:fixture.order,...result});
   }
   assert.deepEqual(report.errors,[]);await page.screenshot({path:path.join(output,'formats.png')});await context.close();console.log('PASS native image formats',report.checks.length);
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}

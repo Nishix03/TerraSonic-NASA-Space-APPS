@@ -72,10 +72,9 @@ async function main() {
       await page.evaluate(() => { __app.setState({ mute: __app.allMute(false), leadOverride: 'mama' }); });
       for (const mode of ['melody', 'raw']) {
         await page.locator('.player-modes button').nth(mode === 'melody' ? 0 : 1).click();
-        assert.equal(await page.locator('.chordsrow').count(),mode==='melody'?1:0,'Data must not show an unused chord progression');
-        await page.locator('.player-readout summary').click();
-        if(mode==='raw')assert.match(await page.locator('.player-readout').textContent(),/niveles derivados/i);
-        await page.locator('.player-readout summary').click();
+        await page.locator('#tour-more button').click();
+        assert.match(await page.locator('#more-dialog').textContent(),mode==='melody'?/Tonalidad|escala/i:/Niveles convertidos en tonos/i);
+        await page.keyboard.press('Escape');
         const slider = page.locator('#playback-position');
         await slider.focus(); await slider.press('Home'); await slider.press('ArrowRight');
         assert.equal(await page.evaluate(() => __app.playerPosition()), 1);
@@ -98,13 +97,14 @@ async function main() {
         assert.deepEqual(await page.evaluate(() => [__app.state.frame, __app.state.col, __app.state.playing]), [1, 6, false]);
         assert.equal(await slider.inputValue(), '35');
         const date = await page.locator('.when b').textContent();
-        await page.locator('.transport-tools .seek-buttons button').last().click();
-        assert((await slider.inputValue()) !== '35');
         await page.locator('.event-history summary').click();
         await page.locator('.event-history li').first().waitFor();
         assert(await page.locator('.event-history li').count() > 0);
         await page.locator('.event-history summary').click();
-        assert.equal(await page.locator('.map-legend li').count(), 4);
+        assert.equal(await page.locator('.map-legend .legend-choice').count(),3);
+        assert.equal(await page.locator('#tour-machine .heard > div').count(),448);
+        assert.equal(await page.getByRole('button',{name:'Escenario',exact:true}).count(),0);
+        assert.equal(await page.locator('.listen-member').count(),5);
         const before = await page.evaluate(() => __app.playerPosition());
         await page.locator('#tour-lang button').nth(1).click();
         assert.equal(await page.evaluate(() => __app.playerPosition()), before);

@@ -29,15 +29,18 @@ async function main(){
    report.samples.push({cycle,dom,metrics:selected,app,retained});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));console.log('MEMORY',cycle,JSON.stringify({dom,heap:Math.round(selected.JSHeapUsedSize/1048576*100)/100,activeUrls:app.activeUrls}));
   };
   for(let cycle=1;cycle<=25;cycle++){
-   await page.evaluate(()=>__app.goTab('data',0));await page.waitForFunction(()=>!__app.state.trans);
-   if(!await page.locator('.convert-options').isVisible())await page.locator('.headtools button').click();
-   await page.locator('.convert-secondary summary').first().click();
-   const csv='day,rain\n1,2\n2,4\n3,3\n4,6\n5,8\n6,1\n7,5\n8,9\n';
-   if(process.argv.includes('--file-api'))await page.evaluate(({cycle,csv})=>{const input=document.querySelector('.csv-picker input'),transfer=new DataTransfer();transfer.items.add(new File([csv],`memory-${cycle}.csv`,{type:'text/csv'}));input.files=transfer.files;input.dispatchEvent(new Event('change',{bubbles:true}));},{cycle,csv});
-   else await page.locator('.csv-picker input').setInputFiles({name:`memory-${cycle}.csv`,mimeType:'text/csv',buffer:Buffer.from(csv)});
-   await page.waitForFunction(cycle=>__app.state.custom?.baseName===`memory-${cycle}.csv`&&__app.cur(),cycle);
+   await page.evaluate(()=>__app.goTab('how',1));await page.waitForFunction(()=>!__app.state.trans);
+   const filename='memory-'+cycle+'.webp';
+   const buffer=fs.readFileSync(path.join(site,'fotogramas/ver2025_2.webp'));
+   if(process.argv.includes('--file-api'))await page.evaluate(({filename,bytes})=>{
+     const input=document.querySelector('#tour-drop input'),transfer=new DataTransfer();
+     transfer.items.add(new File([new Uint8Array(bytes)],filename,{type:'image/webp'}));
+     input.files=transfer.files;input.dispatchEvent(new Event('change',{bubbles:true}));
+   },{filename,bytes:[...buffer]});
+   else await page.locator('#tour-drop input').setInputFiles({name:filename,mimeType:'image/webp',buffer});
+   await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.cur(),filename);
    await page.evaluate(()=>__app.setState({events:Array.from({length:200},()=>__app.eventFor({mama:true},''))}));
-   for(const selector of ['.analysis-panel','.event-history'])if(await page.locator(selector).getAttribute('open')===null)await page.locator(selector+' summary').click();
+   if(await page.locator('.event-history').getAttribute('open')===null)await page.locator('.event-history summary').click();
    await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
    await page.evaluate(()=>__app.goTab('band'));await page.waitForFunction(()=>!__app.state.trans);await page.locator('.bsel').nth(cycle%5).click();
    await sample(cycle);

@@ -40,20 +40,15 @@ async function main() {
           const persona=await page.evaluate(()=>__app.renderVals().bandCur.persona);
           assert.match(await page.locator('.bsummary').textContent(),new RegExp(persona.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
           const data=await page.evaluate(()=>({cur:__app.renderVals().bandCur,playing:__app.state.playing}));
-          assert(data.cur.story && data.cur.impactFact && data.cur.references.length);
-          for(const detail of await page.locator('.bnotes details').all()) {
-            await detail.locator('summary').click();
-            const box=await detail.boundingBox();assert(box.width<=width);
-            await page.keyboard.press('End');
-          }
-          const urls=await page.locator('.bsource a').evaluateAll(links=>links.map(link=>link.href));
-          assert(urls.length>=3);assert(urls.every(url=>url.startsWith('https://')));
+          assert(data.cur.story);
+          assert.doesNotMatch(data.cur.story,/propues|proponemos|propos/i);
+          await page.waitForFunction(()=>{const img=document.querySelector('.bportrait-live');return img?.complete&&img.naturalWidth>0;});
+          assert.equal(await page.locator('.bportrait-motion').count(),0);
           assert.equal(await page.evaluate(()=>__app.state.playing),data.playing,'reading references must not start audio');
           const overflowing=await page.evaluate(()=>[...document.querySelectorAll('.bpage *')].filter(el=>{
             const r=el.getBoundingClientRect(),cs=getComputedStyle(el);return r.width && cs.display!=='none' && r.right>innerWidth+2;
           }).map(el=>el.className).slice(0,8));
           assert.deepEqual(overflowing,[],`${width} ${lang} ${key} horizontal overflow`);
-          for(const detail of await page.locator('.bnotes details').all()) await detail.locator('summary').click();
           if((width===390||width===1366)&&lang==='es') {
             await page.locator('.bpage').evaluate(el=>{const scroller=el.closest('.scr');if(scroller)scroller.scrollTop=0;window.scrollTo(0,0);});
             await page.screenshot({path:path.join(output,`${width}-${key}.png`)});
@@ -64,8 +59,8 @@ async function main() {
       await context.close();
     }
     report.checks.push('Five complete profiles in Spanish and English at five viewport widths');
-    report.checks.push('Native disclosure controls expose facts, source links, limitations and original inspiration');
-    report.checks.push('Reading a story or source does not start or change audio');
+    report.checks.push('All five original 2D portraits load and respect reduced motion');
+    report.checks.push('Reading a story does not start or change audio');
     assert.deepEqual(report.errors,[]);report.checks.forEach(check=>console.log('PASS',check));
   } finally {fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}
 }

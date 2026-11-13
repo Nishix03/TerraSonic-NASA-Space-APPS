@@ -37,16 +37,12 @@ async function main(){
     await page.locator('.discgrid .dcard').nth(3).click();await page.evaluate(()=>__app.gotoFrame(2));
     await page.waitForFunction(()=>__app.cur()&&!__app.state.trans);
     await page.evaluate(engine=>__app.setEngine(engine),engine);
-    assert.equal(await page.locator('.chordsrow').count(),engine==='melody'?1:0);
     await page.evaluate(()=>{const events=Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''));__app.setState({events});});
     await openDetails(page);await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
-    await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
-    assert(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>new Set(cells.map(el=>el.style.background)).size>4),'the open grid must contain the current map analysis');
-    await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===0);
-    assert.equal(await page.locator('.analysis-panel').getAttribute('open'),null,'false must remove the native boolean open attribute');
-    await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
+    await page.waitForFunction(()=>document.querySelectorAll('#tour-machine .heard>div').length===448);
+    assert(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>new Set(cells.map(el=>el.style.background)).size>4),'the open grid must contain the current map analysis');
     await page.evaluate(()=>__app.seekPosition(69));
-    assert.equal(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16,'the reopened grid keeps exactly the current scan column highlighted');
+    assert.equal(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16,'the visible grid keeps exactly the current scan column highlighted');
     await page.locator('.event-history summary').focus();await page.keyboard.press('Tab');
     assert(await page.locator('.event-history ol').evaluate(el=>el===document.activeElement),'the scrollable event list must be reachable by Tab');
     await page.keyboard.press('End');await page.waitForFunction(()=>{const el=document.querySelector('.event-history ol');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
@@ -61,7 +57,7 @@ async function main(){
     await page.waitForFunction(()=>{const el=document.getElementById('more-dialog');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
     const readingEnd=await page.locator('#more-dialog .why').last().evaluate(el=>{const r=el.getBoundingClientRect(),dialog=el.closest('[role="dialog"]').getBoundingClientRect();return {bottom:r.bottom,dialogBottom:dialog.bottom};});assert(readingEnd.bottom<=readingEnd.dialogBottom+1,'the explanation can be read to the end with the keyboard');
     await page.keyboard.press('Escape');assert.equal(await page.locator('#more-dialog').count(),0);assert.equal(await page.evaluate(()=>JSON.stringify([__app.state.disc,__app.state.frame,__app.state.col,__app.state.events.length])),snapshot);assert.equal(await page.locator('#tour-more button').evaluate(el=>el===document.activeElement),true);
-    await page.evaluate(()=>__app.goTab('data'));await page.waitForFunction(()=>!__app.state.trans);await openDetails(page);const convert=await audit(page,label+' convert'),convertEnd=await checkEnd(page);
+    await page.evaluate(()=>__app.goTab('how',1));await page.waitForFunction(()=>!__app.state.trans);await openDetails(page);const convert=await audit(page,label+' convert'),convertEnd=await checkEnd(page);
     report.checks.push({width,height,setting,language,engine,player,end,dialog,size,readingEnd,convert,convertEnd});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
    }
   }

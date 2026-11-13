@@ -38,11 +38,7 @@ async function main() {
     await page.waitForFunction(()=>__app.cur());
     const profile=await page.evaluate(()=>{const p=__app.profile();return {bpm:p.bpm,base:p.baseBpm,mode:p.mode,impact:p.impactId,stepMs:__app.stepMs()};});
     assert.equal(profile.impact,'pacora-2023-03-08');assert.equal(profile.bpm,profile.base-10);
-    assert.match(await page.locator('.when').textContent(),new RegExp(profile.bpm+' ppm'));
-    await page.locator('.player-impact summary').click();
-    assert.match(await page.locator('.player-impact').textContent(),/29 viviendas afectadas/);
-    assert.match(await page.locator('.player-impact').textContent(),/110 personas afectadas/);
-    assert.match(await page.locator('.player-impact a').first().getAttribute('href'),/2529/);
+    assert.equal(await page.locator('.player-impact').count(),0);
     await page.evaluate(()=>{
       window.__ticks=[];const original=__app.stepMelody;__app.stepMelody=function(col,scheduled){__ticks.push(scheduled?.at??this.ac.currentTime);return original.call(this,col,scheduled);};
       __app.setBandMute(__app.only('mama'));
@@ -54,7 +50,6 @@ async function main() {
     assert(Math.abs(median-profile.stepMs/1000)<.08,'Actual scheduling must follow the editorial tempo');
     report.timing={profile,times,medianStepSeconds:median};report.checks.push('Real Web Audio scheduling follows the Pacora tempo change');
     await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.evaluate(()=>__app.profile().bpm),profile.bpm);
-    assert.match(await page.locator('.player-impact').textContent(),/affected homes/);
     await page.screenshot({path:path.join(output,'pacora-english.png')});
     await page.locator('.player-modes button').nth(1).click();
     assert.equal(await page.evaluate(()=>__app.profile().impactId),undefined);assert.equal(await page.evaluate(()=>__app.stepMs()),110);

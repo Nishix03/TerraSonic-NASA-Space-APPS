@@ -140,7 +140,7 @@ Vista independiente: {preview or 'consultar docs/PUBLICACION.md en source.zip'}.
 
 `site/` contiene el producto estático listo para un host. No requiere Node, Blender, cuenta, backend, AWS ni base de datos. Archivos, fuentes, mapas, modelos y poses se incluyen. El audio requiere una acción del usuario y un navegador con Web Audio. Voz/vibración dependen del dispositivo y las voces instaladas; el texto y las poses permiten continuar sin esas APIs. Los enlaces documentales externos requieren red. Abrir index.html con file:// no es el modo soportado.
 
-`source.zip` contiene solo archivos del commit Git. Extráelo en otra carpeta para editar: `python scripts/build_pages.py _site`; `node scripts/test_guides.cjs _site/index.html`. Node solo es necesario para pruebas; Blender solo para regenerar modelos. Instrucciones y límites en docs/PIERO-MEJORAS.md, AUDITORIA_2026-11-13.md, MODELOS_3D.md y PUBLICACION.md.
+`source.zip` contiene solo archivos del commit Git. Extráelo en otra carpeta para editar: `python scripts/build_pages.py _site`; `node scripts/test_guides.cjs _site/index.html`. Node solo es necesario para pruebas. Consulta README.md para ejecutar y verificar esta rama.
 
 {('baseline-models.zip conserva el .blend y los cinco GLB originales del commit '+baseline_sha+', separados de la propuesta nueva.') if baseline_sha else 'Los modelos anteriores se pueden recuperar del commit base indicado en la documentación del repositorio.'}
 

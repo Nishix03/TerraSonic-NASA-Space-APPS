@@ -17,7 +17,7 @@ async function main(){
    // Bound the lifetime of each rendered document during the long matrix.
    await page.reload();await page.waitForFunction(()=>window.__app);await page.addScriptTag({path:axePath});
    await page.setViewportSize({width,height});await page.evaluate(({lang,mode,contrast})=>{__app.setLang(lang);__app.setColorScheme(mode);__app.setPreference('contrast',contrast);},{lang,mode,contrast});
-   for(const [tab,count]of [['home',1],['juke',1],['band',5],['data',1],['how',3],['tech',5]]){
+   for(const [tab,count]of [['home',1],['juke',1],['band',5],['how',2],['tech',5]]){
     await page.evaluate(tab=>__app.goTab(tab),tab);await page.waitForFunction(()=>!__app.state.trans);
     if(tab==='juke'){await page.locator('.discgrid .dcard').first().click();await page.waitForFunction(()=>__app.cur()&&!__app.state.trans);}
     for(let sub=0;sub<count;sub++){

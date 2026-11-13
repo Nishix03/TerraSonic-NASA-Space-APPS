@@ -24,8 +24,9 @@ async function main(){
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
   });
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
-  await page.locator('#tour-nav button').nth(2).click();await page.locator('.convert-secondary summary').first().click();
-  await page.locator('.csv-picker input').setInputFiles({name:'history.csv',mimeType:'text/csv',buffer:Buffer.from('day,rain\n1,2\n2,4\n3,3\n4,6\n5,8\n6,1\n7,5\n8,9\n')});await page.waitForFunction(()=>__app.cur()&&__app.state.custom);await page.evaluate(()=>__app.seekPosition(8));
+  await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();
+  await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
+  await page.locator('#tour-drop input').setInputFiles(path.join(site,'fotogramas/ver2025_2.webp'));await page.waitForFunction(()=>__app.cur()&&__app.state.custom);await page.evaluate(()=>__app.seekPosition(8));
   if(!process.argv.includes('--native-only'))for(let pass=1;pass<=3;pass++){
    const audioAvailable=await page.evaluate(()=>typeof (window.AudioContext||window.webkitAudioContext)==='function');
    if(audioAvailable){await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing&&__app.playerPosition()>8);await page.waitForFunction(()=>__audioPeak()>.00001);}

@@ -15,17 +15,8 @@ def lf_bytes(path: Path) -> bytes:
 def build(destination: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     prototype = root / "prototipos" / "I11-eic"
-    avatar_runtime = root / "scripts" / "avatar3d.js"
     support_runtime = root / "scripts" / "pages-support.js"
-    models = sorted((prototype / "modelos").glob("*.glb"))
-    if len(models) != 5:
-        raise ValueError("Se necesitan los cinco modelos GLB de TerraSonic.")
-    version = sha256(lf_bytes(avatar_runtime))
-    for model in models:
-        version.update(model.read_bytes())
-        for kind in ("pose", "face"):
-            version.update((prototype / "sprites" / model.stem / f"{kind}-volume.webp").read_bytes())
-    avatar_version = version.hexdigest()[:12]
+    musicians = {"silbo", "inti", "mama", "yaku", "illapa"}
     support_version = sha256(lf_bytes(support_runtime)).hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
     impact_catalog = json.loads((root / "data" / "impacts.v1.json").read_text(encoding="utf-8"))
@@ -36,7 +27,7 @@ def build(destination: Path) -> None:
         raise ValueError("Falta el marcador del catálogo estático de impactos.")
     html = html.replace(impact_marker, "var IMPACT_CATALOG = " + json.dumps(impact_catalog, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", 1)
     character_catalog = json.loads((root / "data" / "characters.v1.json").read_text(encoding="utf-8"))
-    if character_catalog.get("version") != 1 or {item["key"] for item in character_catalog.get("characters", [])} != {model.stem for model in models}:
+    if character_catalog.get("version") != 1 or {item["key"] for item in character_catalog.get("characters", [])} != musicians:
         raise ValueError("El catálogo de personajes necesita versión 1 y los cinco músicos.")
     character_marker = "var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };"
     if character_marker not in html:
@@ -57,32 +48,22 @@ def build(destination: Path) -> None:
     html = html.replace(
         "/_blob/73710d959697d6b73c436a389b19a0de", "./data/nasa_power_monthly.json"
     )
-    html = html.replace(
-        "</head>", f'<script type="module" src="./runtime/avatar3d.js?v={avatar_version}"></script>\n</head>', 1
-    )
-    for kind in ("pose", "face"):
-        html = html.replace(f"{kind}-volume.webp", f"{kind}-volume.webp?v={avatar_version}")
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
-    for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
+    for folder in ("fotogramas", "fotogramas-anteriores"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
-    for model in models:
-        for filename in ("particula.png", "pose-volume.webp", "face-volume.webp"):
-            sprite = Path("sprites") / model.stem / filename
+    for musician in sorted(musicians):
+        for filename in ("miniatura-banda.webp", "pose-banda.webp", "pose-banda-animada.webp"):
+            sprite = Path("sprites") / musician / filename
             (destination / sprite).parent.mkdir(parents=True, exist_ok=True)
             copy2(prototype / sprite, destination / sprite)
-    runtime = destination / "runtime"
-    runtime.mkdir(exist_ok=True)
-    copy2(avatar_runtime, runtime)
-    copytree(root / "scripts" / "vendor", runtime / "vendor", dirs_exist_ok=True)
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")
     copy2(root / "data" / "characters.v1.json", destination / "data")
-    # git archive also applies core.autocrlf. Normalize shipped text and the
-    # runtime cache key; keep pinned original font notices byte-for-byte intact.
+    # Keep shipped text independent of checkout line endings and preserve font notices.
     for asset in destination.rglob("*"):
         if asset.is_file() and asset.suffix.lower() in {".html", ".js", ".json", ".css", ".md", ".txt"} and not asset.name.endswith("-OFL.txt"):
             normalized = lf_bytes(asset)

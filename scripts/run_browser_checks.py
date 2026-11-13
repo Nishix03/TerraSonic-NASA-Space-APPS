@@ -16,15 +16,12 @@ CHECKS = {
     "method": "verify_method.cjs", "characters": "verify_characters.cjs",
     "convert": "verify_convert.cjs", "brisa": "verify_brisa.cjs",
     "player": "verify_player.cjs", "impacts": "verify_impacts.cjs",
-    "models": "verify_models.cjs", "full-disc": "verify_full_disc.cjs",
+    "full-disc": "verify_full_disc.cjs",
     "image-geometry": "verify_image_geometry.cjs",
     "image-formats": "verify_image_formats.cjs",
     "expanded-layout": "verify_expanded_layout.cjs",
     "page-lifecycle": "verify_page_lifecycle.cjs", "memory": "measure_memory.cjs",
-    "fallback-audio": "verify_fallback_audio.cjs",
-    "avatar-interactions": "verify_avatar_interactions.cjs",
     "compact-player": "verify_compact_player.cjs",
-    "models-framing": "verify_model_framing.cjs",
     "themes": "verify_themes.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]

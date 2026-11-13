@@ -22,22 +22,17 @@ async function main(){
      const rect=selector=>{const r=root.querySelector(selector).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};
      const buttons=[...root.querySelectorAll('.transport button,.player-sidebar>.controls button,.map-legend button')].filter(visible).map(el=>({label:el.textContent.trim(),height:el.getBoundingClientRect().height}));
      const transportOrder=[...root.querySelectorAll('.transport-tools button,.transport-tools input,.transport-tools select')].filter(visible).map(el=>{const r=el.getBoundingClientRect();return {label:el.textContent.trim()||el.id,top:r.top,left:r.left};});
-     const mute=root.querySelector('.volume-control button'),range=document.createRange();range.selectNodeContents(mute);
-     return {overflow,band:rect('.listen-band'),sidebar:rect('.player-sidebar'),buttons,transportOrder,muteLines:range.getClientRects().length,muteFits:mute.scrollWidth<=mute.clientWidth+1};
+     return {overflow,band:rect('.listen-band'),sidebar:rect('.player-sidebar'),buttons,transportOrder};
     });
     const label=`${width}-${height}-${setting}-${language}-${set}-${engine}`;report.checks.push({label,...geometry});
     assert.deepEqual(geometry.overflow,[],label+' horizontal overflow');assert(geometry.buttons.every(button=>button.height>=43.9),label+' targets below 44px');
     if(setting==='default'){
      assert(geometry.band.bottom<=height&&geometry.sidebar.bottom<=height,label+' initial core must fit the short desktop: '+JSON.stringify(geometry));
-     assert(geometry.muteLines===1&&geometry.muteFits,label+' mute word must remain whole');
      for(let i=1;i<geometry.transportOrder.length;i++){const previous=geometry.transportOrder[i-1],current=geometry.transportOrder[i];assert(current.top>=previous.top-16,label+' keyboard order must follow visual rows');if(Math.abs(current.top-previous.top)<16)assert(current.left>=previous.left,label+' keyboard order must follow the row');}
      if(engine==='melody')await page.screenshot({path:path.join(output,label+'.png')});
-     for(let choice=0;choice<4;choice++){
-      await page.locator('.legend-choice').nth(choice).click();
-      const layout=await page.locator('.map-legend').evaluate(root=>{const detail=root.querySelector('.legend-detail summary').getBoundingClientRect(),button=root.querySelector(':scope>button').getBoundingClientRect(),reading=root.querySelector('.legend-reading').getBoundingClientRect();return {detailTop:detail.top,buttonTop:button.top,buttonBottom:button.bottom,readingTop:reading.top,readingBottom:reading.bottom};});
-      report.interactions.push({label,choice,...layout});
-      assert(layout.buttonTop>=layout.detailTop-1,label+' selected legend must preserve visual/keyboard order');
-      assert(layout.buttonBottom<=layout.readingTop+1||layout.buttonTop>=layout.readingBottom-1,label+' legend output must not overlap its button');
+     for(const choice of await page.locator('.legend-choice').all()){
+      await choice.click();
+      assert.equal(await choice.getAttribute('aria-pressed'),'true');
      }
      while(await page.locator('.listen-member[aria-pressed="true"]').count())await page.locator('.listen-member[aria-pressed="true"]').first().click();
      const notice=page.locator('.listen-band [role="status"]');assert(await notice.isVisible());assert((await notice.textContent()).trim());

@@ -4,27 +4,16 @@ TerraSonic convierte imágenes del Pacífico y datos locales en música con cinc
 
 La aplicación es estática y funciona en español e inglés. Usa Canvas y Web Audio en el navegador; no requiere backend, AWS, base de datos remota ni servicios de IA para procesar archivos o generar sonido.
 
-## Estado de esta rama
+## Reto 05
 
-**Revisión artística en curso:** el usuario pidió rehacer los cinco personajes con fidelidad a las ilustraciones y trabajo por la interfaz de Blender, además de temas claro/oscuro. La entrega técnica del 13 de noviembre queda como checkpoint; no representa aceptación visual ni cierre de la continuación. [Estado y punto de trabajo](docs/CONTINUACION_ARTISTICA.md).
+`piero-mejoras-v2` parte de `piero-mejoras` en `fcb1396`. Recupera las ilustraciones 2D de `prueba-acordes`.
 
-La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
+- **Escuchar** muestra el mapa NASA junto a la cuadrícula de 28 × 16, con una escala de frío a cálido y controles por músico.
+- **La banda** presenta a los cinco músicos con sus historias y muestras de instrumento.
+- **¿Cómo funciona?** reúne una explicación breve y una prueba con lluvia de Chiclayo o una imagen propia procesada en el navegador.
+- **Tecnología** conserva sus categorías y créditos.
 
-La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve `9c38535`, con modo claro y oscuro azul pizarra. Se verificaron sin credenciales el HTML y 96 activos, ambos catálogos/modos, teclado, CSV multicolumna y respaldo sin WebGL. El cambio de tema conserva el archivo y la columna y persiste al recargar. **Los personajes visibles todavía corresponden a la propuesta rechazada; la revisión artística no está terminada.** Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
-
-La entrega y sus comprobaciones se resumen en [ENTREGA_2026-11-13.md](docs/ENTREGA_2026-11-13.md).
-
-El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
-
-## Qué incluye
-
-- **Escuchar:** diez discos, sesenta mapas EIC/GIBS, selección de fechas, modos Melodía y Datos, posición/tiempo, pausa y reanudación, saltos, velocidad, volumen, silencio y repetición. Leyenda escrita, símbolos y registro consultable.
-- **Banda:** cinco cuerpos 3D, mezcla compartida con Escenario, muestras de instrumento detenibles y poses de respaldo sin WebGL o con recursos lentos/ausentes. Fuentes históricas y propuestas de ficción diferenciadas.
-- **Convertir:** muestra NASA e imagen propia como entradas principales; lluvia de Chiclayo y CSV como alternativas. Procesamiento local, elección de columna, límites y errores recuperables. Las imágenes se centran sin deformarse y usan la misma vista fija que el análisis.
-- **Brisa y preferencias:** tutorial saltable/reabrible, texto, voz opcional, idioma guardado, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Vibración optativa donde exista.
-- **Método y Tecnología:** fuentes NASA, niveles derivados, seis perfiles armónicos, catálogo estático de impactos y una regla editorial mensual verificable, con límites científicos explícitos.
-
-Los niveles derivados de las imágenes **no son grados de temperatura**. Las progresiones y el carácter musical son decisiones artísticas. EIC y GIBS usan paletas y rangos diferentes; no se presentan sus niveles como magnitudes físicas comparables.
+Los niveles de color de −5 a +5 se usan para la sonificación. Las progresiones y el carácter musical son decisiones artísticas.
 
 ## Ejecutar localmente
 
@@ -36,7 +25,7 @@ python scripts/build_pages.py _site
 python -m http.server 8765 --bind 127.0.0.1 --directory _site
 ```
 
-Abrir [http://127.0.0.1:8765/](http://127.0.0.1:8765/). Detener el servidor con Ctrl+C. El build incluye mapas, modelos, poses y tipografías locales. Abrir el HTML por `file://` no es el modo soportado. La reproducción requiere una acción del usuario; voz y vibración dependen del navegador/dispositivo.
+Abrir [http://127.0.0.1:8765/](http://127.0.0.1:8765/). Detener el servidor con Ctrl+C. El build incluye mapas, ilustraciones 2D y tipografías locales. Abrir el HTML por `file://` no es el modo soportado. La reproducción requiere una acción del usuario; voz y vibración dependen del navegador/dispositivo.
 
 La fuente canónica es **`prototipos/I11-eic/Main.dc.html`**. `scripts/build_pages.py` genera el HTML y copia los recursos; editar solamente `_site/index.html` no cambia la aplicación fuente. El `index.html` de la raíz y parte de `src/` son material histórico de organización del equipo.
 
@@ -44,7 +33,6 @@ La fuente canónica es **`prototipos/I11-eic/Main.dc.html`**. `scripts/build_pag
 
 ```bash
 node scripts/test_guides.cjs _site/index.html
-node --test scripts/models.test.cjs
 python scripts/run_browser_checks.py --list
 ```
 
@@ -55,12 +43,6 @@ Node es una herramienta de pruebas; no hace falta para usar el sitio generado. L
 - [Mediciones comparables](docs/RENDIMIENTO.md) · [Paquete portable y recuperación](docs/ENTREGA_PORTABLE.md)
 - [Conversión local](docs/CONVERTIR.md) · [Brisa](docs/BRISA.md) · [Método](docs/METODO.md)
 - [Impactos y fuentes](docs/IMPACTOS.md) · [Historias y referencias culturales](docs/PERSONAJES.md)
-
-## Modelos editables
-
-La escena está en `assets/avatares/terrasonic-banda.blend`. Se inspeccionó y generó con Blender 5.2.2 LTS. `scripts/modelar_banda.py` construye los cinco personajes y exporta los GLB; `scripts/inspect_banda.py` documenta rig, clips, dimensiones y renders multivista. [Inventario y comandos](docs/MODELOS_3D.md).
-
-Los originales se conservan en Git, las ilustraciones del equipo y checkpoints de trabajo. El empaquetador puede incluir el `.blend` y los cinco GLB del commit base en un ZIP de recuperación separado. Los retratos pequeños no necesitan cargar el motor 3D.
 
 ## Datos, créditos e historia
 

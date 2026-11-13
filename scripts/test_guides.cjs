@@ -8,14 +8,14 @@ const path = require('node:path');
 const html = fs.readFileSync(process.argv[2] || path.join(__dirname, '../prototipos/I11-eic/Main.dc.html'), 'utf8');
 const source = html.match(/<script[^>]*data-dc-script[^>]*>([\s\S]*?)<\/script>/)[1];
 
-test('Listen has only discs, player and stage, while every date remains selectable', () => {
+test('Listen has only discs and player, while every date remains selectable', () => {
   const { component: c, context } = setup();
   c.state.tab = 'juke';
   for (const lang of ['es', 'en']) {
     c.setLang(lang);
-    assert.equal(c.subCount(), 3);
-    assert.equal(c.subTitles().length, 3);
-    c.goSub(3);
+    assert.equal(c.subCount(), 2);
+    assert.equal(c.subTitles().length, 2);
+    c.goSub(2);
     assert.equal(c.state.sub, 0);
     for (const set of ['eic', 'prev']) {
       c.applySet(set);
@@ -34,29 +34,15 @@ test('Listen has only discs, player and stage, while every date remains selectab
   }
 });
 
-test('Method 02 preserves the ten legend mappings and translates its explanatory content without resetting state', () => {
-  const { component: c } = setup();
-  c.state.tab = 'how'; c.state.sub = 1;
-  const preserved = () => JSON.stringify(['tab','sub','disc','frame','col','playing','mute','custom','an','tour'].map(k => c.state[k]));
-  const before = preserved();
-  const expected = [
-    ['+5','#7A0F1E','Illapa'], ['+4,5','#C21F7A','Illapa'],
-    ['+4','#E8283A','Inti · Yaku'], ['+3','#FF6A2B','Inti · Yaku'],
-    ['+2','#FFA62B','Inti · Yaku'], ['+1','#FFD447','Inti'],
-    ['0','#7E849E','referencia'], ['−1','#7BE38A','Mamacocha'],
-    ['−2 / −3','#38C6E8','Mamacocha · Yaku'], ['−4 / −5','#2F4FD0','Mamacocha · Yaku']
-  ];
-  const es = c.renderVals();
-  assert.deepEqual(JSON.parse(JSON.stringify(es.legend.map(l => [l.v,l.c,l.who]))), expected);
-  const keys = ['howTitle2','scaleIntro','scaleSource','scaleDirection','scaleLabel','scaleRead','scaleContext','scaleMusic'];
-  const spanish = keys.map(k => es.tx[k]);
-  assert(spanish.every(Boolean)); assert(es.legend.every(l => l.sound));
-  c.setLang('en'); const en = c.renderVals();
-  keys.forEach((k,i) => { assert(en.tx[k]); assert.notEqual(en.tx[k], spanish[i]); });
-  assert.equal(en.legend[1].v, '+4.5'); assert.equal(en.legend[6].who, 'reference');
-  en.legend.forEach((l,i) => { assert(l.sound); assert.notEqual(l.sound, es.legend[i].sound); });
-  c.setLang('es');
-  assert.equal(preserved(), before);
+test('the grid legend uses its exact palette and three bilingual labels', () => {
+  const {component:c,context}=setup();
+  c.state.tab='juke';c.state.sub=1;
+  const colors=c.playerVm().scale;
+  assert.deepEqual([...colors],Array.from(context.RAMP,pair=>pair[1]));
+  assert.deepEqual(Array.from(c.playerVm().legend,level=>level.label),['−5 · Más frío','0 · Neutro','+5 · Más cálido']);
+  c.setLang('en');
+  assert.deepEqual(Array.from(c.playerVm().legend,level=>level.label),['−5 · Cooler','0 · Neutral','+5 · Warmer']);
+  assert.equal(c.state.sub,1);
 });
 
 function setup(options = {}) {
@@ -164,7 +150,7 @@ test('each section has a brief, bilingual guide with real target IDs', () => {
     c.setLang(lang);
     for (const tab of context.PAGE_ORDER) {
       const steps = c.guideSteps(tab);
-      assert(steps.length >= 3 && steps.length <= 5, tab + ' needs 3–5 steps');
+      assert(steps.length >= 1 && steps.length <= 5, tab + ' needs 1–5 steps');
       for (const step of steps) {
         assert(step.t && step.b && step.en.t && step.en.b);
         assert(html.includes('id="' + step.id + '"'), 'missing target ' + step.id);
@@ -294,7 +280,7 @@ test('Brisa’s help button stays visible when targeted and Escape closes the gu
 
 test('language changes retain upload errors, filenames and application state', () => {
   const { component: c } = setup();
-  c.state.tab = 'data'; c.state.sub = 0;
+  c.state.tab = 'how'; c.state.sub = 1;
   c.handleFile({ name: 'mi archivo.csv', size: 9 * 1024 * 1024 });
   const spanishError = c.renderVals().upMsg;
   c.state.frame = 2; c.state.playing = true; c.state.tour = 2; c.state.more = true;
@@ -308,21 +294,6 @@ test('language changes retain upload errors, filenames and application state', (
   assert.equal(c.renderVals().upMsg, spanishError);
 });
 
-test('generated CSV column labels and status messages follow the selected language', () => {
-  const { component: c } = setup();
-  c.drawSeries = (_, done) => done('data:image/png;base64,test');
-  c.state.tab = 'data';
-  c.loadCsv('columna 1.csv', '1,11\n2,12\n3,13\n4,14\n5,15\n6,16\n7,17\n8,18');
-  const custom = c.state.custom;
-  c.setLang('en');
-  const v = c.renderVals();
-  assert.equal(c.state.custom, custom);
-  assert.equal(v.colOpts[0].l, 'column 1');
-  assert.match(v.fileName, /^columna 1\.csv · column /, 'user filename must remain untouched');
-  assert.match(v.upMsg, /^Ready:/);
-  c.setLang('es');
-  assert.equal(c.renderVals().colOpts[0].l, 'columna 1');
-});
 
 test('language switching keeps the current chord highlighted without changing musical values', () => {
   const { component: c } = setup();
@@ -358,23 +329,18 @@ test('all fixed UI keys, guides, method and technology content render in both la
   }
 });
 
-test('sample labels translate without reloading or modifying their numerical values', async () => {
-  const { component: c, context } = setup();
-  c.state.tab = 'data';
-  const samples = Array.from({ length: 500 }, (_, i) => i);
-  context.fetch = async () => ({ json: async () => ({ chiclayo: { p: samples } }) });
-  c.drawSeries = (_, done) => done('data:image/png;base64,sample');
+test('sample labels translate without replacing the rainfall analysis', async () => {
+  const {component:c,context}=setup();
+  c.state.tab='how';c.state.sub=1;
+  context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
+  c.drawSeries=(_,done)=>done('blob:sample');
   c.loadSample();
-  await new Promise(resolve => setImmediate(resolve));
-  const custom = c.state.custom, values = JSON.stringify(custom.cols[0].values);
-  assert.match(c.renderVals().fileName, /lluvia/);
+  await new Promise(resolve=>setImmediate(resolve));
+  const sample=c.state.custom, analysis=c.cur();
+  assert.equal(sample.kind,'rain');assert.match(c.renderVals().playTitle,/lluvia/);
   c.setLang('en');
-  assert.equal(c.state.custom, custom);
-  assert.match(c.renderVals().fileName, /rainfall/);
-  assert.match(c.renderVals().upMsg, /rainfall \(mm\/day\)/);
-  assert.equal(JSON.stringify(custom.cols[0].values), values);
-  c.setLang('es');
-  assert.match(c.renderVals().fileName, /lluvia/);
+  assert.equal(c.state.custom,sample);assert.equal(c.cur(),analysis);
+  assert.match(c.renderVals().playTitle,/rainfall/);
 });
 
 test('reduced motion keeps all five portraits static at mobile and desktop widths', () => {
@@ -387,9 +353,9 @@ test('reduced motion keeps all five portraits static at mobile and desktop width
       const view = c.renderVals().bandCur;
       assert.equal(c.state.bsel, i);
       assert.equal(view.entering, false);
-      assert.equal(view.modelCue, '');
+      assert.equal(view.moving, false);
       assert.equal(view.entrance, '');
-      assert.equal(view.key, c.renderVals().bandSel[i].key);
+      assert.match(c.renderVals().bandSel[i].thumbUrl,new RegExp('/'+view.key+'/'));
     }
   }
   assert.equal(timers.size, 0);
@@ -438,9 +404,9 @@ test('all section transitions settle on mobile and desktop without stacking rapi
     const { component: c, context, timers } = setup();
     context.window.innerWidth = width;
     context.window.matchMedia = () => ({ matches: false });
-    for (const tab of ['juke', 'band', 'data', 'how', 'tech', 'home']) {
+    for (const tab of ['juke', 'band', 'how', 'tech', 'home']) {
       c.goTab(tab);
-      for (const other of ['home', 'tech', 'data']) c.goTab(other);
+      for (const other of ['home', 'tech', 'band']) c.goTab(other);
       assert.equal(timers.size, 2);
       const tasks = [...timers]; timers.clear(); tasks.forEach(([, fn]) => fn());
       assert.equal(c.state.tab, tab);
@@ -476,19 +442,12 @@ test('late transition callbacks cannot update an unmounted component', () => {
   assert.equal(JSON.stringify(c.state), before);
 });
 
-test('the 448-cell display model is built only while its player analysis is open', () => {
-  const { component: c } = setup();
-  for (const tab of ['home', 'band', 'how', 'tech']) {
-    c.state.tab = tab; c.state.sub = 0;
-    assert.equal(c.renderVals().cells.length, 0);
-  }
-  for (const tab of ['juke', 'data']) {
-    c.state.tab = tab;
-    for (const sub of [0, 1, 2]) for (const open of [false,true]) {
-      c.state.sub = sub; c.state.analysisOpen = open;
-      assert.equal(c.renderVals().cells.length, sub === 1 && open ? 448 : 0);
-    }
-  }
+test('the 448-cell grid is visible in the disc player and after a practical sample', () => {
+  const {component:c}=setup();
+  c.state.tab='juke';c.state.sub=0;assert.equal(c.renderVals().cells.length,0);
+  c.state.sub=1;assert.equal(c.renderVals().cells.length,448);
+  c.state.tab='how';assert.equal(c.renderVals().cells.length,0);
+  c.state.custom={kind:'image',name:'map.webp'};assert.equal(c.renderVals().cells.length,448);
 });
 
 function delayedImages() {
@@ -504,7 +463,7 @@ function delayedImages() {
       return { data };
     } }) };
   };
-  h.component.state.tab = 'data'; h.component.state.customMode = 'free';
+  h.component.state.tab = 'how'; h.component.state.sub = 1; h.component.state.customMode = 'free';
   // Concurrency cases keep decoding/encoding synchronous. Native geometry is covered in
   // verify_image_geometry.cjs; delayed encoding has its own lifecycle regression below.
   h.component.freezeImage = (image, custom, done) => done(image, {name:custom.name+'-preview'});
@@ -525,25 +484,6 @@ test('out-of-order image success and error cannot replace the newest complete fi
   assert.equal(c.state.custom.name, 'second.png', 'keep the accepted image and analysis together until the new one is ready');
 });
 
-test('CSV reads cannot overwrite a newer image and stale CSV canvases release their URLs', () => {
-  const { component: c, context, images, upload, revoked } = delayedImages();
-  const readers = [], drawings = [];
-  context.FileReader = class { constructor() { readers.push(this); } readAsText() {} };
-  c.drawSeries = (_, done) => drawings.push(done);
-  const csv = 'rain\n1\n2\n3\n4\n5\n6\n7\n8';
-  c.handleFile({ name: 'old.csv', type: 'text/csv', size: 100 });
-  upload('second.png'); images[0].onload();
-  const state = JSON.stringify(c.state);
-  readers[0].result = csv; readers[0].onload(); readers[0].onerror();
-  assert.equal(JSON.stringify(c.state), state);
-  assert.equal(drawings.length, 0, 'stale text must not start a canvas job');
-  c.loadCsv('pending.csv', csv);
-  upload('newest.png'); images[1].onload();
-  const accepted = JSON.stringify(c.state);
-  drawings[0]('blob:stale-canvas');
-  assert.equal(JSON.stringify(c.state), accepted);
-  assert(revoked.includes('blob:stale-canvas'));
-});
 
 test('switching disc sets and unmounting invalidate pending image callbacks', () => {
   for (const cancel of [c => c.applySet('prev'), c => c.componentWillUnmount()]) {
@@ -563,18 +503,6 @@ test('late NASA frame analyses from the previous disc set are discarded', () => 
   assert.equal(JSON.stringify(c.state), state);
 });
 
-test('repeated column selections accept only the newest canvas response', () => {
-  const { component: c, context } = setup(), drawings = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.state.custom = { name: 'data.csv', baseName: 'data.csv', kind: 'csv', url: 'blob:old', col: 0,
-    cols: [{ name: 'A', values: [1,2,3,4,5,6,7,8] }, { name: 'B', values: [8,7,6,5,4,3,2,1] }] };
-  c.drawSeries = (_, done) => drawings.push(done);
-  c.setCol(1); c.setCol(0);
-  drawings[1]('blob:newest'); const state = JSON.stringify(c.state);
-  drawings[0]('blob:stale');
-  assert.equal(JSON.stringify(c.state), state);
-  assert.equal(c.state.custom.col, 0); assert(revoked.includes('blob:stale'));
-});
 
 function modalHarness() {
   const h = setup(), background = { inert: false }, opener = { isConnected: true, focus() { h.context.document.activeElement = this; } };
@@ -675,25 +603,28 @@ test('re-analysis of the same frame or custom image ignores superseded callbacks
   assert(JSON.stringify(c.state.an) === frames);
 });
 
-test('pending CSV canvas callbacks after unmount release resources without setting state', () => {
-  const { component: c, context } = setup(), callbacks = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.drawSeries = (_, done) => callbacks.push(done);
-  c.loadCsv('pending.csv', 'rain\n1\n2\n3\n4\n5\n6\n7\n8');
-  c.componentWillUnmount(); const state = JSON.stringify(c.state);
+test('late rainfall canvases are released after unmount', async () => {
+  const {component:c,context}=setup(), callbacks=[], revoked=[];
+  c.state.tab='how';c.state.sub=1;
+  context.URL={revokeObjectURL:url=>revoked.push(url)};
+  context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
+  c.drawSeries=(_,done)=>callbacks.push(done);
+  c.loadSample();await new Promise(resolve=>setImmediate(resolve));
+  c.componentWillUnmount();const before=JSON.stringify(c.state);
   callbacks[0]('blob:late');
-  assert(JSON.stringify(c.state) === state); assert(revoked.includes('blob:late'));
+  assert.equal(JSON.stringify(c.state),before);assert.deepEqual(revoked,['blob:late']);
 });
 
-test('leaving the upload section invalidates pending files instead of changing another screen', () => {
-  const { component: c, context } = setup(), callbacks = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.state.tab = 'data'; c.drawSeries = (_, done) => callbacks.push(done);
-  c.loadCsv('pending.csv', 'rain\n1\n2\n3\n4\n5\n6\n7\n8');
-  c.goTab('how'); const state = JSON.stringify(c.state);
+test('late rainfall canvases are released after leaving practice', async () => {
+  const {component:c,context}=setup(), callbacks=[], revoked=[];
+  c.state.tab='how';c.state.sub=1;
+  context.URL={revokeObjectURL:url=>revoked.push(url)};
+  context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
+  c.drawSeries=(_,done)=>callbacks.push(done);
+  c.loadSample();await new Promise(resolve=>setImmediate(resolve));
+  c.goSub(0);const before=JSON.stringify(c.state);
   callbacks[0]('blob:late');
-  assert(JSON.stringify(c.state) === state); assert.equal(c.state.sub, 0);
-  assert(revoked.includes('blob:late'));
+  assert.equal(JSON.stringify(c.state),before);assert.deepEqual(revoked,['blob:late']);
 });
 
 test('modal Tab excludes disabled and hidden controls and handles an empty dialog', () => {
@@ -812,45 +743,9 @@ test('images with no usable pixels retain the accepted file and report errors in
   }
 });
 
-test('CSV handles quoted separators, escaped quotes, multiline fields and a BOM', () => {
-  const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-  const rows = ['\uFEFFstation,"rain, ""daily"""', ...Array.from({ length: 8 }, (_, i) => '"Lima, ""Centro""\nPeru",' + (i + 1))];
-  c.loadCsv('quoted.csv', rows.join('\r\n'));
-  assert(c.state.custom);
-  assert.equal(c.state.custom.cols[0].name, 'rain, "daily"');
-  assert.equal(JSON.stringify(c.state.custom.cols[0].values), '[1,2,3,4,5,6,7,8]');
-});
 
-test('CSV retains semicolon decimal commas, TSV and headerless compatibility', () => {
-  for (const text of [
-    ['station;rain', ...Array.from({ length: 8 }, (_, i) => '"Lima, Peru";' + (i + 1) + ',5')].join('\n'),
-    ['station\train', ...Array.from({ length: 8 }, (_, i) => '"Lima, Peru"\t' + (i + 1))].join('\n'),
-    Array.from({ length: 8 }, (_, i) => (i + 1) + ',' + (i + 11)).join('\n')
-  ]) {
-    const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-    c.loadCsv('supported.csv', text); assert(c.state.custom); assert.equal(c.state.custom.cols[0].values.length, 8);
-  }
-});
 
-test('CSV accepts 5000 data records but rejects overflow without partial processing', () => {
-  const { component: c } = setup(); let rendered = 0;
-  c.drawSeries = (_, done) => { rendered++; done('data:image/png;base64,csv'); };
-  const records = Array.from({ length: 5000 }, (_, i) => String(i));
-  c.loadCsv('limit.csv', ['rain', ...records].join('\n')); assert(c.state.custom);
-  assert.equal(c.state.custom.cols[0].values.length, 5000);
-  const accepted = c.state.custom;
-  for (const header of [[], ['rain']]) c.loadCsv('overflow.csv', [...header, ...records, '5001'].join('\n'));
-  assert.equal(c.state.custom, accepted); assert.equal(rendered, 1);
-  assert.match(c.renderVals().upMsg, /5000/); c.setLang('en'); assert.match(c.renderVals().upMsg, /5000/);
-  assert.match(c.renderVals().upMsg, /not processed|no rows/i);
-});
 
-test('malformed CSV quotes show a bilingual error without replacing accepted data', () => {
-  const { component: c } = setup();
-  c.loadCsv('broken.csv', 'station,rain\n"Lima,1\n"Peru,2');
-  assert.equal(c.state.custom, null); assert.match(c.renderVals().upMsg, /comillas/);
-  c.setLang('en'); assert.match(c.renderVals().upMsg, /quot/i);
-});
 
 test('audio rejects non-Error failures safely and supports the prefixed browser API', async () => {
   const { component: c, context, AudioContextStub } = audioHarness();
@@ -892,12 +787,6 @@ test('neutral but visible image pixels remain valid and an invalid color mode ro
   assert.equal(c.state.custom, previous); assert.equal(c.state.customMode, 'free'); assert.equal(c.state.an['5_0'], analysis);
 });
 
-test('CSV row limit counts logical records rather than newlines inside quoted fields', () => {
-  const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-  const rows = ['station,rain', ...Array.from({ length: 5000 }, (_, i) => '"Lima\nPeru",' + i)];
-  c.loadCsv('multiline.csv', rows.join('\n'));
-  assert(c.state.custom); assert.equal(c.state.custom.cols[0].values.length, 5000);
-});
 
 test('resume that never settles times out, restores Play and permits retry', async () => {
   const { component: c, context, timers, intervals, AudioContextStub } = audioHarness(), delays = [];
@@ -939,9 +828,9 @@ test('late completion of a timed-out resume cannot finish a newer activation', a
 });
 
 test('stop, navigation, file operations and unmount settle a pending activation immediately', async () => {
-  for (const cancel of [c => c.stop(), c => c.goTab('how'), c => c.loadCsv('new.csv', 'v\n1\n2\n3\n4\n5\n6\n7\n8'), c => c.componentWillUnmount()]) {
+  for (const cancel of [c => c.stop(), c => c.goTab('tech'), c => c.handleFile({name:'new.csv',type:'text/csv',size:1}), c => c.componentWillUnmount()]) {
     const { component: c, context, timers, intervals, AudioContextStub } = audioHarness();
-    c.state.tab = 'data'; c.drawSeries = (_, done) => done('data:image/png;base64,new');
+    c.state.tab = 'how'; c.state.sub = 1;
     let rejectLate;
     context.window.AudioContext = class extends AudioContextStub {
       constructor() { super(); this.state = 'suspended'; }
@@ -971,71 +860,33 @@ test('successful and rejected audio activations release their deadline timers', 
   }
 });
 
-test('Technology categories remain reachable and selected when filtering in either language', () => {
-  for (const [width, height] of [[320,568],[390,844],[660,900],[768,1024],[1366,768],[1920,1080]]) {
-    const { component: c, context } = setup(); context.window.innerWidth = width; context.window.innerHeight = height;
-    for (const lang of ['es', 'en']) {
-      c.setLang(lang); c.state.tab = 'tech'; c.state.sub = 0;
-      for (let sub = 0; sub < c.subCount(); sub++) {
-        const v = c.renderVals();
-        assert.equal(v.nav.counter, ('0' + (sub + 1)).slice(-2) + ' / 05');
-        assert.equal(v.nav.shortNext, lang === 'es' ? 'Siguiente' : 'Next');
-        assert.equal(v.nav.dots.length, 5);
-        assert(v.nav.topics);
-        assert(v.bottomNavClass.includes('with-pages'));
-        if (sub < 4) v.nav.next();
-      }
-      for (let sub = 4; sub > 0; sub--) c.renderVals().nav.prev();
-      assert.equal(c.state.sub, 0);
-      c.renderVals().nav.dots[2].go();
-      const all = c.renderVals();
-      all.techFilters[2].pick();
-      const filtered = c.renderVals();
-      assert.equal(c.state.sub, 2);
-      assert.equal(filtered.techCur.title, all.techCur.title);
-      assert(filtered.techCur.items.length < all.techCur.items.length);
-      assert.equal(filtered.techCur.items.length, 0, 'music runtime is not a production tool');
-      assert.equal(filtered.nav.dots.length, all.nav.dots.length);
-      filtered.techFilters[0].pick();
-    }
-  }
-});
-
-test('Technology lists only used tools with browser, source or production scope and keeps planned services absent', () => {
+test('Technology has four unfiltered tool lists and one credits page in both languages', () => {
   const {component:c,context}=setup();
-  for (const tool of context.TECH) {
-    assert(['browser','source','production'].includes(tool.scope)); assert.equal(tool.st,undefined);
-    assert(!/Tonal\.js|Tone\.js|Magenta|Lyria|ElevenLabs|Stable Audio|Krita|Piskel/.test(tool.name));
-  }
+  c.state.tab='tech';
   for(const lang of ['es','en']) {
-    c.setLang(lang);c.state.tab='tech';c.state.sub=0;
-    for(const filter of ['all','browser','production','source']) {
-      c.state.techFilter=filter;
-      const groups=c.techGroups();assert.equal(groups.length,4);
-      for(const group of groups)for(const tool of group.items)assert(!/planeado|planned|M[1-6]/i.test(tool.chip));
-      assert.equal(groups.reduce((total,group)=>total+group.items.length,0),context.TECH.filter(tool=>filter==='all'||tool.scope===filter).length);
+    c.setLang(lang);c.state.sub=0;
+    assert.equal(c.subCount(),5);
+    const groups=c.techGroups();
+    assert.equal(groups.length,4);
+    assert.equal(groups.reduce((count,group)=>count+group.items.length,0),context.TECH.length);
+    for(let sub=0;sub<4;sub++){
+      const view=c.renderVals();
+      assert(view.nav.topics);assert(view.techCur.items.length>0);
+      assert.equal(view.techFilters,undefined);view.nav.next();
     }
+    assert(c.renderVals().scr.tCred);
   }
 });
 
-test('Method names both catalogs, regions, derived units, local rainfall and the actual monthly impact rule', () => {
-  const {component:c}=setup();
-  for(const lang of ['es','en']) {
-    c.setLang(lang); const tx=c.renderVals().tx;
-    assert.match(tx.methodCoverage,/140°–70°/);assert.match(tx.methodCoverage,/2010/);assert.match(tx.methodCoverage,/2017/);
-    assert.match(tx.methodChiclayo,/2015–2018/);assert.match(tx.methodChiclayo,/48/);
-    assert.match(tx.methodLimits,/−4/);assert.match(tx.methodLimits,/−3/);
-    assert.match(tx.methodRule,/29/);assert.match(tx.methodRule,/10/);
-    assert.match(tx.credAiP,lang==='es'?/pendiente/:/pending/);
-    assert(!/todo código|all generated code|manual review/i.test(tx.credAiP));
-  }
-  assert(html.includes('https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/'));
-  assert(html.includes('./data/impacts.v1.json'));
+test('Technology lists used tools and omits the removed 3D stack', () => {
+  const {context}=setup();
+  for(const tool of context.TECH) assert.doesNotMatch(tool.name,/Three\.js|GLTFLoader|Blender|Tonal\.js|Tone\.js|Magenta|Lyria|ElevenLabs/);
 });
+
 
 function sectionNavHarness() {
   const h = setup(), scrolled = [];
-  const buttons = ['juke', 'band', 'data', 'how', 'tech'].map(key => ({ key,
+  const buttons = ['juke', 'band', 'how', 'tech'].map(key => ({ key,
     scrollIntoView: options => scrolled.push({ key, options }), focus() { h.context.document.activeElement = this; } }));
   const nav = { clientWidth: 280, scrollWidth: 680, scrollLeft: 0,
     querySelector: () => buttons.find(b => b.key === h.component.state.tab) || null,
@@ -1057,7 +908,7 @@ test('section changes and language changes bring the active tab into view withou
 test('navigation keyboard supports arrows, Home and End without activating another section', () => {
   const { component: c, context, nav, buttons } = sectionNavHarness();
   c.state.tab = 'juke'; buttons[0].focus();
-  for (const [key, target] of [['End',4],['ArrowLeft',3],['Home',0],['ArrowRight',1]]) {
+  for (const [key, target] of [['End',3],['ArrowLeft',2],['Home',0],['ArrowRight',1]]) {
     let prevented = false;
     c.navKey({ key, currentTarget: nav, preventDefault() { prevented = true; } });
     assert(prevented); assert.equal(context.document.activeElement, buttons[target]);
@@ -1065,19 +916,18 @@ test('navigation keyboard supports arrows, Home and End without activating anoth
   }
 });
 
-test('compact navigation has five bilingual labels while preserving full section names and the active page', () => {
+test('compact navigation has four bilingual labels while preserving full section names and the active page', () => {
   const { component: c, context } = setup();
-  c.state.tab = 'data'; c.state.sub = 1;
-  const expected = { es: ['Escuchar','Banda','Convierte','Método','Tecnología'], en: ['Listen','Band','Convert','Method','Technology'] };
+  c.state.tab = 'how'; c.state.sub = 1;
+  const expected = { es: ['Escuchar','Banda','Cómo funciona','Tecnología'], en: ['Listen','Band','How it works','Technology'] };
   for (const lang of ['es','en','es']) {
     c.setLang(lang);
     const tabs = c.renderVals().tabs;
     assert.deepEqual(JSON.parse(JSON.stringify(tabs.map(t => t.short))), expected[lang]);
     context.PAGE_ORDER.forEach((key,i) => assert.equal(tabs[i].label, context.ROUTE_LOOK[key].title));
-    assert.equal(tabs[2].label, lang === 'es' ? 'Convierte en música' : 'Convert to music');
-    tabs.forEach(tab => assert(tab.label.toLowerCase().includes(tab.short.toLowerCase())));
+    assert.equal(tabs[2].label, lang === 'es' ? '¿Cómo funciona?' : 'How does it work?');
     assert.equal(tabs[2].cur, 'page'); assert.equal(tabs.filter(t => t.cur === 'page').length, 1);
-    assert.equal(c.state.tab, 'data'); assert.equal(c.state.sub, 1);
+    assert.equal(c.state.tab, 'how'); assert.equal(c.state.sub, 1);
   }
 });
 
@@ -1111,8 +961,8 @@ test('resize reveals the active tab again and releases the resize callback on un
 
 test('leaving a playback screen stops immediately, clears activity and preserves instrument preferences', async () => {
   for (const [tab,sub,leave] of [
-    ['juke',2,c=>c.goSub(0)], ['juke',2,c=>c.goSub(1)],
-    ['juke',2,c=>c.goTab('juke')], ['juke',2,c=>c.goTab('data')],
+    ['juke',1,c=>c.goSub(0)], ['how',1,c=>c.goSub(0)],
+    ['juke',1,c=>c.goTab('juke')], ['juke',1,c=>c.goTab('how')],
     ['band',0,c=>c.goTab('juke')], ['band',0,c=>c.goTab('how')], ['band',0,c=>c.goTab('tech')]
   ]) {
     const { component:c, intervals } = audioHarness();
@@ -1177,12 +1027,12 @@ test('stop fades and retires the old music graph; restarting reuses the context 
   assert(old.disconnected);assert.equal(current.disconnected,false);assert.equal(c.state.playing,true);
 });
 
-test('character transition owns its outgoing model and removes temporary state after its gesture', () => {
+test('character transition owns its outgoing portrait and removes temporary state after its gesture', () => {
   const {component:c,context,timers}=setup();context.window.matchMedia=()=>({matches:false});c.state.tab='band';
   c.pickBand(1);
-  assert.equal(c.renderVals().bandCur.hasOutgoing,true);assert.equal(c.renderVals().bandCur.previousKey,'silbo');
+  assert.equal(c.renderVals().bandCur.hasOutgoing,true);assert.match(c.renderVals().bandCur.previousPoseUrl,/silbo\/pose-banda\.webp/);
   const id=c.bandTimer,finish=timers.get(id);timers.delete(id);finish();
-  assert.match(c.renderVals().bandCur.modelCue, /^selection-/);
+  assert.equal(c.renderVals().bandCur.moving,true);
   const gesture=c.bandTimer,settle=timers.get(gesture);timers.delete(gesture);settle();
   assert.equal(c.renderVals().bandCur.entering,false);assert.equal(c.renderVals().bandCur.hasOutgoing,false);assert.equal(c.bandTimer,null);
 });
@@ -1290,17 +1140,6 @@ test('seeking keeps pause, resumes a playing disc and cancels a stale scheduled 
   c.seekPosition(999); assert.equal(c.playerPosition(), c.playerSteps()); assert.equal(c.state.ended, true);
 });
 
-test('five-second buttons, duration and date selection share the same timeline', async () => {
-  const { component: c } = playbackHarness();
-  assert.equal(c.playerSeconds(c.playerSteps()), 84);
-  c.seekSeconds(5); assert.equal(c.playerPosition(), 10); assert.equal(c.playerVm().elapsed, '0:05');
-  c.seekSeconds(-5); assert.equal(c.playerPosition(), 0);
-  c.gotoFrame(4); assert.equal(c.playerPosition(), 112); assert.equal(c.playerVm().elapsed, '0:56');
-  const frame = c.state.frame;
-  c.setLang('en'); assert.equal(c.state.frame, frame); assert.match(c.playerVm().positionText, /Map:/);
-  c.state.speed = 70; assert.equal(c.frameStepMs(0), Math.round(500 / 1.4));
-  c.state.engine = 'raw'; assert.equal(c.frameStepMs(0), Math.round(110 / 1.4));
-});
 
 test('repeat restarts only when selected, and a finished disc can be replayed', async () => {
   for (const repeat of [false, true]) {
@@ -1317,9 +1156,8 @@ test('master volume, mute and narration ducking apply without changing instrumen
   const { component: c } = playbackHarness();
   await c.play(); const mute = JSON.stringify(c.state.mute);
   c.setVolume(25); assert.equal(c.master.gain.value, .2);
-  c.toggleMasterMute(); assert.equal(c.master.gain.value, 0); assert.equal(c.state.volume, 25);
-  c.setVolume(75); assert.equal(c.master.gain.value, 0);
-  c.toggleMasterMute(); assert(Math.abs(c.master.gain.value - .6) < 1e-9);
+  c.setVolume(0);assert.equal(c.master.gain.value,0);
+  c.setVolume(75);assert(Math.abs(c.master.gain.value-.6)<1e-9);
   c.state.speaking = true; c.syncVolume(); assert(Math.abs(c.master.gain.value - .18) < 1e-9);
   c.stopSpeech(); assert(Math.abs(c.master.gain.value - .6) < 1e-9);
   c.setVolume(-5); assert.equal(c.state.volume, 0); c.setVolume(120); assert.equal(c.state.volume, 100);
@@ -1435,15 +1273,6 @@ test('a new lead retires the previous harmony while keeping position and play st
   assert.equal(c.state.playing, true); assert.equal(intervals.size, 1); assert.notEqual(c.master, oldMaster);
 });
 
-test('the primary image example uses a bundled NASA asset and retains its source and language', () => {
-  const { component: c, images } = delayedImages();
-  c.loadImageSample(); assert.equal(images[0].url, 'fotogramas/ver2025_2.webp');
-  images[0].onload(); assert.equal(c.state.custom.kind, 'image');
-  assert.equal(c.state.custom.source, 'eic'); assert.equal(c.state.custom.mode, 'palette');
-  assert.equal(c.state.customMode, 'palette'); assert.equal(c.state.disc, 5); assert.equal(c.state.sub, 1);
-  c.setLang('en'); assert.equal(c.renderVals().fileName, 'Sample NASA map');
-  assert.match(c.playerVm().paletteNote, /EIC/);
-});
 
 test('oversized image dimensions are rejected before creating a URL or decoding the file', async () => {
   const { component: c, images, revoked, upload } = delayedImages();
@@ -1491,7 +1320,7 @@ test('color scheme persists independently from reading preferences and safely ig
 });
 
 test('switching theme preserves file, selected date, playback position, mix and open help', () => {
-  const {component:c}=setup();c.state.tab='data';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=7;c.state.playing=true;c.state.tour=2;
+  const {component:c}=setup();c.state.tab='how';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=7;c.state.playing=true;c.state.tour=2;
   c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};const keys=['tab','sub','disc','frame','col','playing','tour','custom','mute'];
   const before=JSON.stringify(keys.map(key=>c.state[key]));c.setColorScheme('light');assert.equal(JSON.stringify(keys.map(key=>c.state[key])),before);
 });
@@ -1524,7 +1353,7 @@ test('stored preferences only accept known boolean values and recover from inval
 });
 
 test('contextual help never changes the active file, date, position or playback', () => {
-  for (const [tab,sub] of [['juke',0],['juke',1],['juke',2],['data',1],['how',1],['tech',1]]) {
+  for (const [tab,sub] of [['juke',0],['juke',1],['how',1],['tech',1]]) {
     const {component:c}=setup();
     c.state.tab=tab; c.state.sub=sub; c.state.frame=2; c.state.col=11; c.state.playing=true;
     c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};
@@ -1541,15 +1370,15 @@ test('the tutorial progresses only through choosing a disc, playback and interpr
   c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
   c.renderVals().tour.next(); assert.equal(c.state.tour,2);
   await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
-  c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
-  c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
+  c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
+  c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
   c.renderVals().tour.next(); assert.equal(c.state.tour,0); assert.equal(c.state.tutorial,false);
   assert.equal(c.state.disc,2); assert.equal(c.state.sub,1); assert.equal(c.state.playing,true); c.stop();
 });
 
 test('skipping the tutorial restores the previous file and paused position', () => {
   const {component:c}=playbackHarness();
-  c.state.tab='data'; c.state.sub=1; c.state.disc=5; c.state.frame=0; c.state.col=7;
+  c.state.tab='how'; c.state.sub=1; c.state.disc=5; c.state.frame=0; c.state.col=7;
   c.state.custom={name:'retained.png',kind:'image',url:'blob:retained',mode:'free'};
   const before=JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key]));
   c.startTutorial(); c.renderVals().discs[0].pick(); c.tourEnd();
@@ -1587,7 +1416,7 @@ test('missing speech APIs or a voice for the selected language keep written help
 
 test('every contextual guide targets content on its own screen, including credits', () => {
   const {component:c}=setup();
-  for (const tab of ['home','juke','band','data','how','tech']) {
+  for (const tab of ['home','juke','band','how','tech']) {
     c.state.tab=tab;
     for (let sub=0;sub<c.subCount();sub++) {
       c.state.sub=sub;
@@ -1644,23 +1473,18 @@ test('without the qualifying metric the impact rule leaves base harmony intact',
   const {component:c,context}=playbackHarness(); c.applySet('prev'); c.state.disc=3; c.state.frame=2;
   const record=context.IMPACT_CATALOG.records.find(record=>record.id==='pacora-2023-03-08');
   record.metrics.find(metric=>metric.category==='affected_houses').value=0;
-  assert.equal(c.profile().bpm,96); assert.equal(c.impactVm().applied,false);
+  assert.equal(c.profile().bpm,96); assert.equal(c.profile().impactId,undefined);
 });
 
-test('all five character stories separate sourced episode, culture, fictional proposal and team personality', () => {
+test('all five stories keep their characters, episode and original 2D pose', () => {
   const {component:c,context}=setup(), catalog=context.CHARACTER_CATALOG;
-  assert.equal(catalog.version,1); assert.equal(catalog.status,'editorial-proposal-not-community-validated');
-  assert.equal(catalog.characters.length,5);
-  const ids=new Set(context.IMPACT_CATALOG.records.map(item=>item.id));
+  assert.equal(catalog.version,1);assert.equal(catalog.characters.length,5);
   for(const [index,member] of context.BAND.entries()) {
-    c.state.bsel=index; const profile=c.renderVals().bandCur;
-    const record=catalog.characters.find(item=>item.key===member.k);
-    assert(record && ids.has(record.impactId));
-    assert.equal(profile.persona,member.persona); assert.equal(profile.quote,member.quote); assert.equal(profile.origin,member.origin);
-    assert(profile.story && profile.visual && profile.instrumentDetail && profile.impactQualification);
-    assert(profile.ethicsUrl.startsWith('https://ich.unesco.org/'));
-    assert(profile.references.every(reference=>reference.fact && reference.limit && reference.url.startsWith('https://')));
-    assert.notEqual(profile.plays,member.plays,'current behavior is documented separately from the original concept');
+    c.state.bsel=index;const profile=c.renderVals().bandCur;
+    assert.equal(profile.persona,member.persona);assert.equal(profile.quote,member.quote);
+    assert(profile.story && profile.episode);
+    assert.doesNotMatch(profile.story,/propues|proponemos|propos/i);
+    assert.equal(profile.poseUrl,'sprites/'+member.k+'/pose-banda.webp');
   }
 });
 
@@ -1669,16 +1493,14 @@ test('character catalog translates without changing the player, user file or edi
   c.state.tab='band'; c.state.bsel=3; c.state.custom={kind:'image',name:'local-only.webp',url:'blob:local-only'};
   const snapshot=()=>JSON.stringify([c.state.disc,c.state.frame,c.state.col,c.state.custom,c.state.mute,c.profile().bpm]);
   const before=snapshot(), spanish=c.renderVals().bandCur; c.setLang('en'); const english=c.renderVals().bandCur;
-  for(const key of ['episode','story','instrumentDetail','listens','plays','visual','impactFact','impactQualification','ethicsNote']) assert.notEqual(english[key],spanish[key],key);
-  assert.equal(snapshot(),before); assert.match(english.references[0].limit,/different districts/);
+  for(const key of ['episode','story']) assert.notEqual(english[key],spanish[key],key);
+  assert.equal(snapshot(),before);
   c.setLang('es'); assert.equal(snapshot(),before); assert.equal(c.renderVals().bandCur.story,spanish.story);
 });
 
 test('culture sources never activate a musical impact and later Paita context remains explicit in the band profile', () => {
   const {component:c}=playbackHarness(); c.applySet('prev'); c.state.disc=1; c.state.frame=5; c.state.bsel=1;
-  const profile=c.renderVals().bandCur;
-  assert.match(profile.impactQualification,/posterior al disco julio–diciembre de 2015/);
-  assert.match(profile.instrumentDetail,/no a Paita/); assert.equal(c.currentImpact(),null);
+  assert.equal(c.currentImpact(),null);
   const before=c.profile().bpm; c.characterVm('inti'); assert.equal(c.profile().bpm,before);
 });
 
@@ -1781,9 +1603,9 @@ test('map descriptions report derived source values independently of mute and av
   const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(-1),cold:1,warm:0,hot:.25,coast:0,coastPixels:0});
   const description=c.describeText();assert.match(description,/25 por ciento de los píxeles/);assert.match(description,/no tiene píxeles utilizables/);
   c.state.mute=c.allMute(true);assert.equal(c.describeText(),description,'map interpretation is independent of the enabled instruments');
-  c.state.disc=5;c.state.custom={name:'lluvia.csv',cols:[{name:'lluvia'}]};
-  assert.match(c.describeText(),/por debajo de la media de la columna/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
-  c.setLang('en');assert.match(c.describeText(),/below the column mean/);assert.match(c.describeText(),/drawn cells/);
+  c.state.disc=5;c.state.custom={name:'Chiclayo',kind:'rain'};
+  assert.match(c.describeText(),/por debajo del promedio de la serie/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
+  c.setLang('en');assert.match(c.describeText(),/below the series average/);assert.match(c.describeText(),/drawn cells/);
 });
 
 test('a stale preview encoder cannot create URLs, replace the accepted image, or commit after navigation',()=>{
@@ -1795,7 +1617,7 @@ test('a stale preview encoder cannot create URLs, replace the accepted image, or
   encoders[0].done(encoders[0].image,{name:'stale-preview'});assert.equal(c.state.custom,accepted);
   assert(revoked.includes('blob:old.png'));assert(!revoked.includes(accepted.url));
   encoders[1].done(encoders[1].image,{name:'new-preview'});assert.equal(c.state.custom.name,'new.png');assert.equal(c.state.custom.url,'blob:new-preview');assert(revoked.includes(accepted.url));
-  upload('leaving.png');images[3].onload();c.goTab('how');const snapshot=JSON.stringify(c.state);
+  upload('leaving.png');images[3].onload();c.goSub(0);const snapshot=JSON.stringify(c.state);
   encoders[2].done(encoders[2].image,{name:'offscreen-preview'});assert.equal(JSON.stringify(c.state),snapshot);assert(revoked.includes('blob:leaving.png'));
 });
 
@@ -1861,15 +1683,13 @@ test('numeric series keep the same normalized pattern at very large and very sma
   assert(c.seriesAnalysis(Array(10).fill(1e308)).cells.every(value=>value===0));
 });
 
-test('analysis indicators name the positive threshold and never invent an ocean coast for a local file',()=>{
-  const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:2,coastPixels:8});
-  assert.equal(c.renderVals().stats.coast,'+2.0');assert.match(c.renderVals().tx.strongWarm,/≥ \+4/);
-  c.state.disc=5;c.state.custom={name:'drawing.png',mode:'free'};
-  assert.equal(c.renderVals().stats.coast,'—');assert.match(c.renderVals().statsHelp,/no define una costa/);assert.equal(c.playerVm().legend[3].label,'Sin valor utilizable');
-  c.state.custom={name:'values.csv',cols:[{name:'value'}]};assert.match(c.renderVals().statsHelp,/celdas dibujadas/);
-  c.setLang('en');assert.equal(c.playerVm().legend[3].label,'No usable value');assert.match(c.renderVals().statsHelp,/drawn cells/);
-  c.state.custom={name:'NASA',source:'eic',mode:'palette'};assert.equal(c.renderVals().stats.coast,'+2.0');assert.equal(c.playerVm().legend[3].label,'No ocean data');
-  c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:0,coastPixels:0});assert.equal(c.renderVals().stats.coast,'—');
+test('local image and rainfall have no reference coast, and rainfall has average labels', () => {
+  const {component:c}=setup();
+  c.state.disc=5;c.state.custom={name:'photo.webp',kind:'image'};
+  assert.equal(c.renderVals().stats.coast,'—');
+  c.state.custom={name:'Chiclayo',kind:'rain'};
+  assert.equal(c.renderVals().stats.coast,'—');
+  assert.match(c.playerVm().legend[0].label,/Bajo el promedio/);
 });
 
 test('player explanations distinguish derived Data tones from composed harmony and local image position',()=>{
@@ -1879,7 +1699,7 @@ test('player explanations distinguish derived Data tones from composed harmony a
   c.setEngine('melody');c.state.disc=5;c.state.custom={name:'values.csv',cols:[]};view=c.renderVals();assert(view.showHarmony);assert(view.progItems.length>=4);assert.match(view.whyTiles[2].title,/Vertical position/);assert(!/Latitude/.test(view.whyTiles[2].body));
 });
 
-test('the EIC player dates and stated Method coverage match the versioned extraction manifest',()=>{
+test('the EIC player dates match the versioned extraction manifest',()=>{
   const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/discos.json'),'utf8'));
   const {component:c,context}=setup();
   assert.equal(manifest.length,5);
@@ -1889,7 +1709,6 @@ test('the EIC player dates and stated Method coverage match the versioned extrac
     assert.deepEqual(Array.from(player.files),disc.fotogramas.map(frame=>frame.url.replace(/^data\//,'')));
   });
   assert.equal(manifest.at(-1).fotogramas.at(-1).fecha,'2026-10-03');
-  assert.match(c.renderVals().tx.methodCoverage,/3 de octubre de 2026/);c.setLang('en');assert.match(c.renderVals().tx.methodCoverage,/3 October 2026/);
 });
 
 test('final disposal revokes the accepted file once while repeated disposal remains harmless',()=>{
