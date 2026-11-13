@@ -1,5 +1,7 @@
 # Entrega portable y recuperación
 
+La copia final verificada es `terrasonic-review-f5522b9.zip`, fuente f5522b9, 58.337.305 bytes, SHA-256 `7a37523518d20702e222e64300a683d2b8e2f64154fcd9bea6107fabdff67a51`. Incluye los 103 archivos actuales idénticos a la vista pública c4f7aca y el registro de 420 minutos. [Entrega, pruebas y límites](ENTREGA_2026-11-13.md). Los checkpoints siguientes se conservan para recuperación.
+
 El build normaliza los saltos de línea de los archivos de texto distribuidos y de la clave de caché del runtime 3D. Git puede producir CRLF en `archive` según `core.autocrlf`, incluso cuando el blob del repositorio es LF. La normalización evita que esa preferencia local cambie las huellas del sitio. Los binarios y los cuatro avisos originales OFL con huellas fijadas se conservan byte por byte; no se cambia la configuración Git global.
 
 La prueba del commit `0fefefd` comparó exportaciones reales de Git con `core.autocrlf=true`, `false` y el árbol de trabajo: los 103 archivos generados coinciden byte por byte. Son 7.152.631 bytes, con HTML SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90`, y las doce fuentes/avisos originales siguen intactos. Evidencia en `_work/reproducible-0fefefd/results.json`. Esa salida corresponde a la publicación inicial de GitHub Pages; la [vista pública actual](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) tiene una fuente posterior identificada en PUBLICACION.md. Los paquetes históricos de abajo conservan su procedencia anterior.
