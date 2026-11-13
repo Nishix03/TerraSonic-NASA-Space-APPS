@@ -42,3 +42,21 @@ Los elementos reales de la aplicación son visibles por defecto: una animación 
 La implementación sigue las orientaciones de [W3C sobre animación por interacción](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html), [control del movimiento automático](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html), [reflow](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html), [diseño desde una columna](https://web.dev/learn/design/macro-layouts) y [animaciones con transform y opacity](https://web.dev/articles/animations-guide). No constituyen certificación WCAG ni garantía de velocidad en cualquier equipo.
 
 El [prompt detallado](PROMPT_CINEMATICO.md) conserva la especificación, los criterios de aceptación y las fuentes. `scripts/verify_cinema.cjs` comprueba la política de sesión, prioridad de bienvenida, salto, repetición, foco, navegación, reproducción nativa de la secuencia en 360/390/768/1024/1440 px, limpieza, ausencia de audio/vibración, ES/EN, versión estática, cancelación y fallo de la API. Las medidas de pantalla son viewports CSS de navegadores de escritorio; no se declara prueba en teléfono físico ni FPS medidos.
+
+## Resultado de verificación
+
+Aplicación publicada: `2fec2269fedde019ad05102afb5e1cfcf131f91d`. El build archivado de ese commit pasó 134 pruebas de componente y 14 del controlador háptico. La pasada final de Chromium usa exactamente ese build, incluido el ajuste de tipografía con texto grande.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Introducción | 14 recorridos en Chromium 156, Firefox 146 y WebKit 26; también 667×375 y 320×256 |
+| Transporte 2D | 60 recorridos por motor; cinco personajes, tres modos, movimiento normal/reducido, permiso local y pasos |
+| Redistribución final | 408 estados sin fallos detectados, incluidos texto grande y espaciado ampliado |
+| Accesibilidad automática final | axe-core 4.14.0, 74 pantallas, cero infracciones detectadas |
+| Preferencias hápticas final | 10 recorridos de capacidad y preferencias en Chromium; frontera nativa e inyectada diferenciadas |
+| Fondo persistente | Seis tamaños y ambos temas por motor; movimiento reducido, ocultación y alto contraste |
+| Arte | 25 archivos originales coinciden byte por byte con la referencia registrada de `prueba-acordes` |
+
+La primera pasada de WebKit detectó que un clic no enfocaba el botón de repetición. Se corrigió conservando explícitamente el elemento que abre la presentación; los 14 recorridos pasaron después. Firefox se comprobó antes de ese ajuste específico y Chromium/WebKit después. Las pruebas cruzadas de sprites utilizan el mismo runtime del commit `1d790dc`, sin cambios posteriores. Las comprobaciones de fondo y producto previas al último ajuste de fuente se conservan con su versión; no se confunden con los informes finales de redistribución.
+
+Evidencia local: `_work/cinema-release/chromium/`, `_work/controls-qa/`, `_work/cinema-qa/firefox/` y `_work/cinema-qa/webkit-focus/`. Los resultados públicos y la integridad del paquete se registran en [la entrega vigente](ENTREGA_2D_CINEMATICA.md).

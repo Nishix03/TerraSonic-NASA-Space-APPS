@@ -2,7 +2,21 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · ajuste de zoom · 13 noviembre, 15:47 Bogotá
+## Edición vigente · controles 2D y viaje al Pacífico · 13 noviembre, 17:10 Bogotá
+
+La URL sirve la aplicación **`2fec2269fedde019ad05102afb5e1cfcf131f91d`**, commit estático **`f798af8c09f3f64c5cdfc76735418959e9a64eca`**, por fast-forward desde `665b1cd`. Pages confirmó `built` a las **17:09:35**; la lectura anónima de las **17:10:09** comprobó `source.json` y HTML exacto: **445.614 bytes**, SHA-256 **`135a4dd6c80861643436a427e024dae3eff7b50c5778d294357e039c45fa5e4b`**. Hay 112 archivos de aplicación y cuatro metadatos en la copia pública.
+
+Incluye el permiso local de movimiento y transporte reparado de los cinco personajes, botones legibles, introducción ilustrada saltable/repetible, estados estáticos, fondo solar ampliado y vibración opcional. [Diseño, pruebas y límites](CINEMATICA.md), [prompt investigado](PROMPT_CINEMATICO.md) y [entrega vigente](ENTREGA_2D_CINEMATICA.md). Los dos recorridos HTTP del build exacto pasaron antes de la subida, sin errores, respuestas fallidas ni peticiones externas.
+
+La comprobación pública completa pasó normal y sin WebGL: dos catálogos, ambos modos del reproductor, los cinco personajes, lluvia, imagen propia, teclado e idioma. Los **106 recursos** comprobados coinciden por SHA-256 con el build. También pasaron **14 recorridos de la introducción** y **10 de capacidad/preferencias hápticas**, sin errores JavaScript ni respuestas fallidas. La vibración física sigue pendiente de teléfono compatible.
+
+La primera pasada pública de la introducción terminó por tiempo tras dos casos: esperaba el evento global `load`, que podía llegar después de la secuencia de tres segundos. Se conserva esa evidencia parcial en `browser-public-2fec226-cinema`; la prueba corregida observa DOM y aplicación listos y completó los 14 casos en `browser-public-2fec226-cinema-retry`. No fue necesario cambiar el producto publicado. Los demás informes están en `browser-public-2fec226-full`, `browser-public-2fec226-haptics`, `browser-local-2fec226`, `readback-2fec226.json` y `http-2fec226.json` bajo `_work/github-preview/`.
+
+Se conservaron main local y `.github/` sin modificaciones. Antes de esta publicación, main remoto y la web oficial ya habían cambiado externamente respecto de la comprobación histórica inferior: a las 17:03:40 se registraron main remoto `885cd51e977f96bc421a3ad2d18cef322d28039b` y HTML oficial SHA-256 `bf4db6d86b2f293ebbee90cf85ae4b4ac8973aaafb8ba50c88a9d32d18f6f951`. La lectura posterior de las 17:10:20 conservó exactamente esos valores. Esta entrega solo hizo push a `piero-mejoras` y al repositorio independiente de revisión.
+
+Los apartados siguientes son checkpoints históricos, no describen el producto vigente.
+
+## Checkpoint · ajuste de zoom · 13 noviembre, 15:47 Bogotá
 
 La misma URL sirve la aplicación **`e28c31f900103db54ef1885748ceb79f040f7f8b`**, commit estático **`c0ad86569b421f4991fd0fe4acfecbb82de13847`**. Pages confirmó `built` a las 15:47; la lectura anónima de las 15:48 verificó `source.json` y el HTML exacto: **409.567 bytes**, SHA-256 **`6af64c0f08ca360b7f2abe2041d07768ad0af02ade52a9ca79d4dc3418661bc4`**. El build conserva 112 archivos / **16.624.177 bytes** y los personajes 2D originales; la copia publicada añade cuatro metadatos.
 

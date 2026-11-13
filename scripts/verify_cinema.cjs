@@ -13,7 +13,9 @@ async function main(){
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return set.apply(this,args);};}});
    if(noAnimation)Element.prototype.animate=()=>{throw Error('Deliberate unavailable animation fixture');};
   },{configured,lang,noAnimation});
-  const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});await page.goto(base);await page.waitForFunction(()=>window.__app?.cinema);return {context,page};
+  // Remote image preloads can outlast the finite intro. Observe actual app
+  // readiness instead of starting assertions after the global load event.
+  const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.__app?.cinema);return {context,page};
  }
  try{
   // Welcome has priority; skip, replay, refresh and ordinary navigation.

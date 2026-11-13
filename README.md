@@ -12,7 +12,7 @@ La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](htt
 
 La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) permite revisar la aplicación sin modificar la web oficial. Consulta `source.json` en esa URL para identificar su código exacto y [PUBLICACION.md](docs/PUBLICACION.md) para la comprobación de publicación. La edición RETO 05 y sus criterios están en [RETO_05.md](docs/RETO_05.md).
 
-La entrega y sus comprobaciones se resumen en [ENTREGA_2026-11-13.md](docs/ENTREGA_2026-11-13.md).
+La entrega vigente y sus comprobaciones se resumen en [ENTREGA_2D_CINEMATICA.md](docs/ENTREGA_2D_CINEMATICA.md). El documento anterior de entrega conserva un checkpoint histórico con otro alcance.
 
 El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
