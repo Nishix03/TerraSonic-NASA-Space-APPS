@@ -1,5 +1,7 @@
 # Entrega portable y recuperación
 
+El build normaliza los saltos de línea de los archivos de texto distribuidos y de la clave de caché del runtime 3D. Git puede producir CRLF en `archive` según `core.autocrlf`, incluso cuando el blob del repositorio es LF. La normalización evita que esa preferencia local cambie las huellas del sitio. Los binarios y los cuatro avisos originales OFL con huellas fijadas se conservan byte por byte; no se cambia la configuración Git global.
+
 El primer paquete verificado de esta revisión es un checkpoint del commit `122fd9d536393528b84d9871fe734ac93a761101`. No incluye las correcciones posteriores de este chat. Se conserva para recuperación y para comprobar el procedimiento de entrega.
 
 | Dato | Checkpoint verificado |

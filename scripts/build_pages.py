@@ -7,6 +7,11 @@ from shutil import copy2, copytree
 from sys import argv
 
 
+def lf_bytes(path: Path) -> bytes:
+    """Canonical text bytes, independent of Git's checkout/archive line endings."""
+    return path.read_bytes().replace(b"\r\n", b"\n")
+
+
 def build(destination: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     prototype = root / "prototipos" / "I11-eic"
@@ -14,7 +19,7 @@ def build(destination: Path) -> None:
     models = sorted((prototype / "modelos").glob("*.glb"))
     if len(models) != 5:
         raise ValueError("Se necesitan los cinco modelos GLB de TerraSonic.")
-    version = sha256(avatar_runtime.read_bytes())
+    version = sha256(lf_bytes(avatar_runtime))
     for model in models:
         version.update(model.read_bytes())
         for kind in ("pose", "face"):
@@ -52,7 +57,7 @@ def build(destination: Path) -> None:
     for kind in ("pose", "face"):
         html = html.replace(f"{kind}-volume.webp", f"{kind}-volume.webp?v={avatar_version}")
     destination.mkdir(parents=True, exist_ok=True)
-    (destination / "index.html").write_text(html, encoding="utf-8")
+    (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(root / "scripts" / "pages-support.js", destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
@@ -70,6 +75,13 @@ def build(destination: Path) -> None:
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")
     copy2(root / "data" / "characters.v1.json", destination / "data")
+    # git archive also applies core.autocrlf. Normalize shipped text and the
+    # runtime cache key; keep pinned original font notices byte-for-byte intact.
+    for asset in destination.rglob("*"):
+        if asset.is_file() and asset.suffix.lower() in {".html", ".js", ".json", ".css", ".md", ".txt"} and not asset.name.endswith("-OFL.txt"):
+            normalized = lf_bytes(asset)
+            if normalized != asset.read_bytes():
+                asset.write_bytes(normalized)
 
 
 if __name__ == "__main__":
