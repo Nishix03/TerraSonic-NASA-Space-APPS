@@ -27,7 +27,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | R5 | Brisa, preferencias e idioma | Guía separada, tutorial con acciones reales, foco y voz cancelable, primera visita y elección guardada. | Implementado. 107 pruebas y recorrido Chromium de idioma, preferencias, foco, tutorial, voz simulada y APIs ausentes. Brisa usa nombre y símbolo de ayuda porque falta una referencia visual aprobada. Ver docs/BRISA.md. |
 | R6 | Accesibilidad | Teclado, estados, contraste, zoom, móvil, movimiento reducido y alternativas a sonido/vista/arrastre. Vibración optativa y cancelable. | Parcial en base. Requiere nueva verificación integral. |
 | R7 | Armonía | Seis perfiles con acordes y notas concretas, incluidos disminuidos y sus4. Concordancia entre rótulo y motor. | Implementado. 81 pruebas: seis progresiones, notas MIDI emitidas por el sintetizador, rótulos bilingües y umbral de Yaku cálido. Pendiente prueba de audio final en navegador. |
-| R8 | Impactos | Catálogo con episodio, territorio, periodo, métrica, fecha y fuente oficial. Al menos una regla musical editorial activada por evidencia del periodo. | Pendiente. |
+| R8 | Impactos | Catálogo con episodio, territorio, periodo, métrica, fecha y fuente oficial. Al menos una regla musical editorial activada por evidencia del periodo. | Implementado. Catálogo estático v1 con cinco contextos y regla real de tempo en Pacora/marzo 2023. 111 pruebas y recorrido Chromium con reloj Web Audio. Paita marzo 2016 queda fuera del disco de 2015. Ver docs/IMPACTOS.md. |
 | R9 | Cultura e historias | Cinco fichas con hechos, referencia cultural y propuesta de ficción. Fuentes y cuidado UNESCO. Sonidos individuales detenibles. | Cinco muestras individuales detenibles implementadas y comprobadas con Web Audio real. Historias, episodios y revisión cultural pendientes. Biblia visual antigua disponible. |
 | R9-3D | Cinco modelos | Inventario y renders multivista, anatomía, rostro, prendas, instrumentos, materiales, rig y clips. Peso, contacto, respaldo y movimiento reducido. | Propuesta volumétrica implementada. 5 pruebas GLB y 6 escenarios web. Ver docs/MODELOS_3D.md. Faltan revisión cultural, visuales históricas y URL final. |
 | R10 | Método y Tecnología | Documentar comportamiento real, niveles derivados y decisiones artísticas. Conservar Retos. Retirar tecnología planeada o no usada. | Pendiente. |
@@ -48,8 +48,9 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | 4 | 13 nov 2026, 01:09–01:17 | Salidas individuales con reverberación, cancelación de fuentes, cinco muestras de instrumento, cambio de protagonista y regresiones de audio. 94 pruebas y cinco muestras medidas en navegador. | 7 |
 | 5 | 13 nov 2026, 01:17–01:24 | Imágenes como entrada principal, lluvia/CSV secundarios, límites de memoria, concurrencia y errores recuperables. 98 pruebas y recorrido Chromium de conversión. | 6 |
 | 6 | 13 nov 2026, 01:24–01:48 | Brisa, preferencias, idioma inicial, contexto conservado, tutorial de tres acciones, ciclo de voz y movimiento reducido. 107 pruebas y recorridos Chromium con voz simulada y APIs ausentes. | 22 |
+| 7 | 13 nov 2026, 01:48–02:06 | Fuentes oficiales de episodios, catálogo versionado y regla musical mensual comprobada en el sintetizador. 111 pruebas y recorrido de impacto con reloj Web Audio. | 16 |
 
-Total conservador acreditado: **84 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
+Total conservador acreditado: **100 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
 
 ## Decisiones
 

@@ -82,6 +82,7 @@ function setup(options = {}) {
   if (options.language) context.navigator = { language: options.language };
   vm.createContext(context);
   vm.runInContext(source + '\nglobalThis.ComponentUnderTest = Component;', context);
+  if (!context.IMPACT_CATALOG.records.length) context.IMPACT_CATALOG = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/impacts.v1.json'), 'utf8'));
   const component = new context.ComponentUnderTest({});
   component.loadDisc = component.preloadArt = component.playCue = component.warmBandClips = () => {};
   function element(id, left, top, width, height, clip = null) {
@@ -1525,4 +1526,52 @@ test('every contextual guide targets content on its own screen, including credit
       }
     }
   }
+});
+
+test('the versioned impact catalog keeps sourced units, dates and territories distinct', () => {
+  const {context}=setup(), catalog=context.IMPACT_CATALOG;
+  assert.equal(catalog.version,1); assert.equal(catalog.records.length,5);
+  assert.equal(new Set(catalog.records.map(record=>record.id)).size,5);
+  for (const record of catalog.records) {
+    assert(record.territory && record.episode && record.source.url.startsWith('https://'));
+    assert.match(record.period.start,/^\d{4}-\d{2}$/); assert(record.period.start<=record.period.end);
+    assert(record.fact.es && record.fact.en && record.qualification.es && record.qualification.en);
+    for (const metric of record.metrics) { assert(Number.isFinite(metric.value)); assert(metric.value>0); assert(metric.unit.es && metric.unit.en); }
+  }
+  const pacora=catalog.records.find(record=>record.id==='pacora-2023-03-08');
+  assert.equal(pacora.metrics.find(metric=>metric.category==='affected_houses').value,29);
+  assert.equal(pacora.metrics.find(metric=>metric.category==='affected_people').value,110);
+  assert(!pacora.metrics.some(metric=>/death|displaced/.test(metric.category)));
+});
+
+test('impact matching requires the episode and month and never borrows later Paita or Tumbes events', () => {
+  const {context}=setup(), catalog=context.IMPACT_CATALOG;
+  assert.equal(context.findImpactRecord(catalog,'yaku2023','2023-03').id,'pacora-2023-03-08');
+  assert.equal(context.findImpactRecord(catalog,'yaku2023','2023-04'),null);
+  assert.equal(context.findImpactRecord(catalog,'nino2023','2023-12').id,'tumbes-2023-12-27');
+  assert.equal(context.findImpactRecord(catalog,'nino2023','2024-02'),null);
+  assert.equal(context.findImpactRecord(catalog,'nino2015','2015-12'),null);
+  assert.equal(context.findImpactRecord(catalog,'nino2015','2016-03'),null,'a context-only record cannot activate');
+  assert.equal(context.findImpactRecord(catalog,'inv2025','2023-03'),null);
+});
+
+test('documented Pacora homes actually change Yaku tempo while retaining scales, chords and the warm criterion', async () => {
+  const {component:c,context}=playbackHarness(); c.applySet('prev'); c.state.disc=3; c.state.frame=2;
+  const original=JSON.stringify(context.MUSIC.yaku);
+  let profile=c.profile(); assert.equal(profile.bpm,86); assert.equal(profile.baseBpm,96);
+  assert.equal(profile.scale,context.MUSIC.yaku.scale); assert.equal(profile.prog,context.MUSIC.yaku.prog);
+  assert.equal(c.stepMs(),Math.round(30000/86)); await c.play(); assert.equal(c.sequencerMs,Math.round(30000/86)); c.stop();
+  c.cur=()=>({warm:1.1,cold:.1}); profile=c.profile();
+  assert.equal(profile.bpm,66); assert.equal(profile.scale,context.MUSIC.yaku.dark.scale); assert.equal(profile.prog,context.MUSIC.yaku.dark.prog);
+  c.state.frame=3; assert.equal(c.profile().bpm,76);
+  c.state.frame=2; c.state.engine='raw'; assert.equal(c.profile().bpm,76); assert.equal(c.stepMs(),110);
+  c.state.engine='melody'; c.state.leadOverride='inti'; assert.equal(c.profile().bpm,72);
+  assert.equal(JSON.stringify(context.MUSIC.yaku),original,'base harmony must not be mutated');
+});
+
+test('without the qualifying metric the impact rule leaves base harmony intact', () => {
+  const {component:c,context}=playbackHarness(); c.applySet('prev'); c.state.disc=3; c.state.frame=2;
+  const record=context.IMPACT_CATALOG.records.find(record=>record.id==='pacora-2023-03-08');
+  record.metrics.find(metric=>metric.category==='affected_houses').value=0;
+  assert.equal(c.profile().bpm,96); assert.equal(c.impactVm().applied,false);
 });

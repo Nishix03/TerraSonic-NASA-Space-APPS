@@ -1355,6 +1355,12 @@ a{color:inherit}
 .px .event-history ol{max-height:240px;overflow:auto;overscroll-behavior:contain;padding:0 0 0 26px;margin:10px 0;list-style:decimal}
 .px .event-history li{padding:6px 4px;border-bottom:1px solid var(--line);font-size:.76em;line-height:1.5}
 .px .event-history li>span:first-child{margin-right:10px;color:var(--muted)}
+.px .player-impact{min-width:0;border-block:1px solid var(--line);padding-block:6px;font-size:.85em}
+.px .player-impact summary{min-height:32px;align-content:center;cursor:pointer;font-weight:600}
+.px .player-impact h2{font:700 1.05em/1.4 var(--head);margin:8px 0}
+.px .player-impact p{max-width:82ch;margin:8px 0}
+.px .player-impact ul{padding-left:22px}
+.px .player-impact a{display:inline-block;max-width:100%;overflow-wrap:anywhere;text-underline-offset:3px;margin-block:4px}
 @media(max-width:1100px){
   .px .player-layout{grid-template-columns:minmax(0,1fr);gap:12px}
   .px .player-sidebar{grid-column:1;grid-row:1}
@@ -1551,7 +1557,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div id="tour-play" class="playwrap">
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
-<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
+<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span><span class="small muted">{{player.tempoLabel}}</span></div>
 <div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
 </div>
 <section class="transport" aria-label="{{player.controlsLabel}}">
@@ -1635,6 +1641,11 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </section>
 </div>
 </div>
+
+<details class="player-impact"><summary>{{impact.summary}}</summary>
+<sc-if value="{{impact.on}}"><h2>{{impact.territory}}</h2><p>{{impact.fact}}</p><ul><sc-for list="{{impact.metrics}}" as="metric"><li>{{metric.text}}</li></sc-for></ul><p class="small muted">{{impact.cutLabel}}{{impact.cut}} · {{impact.qualification}}</p><a href="{{impact.source}}" target="_blank" rel="noopener noreferrer" lang="es">{{impact.sourceTitle}}</a><p class="small muted">{{impact.locator}}</p></sc-if>
+<p>{{impact.rule}}</p><p class="small muted">{{impact.artistic}}</p><a href="data/impacts.v1.json" target="_blank" rel="noopener">{{impact.catalogLabel}}</a>
+</details>
 
 <details id="tour-machine" class="analysis-panel"><summary>{{tx.machineSees}} · 28×16</summary>
 <figure class="vpanel">
@@ -2092,6 +2103,14 @@ var DISC_SETS = {
   ]
 };
 var DISCS = DISC_SETS.eic.slice();
+// The build embeds data/impacts.v1.json here. No runtime request is needed.
+var IMPACT_CATALOG = { version: 1, records: [] };
+function findImpactRecord(catalog, discId, month) {
+  if (!/^\d{4}-\d{2}$/.test(month)) return null;
+  return catalog.records.find(function (record) {
+    return !record.contextOnly && record.discId === discId && record.period.start <= month && month <= record.period.end;
+  }) || null;
+}
 var DISC_CUSTOM = { id: 'custom', n: '+', title: 'Tu imagen', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] };
 DISCS.push(DISC_CUSTOM);
 // Brisa ofrece ayuda contextual y un tutorial opcional. No es integrante de la banda.
@@ -3510,7 +3529,36 @@ class Component extends DCLogic {
   profile() {
     var a = arguments.length ? arguments[0] : this.cur();
     var p = MUSIC[this.state.leadOverride || this.discLead(this.state.disc, a)];
-    return p.dark && a && a.warm - a.cold > 0.9 ? p.dark : p;
+    var base = p.dark && a && a.warm - a.cold > 0.9 ? p.dark : p;
+    var record = this.currentImpact(arguments.length > 1 ? arguments[1] : this.state.frame);
+    var rule = record && record.musicRule;
+    var hasEvidence = rule && record.metrics.some(function (metric) { return metric.category === rule.requiresPositiveMetric && Number.isFinite(metric.value) && metric.value > 0; });
+    if (this.state.engine !== 'melody' || !rule || !hasEvidence || rule.musician !== (this.state.leadOverride || this.discLead(this.state.disc, a))) return base;
+    return Object.assign({}, base, { bpm: base.bpm + rule.tempoDelta, baseBpm: base.bpm, impactId: record.id });
+  }
+  currentImpact(frame) {
+    var s = this.state;
+    if (s.set !== 'prev' || s.disc >= 5) return null;
+    var date = this.frameDate(s.disc, frame == null ? s.frame : frame);
+    var month = date.y + '-' + ('0' + (date.m + 1)).slice(-2);
+    return findImpactRecord(IMPACT_CATALOG, DISCS[s.disc].id, month);
+  }
+  impactVm() {
+    var record = this.currentImpact(), profile = this.profile();
+    var applied = !!(record && profile.impactId === record.id);
+    return {
+      on: !!record, absent: !record, applied: applied,
+      summary: applied ? T('Decisión musical de este mes: ', 'This month’s music decision: ') + profile.baseBpm + ' → ' + profile.bpm + T(' ppm', ' bpm') : record ? T('Contexto local documentado · armonía base', 'Documented local context · base harmony') : T('Armonía base · sin regla de impacto para esta fecha', 'Base harmony · no impact rule for this date'),
+      territory: record ? record.territory : '', fact: record ? record.fact[LANG] : '',
+      metrics: record ? record.metrics.map(function (metric) { return { text: new Intl.NumberFormat(LANG).format(metric.value) + ' ' + metric.unit[LANG] }; }) : [],
+      cutLabel: T('Corte de la fuente: ', 'Source update: '), cut: record ? record.asOf : '',
+      qualification: record ? record.qualification[LANG] : '',
+      source: record ? record.source.url : '', sourceTitle: record ? record.source.organization + ' · ' + record.source.title : '',
+      locator: record ? record.source.locator : '',
+      rule: applied ? record.musicRule.explanation[LANG] : T('Sin una regla editorial aplicable se conserva el perfil musical base. Datos no aplica esta modificación de tempo.', 'Without an applicable editorial rule, the base music profile remains. Data does not apply this tempo change.'),
+      artistic: T('Melancolía, tensión e incertidumbre son elecciones artísticas, no emociones medidas ni una escala científica de tristeza.', 'Melancholy, tension and uncertainty are artistic choices, not measured emotions or a scientific sadness scale.'),
+      catalogLabel: T('Ver catálogo estático v1', 'View static catalog v1')
+    };
   }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
   allMute(v) { var m = {}; BAND.forEach(function (b) { m[b.k] = v; }); return m; }
@@ -3657,7 +3705,7 @@ class Component extends DCLogic {
   frameStepMs(frame) {
     if (this.state.engine === 'raw') return Math.round(110 / this.speedFactor());
     var analysis = frame === this.state.frame ? this.cur() : this.state.an[this.state.disc + '_' + frame];
-    return Math.round(30000 / (this.profile(analysis).bpm * this.speedFactor()));
+    return Math.round(30000 / (this.profile(analysis, frame).bpm * this.speedFactor()));
   }
   playerSeconds(position) {
     var remaining = Math.max(0, Math.min(this.playerSteps(), position)), ms = 0;
@@ -3697,7 +3745,7 @@ class Component extends DCLogic {
       date: this.frameDate(s.disc, s.frame), column: s.col + 1, engine: s.engine,
       seconds: this.playerSeconds(Math.max(0, this.playerPosition() - 1)),
       chord: chord ? this.profile().prog.findIndex(function (item) { return chordOf(this.profile(), item).label === chord; }, this) : -1,
-      profile: this.leadChar(), dark: this.profile() === MUSIC.yaku.dark,
+      profile: this.leadChar(), dark: this.profile().scale === MUSIC.yaku.dark.scale,
       musicians: BAND.filter(function (b) { return fired[b.k]; }).map(function (b) { return b.name; }) };
     this.setState({ events: s.events.concat([event]).slice(-200) });
   }
@@ -3721,6 +3769,7 @@ class Component extends DCLogic {
       T('Lectura artística del color de tu imagen. No mide temperaturas.', 'An artistic reading of your image’s colors. It does not measure temperatures.');
     return {
       controlsLabel: T('Controles de reproducción', 'Playback controls'), positionLabel: T('Tiempo del disco', 'Disc playback time'),
+      tempoLabel: s.engine === 'melody' ? Math.round(this.profile().bpm * this.speedFactor()) + T(' ppm', ' bpm') : this.stepMs() + T(' ms por paso', ' ms per step'),
       position: position, steps: steps, elapsed: elapsed, duration: duration, of: T(' de ', ' of '),
       positionText: elapsed + T(' de ', ' of ') + duration + '. ' + T('Mapa: ', 'Map: ') + this.frameTag(s.disc, s.frame) + '.',
       seek: function (e) { self.seekPosition(Number(e.target.value)); },
@@ -3744,7 +3793,7 @@ class Component extends DCLogic {
         var disc = DISC_SETS.eic.concat(DISC_SETS.prev).find(function (item) { return item.id === event.discId; });
         var profile = event.dark ? MUSIC.yaku.dark : MUSIC[event.profile];
         var chord = event.chord >= 0 && profile.prog[event.chord] ? chordOf(profile, profile.prog[event.chord]).label : '';
-        return { time: self.formatClock(event.seconds), text: (disc ? disc.title : T('Tu archivo', 'Your file')) + ' · ' + MES[event.date.m] + ' ' + event.date.y + ' · ' +
+        return { time: self.formatClock(event.seconds), text: (disc ? disc.title + ' · ' + MES[event.date.m] + ' ' + event.date.y : T('Tu archivo', 'Your file')) + ' · ' +
           T('columna ', 'column ') + event.column + '/28 · ' + (event.engine === 'melody' ? T('Melodía', 'Melody') : T('Datos', 'Data')) +
           (chord ? ' · ' + T('acorde ', 'chord ') + chord : '') + ' · ' + (event.musicians.join(', ') || T('Sin entradas nuevas.', 'No new instrument entries.')) };
       }) : [],
@@ -4682,6 +4731,7 @@ class Component extends DCLogic {
       engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos puros: cada color suena directo, sin armonía.', 'Raw data: each color plays directly, with no harmony.')),
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, objectives: objectives,
       player: this.playerVm(),
+      impact: this.impactVm(),
       motionClass: s.reducedMotion ? 'reduce-motion' : '',
       preferences: {
         on: s.showPreferences, title: T('¿Cómo prefieres usar TerraSonic?', 'How would you like to use TerraSonic?'),
@@ -4830,7 +4880,7 @@ class Component extends DCLogic {
       noFile: s.tab === 'data' && !hasCustom,
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
-      moodText: prof.mood ? T('Ánimo de la música: ', 'Mood of the music: ') + prof.mood + ' (' + prof.key + ' ' + prof.mode + T('). Los acordes menores suenan nostálgicos; los mayores, alegres.', '). Minor chords sound nostalgic; major ones, joyful.') : '',
+      moodText: prof.mood ? T('Carácter artístico elegido: ', 'Chosen artistic character: ') + prof.mood + T('. No mide emociones.', '. It does not measure emotions.') : '',
       tourOpen: function () { self.tourOpen(); },
       goHome: function () { self.goTab('home'); },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },

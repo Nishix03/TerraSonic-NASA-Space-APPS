@@ -1,6 +1,7 @@
 """Package the interactive TerraSonic prototype for GitHub Pages."""
 
 from hashlib import sha256
+import json
 from pathlib import Path
 from shutil import copy2, copytree
 from sys import argv
@@ -20,6 +21,13 @@ def build(destination: Path) -> None:
             version.update((prototype / "sprites" / model.stem / f"{kind}-volume.webp").read_bytes())
     avatar_version = version.hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
+    impact_catalog = json.loads((root / "data" / "impacts.v1.json").read_text(encoding="utf-8"))
+    if impact_catalog.get("version") != 1 or not isinstance(impact_catalog.get("records"), list):
+        raise ValueError("El catálogo de impactos necesita versión 1 y una lista de registros.")
+    impact_marker = "var IMPACT_CATALOG = { version: 1, records: [] };"
+    if impact_marker not in html:
+        raise ValueError("Falta el marcador del catálogo estático de impactos.")
+    html = html.replace(impact_marker, "var IMPACT_CATALOG = " + json.dumps(impact_catalog, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", 1)
     html = html.replace(
         '<meta charset="utf-8">',
         '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -52,6 +60,7 @@ def build(destination: Path) -> None:
     copytree(root / "scripts" / "vendor", runtime / "vendor", dirs_exist_ok=True)
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
+    copy2(root / "data" / "impacts.v1.json", destination / "data")
 
 
 if __name__ == "__main__":

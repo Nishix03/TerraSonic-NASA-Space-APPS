@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "updated": "2026-11-13",
+  "periodPrecision": "month",
+  "purpose": {
+    "es": "Contexto local documentado para decisiones musicales editoriales. No estima emociones ni atribuye por sí solo causalidad al mapa NASA.",
+    "en": "Documented local context for editorial music decisions. It does not estimate emotions or establish causation from the NASA map."
+  },
+  "records": [
+    {
+      "id": "santa-lucia-2010-12-coe",
+      "discId": "nina2010",
+      "musician": "mama",
+      "episode": "La Niña 2010–2011",
+      "territory": "Santa Lucía, Atlántico, Colombia",
+      "period": { "start": "2010-12", "end": "2010-12" },
+      "eventDate": null,
+      "asOf": "2010-12-07T17:00:00-05:00",
+      "fact": {
+        "es": "El corte del COE publicado por la Gobernación registró 4821 personas y 964 familias en Santa Lucía tras las inundaciones.",
+        "en": "The COE update published by the departmental government recorded 4821 people and 964 families in Santa Lucía following flooding."
+      },
+      "metrics": [
+        { "category": "reported_people", "value": 4821, "unit": { "es": "personas registradas en el corte municipal", "en": "people recorded in the municipal update" } },
+        { "category": "reported_families", "value": 964, "unit": { "es": "familias registradas en el corte municipal", "en": "families recorded in the municipal update" } }
+      ],
+      "qualification": {
+        "es": "La nota no desglosa por municipio las categorías de afectados y damnificados. No se suman personas y familias ni se compara este corte con cifras finales posteriores.",
+        "en": "The note does not disaggregate affected and damnificados categories by municipality. People and families are not added together, and this update is not compared with later final figures."
+      },
+      "source": {
+        "organization": "Gobernación del Atlántico · COE",
+        "title": "57.687 damnificados en el Cono Sur del Atlántico",
+        "published": "2010-12-07",
+        "url": "https://www.atlantico.gov.co/index.php/noticias/gobernadora/450-informe-oficial-coe",
+        "locator": "Párrafo del desglose por municipio; reporte de las 17:00."
+      },
+      "contextOnly": false,
+      "musicRule": null
+    },
+    {
+      "id": "paita-2016-03-registro",
+      "discId": "nino2015",
+      "musician": "inti",
+      "episode": "El Niño 2015–2016",
+      "territory": "Distrito de Paita, Piura, Perú",
+      "period": { "start": "2016-03", "end": "2016-03" },
+      "eventDate": null,
+      "asOf": "2016-03-07",
+      "fact": {
+        "es": "El plan municipal recoge el registro de lluvia del 7 de marzo de 2016, código 75628, en el distrito de Paita.",
+        "en": "The municipal plan lists a rainfall emergency record dated 7 March 2016, code 75628, in Paita district."
+      },
+      "metrics": [],
+      "qualification": {
+        "es": "75628 es un identificador, no una cantidad de víctimas. Este registro es posterior al disco julio–diciembre de 2015 y nunca modifica su música. No se ha transcrito una cifra local del periodo del disco.",
+        "en": "75628 is an identifier, not a victim count. This record is later than the July–December 2015 disc and never changes its music. No local impact count for the disc period has been transcribed."
+      },
+      "source": {
+        "organization": "Municipalidad Provincial de Paita · CENEPRED",
+        "title": "Plan de prevención y reducción del riesgo de desastres de Paita 2019–2021",
+        "published": "2018",
+        "url": "https://sigrid.cenepred.gob.pe/sigridv3/storage/biblioteca/6187_plan-de-prevencion-y-reduccion-del-riesgo-de-desastres-de-la-provincia-de-paita-2019-2021.pdf#page=14",
+        "locator": "Página 13 impresa, cuadro 13; el código es del registro INDECI/COEN."
+      },
+      "contextOnly": true,
+      "musicRule": null
+    },
+    {
+      "id": "bajo-piura-2017-03",
+      "discId": "costero2017",
+      "musician": "silbo",
+      "episode": "El Niño Costero 2017",
+      "territory": "Bajo Piura, con Catacaos, Piura, Perú",
+      "period": { "start": "2017-03", "end": "2017-03" },
+      "eventDate": "2017-03-27",
+      "asOf": "2017-03-27",
+      "fact": {
+        "es": "INDECI describe el desborde del río Piura del 27 de marzo y la inundación de Catacaos y otras localidades. Reporta una máxima avenida de 3800 m³/s en el río.",
+        "en": "INDECI describes the Piura River overflow on 27 March and flooding in Catacaos and other localities. It reports a peak river flow of 3800 m³/s."
+      },
+      "metrics": [
+        { "category": "reported_river_flow", "value": 3800, "unit": { "es": "m³/s, máxima avenida reportada del río Piura", "en": "m³/s, reported peak flow of the Piura River" } }
+      ],
+      "qualification": {
+        "es": "El caudal corresponde al río, no a un conteo de personas ni a una medición exclusiva de Catacaos. No se atribuyen al distrito los totales de toda la región.",
+        "en": "The flow describes the river, not a population count or a measurement exclusive to Catacaos. Regional totals are not assigned to the district."
+      },
+      "source": {
+        "organization": "INDECI",
+        "title": "Compendio estadístico del INDECI 2017 · Gestión reactiva",
+        "published": "2017-12",
+        "url": "https://portal.indeci.gob.pe/wp-content/uploads/2019/01/201802271714541.pdf#page=28",
+        "locator": "Página 28 impresa, Departamento de Piura, hechos y daños."
+      },
+      "contextOnly": false,
+      "musicRule": null
+    },
+    {
+      "id": "pacora-2023-03-08",
+      "discId": "yaku2023",
+      "musician": "yaku",
+      "episode": "Marzo de 2023 · colección Yaku",
+      "territory": "Distrito de Pacora, Lambayeque, Perú",
+      "period": { "start": "2023-03", "end": "2023-03" },
+      "eventDate": "2023-03-07",
+      "asOf": "2023-03-08T19:00:00-05:00",
+      "fact": {
+        "es": "Tras el desborde del río La Leche del 7 de marzo, la evaluación del día 8 registró 29 viviendas y 110 personas afectadas en Pacora.",
+        "en": "Following the La Leche River overflow on 7 March, the 8 March assessment recorded 29 homes and 110 people affected in Pacora."
+      },
+      "metrics": [
+        { "category": "affected_houses", "value": 29, "unit": { "es": "viviendas afectadas", "en": "affected homes" } },
+        { "category": "affected_people", "value": 110, "unit": { "es": "personas afectadas", "en": "affected people" } }
+      ],
+      "qualification": {
+        "es": "Evaluación rápida aún en proceso. Afectadas no equivale a damnificadas ni fallecidas. No se infieren cifras de esas otras categorías.",
+        "en": "The rapid assessment was still in progress. Affected is a different category from damnificados or deaths. Counts for those other categories are not inferred."
+      },
+      "source": {
+        "organization": "COEN · INDECI, fuente COER Lambayeque",
+        "title": "Reporte complementario 2529 · Inundación en Pacora",
+        "published": "2023-03-08",
+        "url": "https://portal.indeci.gob.pe/wp-content/uploads/2023/03/REPORTE-COMPLEMENTARIO-N%C2%BA-2529-8MAR2023-INUNDACI%C3%93N-EN-EL-DISTRITO-DE-PACORA-LAMBAYEQUE-1.pdf#page=2",
+        "locator": "Página 2, evaluación rápida de daños, corte de las 19:00."
+      },
+      "contextOnly": false,
+      "musicRule": {
+        "id": "memoria-pacora-v1",
+        "musician": "yaku",
+        "tempoDelta": -10,
+        "requiresPositiveMetric": "affected_houses",
+        "explanation": {
+          "es": "Solo en marzo de 2023 del disco Yaku, la presencia de viviendas afectadas documentadas reduce diez pulsaciones por minuto al perfil de Yaku. El número de viviendas no fija cuánto se reduce. Se mantienen escala, acordes y el criterio original de Yaku cálido.",
+          "en": "Only in March 2023 on the Yaku disc, documented affected homes lower Yaku’s profile by ten beats per minute. The home count does not determine the size of the change. Scale, chords and the original warm-Yaku criterion remain."
+        }
+      }
+    },
+    {
+      "id": "tumbes-2023-12-27",
+      "discId": "nino2023",
+      "musician": "illapa",
+      "episode": "El Niño 2023 · diciembre",
+      "territory": "Departamento de Tumbes, Perú",
+      "period": { "start": "2023-12", "end": "2023-12" },
+      "eventDate": "2023-12-26",
+      "asOf": "2023-12-27T18:20:00-05:00",
+      "fact": {
+        "es": "El reporte del 27 de diciembre documentó 14 viviendas afectadas en Tumbes tras las lluvias del día 26.",
+        "en": "The 27 December report documented 14 homes affected in Tumbes following rainfall on the 26th."
+      },
+      "metrics": [
+        { "category": "affected_houses", "value": 14, "unit": { "es": "viviendas afectadas en el departamento", "en": "affected homes in the department" } }
+      ],
+      "qualification": {
+        "es": "Es un corte departamental de diciembre de 2023. No se le añaden impactos de febrero de 2024 ni se atribuye por sí solo causalidad a la imagen NASA.",
+        "en": "This is a departmental update from December 2023. February 2024 impacts are not added, and causation is not established from the NASA image alone."
+      },
+      "source": {
+        "organization": "COEN · INDECI, fuente COER Tumbes",
+        "title": "Reporte complementario 12356 · Lluvias en Tumbes",
+        "published": "2023-12-27",
+        "url": "https://portal.indeci.gob.pe/wp-content/uploads/2023/12/REPORTE-COMPLEMENTARIO-N.%C2%BA-12356-27DIC2023-LLUVIAS-INTENSAS-EN-EL-DEPARTAMENTO-DE-TUMBES-1.pdf#page=2",
+        "locator": "Página 2, cuadro departamental, corte de las 18:20."
+      },
+      "contextOnly": false,
+      "musicRule": null
+    }
+  ]
+}
