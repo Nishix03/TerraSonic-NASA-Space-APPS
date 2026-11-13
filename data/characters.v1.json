@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "updated": "2026-11-13",
+  "status": "editorial-proposal-not-community-validated",
+  "ethics": {
+    "url": "https://ich.unesco.org/es/principios-eticos-y-pci-00866",
+    "organization": "UNESCO · Patrimonio cultural inmaterial",
+    "note": {
+      "es": "Las comunidades son protagonistas de su patrimonio. Estas adaptaciones de ficción requieren revisión con sus portadores; las fuentes no equivalen a su consentimiento ni a una validación cultural.",
+      "en": "Communities lead the safeguarding of their heritage. These fictional adaptations require review with its bearers; citing sources does not imply their consent or cultural validation."
+    }
+  },
+  "characters": [
+    {
+      "key": "silbo",
+      "discId": "costero2017",
+      "episode": { "es": "El Niño Costero 2017", "en": "Coastal El Niño 2017" },
+      "place": "Catacaos, Piura, Perú",
+      "impactId": "bajo-piura-2017-03",
+      "story": {
+        "es": "En esta propuesta, Silbo visita Catacaos y escucha el paso del agua antes de tocar. Su frase breve invita a recordar lo ocurrido y a consultar las fuentes: es un narrador de ficción, no un sistema de alerta de lluvias.",
+        "en": "In this proposal, Silbo visits Catacaos and listens to the water before playing. His short phrase invites us to remember what happened and consult the sources: he is a fictional narrator, not a rainfall warning system."
+      },
+      "instrument": {
+        "es": "Quena representada en 3D; flauta sintética con vibrato en el navegador. La referencia del equipo a las vasijas silbadoras es una inspiración distinta, no una reconstrucción acústica de una pieza arqueológica.",
+        "en": "A quena is represented in 3D; the browser synthesizes a flute with vibrato. The team's whistling-vessel reference is a separate inspiration, not an acoustic reconstruction of an archaeological object."
+      },
+      "listens": {
+        "es": "En Melodía toma la celda más intensa de la columna y su fila. En los mapas NASA añade un motivo cuando el recuadro costero tiene nivel medio ≥ +2; ese nivel es derivado, no una predicción.",
+        "en": "In Melody it uses the strongest cell in the column and its row. NASA maps add a motif when the coastal box has a mean derived level ≥ +2; this is not a prediction."
+      },
+      "plays": {
+        "es": "La melodía sigue la escala del protagonista y se aproxima al acorde en tiempos fuertes. En Datos, Silbo emite un silbido cuando el recuadro costero alcanza el umbral.",
+        "en": "The melody follows the lead's scale and moves toward the chord on strong beats. In Data, Silbo emits a whistle when the coastal box reaches the threshold."
+      },
+      "culture": [
+        {
+          "fact": { "es": "El Ministerio de Cultura declaró patrimonio los conocimientos y prácticas del tejido del sombrero de paja de Catacaos en 2013.", "en": "Peru's Ministry of Culture recognized the knowledge and practices of Catacaos straw-hat weaving as cultural heritage in 2013." },
+          "url": "https://transparencia.cultura.gob.pe/rvm-ndeg-033-2013-vmpcic-mc",
+          "source": "Ministerio de Cultura · RVM 033-2013",
+          "limit": { "es": "El sombrero de Catacaos es una referencia contemporánea; no se presenta como un tocado moche ni se ha añadido sin la referencia visual pendiente.", "en": "The Catacaos hat is a contemporary reference; it is not described as a Moche headdress and has not been added without the pending visual reference." }
+        },
+        {
+          "fact": { "es": "La literatura arqueológica del Ministerio de Cultura documenta instrumentos sonoros y vasijas silbadoras en el mundo moche.", "en": "Archaeological literature published by the Ministry of Culture documents sound instruments and whistling vessels in the Moche world." },
+          "url": "https://museos.cultura.pe/sites/default/files/publicaciones/pdf/arqueologicas31_2022%20%281%29.pdf",
+          "source": "Arqueológicas 31 · La Chioma y Leonel, 2022",
+          "limit": { "es": "Su tocado dorado y la combinación de quena y vasija son una adaptación del proyecto. No es una réplica histórica ni una representación de las personas afectadas de Catacaos.", "en": "The gold headdress and combination of quena and vessel are a project adaptation. This is neither a historical replica nor a portrayal of people affected in Catacaos." }
+        }
+      ],
+      "visual": {
+        "es": "Propuesta: figura mayor de túnica ocre, rostro con cejas y nariz definidos, tocado curvo, orejeras, vasija y quena sostenida con ambas manos.",
+        "en": "Proposal: an elder in an ochre tunic, with defined brows and nose, a curved headdress, ear ornaments, a vessel and a quena held in both hands."
+      }
+    },
+    {
+      "key": "inti",
+      "discId": "nino2015",
+      "episode": { "es": "El Niño 2015–2016", "en": "El Niño 2015–2016" },
+      "place": "Paita, Piura, Perú",
+      "impactId": "paita-2016-03-registro",
+      "story": {
+        "es": "Proponemos a Inti como un músico que acompaña una jornada imaginada junto al puerto de Paita. Su marimba alterna insistencia y descanso para hablar del calor y del trabajo cotidiano, sin atribuir recuerdos ni testimonios a una comunidad real.",
+        "en": "We propose Inti as a musician accompanying an imagined day beside Paita's port. His marimba alternates persistence and rest to explore heat and daily work, without attributing memories or testimony to a real community."
+      },
+      "instrument": {
+        "es": "Marimba de láminas y resonadores representada en 3D; ataques sintéticos de seno y triángulo. La tradición documentada por UNESCO corresponde al Pacífico sur colombiano y Esmeraldas, Ecuador, no a Paita.",
+        "en": "A marimba with keys and resonators is represented in 3D; sine and triangle attacks are synthesized. UNESCO's documented tradition belongs to Colombia's South Pacific and Esmeraldas, Ecuador, not Paita."
+      },
+      "listens": {
+        "es": "El promedio de niveles cálidos de la columna. En Melodía también toca en los tiempos fuertes cuando hay datos.",
+        "en": "The mean warm level in the column. In Melody it also plays on strong beats when data is present."
+      },
+      "plays": {
+        "es": "Notas del acorde de la progresión vigente. Si el promedio cálido supera +2, sube una octava. En Datos emite tonos derivados del nivel, sin progresión armónica.",
+        "en": "Notes from the current progression's chord. If the mean warm level exceeds +2, it rises an octave. In Data it emits level-derived tones without a chord progression."
+      },
+      "culture": [
+        {
+          "fact": { "es": "UNESCO documenta una marimba de láminas de madera de palma y resonadores de bambú dentro de prácticas musicales de Colombia y Ecuador.", "en": "UNESCO documents a marimba with palm-wood keys and bamboo resonators within musical practices in Colombia and Ecuador." },
+          "url": "https://ich.unesco.org/en/RL/marimba-music-traditional-chants-and-dances-from-the-colombia-south-pacific-region-and-esmeraldas-province-of-ecuador-01099",
+          "source": "UNESCO · Inscripción 01099, 2015",
+          "limit": { "es": "La banda es una ficción que reúne referencias de lugares distintos. La chaqueta de faena, el sombrero y el medallón solar son propuestas visuales; no se presentan como vestuario típico certificado de Paita.", "en": "The fictional band brings together references from different places. The work jacket, hat and sun medallion are visual proposals, not certified traditional clothing from Paita." }
+        }
+      ],
+      "visual": {
+        "es": "Propuesta: chaqueta naranja sobre camisa clara, sombrero de ala, medallón solar y marimba con dos baquetas. La ropa de faena es una decisión narrativa, no una reconstrucción histórica.",
+        "en": "Proposal: an orange jacket over a light shirt, a brimmed hat, sun medallion and marimba with two mallets. The work clothing is a narrative decision, not a historical reconstruction."
+      }
+    },
+    {
+      "key": "mama",
+      "discId": "nina2010",
+      "episode": { "es": "La Niña 2010–2011", "en": "La Niña 2010–2011" },
+      "place": "Santa Lucía, Atlántico, Colombia",
+      "impactId": "santa-lucia-2010-12-coe",
+      "story": {
+        "es": "En esta historia propuesta, Mamacocha dedica una frase lenta a la memoria del agua en Santa Lucía. Su arpa sostiene a la banda y deja espacio a los demás; no habla en nombre de las familias que vivieron las inundaciones.",
+        "en": "In this proposed story, Mamacocha dedicates a slow phrase to the memory of water in Santa Lucía. Her harp supports the band and leaves room for the others; she does not speak for families who experienced the floods."
+      },
+      "instrument": {
+        "es": "Arpa como representación visual del bajo y colchón armónico sintéticos. No se afirma que este arpa sea una tradición musical de Santa Lucía ni que esté fabricada en iraca.",
+        "en": "The harp visually represents synthesized bass and harmonic pads. It is not described as a Santa Lucía musical tradition or as an instrument made from iraca fibre."
+      },
+      "listens": {
+        "es": "El promedio de niveles fríos de cada columna modifica la fuerza del bajo. Los datos del mapa no miden tranquilidad ni protección.",
+        "en": "The mean cold level in each column changes the bass strength. Map data does not measure calmness or protection."
+      },
+      "plays": {
+        "es": "En Melodía sostiene el bajo y las notas del acorde cada cuatro columnas, aun en un mapa cálido. En Datos emite tonos de niveles fríos, sin acordes.",
+        "en": "In Melody it sustains bass and chord notes every four columns, including on warm maps. In Data it emits cold-level tones without chords."
+      },
+      "culture": [
+        {
+          "fact": { "es": "Artesanías de Colombia documenta la tejeduría en palma de iraca en Usiacurí, municipio del Atlántico distinto de Santa Lucía.", "en": "Artesanías de Colombia documents iraca-palm weaving in Usiacurí, an Atlántico municipality distinct from Santa Lucía." },
+          "url": "https://repositorio.artesaniasdecolombia.com.co/items/ad4424f8-ba9a-4b58-93d3-f8a65cd9f159",
+          "source": "Artesanías de Colombia · La iraca en Usiacurí",
+          "limit": { "es": "El detalle geométrico del modelo es una propuesta inspirada en el tejido, no una copia de una obra artesanal ni prueba de vestimenta usada durante las inundaciones de 2010.", "en": "The model's geometric detail is a weaving-inspired proposal, not a copy of an artisan's work or evidence of clothing worn during the 2010 floods." }
+        }
+      ],
+      "visual": {
+        "es": "Propuesta: abrigo azul, trenzas onduladas, medallón geométrico y arpa de ocho cuerdas. La forma mantiene la referencia acuática del equipo.",
+        "en": "Proposal: a blue coat, wave-like braids, geometric medallion and eight-string harp. The form retains the team's water reference."
+      }
+    },
+    {
+      "key": "yaku",
+      "discId": "yaku2023",
+      "episode": { "es": "Marzo de 2023 · colección Yaku", "en": "March 2023 · Yaku collection" },
+      "place": "Pacora, Lambayeque, Perú",
+      "impactId": "pacora-2023-03-08",
+      "story": {
+        "es": "La propuesta sitúa a Yaku en un recorrido imaginado por Pacora. Ordena sus botellas de agua y escucha antes de jugar: en marzo, una pausa más larga recuerda que la lluvia también interrumpe la vida cotidiana. Es ficción, no el relato de una persona afectada.",
+        "en": "The proposal places Yaku on an imagined journey through Pacora. He arranges his water bottles and listens before playing: in March, a longer pause reminds us that rain can interrupt daily life. This is fiction, not an affected person's account."
+      },
+      "instrument": {
+        "es": "Botellas y gotas como instrumento imaginado; sonido sintético con caída breve de frecuencia. La escala pentatónica es una decisión compositiva, no una atribución exclusiva a una cultura.",
+        "en": "Bottles and drops form an imagined instrument; a short frequency fall creates the synthesized sound. The pentatonic scale is a composition choice, not a tradition attributed exclusively to one culture."
+      },
+      "listens": {
+        "es": "Las celdas con niveles de magnitud ≥ 2 y su fila en la columna. En el mapa, las filas superiores corresponden a latitudes más al norte.",
+        "en": "Cells with level magnitude ≥ 2 and their row in the column. On the map, higher rows correspond to more northerly latitudes."
+      },
+      "plays": {
+        "es": "Hasta dos gotas pentatónicas por columna en Melodía, más agudas para filas superiores. Yaku cálido se activa si cálido menos frío supera 0,9; en marzo de 2023 se aplica además la regla editorial de Pacora.",
+        "en": "Up to two pentatonic drops per column in Melody, higher for upper rows. Warm Yaku activates when warm minus cold exceeds 0.9; March 2023 also applies the Pacora editorial rule."
+      },
+      "culture": [
+        {
+          "fact": { "es": "El inventario de MINCETUR registra tejidos de algodón nativo y telar de cintura en Mórrope, Lambayeque.", "en": "MINCETUR's inventory records native-cotton weaving and backstrap-loom work in Mórrope, Lambayeque." },
+          "url": "https://consultasenlinea.mincetur.gob.pe/fichaInventario/index.aspx?cod_Ficha=13353",
+          "source": "MINCETUR · Ficha 13353, registro de 2024",
+          "limit": { "es": "Mórrope y Pacora son distritos distintos. El parche claro del modelo es una propuesta; la ficha no prueba vestimenta de Pacora ni daños de marzo de 2023.", "en": "Mórrope and Pacora are different districts. The model's light patch is a proposal; the inventory does not establish Pacora clothing or damage in March 2023." }
+        }
+      ],
+      "visual": {
+        "es": "Propuesta: silueta más pequeña, capucha de tres crestas, gafas, mochila, botas y bandeja de botellas. Un parche geométrico claro remite al tejido sin copiar un diseño artesanal.",
+        "en": "Proposal: a smaller silhouette, a three-crest hood, goggles, backpack, boots and bottle tray. A light geometric patch evokes weaving without copying an artisan's design."
+      }
+    },
+    {
+      "key": "illapa",
+      "discId": "nino2023",
+      "episode": { "es": "El Niño 2023–2024 · disco julio–diciembre de 2023", "en": "El Niño 2023–2024 · July–December 2023 disc" },
+      "place": "Tumbes, Perú",
+      "impactId": "tumbes-2023-12-27",
+      "story": {
+        "es": "Proponemos a Illapa como un guardián que escucha antes de golpear el tambor en una escena imaginada de Tumbes. Sus pulsos recuerdan la fuerza del agua sin convertir a una localidad en una imagen de desastre permanente.",
+        "en": "We propose Illapa as a guardian who listens before striking his drum in an imagined Tumbes scene. His pulses recall the force of water without portraying a place as permanently defined by disaster."
+      },
+      "instrument": {
+        "es": "Tambor de membrana en la propuesta visual; timbal y ruido filtrado sintetizados. No se atribuye el instrumento ni el poncho a una ceremonia o tradición específica de Tumbes.",
+        "en": "A membrane drum is used in the visual proposal; timpani and filtered noise are synthesized. Neither the instrument nor the poncho is attributed to a specific Tumbes ceremony or tradition."
+      },
+      "listens": {
+        "es": "La proporción de celdas extremas de la columna, con magnitud ≥ 4,2 en la escala derivada.",
+        "en": "The share of extreme cells in the column, with magnitude ≥ 4.2 on the derived scale."
+      },
+      "plays": {
+        "es": "En Melodía toca un pulso cada ocho columnas y refuerza las columnas con al menos 25 % de extremos. En Datos truena con ese mismo umbral. Deja al menos dos columnas entre truenos. No predice tormentas.",
+        "en": "In Melody it pulses every eight columns and emphasizes columns with at least 25% extreme cells. Data uses the same threshold. Thunder strikes are at least two columns apart. It does not predict storms."
+      },
+      "culture": [
+        {
+          "fact": { "es": "La guía de Tumbes de PROMPERÚ describe artesanía en pasalla, fibra obtenida del tallo del plátano.", "en": "PROMPERÚ's Tumbes guide describes crafts made with pasalla, fibre obtained from banana stems." },
+          "url": "https://repositorio.promperu.gob.pe/server/api/core/bitstreams/354822f2-1e01-450c-93a2-ee46f6076285/content#page=6",
+          "source": "PROMPERÚ · Guía de Tumbes 2023, página 6",
+          "limit": { "es": "La guía habla de artesanía; no demuestra que el poncho esté hecho de pasalla. Sus bordes geométricos son una propuesta. No se usan impactos de febrero de 2024 para este disco de 2023.", "en": "The guide concerns crafts; it does not establish that the poncho is made of pasalla. Its geometric borders are a proposal. February 2024 impacts are not used for this 2023 disc." }
+        }
+      ],
+      "visual": {
+        "es": "Propuesta: figura alta con sombrero oscuro, poncho de borde magenta, gafas, tambor encordado y baqueta. La ropa y los motivos son una adaptación de ficción.",
+        "en": "Proposal: a tall figure with a dark hat, magenta-edged poncho, glasses, rope-tension drum and beater. Clothing and motifs are a fictional adaptation."
+      }
+    }
+  ]
+}

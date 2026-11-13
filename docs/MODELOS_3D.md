@@ -63,4 +63,6 @@ La regresión de navegador prueba cinco personajes en seis situaciones: carga no
 
 El perfil local emula 390 × 844, latencia de 150 ms, descarga de 200 KiB/s, CPU ×4 y caché deshabilitada. Se hicieron tres recorridos por versión. La mediana inicial fue de 6,25 s hasta Inicio utilizable, 2,40 s desde elegir Escuchar hasta el control del reproductor y 37,83 s desde Banda hasta el primer render 3D. Con carga diferida y los nuevos modelos, una medición intermedia dio 2,60 s, 0,90 s y 10,67 s respectivamente. Son recorridos emulados en esta laptop, con SwiftShader. Las imágenes de respaldo son visibles durante la descarga. El conteo de bytes GLB por CDP resultó incompleto; el peso de los archivos se obtiene del disco.
 
+Las fichas históricas y culturales ya se incorporaron a `data/characters.v1.json` y se explican en `docs/PERSONAJES.md`. Las menciones de tareas históricas pendientes en el inventario inicial de arriba quedan resueltas por ese catálogo; la revisión cultural externa y la referencia visual para una posible adaptación de Silbo siguen pendientes.
+
 Quedan por medir el paquete final completo, continuidad de audio con el nuevo reproductor, teléfono físico, escucha humana y revisión cultural. Esta revisión de modelos no acredita el cierre del encargo completo de TerraSonic.

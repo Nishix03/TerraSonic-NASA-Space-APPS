@@ -83,6 +83,7 @@ function setup(options = {}) {
   vm.createContext(context);
   vm.runInContext(source + '\nglobalThis.ComponentUnderTest = Component;', context);
   if (!context.IMPACT_CATALOG.records.length) context.IMPACT_CATALOG = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/impacts.v1.json'), 'utf8'));
+  if (!context.CHARACTER_CATALOG.characters.length) context.CHARACTER_CATALOG = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/characters.v1.json'), 'utf8'));
   const component = new context.ComponentUnderTest({});
   component.loadDisc = component.preloadArt = component.playCue = component.warmBandClips = () => {};
   function element(id, left, top, width, height, clip = null) {
@@ -1574,4 +1575,39 @@ test('without the qualifying metric the impact rule leaves base harmony intact',
   const record=context.IMPACT_CATALOG.records.find(record=>record.id==='pacora-2023-03-08');
   record.metrics.find(metric=>metric.category==='affected_houses').value=0;
   assert.equal(c.profile().bpm,96); assert.equal(c.impactVm().applied,false);
+});
+
+test('all five character stories separate sourced episode, culture, fictional proposal and team personality', () => {
+  const {component:c,context}=setup(), catalog=context.CHARACTER_CATALOG;
+  assert.equal(catalog.version,1); assert.equal(catalog.status,'editorial-proposal-not-community-validated');
+  assert.equal(catalog.characters.length,5);
+  const ids=new Set(context.IMPACT_CATALOG.records.map(item=>item.id));
+  for(const [index,member] of context.BAND.entries()) {
+    c.state.bsel=index; const profile=c.renderVals().bandCur;
+    const record=catalog.characters.find(item=>item.key===member.k);
+    assert(record && ids.has(record.impactId));
+    assert.equal(profile.persona,member.persona); assert.equal(profile.quote,member.quote); assert.equal(profile.origin,member.origin);
+    assert(profile.story && profile.visual && profile.instrumentDetail && profile.impactQualification);
+    assert(profile.ethicsUrl.startsWith('https://ich.unesco.org/'));
+    assert(profile.references.every(reference=>reference.fact && reference.limit && reference.url.startsWith('https://')));
+    assert.notEqual(profile.plays,member.plays,'current behavior is documented separately from the original concept');
+  }
+});
+
+test('character catalog translates without changing the player, user file or editorial music', () => {
+  const {component:c}=playbackHarness(); c.applySet('prev'); c.state.disc=3; c.state.frame=2; c.state.col=14;
+  c.state.tab='band'; c.state.bsel=3; c.state.custom={kind:'image',name:'local-only.webp',url:'blob:local-only'};
+  const snapshot=()=>JSON.stringify([c.state.disc,c.state.frame,c.state.col,c.state.custom,c.state.mute,c.profile().bpm]);
+  const before=snapshot(), spanish=c.renderVals().bandCur; c.setLang('en'); const english=c.renderVals().bandCur;
+  for(const key of ['episode','story','instrumentDetail','listens','plays','visual','impactFact','impactQualification','ethicsNote']) assert.notEqual(english[key],spanish[key],key);
+  assert.equal(snapshot(),before); assert.match(english.references[0].limit,/different districts/);
+  c.setLang('es'); assert.equal(snapshot(),before); assert.equal(c.renderVals().bandCur.story,spanish.story);
+});
+
+test('culture sources never activate a musical impact and later Paita context remains explicit in the band profile', () => {
+  const {component:c}=playbackHarness(); c.applySet('prev'); c.state.disc=1; c.state.frame=5; c.state.bsel=1;
+  const profile=c.renderVals().bandCur;
+  assert.match(profile.impactQualification,/posterior al disco julio–diciembre de 2015/);
+  assert.match(profile.instrumentDetail,/no a Paita/); assert.equal(c.currentImpact(),null);
+  const before=c.profile().bpm; c.characterVm('inti'); assert.equal(c.profile().bpm,before);
 });

@@ -1104,12 +1104,23 @@ a{color:inherit}
 .px .bidentity{grid-area:identity;min-width:0;padding-top:10px;border-top:1px solid var(--line)}
 .px .bidentity .display{color:var(--band);font-size:clamp(1.7rem,4vw,3.5rem);overflow-wrap:anywhere}
 .px .bidentity p{margin-top:4px}
-.px .bshow{align-content:start;border-radius:6px}
+.px .bshow{align-content:start;align-self:start;border-radius:6px}
 .px .bscene{height:clamp(210px,43svh,435px)}
 .px .bstage-label{gap:8px;margin-inline:clamp(10px,2vw,22px)}
 .px .avatar-actions{width:100%;justify-content:flex-start}
 .px .avatar-actions .btn{min-height:44px;white-space:normal}
 .px .binfo{gap:12px;padding-top:0}
+.px .bsummary .kicker{margin-bottom:4px}
+.px .bstory{display:grid;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.px .bstory h2{font:700 1.1em/1.35 var(--head)}
+.px .bnotes{display:grid;gap:0;border-top:1px solid var(--line)}
+.px .bnotes details{border-bottom:1px solid var(--line);min-width:0}
+.px .bnotes summary{padding:12px 2px;cursor:pointer;font-weight:700;min-height:44px}
+.px .bnotes details>p{padding:0 2px 10px}
+.px .bsource{display:grid;gap:7px;padding:10px 2px 14px;overflow-wrap:anywhere}
+.px .bsource+.bsource{border-top:1px solid var(--line)}
+.px .bsource h3{font:700 1em/1.35 var(--head)}
+.px .bsource a{font-size:.85em;line-height:1.5;text-decoration:underline;text-underline-offset:3px}
 .px .bdl{grid-template-columns:minmax(0,1fr) minmax(0,1.75fr);gap:0 12px;overflow-wrap:anywhere}
 .px .bdl dt,.px .bdl dd{padding:7px 0;border-bottom:1px solid var(--line)}
 .px #tour-bgo .btn{white-space:normal;text-align:left}
@@ -1786,7 +1797,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-for>
 </div>
 </div>
-<div class="bidentity"><h1 class="display">{{bandCur.name}}</h1><p class="muted">{{bandCur.origin}}</p></div>
+<div class="bidentity"><h1 class="display">{{bandCur.name}}</h1><p class="muted">{{bandCur.instrumentName}} · {{bandCur.episode}}</p></div>
 <figure id="tour-bshow" class="bshow">
 <div class="bstage-top" aria-hidden="true"><span>{{tx.inScene}} · <span class="model-live-label">3D</span><span class="model-static-label">{{tx.staticPose}}</span></span><span>{{bandCur.name}}</span></div>
 <div class="bscene {{bandCur.entrance}}" role="img" aria-label="{{bandCur.name}} {{tx.fullBody}}">
@@ -1843,16 +1854,23 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <p role="status" class="small">{{bandCur.previewStatus}}</p>
 <sc-if value="{{bandCur.previewMuted}}"><button type="button" class="btn sm" onClick="{{bandCur.previewUnmute}}">{{bandCur.previewUnmuteLabel}}</button></sc-if>
-<dl class="bdl">
-<dt class="muted">{{tx.starring}}</dt><dd>{{bandCur.disc}}</dd>
+<div class="bsummary"><p class="kicker">{{tx.teamCharacter}}</p><p>{{bandCur.persona}}</p></div>
+<p class="bquote muted">«{{bandCur.quote}}»</p>
+<div class="bstory"><h2>{{tx.proposedStory}}</h2><p class="small muted">{{bandCur.place}}</p><p>{{bandCur.story}}</p></div>
+<div id="tour-bgo" class="row"><button type="button" class="btn primary" onClick="{{bandGo}}">{{tx.bandGo}} →</button></div>
+<div class="bnotes">
+<details><summary>{{tx.howItPlays}}</summary><dl class="bdl">
 <dt class="muted">{{tx.listens}}</dt><dd>{{bandCur.listens}}</dd>
 <dt class="muted">{{tx.plays}}</dt><dd>{{bandCur.plays}}</dd>
-<dt class="muted">{{tx.persona}}</dt><dd>{{bandCur.persona}}</dd>
-<dt class="muted">{{tx.instrument}}</dt><dd>{{bandCur.ins}}</dd>
-</dl>
-<p class="bquote muted">«{{bandCur.quote}}»</p>
-<p class="muted small">{{tx.bandDesign}}</p>
-<div id="tour-bgo" class="row"><button type="button" class="btn primary" onClick="{{bandGo}}">{{tx.bandGo}} →</button></div>
+<dt class="muted">{{tx.instrument}}</dt><dd>{{bandCur.instrumentDetail}}</dd>
+</dl></details>
+<details><summary>{{tx.factsAndReferences}}</summary>
+<section class="bsource"><h3>{{tx.documentedEpisode}}</h3><p>{{bandCur.impactFact}}</p><p class="small muted">{{bandCur.impactQualification}}</p><a href="{{bandCur.impactUrl}}" target="_blank" rel="noopener noreferrer">{{bandCur.impactSource}} ↗</a></section>
+<sc-for list="{{bandCur.references}}" as="reference"><section class="bsource"><h3>{{tx.culturalReference}}</h3><p>{{reference.fact}}</p><p class="small muted">{{reference.limit}}</p><a href="{{reference.url}}" target="_blank" rel="noopener noreferrer">{{reference.source}} ↗</a></section></sc-for>
+<section class="bsource"><h3>{{tx.visualProposal}}</h3><p>{{bandCur.visual}}</p><p class="small muted">{{bandCur.ethicsNote}}</p><a href="{{bandCur.ethicsUrl}}" target="_blank" rel="noopener noreferrer">UNESCO · {{tx.ethicalPrinciples}} ↗</a></section>
+</details>
+<details><summary>{{tx.teamInspiration}}</summary><p>{{bandCur.origin}}</p><p class="small muted">{{tx.bandDesign}}</p></details>
+</div>
 </div>
 </div>
 </sc-if>
@@ -2105,6 +2123,7 @@ var DISC_SETS = {
 var DISCS = DISC_SETS.eic.slice();
 // The build embeds data/impacts.v1.json here. No runtime request is needed.
 var IMPACT_CATALOG = { version: 1, records: [] };
+var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };
 function findImpactRecord(catalog, discId, month) {
   if (!/^\d{4}-\d{2}$/.test(month)) return null;
   return catalog.records.find(function (record) {
@@ -2774,6 +2793,7 @@ var TX = {
     theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Propuesta artística del proyecto. Las referencias culturales y las historias se documentan por separado.',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
+    teamCharacter: 'Personaje de ficción del equipo', proposedStory: 'Historia propuesta', howItPlays: 'Cómo suena en TerraSonic', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Propuesta visual', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
     dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Escucha cómo suena una imagen o una serie de datos.',
     dropTitle: 'Elegir una imagen o un CSV', dropSub: 'También puedes arrastrar el archivo aquí. Máx. 8 MB. CSV con al menos 8 valores numéricos y hasta 5000 filas.', sample: 'Probar con la lluvia de Chiclayo', dataExplainer: 'Cómo sonará tu archivo',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
@@ -2819,6 +2839,7 @@ var TX = {
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic proposal for the project. Cultural references and stories are documented separately.',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
+    teamCharacter: 'Fictional character by the team', proposedStory: 'Proposed story', howItPlays: 'How it sounds in TerraSonic', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Visual proposal', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
     dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Hear what an image or a data series sounds like.',
     dropTitle: 'Choose an image or CSV', dropSub: 'You can also drag the file here. 8 MB max. CSV files need at least 8 numeric values and can have up to 5000 rows.', sample: 'Try Chiclayo’s rainfall', dataExplainer: 'How your file will sound',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
@@ -3558,6 +3579,20 @@ class Component extends DCLogic {
       rule: applied ? record.musicRule.explanation[LANG] : T('Sin una regla editorial aplicable se conserva el perfil musical base. Datos no aplica esta modificación de tempo.', 'Without an applicable editorial rule, the base music profile remains. Data does not apply this tempo change.'),
       artistic: T('Melancolía, tensión e incertidumbre son elecciones artísticas, no emociones medidas ni una escala científica de tristeza.', 'Melancholy, tension and uncertainty are artistic choices, not measured emotions or a scientific sadness scale.'),
       catalogLabel: T('Ver catálogo estático v1', 'View static catalog v1')
+    };
+  }
+  characterVm(key) {
+    var character = CHARACTER_CATALOG.characters.find(function (item) { return item.key === key; });
+    if (!character) return {};
+    var impact = IMPACT_CATALOG.records.find(function (item) { return item.id === character.impactId; });
+    return {
+      episode: uiText(character.episode), place: character.place, story: uiText(character.story),
+      instrumentDetail: uiText(character.instrument), listens: uiText(character.listens), plays: uiText(character.plays),
+      visual: uiText(character.visual),
+      references: character.culture.map(function (reference) { return { fact: uiText(reference.fact), limit: uiText(reference.limit), url: reference.url, source: reference.source }; }),
+      impactFact: impact ? uiText(impact.fact) : '', impactQualification: impact ? uiText(impact.qualification) : '',
+      impactUrl: impact ? impact.source.url : '', impactSource: impact ? impact.source.organization + ' · ' + impact.asOf : '',
+      ethicsUrl: CHARACTER_CATALOG.ethics.url, ethicsNote: uiText(CHARACTER_CATALOG.ethics.note)
     };
   }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
@@ -4846,7 +4881,7 @@ class Component extends DCLogic {
           else avatar.replay?.(action[1]);
         } };
       }),
-      bandCur: Object.assign({}, band[bandIndex], {
+      bandCur: Object.assign({}, band[bandIndex], this.characterVm(bandKey), {
         previewOn: s.previewKey === bandKey,
         previewLabel: s.previewKey === bandKey ? T('Detener instrumento', 'Stop instrument') : T('Escuchar instrumento', 'Hear instrument'),
         preview: function () { self.previewInstrument(bandKey); },

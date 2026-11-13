@@ -28,6 +28,13 @@ def build(destination: Path) -> None:
     if impact_marker not in html:
         raise ValueError("Falta el marcador del catálogo estático de impactos.")
     html = html.replace(impact_marker, "var IMPACT_CATALOG = " + json.dumps(impact_catalog, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", 1)
+    character_catalog = json.loads((root / "data" / "characters.v1.json").read_text(encoding="utf-8"))
+    if character_catalog.get("version") != 1 or {item["key"] for item in character_catalog.get("characters", [])} != {model.stem for model in models}:
+        raise ValueError("El catálogo de personajes necesita versión 1 y los cinco músicos.")
+    character_marker = "var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };"
+    if character_marker not in html:
+        raise ValueError("Falta el marcador del catálogo estático de personajes.")
+    html = html.replace(character_marker, "var CHARACTER_CATALOG = " + json.dumps(character_catalog, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", 1)
     html = html.replace(
         '<meta charset="utf-8">',
         '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -61,6 +68,7 @@ def build(destination: Path) -> None:
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")
+    copy2(root / "data" / "characters.v1.json", destination / "data")
 
 
 if __name__ == "__main__":
