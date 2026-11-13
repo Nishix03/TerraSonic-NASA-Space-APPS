@@ -973,15 +973,48 @@ test('Technology categories remain reachable and selected when filtering in eith
       assert.equal(c.state.sub, 0);
       c.renderVals().nav.dots[2].go();
       const all = c.renderVals();
-      all.techFilters[1].pick();
+      all.techFilters[2].pick();
       const filtered = c.renderVals();
       assert.equal(c.state.sub, 2);
       assert.equal(filtered.techCur.title, all.techCur.title);
       assert(filtered.techCur.items.length < all.techCur.items.length);
+      assert.equal(filtered.techCur.items.length, 0, 'music runtime is not a production tool');
       assert.equal(filtered.nav.dots.length, all.nav.dots.length);
       filtered.techFilters[0].pick();
     }
   }
+});
+
+test('Technology lists only used tools with browser, source or production scope and keeps planned services absent', () => {
+  const {component:c,context}=setup();
+  for (const tool of context.TECH) {
+    assert(['browser','source','production'].includes(tool.scope)); assert.equal(tool.st,undefined);
+    assert(!/Tonal\.js|Tone\.js|Magenta|Lyria|ElevenLabs|Stable Audio|Krita|Piskel/.test(tool.name));
+  }
+  for(const lang of ['es','en']) {
+    c.setLang(lang);c.state.tab='tech';c.state.sub=0;
+    for(const filter of ['all','browser','production','source']) {
+      c.state.techFilter=filter;
+      const groups=c.techGroups();assert.equal(groups.length,4);
+      for(const group of groups)for(const tool of group.items)assert(!/planeado|planned|M[1-6]/i.test(tool.chip));
+      assert.equal(groups.reduce((total,group)=>total+group.items.length,0),context.TECH.filter(tool=>filter==='all'||tool.scope===filter).length);
+    }
+  }
+});
+
+test('Method names both catalogs, regions, derived units, local rainfall and the actual monthly impact rule', () => {
+  const {component:c}=setup();
+  for(const lang of ['es','en']) {
+    c.setLang(lang); const tx=c.renderVals().tx;
+    assert.match(tx.methodCoverage,/140°–70°/);assert.match(tx.methodCoverage,/2010/);assert.match(tx.methodCoverage,/2017/);
+    assert.match(tx.methodChiclayo,/2015–2018/);assert.match(tx.methodChiclayo,/48/);
+    assert.match(tx.methodLimits,/−4/);assert.match(tx.methodLimits,/−3/);
+    assert.match(tx.methodRule,/29/);assert.match(tx.methodRule,/10/);
+    assert.match(tx.credAiP,lang==='es'?/pendiente/:/pending/);
+    assert(!/todo código|all generated code|manual review/i.test(tx.credAiP));
+  }
+  assert(html.includes('https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/'));
+  assert(html.includes('./data/impacts.v1.json'));
 });
 
 function sectionNavHarness() {

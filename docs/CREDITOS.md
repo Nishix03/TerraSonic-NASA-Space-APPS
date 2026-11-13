@@ -7,9 +7,10 @@ Cada librería, repositorio, imagen o snippet que reutilicemos va aquí, con su 
 
 ## Datos
 - **Fotogramas oficiales del Earth Information Center**: *Sea Surface Temperature (SST) Anomaly – Near Real Time*, variante Pacífico (https://svs.gsfc.nasa.gov/5176), 16 may 2024 – 2 nov 2026. Crédito: NASA's Scientific Visualization Studio (visualizador Kel Elkins, USRA; científica Atousa Saberi, NASA/GSFC). Los fotogramas se recortan al Pacífico sudeste y se reducen a 560×320; la escala de color (−4 °C a +4 °C) es la de la visualización. Datos de origen: JPL MUR SST (https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1). Reutilización según las guías de la NASA: https://www.nasa.gov/multimedia/guidelines/index.html
-- *(Extras)* EIC *Global Temperature Anomalies 1880–2023* (https://svs.gsfc.nasa.gov/5207) y *Seasonal Global Precipitation, GPM* (https://svs.gsfc.nasa.gov/4897).
+- Los extras SVS 5207 y 4897 figuraban en planes anteriores; no forman parte de los discos de esta versión.
 - **NASA POWER** (Prediction Of Worldwide Energy Resources), NASA Langley Research Center. https://power.larc.nasa.gov — parámetros PRECTOTCORR, T2M y RH2M, resolución mensual, 1981–2024.
-- *(Planeado)* **NASA Worldview / GIBS**, imágenes MODIS. https://worldview.earthdata.nasa.gov
+- **NASA Worldview / GIBS**, capa GHRSST Sea Surface Temperature Anomalies: 30 mapas, día 15 de cada mes, cinco episodios 2010–2023. La paleta oficial se conserva en `data/colormaps/` con procedencia y huella. No son imágenes MODIS. [Paleta oficial](https://gitc.earthdata.nasa.gov/colormaps/v1.0/output/GHRSST_Sea_Surface_Temperature_Anomalies.html).
+- Los hechos de impactos y las referencias culturales, con sus límites, están en `data/impacts.v1.json`, `data/characters.v1.json`, `docs/IMPACTOS.md` y `docs/PERSONAJES.md`.
 
 ## Referencias culturales (por citar con fuente exacta)
 Los diseños de los personajes (docs/PLAN.md §9.6) están **inspirados** en piezas y lugares reales. M5 anota aquí cada fuente consultada:
@@ -27,7 +28,9 @@ Los diseños de los personajes (docs/PLAN.md §9.6) están **inspirados** en pie
 ## Librerías
 | Librería | Uso | Licencia | Enlace |
 |---|---|---|---|
-| Tone.js | Motor de audio | MIT | https://github.com/Tonejs/Tone.js |
+| Three.js + GLTFLoader, copia local combinada | Vistas 3D con respaldo estático | MIT, copia en `scripts/vendor/three-LICENSE.txt` | https://github.com/mrdoob/three.js |
+
+El audio utiliza Web Audio nativo, sin Tone.js. axe-core 4.14.0 (MPL-2.0) se descarga exclusivamente como herramienta de auditoría local y no se incluye en el producto. Su licencia acompaña el paquete en `_work/axe/`. Las tipografías se solicitan a Google Fonts con alternativas del sistema. Los modelos procedurales nuevos y sus atlas se generan dentro del repositorio; no se importaron modelos de terceros.
 
 ## Repos y snippets reutilizados
 | Qué | De dónde | Licencia | Dónde lo usamos |

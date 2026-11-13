@@ -172,8 +172,8 @@
         "en": "A membrane drum is used in the visual proposal; timpani and filtered noise are synthesized. Neither the instrument nor the poncho is attributed to a specific Tumbes ceremony or tradition."
       },
       "listens": {
-        "es": "La proporción de celdas extremas de la columna, con magnitud ≥ 4,2 en la escala derivada.",
-        "en": "The share of extreme cells in the column, with magnitude ≥ 4.2 on the derived scale."
+        "es": "La proporción de celdas cálidas extremas de la columna, con nivel ≥ +4,4 en la escala derivada.",
+        "en": "The share of extreme warm cells in the column, with level ≥ +4.4 on the derived scale."
       },
       "plays": {
         "es": "En Melodía toca un pulso cada ocho columnas y refuerza las columnas con al menos 25 % de extremos. En Datos truena con ese mismo umbral. Deja al menos dos columnas entre truenos. No predice tormentas.",

@@ -1121,6 +1121,13 @@ a{color:inherit}
 .px .bsource+.bsource{border-top:1px solid var(--line)}
 .px .bsource h3{font:700 1em/1.35 var(--head)}
 .px .bsource a{font-size:.85em;line-height:1.5;text-decoration:underline;text-underline-offset:3px}
+.px .method-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.px .method-notes details{border:1px solid var(--line);padding:0 12px;min-width:0}
+.px .method-notes summary{min-height:44px;padding-block:12px;font-weight:700;cursor:pointer}
+.px .method-notes p,.px .method-sources{font-size:.92em;line-height:1.6;margin-bottom:12px;overflow-wrap:anywhere}
+.px .method-sources{padding-left:18px;display:grid;gap:10px}
+.px .method-sources a{display:inline-block;padding-block:4px;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:900px){.px .method-notes{grid-template-columns:minmax(0,1fr)}}
 .px .bdl{grid-template-columns:minmax(0,1fr) minmax(0,1.75fr);gap:0 12px;overflow-wrap:anywhere}
 .px .bdl dt,.px .bdl dd{padding:7px 0;border-bottom:1px solid var(--line)}
 .px #tour-bgo .btn{white-space:normal;text-align:left}
@@ -1886,6 +1893,17 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <li class="cardx compact"><span class="tag">{{s.n}}</span><strong>{{s.title}}</strong><span class="muted small">{{s.body}}</span></li>
 </sc-for>
 </ol>
+<div class="method-notes">
+<details><summary>{{tx.methodCoverageTitle}}</summary><p>{{tx.methodCoverage}}</p><p>{{tx.methodChiclayo}}</p></details>
+<details><summary>{{tx.methodLimitsTitle}}</summary><p>{{tx.methodLimits}}</p><p>{{tx.methodRule}}</p></details>
+<details><summary>{{tx.methodSourcesTitle}}</summary><ul class="method-sources">
+<li><a href="https://svs.gsfc.nasa.gov/5176/" target="_blank" rel="noopener noreferrer">NASA SVS 5176 · EIC SST Anomaly ↗</a></li>
+<li><a href="https://gitc.earthdata.nasa.gov/colormaps/v1.0/output/GHRSST_Sea_Surface_Temperature_Anomalies.html" target="_blank" rel="noopener noreferrer">NASA GIBS · {{tx.originalPalette}} ↗</a></li>
+<li><a href="https://power.larc.nasa.gov/docs/services/api/temporal/monthly/" target="_blank" rel="noopener noreferrer">NASA POWER · {{tx.monthlyData}} ↗</a></li>
+<li><a href="./data/impacts.v1.json" target="_blank" rel="noopener noreferrer">{{tx.impactCatalog}} ↗</a></li>
+<li><a href="https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/" target="_blank" rel="noopener noreferrer">Space Apps · The Earth Information Jukebox ↗</a></li>
+</ul></details>
+</div>
 </sc-if>
 <sc-if value="{{scr.hB}}" hint-placeholder-val="{{ false }}">
 <div class="color-method">
@@ -1932,7 +1950,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{techCur.empty}}"><p class="tech-empty muted">{{tx.techEmpty}}</p></sc-if>
 <sc-for list="{{techCur.items}}" as="t" hint-placeholder-count="6">
 <article class="tech-item">
-<h2>{{t.name}}</h2><div class="tech-chipline"><span class="techchip" style="background: {{t.chipBg}}">{{t.chip}}</span><span class="mono muted xsmall">{{tx.module}} {{t.mod}}</span></div>
+<h2>{{t.name}}</h2><div class="tech-chipline"><span class="techchip" style="background: {{t.chipBg}}">{{t.chip}}</span></div>
 <p class="muted small">{{t.use}}</p>
 <sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><details><summary class="small" aria-label="{{tx.techNote}} · {{t.name}}">{{tx.techNote}}</summary><p class="muted small">{{t.note}}</p></details></sc-if>
 </article>
@@ -2584,55 +2602,172 @@ var BAND = [
   { k: 'illapa', name: 'ILLAPA', color: '#E0459B', disc: 'Invierno 2026', glyph: '✦', ins: 'TIMBAL', clip: 'latido', clips: 'idle · latido · trueno · aparecer / salir', origin: 'Rayo y trueno en la cosmovisión andina', listens: 'Los píxeles de anomalía extrema (rojo oscuro y magenta) de cada columna.', plays: 'Truenos graves. Solo aparece cuando una columna supera un 25 % de valores extremos.', persona: 'Aparece poco, pero cuando llega todos callan.', quote: 'No me llames. Si vengo, es en serio.', brief: 'guerrero de tormenta con honda y rayo zigzag magenta; nube oscura detrás; frame de destello.' }
 ];
 var TECH = [
-  { cat: 'Interfaz y código', name: 'HTML + CSS + JavaScript', use: 'Base del prototipo y de la app final. Sin frameworks ni servidor.', st: 'done', mod: 'M6' },
-  { cat: 'Interfaz y código', name: 'Web Audio API', use: 'Sintetiza la banda en tiempo real: marimba, bajo, gotas, truenos y el silbido.', st: 'done', mod: 'M3' },
-  { cat: 'Interfaz y código', name: 'Canvas 2D (getImageData)', use: 'Lee los píxeles de cada fotograma y de tus imágenes: visión por computadora sin librerías.', st: 'done', mod: 'M2' },
-  { cat: 'Interfaz y código', name: 'Web Speech API', use: 'Narración y «Describir en voz alta» en español e inglés.', st: 'done', mod: 'M5' },
-  { cat: 'Interfaz y código', name: 'Vibration API', use: 'Vibración en el móvil con los truenos y las gotas densas.', st: 'done', mod: 'M5' },
-  { cat: 'Interfaz y código', name: 'FileReader y Blob', use: 'Lee tus imágenes y CSV dentro del navegador, sin subirlos a ningún servidor.', st: 'done', mod: 'M4' },
-  { cat: 'Interfaz y código', name: 'Animaciones CSS', use: 'Fondo espacial, transición de página con satélite, escenario de la banda y efectos de la interfaz.', st: 'done', mod: 'M4' },
-  { cat: 'Interfaz y código', name: 'Barlow, Inter, IBM Plex Mono, Atkinson Hyperlegible', use: 'Tipografías de la interfaz y del texto legible (Google Fonts).', st: 'done', mod: 'M4' },
-  { cat: 'Interfaz y código', name: 'Tone.js', use: 'Opcional para el motor de sonido final. El prototipo usa Web Audio puro.', st: 'plan', mod: 'M3' },
-  { cat: 'Interfaz y código', name: 'GitHub (repositorio)', use: 'Repositorio público, una rama por módulo y revisión de cambios entre compañeros.', st: 'done', mod: 'M6' },
-  { cat: 'Interfaz y código', name: 'GitHub Pages', use: 'Publicación de la versión final con una URL pública.', st: 'plan', mod: 'M6' },
-  { cat: 'Datos de la NASA', name: 'EIC · SST Anomaly (SVS 5176)', use: 'Los 30 fotogramas de los 5 discos, extraídos del video oficial del EIC «SST Anomaly» (SVS 5176, Pacífico).', st: 'done', mod: 'M1' },
-  { cat: 'Datos de la NASA', name: 'GHRSST MUR · anomalía de temperatura del mar (GIBS)', use: 'Los 30 fotogramas de los 5 discos «NASA GIBS» (2010–2023), vía NASA GIBS / Worldview.', st: 'done', mod: 'M1' },
-  { cat: 'Datos de la NASA', name: 'NASA POWER API', use: 'Lluvia y temperatura mensuales (1981–2024) de Chiclayo, Galápagos e Iquitos. Alimenta el ejemplo de «Convierte en música».', st: 'done', mod: 'M1' },
-  { cat: 'Datos de la NASA', name: 'Galería del Earth Information Center (SVS)', use: 'Fuente oficial de las visualizaciones. Los discos extra saldrán de SVS 5207 y 4897.', st: 'plan', mod: 'M1' },
-  { cat: 'Datos de la NASA', name: 'ffmpeg', use: 'Recortar y reducir los fotogramas del video del EIC (y los de los discos extra).', st: 'done', mod: 'M1' },
-  { cat: 'Música y sonido', name: 'Compositor por reglas (teoría musical)', use: 'Una tonalidad, un tempo y una progresión de acordes por personaje. La melodía sale de los datos y se ajusta al acorde en los tiempos fuertes.', st: 'done', mod: 'M3' },
-  { cat: 'Música y sonido', name: 'ConvolverNode (reverb)', use: 'Reverberación generada en el navegador para que el sonido sea más cálido y agradable.', st: 'done', mod: 'M3' },
-  { cat: 'Música y sonido', name: 'Tonal.js', use: 'Biblioteca de teoría musical (escalas, acordes, modos) para ampliar el compositor en la versión final.', st: 'plan', mod: 'M3' },
-  { cat: 'Música y sonido', name: 'Magenta.js (MusicRNN)', use: 'IA que corre en el navegador para variar o continuar la melodía. Alimentaría la opción «IA en el navegador».', note: 'Verificar versión, tamaño del modelo y mantenimiento antes de integrarla.', st: 'plan', mod: 'M3' },
-  { cat: 'Música y sonido', name: 'Lyria RealTime (Gemini API)', use: 'Música generada por IA en tiempo real por WebSocket, guiada por texto, tempo, escala y densidad. Es experimental y solo instrumental.', note: 'Necesita clave de API: no puede ir en una web estática, haría falta un servidor intermediario. No es parte del MVP.', st: 'plan', mod: 'M3' },
-  { cat: 'Música y sonido', name: 'Stable Audio / ElevenLabs Music', use: 'Pistas pregeneradas para la playlist de respaldo y el video, con prompts derivados de los datos.', note: 'No es en tiempo real ni traduce los datos 1:1. Revisar licencias y declarar el uso de IA.', st: 'plan', mod: 'M5' },
-  { cat: 'IA y herramientas', name: 'Claude Design (Anthropic)', use: 'Crear este boceto interactivo: interfaz, analizador y sonido.', st: 'done', mod: 'Todos' },
-  { cat: 'IA y herramientas', name: 'Claude Code (Anthropic)', use: 'Plan, análisis del audio y del reto, cálculos con NASA POWER y estructura del repositorio.', st: 'done', mod: 'Todos' },
-  { cat: 'IA y herramientas', name: 'Whisper (OpenAI, en local)', use: 'Transcribir la charla de orientación para extraer los requerimientos.', st: 'done', mod: 'M5' },
-  { cat: 'IA y herramientas', name: 'ChatGPT Codex (OpenAI)', use: 'Programar ciertas funciones de la versión final, por ejemplo exportar .wav, pruebas del analizador y la animación por capas de los avatares.', note: 'Cada función generada se revisa en un cambio aparte y se prueba antes de integrarla. Se anota en el repositorio.', st: 'plan', mod: 'M2–M4' },
-  { cat: 'IA y herramientas', name: 'ChatGPT · generación de imágenes', use: 'Conceptos de los 5 avatares: modelo anime detallado y sprite 32×32.', note: 'Confirmar la herramienta exacta y sus condiciones de uso antes de generar. Retoque a mano y etiqueta «generado con IA».', st: 'plan', mod: 'M4' },
-  { cat: 'IA y herramientas', name: 'Krita / Piskel', use: 'Repintar, separar en capas y ajustar los avatares y sprites.', st: 'plan', mod: 'M4' },
-  { cat: 'IA y herramientas', name: 'ElevenLabs (opcional)', use: 'Voz de la narración del video, si la voz del navegador suena muy robótica.', st: 'plan', mod: 'M5' }
+  {
+    "cat": "Interfaz y código",
+    "name": "HTML + CSS + JavaScript",
+    "scope": "browser",
+    "use": "Interfaz estática con enlaces de estado y controles nativos. No requiere servidor de aplicación."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "Canvas 2D",
+    "scope": "browser",
+    "use": "Reduce imágenes a 28×16 celdas y dibuja series numéricas. Los archivos se procesan localmente."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "Three.js + GLTFLoader",
+    "scope": "browser",
+    "use": "Vista de cinco modelos GLB, cargada al necesitarla. Las miniaturas y el respaldo estático no requieren WebGL."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "Web Speech API",
+    "scope": "browser",
+    "use": "Lectura opcional con voces disponibles del idioma. El texto permanece cuando no hay voz compatible."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "Vibration API",
+    "scope": "browser",
+    "use": "Pulsos breves opcionales, apagados inicialmente. Depende del dispositivo y del navegador."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "FileReader + Blob + localStorage",
+    "scope": "browser",
+    "use": "Lectura local de imágenes y tablas; guarda idioma y preferencias. Los archivos no se guardan en localStorage."
+  },
+  {
+    "cat": "Interfaz y código",
+    "name": "CSS + tipografías",
+    "scope": "browser",
+    "use": "Diseño adaptable, foco y movimiento reducido. Barlow, Inter, IBM Plex Mono y Atkinson Hyperlegible; con fuentes de sistema de respaldo."
+  },
+  {
+    "cat": "Datos de la NASA",
+    "name": "EIC · SST Anomaly (SVS 5176)",
+    "scope": "source",
+    "use": "30 imágenes del Pacífico: 16 mayo 2024–2 noviembre 2026. Son una selección almacenada, no una conexión diaria en vivo."
+  },
+  {
+    "cat": "Datos de la NASA",
+    "name": "NASA GIBS · GHRSST MUR",
+    "scope": "source",
+    "use": "30 mapas de anomalías de cinco episodios entre 2010 y 2023. Cada fecha corresponde al día 15 del mes."
+  },
+  {
+    "cat": "Datos de la NASA",
+    "name": "NASA POWER",
+    "scope": "source",
+    "use": "Archivo mensual 1981–2024. El ejemplo usa 48 valores de precipitación media diaria por mes de Chiclayo, 2015–2018."
+  },
+  {
+    "cat": "Música y sonido",
+    "name": "Web Audio API",
+    "scope": "browser",
+    "use": "Osciladores, filtros y envolventes sintetizan cinco instrumentos. Volumen y reverberación se cancelan al pausar o saltar."
+  },
+  {
+    "cat": "Música y sonido",
+    "name": "Compositor por reglas",
+    "scope": "browser",
+    "use": "Melodía utiliza escala, 4–6 acordes y tempo del protagonista. Datos usa niveles y tonos sin progresión armónica."
+  },
+  {
+    "cat": "Música y sonido",
+    "name": "ConvolverNode",
+    "scope": "browser",
+    "use": "Reverberación generada localmente y salida independiente por músico, para silenciar también su cola sonora."
+  },
+  {
+    "cat": "Música y sonido",
+    "name": "Catálogo editorial de impactos v1",
+    "scope": "browser",
+    "use": "Registros estáticos con fuente, territorio y mes. Solo la regla explícita de Pacora/marzo 2023 cambia el tempo."
+  },
+  {
+    "cat": "Producción y revisión",
+    "name": "Blender + Python",
+    "scope": "production",
+    "use": "Generación de geometría, rig, clips, atlas PBR, exportación GLB y renders de respaldo. Blender no se ejecuta en la web."
+  },
+  {
+    "cat": "Producción y revisión",
+    "name": "Python + ffmpeg",
+    "scope": "production",
+    "use": "Preparación de fotogramas y datos; empaquetado del sitio estático. No se descarga el video fuente durante la visita."
+  },
+  {
+    "cat": "Producción y revisión",
+    "name": "Node.js + Playwright",
+    "scope": "production",
+    "use": "Regresiones de controles, audio, idiomas, guías, errores y composición en Chromium. No reemplazan pruebas con usuarios."
+  },
+  {
+    "cat": "Producción y revisión",
+    "name": "Git + GitHub",
+    "scope": "production",
+    "use": "Historial y ramas del proyecto. Esta revisión se conserva en piero-mejoras; la web oficial se mantiene separada."
+  },
+  {
+    "cat": "Producción y revisión",
+    "name": "Asistencia de IA documentada",
+    "scope": "production",
+    "use": "El registro conserva Claude Design/Code y Whisper como usos históricos. Codex asiste esta revisión de código, pruebas y modelos procedurales."
+  }
 ];
 var OBJ = [
   { tag: 'EMPAREJAR', title: 'Fotogramas del EIC + sonido en tiempo real', where: 'Cada fotograma suena mientras el cabezal lo escanea, columna por columna.', page: 'juke' },
-  { tag: 'ELEGIR', title: 'Elegir una visualización y oírla', where: 'Cinco discos, una tira de fotogramas y flechas para saltar de mes.', page: 'juke' },
+  { tag: 'ELEGIR', title: 'Elegir una visualización y oírla', where: 'Dos colecciones de cinco discos, con seis fechas por disco y controles para saltar sin arrastrar.', page: 'juke' },
   { tag: 'DE LA VISTA AL OÍDO', title: 'Del color al sonido', where: 'La cuadrícula «Lo que ve la máquina» muestra qué lee el algoritmo, y «Más opciones» explica por qué suena así.', page: 'juke' },
   { tag: 'MUSICAL', title: 'Agradable, no ruido', where: 'El motor Melodía usa escalas, acordes y una progresión por disco, no píxeles convertidos a tonos al azar.', page: 'juke' },
   { tag: 'ACCESIBLE', title: 'Para personas ciegas o con baja visión', where: 'Descripción por voz, subtítulos de sonido, vibración, teclado, alto contraste y texto grande.', page: 'juke' },
   { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen o un CSV y suena con la misma banda.', page: 'data' },
-  { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cada disco sugiere un protagonista con personalidad. Mamacocha se apaga cuando el mar se calienta. El escenario muestra quién toca en cada momento.', page: 'band' },
-  { tag: 'PROCESO', title: 'Documentar el método', where: 'La página Tecnología explica herramientas, datos y uso de IA, con lo hecho y lo planeado.', page: 'tech' }
+  { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cinco personajes de ficción con historias propuestas, fuentes de episodios y referencias culturales diferenciadas.', page: 'band' },
+  { tag: 'PROCESO', title: 'Documentar el método', where: 'Tecnología distingue ejecución en el navegador, datos y herramientas de producción; los créditos explican el uso documentado de IA.', page: 'tech' }
 ];
 var STEPS = [
-  { n: '01', title: 'Fotograma EIC', body: 'Imagen de anomalía de temperatura del mar de la visualización del EIC, un fotograma cada 30 días.' },
-  { n: '02', title: 'Cuadrícula 28×16', body: 'Se reduce a 448 celdas con Canvas (getImageData). La tierra se ignora.' },
-  { n: '03', title: 'Color → nivel', body: 'Cada color de la paleta de la NASA se convierte en un nivel de −5 (muy frío) a +5 (muy cálido).' },
-  { n: '04', title: 'Escaneo oeste → este', body: 'Un cabezal recorre las 28 columnas. Cada columna es un paso del ritmo.' },
-  { n: '05', title: 'Cinco músicos', body: 'Inti, Mamacocha, Yaku, Illapa y Silbo convierten esos niveles en acordes, bajo, gotas, truenos y silbidos. En modo Melodía, todos tocan en la tonalidad y la progresión del disco.' },
-  { n: '06', title: 'Para todos', body: 'Subtítulos de sonido, descripción por voz, vibración, teclado y alto contraste.' },
-  { n: '07', title: 'Convierte en música', body: 'Sube una imagen o un CSV. Una imagen se lee por colores; un CSV, por valores sobre o bajo la media. Se procesa en tu navegador.' },
-  { n: '08', title: 'Elige al protagonista', body: 'Cada disco sugiere un músico. Puedes elegir otro en Escuchar y sumar a los demás para armar la banda completa.' }
+  {
+    "n": "01",
+    "title": "Mapas con fecha",
+    "body": "Diferencia respecto a una referencia climática, no temperatura absoluta. EIC y GIBS aportan dos colecciones almacenadas de seis fechas por disco."
+  },
+  {
+    "n": "02",
+    "title": "28×16 celdas",
+    "body": "Canvas reduce el recorte a 448 celdas. Se excluyen colores identificados como tierra o sin datos; es una aproximación visual."
+  },
+  {
+    "n": "03",
+    "title": "Colores y niveles",
+    "body": "Se compara con la paleta del producto y se deriva un nivel entre −5 y +5. No son grados ni valores científicos recuperados sin pérdida."
+  },
+  {
+    "n": "04",
+    "title": "Barrido con controles",
+    "body": "28 columnas de oeste a este. Puedes pausar, reanudar o saltar con botones y teclado; la fecha del mapa es distinta al tiempo del audio."
+  },
+  {
+    "n": "05",
+    "title": "Melodía o Datos",
+    "body": "Melodía compone con escala y acordes del protagonista. Datos traduce niveles a tonos sin progresión. Cinco controles permiten elegir qué instrumentos oír."
+  },
+  {
+    "n": "06",
+    "title": "Decisiones artísticas",
+    "body": "La regla documentada de Pacora ralentiza marzo de 2023 en 10 ppm. Tensión y melancolía son elecciones editoriales; no se calculan emociones."
+  },
+  {
+    "n": "07",
+    "title": "Chiclayo y tus archivos",
+    "body": "La imagen de ejemplo permite empezar. Lluvia de Chiclayo 2015–2018 y tablas son alternativas locales; los valores se normalizan dentro de la serie elegida."
+  },
+  {
+    "n": "08",
+    "title": "Más de una forma",
+    "body": "Mapa con leyenda escrita y símbolos, registro consultable, teclado y preferencias combinables. Voz y vibración son ayudas opcionales si están disponibles."
+  }
 ];
 var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
 var CHORDS = { Am: [[220,261.63,329.63],110], C: [[261.63,329.63,392],130.81], F: [[174.61,220,261.63],87.31], G: [[196,246.94,293.66],98], E: [[164.81,207.65,246.94],82.41] };
@@ -2717,57 +2852,109 @@ var MUSIC_EN = {
   yaku_dark: { key: 'G', mode: 'minor pentatonic', mood: 'bittersweet, like rain that no longer brings joy', story: 'the drops of a worrying rain' },
   illapa: { key: 'B', mode: 'natural minor', mood: 'tense and dark', story: 'the tension of the storm' }
 };
-var CAT_EN = { 'Interfaz y código': 'Interface and code', 'Datos de la NASA': 'NASA data', 'Música y sonido': 'Music and sound', 'IA y herramientas': 'AI and tools' };
+var CAT_EN = { 'Interfaz y código': 'Interface and code', 'Datos de la NASA': 'NASA data', 'Música y sonido': 'Music and sound', 'Producción y revisión': 'Production and review' };
 var TECH_EN = {
-  'HTML + CSS + JavaScript': { use: 'Foundation of the prototype and the final app. No frameworks, no server.' },
-  'Web Audio API': { use: 'Synthesizes the band in real time: marimba, bass, drops, thunder and the whistle.' },
-  'Canvas 2D (getImageData)': { use: 'Reads the pixels of each frame and of your images: computer vision without libraries.' },
-  'Web Speech API': { use: 'Narration and “Describe aloud” in Spanish and English.' },
-  'Vibration API': { use: 'Phone vibration with the thunder and dense drops.' },
-  'FileReader y Blob': { name: 'FileReader and Blob', use: 'Reads your images and CSV files inside the browser, without uploading them to any server.' },
-  'Animaciones CSS': { name: 'CSS animations', use: 'Space background, page transitions, the band’s stage and interface effects.' },
-  'Barlow, Inter, IBM Plex Mono, Atkinson Hyperlegible': { use: 'Interface and readable-text typefaces (Google Fonts).' },
-  'Tone.js': { use: 'Optional for the final sound engine. The prototype uses plain Web Audio.' },
-  'GitHub (repositorio)': { name: 'GitHub (repository)', use: 'Public repository, one branch per module and peer review of changes.' },
-  'GitHub Pages': { use: 'Publishing the final version at a public URL.' },
-  'EIC · SST Anomaly (SVS 5176)': { use: 'The 30 frames of the 5 discs, extracted from the official EIC “SST Anomaly” video (SVS 5176, Pacific).' },
-  'GHRSST MUR · anomalía de temperatura del mar (GIBS)': { name: 'GHRSST MUR · sea surface temperature anomaly (GIBS)', use: 'The 30 frames of the 5 “NASA GIBS” discs (2010–2023), via NASA GIBS / Worldview.' },
-  'NASA POWER API': { use: 'Monthly rainfall and temperature (1981–2024) for Chiclayo, Galápagos and Iquitos. Feeds the “Convert to music” sample.' },
-  'Galería del Earth Information Center (SVS)': { name: 'Earth Information Center gallery (SVS)', use: 'Official source of the visualizations. The extra discs will come from SVS 5207 and 4897.' },
-  'ffmpeg': { use: 'Crops and downsizes the frames of the EIC video (and those of the extra discs).' },
-  'Compositor por reglas (teoría musical)': { name: 'Rule-based composer (music theory)', use: 'One key, one tempo and one chord progression per character. The melody comes from the data and snaps to the chord on strong beats.' },
-  'ConvolverNode (reverb)': { use: 'Reverb generated in the browser so the sound is warmer and more pleasant.' },
-  'Tonal.js': { use: 'Music theory library (scales, chords, modes) to extend the composer in the final version.' },
-  'Magenta.js (MusicRNN)': { use: 'AI that runs in the browser to vary or continue the melody. It would power the “In-browser AI” option.', note: 'Check version, model size and maintenance before integrating it.' },
-  'Lyria RealTime (Gemini API)': { use: 'AI-generated music in real time over WebSocket, guided by text, tempo, scale and density. Experimental and instrumental only.', note: 'Needs an API key: it cannot live in a static site and would need a proxy server. Not part of the MVP.' },
-  'Stable Audio / ElevenLabs Music': { use: 'Pre-generated tracks for the backup playlist and the video, with prompts derived from the data.', note: 'Not real time and does not map the data 1:1. Check licenses and declare AI use.' },
-  'Claude Design (Anthropic)': { use: 'Building this interactive prototype: interface, analyzer and sound.', mod: 'All' },
-  'Claude Code (Anthropic)': { use: 'Plan, analysis of the audio and the challenge, NASA POWER calculations, repository structure and this redesign.', mod: 'All' },
-  'Whisper (OpenAI, en local)': { name: 'Whisper (OpenAI, local)', use: 'Transcribing the orientation talk to extract the requirements.' },
-  'ChatGPT Codex (OpenAI)': { use: 'Coding certain features of the final version, such as .wav export, analyzer tests and layered avatar animation.', note: 'Each generated feature is reviewed in a separate change and tested before merging. It is logged in the repository.' },
-  'ChatGPT · generación de imágenes': { name: 'ChatGPT · image generation', use: 'Concepts for the 5 avatars: a detailed anime model and a 32×32 sprite.', note: 'Confirm the exact tool and its terms of use before generating. Hand retouching and a visible “AI-generated” label.' },
-  'Krita / Piskel': { use: 'Repainting, splitting into layers and adjusting the avatars and sprites.' },
-  'ElevenLabs (opcional)': { name: 'ElevenLabs (optional)', use: 'Voice for the video narration, if the browser voice sounds too robotic.' }
+  "HTML + CSS + JavaScript": {
+    "use": "Static interface with state bindings and native controls. No application server is required."
+  },
+  "Canvas 2D": {
+    "use": "Reduces images to 28×16 cells and draws numeric series. Files are processed locally."
+  },
+  "Three.js + GLTFLoader": {
+    "use": "Displays five GLB models, loaded when needed. Thumbnails and static fallbacks do not require WebGL."
+  },
+  "Web Speech API": {
+    "use": "Optional reading with available voices matching the language. Text remains when no matching voice exists."
+  },
+  "Vibration API": {
+    "use": "Optional short pulses, initially off. Availability depends on the device and browser."
+  },
+  "FileReader + Blob + localStorage": {
+    "use": "Local image and table reading; stores language and preferences. Files are not stored in localStorage."
+  },
+  "CSS + tipografías": {
+    "use": "Responsive layout, focus and reduced motion. Barlow, Inter, IBM Plex Mono and Atkinson Hyperlegible; system fonts provide fallbacks."
+  },
+  "EIC · SST Anomaly (SVS 5176)": {
+    "use": "30 Pacific images: 16 May 2024–2 November 2026. This is a stored selection, not a daily live feed."
+  },
+  "NASA GIBS · GHRSST MUR": {
+    "use": "30 anomaly maps from five episodes between 2010 and 2023. Each date corresponds to the 15th of its month."
+  },
+  "NASA POWER": {
+    "use": "Monthly file for 1981–2024. The sample uses 48 monthly mean daily precipitation values for Chiclayo, 2015–2018."
+  },
+  "Web Audio API": {
+    "use": "Oscillators, filters and envelopes synthesize five instruments. Volume and reverb are cancelled on pause or seek."
+  },
+  "Compositor por reglas": {
+    "use": "Melody uses the lead’s scale, 4–6 chords and tempo. Data uses levels and tones without a chord progression."
+  },
+  "ConvolverNode": {
+    "use": "Locally generated reverb and an independent output per musician, so muting also cuts its sound tail."
+  },
+  "Catálogo editorial de impactos v1": {
+    "use": "Static records with source, territory and month. Only the explicit Pacora/March 2023 rule changes tempo."
+  },
+  "Blender + Python": {
+    "use": "Generates geometry, rig, clips, PBR atlas, GLB exports and fallback renders. Blender does not run on the website."
+  },
+  "Python + ffmpeg": {
+    "use": "Prepares frames and data; packages the static site. The source video is not downloaded during a visit."
+  },
+  "Node.js + Playwright": {
+    "use": "Regression checks for controls, audio, languages, guides, errors and layout in Chromium. They do not replace user testing."
+  },
+  "Git + GitHub": {
+    "use": "Project history and branches. This review is kept on piero-mejoras; the official website remains separate."
+  },
+  "Asistencia de IA documentada": {
+    "use": "The log preserves Claude Design/Code and Whisper as historical uses. Codex assists this code review, testing and procedural models."
+  }
 };
 var OBJ_EN = [
   { tag: 'MATCH', title: 'EIC frames + real-time sound', where: 'Each frame plays while the scan head crosses it, column by column.' },
-  { tag: 'CHOOSE', title: 'Pick a visualization and hear it', where: 'Five discs, a strip of frames and arrows to jump between months.' },
+  { tag: 'CHOOSE', title: 'Pick a visualization and hear it', where: 'Two collections of five discs, with six dates per disc and controls to seek without dragging.' },
   { tag: 'FROM SIGHT TO SOUND', title: 'From color to sound', where: 'The “What the machine sees” grid shows what the algorithm reads, and “More options” explains why it sounds that way.' },
   { tag: 'MUSICAL', title: 'Pleasant, not noise', where: 'The Melody engine uses scales, chords and a progression per disc, not pixels turned into random pitches.' },
   { tag: 'ACCESSIBLE', title: 'For blind and low-vision people', where: 'Spoken description, sound captions, vibration, keyboard, high contrast and large text.' },
   { tag: 'EXPLORE', title: 'Explore with your own data', where: 'Upload an image or a CSV and it plays with the same band.' },
-  { tag: 'STORY', title: 'Telling the why', where: 'Each disc suggests a lead with a personality. Mamacocha goes quiet when the sea warms up. The stage shows who plays at each moment.' },
-  { tag: 'PROCESS', title: 'Documenting the method', where: 'The Technology page explains tools, data and AI use, with what is done and what is planned.' }
+  { tag: 'STORY', title: 'Telling the why', where: 'Five fictional characters with proposed stories, episode sources and clearly distinguished cultural references.' },
+  { tag: 'PROCESS', title: 'Documenting the method', where: 'Technology distinguishes browser execution, data and production tools; credits explain documented AI use.' }
 ];
 var STEPS_EN = [
-  { title: 'EIC frame', body: 'A sea surface temperature anomaly image from the EIC visualization, one frame every 30 days.' },
-  { title: '28×16 grid', body: 'It is reduced to 448 cells with Canvas (getImageData). Land is ignored.' },
-  { title: 'Color → level', body: 'Each color in the NASA palette becomes a level from −5 (very cold) to +5 (very warm).' },
-  { title: 'West → east scan', body: 'A scan head crosses the 28 columns. Each column is one step of the rhythm.' },
-  { title: 'Five musicians', body: 'Inti, Mamacocha, Yaku, Illapa and Silbo turn those levels into chords, bass, drops, thunder and whistles. In Melody mode they all play in the disc’s key and progression.' },
-  { title: 'For everyone', body: 'Sound captions, spoken description, vibration, keyboard and high contrast.' },
-  { title: 'Convert to music', body: 'Upload an image or a CSV. An image is read by its colors; a CSV by values above or below the mean. Everything is processed in your browser.' },
-  { title: 'Pick the lead', body: 'Each disc suggests a musician. You can pick another one in Listen and add the others to build the full band.' }
+  {
+    "title": "Dated maps",
+    "body": "Difference from a climate reference, not absolute temperature. EIC and GIBS provide two stored collections of six dates per disc."
+  },
+  {
+    "title": "28×16 cells",
+    "body": "Canvas reduces the crop to 448 cells. Colors identified as land or missing data are excluded; this is a visual approximation."
+  },
+  {
+    "title": "Colors and levels",
+    "body": "Colors are matched to the product palette to derive levels between −5 and +5. These are neither degrees nor lossless scientific values."
+  },
+  {
+    "title": "Scan with controls",
+    "body": "28 columns from west to east. Pause, resume or seek with buttons and keyboard; the map date differs from playback time."
+  },
+  {
+    "title": "Melody or Data",
+    "body": "Melody composes with the lead’s scale and chords. Data maps levels to tones without a progression. Five controls select which instruments to hear."
+  },
+  {
+    "title": "Artistic decisions",
+    "body": "The documented Pacora rule slows March 2023 by 10 bpm. Tension and melancholy are editorial choices; emotions are not calculated."
+  },
+  {
+    "title": "Chiclayo and your files",
+    "body": "Start with the sample image. Chiclayo rainfall for 2015–2018 and tables are local alternatives; values are normalized within the selected series."
+  },
+  {
+    "title": "More than one way",
+    "body": "Map with written legend and symbols, browsable log, keyboard and combined preferences. Voice and vibration are optional where available."
+  }
 ];
 var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert to music', how: 'Method', tech: 'Technology' };
 
@@ -2799,13 +2986,18 @@ var TX = {
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
     dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
     noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
-    howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Todo ocurre en el navegador y en tiempo real, con Canvas y Web Audio. Sin modelos ni servidores.',
-    howTitle2: 'Escala de color de la NASA',
+    howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Del mapa a una interpretación musical explicable. El análisis y el sonido se ejecutan en tu navegador.',
+    methodCoverageTitle: 'Qué zona y qué fechas', methodCoverage: 'Recorte del Pacífico: 140°–70°O y 25°S–15°N. EIC contiene cinco selecciones de seis imágenes cada 30 días, del 16 de mayo de 2024 al 2 de noviembre de 2026. GIBS incluye julio–diciembre de 2010 y 2015, diciembre de 2016–mayo de 2017 y enero–junio y julio–diciembre de 2023. Son archivos almacenados; no un monitoreo en vivo.',
+    methodChiclayo: 'Chiclayo es el vínculo local: el ejemplo alternativo usa 48 promedios mensuales de precipitación diaria de NASA POWER, 2015–2018, en −6,77°, −79,84°. El archivo conserva 1981–2024. Esta serie no prueba que un color del océano cause lluvia en la ciudad.',
+    methodLimitsTitle: 'Qué significa y qué limita', methodLimits: 'Una anomalía compara la temperatura con una referencia climática: cero no significa 0 °C. La imagen puede perder detalle al comprimirse y reducirse. EIC deriva niveles de una escala original −4 a +4 °C; GIBS usa su propia escala y extremos abiertos, acotados a −3 y +3 para la sonificación. El nivel −5 a +5 no es una medida en grados ni permite comparar físicamente ambos productos.',
+    methodRule: 'Los hechos de impacto se vinculan a episodio, territorio y mes. En Pacora/marzo 2023, 29 viviendas afectadas documentadas activan una reducción editorial fija de 10 ppm en Melodía de Yaku. No se calcula tristeza ni se escala el daño en notas. Sin evidencia y regla aplicables se mantiene la armonía base.',
+    methodSourcesTitle: 'Consultar las fuentes', originalPalette: 'Paleta original', monthlyData: 'Datos mensuales', impactCatalog: 'Catálogo de impactos v1',
+    howTitle2: 'Paletas y niveles',
     scaleIntro: 'Del color al nivel, del nivel a la música. TerraSonic interpreta los fotogramas y transforma sus patrones en una banda sonora.',
     scaleSource: 'El análisis compara los colores con la escala del producto NASA. Los colores de esta leyenda y la asignación de músicos son la representación de TerraSonic; la NASA no determina quién toca.',
     scaleDirection: 'Niveles · de cálido a frío ↓', scaleLabel: 'Leyenda de niveles y músicos de TerraSonic',
     scaleMusic: 'Representación musical · TerraSonic', scaleRead: 'Cómo leer esta escala',
-    scaleContext: 'Son niveles de análisis, no temperaturas en grados. La leyenda resume asociaciones; el sonido real depende del conjunto de píxeles, el motor musical y los instrumentos activos. El nivel 0 no implica ausencia de calor ni silencio de toda la banda.', howTitle3: 'Lo que pide el reto y dónde verlo',
+    scaleContext: 'La tabla muestra la paleta propia de TerraSonic, no los colores originales de ambos productos NASA. Las asociaciones son un resumen artístico: el sonido depende de promedios, filas, motor e instrumentos activos. En Melodía pueden sonar acordes sobre el nivel 0. En el mapa original, sin datos no equivale a frío. Usa la leyenda escrita junto al mapa para interpretar cada producto.', howTitle3: 'Lo que pide el reto y dónde verlo',
     techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', techNote: 'Detalle técnico', techEmpty: 'No hay herramientas con este filtro en la categoría. Elige «Todo» para verlas.', module: 'Módulo', credTitle: 'Datos, créditos y uso de IA', credData: 'Datos',
     credDataP1: 'Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA’s Scientific Visualization Studio.',
     credDataP2: 'Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview.',
@@ -2813,7 +3005,7 @@ var TX = {
     credDevP: 'Interfaz en HTML, CSS y JavaScript. Canvas 2D analiza los fotogramas y Web Audio sintetiza los instrumentos en el navegador. La versión estática para GitHub Pages se genera con scripts/build_pages.py.',
     credAiReview: 'El registro docs/USO_DE_IA.md aún contiene entradas pendientes de revisión y detalle. La declaración debe contrastarse con ese registro antes de presentar el proyecto.',
     credAi: 'Declaración de uso de IA',
-    credAiP: 'Este prototipo se hizo con Claude Design y Claude Code, y la charla se transcribió con Whisper. Los sprites y modelos de los personajes se generaron con ChatGPT Codex e imágenes de ChatGPT, con revisión manual. Todo código generado se revisa y se prueba antes de integrarlo, y toda imagen generada lleva una etiqueta visible. Cada uso queda anotado en el repositorio.',
+    credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código, pruebas y modelos procedurales creados con Blender. Las ilustraciones previas del equipo se conservaron. Hay propuestas visuales e historias nuevas identificadas como tales; la revisión humana y cultural sigue pendiente.',
     notice: 'Aviso', noticeP: 'Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.',
     back: 'Atrás', prevScreen: 'Pantalla anterior', nextScreen: 'Pantalla siguiente', screensAria: 'Pantallas de esta sección',
     close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad del escaneo', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
@@ -2845,13 +3037,18 @@ var TX = {
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
     dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
     noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
-    howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'Everything happens in the browser in real time, with Canvas and Web Audio. No models, no servers.',
-    howTitle2: 'NASA color scale',
+    howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'From a map to an explainable musical interpretation. Analysis and sound run in your browser.',
+    methodCoverageTitle: 'Which area and dates', methodCoverage: 'Pacific crop: 140°–70°W and 25°S–15°N. EIC contains five selections of six images, spaced 30 days apart, from 16 May 2024 to 2 November 2026. GIBS covers July–December 2010 and 2015, December 2016–May 2017, and January–June and July–December 2023. These are stored files, not live monitoring.',
+    methodChiclayo: 'Chiclayo is the local connection: the alternative sample uses 48 monthly means of daily precipitation from NASA POWER, 2015–2018, at −6.77°, −79.84°. The stored file retains 1981–2024. This series does not prove that an ocean color causes rain in the city.',
+    methodLimitsTitle: 'Meaning and limits', methodLimits: 'An anomaly compares temperature with a climate reference: zero does not mean 0 °C. Compression and downsampling may lose image detail. EIC derives levels from an original −4 to +4 °C scale; GIBS uses its own scale with open extremes, bounded to −3 and +3 for sonification. The −5 to +5 level is not measured in degrees and does not enable physical comparison of the two products.',
+    methodRule: 'Impact facts match an episode, territory and month. In Pacora/March 2023, 29 documented affected homes activate a fixed editorial reduction of 10 bpm in Yaku Melody. Sadness is not calculated, and damage is not scaled into notes. Without applicable evidence and a rule, base harmony remains.',
+    methodSourcesTitle: 'Consult the sources', originalPalette: 'Original palette', monthlyData: 'Monthly data', impactCatalog: 'Impact catalog v1',
+    howTitle2: 'Palettes and levels',
     scaleIntro: 'From color to level, from level to music. TerraSonic interprets the frames and turns their patterns into a soundtrack.',
     scaleSource: 'The analysis compares colors against the NASA product scale. The colors in this legend and the musician assignments are TerraSonic’s representation; NASA does not determine who plays.',
     scaleDirection: 'Levels · warm to cold ↓', scaleLabel: 'TerraSonic level and musician legend',
     scaleMusic: 'Musical representation · TerraSonic', scaleRead: 'How to read this scale',
-    scaleContext: 'These are analysis levels, not temperatures in degrees. The legend summarizes associations; actual sound depends on the pixel ensemble, music engine and active instruments. Level 0 means neither an absence of heat nor silence across the entire band.', howTitle3: 'What the challenge asks for and where to see it',
+    scaleContext: 'The table shows TerraSonic’s own palette, not the original colors of both NASA products. Associations are an artistic summary: sound depends on means, rows, engine and active instruments. Melody may play chords at level 0. On the original map, missing data does not mean cold. Use the written legend beside the map to interpret each product.', howTitle3: 'What the challenge asks for and where to see it',
     techKicker: 'Technology', techFilterAria: 'Filter technologies', techNote: 'Technical detail', techEmpty: 'No tools in this category match the filter. Choose “All” to see them.', module: 'Module', credTitle: 'Data, credits and AI use', credData: 'Data',
     credDataP1: 'Frames from the Earth Information Center visualization “Sea Surface Temperature (SST) Anomaly – Near Real Time” (NASA SVS 5176, Pacific variant, 16 May 2024 – 2 Nov 2026), cropped to the southeast Pacific; JPL MUR SST data. Credit: NASA’s Scientific Visualization Studio.',
     credDataP2: 'The “NASA GIBS” discs (2010–2023) use NASA JPL GHRSST L4 MUR 0.25° SST Anomalies, the 15th of each month, via NASA GIBS/Worldview.',
@@ -2859,7 +3056,7 @@ var TX = {
     credDevP: 'Interface built with HTML, CSS and JavaScript. Canvas 2D analyzes the frames and Web Audio synthesizes the instruments in the browser. The static GitHub Pages version is generated with scripts/build_pages.py.',
     credAiReview: 'The docs/USO_DE_IA.md log still contains entries awaiting review and detail. This declaration should be checked against that log before submitting the project.',
     credAi: 'AI use statement',
-    credAiP: 'This prototype was made with Claude Design and Claude Code, and the talk was transcribed with Whisper. The character sprites and models were generated with ChatGPT Codex and ChatGPT images, with manual review. All generated code is reviewed and tested before it is merged, and every generated image carries a visible label. Each use is logged in the repository.',
+    credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This review uses Codex for code, tests and procedural models created with Blender. The team’s earlier illustrations were preserved. New visual proposals and stories are labelled as such; human and cultural review remains pending.',
     notice: 'Notice', noticeP: 'Independent project created for the NASA Space Apps Challenge; it is not affiliated with or endorsed by NASA.',
     back: 'Back', prevScreen: 'Previous screen', nextScreen: 'Next screen', screensAria: 'Screens in this section',
     close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Scan speed', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
@@ -3908,9 +4105,10 @@ class Component extends DCLogic {
     var f = this.state.techFilter, groups = {}, order = [];
     TECH.forEach(function (t) {
       if (!groups[t.cat]) { groups[t.cat] = []; order.push(t.cat); }
-      if (f !== 'all' && t.st !== f) return;
-      var done = t.st === 'done';
-      groups[t.cat].push({ name: t.name, use: t.use, mod: t.mod, note: t.note || '', hasNote: !!t.note, chip: done ? T('En el prototipo', 'In the prototype') : T('Planeado', 'Planned'), chipBg: done ? '#7BE38A' : '#FFD447', delay: (groups[t.cat].length * 0.05).toFixed(2) + 's' });
+      if (f !== 'all' && t.scope !== f) return;
+      groups[t.cat].push({ name: t.name, use: t.use, note: t.note || '', hasNote: !!t.note,
+        chip: t.scope === 'browser' ? T('En tu navegador', 'In your browser') : t.scope === 'source' ? T('Fuente de datos', 'Data source') : T('Producción y revisión', 'Production and review'),
+        chipBg: t.scope === 'browser' ? '#7BE38A' : t.scope === 'source' ? '#38C6E8' : '#FFD447' });
     });
     return order.map(function (c) { return { title: c, items: groups[c] }; });
   }
@@ -4959,7 +5157,7 @@ class Component extends DCLogic {
       useImageSample: function () { self.loadImageSample(); },
       onUpMode: function (e) { self.setMode(e.target.value); },
       onCol: function (e) { self.setCol(parseInt(e.target.value, 10)); },
-      techFilters: [['all', T('Todo', 'All')], ['done', T('En el prototipo', 'In the prototype')], ['plan', T('Planeado', 'Planned')]].map(function (x) {
+      techFilters: [['all', T('Todo', 'All')], ['browser', T('Navegador', 'Browser')], ['production', T('Producción', 'Production')], ['source', T('Datos', 'Data')]].map(function (x) {
         return { label: x[1], on: s.techFilter === x[0], pick: function () {
           if (self.state.techFilter !== x[0]) self.setState({ techFilter: x[0] });
         } };
