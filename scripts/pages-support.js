@@ -104,8 +104,6 @@
     if (location.hash === "#banda") {
       component.tourEnd();
       component.goTab("band");
-    } else if (location.hash === "#comparar" || location.hash === "#compare") {
-      component.goTab("juke", 3);
     } else if (location.hash === "#escuchar" || location.hash === "#listen") {
       component.goTab("juke");
     }

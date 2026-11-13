@@ -653,27 +653,11 @@ a{color:inherit}
 .px .listen-intro{display:flex;align-items:end;justify-content:space-between;gap:10px 28px}
 .px .listen-intro h1{font:700 clamp(1.8rem,4vw,3.75rem)/1 var(--head);letter-spacing:-.02em}
 .px .listen-intro p{color:var(--muted);max-width:40ch;line-height:1.4;font-size:.86em}
-.px .learn{display:grid;gap:clamp(14px,2vw,24px);width:100%;min-width:0}
-.px .learn-panel{display:grid;gap:12px;padding:clamp(14px,2vw,22px);border:1px solid var(--line);background:#101722}
-.px .learn-panel h2{font:700 clamp(1.15rem,2vw,1.55rem)/1.15 var(--head)}
-.px .learn-panel p{line-height:1.55}
-.px .learn-head,.px .learn-examples,.px .learn-tools,.px .learn-answers{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.px .learn-head .gface{width:44px;height:44px}
-.px .learn-tools label{display:grid;gap:5px}
-.px .learn input[type="range"]{accent-color:var(--accent);min-height:30px;width:min(175px,100%)}
-.px .learn .btn,.px .learn select,.px .easy-panel .btn{min-height:44px;white-space:normal}
-.px .learn button:focus-visible,.px .learn select:focus-visible,.px .learn input:focus-visible,.px .easy-panel button:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.px .learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.px .learn-grid figure{margin:0;display:grid;gap:10px;min-width:0}
-.px .learn-grid figcaption{display:grid;gap:6px}
-.px .learn-grid img{width:100%;display:block;aspect-ratio:560/320;object-fit:contain;background:#090d16;border:1px solid var(--line)}
-.px .learn-map{position:relative}
-.px .learn-coast{position:absolute;left:82.14%;width:10.72%;top:43.75%;height:37.5%;border:2px dashed #fff;box-shadow:0 0 0 1px #111;pointer-events:none}
-.px .learn-grid select{width:100%}
-.px .learn-status{min-height:1.45em;color:var(--muted)}
-.px .learn-question{margin:0;min-width:0}
-.px .learn-panel a{text-decoration:underline;text-underline-offset:.18em}
-@media(max-width:620px){.px .learn-grid{grid-template-columns:minmax(0,1fr)}}
+.px .easy-panel{display:grid;gap:8px;padding:12px;border:1px solid var(--line);background:var(--panel);min-width:0}
+.px .easy-panel h2{font:700 1.2rem/1.2 var(--head)}
+.px .easy-panel p{line-height:1.55}
+.px .easy-panel .btn{min-height:44px;white-space:normal}
+.px .easy-panel button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 .px .uni,.px .uleft,.px .uright{height:auto}
 .px .uni .drow{padding:8px;border:1px solid var(--line);background:var(--bg)}
 .px .uni .dchip[aria-pressed="true"]{background:color-mix(in srgb,var(--section) 9%,var(--bg))}
@@ -1210,9 +1194,6 @@ a{color:inherit}
 .px .stagebox.big{min-height:clamp(225px,40svh,405px)}
 .px .stageside{gap:10px}
 .px .bandbox{padding-top:8px}
-.px .learn{grid-template-columns:minmax(0,1fr);max-width:1160px;align-self:center}
-.px .learn-panel{grid-template-columns:minmax(0,1fr);min-width:0;gap:8px;padding:12px}
-.px .learn-tools label,.px .learn-tools select{min-width:0;max-width:100%}
 .px .pagehead .lede,.px .stagebar .chordhud{min-width:0;overflow-wrap:anywhere}
 .px .stagebar{flex-wrap:wrap;gap:6px 12px}
 .px .band.two .bchip{min-width:0}
@@ -1346,7 +1327,6 @@ a{color:inherit}
 <div id="tour-cta" class="row cta">
 <button type="button" class="btn primary" onClick="{{heroGo}}">{{tx.heroCta}}</button>
 <button type="button" class="btn" onClick="{{heroBand}}">{{tx.heroBand}}</button>
-<button type="button" class="btn" onClick="{{openComparison}}">{{lesson.cta}}</button>
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
 </div>
@@ -1371,7 +1351,6 @@ a{color:inherit}
 <section class="disc-library" aria-labelledby="disc-library-title">
 <div class="pagehead">
 <div><p class="kicker">{{tx.discKicker}}</p><h1 id="disc-library-title" class="display md" tabindex="-1">{{tx.discTitle}}</h1><p class="lede">{{tx.discLede}}</p></div>
-<button type="button" class="btn sm" onClick="{{openComparison}}">{{lesson.cta}} →</button>
 </div>
 <div id="tour-sets" class="disc-sources" role="group" aria-label="{{tx.setsAria}}">
 <span class="tag">{{tx.setsAria}}</span>
@@ -1513,14 +1492,13 @@ a{color:inherit}
 </div>
 </details>
 <div class="player-tools">
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{lesson.easy}}</button></sc-if>
+<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{easyLabel}}</button></sc-if>
 <button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm quiet" onClick="{{openComparison}}">{{lesson.cta}}</button></sc-if>
 </div>
 <div id="easy-explanation">
 <sc-if value="{{easyVisible}}">
-<section class="learn-panel easy-panel" aria-labelledby="easy-title">
-  <h2 id="easy-title">{{lesson.easy}}</h2>
+<section class="easy-panel" aria-labelledby="easy-title">
+  <h2 id="easy-title">{{easyLabel}}</h2>
   <p>{{easyText}}</p>
   <div class="row"><button type="button" class="btn sm" onClick="{{readEasy}}" disabled="{{speechUnavailable}}">{{readEasyLabel}}</button><span class="muted small">{{speechSupport}}</span></div>
 </section>
@@ -1529,57 +1507,6 @@ a{color:inherit}
 <p role="status" aria-live="polite" class="sr">{{caption}}</p>
 </div>
 </sc-if>
-</sc-if>
-
-<!-- ESCUCHAR · 4 · Comparar temperaturas -->
-<sc-if value="{{scr.compare}}">
-<section class="learn" aria-labelledby="compare-title">
-  <div class="pagehead">
-    <div><p class="kicker">{{lesson.kicker}}</p><h1 id="compare-title" class="display" tabindex="-1">{{lesson.title}}</h1></div>
-    <p class="lede">{{lesson.story}}</p>
-  </div>
-  <section class="learn-panel" aria-labelledby="sound-title">
-    <div class="learn-head"><ts-avatar class="gface" data-view="face" data-character="silbo" aria-hidden="true"></ts-avatar><h2 id="sound-title">{{lesson.soundTitle}}</h2></div>
-    <p>{{lesson.mapping}}</p>
-    <div class="learn-examples">
-      <sc-for list="{{lesson.examples}}" as="example"><button type="button" class="btn sm" onClick="{{example.play}}">{{example.label}}</button></sc-for>
-    </div>
-    <p class="muted small">{{lesson.sourceSound}}</p>
-  </section>
-  <section class="learn-panel" aria-labelledby="dates-title">
-    <h2 id="dates-title">{{lesson.datesTitle}}</h2>
-    <p>{{lesson.rules}}</p>
-    <div class="learn-tools">
-      <label>{{lesson.regionLabel}}<select value="{{lesson.region}}" onChange="{{lesson.chooseRegion}}"><option value="all">{{lesson.all}}</option><option value="coast">{{lesson.coast}}</option></select></label>
-      <label>{{lesson.volumeLabel}} <span aria-hidden="true">{{lesson.volume}}%</span><input type="range" min="0" max="100" step="5" value="{{lesson.volume}}" onInput="{{lesson.changeVolume}}"></label>
-      <button type="button" class="btn sm quiet" disabled="{{lesson.noSound}}" onClick="{{lesson.stop}}">{{lesson.stopLabel}}</button>
-    </div>
-    <div class="learn-grid">
-      <sc-for list="{{lesson.cards}}" as="card">
-        <figure class="learn-panel">
-          <figcaption><label>{{card.label}}<select value="{{card.selected}}" onChange="{{card.choose}}"><sc-for list="{{lesson.dates}}" as="date"><option value="{{date.key}}">{{date.label}}</option></sc-for></select></label></figcaption>
-          <div class="learn-map"><img src="{{card.image}}" alt="{{card.alt}}" decoding="async"><sc-if value="{{lesson.showCoast}}"><span class="learn-coast" aria-hidden="true"></span></sc-if></div>
-          <button type="button" class="btn primary" onClick="{{card.play}}" disabled="{{card.unavailable}}">{{card.playLabel}}</button>
-          <sc-if value="{{card.hasLevels}}"><details><summary>{{lesson.textVersion}}</summary><p>{{card.textVersion}}</p></details></sc-if>
-        </figure>
-      </sc-for>
-    </div>
-    <p role="status" class="learn-status">{{lesson.status}}</p>
-    <sc-if value="{{lesson.retry}}"><button type="button" class="btn sm quiet" onClick="{{lesson.reload}}">{{lesson.retryLabel}}</button></sc-if>
-  </section>
-  <section class="learn-panel learn-question" aria-labelledby="question-title">
-    <h2 id="question-title">{{lesson.question}}</h2>
-    <div class="learn-answers">
-      <sc-for list="{{lesson.answers}}" as="answer"><button type="button" class="btn sm" disabled="{{lesson.unavailable}}" aria-pressed="{{answer.selected}}" onClick="{{answer.choose}}">{{answer.label}}</button></sc-for>
-    </div>
-    <p role="status">{{lesson.feedback}}</p>
-    <p class="muted small">{{lesson.limit}}</p>
-  </section>
-  <details class="learn-panel">
-    <summary>{{lesson.contextTitle}}</summary>
-    <p>{{lesson.context}} <a href="https://science.nasa.gov/earth/earth-observatory/warming-water-and-downpours-in-peru-151183/">{{lesson.contextLink}}</a></p>
-  </details>
-</section>
 </sc-if>
 
 <!-- ESCUCHAR · 3 · Escenario -->
@@ -1977,37 +1904,6 @@ var DISC_SETS = {
   ]
 };
 var DISCS = DISC_SETS.eic.slice();
-var EIC_FRAMES = DISC_SETS.eic.flatMap(function (disc) {
-  return disc.dates.map(function (date, index) { return { date: date, image: disc.files[index] }; });
-});
-function eicDate(frame) {
-  var parts = frame.date.split('-'), month = MES[Number(parts[1]) - 1];
-  return T(Number(parts[2]) + ' de ' + month + ' de ' + parts[0], month + ' ' + Number(parts[2]) + ', ' + parts[0]);
-}
-function compareTemperature(a, b, region) {
-  var from = region === 'coast' ? 23 : 0, to = region === 'coast' ? 26 : 28;
-  var top = region === 'coast' ? 7 : 0, bottom = region === 'coast' ? 13 : 16;
-  var step = region === 'coast' ? 1 : 4, tones = [[], []], total = [0, 0], count = 0;
-  for (var x = from; x < to; x += step) {
-    var sum = [0, 0], common = 0;
-    for (var row = top; row < bottom; row++) for (var col = x; col < Math.min(x + step, to); col++) {
-      var index = row * 28 + col, first = a[index], second = b[index];
-      if (!Number.isFinite(first) || !Number.isFinite(second)) continue;
-      sum[0] += first; sum[1] += second; common++;
-    }
-    for (var slot = 0; slot < 2; slot++) {
-      tones[slot].push(common ? sum[slot] / common : null);
-      total[slot] += sum[slot];
-    }
-    count += common;
-  }
-  if (!count) return null;
-  var levels = total.map(function (n) { return Math.round(n / count * 10) / 10; });
-  return { tones: tones, levels: levels, answer: Math.abs(levels[0] - levels[1]) < 0.15 ? 'similar' : levels[0] > levels[1] ? 'A' : 'B' };
-}
-function learningFrequency(level) {
-  return mtof(60 + Math.max(-5, Math.min(5, level)) * 2.4);
-}
 var DISC_CUSTOM = { id: 'custom', n: '+', title: 'Tu imagen', period: 'tu archivo', color: '#FFD447', start: [2000, 0], files: ['custom'] };
 DISCS.push(DISC_CUSTOM);
 // Guía de cada sección. Silbo, el narrador de la banda, explica cómo funciona cada pantalla.
@@ -2579,15 +2475,7 @@ class Component extends DCLogic {
     this.timer = null; this.ac = null; this.lastThunder = -9; this.routeTimers = []; this.routeRun = 0; this.routeFinish = null; this.melDeg = null;
     this.state.sfx = true;
     this.state.easyOpen = false;
-    this.state.comparison = [3, 15];
-    this.state.compareRegion = 'all';
-    this.state.compareAnswer = '';
-    this.state.compareFrames = {};
-    this.state.learnVolume = 100;
-    this.state.learnAudio = '';
-    this.state.learnStatus = null;
-    this.compareLoading = new Set();
-    this.learnRun = 0;
+    this.state.volume = 100;
     this.state.audioPending = false; this.state.audioError = ''; this.audioRun = 0; this.cancelAudioWait = null;
     this.audioGraph = null; this.audioRetirements = new Map(); this.reverbImpulse = null; this.cueRun = 0;
     this.state.speaking = false;
@@ -2991,8 +2879,7 @@ class Component extends DCLogic {
     return this.frameCount % 2 ? 'fa' : 'fb';
   }
   subCount() {
-    var t = this.state.tab;
-    return t === 'home' || t === 'band' ? 1 : t === 'juke' ? 4 : t === 'data' || t === 'how' ? 3 : this.techPages().length;
+    return this.subTitles().length;
   }
   techPages() {
     var pages = this.techGroups();
@@ -3002,7 +2889,7 @@ class Component extends DCLogic {
   subTitles() {
     var t = this.state.tab;
     if (t === 'home') return [ROUTE_LOOK.home.title];
-    if (t === 'juke') return [T('Elige un disco', 'Pick a disc'), T('Escucha', 'Listen'), T('Escenario', 'Stage'), T('Compara', 'Compare')];
+    if (t === 'juke') return [T('Elige un disco', 'Pick a disc'), T('Escucha', 'Listen'), T('Escenario', 'Stage')];
     if (t === 'band') return [ROUTE_LOOK.band.title];
     if (t === 'data') return [T('Tu archivo', 'Your file'), T('Escucha', 'Listen'), T('Escenario', 'Stage')];
     if (t === 'how') return [T('Del mapa al sonido', 'From map to sound'), T('Escala de color', 'Color scale'), T('Retos del Space Apps', 'Space Apps goals')];
@@ -3056,9 +2943,8 @@ class Component extends DCLogic {
         self.ensureNavVisible();
         if (self.state.tab === 'juke') {
           var sub = self.state.sub;
-          if (sub === 3) self.loadComparison();
           if (sub === 1 && patch.disc != null) self.loadDisc(patch.disc);
-          var headingId = ['disc-library-title', 'player-title', null, 'compare-title'][sub];
+          var headingId = ['disc-library-title', 'player-title', null][sub];
           var heading = headingId && document.getElementById(headingId);
           if (heading) heading.focus({ preventScroll: true });
         }
@@ -3079,88 +2965,12 @@ class Component extends DCLogic {
     this.routeFinish = finish;
     this.routeTimers = [setTimeout(function () { swap(false); }, 30), setTimeout(finish, 170)];
   }
-  loadComparison(retry) {
-    var self = this;
-    this.state.comparison.forEach(function (index) {
-      var cached = self.state.compareFrames[index];
-      if (cached || (cached === null && !retry) || self.compareLoading.has(index)) return;
-      self.compareLoading.add(index);
-      var image = new Image();
-      var finish = function (analysis) {
-        self.compareLoading.delete(index);
-        if (self.disposed) return;
-        var frames = Object.assign({}, self.state.compareFrames);
-        frames[index] = analysis;
-        self.setState({ compareFrames: frames });
-      };
-      image.onerror = function () { finish(null); };
-      image.onload = function () {
-        var analysis = null;
-        try { analysis = analyzeMapImage(image, false, false); } catch (ignored) {}
-        finish(analysis);
-      };
-      image.src = EIC_FRAMES[index].image;
-    });
-  }
-  chooseComparison(slot, index) {
-    if (!Number.isInteger(index) || !EIC_FRAMES[index]) return;
-    this.stopLearning();
-    var selection = this.state.comparison.slice();
-    selection[slot] = index;
-    this.setState({ comparison: selection, compareAnswer: '', learnStatus: null }, this.loadComparison.bind(this));
-  }
-  setLearningVolume(value) {
+  setVolume(value) {
     if (!Number.isFinite(value)) return;
     var volume = Math.max(0, Math.min(100, value));
-    if (this.learnGain) this.learnGain.gain.value = .19 * volume / 100;
     if (this.master) this.master.gain.value = .8 * volume / 100;
     if (this.cueBus) this.cueBus.gain.value = volume / 100;
-    this.setState({ learnVolume: volume });
-  }
-  stopLearning() {
-    ++this.learnRun;
-    clearTimeout(this.learnTimer);
-    this.learnTimer = null;
-    if (this.learnGain) this.learnGain.disconnect();
-    this.learnGain = null;
-    if (this.state.learnAudio) this.setState({ learnAudio: '' });
-  }
-  async playLearning(levels, id) {
-    this.stop();
-    this.stopSpeech();
-    var run = this.learnRun;
-    this.setState({ learnAudio: id, learnStatus: null });
-    try {
-      var context = this.audioContext();
-      if (!context) throw new Error('audio-unavailable');
-      if (context.state !== 'running') await this.waitForAudio(context.resume());
-      if (this.disposed || run !== this.learnRun) return;
-      if (context.state !== 'running') throw new Error('audio-unavailable');
-      var bus = context.createGain();
-      this.learnGain = bus;
-      bus.gain.value = .19 * this.state.learnVolume / 100;
-      bus.connect(context.destination);
-      var start = context.currentTime + .035, beat = .34;
-      levels.forEach(function (level, index) {
-        if (level === null) return;
-        var t = start + index * beat, oscillator = context.createOscillator(), envelope = context.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = learningFrequency(level);
-        envelope.gain.setValueAtTime(0.0001, t);
-        envelope.gain.exponentialRampToValueAtTime(.65, t + .035);
-        envelope.gain.exponentialRampToValueAtTime(.0001, t + .28);
-        oscillator.connect(envelope);
-        envelope.connect(bus);
-        oscillator.start(t);
-        oscillator.stop(t + .30);
-      });
-      var self = this;
-      this.learnTimer = setTimeout(function () { if (run === self.learnRun) self.stopLearning(); }, (levels.length * beat + .06) * 1000);
-    } catch (error) {
-      if (this.disposed || run !== this.learnRun) return;
-      this.stopLearning();
-      this.setState({ learnStatus: uiMessage('El audio no se pudo iniciar. Puedes comparar con el resultado escrito.', 'Audio could not start. You can compare using the written result.') });
-    }
+    this.setState({ volume: volume });
   }
   easyExplanation() {
     var a = this.cur();
@@ -3170,89 +2980,6 @@ class Component extends DCLogic {
       mean < -.15 ? T('En este mapa, el mar se ve en promedio más frío de lo esperado para esa época.', 'On this map, the sea looks cooler on average than expected for that time of year.') :
       T('En este mapa, el promedio está cerca de la referencia. Aun así, puede haber zonas más cálidas y otras más frías.', 'On this map, the average is close to the reference. Some areas can still be warmer and others cooler.');
     return summary + ' ' + T('Los colores muestran diferencias frente a la referencia del mapa. La banda transforma esos datos en música.', 'The colors show differences from the map’s reference. The band turns those data into music.');
-  }
-  comparisonVm() {
-    var self = this, s = this.state;
-    var first = s.compareFrames[s.comparison[0]], second = s.compareFrames[s.comparison[1]];
-    var retry = first === null || second === null;
-    var result = first && second ? compareTemperature(first.cells, second.cells, s.compareRegion) : null;
-    var sides = ['A', 'B'], similar = T('Son parecidas', 'They are similar');
-    var options = [T('Fecha A', 'Date A'), T('Fecha B', 'Date B'), similar];
-    var formatLevel = function (n) {
-      if (n === null) return T('sin datos', 'no data');
-      var number = (Math.round(n * 10) / 10).toFixed(1);
-      return (Number(number) > 0 ? '+' : '') + T(number.replace('.', ','), number);
-    };
-    var feedback = T('Escucha ambas fechas y elige una respuesta. También puedes responder con el texto.', 'Listen to both dates and choose an answer. You can also answer using the text.');
-    if (s.compareAnswer && result) {
-      var label = options[['A', 'B', 'similar'].indexOf(result.answer)];
-      var scores = result.levels.map(formatLevel);
-      feedback = (s.compareAnswer === result.answer ? T('¡Acertaste! ', 'You got it! ') : T('La respuesta es: ', 'The answer is: ')) +
-        label + '. ' + T('Nivel medio estimado: A ', 'Estimated average level: A ') + scores[0] + ', B ' + scores[1] + '.';
-    }
-    var status = uiText(s.learnStatus) || (s.learnAudio ?
-      T('Sonando: ', 'Playing: ') + (sides.indexOf(s.learnAudio) >= 0 ? options[sides.indexOf(s.learnAudio)] : s.learnAudio) :
-      retry ? T('No se pudo leer uno de los mapas. Intenta cargar de nuevo.', 'One of the maps could not be read. Try loading it again.') :
-      !first || !second ? T('Leyendo los dos mapas…', 'Reading both maps…') :
-      !result ? T('El recuadro no tiene celdas de mar válidas en ambas fechas.', 'There are no valid ocean cells in both maps in this area.') :
-      T('Los dos mapas están listos para escuchar.', 'Both maps are ready to listen to.'));
-    return {
-      kicker: T('Historia sonora · temperatura del mar', 'Sound story · sea temperature'),
-      title: T('Compara dos fechas del Pacífico', 'Compare two dates in the Pacific'),
-      story: T('¿En cuál fecha se veía el mar más cálido de lo esperado? Compara dos mapas del Pacífico y escucha la diferencia.', 'On which date did the ocean look warmer than expected? Compare two Pacific maps and listen for the difference.'),
-      soundTitle: T('Silbo te enseña a escuchar', 'Silbo shows you how to listen'),
-      mapping: T('En este comparador, una nota grave indica agua más fría de lo esperado; una nota aguda indica agua más cálida. La nota media corresponde a la referencia del mapa.', 'In this comparison, a low note means cooler-than-expected water; a high note means warmer-than-expected water. The middle note matches the map’s reference.'),
-      sourceSound: T('El audio se sintetiza a partir del mapa, sin grabaciones del mar. En el escenario, la banda usa otras reglas para convertir el mapa en música.', 'The audio is synthesized from the map, without ocean recordings. On stage, the band uses other rules to turn the map into music.'),
-      examples: [[-3, T('Grave · más fría', 'Low · cooler')], [0, T('Media · referencia', 'Middle · reference')], [3, T('Aguda · más cálida', 'High · warmer')]].map(function (item) {
-        return { label: item[1], play: function () { self.playLearning([item[0], item[0]], item[1]); } };
-      }),
-      datesTitle: T('Escucha A y B', 'Listen to A and B'),
-      rules: T('Los dos mapas EIC usan las mismas notas, el mismo ritmo y las mismas celdas de mar. Cada nota resume una franja de oeste a este. Una pausa indica que faltan datos en esa franja.', 'Both EIC maps use the same notes, timing and ocean cells. Each note summarizes a band from west to east. A pause means that band lacks data.'),
-      regionLabel: T('Región del mapa', 'Map region'),
-      region: s.compareRegion,
-      all: T('Pacífico oriental visible', 'Visible eastern Pacific'),
-      coast: T('Recuadro frente al norte de Perú', 'Area off northern Peru'),
-      showCoast: s.compareRegion === 'coast',
-      chooseRegion: function (event) {
-        self.stopLearning();
-        self.setState({ compareRegion: event.target.value === 'coast' ? 'coast' : 'all', compareAnswer: '', learnStatus: null });
-      },
-      volumeLabel: T('Volumen', 'Volume'),
-      volume: String(s.learnVolume),
-      changeVolume: function (event) { self.setLearningVolume(Number(event.target.value)); },
-      noSound: !s.learnAudio,
-      stopLabel: T('Detener audio', 'Stop audio'),
-      stop: function () { self.stopLearning(); },
-      status: status,
-      retry: retry,
-      retryLabel: T('Volver a cargar los mapas', 'Reload the maps'),
-      reload: function () { self.loadComparison(true); },
-      textVersion: T('Ver los niveles en texto', 'Read the levels as text'),
-      dates: EIC_FRAMES.map(function (frame, index) { return { key: String(index), label: eicDate(frame) }; }),
-      cards: s.comparison.map(function (index, slot) {
-        var frame = EIC_FRAMES[index], side = sides[slot];
-        return {
-          label: options[slot], selected: String(index), image: frame.image,
-          alt: T('Mapa del Pacífico oriental, ', 'Eastern Pacific map, ') + eicDate(frame),
-          unavailable: !result, playLabel: T('Escuchar ', 'Listen to ') + side,
-          hasLevels: !!result,
-          textVersion: result ? T('Nivel medio estimado: ', 'Estimated average level: ') + formatLevel(result.levels[slot]) + '. ' +
-            T('Niveles por franja de oeste a este: ', 'Levels by band from west to east: ') + result.tones[slot].map(formatLevel).join(' · ') + '.' : '',
-          choose: function (event) { self.chooseComparison(slot, Number(event.target.value)); },
-          play: function () { if (result) self.playLearning(result.tones[slot], side); }
-        };
-      }),
-      question: T('¿Cuál fecha se aleja más hacia lo cálido?', 'Which date is warmer relative to the reference?'),
-      unavailable: !result,
-      answers: ['A', 'B', 'similar'].map(function (id, index) {
-        return { label: options[index], selected: s.compareAnswer === id, choose: function () { self.setState({ compareAnswer: id }); } };
-      }),
-      feedback: feedback,
-      limit: T('El resultado es un nivel aproximado que se obtiene de los colores del mapa, no una temperatura en grados. Dos mapas muestran una diferencia entre fechas, no una tendencia.', 'The result is an approximate level estimated from map colors, not a temperature in degrees. Two maps show a difference between dates, not a trend.'),
-      contextTitle: T('¿Por qué mirar frente a Perú?', 'Why look off Peru?'),
-      context: T('En 2023, NASA describió cómo el agua inusualmente cálida contribuyó a las lluvias intensas en el norte de Perú junto con otros factores. Aquí se escuchan mapas EIC de 2024 a 2026.', 'In 2023, NASA described how unusually warm water contributed to heavy rainfall in northern Peru alongside other factors. This comparison uses EIC maps from 2024 to 2026.'),
-      contextLink: T('Leer el relato de NASA', 'Read NASA’s account')
-    };
   }
   analyze(d, f, force, operation, pendingCustom) {
     var key = d + '_' + f, self = this;
@@ -3490,7 +3217,7 @@ class Component extends DCLogic {
       if (self.disposed || run !== self.cueRun || self.ac !== ac || !self.state.sfx || ac.state !== 'running') return;
       if (!self.cueBus) {
         self.cueBus = ac.createGain();
-        self.cueBus.gain.value = self.state.learnVolume / 100;
+        self.cueBus.gain.value = self.state.volume / 100;
         self.cueBus.connect(ac.destination);
       }
       var start = ac.currentTime + 0.012;
@@ -3519,7 +3246,7 @@ class Component extends DCLogic {
     if (ac.state === 'closed' || !['createGain', 'createDynamicsCompressor', 'createConvolver', 'createBuffer'].every(function (name) { return typeof ac[name] === 'function'; })) throw new Error('audio-initialization');
     try {
       if (!this.master) {
-        this.master = this.ac.createGain(); this.master.gain.value = 0.8 * this.state.learnVolume / 100;
+        this.master = this.ac.createGain(); this.master.gain.value = 0.8 * this.state.volume / 100;
         var comp = this.ac.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ac.destination);
         this.bus = this.ac.createGain(); this.bus.connect(this.master);
         var conv = this.ac.createConvolver(), irLen = Math.floor(this.ac.sampleRate * 2.4), ir = this.reverbImpulse;
@@ -3799,7 +3526,6 @@ class Component extends DCLogic {
   }
   async play() {
     if (this.disposed || this.state.trans || this.state.playing || this.state.audioPending) return;
-    this.stopLearning();
     var self = this, run = ++this.audioRun;
     this.setState({ audioPending: true, audioError: '' });
     try {
@@ -3834,7 +3560,7 @@ class Component extends DCLogic {
   }
   stopForScreen(tab, sub) {
     if (tab === this.state.tab && sub === this.state.sub) return;
-    if (this.state.playing || this.state.audioPending || this.state.learnAudio) this.stop();
+    if (this.state.playing || this.state.audioPending) this.stop();
     if (this.state.easyOpen && this.state.speaking) this.stopSpeech();
   }
   retireAudioGraph() {
@@ -3863,7 +3589,6 @@ class Component extends DCLogic {
     cleanup();
   }
   stop() {
-    this.stopLearning();
     ++this.audioRun;
     ++this.cueRun;
     if (this.cancelAudioWait) this.cancelAudioWait();
@@ -3970,7 +3695,7 @@ class Component extends DCLogic {
       showMini: s.playing && (s.tab === 'juke' || s.tab === 'data') && sub === 0 };
     var scrDir = this.navDir || 0, scrCls = this.navCount ? 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + (this.navCount % 2 ? '-a' : '-b') : '';
     if (s.routeArrived) scrCls = 'route-arrive';
-    var scrVm = { home: s.tab === 'home', jDisc: s.tab === 'juke' && sub === 0, compare: s.tab === 'juke' && sub === 3,
+    var scrVm = { home: s.tab === 'home', jDisc: s.tab === 'juke' && sub === 0,
       play: (s.tab === 'juke' && sub === 1) || (s.tab === 'data' && sub === 1), stg: (s.tab === 'juke' && sub === 2) || (s.tab === 'data' && sub === 2),
       dUp: s.tab === 'data' && sub === 0, bPage: s.tab === 'band',
       hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
@@ -4038,8 +3763,7 @@ class Component extends DCLogic {
       heroUrl: 'fotogramas/ver2025_2.webp',
       heroGo: function () { self.goTab('juke'); },
       heroBand: function () { self.goTab('band'); },
-      lesson: Object.assign(scrVm.compare ? this.comparisonVm() : {}, { cta: T('Comparar fechas', 'Compare dates'), easy: T('Explícamelo fácil', 'Explain it simply') }),
-      openComparison: function () { self.goTab('juke', 3); },
+      easyLabel: T('Explícamelo fácil', 'Explain it simply'),
       easyOpen: s.easyOpen,
       easyVisible: isJuke && s.easyOpen,
       easyText: this.easyExplanation(),

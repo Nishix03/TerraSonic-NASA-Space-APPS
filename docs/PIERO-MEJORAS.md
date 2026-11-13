@@ -21,7 +21,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | ID | Requisito | Implementación y verificación previstas | Estado actual |
 | --- | --- | --- | --- |
 | R1 | Escuchar | Posición, tiempos, saltos, pausa, volumen, silencio, repetición y velocidad en EIC y GIBS. Cancelación de notas. Modos claros, leyenda y eventos consultables. | Pendiente. Base auditada. |
-| R2 | Retirar A/B | Eliminar vista, estado, audio, ayudas, traducciones, estilos y recursos exclusivos. Conservar fechas del reproductor. | Pendiente. A/B todavía existe. |
+| R2 | Retirar A/B | Eliminar vista, estado, audio, ayudas, traducciones, estilos y recursos exclusivos. Conservar fechas del reproductor. | Implementado. Se retiraron pantalla, entradas, hash, estilos, estado, análisis y audio exclusivo en ambos idiomas. La regresión recorre las seis fechas de los diez discos. 81 pruebas pasan. |
 | R3 | Banda en Escuchar | Cinco cuerpos completos, activación compartida con Escenario y respaldo estático con carga lenta o sin WebGL. | Implementado en checkpoint 3D. Falta reverificar en la URL independiente final y cancelar notas por músico en el motor nuevo. |
 | R4 | Convertir | Imagen de ejemplo y propia como acciones principales, CSV y lluvia secundarios. Casos inválidos, tamaño, columnas y procesamiento local. | Parcial en base. Falta prioridad de imagen. |
 | R5 | Brisa, preferencias e idioma | Guía separada, tutorial con acciones reales, foco y voz cancelable, primera visita y elección guardada. | Pendiente. Silbo todavía es guía. |

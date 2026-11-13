@@ -8,28 +8,30 @@ const path = require('node:path');
 const html = fs.readFileSync(process.argv[2] || path.join(__dirname, '../prototipos/I11-eic/Main.dc.html'), 'utf8');
 const source = html.match(/<script[^>]*data-dc-script[^>]*>([\s\S]*?)<\/script>/)[1];
 
-test('the comparison uses the same valid sea cells, regions and note scale for both dates', () => {
-  const { context } = setup();
-  const a = Array(448).fill(null);
-  const b = Array(448).fill(null);
-  a[0] = 5; // The second map has no data here.
-  a[1] = -3; b[1] = 1;
-  const coastalCell = 7 * 28 + 23;
-  a[coastalCell] = 1; b[coastalCell] = 1;
-  const whole = context.compareTemperature(a, b, 'all');
-  assert.equal(whole.answer, 'B');
-  assert.deepEqual(Array.from(whole.levels), [-1, 1]);
-  assert.equal(whole.tones[0][0], -3);
-  assert.equal(whole.tones[1][0], 1);
-  assert.equal(whole.tones[0][1], null);
-  assert.equal(whole.tones[1][1], null);
-  const coastal = context.compareTemperature(a, b, 'coast');
-  assert.equal(coastal.answer, 'similar');
-  assert.deepEqual(Array.from(coastal.levels), [1, 1]);
-  assert.equal(context.compareTemperature(a, Array(448).fill(null), 'all'), null);
-  assert(context.learningFrequency(-3) < context.learningFrequency(0));
-  assert(context.learningFrequency(0) < context.learningFrequency(3));
-  assert.equal(context.learningFrequency(5), context.learningFrequency(50));
+test('Listen has only discs, player and stage, while every date remains selectable', () => {
+  const { component: c, context } = setup();
+  c.state.tab = 'juke';
+  for (const lang of ['es', 'en']) {
+    c.setLang(lang);
+    assert.equal(c.subCount(), 3);
+    assert.equal(c.subTitles().length, 3);
+    c.goSub(3);
+    assert.equal(c.state.sub, 0);
+    for (const set of ['eic', 'prev']) {
+      c.applySet(set);
+      for (let disc = 0; disc < 5; disc++) {
+        c.state.disc = disc;
+        for (let frame = 0; frame < context.DISCS[disc].files.length; frame++) {
+          c.gotoFrame(frame);
+          assert.equal(c.state.frame, frame);
+        }
+        assert.equal(c.renderVals().strip.length, 6);
+      }
+    }
+  }
+  for (const symbol of ['compareTemperature','comparisonVm','playLearning','learnAudio','EIC_FRAMES']) {
+    assert(!source.includes(symbol), symbol + ' must be absent from the public app');
+  }
 });
 
 test('Method 02 preserves the ten legend mappings and translates its explanatory content without resetting state', () => {
