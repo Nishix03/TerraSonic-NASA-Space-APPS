@@ -771,7 +771,7 @@ test('retry after a partial audio graph failure creates a complete graph', async
   await c.play(); assert.equal(c.state.playing, true);
   assert(c.master && c.bus && c.noise); assert.equal(intervals.size, 1);
   c.state.col = 9; c.stop(); assert.equal(c.state.col, 9);
-  await c.play(); assert.equal(c.state.col, -1, 'the existing restart-from-frame behavior must remain unchanged');
+  await c.play(); assert.equal(c.state.col, 9, 'resuming keeps the accepted position');
 });
 
 test('images with no usable pixels retain the accepted file and report errors in ES/EN', () => {
@@ -1197,4 +1197,131 @@ test('stop also invalidates optional UI cues still waiting for native audio acti
   };
   c.playCue(['sine',[440]]);c.stop();resume();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(oscillators,0);
+});
+
+function playbackHarness() {
+  const h = audioHarness(), c = h.component;
+  c.state.tab = 'juke'; c.state.sub = 1; c.state.disc = 0; c.state.frame = 0; c.state.col = -1;
+  c.cur = () => ({ cells: Array(448).fill(0), warm: 0, cold: 0, hot: 0, coast: 0 });
+  c.stepMelody = c.step = col => c.setState({ col });
+  return h;
+}
+
+test('pause and resume continue from the next column for both catalogs and modes', async () => {
+  for (const catalog of ['eic', 'prev']) for (const mode of ['melody', 'raw']) {
+    const { component: c, intervals } = playbackHarness();
+    c.applySet(catalog); c.state.engine = mode;
+    await c.play(); c.tick(); c.tick();
+    assert.equal(c.state.col, 1);
+    c.stop(); const position = c.playerPosition();
+    assert.equal(intervals.size, 0);
+    await c.play(); assert.equal(c.playerPosition(), position);
+    c.tick(); assert.equal(c.state.col, 2);
+    assert.equal(intervals.size, 1);
+  }
+});
+
+test('seeking keeps pause, resumes a playing disc and cancels a stale scheduled tick', async () => {
+  const { component: c, intervals } = playbackHarness();
+  c.seekPosition(84); assert.equal(c.state.frame, 3); assert.equal(c.state.col, -1);
+  assert.equal(c.state.playing, false); assert.equal(intervals.size, 0);
+  await c.play(); const staleTick = [...intervals][0];
+  c.tick(); c.seekPosition(90);
+  const selected = c.playerPosition(); staleTick(); assert.equal(c.playerPosition(), selected);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(c.state.playing, true); assert.equal(c.playerPosition(), 90); assert.equal(intervals.size, 1);
+  c.tick(); assert.equal(c.state.frame, 3); assert.equal(c.state.col, 6);
+  c.stop(); c.seekPosition(Infinity); assert.equal(c.playerPosition(), 91);
+  c.seekPosition(-100); assert.equal(c.playerPosition(), 0);
+  c.seekPosition(999); assert.equal(c.playerPosition(), c.playerSteps()); assert.equal(c.state.ended, true);
+});
+
+test('five-second buttons, duration and date selection share the same timeline', async () => {
+  const { component: c } = playbackHarness();
+  assert.equal(c.playerSeconds(c.playerSteps()), 84);
+  c.seekSeconds(5); assert.equal(c.playerPosition(), 10); assert.equal(c.playerVm().elapsed, '0:05');
+  c.seekSeconds(-5); assert.equal(c.playerPosition(), 0);
+  c.gotoFrame(4); assert.equal(c.playerPosition(), 112); assert.equal(c.playerVm().elapsed, '0:56');
+  const frame = c.state.frame;
+  c.setLang('en'); assert.equal(c.state.frame, frame); assert.match(c.playerVm().positionText, /Map:/);
+  c.state.speed = 70; assert.equal(c.frameStepMs(0), Math.round(500 / 1.4));
+  c.state.engine = 'raw'; assert.equal(c.frameStepMs(0), Math.round(110 / 1.4));
+});
+
+test('repeat restarts only when selected, and a finished disc can be replayed', async () => {
+  for (const repeat of [false, true]) {
+    const { component: c, intervals } = playbackHarness();
+    await c.play(); c.state.frame = 5; c.state.col = 27; c.state.repeat = repeat;
+    c.tick(); await new Promise(resolve => setImmediate(resolve));
+    assert.equal(c.state.playing, repeat); assert.equal(intervals.size, repeat ? 1 : 0);
+    if (repeat) { assert.equal(c.state.frame, 0); assert.equal(c.state.col, -1); }
+    else { assert.equal(c.state.ended, true); await c.play(); assert.equal(c.state.frame, 0); }
+  }
+});
+
+test('master volume, mute and narration ducking apply without changing instrument choices', async () => {
+  const { component: c } = playbackHarness();
+  await c.play(); const mute = JSON.stringify(c.state.mute);
+  c.setVolume(25); assert.equal(c.master.gain.value, .2);
+  c.toggleMasterMute(); assert.equal(c.master.gain.value, 0); assert.equal(c.state.volume, 25);
+  c.setVolume(75); assert.equal(c.master.gain.value, 0);
+  c.toggleMasterMute(); assert(Math.abs(c.master.gain.value - .6) < 1e-9);
+  c.state.speaking = true; c.syncVolume(); assert(Math.abs(c.master.gain.value - .18) < 1e-9);
+  c.stopSpeech(); assert(Math.abs(c.master.gain.value - .6) < 1e-9);
+  c.setVolume(-5); assert.equal(c.state.volume, 0); c.setVolume(120); assert.equal(c.state.volume, 100);
+  assert.equal(JSON.stringify(c.state.mute), mute);
+});
+
+test('mode changes cancel old callbacks, preserve position and expose only two working modes', async () => {
+  const { component: c, intervals } = playbackHarness();
+  await c.play(); c.tick(); const old = [...intervals][0];
+  c.setEngine('raw'); old();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(c.state.engine, 'raw'); assert.equal(c.state.col, 0); assert.equal(c.state.playing, true);
+  assert.equal(intervals.size, 1); c.setEngine('cloud'); assert.equal(c.state.engine, 'raw');
+  c.stop(); c.setEngine('melody'); assert.equal(c.state.playing, false);
+  assert.deepEqual(Array.from(c.renderVals().engines, e => e.short), ['Melodía', 'Datos']);
+  assert(!/planned|planeadas/i.test(c.renderVals().engineDesc));
+});
+
+test('event history remains bounded, survives pause and translates on demand without a live note feed', () => {
+  const { component: c } = playbackHarness();
+  c.state.eventsOpen = true;
+  for (let i = 0; i < 210; i++) { c.state.col = i % 28; c.recordEvent({ mama: true }, ''); }
+  assert.equal(c.state.events.length, 200); const first = c.state.events[0].id;
+  c.stop(); c.setLang('en');
+  assert.equal(c.state.events[0].id, first); assert.match(c.playerVm().events[0].text, /column/);
+  assert.match(c.playerVm().events[0].text, /Mamacocha/i);
+  assert(!html.includes('aria-live="polite" class="sr">{{caption}}'));
+  assert(html.includes('{{player.announcement}}'));
+});
+
+test('NASA palettes keep warm/cold direction and exclude missing GIBS pixels', () => {
+  const { context } = setup();
+  assert.equal(context.EIC_SCALE.length, 33);
+  assert.equal(context.score(...context.EIC_SCALE[0]), -5);
+  assert.equal(context.score(...context.EIC_SCALE[16]), 0);
+  assert.equal(context.score(...context.EIC_SCALE[32]), 5);
+  assert.equal(context.GIBS_SCALE.length, 62);
+  for (const [r, g, b, expected] of context.GIBS_SCALE) assert.equal(context.scoreOld(r, g, b), expected);
+  assert.equal(context.scoreOld(0, 0, 0), null);
+  assert.equal(context.scoreOld(255, 255, 255), null);
+  assert(context.scoreOld(0, 148, 255) < 0);
+  assert(context.scoreOld(255, 182, 1) > 0);
+  assert(Math.abs(context.scoreOld(194, 202, 184)) < .1);
+});
+
+test('black legacy land yields absent cells rather than diluting cold ocean with zeroes', () => {
+  const { context } = setup();
+  context.document.createElement = () => ({ getContext: () => ({ drawImage() {}, getImageData() {
+    const data = new Uint8ClampedArray(140 * 80 * 4);
+    for (let i = 0; i < data.length; i += 4) { data[i + 3] = 255; }
+    for (let y = 0; y < 80; y++) for (let x = 0; x < 70; x++) {
+      const i = (y * 140 + x) * 4; data[i] = 0; data[i + 1] = 148; data[i + 2] = 255;
+    }
+    return { data };
+  } }) });
+  const map = context.analyzeMapImage({}, false, true);
+  assert.equal(map.cells.filter(value => value === null).length, 224);
+  assert.equal(map.warm, 0); assert(map.cold > 3);
 });

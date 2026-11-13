@@ -1273,6 +1273,85 @@ a{color:inherit}
   .px .bscene{height:clamp(175px,46svh,265px)}
   .px .hero .display{font-size:clamp(2rem,8svh,3.5rem)}
 }
+
+/* Transport and map explanation: shared by NASA discs and local files. */
+.px .transport{display:grid;gap:10px;padding:12px 0;border-block:1px solid var(--line);min-width:0}
+.px .player-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:22px}
+.px .player-sidebar{grid-column:2;grid-row:1;display:grid;gap:8px;min-width:0}
+.px .player-visual{grid-column:1;grid-row:1;display:grid;gap:10px;min-width:0}
+.px .uni{max-width:1200px}
+.px .player-sidebar .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.px .player-sidebar .controls .when{min-width:100px;flex:1 1 auto}
+.px .player-sidebar .controls #tour-more{width:100%}
+.px .player-sidebar .controls #tour-more button{width:100%}
+.px .transport-position{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 12px;font-size:.8em}
+.px .transport-position output{font-variant-numeric:tabular-nums}
+.px .transport-position input{grid-column:1/-1;width:100%;margin:0;min-height:32px;accent-color:var(--accent)}
+.px .transport-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.px .transport .btn,.px .transport select,.px .map-legend .btn{min-height:44px;white-space:normal}
+.px .transport-tools .seek-buttons{gap:6px}
+.px .volume-control{display:grid;grid-template-columns:auto auto;align-items:center;gap:0 10px}
+.px .volume-control button{grid-row:1/3}
+.px .volume-control button{min-width:106px;white-space:nowrap}
+.px .volume-control label,.px .transport-speed{font-size:.72em}
+.px .volume-control input{width:110px;min-height:28px;margin:0;accent-color:var(--accent)}
+.px .transport-speed{display:flex;gap:8px;align-items:center}
+.px .transport-speed select{max-width:145px;padding:6px}
+.px .player-modes{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.px .player-modes .engines{display:flex;width:auto;flex:0 0 auto;gap:0}
+.px .player-modes .engines button{min-height:44px;padding:7px 18px;border:1px solid var(--line)}
+.px .player-modes .engines button[aria-pressed="true"],.px .transport button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.px .player-modes p{flex:1 1 240px;margin:0;max-width:70ch}
+.px .uni .views{grid-template-columns:minmax(0,1fr) minmax(180px,.55fr);align-items:start;gap:12px}
+.px .uni .views>.vpanel{display:grid;grid-row:auto;grid-template-rows:auto auto auto;min-width:0;align-content:start}
+.px .uni .views .mapbox,.px .uni .views .mbox{aspect-ratio:560/320;min-height:0;height:auto;width:100%}
+.px .uni .views .mbox .heard{position:absolute;inset:0}
+.px .analysis-panel{grid-column:1/-1;order:3;min-width:0;border-block:1px solid var(--line);padding:6px 0;font-size:.8em}
+.px .analysis-panel summary{min-height:30px;cursor:pointer;align-content:center}
+.px .analysis-panel .vpanel{display:grid;grid-template-rows:auto auto auto;max-width:560px;margin-top:6px}
+.px .listen-member ts-avatar{height:88px}
+.px .map-legend{display:grid;gap:8px;min-width:0;border-left:1px solid var(--line);padding-left:14px;align-content:start}
+.px .map-legend h2{font:600 .88em/1.3 var(--head);letter-spacing:.03em}
+.px .map-legend ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.px .map-legend li{display:flex;align-items:start;gap:8px;min-width:0}
+.px .map-legend li>span:last-child{display:grid;gap:2px;min-width:0}
+.px .map-legend strong{font-size:.76em;line-height:1.3}
+.px .map-legend li{align-items:center}
+.px .legend-detail{font-size:.78em;min-width:0}
+.px .legend-detail summary{min-height:30px;cursor:pointer;align-content:center}
+.px .legend-detail p{padding-top:4px}
+@media(min-width:1101px){
+  .px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .px .workspace>.in:has(.uni){padding-block:16px}
+  .px .uni .pagehead.slim{padding-bottom:6px}
+  .px .listen-band .bandhead{padding-bottom:0}
+  .px .listen-band{gap:6px}
+  .px .listen-member ts-avatar{height:clamp(80px,10dvh,118px)}
+}
+.px .legend-swatch{flex:0 0 26px;width:26px;height:26px;background:var(--swatch);border:1px solid #9ca6ba;color:#fff;text-shadow:0 1px 3px #000;font:bold 21px/24px monospace;text-align:center}
+.px .current-event{margin:0;padding-block:6px;min-height:2em;overflow-wrap:anywhere;color:var(--muted)}
+.px .event-history{border-block:1px solid var(--line);padding:10px 0;min-width:0}
+.px .event-history summary{cursor:pointer;min-height:28px;font-size:.82em}
+.px .event-history ol{max-height:240px;overflow:auto;overscroll-behavior:contain;padding:0 0 0 26px;margin:10px 0;list-style:decimal}
+.px .event-history li{padding:6px 4px;border-bottom:1px solid var(--line);font-size:.76em;line-height:1.5}
+.px .event-history li>span:first-child{margin-right:10px;color:var(--muted)}
+@media(max-width:1100px){
+  .px .player-layout{grid-template-columns:minmax(0,1fr);gap:12px}
+  .px .player-sidebar{grid-column:1;grid-row:1}
+  .px .player-visual{grid-column:1;grid-row:2}
+  .px .player-sidebar .controls #tour-more{width:auto}
+  .px .map-legend{grid-column:auto}
+  .px .listen-member ts-avatar{height:118px}
+}
+@media(max-width:620px){
+  .px .uni .views{grid-template-columns:minmax(0,1fr)}
+  .px .map-legend{order:2;grid-column:1;border-left:0;border-top:1px solid var(--line);padding:12px 0 0}
+  .px #tour-machine{order:3}
+  .px .map-legend ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .px .transport-tools{gap:8px}
+  .px .transport-speed{flex-wrap:wrap}
+  .px .transport-tools .volume-control{flex:1 1 180px}
+}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
@@ -1411,6 +1490,8 @@ a{color:inherit}
 
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
+<div class="player-layout">
+<aside class="player-sidebar" aria-label="{{player.controlsLabel}}">
 <div class="controls">
 <div id="tour-play" class="playwrap">
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
@@ -1418,6 +1499,22 @@ a{color:inherit}
 <div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
 <div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
 </div>
+<section class="transport" aria-label="{{player.controlsLabel}}">
+<div class="transport-position">
+<label for="playback-position">{{player.positionLabel}}</label>
+<output for="playback-position" class="mono">{{player.elapsed}} <span aria-hidden="true">/</span><span class="sr">{{player.of}}</span> {{player.duration}}</output>
+<input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
+</div>
+<div class="transport-tools">
+<div class="row seek-buttons"><button type="button" class="btn sm" onClick="{{player.back}}" disabled="{{player.atStart}}" aria-label="{{player.backLabel}}">−5 s</button><button type="button" class="btn sm" onClick="{{player.forward}}" disabled="{{player.atEnd}}" aria-label="{{player.forwardLabel}}">+5 s</button></div>
+<div class="volume-control"><button type="button" class="btn sm" aria-pressed="{{player.muted}}" onClick="{{player.toggleMute}}">{{player.muteLabel}}</button><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
+<button type="button" class="btn sm" onClick="{{player.toggleRepeat}}" aria-pressed="{{player.repeat}}">{{player.repeatLabel}}</button>
+<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
+</div>
+<div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="muted small">{{engineDesc}}</p></div>
+</section>
+</aside>
+<div class="player-visual">
 <sc-if value="{{showFileSettings}}">
 <div class="file-settings">
 <sc-if value="{{isImageUp}}">
@@ -1458,14 +1555,14 @@ a{color:inherit}
 </div>
 <div class="vfoot"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></div>
 </figure>
-<figure id="tour-machine" class="vpanel">
-<figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
-<div class="mbox" aria-hidden="true">
-<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
-<div class="scanline" style="left: {{scanLeft}}"></div>
-</div>
-<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.extreme}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
-</figure>
+
+<aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
+<h2 id="map-legend-title">{{player.legendTitle}}</h2>
+<p class="muted small">{{player.legendIntro}}</p>
+<ul><sc-for list="{{player.legend}}" as="l"><li><span class="legend-swatch" style="--swatch: {{l.color}}" aria-hidden="true">{{l.symbol}}</span><span><strong>{{l.label}}</strong><span class="sr">{{l.meaning}}</span></span></li></sc-for></ul>
+<details class="legend-detail"><summary>{{player.paletteTitle}}</summary><p class="small muted">{{player.paletteNote}}</p></details>
+<button type="button" class="btn sm" onClick="{{player.readLegend}}" disabled="{{speechUnavailable}}">{{player.readLegendLabel}}</button>
+</aside>
 </div>
 
 <section class="listen-band" aria-labelledby="listen-band-title">
@@ -1479,6 +1576,19 @@ a{color:inherit}
 </sc-for>
 </div>
 </section>
+</div>
+</div>
+
+<details id="tour-machine" class="analysis-panel"><summary>{{tx.machineSees}} · 28×16</summary>
+<figure class="vpanel">
+<figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
+<div class="mbox" aria-hidden="true">
+<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
+<div class="scanline" style="left: {{scanLeft}}"></div>
+</div>
+<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.extreme}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
+</figure>
+</details>
 
 <details class="player-readout">
 <summary>{{tx.playerReadout}}</summary>
@@ -1504,7 +1614,9 @@ a{color:inherit}
 </section>
 </sc-if>
 </div>
-<p role="status" aria-live="polite" class="sr">{{caption}}</p>
+<p class="current-event small">{{caption}}</p>
+<details class="event-history" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
+<p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
 </div>
 </sc-if>
 </sc-if>
@@ -1794,15 +1906,6 @@ a{color:inherit}
 <div class="mdim" onClick="{{closeMore}}" aria-hidden="true"></div>
 <div id="more-dialog" class="modal" role="dialog" aria-modal="true" aria-labelledby="more-t" tabindex="-1">
 <div class="mhead"><h2 id="more-t" class="display md">{{tx.moreOptions}}</h2><button id="more-close" type="button" class="btn sm" onClick="{{closeMore}}">{{tx.close}}</button></div>
-<div class="col">
-<span class="tag">{{tx.sound}}</span>
-<div class="engines" role="group" aria-label="{{tx.engineAria}}">
-<sc-for list="{{engines}}" as="e" hint-placeholder-count="4"><button type="button" onClick="{{e.pick}}" disabled="{{e.off}}" aria-pressed="{{e.on}}" title="{{e.label}}">{{e.short}}</button></sc-for>
-</div>
-<p class="muted small">{{engineDesc}}</p>
-<label class="field">{{tx.speedLabel}}
-<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}}</option><option value="110">{{tx.normal}}</option><option value="70">{{tx.fast}}</option></select></label>
-</div>
 <div class="col">
 <span class="tag">{{tx.fourDecisions}}</span>
 <sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div class="why"><strong>{{w.title}}</strong><span class="muted small">{{w.body}}</span></div></sc-for>
@@ -2369,16 +2472,18 @@ function score(r, g, b) {
   for (var i = 0; i < EIC_SCALE.length; i++) { var e = EIC_SCALE[i], dd = (r - e[0]) * (r - e[0]) + (g - e[1]) * (g - e[1]) + (b - e[2]) * (b - e[2]); if (dd < dmin) { dmin = dd; best = i; } }
   return (best - 16) / 4 * 1.25;
 }
+// BEGIN NASA GIBS PALETTE
+var GIBS_SCALE = [[107,0,219,-5.0],[116,0,214,-4.916667],[127,0,211,-4.75],[137,0,207,-4.583333],[150,0,202,-4.416667],[145,9,204,-4.25],[127,26,209,-4.083333],[96,49,220,-3.916667],[65,75,230,-3.75],[34,100,241,-3.583333],[8,124,251,-3.416667],[0,148,255,-3.25],[0,174,255,-3.083333],[0,202,255,-2.916667],[0,227,255,-2.75],[3,248,250,-2.583333],[24,252,229,-2.416667],[47,255,206,-2.25],[71,255,182,-2.083333],[96,255,158,-1.916667],[118,255,140,-1.75],[136,255,132,-1.583333],[151,255,139,-1.416667],[164,255,145,-1.25],[177,255,152,-1.083333],[189,254,158,-0.916667],[191,244,163,-0.75],[191,232,169,-0.583333],[191,219,176,-0.416667],[191,208,182,-0.25],[194,202,184,-0.083333],[202,202,183,0.083333],[213,213,172,0.25],[226,226,162,0.416667],[237,237,152,0.583333],[249,248,141,0.75],[255,246,121,0.916667],[255,234,94,1.083333],[255,222,67,1.25],[255,208,37,1.416667],[255,194,9,1.583333],[255,182,1,1.75],[255,170,0,1.916667],[255,157,0,2.083333],[255,145,0,2.25],[255,130,0,2.416667],[255,113,0,2.583333],[255,89,0,2.75],[255,61,0,2.916667],[255,33,0,3.083333],[254,9,0,3.25],[249,1,19,3.416667],[243,0,45,3.583333],[236,0,74,3.75],[230,0,103,3.916667],[222,0,125,4.083333],[211,0,133,4.25],[191,0,104,4.416667],[171,0,72,4.583333],[154,0,44,4.75],[136,0,15,4.916667],[128,0,0,5.0]];
+// END NASA GIBS PALETTE
 function scoreOld(r, g, b) {
-  var q = hsv(r, g, b), h = q[0], s = q[1], v = q[2];
-  if (s < 0.15) return 0;
-  if (v < 0.6 && (h < 20 || h > 330)) return 5;
-  if (h >= 300 && h < 345) return 4.5;
-  if (h >= 345 || h < 7) return 4;
-  if (h < 27) return 3; if (h < 43) return 2; if (h < 53) return 1;
-  if (h < 75) return s > 0.3 ? 0.5 : 0;
-  if (h < 118) return -0.5; if (h < 145) return -1; if (h < 170) return -2; if (h < 190) return -3; if (h < 250) return -4;
-  return -5;
+  // Black missing-data fill and white coastline overlays are not ocean values.
+  if ((r < 8 && g < 8 && b < 8) || (r > 245 && g > 245 && b > 245)) return null;
+  var best = GIBS_SCALE[0], distance = Infinity;
+  GIBS_SCALE.forEach(function (entry) {
+    var d = Math.pow(r - entry[0], 2) + Math.pow(g - entry[1], 2) + Math.pow(b - entry[2], 2);
+    if (d < distance) { distance = d; best = entry; }
+  });
+  return best[3];
 }
 function freeScore(r, g, b) {
   var q = hsv(r, g, b), h = q[0], s = q[1], v = q[2];
@@ -2455,7 +2560,9 @@ function analyzeMapImage(img, free, legacy) {
     for (var yy = 0; yy < 5; yy++) for (var xx = 0; xx < 5; xx++) {
       var x = cxi * 5 + xx, y = cy * 5 + yy, i = (y * 140 + x) * 4;
       if (px[i + 3] < 128 || (!free && !legacy && isLand(px[i], px[i + 1], px[i + 2]))) continue;
-      var sc = free ? freeScore(px[i], px[i + 1], px[i + 2]) : legacy ? scoreOld(px[i], px[i + 1], px[i + 2]) : score(px[i], px[i + 1], px[i + 2]); sum += sc; cnt++; n++;
+      var sc = free ? freeScore(px[i], px[i + 1], px[i + 2]) : legacy ? scoreOld(px[i], px[i + 1], px[i + 2]) : score(px[i], px[i + 1], px[i + 2]);
+      if (!Number.isFinite(sc)) continue;
+      sum += sc; cnt++; n++;
       if (sc > 0) warm += sc; else cold -= sc; if (sc >= 4) hot++;
       if (x >= 116 && x <= 128 && y >= 36 && y <= 66) { cs += sc; cn++; }
     }
@@ -2476,6 +2583,12 @@ class Component extends DCLogic {
     this.state.sfx = true;
     this.state.easyOpen = false;
     this.state.volume = 100;
+    this.state.masterMuted = false;
+    this.state.repeat = false;
+    this.state.ended = false;
+    this.state.playerAnnouncement = '';
+    this.state.events = [];
+    this.eventSerial = 0;
     this.state.audioPending = false; this.state.audioError = ''; this.audioRun = 0; this.cancelAudioWait = null;
     this.audioGraph = null; this.audioRetirements = new Map(); this.reverbImpulse = null; this.cueRun = 0;
     this.state.speaking = false;
@@ -2836,7 +2949,8 @@ class Component extends DCLogic {
       function () { if (disc < 5) self.loadDisc(disc); });
   }
   profile() {
-    var p = MUSIC[this.leadChar()], a = this.cur();
+    var a = arguments.length ? arguments[0] : this.cur();
+    var p = MUSIC[this.state.leadOverride || this.discLead(this.state.disc, a)];
     return p.dark && a && a.warm - a.cold > 0.9 ? p.dark : p;
   }
   only(k) { var m = {}; BAND.forEach(function (b) { m[b.k] = b.k !== k; }); return m; }
@@ -2916,7 +3030,7 @@ class Component extends DCLogic {
     this.stop();
     // Cambiar de sección cierra la ayuda; Silbo la reanuda solo cuando se le pide.
     if (s.tour) this.tourClose();
-    var patch = { tab: k, col: -1, sub: sub || 0, tour: 0, tourRect: null, more: false };
+    var patch = { tab: k, sub: sub || 0, tour: 0, tourRect: null, more: false };
     if (s.tab === 'data') patch.upMsg = '';
     if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
     this.routeChange(patch, k);
@@ -2968,9 +3082,111 @@ class Component extends DCLogic {
   setVolume(value) {
     if (!Number.isFinite(value)) return;
     var volume = Math.max(0, Math.min(100, value));
-    if (this.master) this.master.gain.value = .8 * volume / 100;
-    if (this.cueBus) this.cueBus.gain.value = volume / 100;
     this.setState({ volume: volume });
+    this.syncVolume();
+  }
+  syncVolume() {
+    var level = this.state.masterMuted ? 0 : this.state.volume / 100;
+    if (this.master) this.master.gain.value = .8 * level * (this.state.speaking ? .3 : 1);
+    if (this.cueBus) this.cueBus.gain.value = this.state.sfx ? level : 0;
+  }
+  toggleMasterMute() { this.setState({ masterMuted: !this.state.masterMuted }); this.syncVolume(); }
+  playerPosition() {
+    return Math.max(0, Math.min(this.playerSteps(), this.state.frame * 28 + this.state.col + 1));
+  }
+  playerSteps() { return DISCS[this.state.disc].files.length * 28; }
+  frameStepMs(frame) {
+    if (this.state.engine === 'raw') return Math.round(110 / this.speedFactor());
+    var analysis = frame === this.state.frame ? this.cur() : this.state.an[this.state.disc + '_' + frame];
+    return Math.round(30000 / (this.profile(analysis).bpm * this.speedFactor()));
+  }
+  playerSeconds(position) {
+    var remaining = Math.max(0, Math.min(this.playerSteps(), position)), ms = 0;
+    for (var frame = 0; remaining > 0; frame++) {
+      var steps = Math.min(28, remaining); ms += steps * this.frameStepMs(frame); remaining -= steps;
+    }
+    return ms / 1000;
+  }
+  formatClock(seconds) {
+    var value = Math.max(0, Math.floor(seconds));
+    return Math.floor(value / 60) + ':' + ('0' + value % 60).slice(-2);
+  }
+  seekPosition(value) {
+    if (!Number.isFinite(value)) return;
+    var self = this, was = this.state.playing || this.state.audioPending;
+    var position = Math.max(0, Math.min(this.playerSteps(), Math.round(value)));
+    var atEnd = position === this.playerSteps(), frame = Math.min(DISCS[this.state.disc].files.length - 1, Math.floor(position / 28));
+    this.stop(); this.stopSpeech(); this.lastThunder = -9; this.melDeg = null;
+    this.setState({ frame: frame, col: atEnd ? 27 : position % 28 - 1, ended: atEnd,
+      playerAnnouncement: T('Posición ', 'Position ') + this.formatClock(this.playerSeconds(position)) + '. ' + (was && !atEnd ? T('Reproduciendo.', 'Playing.') : T('En pausa.', 'Paused.')) }, function () {
+      if (was && !atEnd) self.play();
+    });
+  }
+  seekSeconds(delta) {
+    var seconds = Math.max(0, Math.min(this.playerSeconds(this.playerSteps()), this.playerSeconds(this.playerPosition()) + delta));
+    var step = 0, elapsed = 0;
+    while (step < this.playerSteps()) {
+      var duration = this.frameStepMs(Math.floor(step / 28)) / 1000;
+      if (elapsed + duration / 2 > seconds) break;
+      elapsed += duration; step++;
+    }
+    this.seekPosition(step);
+  }
+  recordEvent(fired, chord) {
+    var s = this.state;
+    var event = { id: ++this.eventSerial, discId: DISCS[s.disc].id, set: s.set, frame: s.frame,
+      date: this.frameDate(s.disc, s.frame), column: s.col + 1, engine: s.engine,
+      seconds: this.playerSeconds(Math.max(0, this.playerPosition() - 1)),
+      chord: chord ? this.profile().prog.findIndex(function (item) { return chordOf(this.profile(), item).label === chord; }, this) : -1,
+      profile: this.leadChar(), dark: this.profile() === MUSIC.yaku.dark,
+      musicians: BAND.filter(function (b) { return fired[b.k]; }).map(function (b) { return b.name; }) };
+    this.setState({ events: s.events.concat([event]).slice(-200) });
+  }
+  playerVm() {
+    var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
+    var elapsed = this.formatClock(this.playerSeconds(position)), duration = this.formatClock(this.playerSeconds(steps));
+    var source = s.disc === 5 ? (s.custom && s.custom.kind === 'csv' ? 'csv' : 'image') : s.set;
+    var legend = [
+      { symbol: '↑', color: '#FF6A2B', label: source === 'csv' ? T('Sobre la media', 'Above the mean') : source === 'image' ? T('Color cálido', 'Warm color') : T('Más cálido de lo esperado', 'Warmer than expected'), meaning: T('Nivel positivo · Inti, Yaku; extremos: Illapa.', 'Positive level · Inti, Yaku; extremes: Illapa.') },
+      { symbol: '≈', color: '#7E849E', label: source === 'csv' ? T('Cerca de la media', 'Near the mean') : source === 'image' ? T('Nivel cercano a cero', 'Level near zero') : T('Cerca de lo esperado', 'Near expected'), meaning: T('Referencia · no implica silencio total.', 'Reference · does not mean complete silence.') },
+      { symbol: '↓', color: '#38C6E8', label: source === 'csv' ? T('Bajo la media', 'Below the mean') : source === 'image' ? T('Color frío', 'Cool color') : T('Más frío de lo esperado', 'Cooler than expected'), meaning: T('Nivel negativo · Mamacocha y Yaku.', 'Negative level · Mamacocha and Yaku.') },
+      { symbol: '□', color: '#232A4A', label: T('Sin datos de mar', 'No ocean data'), meaning: T('Celda sin valor utilizable · sin nota de datos.', 'Cell without a usable value · no data note.') }
+    ];
+    var paletteNote = source === 'eic' ? T('Original EIC: azul, referencia clara y marrón. Cuadrícula: paleta propia de TerraSonic.', 'EIC original: blue, a light reference and brown. Grid: TerraSonic’s own palette.') :
+      source === 'prev' ? T('Original GIBS: violeta/azul, verde/beige y naranja/rojo. La cuadrícula usa los colores de TerraSonic.', 'GIBS original: purple/blue, green/beige and orange/red. The grid uses TerraSonic’s colors.') :
+      source === 'csv' ? T('Los niveles se normalizan respecto a la media de la columna elegida; no son anomalías del océano.', 'Levels are normalized relative to the selected column’s mean; they are not ocean anomalies.') :
+      T('Lectura artística del color de tu imagen. No mide temperaturas.', 'An artistic reading of your image’s colors. It does not measure temperatures.');
+    return {
+      controlsLabel: T('Controles de reproducción', 'Playback controls'), positionLabel: T('Tiempo del disco', 'Disc playback time'),
+      position: position, steps: steps, elapsed: elapsed, duration: duration, of: T(' de ', ' of '),
+      positionText: elapsed + T(' de ', ' of ') + duration + '. ' + T('Mapa: ', 'Map: ') + this.frameTag(s.disc, s.frame) + '.',
+      seek: function (e) { self.seekPosition(Number(e.target.value)); },
+      back: function () { self.seekSeconds(-5); }, forward: function () { self.seekSeconds(5); },
+      backLabel: T('Retroceder cinco segundos', 'Go back five seconds'), forwardLabel: T('Avanzar cinco segundos', 'Go forward five seconds'),
+      atStart: position === 0, atEnd: position === steps,
+      volumeLabel: T('Volumen', 'Volume'), volume: s.volume, muted: s.masterMuted,
+      muteLabel: s.masterMuted ? T('Sonido silenciado', 'Sound muted') : T('Silenciar', 'Mute'),
+      toggleMute: function () { self.toggleMasterMute(); }, changeVolume: function (e) { self.setVolume(Number(e.target.value)); },
+      repeat: s.repeat, repeatLabel: T('Repetir', 'Repeat'), toggleRepeat: function () { self.setState({ repeat: !self.state.repeat }); },
+      legendTitle: T('Cómo interpretar el mapa', 'How to read the map'), legend: legend,
+      legendIntro: T('Niveles derivados −5…+5, no grados medidos.', 'Derived levels −5…+5, not measured degrees.'), paletteNote: paletteNote,
+      paletteTitle: T('Mapa original y análisis', 'Original map and analysis'),
+      readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
+      readLegend: function () { if (self.state.speaking) self.stopSpeech(); else self.speak(legend.map(function (l) { return l.label + '. ' + l.meaning; }).join(' ') + ' ' + paletteNote, true); },
+      historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length,
+      historyHelp: T('Últimos 200 pasos. Se conservan al pausar o cambiar de disco. El lector de pantalla los lee cuando tú los consultas.', 'Last 200 steps. They remain when you pause or change discs. Your screen reader reads them when you choose to browse them.'),
+      events: s.eventsOpen ? s.events.slice().reverse().map(function (event) {
+        var disc = DISC_SETS.eic.concat(DISC_SETS.prev).find(function (item) { return item.id === event.discId; });
+        var profile = event.dark ? MUSIC.yaku.dark : MUSIC[event.profile];
+        var chord = event.chord >= 0 && profile.prog[event.chord] ? chordOf(profile, profile.prog[event.chord]).label : '';
+        return { time: self.formatClock(event.seconds), text: (disc ? disc.title : T('Tu archivo', 'Your file')) + ' · ' + MES[event.date.m] + ' ' + event.date.y + ' · ' +
+          T('columna ', 'column ') + event.column + '/28 · ' + (event.engine === 'melody' ? T('Melodía', 'Melody') : T('Datos', 'Data')) +
+          (chord ? ' · ' + T('acorde ', 'chord ') + chord : '') + ' · ' + (event.musicians.join(', ') || T('Sin entradas nuevas.', 'No new instrument entries.')) };
+      }) : [],
+      toggleHistory: function (event) { var open = event.target.open; if (open !== !!self.state.eventsOpen) self.setState({ eventsOpen: open }); },
+      clearLabel: T('Vaciar historial', 'Clear history'), clearEvents: function () { self.setState({ events: [] }); },
+      announcement: s.playerAnnouncement
+    };
   }
   easyExplanation() {
     var a = this.cur();
@@ -3217,7 +3433,7 @@ class Component extends DCLogic {
       if (self.disposed || run !== self.cueRun || self.ac !== ac || !self.state.sfx || ac.state !== 'running') return;
       if (!self.cueBus) {
         self.cueBus = ac.createGain();
-        self.cueBus.gain.value = self.state.volume / 100;
+        self.cueBus.gain.value = self.state.masterMuted ? 0 : self.state.volume / 100;
         self.cueBus.connect(ac.destination);
       }
       var start = ac.currentTime + 0.012;
@@ -3246,7 +3462,7 @@ class Component extends DCLogic {
     if (ac.state === 'closed' || !['createGain', 'createDynamicsCompressor', 'createConvolver', 'createBuffer'].every(function (name) { return typeof ac[name] === 'function'; })) throw new Error('audio-initialization');
     try {
       if (!this.master) {
-        this.master = this.ac.createGain(); this.master.gain.value = 0.8 * this.state.volume / 100;
+        this.master = this.ac.createGain(); this.master.gain.value = this.state.masterMuted ? 0 : 0.8 * this.state.volume / 100 * (this.state.speaking ? .3 : 1);
         var comp = this.ac.createDynamicsCompressor(); this.master.connect(comp); comp.connect(this.ac.destination);
         this.bus = this.ac.createGain(); this.bus.connect(this.master);
         var conv = this.ac.createConvolver(), irLen = Math.floor(this.ac.sampleRate * 2.4), ir = this.reverbImpulse;
@@ -3315,14 +3531,13 @@ class Component extends DCLogic {
   }
   step(col) {
     var a = this.cur(); if (!a) return;
-    var s = this.state, m = s.mute, t = this.ac.currentTime + 0.02, sp = s.speed / 1000, info = this.colInfo(a, col), pan = (col / 27) * 1.6 - 0.8;
+    var s = this.state, m = s.mute, t = this.ac.currentTime + 0.02, sp = this.stepMs() / 1000, info = this.colInfo(a, col), pan = (col / 27) * 1.6 - 0.8;
     var lv = { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, notes = [];
     if (col % 4 === 0) {
       var w = 0, c = 0, k = 0; for (var j = col; j < Math.min(28, col + 4); j++) { var ci = this.colInfo(a, j); if (!ci.k) continue; w += ci.w; c += ci.c; k++; }
       w = k ? w / k : 0; c = k ? c / k : 0;
-      var name = c > w + 0.3 ? 'Am' : w < 0.6 ? 'C' : w < 1.3 ? 'F' : w < 2.2 ? 'G' : 'E', ch = CHORDS[name];
-      if (!m.inti && w > 0.05) { var self = this; ch[0].forEach(function (f, q) { self.tone('triangle', f, t + q * 0.03, Math.min(0.16, 0.03 + 0.06 * w), sp * 4.5, pan * 0.5); }); lv.inti = Math.min(1, w / 3); notes.push(T('Inti toca ', 'Inti plays ') + name); }
-      if (!m.mama && c > 0.05) { this.tone('sine', ch[1], t, Math.min(0.32, 0.06 + 0.2 * c), sp * 4.2, 0); lv.mama = Math.min(1, c / 2); notes.push(T('Mamacocha canta grave', 'Mamacocha sings low')); }
+      if (!m.inti && w > 0.05) { this.tone('triangle', mtof(60 + Math.min(5, w) * 2.4), t, Math.min(0.16, 0.03 + 0.06 * w), sp * 3.5, pan * 0.5); lv.inti = Math.min(1, w / 3); notes.push(T('Inti: nivel cálido ', 'Inti: warm level ') + w.toFixed(1)); }
+      if (!m.mama && c > 0.05) { this.tone('sine', mtof(48 - Math.min(5, c) * 2.4), t, Math.min(0.32, 0.06 + 0.2 * c), sp * 3.5, 0); lv.mama = Math.min(1, c / 2); notes.push(T('Mamacocha: nivel frío ', 'Mamacocha: cold level ') + (-c).toFixed(1)); }
     } else { lv.inti = s.levels.inti * 0.8; lv.mama = s.levels.mama * 0.8; }
     if (!m.yaku && info.strong.length) {
       var picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(3, Math.ceil(info.strong.length / 4)));
@@ -3349,6 +3564,7 @@ class Component extends DCLogic {
     if (fired.silbo) this.leadNote('silbo', t, Math.max(0.9, sp * 6));
     var bp = this.bump(fired, fired.illapa);
     this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') });
+    this.recordEvent(fired, '');
   }
   spriteVm(k) {
     var s = this.state, b = BAND.filter(function (x) { return x.k === k; })[0], off = s.mute[k], lv = s.levels[k] || 0;
@@ -3368,12 +3584,20 @@ class Component extends DCLogic {
   }
   speedFactor() { return { 180: 0.75, 110: 1, 70: 1.4 }[this.state.speed] || 1; }
   stepMs() {
-    var s = this.state; if (s.engine !== 'melody') return s.speed;
-    return Math.round(30000 / (this.profile().bpm * this.speedFactor()));
+    return this.frameStepMs(this.state.frame);
+  }
+  startSequencer() {
+    var self = this, run = this.audioRun;
+    if (this.timer != null) clearInterval(this.timer);
+    this.sequencerMs = this.stepMs();
+    this.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.tick(); }, this.sequencerMs);
   }
   setEngine(k) {
-    this.stop(); this.melDeg = null;
-    this.setState({ engine: k, caption: k === 'melody' ? T('Motor Melodía: el protagonista guía la tonalidad y la progresión.', 'Melody engine: the lead sets the key and the progression.') : T('Motor Datos puros: cada color suena directo, sin armonía.', 'Raw data engine: each color plays directly, with no harmony.') });
+    if (['melody', 'raw'].indexOf(k) < 0 || k === this.state.engine) return;
+    var self = this, was = this.state.playing || this.state.audioPending;
+    this.stop(); this.stopSpeech(); this.melDeg = null; this.lastThunder = -9;
+    var message = k === 'melody' ? T('Melodía: el protagonista guía la escala y los acordes.', 'Melody: the lead sets the scale and chords.') : T('Datos: los niveles controlan los tonos, sin progresión de acordes.', 'Data: levels control tones, without a chord progression.');
+    this.setState({ engine: k, caption: message, playerAnnouncement: message }, function () { if (was) self.play(); });
   }
   note(type, midi, t, dur, vol, o) {
     o = o || {};
@@ -3478,6 +3702,7 @@ class Component extends DCLogic {
     var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
     var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }));
     this.setState({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] ' + T('acorde ', 'chord ') + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') });
+    this.recordEvent(fired, ch.label);
   }
   describeText() {
     var a = this.cur(), s = this.state, dt = this.frameDate(s.disc, s.frame);
@@ -3494,6 +3719,7 @@ class Component extends DCLogic {
     this.utterance = null;
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     if (this.state.speaking) this.setState({ speaking: false });
+    this.syncVolume();
   }
   speak(text, manual) {
     if ((!manual && !this.state.voice) || !window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
@@ -3505,8 +3731,10 @@ class Component extends DCLogic {
       if (self.utterance !== utterance) return;
       self.utterance = null;
       self.setState({ speaking: false });
+      self.syncVolume();
     };
     this.setState({ speaking: true });
+    this.syncVolume();
     window.speechSynthesis.speak(utterance);
   }
   leadNote(key, at, duration) {
@@ -3532,7 +3760,13 @@ class Component extends DCLogic {
       await this.waitForAudio(this.ensureAudio());
       if (this.disposed || run !== this.audioRun) return;
       var s = this.state, allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
-      var go = function () { self.melDeg = null; self.playT0 = document.timeline.currentTime; self.setState({ playing: true, col: -1, audioPending: false }); self.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.tick(); }, self.stepMs()); };
+      var go = function () {
+        self.melDeg = null; self.playT0 = document.timeline.currentTime;
+        var restart = self.playerPosition() >= self.playerSteps();
+        self.setState(Object.assign({ playing: true, audioPending: false, ended: false,
+          playerAnnouncement: T('Reproduciendo.', 'Playing.') }, restart ? { frame: 0, col: -1 } : {}));
+        self.startSequencer();
+      };
       if (allOff) {
         var nm = BAND.filter(function (b) { return b.k === k; })[0].name;
         this.setState({ mute: this.only(k), caption: T('La banda estaba apagada: activé a ', 'The band was off: I switched on ') + nm + T(', el protagonista seleccionado.', ', the selected lead.') }, go);
@@ -3552,16 +3786,27 @@ class Component extends DCLogic {
     var s = this.state, col = s.col + 1;
     if (this.disposed || !s.playing) return;
     if (col >= 28) {
-      if (s.frame >= DISCS[s.disc].files.length - 1) { this.stop(); this.setState({ col: -1, caption: T('Fin del disco. Elige otro o vuelve a reproducir.', 'End of the disc. Pick another one or play it again.') }); return; }
+      if (s.frame >= DISCS[s.disc].files.length - 1) {
+        var repeat = s.repeat;
+        this.stop();
+        var message = repeat ? T('Repetir disco.', 'Repeating disc.') : T('Fin del disco.', 'End of the disc.');
+        this.setState({ ended: !repeat, caption: message, playerAnnouncement: message });
+        if (repeat) { this.setState({ frame: 0, col: -1 }); this.play(); }
+        return;
+      }
       var dt = this.frameDate(s.disc, s.frame + 1);
-      this.setState({ frame: s.frame + 1, col: -1 }); this.lastThunder = -9; this.speak(MES[dt.m] + ' ' + dt.y); return;
+      this.setState({ frame: s.frame + 1, col: -1 }); this.lastThunder = -9;
+      this.setState({ playerAnnouncement: T('Mapa de ', 'Map for ') + MES[dt.m] + ' ' + dt.y + '.' });
+      if (this.sequencerMs !== this.stepMs()) this.startSequencer();
+      col = 0;
     }
+    if (!this.cur()) return;
     if (s.engine === 'melody') this.stepMelody(col); else this.step(col);
   }
   stopForScreen(tab, sub) {
     if (tab === this.state.tab && sub === this.state.sub) return;
     if (this.state.playing || this.state.audioPending) this.stop();
-    if (this.state.easyOpen && this.state.speaking) this.stopSpeech();
+    this.stopSpeech();
   }
   retireAudioGraph() {
     var self = this;
@@ -3599,12 +3844,13 @@ class Component extends DCLogic {
     clearTimeout(this.leadRestTimer);
     this.leadRestTimer = null;
     this.retireAudioGraph();
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') { try { navigator.vibrate(0); } catch (ignored) {} }
     if (this.state.playing || this.state.audioPending || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
-      this.setState({ playing: false, audioPending: false, leadPulse: null, chord: '', flash: 0,
+      this.setState({ playing: false, audioPending: false, leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
     }
   }
-  gotoFrame(f) { var self = this; this.stop(); this.lastThunder = -9; this.setState({ frame: Math.max(0, Math.min(DISCS[this.state.disc].files.length - 1, f)), col: -1 }, function () { self.speak(self.describeText()); }); }
+  gotoFrame(f) { this.seekPosition(Math.max(0, Math.min(DISCS[this.state.disc].files.length - 1, f)) * 28); }
 
   renderVals() {
     var s = this.state, self = this, hc = s.contrast;
@@ -3719,14 +3965,11 @@ class Component extends DCLogic {
       { tag: T('USO', 'USE'), title: T('Para estudiar', 'For study'), body: T('Sirve para comparar discos sin que la música «embellezca» los datos.', 'Useful to compare discs without the music “prettifying” the data.') }
     ];
     var engines = [
-      { key: 'melody', label: T('Melodía compuesta', 'Composed melody'), desc: T('Escalas, acordes y ritmo por disco. La melodía sale de los datos.', 'Scales, chords and rhythm per disc. The melody comes from the data.'), chip: T('En el prototipo', 'In the prototype'), live: true },
-      { key: 'raw', label: T('Datos puros', 'Raw data'), desc: T('Cada color suena directo, sin armonía. La traducción más literal.', 'Each color plays directly, with no harmony. The most literal translation.'), chip: T('En el prototipo', 'In the prototype'), live: true },
-      { key: 'magenta', label: T('IA en el navegador', 'In-browser AI'), desc: T('Magenta.js varía y continúa la melodía, en tu equipo.', 'Magenta.js varies and continues the melody, on your device.'), chip: T('Planeado', 'Planned'), live: false },
-      { key: 'cloud', label: T('IA generativa en la nube', 'Generative AI in the cloud'), desc: T('Lyria RealTime, Stable Audio o ElevenLabs. Pide servidor y clave.', 'Lyria RealTime, Stable Audio or ElevenLabs. Needs a server and a key.'), chip: T('Planeado', 'Planned'), live: false }
+      { key: 'melody', short: T('Melodía', 'Melody'), label: T('Melodía con escala y acordes', 'Melody with a scale and chords') },
+      { key: 'raw', short: T('Datos', 'Data'), label: T('Niveles convertidos en tonos', 'Levels converted into tones') }
     ].map(function (e) {
-      var on = e.key === s.engine;
-      return { ic: self.icons[{ melody: 'melody', raw: 'raw', magenta: 'chip', cloud: 'cloud' }[e.key]], short: { melody: T('Melodía', 'Melody'), raw: T('Datos', 'Data'), magenta: T('IA local', 'Local AI'), cloud: T('IA nube', 'Cloud AI') }[e.key], label: e.label, desc: e.desc, chip: e.chip, chipBg: e.live ? '#7BE38A' : '#FFD447', on: on, off: !e.live, op: e.live ? '1' : '0.6',
-        bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, sub: on ? '#0A0D1A' : th.muted, border: on ? th.accent : th.line, pick: function () { self.setEngine(e.key); } };
+      return { short: e.short, label: e.label, on: e.key === s.engine, off: false,
+        pick: function () { self.setEngine(e.key); } };
     });
     var objectives = OBJ.map(function (o) { return { tag: o.tag, title: o.title, where: o.where, goLabel: T('Ir a ', 'Go to ') + ROUTE_LOOK[o.page].title, go: function () { self.goTab(o.page); } }; });
     var leadKey = this.leadChar();
@@ -3739,15 +3982,16 @@ class Component extends DCLogic {
       beatDots: [0, 1, 2, 3, 4, 5, 6, 7].map(function (i) { return { c: s.playing && s.col >= 0 && (s.col % 8) === i ? th.accent : th.line }; }),
       chordHud: melody ? T('ACORDE ', 'CHORD ') + (s.playing && s.chord ? s.chord : '—') + ' · ' + bpmEff + T(' ppm', ' bpm') : T('DATOS PUROS · ', 'RAW DATA · ') + s.speed + T(' ms por columna', ' ms per column'),
       shakeCls: s.flash ? (s.flash % 2 ? 'sh1' : 'sh2') : '', flashCls: s.flash ? (s.flash % 2 ? 'fl1' : 'fl2') : '',
-      engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos puros: cada color suena directo, sin armonía.', 'Raw data: each color plays directly, with no harmony.')) + T(' IA local e IA en la nube: planeadas.', ' Local AI and cloud AI: planned.'),
+      engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos puros: cada color suena directo, sin armonía.', 'Raw data: each color plays directly, with no harmony.')),
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, objectives: objectives,
+      player: this.playerVm(),
       frameCount: s.disc === 5 ? T('tu archivo', 'your file') : T('fotograma ', 'frame ') + (s.frame + 1) + T(' de ', ' of ') + d.files.length, prevOff: s.frame <= 0, nextOff: s.frame >= d.files.length - 1,
       trans: s.trans, route: s.route, pageName: ROUTE_LOOK[s.tab].title,
       sectionNumber: PAGES[s.tab][0],
       sectionName: ROUTE_LOOK[s.tab].title,
       sectionColor: '#FFFFFF',
       signalClass: s.playing ? 'on' : '',
-      signalLabel: s.playing ? T('Reproduciendo', 'Playing') : T('En pausa', 'Paused'),
+      signalLabel: s.audioPending ? T('Preparando audio', 'Preparing audio') : s.playing ? (a ? T('Reproduciendo', 'Playing') : T('Preparando mapa', 'Preparing map')) : s.ended ? T('Fin del disco', 'End of disc') : T('En pausa', 'Paused'),
       isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
       showMain: isJuke || isData, showPlayer: isJuke || (isData && hasCustom), dataEmpty: isData && !hasCustom,
       showStrip: s.disc !== 5, showSilbo: s.disc !== 5,
@@ -3869,7 +4113,7 @@ class Component extends DCLogic {
       autoLead: function () { self.selectLead('auto'); },
       strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: T('Ver ', 'View ') + MES[fd.m] + T(' de ', ' ') + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playPending: s.audioPending, audioError: uiText(s.audioError),
-      playLabel: s.audioPending ? T('Preparando audio…', 'Preparing audio…') : s.playing ? T('Pausar', 'Pause') : T('Reproducir', 'Play'), playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
+      playLabel: s.audioPending ? T('Preparando audio…', 'Preparing audio…') : s.playing ? T('Pausar', 'Pause') : s.ended ? T('Volver a reproducir', 'Play again') : s.col >= 0 ? T('Reanudar', 'Resume') : T('Reproducir', 'Play'), playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
       describeLabel: s.speaking ? T('Detener voz', 'Stop voice') : T('Describir en voz alta', 'Describe aloud'),
       describe: function () {

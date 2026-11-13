@@ -63,7 +63,7 @@
         updates.push(scope => { node[name] = direct(value, scope) ?? null; });
       } else if (name === "disabled" || name === "hidden" || name === "checked") {
         updates.push(scope => node.toggleAttribute(name, !!direct(value, scope)));
-      } else if (name === "value" && tag === "select") {
+      } else if (name === "value" && ["select", "input", "textarea"].includes(tag) && node.type !== "file") {
         updates.push(scope => { const selected = interpolate(value, scope); if (node.value !== selected) node.value = selected; });
       } else {
         updates.push(scope => {

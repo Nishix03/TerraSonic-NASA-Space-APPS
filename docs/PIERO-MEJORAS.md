@@ -20,7 +20,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 
 | ID | Requisito | Implementación y verificación previstas | Estado actual |
 | --- | --- | --- | --- |
-| R1 | Escuchar | Posición, tiempos, saltos, pausa, volumen, silencio, repetición y velocidad en EIC y GIBS. Cancelación de notas. Modos claros, leyenda y eventos consultables. | Pendiente. Base auditada. |
+| R1 | Escuchar | Posición, tiempos, saltos, pausa, volumen, silencio, repetición y velocidad en EIC y GIBS. Cancelación de notas. Modos claros, leyenda y eventos consultables. | Implementado en checkpoint del reproductor. 90 pruebas, cuatro recorridos de audio y cinco anchos. Salida cero tras pausar. Se corrigió la paleta GIBS y la tierra negra. Falta continuidad bajo carga y URL final. Ver docs/REPRODUCTOR.md. |
 | R2 | Retirar A/B | Eliminar vista, estado, audio, ayudas, traducciones, estilos y recursos exclusivos. Conservar fechas del reproductor. | Implementado. Se retiraron pantalla, entradas, hash, estilos, estado, análisis y audio exclusivo en ambos idiomas. La regresión recorre las seis fechas de los diez discos. 81 pruebas pasan. |
 | R3 | Banda en Escuchar | Cinco cuerpos completos, activación compartida con Escenario y respaldo estático con carga lenta o sin WebGL. | Implementado en checkpoint 3D. Falta reverificar en la URL independiente final y cancelar notas por músico en el motor nuevo. |
 | R4 | Convertir | Imagen de ejemplo y propia como acciones principales, CSV y lluvia secundarios. Casos inválidos, tamaño, columnas y procesamiento local. | Parcial en base. Falta prioridad de imagen. |
@@ -31,9 +31,9 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | R9 | Cultura e historias | Cinco fichas con hechos, referencia cultural y propuesta de ficción. Fuentes y cuidado UNESCO. Sonidos individuales detenibles. | Pendiente. Biblia visual antigua disponible. |
 | R9-3D | Cinco modelos | Inventario y renders multivista, anatomía, rostro, prendas, instrumentos, materiales, rig y clips. Peso, contacto, respaldo y movimiento reducido. | Propuesta volumétrica implementada. 5 pruebas GLB y 6 escenarios web. Ver docs/MODELOS_3D.md. Faltan revisión cultural, visuales históricas y URL final. |
 | R10 | Método y Tecnología | Documentar comportamiento real, niveles derivados y decisiones artísticas. Conservar Retos. Retirar tecnología planeada o no usada. | Pendiente. |
-| R11 | Pruebas y rendimiento | Antes/después con perfil idéntico, Inicio/Escuchar/Banda, peso, audio, ambos catálogos y modos, ausencia de APIs. | Línea base y 3 recorridos por versión medidos. 78 pruebas del producto y 5 pruebas GLB. Faltan reproductor completo y continuidad de audio. |
+| R11 | Pruebas y rendimiento | Antes/después con perfil idéntico, Inicio/Escuchar/Banda, peso, audio, ambos catálogos y modos, ausencia de APIs. | Línea base y 3 recorridos por versión medidos. 90 pruebas del producto, 5 GLB, seis escenarios 3D y cuatro recorridos con Web Audio medido. Falta continuidad bajo carga y medir la versión final. |
 | R12 | Entrega | Matriz, tiempo real, decisiones, commits, URL pública independiente, main intacto, paquete portable e instrucciones. | Este documento es el checkpoint inicial. |
-| R13 | Disco y recursos | Comprobar C periódicamente, salidas en D, limpiar solo temporales identificados si fuera necesario. | Espacio suficiente al inicio. |
+| R13 | Disco y recursos | Comprobar C periódicamente, salidas en D, limpiar solo temporales identificados si fuera necesario. | C conserva 18.581.864.448 bytes libres en la revisión de las 01:02, unos 17,3 GiB. No se ha realizado limpieza. Salidas en D. |
 | R14 | 420 minutos efectivos | Registrar bloques reales de trabajo y excluir pausas y esperas. No mantener procesos inactivos para completar horas. | Registro iniciado. Tiempo histórico no acreditado. |
 
 ## Registro de trabajo efectivo
@@ -44,8 +44,9 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | --- | --- | --- | --- |
 | 1 | 13 nov 2026, 00:14–00:19 | Leer adjunto, verificar base/remoto, build, 78 pruebas, espacio, Blender y referencias. | 4 |
 | 2 | 13 nov 2026, 00:19–00:45 | Modelado, inspección multivista, respaldo, carga diferida, integración y pruebas. 78 pruebas de producto, 5 de GLB y seis escenarios Chromium con cinco personajes, incluida mezcla compartida Escuchar/Escenario. | 23 |
+| 3 | 13 nov 2026, 00:45–01:09 | Armonía, retirada A/B, transporte, paletas oficiales, voz/volumen, historial y composición del reproductor. 90 pruebas y verificación de Web Audio en ambos catálogos/modos. | 22 |
 
-Total conservador acreditado: **27 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
+Total conservador acreditado: **49 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
 
 ## Decisiones
 
