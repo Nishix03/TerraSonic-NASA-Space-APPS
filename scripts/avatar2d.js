@@ -8,7 +8,7 @@ const version = new URL(import.meta.url).search;
 const asset = (key,file) => new URL(`../sprites/${key}/${file}${version}`,import.meta.url).href;
 const sequences = {
   Play: [0,1,2,3,2,1,0],
-  Walk: [0,1,2,1,0,1,2,0],
+  Walk: [0,1,2,3,2,1,2,0],
   Dance: [0,1,2,3,2,1,2,0]
 };
 // Durations from each original banda/keyframes/animacion.json.
@@ -28,8 +28,12 @@ function imageReady(url) {
   return decoded.get(url);
 }
 const intersection = new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
-  target.inView=isIntersecting;
-  if (isIntersecting) target.sync(); else target.cancel(false);
+  // A portrait and its controls form one stage. On a short phone viewport the
+  // drawing can leave the viewport while its transport is still being used.
+  for (const avatar of instances) if (avatar.visibilityTarget===target) {
+    avatar.inView=isIntersecting;
+    if (isIntersecting) avatar.sync(); else avatar.cancel(false);
+  }
 }),{rootMargin:'40px'});
 
 class Sprite extends HTMLElement {
@@ -40,21 +44,23 @@ class Sprite extends HTMLElement {
       this.image.decoding='async';this.image.draggable=false;this.image.setAttribute('aria-hidden','true');
       this.append(this.image);
     }
-    instances.add(this);intersection.observe(this);this.sync();
+    this.visibilityTarget=this.closest('.bshow')||this;
+    instances.add(this);intersection.observe(this.visibilityTarget);this.sync();
   }
-  disconnectedCallback(){this.cancel(false);this.epoch=(this.epoch||0)+1;instances.delete(this);intersection.unobserve(this);}
+  disconnectedCallback(){this.cancel(false);this.epoch=(this.epoch||0)+1;instances.delete(this);if(![...instances].some(a=>a.visibilityTarget===this.visibilityTarget))intersection.unobserve(this.visibilityTarget);}
+  motionBlocked(){return reduced()&&!this.allowMotion;}
   attributeChangedCallback(name,old,value){if(old!==value&&this.isConnected&&this.image)this.sync(name==='data-character');}
   async sync(changed=false){
     const key=this.dataset.character;if(!keys.has(key))return;
     if(this.key!==key||changed){
-      this.cancel(true);this.epoch=(this.epoch||0)+1;this.key=key;this.cue='';this.currentFrame=0;
+      this.cancel(true);this.allowMotion=false;this.resting=true;this.epoch=(this.epoch||0)+1;this.key=key;this.cue='';this.currentFrame=0;
       this.removeAttribute('data-rendered');this.removeAttribute('data-error');
       const url=asset(key,'pose-banda.webp');this.image.src=url;
       try{await imageReady(url);if(!this.isConnected||this.key!==key)return;this.setAttribute('data-rendered','');}
       catch{if(this.key===key)this.setAttribute('data-error','');}
       this.notify();
     }
-    if(!this.inView||document.hidden||reduced()||this.dataset.muted==='true'){this.cancel(false);return;}
+    if(!this.inView||document.hidden||this.motionBlocked()||this.dataset.muted==='true'){this.cancel(false);return;}
     if(this.manual)return;
     if(this.dataset.active==='true'&&!this.timer)this.start('Play',false);
     else if(this.dataset.cue&&this.dataset.cue!==this.cue){this.cue=this.dataset.cue;this.start('Play',false);}
@@ -67,17 +73,17 @@ class Sprite extends HTMLElement {
     this.notify();
   }
   async start(mode='Play',manual=true){
-    if(!sequences[mode]||reduced()||!this.inView||document.hidden)return;
-    this.cancel(false);this.mode=mode;this.manual=manual;this.index=0;this.running=true;this.loading=true;this.notify();
+    if(!sequences[mode]||this.motionBlocked()||!this.inView||document.hidden)return;
+    this.cancel(false);this.resting=false;this.mode=mode;this.manual=manual;this.index=0;this.running=true;this.loading=true;this.notify();
     const token=++this.epoch,key=this.key;
     // Decode all four originals before changing a frame: no blank flashes.
     try{await Promise.all([0,1,2,3].map(n=>imageReady(asset(key,`keyframes/0${n}.png`))));}
     catch{if(token===this.epoch){this.cancel(true);this.setAttribute('data-error','');}return;}
-    if(!this.isConnected||token!==this.epoch||!this.inView||reduced()||document.hidden)return;
+    if(!this.isConnected||token!==this.epoch||!this.inView||this.motionBlocked()||document.hidden)return;
     this.preparedKey=key;this.loading=false;this.cycles=manual?3:1;this.tick();
   }
   tick(){
-    if(!this.running||!this.isConnected||!this.inView||document.hidden||reduced()){this.cancel(false);return;}
+    if(!this.running||!this.isConnected||!this.inView||document.hidden||this.motionBlocked()){this.cancel(false);return;}
     this.paint();const delay=this.mode==='Play'?timings[this.key][this.index%7]:this.mode==='Walk'?190:160;
     this.timer=setTimeout(()=>{
       this.index++;
@@ -87,7 +93,7 @@ class Sprite extends HTMLElement {
   }
   paint(){
     const sequence=sequences[this.mode||'Play'],index=this.index||0,n=sequence[index%sequence.length];
-    this.currentFrame=n;this.dataset.frame=String(n);this.dataset.step=String(index);this.dataset.motion=this.mode||'Play';
+    this.resting=false;this.currentFrame=n;this.dataset.frame=String(n);this.dataset.step=String(index);this.dataset.motion=this.mode||'Play';
     this.image.src=asset(this.key,`keyframes/0${n}.png`);
     const phase=index/(sequence.length-1),sway=Math.sin(phase*Math.PI*2);
     // Stage travel and dance are 2D choreography over the original drawings.
@@ -97,9 +103,9 @@ class Sprite extends HTMLElement {
     this.notify();
   }
   replay(mode){return this.start(mode,true);}
-  pause(){if(this.running){this.cancel(false);this.manual=true;}else if(!reduced()){if(this.preparedKey!==this.key){this.start(this.mode||'Play',true);return;}this.running=true;this.cycles=1;this.tick();}this.notify();}
-  stop(){this.cancel(true);this.paint();}
-  step(delta){this.cancel(false);this.manual=true;const seq=sequences[this.mode||'Play'];this.index=((this.index||0)+delta+seq.length)%seq.length;this.paint();}
+  pause(){if(this.running){this.cancel(false);this.manual=true;}else if(!this.motionBlocked()){if(this.preparedKey!==this.key){this.start(this.mode||'Play',true);return;}this.manual=true;this.running=true;this.cycles=1;this.tick();}this.notify();}
+  stop(){this.cancel(true);this.manual=true;this.resting=true;this.currentFrame=0;this.dataset.frame='rest';this.image.src=asset(this.key,'pose-banda.webp');this.notify();}
+  step(delta){this.cancel(false);this.manual=true;const next=((this.currentFrame||0)+delta+4)%4;this.index=sequences[this.mode||'Play'].indexOf(next);this.paint();}
   selectFrame(n){this.cancel(false);this.manual=true;this.mode='Play';this.index=[0,1,2,3,2,1,0].indexOf(n);this.paint();}
   notify(){this.dispatchEvent(new CustomEvent('sprite-state',{bubbles:true}));}
 }
@@ -108,8 +114,9 @@ customElements.define('ts-avatar',Sprite);
 class Controls extends HTMLElement {
   connectedCallback(){
     if(this.ready)return;this.ready=true;
-    this.innerHTML='<div class="sprite-actions"></div><div class="sprite-transport"></div><p class="sprite-readout"></p><details class="sprite-inspector"><summary></summary><p></p><div class="sprite-frames"></div></details>';
+    this.innerHTML='<label class="sprite-permission"><input type="checkbox"><span></span></label><p class="sprite-notice" role="status"></p><div class="sprite-actions"></div><div class="sprite-transport"></div><p class="sprite-readout"></p><details class="sprite-inspector"><summary></summary><p></p><div class="sprite-frames"></div></details>';
     this.avatar=this.closest('.bshow').querySelector('.bportrait-live');
+    this.querySelector('.sprite-permission input').addEventListener('change',event=>{this.avatar.allowMotion=event.target.checked;this.avatar.cancel(false);this.update();});
     const add=(selector,action,handler)=>{const b=document.createElement('button');b.type='button';b.className='btn sm';b.dataset.action=action;b.addEventListener('click',handler);this.querySelector(selector).append(b);return b;};
     for(const mode of ['Play','Walk','Dance'])add('.sprite-actions',mode,()=>this.avatar.replay(mode));
     add('.sprite-transport','previous',()=>this.avatar.step(-1));
@@ -132,17 +139,21 @@ class Controls extends HTMLElement {
   update(){
     if(!this.avatar)return;
     const a=this.avatar,labels={Play:t('Animar','Animate'),Walk:t('Caminar','Walk'),Dance:t('Bailar','Dance'),previous:t('Paso anterior','Previous step'),pause:a.running?t('Pausar','Pause'):t('Reanudar','Resume'),next:t('Paso siguiente','Next step'),stop:t('Reposo','Rest')};
-    for(const button of this.querySelectorAll('[data-action]')){const action=button.dataset.action;button.textContent=labels[action];button.disabled=reduced()&&['Play','Walk','Dance','pause'].includes(action);if(sequences[action])button.setAttribute('aria-pressed',String(a.running&&a.mode===action));}
+    for(const button of this.querySelectorAll('[data-action]')){const action=button.dataset.action;if(button.textContent!==labels[action])button.textContent=labels[action];button.disabled=a.motionBlocked()&&['Play','Walk','Dance','pause'].includes(action);if(sequences[action])button.setAttribute('aria-pressed',String(a.running&&a.mode===action));}
+    const permission=this.querySelector('.sprite-permission');permission.hidden=!reduced();permission.querySelector('input').checked=!!a.allowMotion;
+    permission.querySelector('span').textContent=t('Permitir movimiento solo en este personaje','Allow motion for this character only');
+    const notice=reduced()?(a.allowMotion?t('Permiso temporal activo. Desmarca para detener el movimiento.','Temporary permission enabled. Uncheck to stop motion.'):t('Movimiento reducido activo. Puedes revisar los dibujos con los pasos, o permitir la animación aquí.','Reduced motion is on. Review still drawings with the step buttons, or allow animation here.')):'';
+    if(this.querySelector('.sprite-notice').textContent!==notice)this.querySelector('.sprite-notice').textContent=notice;
     const modes={Play:t('Animación original','Original animation'),Walk:t('Recorrido en escena','Stage walk'),Dance:t('Baile','Dance')},seq=sequences[a.mode||'Play'];
-    this.querySelector('.sprite-readout').textContent=a.loading?t('Cargando los dibujos originales… Puedes usar Reposo para cancelar.','Loading the original drawings… Use Rest to cancel.'):(reduced()?t('Movimiento reducido · ','Reduced motion · '):a.running?t('En movimiento · ','Playing · '):t('En pausa · ','Paused · '))+modes[a.mode||'Play']+' · '+t('paso ','step ')+((a.index||0)+1)+' / '+seq.length+' · '+t('dibujo ','drawing ')+((a.currentFrame||0)+1)+' / 4';
+    this.querySelector('.sprite-readout').textContent=a.loading?t('Cargando los dibujos originales… Puedes usar Reposo para cancelar.','Loading the original drawings… Use Rest to cancel.'):a.resting?t('En reposo · pose original','At rest · original pose'):(a.running?t('En movimiento · ','Playing · '):t('En pausa · ','Paused · '))+modes[a.mode||'Play']+' · '+t('dibujo ','drawing ')+((a.currentFrame||0)+1)+' / 4';
     this.querySelector('summary').textContent=t('Ver los cuatro dibujos originales','View the four original drawings');
     this.querySelector('details>p').textContent=t('Revisa cada dibujo sin movimiento. Caminar desplaza el sprite por la escena y Bailar lo acompaña con balanceo; conservan los cuatro dibujos del equipo, no añaden un ciclo de piernas nuevo.','Inspect each still drawing. Walk moves the sprite across the stage and Dance adds a sway; both keep the team’s four drawings rather than adding a new leg cycle.');
     if(this.querySelector('details').open)this.loadFrames();this.updateFrameLabels();
   }
 }
 customElements.define('ts-sprite-controls',Controls);
-function refresh(){for(const a of instances){if(reduced()||document.hidden){a.epoch++;a.cancel(true);}else a.sync();}for(const c of document.querySelectorAll('ts-sprite-controls'))c.update();}
-media.addEventListener('change',refresh);
-new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ts-reduced-motion','lang']});
-document.addEventListener('visibilitychange',refresh);
+function refresh(resetPermission=false){for(const a of instances){if(resetPermission)a.allowMotion=false;if(a.motionBlocked()||document.hidden){a.epoch++;a.cancel(true);}else a.sync();}for(const c of document.querySelectorAll('ts-sprite-controls'))c.update();}
+media.addEventListener('change',()=>refresh(true));
+new MutationObserver(records=>refresh(records.some(r=>r.attributeName==='data-ts-reduced-motion'))).observe(document.documentElement,{attributes:true,attributeFilter:['data-ts-reduced-motion','lang']});
+document.addEventListener('visibilitychange',()=>refresh());
 window.addEventListener('pagehide',()=>{for(const a of instances){a.epoch++;a.cancel(true);}});

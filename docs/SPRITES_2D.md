@@ -1,5 +1,13 @@
 # Banda 2D original y guía móvil
 
+## Reparación del transporte · 13 de noviembre de 2026
+
+La captura recibida muestra el estado desactivado que produce Movimiento reducido. Ahora se explica su causa y se ofrece permiso temporal solo para el personaje seleccionado; la preferencia global permanece activa y el permiso se revoca al cambiar personaje o preferencias. Los pasos siguen disponibles sin movimiento automático.
+
+El observador de visibilidad considera el escenario con sus controles, para que un dibujo fuera de la ventana no impida usar el transporte en una ventana corta. Los pasos recorren los cuatro dibujos sin repetir consecutivamente el mismo; Reposo recupera la pose original, y Pausar/Reanudar conservan el estado. El permiso local no activa fondo, audio ni vibración. Los controles tienen tipografía independiente del pie de figura, estado seleccionado y superficies de al menos 44 px.
+
+Verificación: Chromium 156, 60 recorridos reales de los cinco personajes y tres modos: 30 con movimiento normal a 390/1342 px y 30 con movimiento reducido del sistema y permiso local a 360×640/320×256. Se comprueban imágenes originales, pausa/reanudación, pasos, reposo, revocación del permiso y limpieza al navegar. No equivale a validación física de teléfono ni a un nuevo ciclo anatómico de caminar. Especificación de la siguiente iteración: [prompt cinematográfico investigado](PROMPT_CINEMATICO.md).
+
 **Edición vigente:** [RETO 05](RETO_05.md), que retira Escenario, CSV y las barras internas innecesarias. Las cifras del apartado histórico inferior corresponden a la primera pasada 2D, no a la publicación definitiva.
 
 El usuario sustituyó el encargo de reconstrucción 3D por las ilustraciones 2D originales, en todos los lugares donde aparecen los músicos. Se detuvo el trabajo artístico en Blender. Las escenas de estudio y modelos previos quedan recuperables, fuera del build de esta edición.

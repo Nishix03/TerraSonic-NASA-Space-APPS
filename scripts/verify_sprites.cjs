@@ -29,13 +29,16 @@ async function main(){
     for(const mode of ['Play','Walk','Dance']){
      await page.locator(`ts-sprite-controls [data-action="${mode}"]`).click();await page.waitForFunction(mode=>{const a=document.querySelector('.bportrait-live');return a.running&&a.mode===mode&&a.currentFrame===1;},mode);
      await page.locator('ts-sprite-controls [data-action="pause"]').click();const frame=await avatar.getAttribute('data-frame');await page.waitForTimeout(240);assert.equal(await avatar.getAttribute('data-frame'),frame);assert.equal(await avatar.evaluate(a=>a.running),false);
-     const before=await avatar.evaluate(a=>a.index);await page.locator('ts-sprite-controls [data-action="next"]').click();assert.equal(await avatar.evaluate(a=>a.index),before+1);
-     await page.locator('ts-sprite-controls [data-action="previous"]').click();assert.equal(await avatar.evaluate(a=>a.index),before);
+     const before=Number(await avatar.getAttribute('data-frame'));await page.locator('ts-sprite-controls [data-action="next"]').click();assert.equal(Number(await avatar.getAttribute('data-frame')),(before+1)%4);
+     await page.locator('ts-sprite-controls [data-action="previous"]').click();assert.equal(Number(await avatar.getAttribute('data-frame')),before);
+     await page.locator('ts-sprite-controls [data-action="pause"]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
+     await page.locator('ts-sprite-controls [data-action="pause"]').click();assert.equal(await avatar.evaluate(a=>a.running),false);
      report.checks.push({viewport,key,mode,pauseFreezes:true,stepForwardAndBack:true});
     }
     await page.locator('ts-sprite-controls summary').click();await page.locator('.sprite-frames button').nth(3).waitFor();assert.equal(await page.locator('.sprite-frames button').count(),4);
     for(let n=0;n<4;n++){await page.locator(`.sprite-frames [data-original="${n}"]`).click();assert.equal(await avatar.getAttribute('data-frame'),String(n));await page.waitForFunction(()=>document.querySelector('.bportrait-live img')?.complete);assert.equal(await avatar.locator('img').evaluate(im=>im.naturalWidth),512);}
     await page.locator('ts-sprite-controls summary').click();await page.locator('ts-sprite-controls [data-action="stop"]').click();
+    assert.equal(await avatar.getAttribute('data-frame'),'rest');assert.match(await avatar.locator('img').getAttribute('src'),/pose-banda\.webp/);
     await avatar.scrollIntoViewIfNeeded();if(viewport.width===390)await page.screenshot({path:path.join(out,`mobile-${key}.png`),fullPage:true});
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false);
    }
@@ -49,6 +52,30 @@ async function main(){
    await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().click();await page.locator('.listen-members ts-avatar').nth(4).waitFor();assert.equal(await page.locator('.listen-members ts-avatar').count(),5);
    assert.equal(await page.evaluate(()=>__departingSprite.isConnected),false);assert.equal(await page.evaluate(()=>__departingSprite.timer),0);assert.equal(await page.evaluate(()=>__departingSprite.running),false);
    await page.locator('.listen-members').scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.listen-members ts-avatar img')].every(im=>im.complete&&im.naturalWidth>0));
+   await context.close();
+  }
+  // Reproduce the disabled controls in the user's screenshot, then verify the
+  // explicit local permission without changing OS/global preferences.
+  for(const viewport of [{width:360,height:640},{width:320,height:256}]){
+   const context=await browser.newContext({viewport,reducedMotion:'reduce'});
+   await context.route('**/*',r=>{const u=r.request().url();if(!u.startsWith(base))return r.abort();const f=path.resolve(site,new URL(u).pathname.slice(1)||'index.html');return f.startsWith(site+path.sep)&&fs.existsSync(f)?r.fulfill({path:f}):r.fulfill({status:404});});
+   await context.addInitScript(()=>{localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));});
+   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));await page.goto(base);await page.locator('#tour-nav button').nth(1).click();
+   for(const [i,key]of keys.entries()){
+    await page.locator('.bsel').nth(i).click();const avatar=page.locator('.bportrait-live');await page.waitForFunction(key=>document.querySelector('.bportrait-live')?.key===key,key);
+    assert(await page.locator('[data-action=Walk]').isDisabled());assert(await page.locator('.sprite-permission').isVisible());
+    await page.locator('[data-action=next]').click();assert.equal(await avatar.getAttribute('data-frame'),'1');assert.equal(await avatar.evaluate(a=>a.running),false);
+    await page.locator('.sprite-permission input').check();
+    for(const mode of ['Play','Walk','Dance']){
+     await page.locator(`[data-action=${mode}]`).click();await page.waitForFunction(mode=>{const a=document.querySelector('.bportrait-live');return a.running&&a.mode===mode&&a.currentFrame===1;},mode);
+     await page.locator('[data-action=pause]').click();const frame=await avatar.getAttribute('data-frame');await page.waitForTimeout(220);assert.equal(await avatar.getAttribute('data-frame'),frame);
+     await page.locator('[data-action=pause]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
+     await page.locator('[data-action=stop]').click();assert.equal(await avatar.getAttribute('data-frame'),'rest');
+     report.checks.push({viewport,key,mode,systemReduced:true,explicitLocalPermission:true,controlsRemainUsableOnShortViewport:true,pauseResumeRest:true});
+    }
+    await page.locator('.sprite-permission input').uncheck();assert(await page.locator('[data-action=Walk]').isDisabled());assert.equal(await avatar.evaluate(a=>a.running),false);
+    if(i===0)await page.screenshot({path:path.join(out,`reduced-${viewport.width}x${viewport.height}.png`),fullPage:true});
+   }
    await context.close();
   }
   assert(!report.requests.some(u=>/\.glb|three-gltf|avatar3d|volume\.webp/.test(u)));assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);
