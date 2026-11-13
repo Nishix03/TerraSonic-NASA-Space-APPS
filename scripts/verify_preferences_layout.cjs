@@ -19,14 +19,14 @@ async function main(){
      const r=pop.getBoundingClientRect();return {width:r.width,height:r.height,scrollHeight:pop.scrollHeight,viewport:innerWidth,columns:getComputedStyle(pop).gridTemplateColumns,
       options:[...pop.querySelectorAll('button')].map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent.trim(),width:r.width,height:r.height,overflow:el.scrollWidth>el.clientWidth+2,left:r.left,right:r.right};})};
     });
-    assert(result.width<=width);assert.equal(result.options.length,8);
+    assert(result.width<=width);assert.equal(result.options.length,9);
     const brand=await page.locator('.wordmark').evaluate(el=>{const r=el.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(el);return {lines:range.getClientRects().length,left:r.left,right:r.right,topFont:getComputedStyle(el.closest('header')).fontSize};});
     if(language==='es')await page.screenshot({path:path.join(output,`${width}-${height}-${setting}.png`)});
     assert.equal(brand.lines,1,JSON.stringify({width,height,setting,brand}));assert(brand.left>=0&&brand.right<=width);
     result.options.forEach(option=>{assert(option.width>=44&&option.height>=44);assert(!option.overflow&&option.left>=0&&option.right<=width,JSON.stringify(option));});
     if(setting==='large'&&width<=390)assert.equal(result.columns.split(' ').length,1,'enlarged text gets a full-width option');
     const reached=[],traversal=[];
-    for(let count=0;count<16&&reached.length<8;count++){
+    for(let count=0;count<18&&reached.length<9;count++){
      await page.keyboard.press('Tab');await page.waitForFunction(()=>{const r=document.activeElement.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight;},{},{timeout:1000}).catch(()=>{});
      const focus=await page.evaluate(()=>{const el=document.activeElement,r=el.getBoundingClientRect();return {name:el.textContent.trim().slice(0,100),cls:el.className,tag:el.tagName,top:r.top,bottom:r.bottom,viewport:innerHeight,panelScroll:document.querySelector('#tour-a11y .pop').scrollTop,pageScroll:scrollY};});traversal.push(focus);
      if(focus.cls==='pop')continue; // Firefox also tabs to a native scrollable group.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Terrasonic · Earth Jukebox</title>
-<style>html,body{margin:0;background:#000;color:#fff}</style>
+<style>html,body{margin:0;background:#171e2b;color:#eff3f8}</style>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -11,7 +11,7 @@
 <helmet>
 <link href="./fonts/fonts.css" rel="stylesheet">
 <style>
-body{margin:0;background:#000}
+body{margin:0;background:#171e2b}
 html{scroll-behavior:smooth}
 a{color:inherit}
 .px{min-height:100vh;background-color:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased;position:relative}
@@ -1496,9 +1496,43 @@ a{color:inherit}
 html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media(max-width:620px){.px .preferences-dialog{padding:16px;gap:12px}.px .preferences-choices label{padding:9px;min-height:60px}}
+/* Shared surfaces keep reading regions consistent in both color schemes. */
+.px.app{color-scheme:dark}
+.px.app[data-theme="light"]{color-scheme:light}
+.px .top,.px .bottomnav.with-pages{background:var(--surface)}
+.px .bottomnav .bar{background:var(--surface)}
+.px .top .nav button,.px .top details.menu>summary{color:var(--muted)}
+.px .top .nav button[aria-current="page"],.px .top .nav button:hover,.px .top .nav button:focus-visible{color:var(--fg)}
+.px .player-tools .btn.quiet{color:var(--muted)}
+.px .bottomnav .btn.quiet:not(:disabled){color:var(--muted)}
+.px .hero .lede,.px .tour p,.px .credit-section .credit-review{color:var(--muted)}
+.px .credit-tools{color:var(--fg)}
+.px .credit-heading .credit-index{color:var(--muted)}
+.px details.menu .pop,.px select,.px .modal,.px .tour,.px .tour::before{background:var(--surface);border-color:var(--line)}
+.px .nav button:hover,.px .nav button:focus-visible,.px .nav button[aria-current="page"],.px .langsw button:hover,.px .signal-state.on,.px .steps button:hover,.px .steps button.on{color:var(--fg)}
+.px .nav button:focus-visible{outline-color:var(--accent)}
+.px .nav button[aria-current="page"],.px .steps button.on{border-bottom-color:var(--fg)}
+.px .langsw button[aria-pressed="true"],.px .seg button[aria-pressed="true"],.px .engines button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.px .uni .controls .primary{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.px .uni .controls .primary:hover{background:var(--panel);color:var(--fg)}
+.px .timeline button{background:var(--surface)}
+.px .timeline button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 -2px 0 var(--fg)}
+.px .uni .mapbox,.px .mbox,.px .convert-card .sample-preview{background:var(--surface)}
+.px button.cardx:hover{border-color:var(--fg)}
+.px .stagebox.big{background:radial-gradient(ellipse at 50% 100%,color-mix(in srgb,var(--fg) 7%,transparent),var(--surface) 72%)}
+.px .stagebox.big .mname{background:var(--surface);text-shadow:none}
+.px .credit-section p{color:var(--muted)}
+.px.app[data-theme="light"] .skyfix{opacity:.1}
+.px.app[data-theme="light"] .brandmark{background:#172337;border-radius:4px}
+.px.app[data-theme="light"] .homeflow strong{color:var(--fg)}
+.px .guidefab{background:var(--surface)}
+.px.app[data-theme="light"] .tsay{color:var(--fg)}
+.px.app[data-theme="light"] .tour .tn{color:#785000}
+.px.app[data-theme="light"] .tbubble{background:var(--panel);border-left-color:#946600}
+.px.app[data-theme="light"] .scale-swatch{border-color:var(--line)}
 </style>
 </helmet>
-<div class="px app {{bandViewClass}} {{motionClass}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
+<div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
 
 <div class="skyfix" aria-hidden="true"><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div></div>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
@@ -1525,6 +1559,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-for list="{{a11y}}" as="a" hint-placeholder-count="5">
 <button type="button" class="opt" onClick="{{a.toggle}}" aria-pressed="{{a.on}}"><span>{{a.label}}</span><span class="sw" aria-hidden="true"></span></button>
 </sc-for>
+<button type="button" class="opt" onClick="{{theme.toggle}}" aria-pressed="{{theme.light}}"><span>{{theme.label}}</span><span class="sw" aria-hidden="true"></span></button>
 <button type="button" class="opt" onClick="{{preferences.open}}">{{preferences.reopenLabel}}</button>
 </div>
 </details>
@@ -3334,6 +3369,8 @@ class Component extends DCLogic {
     this.voiceGroups = Object.create(null);
     this.voiceEpoch = Object.create(null);
     this.state.previewKey = '';
+    this.state.colorScheme = 'dark';
+    try { if (localStorage.getItem('ts_theme') === 'light') this.state.colorScheme = 'light'; } catch (ignored) {}
     var preferences = readPreferences(), self = this;
     if (preferences) PREFERENCE_KEYS.forEach(function (key) { if (typeof preferences.values[key] === 'boolean') self.state[key] = preferences.values[key]; });
     this.preferencesConfigured = !!(preferences && preferences.configured);
@@ -3448,6 +3485,11 @@ class Component extends DCLogic {
       this.syncPreferenceMotion();
     }
     if (key === 'vibe' && !value) this.vibrateSafely(0);
+  }
+  setColorScheme(mode) {
+    if (mode !== 'light' && mode !== 'dark') return;
+    this.setState({ colorScheme: mode });
+    try { localStorage.setItem('ts_theme', mode); } catch (ignored) {}
   }
   vibrateSafely(pattern) {
     if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return false;
@@ -5050,8 +5092,10 @@ class Component extends DCLogic {
 
   renderVals() {
     var s = this.state, self = this, hc = s.contrast;
-    var th = hc ? { bg: '#000000', panel: '#000000', line: '#FFFFFF', shadow: '#FFFFFF', fg: '#FFFFFF', muted: '#FFFFFF', accent: '#FFD400', hot: '#FF9A7A', cold: '#5CE1FF', magenta: '#FF7AD0' }
-                : { bg: '#000000', panel: 'rgba(255,255,255,0.03)', line: 'rgba(255,255,255,0.14)', shadow: '#000000', fg: '#FFFFFF', muted: '#A1A1A1', accent: '#FFFFFF', hot: '#FF8A5B', cold: '#5CC8FF', magenta: '#F06BB0' };
+    var light = s.colorScheme === 'light';
+    var th = hc ? { bg: light ? '#FFFFFF' : '#000000', panel: light ? '#FFFFFF' : '#000000', surface: light ? '#FFFFFF' : '#000000', line: light ? '#000000' : '#FFFFFF', shadow: '#000000', fg: light ? '#000000' : '#FFFFFF', muted: light ? '#000000' : '#FFFFFF', accent: light ? '#00556B' : '#FFD400', hot: light ? '#A52C00' : '#FF9A7A', cold: light ? '#00556B' : '#5CE1FF', magenta: light ? '#8A185A' : '#FF7AD0' }
+                : light ? { bg: '#F5F7FA', panel: '#FFFFFF', surface: '#E9EFF5', line: '#73859A', shadow: '#D6DEE8', fg: '#182637', muted: '#485B70', accent: '#00556B', hot: '#A52C00', cold: '#00556B', magenta: '#8A185A' }
+                : { bg: '#171E2B', panel: '#202B3A', surface: '#1B2534', line: '#657A95', shadow: '#101725', fg: '#EFF3F8', muted: '#B4C1D2', accent: '#BDE9F2', hot: '#FFAC85', cold: '#82D7F3', magenta: '#F8A4D3' };
     th.fs = s.big ? '19px' : 'clamp(16px, calc(8px + 0.5vw), 19px)';
     th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
     var tx = TX[LANG];
@@ -5204,7 +5248,8 @@ class Component extends DCLogic {
       trans: s.trans, route: s.route, pageName: ROUTE_LOOK[s.tab].title,
       sectionNumber: PAGES[s.tab][0],
       sectionName: ROUTE_LOOK[s.tab].title,
-      sectionColor: '#FFFFFF',
+      sectionColor: th.fg,
+      theme: { mode: light ? 'light' : 'dark', light: light, label: T('Modo claro', 'Light mode'), toggle: function () { self.setColorScheme(light ? 'dark' : 'light'); } },
       signalClass: s.playing ? 'on' : '',
       signalLabel: s.audioPending ? T('Preparando audio', 'Preparing audio') : s.playing ? (a ? T('Reproduciendo', 'Playing') : T('Preparando mapa', 'Preparing map')) : s.ended ? T('Fin del disco', 'End of disc') : T('En pausa', 'Paused'),
       isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
@@ -5317,7 +5362,7 @@ class Component extends DCLogic {
         modelCue: s.previewKey === bandKey ? 'preview-' + this.audioRun : bandPhase === 'play' ? 'selection-' + bandTurn : bandPhase === 'entry' ? 'entry-' + bandTurn : '',
         previousKey: this.bandPrevious != null ? BAND[this.bandPrevious].k : '',
         hasOutgoing: this.bandPrevious != null && (bandPhase === 'entry' || bandPhase === 'reset'),
-        accent: hc ? th.fg : band[bandIndex].color,
+        accent: hc ? th.fg : light ? ({ silbo:'#7A5200', inti:'#9F310F', mama:'#006479', yaku:'#286420', illapa:'#8D1C65' })[bandKey] : band[bandIndex].color,
         effect: BAND_EFFECTS[bandKey],
         silboNotes: bandKey === 'silbo' && bandPhase === 'play',
         instrumentName: bandInstrument.name,

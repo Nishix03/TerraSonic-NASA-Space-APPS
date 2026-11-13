@@ -6,6 +6,8 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 ## Estado de esta rama
 
+**Revisión artística en curso:** el usuario pidió rehacer los cinco personajes con fidelidad a las ilustraciones y trabajo por la interfaz de Blender, además de temas claro/oscuro. La entrega técnica del 13 de noviembre queda como checkpoint; no representa aceptación visual ni cierre de la continuación. [Estado y punto de trabajo](docs/CONTINUACION_ARTISTICA.md).
+
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
 La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve el checkpoint `c4f7aca`, verificado sin credenciales: HTML y 96 activos idénticos al paquete, ambos catálogos/modos, saltos con teclado, CSV multicolumna, cinco personajes y respaldo sin WebGL. Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).

@@ -25,6 +25,7 @@ CHECKS = {
     "avatar-interactions": "verify_avatar_interactions.cjs",
     "compact-player": "verify_compact_player.cjs",
     "models-framing": "verify_model_framing.cjs",
+    "themes": "verify_themes.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

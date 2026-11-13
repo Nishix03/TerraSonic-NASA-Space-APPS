@@ -1482,6 +1482,27 @@ test('first-visit language follows the browser and a stored manual choice has pr
   assert.equal(setup({firstVisit:true,language:'es-PE',storage:{ts_lang:'en'}}).component.state.lang, 'en');
 });
 
+test('color scheme persists independently from reading preferences and safely ignores unknown values', () => {
+  assert.equal(setup({storage:{ts_theme:'light'}}).component.state.colorScheme,'light');
+  assert.equal(setup({storage:{ts_theme:'system-unknown'}}).component.state.colorScheme,'dark');
+  const {component:c,storage}=setup();c.setColorScheme('light');assert.equal(storage.get('ts_theme'),'light');
+  c.setPreference('big',true);assert.equal(c.state.colorScheme,'light');c.setColorScheme('invalid');assert.equal(c.state.colorScheme,'light');
+  c.setColorScheme('dark');assert.equal(storage.get('ts_theme'),'dark');assert.equal(c.state.big,true);
+});
+
+test('switching theme preserves file, selected date, playback position, mix and open help', () => {
+  const {component:c}=setup();c.state.tab='data';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=7;c.state.playing=true;c.state.tour=2;
+  c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};const keys=['tab','sub','disc','frame','col','playing','tour','custom','mute'];
+  const before=JSON.stringify(keys.map(key=>c.state[key]));c.setColorScheme('light');assert.equal(JSON.stringify(keys.map(key=>c.state[key])),before);
+});
+
+test('light and slate themes combine with high contrast without changing the selected theme', () => {
+  const {component:c}=setup();assert.equal(c.renderVals().th.bg,'#171E2B');c.setColorScheme('light');assert.equal(c.renderVals().th.bg,'#F5F7FA');
+  c.setPreference('contrast',true);assert.equal(c.renderVals().th.bg,'#FFFFFF');assert.equal(c.renderVals().theme.mode,'light');
+  c.setColorScheme('dark');assert.equal(c.renderVals().th.bg,'#000000');assert.equal(c.renderVals().theme.mode,'dark');
+  c.setPreference('contrast',false);assert.equal(c.renderVals().th.bg,'#171E2B');
+});
+
 test('the four preferences combine and persist without asking for a diagnosis or opening a guide', () => {
   const { component:c, context, storage } = setup({ firstVisit:true, language:'es-PE' });
   context.window.matchMedia=()=>({matches:false});
