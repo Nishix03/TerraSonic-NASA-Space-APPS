@@ -1,10 +1,10 @@
 // Effective CSS widths and user text settings; this does not claim native browser zoom.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
+const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/a11y/reflow'),base='http://terrasonic.test/';
 async function main(){
  fs.mkdirSync(output,{recursive:true});
- const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const report={fixture:'Emulated CSS viewports, text enlargement and WCAG text spacing; not a physical device or native zoom',checks:[],failures:[],errors:[]};
  try{
   const context=await browser.newContext({reducedMotion:'reduce'});

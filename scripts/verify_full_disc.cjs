@@ -1,9 +1,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
+const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/player/full-disc'),base='http://terrasonic.test/';
 async function main(){
- fs.mkdirSync(output,{recursive:true});const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const report={checks:[],errors:[],fixture:'Complete six-frame playback in real Chromium/Web Audio, reduced motion, silent final test output, 1.4× speed. No human listening.'};
+ fs.mkdirSync(output,{recursive:true});const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const report={checks:[],errors:[],fixture:'Complete six-frame playback in real browser/Web Audio, reduced motion, silent final test output, 1.4× speed. No human listening.'};
  try{
   const context=await browser.newContext({viewport:{width:1366,height:768},reducedMotion:'reduce'});
   await context.route('**/*',async route=>{if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});

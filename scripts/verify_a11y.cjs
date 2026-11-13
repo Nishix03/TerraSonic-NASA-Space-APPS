@@ -1,12 +1,12 @@
 // Automated WCAG checks complement keyboard/zoom/AT review; they are not certification.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
+const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/a11y/browser');
 const axePath=process.env.TERRASONIC_AXE||path.resolve('_work/axe/package/axe.min.js');
 const base='http://terrasonic.test/';
 async function main(){
  fs.mkdirSync(output,{recursive:true});assert(fs.existsSync(axePath),'Set TERRASONIC_AXE to axe-core 4.14.0');
- const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const report={engine:'axe-core',version:'',checks:[],errors:[]};
  try{
   for(const width of [390,1366]){

@@ -30,4 +30,6 @@ Cada músico tiene una salida seca y reverberada propia. Al silenciarlo se retir
 
 La regresión de navegador también mide salida cero al silenciar una voz sostenida, comprueba que activarla no reabra su reverberación anterior y verifica las cinco muestras de instrumentos por separado. El recorrido se mantiene en pausa al terminar cada muestra.
 
-Queda pendiente medir y corregir la continuidad bajo carga sostenida. La secuencia actual depende del temporizador de la interfaz y puede retrasarse si el hilo principal se bloquea.
+La secuencia usa programación adelantada con el reloj Web Audio. La medición inicial detectó notas tardías y motivó la corrección documentada en [AUDIO_RELOJ.md](AUDIO_RELOJ.md). Se comprobaron también cuatro discos completos de 168 pasos, ambos catálogos y ambos modos, final y repetición. La escucha humana y la continuidad ante bloqueos mayores que el horizonte de 650 ms no se afirman.
+
+La descripción del mapa informa niveles derivados y porcentaje de píxeles incluidos con nivel cálido ≥+4. No promete que un instrumento esté sonando por observar un color: eso depende del modo, la posición y los silencios elegidos. Las tablas usan la media de su columna y el porcentaje de celdas dibujadas; no se describen como condiciones oceánicas. Una zona costera sin píxeles utilizables se identifica como tal.

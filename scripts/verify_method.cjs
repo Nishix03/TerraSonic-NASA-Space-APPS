@@ -1,11 +1,11 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');const path=require('node:path');
-const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
+const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/method/browser');
 const base='http://terrasonic.test/';
 async function main(){
  fs.mkdirSync(output,{recursive:true});
- const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const report={checks:[],errors:[],viewports:[]};
  try{
   for(const width of [320,390,768,1366,1920]){

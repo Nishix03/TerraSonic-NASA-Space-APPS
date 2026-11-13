@@ -1,0 +1,71 @@
+"""Run named browser regressions sequentially, retaining logs and exact exit codes."""
+import argparse
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+import os
+import shutil
+import subprocess
+import time
+
+CHECKS = {
+    "home": "verify_home.cjs", "preferences": "verify_preferences_layout.cjs",
+    "fonts": "verify_fonts_browser.cjs", "reflow": "verify_reflow.cjs",
+    "keyboard": "verify_keyboard.cjs", "a11y": "verify_a11y.cjs",
+    "method": "verify_method.cjs", "characters": "verify_characters.cjs",
+    "convert": "verify_convert.cjs", "brisa": "verify_brisa.cjs",
+    "player": "verify_player.cjs", "impacts": "verify_impacts.cjs",
+    "models": "verify_models.cjs", "full-disc": "verify_full_disc.cjs",
+}
+DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--site", type=Path, default=Path("_site"))
+    parser.add_argument("--evidence", type=Path, default=Path("_work/qa"))
+    parser.add_argument("--browser", choices=["chromium", "firefox", "webkit"], default="chromium")
+    parser.add_argument("--only", nargs="+", choices=CHECKS)
+    parser.add_argument("--list", action="store_true")
+    args = parser.parse_args()
+    if args.list:
+        print("\n".join(f"{key}: {value}" for key, value in CHECKS.items()))
+        return 0
+    checks = args.only or DEFAULT
+    if args.browser != "chromium" and any(key in {"fonts", "keyboard"} for key in checks):
+        parser.error("fonts and keyboard currently collect Chrome DevTools evidence; run these with chromium")
+    site, output = args.site.resolve(), args.evidence.resolve()
+    if not (site / "index.html").is_file():
+        parser.error("Generate the static site before running browser checks")
+    node = shutil.which("node")
+    if not node:
+        parser.error("Node.js is required for browser checks, but not to serve the static site")
+    output.mkdir(parents=True, exist_ok=True)
+    env = dict(os.environ, TERRASONIC_BROWSER=args.browser)
+    report = {"startedAt": datetime.now(timezone.utc).isoformat(), "browser": args.browser,
+              "site": str(site), "checks": [], "note": "Durations are process wall time, not active human work time."}
+    scripts = Path(__file__).resolve().parent
+    failed = False
+    for key in checks:
+        print(f"RUN {args.browser} {key}", flush=True)
+        start = time.monotonic()
+        log = output / f"{key}.log"
+        with log.open("w", encoding="utf-8") as stream:
+            try:
+                result = subprocess.run([node, str(scripts / CHECKS[key]), str(site), str(output / key)],
+                                        env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=300)
+                code = result.returncode
+            except subprocess.TimeoutExpired:
+                stream.write("\nRUNNER TIMEOUT after 300 seconds\n")
+                code = 124
+        report["checks"].append({"name": key, "exitCode": code, "wallSeconds": round(time.monotonic() - start, 3), "log": str(log)})
+        (output / "run.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(f"{'PASS' if code == 0 else 'FAIL'} {args.browser} {key} ({code})", flush=True)
+        if code:
+            print(log.read_text(encoding="utf-8", errors="replace")[-4000:])
+            failed = True
+    return int(failed)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

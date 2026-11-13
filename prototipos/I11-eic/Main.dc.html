@@ -8,9 +8,7 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="./fonts/fonts.css" rel="stylesheet">
 <style>
 body{margin:0;background:#000}
 html{scroll-behavior:smooth}
@@ -762,8 +760,7 @@ a{color:inherit}
 .px .herotx .kicker{color:var(--accent);letter-spacing:.12em}
 .px .hero .display{font-size:clamp(2rem,2rem + 2.6vw,4.6rem);line-height:.99}
 .px .hero .lede{max-width:44ch;font-size:.96em;line-height:1.45}
-.px .scr.home .cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:min(100%,440px);align-items:stretch}
-.px .hero .cta .primary{grid-column:1/-1}
+.px .scr.home .cta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;width:min(100%,440px);align-items:stretch}
 .px .hero .cta .btn{min-width:0;min-height:44px;padding:6px 8px;font-size:.87em;letter-spacing:.02em;text-transform:none;white-space:normal;text-align:center}
 .px .hero .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,440px);padding-top:10px;border-top:1px solid var(--line)}
 .px .facts div{display:grid;gap:3px;min-width:0}
@@ -1038,22 +1035,23 @@ a{color:inherit}
 .px .nav-short{display:none}
 .px .nav button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
 .px .top .wrap{max-width:1560px;padding-inline:max(var(--gutter),env(safe-area-inset-left,0px)) max(var(--gutter),env(safe-area-inset-right,0px))}
+.px .top{container:terrasonic-header / inline-size}
 .px .top .brand{min-height:44px;min-width:0}
 .px .top .brandmark{flex-shrink:0}
 .px .top .nav button{flex:0 1 auto;min-width:0;white-space:normal;text-wrap:balance}
 .px details.menu .pop{width:min(16rem,calc(100vw - 2 * var(--gutter)));min-width:0;max-height:calc(100dvh - 4.5rem);overflow-y:auto}
 .px details.menu .opt{padding:6px 8px;gap:8px;overflow-wrap:anywhere}
 /* Expand preferences in the header flow so they do not cover another control. */
-.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding-block:8px}
+.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 4px;padding-block:8px}
 .px .top:has(details.menu[open]) .right,.px details.menu[open]{display:contents}
 .px details.menu[open]::details-content{display:contents}
 .px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1}
 .px .top:has(details.menu[open]) .langsw{grid-row:1;grid-column:2}
 .px .top details.menu[open]>summary{grid-row:1;grid-column:3;justify-self:end}
 .px .top:has(details.menu[open]) .nav{grid-row:2;grid-column:1/-1;width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:center}
-.px details.menu[open] .pop{position:static;grid-row:3;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;min-width:0;max-height:50svh;overflow:auto}
+.px details.menu[open] .pop{position:static;grid-row:3;grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;width:100%;min-width:0;max-height:50svh;overflow:auto}
 .px details.menu[open] .pop .opt{min-height:44px}
-@media(max-width:340px){.px details.menu[open] .pop{grid-template-columns:minmax(0,1fr)}}
+@media(min-width:901px){.px details.menu[open] .pop{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1279px){
   .px .top .wrap{gap:4px 12px;min-height:0}
   .px .top .nav button{min-height:48px;padding-inline:6px;font-size:max(.8em,.8125rem);letter-spacing:.04em}
@@ -1083,7 +1081,7 @@ a{color:inherit}
   .px .top .nav button{grid-column:span 2;padding-inline:3px}
   .px .top .nav button:nth-child(n+4){grid-column:span 3}
 }
-@media(min-width:320px) and (max-width:460px){
+@media(min-width:360px) and (max-width:460px){
   .px .top:not(.readable-nav) .nav{display:flex;gap:0}
   .px .top:not(.readable-nav) .nav button{flex:1 1 auto;min-width:44px;padding-inline:2px;font-size:clamp(.6875rem,3.2vw,.8125rem);letter-spacing:0}
 }
@@ -1094,6 +1092,17 @@ a{color:inherit}
   .px .top .wrap{grid-template-columns:auto minmax(0,1fr) auto}
   .px .top .nav{order:0;grid-column:auto;display:flex;gap:0}
   .px .top .nav button{padding-inline:3px;font-size:max(.6em,.6875rem);letter-spacing:0}
+}
+/* Font-relative space also responds to enlarged text without splitting the name. */
+@container terrasonic-header (max-width:18em){
+  .px .top .wrap,.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto}
+  .px .top .brand,.px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1/-1}
+  .px .top .wordmark{white-space:nowrap;overflow-wrap:normal}
+  .px .top .right{grid-row:2;grid-column:1/-1;justify-self:end}
+  .px .top .nav,.px .top:has(details.menu[open]) .nav{grid-row:3;grid-column:1/-1}
+  .px .top:has(details.menu[open]) .langsw{grid-row:2;grid-column:1;justify-self:end}
+  .px .top details.menu[open]>summary{grid-row:2;grid-column:2}
+  .px .top details.menu[open] .pop{grid-row:4}
 }
 /* Espacio de trabajo común */
 .px .workspace > .in{max-width:1120px;gap:clamp(12px,2vw,18px)}
@@ -1307,6 +1316,24 @@ a{color:inherit}
 @media(max-height:560px) and (min-width:901px){
   .px .bscene{height:clamp(175px,46svh,265px)}
   .px .hero .display{font-size:clamp(2rem,8svh,3.5rem)}
+}
+@media(min-width:641px) and (max-width:900px) and (max-height:450px){
+  .px .scr.home>.in{padding-block:8px}
+  .px .herotx{gap:6px}
+  .px .hero .display{font-size:2em}
+  .px .scr.home .cta{grid-template-columns:repeat(auto-fit,minmax(min(100%,9em),1fr))}
+  .px .hero .cta .primary{grid-column:auto}
+  .px .hero .facts{padding-top:6px;gap:6px}
+  .px .hero .facts div{gap:2px}
+  .px .hero .facts b{font-size:1.25em}
+  .px .hero .facts span{line-height:1.2}
+}
+@media(max-width:359px) and (max-height:600px){
+  .px .scr.home>.in{padding-block:10px}
+  .px .herotx{gap:6px}
+  .px .hero .cta .btn:not(.primary){grid-column:1/-1}
+  .px .hero .facts{padding-top:6px}
+  .px .hero .facts span{line-height:1.2}
 }
 
 /* Transport and map explanation: shared by NASA discs and local files. */
@@ -1523,7 +1550,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div id="tour-discs" class="discgrid" role="group" aria-label="{{tx.discsAria}}">
 <sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
 <button type="button" class="dcard" onClick="{{d.pick}}">
-<span class="dimg"><img decoding="async" src="{{d.thumb}}" alt=""></span>
+<span class="dimg"><img decoding="async" fetchpriority="low" src="{{d.thumb}}" alt=""></span>
 <span class="tx"><span class="t">{{d.title}}</span><span class="s">{{d.period}} · {{d.hero}}</span></span>
 <span class="disc-arrow" aria-hidden="true">→</span>
 </button>
@@ -1640,7 +1667,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <figure id="tour-frame" class="vpanel">
 <figcaption class="vcap"><span class="tag">{{tx.youSee}}</span><span class="muted">{{tx.youSeeSub}}</span></figcaption>
 <div class="mapbox">
-<img decoding="async" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
+<img decoding="async" fetchpriority="high" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
 <div aria-hidden="true" class="scanline" style="left: {{scanLeft}}"></div>
 <sc-if value="{{showSilbo}}" hint-placeholder-val="{{ true }}">
 <div aria-hidden="true" style="position: absolute; left: 82.8%; top: 45%; width: 9.3%; height: 37.5%; border: 1px dashed {{silboBox}}; transition: border-color .4s"></div>
@@ -2661,7 +2688,7 @@ var TECH = [
     "cat": "Interfaz y código",
     "name": "CSS + tipografías",
     "scope": "browser",
-    "use": "Diseño adaptable, foco y movimiento reducido. Barlow, Inter, IBM Plex Mono y Atkinson Hyperlegible; con fuentes de sistema de respaldo."
+    "use": "Diseño adaptable, foco y movimiento reducido. Barlow, Inter, IBM Plex Mono y Atkinson Hyperlegible locales; con fuentes de sistema de respaldo."
   },
   {
     "cat": "Datos de la NASA",
@@ -2892,7 +2919,7 @@ var TECH_EN = {
     "use": "Local image and table reading; stores language and preferences. Files are not stored in localStorage."
   },
   "CSS + tipografías": {
-    "use": "Responsive layout, focus and reduced motion. Barlow, Inter, IBM Plex Mono and Atkinson Hyperlegible; system fonts provide fallbacks."
+    "use": "Responsive layout, focus and reduced motion. Local Barlow, Inter, IBM Plex Mono and Atkinson Hyperlegible; system fonts provide fallbacks."
   },
   "EIC · SST Anomaly (SVS 5176)": {
     "use": "30 Pacific images: 16 May 2024–2 November 2026. This is a stored selection, not a daily live feed."
@@ -3245,7 +3272,7 @@ function analyzeMapImage(img, free, legacy) {
     cells.push(cnt > 6 ? sum / cnt : null);
   }
   if (!n || !cells.some(function (value) { return value !== null; })) return null;
-  return { cells: cells, warm: warm / n, cold: cold / n, hot: hot / n, coast: cn ? cs / cn : 0 };
+  return { cells: cells, warm: warm / n, cold: cold / n, hot: hot / n, coast: cn ? cs / cn : 0, coastPixels: cn };
 }
 
 class Component extends DCLogic {
@@ -3856,7 +3883,12 @@ class Component extends DCLogic {
       if (was) self.play();
     });
   }
-  loadDisc(d) { if (d === 5) return; for (var f = 0; f < DISCS[d].files.length; f++) this.analyze(d, f); }
+  loadDisc(d) {
+    if (d === 5) return;
+    var selected = d === this.state.disc ? Math.max(0, Math.min(DISCS[d].files.length - 1, this.state.frame)) : 0;
+    this.analyze(d, selected);
+    for (var f = 0; f < DISCS[d].files.length; f++) if (f !== selected) this.analyze(d, f);
+  }
   frameTag(d, f) {
     if (d === 5) return this.state.custom ? uiLabel(this.state.custom) : T('tu archivo', 'your file');
     var dt = this.frameDate(d, f); return MESC[dt.m] + ' ' + dt.y;
@@ -4099,6 +4131,8 @@ class Component extends DCLogic {
     };
     var free = d === 5 && custom && custom.mode === 'free', legacy = d < 5 && !!DISCS[d].legacy;
     var img = new Image();
+    img.decoding = 'async';
+    img.fetchPriority = d === 5 || (d === this.state.disc && f === this.state.frame) ? 'high' : 'low';
     img.onerror = function () { fail(uiMessage('No se pudo leer la imagen.', 'The image could not be read.')); };
     img.onload = function () {
       if (!current()) return;
@@ -4756,12 +4790,13 @@ class Component extends DCLogic {
     var a = this.cur(), s = this.state, dt = this.frameDate(s.disc, s.frame);
     if (!a) return T('Analizando el fotograma.', 'Analyzing the frame.');
     if (s.disc === 5) {
-      var up = a.cold > a.warm ? T('Predominan los valores bajos o los colores fríos: Mamacocha canta fuerte.', 'Low values or cold colors dominate: Mamacocha sings loud.') : a.warm > 0.8 ? T('Predominan los valores altos o los colores cálidos: Inti y Yaku suenan fuerte.', 'High values or warm colors dominate: Inti and Yaku play loud.') : T('Los valores están cerca de lo normal.', 'The values are close to normal.');
-      return T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + T(' por ciento de las celdas son extremas.', ' percent of the cells are extreme.');
+      var table = s.custom && s.custom.cols;
+      var up = a.cold > a.warm ? (table ? T('Predominan niveles por debajo de la media de la columna.', 'Levels below the column mean dominate.') : T('La intensidad de colores fríos supera la de colores cálidos.', 'Cool color intensity exceeds warm color intensity.')) : a.warm > 0.8 ? (table ? T('Predominan niveles por encima de la media de la columna.', 'Levels above the column mean dominate.') : T('Destacan los colores cálidos en el análisis visual.', 'Warm colors stand out in the visual analysis.')) : (table ? T('Los niveles derivados están cerca de la media de la columna.', 'Derived levels are close to the column mean.') : T('El análisis tiene baja intensidad de niveles cálidos y fríos.', 'The analysis has low warm and cool level intensity.'));
+      return T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + (table ? T(' por ciento de las celdas dibujadas tienen nivel cálido de al menos +4.', ' percent of the drawn cells have a warm level of at least +4.') : T(' por ciento de los píxeles incluidos tienen nivel cálido de al menos +4.', ' percent of the included pixels have a warm level of at least +4.'));
     }
-    var lead = a.cold > a.warm ? T('Domina el agua más fría de lo normal: Mamacocha canta fuerte.', 'Colder-than-normal water dominates: Mamacocha sings loud.') : a.hot > 0.15 ? T('Una gran franja del océano está en rojo intenso: Inti e Illapa dominan.', 'A wide band of the ocean is deep red: Inti and Illapa take over.') : a.warm > 0.8 ? T('El océano está más cálido de lo normal: Inti toca acordes brillantes.', 'The ocean is warmer than normal: Inti plays bright chords.') : T('El océano está cerca de lo normal.', 'The ocean is close to normal.');
-    var coast = a.coast >= 2 ? T('La costa del Perú está muy caliente, nivel ', 'The Peruvian coast is very hot, level ') + a.coast.toFixed(1) + T(' de 5: Silbo silba.', ' out of 5: Silbo whistles.') : a.coast > 0.5 ? T('La costa del Perú está algo cálida.', 'The Peruvian coast is somewhat warm.') : T('La costa del Perú está fría o normal.', 'The Peruvian coast is cold or normal.');
-    return DISCS[s.disc].title + ', ' + MES[dt.m] + T(' de ', ' ') + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + T(' por ciento del mar visible tiene anomalías extremas. ', ' percent of the visible sea has extreme anomalies. ') + coast;
+    var lead = a.cold > a.warm ? T('La intensidad fría supera la cálida en el análisis visual.', 'Cool intensity exceeds warm intensity in the visual analysis.') : a.warm > 0.8 ? T('Destacan los niveles cálidos en el análisis visual.', 'Warm levels stand out in the visual analysis.') : T('El análisis tiene baja intensidad de niveles cálidos y fríos.', 'The analysis has low warm and cool level intensity.');
+    var coast = a.coastPixels === 0 ? T('La zona costera seleccionada no tiene píxeles utilizables.', 'The selected coastal zone has no usable pixels.') : T('Zona costera seleccionada: nivel derivado ', 'Selected coastal zone: derived level ') + (a.coast > 0 ? '+' : '') + a.coast.toFixed(1) + T(' en la escala de −5 a +5.', ' on the −5 to +5 scale.');
+    return DISCS[s.disc].title + ', ' + MES[dt.m] + T(' de ', ' ') + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + T(' por ciento de los píxeles de mar incluidos tienen nivel cálido de al menos +4. ', ' percent of the included ocean pixels have a warm level of at least +4. ') + coast;
   }
   stopSpeech() {
     this.utterance = null;
@@ -5243,7 +5278,7 @@ class Component extends DCLogic {
       prevFrame: function () { self.gotoFrame(s.frame - 1); }, nextFrame: function () { self.gotoFrame(s.frame + 1); },
       speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
       caption: s.caption,
-      bandStatus: activeN === 0 ? T('Banda apagada. Pulsa Reproducir para activar al protagonista.', 'Band off. Press Play to switch on the lead.') : activeN === 5 ? T('Banda completa: suenan los cinco.', 'Full band: all five are playing.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
+      bandStatus: activeN === 0 ? T('Banda apagada. Pulsa Reproducir para activar al protagonista.', 'Band off. Press Play to switch on the lead.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandAll: function () { self.setBandMute(self.allMute(false)); },
       bandNone: function () { self.setBandMute(self.allMute(true)); },
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
@@ -5270,7 +5305,7 @@ class Component extends DCLogic {
       }),
       techSummary: techCur.items.length + (techCur.items.length === 1 ? T(' herramienta', ' tool') : T(' herramientas', ' tools')),
       steps: STEPS.map(function (x, i) { return { n: x.n, title: x.title, body: x.body, delay: (i * 0.07).toFixed(2) + 's' }; }),
-      legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa', sound: T('Truenos y percusión de Illapa.', 'Illapa’s thunder and percussion.') }, { v: T('+4,5', '+4.5'), c: '#C21F7A', who: 'Illapa', sound: T('Percusión de Illapa en la zona cálida extrema.', 'Illapa’s percussion in the extreme warm range.') }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku', sound: T('Marimba de Inti y gotas de Yaku.', 'Inti’s marimba and Yaku’s droplets.') }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku', sound: T('Texturas cálidas de Inti y gotas de Yaku.', 'Inti’s warm textures and Yaku’s droplets.') }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku', sound: T('Inti y Yaku: armonía y gotas.', 'Inti and Yaku: harmony and droplets.') }, { v: '+1', c: '#FFD447', who: 'Inti', sound: T('Armonía cálida de Inti.', 'Inti’s warm harmony.') }, { v: '0', c: '#7E849E', who: T('silencio', 'silence'), sound: T('Referencia neutra de la leyenda.', 'Neutral reference in the legend.') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha', sound: T('Registro grave de Mamacocha.', 'Mamacocha’s low register.') }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku', sound: T('Graves de Mamacocha y gotas de Yaku.', 'Mamacocha’s bass and Yaku’s droplets.') }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku', sound: T('Texturas frías de Mamacocha y gotas de Yaku.', 'Mamacocha’s cold textures and Yaku’s droplets.') }]
+      legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa', sound: T('Truenos y percusión de Illapa.', 'Illapa’s thunder and percussion.') }, { v: T('+4,5', '+4.5'), c: '#C21F7A', who: 'Illapa', sound: T('Percusión de Illapa en la zona cálida extrema.', 'Illapa’s percussion in the extreme warm range.') }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku', sound: T('Marimba de Inti y gotas de Yaku.', 'Inti’s marimba and Yaku’s droplets.') }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku', sound: T('Texturas cálidas de Inti y gotas de Yaku.', 'Inti’s warm textures and Yaku’s droplets.') }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku', sound: T('Inti y Yaku: armonía y gotas.', 'Inti and Yaku: harmony and droplets.') }, { v: '+1', c: '#FFD447', who: 'Inti', sound: T('Armonía cálida de Inti.', 'Inti’s warm harmony.') }, { v: '0', c: '#7E849E', who: T('referencia', 'reference'), sound: T('Nivel cercano a lo esperado. Melodía puede mantener la armonía base; Datos no añade notas en cero.', 'Close-to-expected level. Melody may keep the base harmony; Data adds no notes at zero.') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha', sound: T('Registro grave de Mamacocha.', 'Mamacocha’s low register.') }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku', sound: T('Graves de Mamacocha y gotas de Yaku.', 'Mamacocha’s bass and Yaku’s droplets.') }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku', sound: T('Texturas frías de Mamacocha y gotas de Yaku.', 'Mamacocha’s cold textures and Yaku’s droplets.') }]
     };
   }
 }

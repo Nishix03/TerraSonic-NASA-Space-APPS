@@ -1,17 +1,17 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || 'playwright-core');
+const {launchBrowser}=require('./browser_fixture.cjs');
 const site = path.resolve(process.argv[2] || '_site');
 const output = path.resolve(process.argv[3] || '_work/brisa/browser');
 const base = 'http://terrasonic.test/';
 
 async function main() {
   fs.mkdirSync(output, { recursive: true });
-  const browser = await chromium.launch({ executablePath: process.env.TERRASONIC_CHROMIUM,
+  const browser = await launchBrowser({ executablePath: process.env.TERRASONIC_CHROMIUM,
     args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const report = { preferences: [], journeys: [], errors: [],
-    fixture: 'Chromium emulated viewports, speech API stubs for lifecycle checks, native Web Audio with muted final output; no human timbre or assistive-technology test' };
+    fixture: 'Browser emulated viewports, speech API stubs for lifecycle checks, native Web Audio with muted final output; no human timbre or assistive-technology test' };
   async function create(options = {}) {
     const context = await browser.newContext({ locale: options.locale || 'es-PE',
       viewport: options.viewport || { width: 1366, height: 768 }, reducedMotion: 'no-preference' });

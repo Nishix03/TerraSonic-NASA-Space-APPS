@@ -43,7 +43,7 @@ test('Method 02 preserves the ten legend mappings and translates its explanatory
     ['+5','#7A0F1E','Illapa'], ['+4,5','#C21F7A','Illapa'],
     ['+4','#E8283A','Inti · Yaku'], ['+3','#FF6A2B','Inti · Yaku'],
     ['+2','#FFA62B','Inti · Yaku'], ['+1','#FFD447','Inti'],
-    ['0','#7E849E','silencio'], ['−1','#7BE38A','Mamacocha'],
+    ['0','#7E849E','referencia'], ['−1','#7BE38A','Mamacocha'],
     ['−2 / −3','#38C6E8','Mamacocha · Yaku'], ['−4 / −5','#2F4FD0','Mamacocha · Yaku']
   ];
   const es = c.renderVals();
@@ -53,7 +53,7 @@ test('Method 02 preserves the ten legend mappings and translates its explanatory
   assert(spanish.every(Boolean)); assert(es.legend.every(l => l.sound));
   c.setLang('en'); const en = c.renderVals();
   keys.forEach((k,i) => { assert(en.tx[k]); assert.notEqual(en.tx[k], spanish[i]); });
-  assert.equal(en.legend[1].v, '+4.5'); assert.equal(en.legend[6].who, 'silence');
+  assert.equal(en.legend[1].v, '+4.5'); assert.equal(en.legend[6].who, 'reference');
   en.legend.forEach((l,i) => { assert(l.sound); assert.notEqual(l.sound, es.legend[i].sound); });
   c.setLang('es');
   assert.equal(preserved(), before);
@@ -1744,4 +1744,20 @@ test('the audio cursor crosses a month using that frame’s tempo while the map 
   assert(Math.abs(scheduled[1].at-scheduled[0].at-Math.round(30000/66)/1000)<1e-9);
   assert.equal(c.state.frame,2);c.ac.currentTime=scheduled[1].at;c.flushPlayback(c.ac.currentTime);assert.equal(c.state.frame,3);assert.equal(c.state.col,0);
   assert.equal(c.profile().bpm,76);assert.equal(c.state.events.at(-1).date.m,3);
+});
+
+test('loading a disc requests its selected date first and still covers all six dates once',()=>{
+  const {component:c,context}=setup(),calls=[];c.state.disc=3;c.state.frame=4;
+  c.analyze=(disc,frame)=>calls.push([disc,frame]);context.ComponentUnderTest.prototype.loadDisc.call(c,3);
+  assert.deepEqual(calls,[[3,4],[3,0],[3,1],[3,2],[3,3],[3,5]]);
+  calls.length=0;context.ComponentUnderTest.prototype.loadDisc.call(c,5);assert.deepEqual(calls,[]);
+});
+
+test('map descriptions report derived source values independently of mute and avoid implying ocean conditions for a table',()=>{
+  const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(-1),cold:1,warm:0,hot:.25,coast:0,coastPixels:0});
+  const description=c.describeText();assert.match(description,/25 por ciento de los píxeles/);assert.match(description,/no tiene píxeles utilizables/);
+  c.state.mute=c.allMute(true);assert.equal(c.describeText(),description,'map interpretation is independent of the enabled instruments');
+  c.state.disc=5;c.state.custom={name:'lluvia.csv',cols:[{name:'lluvia'}]};
+  assert.match(c.describeText(),/por debajo de la media de la columna/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
+  c.setLang('en');assert.match(c.describeText(),/below the column mean/);assert.match(c.describeText(),/drawn cells/);
 });

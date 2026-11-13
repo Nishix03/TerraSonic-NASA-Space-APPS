@@ -54,8 +54,11 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | 10 | 13 nov 2026, 02:38–02:55 | Auditoría axe, teclado, redistribución, texto/espaciado ampliado, contraste de músicos, nombres accesibles, menú y vibración segura. 118 pruebas, 86 estados axe, 544 pantallas y seis recorridos de teclado. Zoom nativo intentado y detenido por limitación de herramienta. | 16 |
 | 11 | 13 nov 2026, 02:56–03:17 | Línea base reconstruida desde Git y medida con perfil actual. Diagnóstico y corrección del reloj de audio, preparación de salidas, cola visual, cancelación por músico, idioma y meses. 124 pruebas y regresiones nativas de reproductor/impactos. Identidad GitHub y permiso de push verificados sin mostrar credenciales. | 19 |
 | 12 | 13 nov 2026, 03:18–03:36 | Push aislado y protección de main; publicación independiente Sites tras 403 de Vercel temporal. Prueba pública de dos catálogos, cinco modelos/poses, 81 huellas, WebGL ausente y muestra. Cuatro discos completos de 168 pasos y repetición verificados. | 16 |
+| 13 | 13 nov 2026, 03:38–04:00 | Medición comparable de tres recorridos, prioridad de fecha actual, corrección visual de preferencias con texto ampliado y espaciado, cabecera y portada horizontal/320 px, 126 pruebas y descripción de datos sin prometer instrumentos audibles. 544 pantallas de redistribución pasan tras la cabecera. | 20 |
 
-Total conservador acreditado: **164 de 420 minutos**. El bloque 9 se corrigió para no contar un minuto futuro. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
+| 14 | 13 nov 2026, 04:00–04:20 | Tipografías locales con cuatro licencias y huellas, decodificación nativa y respaldo lento/ausente, portada completa en 14 casos por cada fuente, lanzador reproducible y pasada completa de 13 recorridos Chromium con fuentes reales. Instaladores de prueba de Firefox/WebKit aislados en D, sin perfiles personales. Diagnóstico de recorte/estiramiento de imágenes propias. | 18 |
+
+Total conservador acreditado: **202 de 420 minutos**. El bloque 9 se corrigió para no contar un minuto futuro. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
 
 ## Decisiones
 

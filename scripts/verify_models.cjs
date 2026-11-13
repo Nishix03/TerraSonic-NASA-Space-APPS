@@ -3,7 +3,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-core");
+const {launchBrowser}=require('./browser_fixture.cjs');
 
 const site = path.resolve(process.argv[2] || "_site");
 const output = path.resolve(process.argv[3] || "_work/models/browser");
@@ -12,7 +12,7 @@ const keys = ["silbo", "inti", "mama", "yaku", "illapa"];
 
 async function main() {
   fs.mkdirSync(output, { recursive: true });
-  const browser = await chromium.launch({
+  const browser = await launchBrowser({
     executablePath: process.env.TERRASONIC_CHROMIUM,
     args: ["--no-sandbox", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
   });

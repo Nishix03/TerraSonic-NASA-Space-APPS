@@ -1,0 +1,91 @@
+{
+  "retrievedAt": "2026-11-13T09:02:57.326615+00:00",
+  "provider": "Google Fonts CSS API; original unmodified WOFF2 Latin subsets",
+  "cssRequest": "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap",
+  "files": [
+    {
+      "file": "atkinson-hyperlegible-400-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/atkinsonhyperlegible/v12/9Bt23C1KxNDXMspQ1lPyU89-1h6ONRlW45G04pIo.woff2",
+      "bytes": 17208,
+      "sha256": "d64ba838ef5472bba248620ec4fd8b5aa7cf0db2908e0bb230600caf279ba7bc",
+      "family": "Atkinson Hyperlegible"
+    },
+    {
+      "file": "atkinson-hyperlegible-700-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/atkinsonhyperlegible/v12/9Bt73C1KxNDXMspQ1lPyU89-1h6ONRlW45G8Wbc9dCWP.woff2",
+      "bytes": 17524,
+      "sha256": "140e2bd25a7315c8a062508391426b0d8c3297400c947b8d847be28f73a199f0",
+      "family": "Atkinson Hyperlegible"
+    },
+    {
+      "file": "barlow-500-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/barlow/v13/7cHqv4kjgoGqM7E3_-gs51os.woff2",
+      "bytes": 22008,
+      "sha256": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+      "family": "Barlow"
+    },
+    {
+      "file": "barlow-600-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/barlow/v13/7cHqv4kjgoGqM7E30-8s51os.woff2",
+      "bytes": 22772,
+      "sha256": "4b52ddd4836b592df0e4832b8286956883cdc651b015126bdd18f184b7f90cc3",
+      "family": "Barlow"
+    },
+    {
+      "file": "barlow-700-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/barlow/v13/7cHqv4kjgoGqM7E3t-4s51os.woff2",
+      "bytes": 22788,
+      "sha256": "2d797dd8b35dcb3413e1af9d7052b3f4f8c341a147cdcb01f4f06af80db53289",
+      "family": "Barlow"
+    },
+    {
+      "file": "ibm-plex-mono-400-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+      "bytes": 14648,
+      "sha256": "7ced53420784c93cecccb7c27237594f0e41e5a7990581565f0aef8eda9e9d2f",
+      "family": "IBM Plex Mono"
+    },
+    {
+      "file": "ibm-plex-mono-500-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2",
+      "bytes": 14904,
+      "sha256": "6e618344335cc436ffd25deba4f4cb5a60ca6c3a4832e67f236ca43922f74eea",
+      "family": "IBM Plex Mono"
+    },
+    {
+      "file": "inter-400-latin.woff2",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+      "family": "Inter"
+    },
+    {
+      "file": "atkinsonhyperlegible-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/atkinsonhyperlegible/OFL.txt",
+      "bytes": 4352,
+      "sha256": "f32d22b3908fcad2c86a74000614ec22e6a7f66ea7e867e616026a27aebdc143",
+      "license": "SIL Open Font License 1.1"
+    },
+    {
+      "file": "barlow-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/barlow/OFL.txt",
+      "bytes": 4377,
+      "sha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+      "license": "SIL Open Font License 1.1"
+    },
+    {
+      "file": "ibmplexmono-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexmono/OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
+      "license": "SIL Open Font License 1.1"
+    },
+    {
+      "file": "inter-OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt",
+      "bytes": 4377,
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+      "license": "SIL Open Font License 1.1"
+    }
+  ]
+}

@@ -54,6 +54,7 @@ def build(destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_text(html, encoding="utf-8")
     copy2(root / "scripts" / "pages-support.js", destination / "support.js")
+    copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "modelos"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     for model in models:

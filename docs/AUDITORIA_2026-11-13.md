@@ -2,7 +2,7 @@
 
 Rama `piero-mejoras`. Se aplicaron las skills `frontend-design-review`, `frontend-a11y` y `browser-qa`. La dirección visual conserva la banda y el observatorio oscuro del equipo, con mapa en una región propia, lectura acotada, controles agrupados y detalles secundarios desplegables. No se dispone de un sistema Figma aprobado con el que acreditar coincidencia de componentes.
 
-**DO NOT SHIP como versión de producción todavía.** Las correcciones locales tienen evidencia; faltan continuidad de audio bajo carga, mediciones finales comparables y verificación de la entrega independiente. La revisión humana del producto, la validación cultural y una certificación WCAG no se afirman.
+La vista independiente está publicada para revisión. El reloj de audio ya tiene medición bajo carga y cuatro recorridos completos; la entrega sigue abierta mientras se consolidan las mediciones finales y el paquete portable. La revisión humana del producto, la validación cultural y una certificación WCAG no se afirman.
 
 El intento de revisión nativa en Chrome se detuvo porque la herramienta no pudo verificar con confianza la URL de la ventana. No se continuó por otra vía de control nativo ni se cambiaron ajustes de seguridad. Las afirmaciones antiguas de `AUDITORIA_UX.md` sobre zoom 80–400 % no son evidencia de esta revisión.
 
@@ -42,6 +42,10 @@ Se usan como referencia [WCAG 2.2 AA](https://www.w3.org/TR/WCAG22/) y [COGA, Ma
 W3C explica que 320 píxeles CSS equivalen a 1280 al 400 % para [redistribución 1.4.10](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html). Se prueba ese ancho resultante; no se declara haber operado zoom nativo. El panel de preferencias se revisó también visualmente después de corregir un contenedor que comprimía etiquetas: una pasada automática limpia no bastó para encontrarlo.
 
 ## Evidencia reproducible
+
+El pulido de las 04:00 añadió un menú de preferencias con columnas sensibles al tamaño del texto y una cabecera que reserva una fila completa para la marca cuando hace falta. Los 30 casos ES/EN × cinco viewports × texto normal/doble/espaciado verifican los ocho controles de 44 px, Tab, desplazamiento y Escape. Las capturas permitieron detectar palabras partidas que no eran desbordamientos. La portada tiene un recorrido específico de 14 casos, incluido el tamaño original de 1342×605, 320×568 y horizontal 667×375; comprueba el proceso completo dentro de la vista y etiquetas de navegación enteras. Con texto ampliado se permite el desplazamiento vertical para conservar lectura y controles.
+
+La cabecera usa una [consulta de contenedor relativa a su fuente](https://www.w3.org/TR/css-contain-3/) para responder también al texto ampliado, y conserva la redistribución anterior como respaldo. Evidencia de este pulido: `_work/a11y/preferences-final/`, `_work/home/compact-small/`, `_work/a11y/reflow-header/`. Scripts: `verify_preferences_layout.cjs` y `verify_home.cjs`.
 
 118 pruebas de producto pasan en este checkpoint. El build parte de `prototipos/I11-eic/Main.dc.html`.
 

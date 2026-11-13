@@ -10,6 +10,7 @@ const site = path.resolve(process.argv[2] || "_site");
 const output = path.resolve(process.argv[3] || "_work/benchmarks/result.json");
 const contentTypes = {
   ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
+  ".css": "text/css", ".woff2": "font/woff2",
   ".png": "image/png", ".webp": "image/webp", ".glb": "model/gltf-binary",
 };
 
@@ -48,6 +49,7 @@ async function main() {
       await context.addInitScript(() => {
         localStorage.setItem('ts_lang', 'es');
         localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
+        Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
       });
       const page = await context.newPage();
       const bytes = { local: 0, glb: 0 };
@@ -75,12 +77,16 @@ async function main() {
       await page.locator("#tour-nav button").nth(0).click();
       await page.locator(".discgrid .dcard").first().click();
       await page.locator("#tour-play button:not([disabled])").waitFor();
+      await page.waitForFunction(()=>window.__app?.cur());
+      await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
       const listenMs = performance.now() - listen;
       const band = performance.now();
       await page.locator("#tour-nav button").nth(1).click();
+      await page.locator('.bportrait-live').waitFor();
+      const bandControlsMs=performance.now()-band;
       await page.locator(".bportrait-live[data-rendered]").waitFor({ timeout: 120000 });
       const bandMs = performance.now() - band;
-      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, atHome, totalBytes: { ...bytes },
+      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, totalBytes: { ...bytes },
         modelsRendered: await page.locator("ts-avatar[data-rendered]").count() });
       fs.mkdirSync(path.dirname(output), { recursive: true });
       fs.writeFileSync(output, JSON.stringify(report, null, 2));

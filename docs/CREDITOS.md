@@ -30,7 +30,7 @@ Los diseños de los personajes (docs/PLAN.md §9.6) están **inspirados** en pie
 |---|---|---|---|
 | Three.js + GLTFLoader, copia local combinada | Vistas 3D con respaldo estático | MIT, copia en `scripts/vendor/three-LICENSE.txt` | https://github.com/mrdoob/three.js |
 
-El audio utiliza Web Audio nativo, sin Tone.js. axe-core 4.14.0 (MPL-2.0) se descarga exclusivamente como herramienta de auditoría local y no se incluye en el producto. Su licencia acompaña el paquete en `_work/axe/`. Las tipografías se solicitan a Google Fonts con alternativas del sistema. Los modelos procedurales nuevos y sus atlas se generan dentro del repositorio; no se importaron modelos de terceros.
+El audio utiliza Web Audio nativo, sin Tone.js. axe-core 4.14.0 (MPL-2.0) se descarga exclusivamente como herramienta de auditoría local y no se incluye en el producto. Su licencia acompaña el paquete en `_work/axe/`. Las tipografías Barlow, Inter, IBM Plex Mono y Atkinson Hyperlegible se incluyen localmente en `assets/fonts/`, con sus cuatro licencias SIL OFL 1.1, copyright y huellas de los WOFF2 originales de Google Fonts. El navegador conserva alternativas del sistema y no solicita fuentes a terceros. Los modelos procedurales nuevos y sus atlas se generan dentro del repositorio; no se importaron modelos de terceros.
 
 ## Repos y snippets reutilizados
 | Qué | De dónde | Licencia | Dónde lo usamos |
