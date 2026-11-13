@@ -22,6 +22,10 @@ async function main() {
       const context = await browser.newContext({
         viewport: { width: 390, height: 844 }, reducedMotion: "reduce", deviceScaleFactor: 1,
       });
+      await context.addInitScript(() => {
+        localStorage.setItem('ts_lang', 'es');
+        localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
+      });
       let release;
       const delayed = new Promise(resolve => { release = resolve; });
       const requests = [];

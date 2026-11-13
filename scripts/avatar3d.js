@@ -1,5 +1,8 @@
 const characters = new Set(["silbo", "inti", "mama", "yaku", "illapa"]);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+function motionReduced() {
+  return reduced.matches || document.documentElement.dataset.tsReducedMotion === "true";
+}
 const models = new Map();
 const pending = new Set();
 const visible = new Set();
@@ -210,7 +213,7 @@ class TerrasonicAvatar extends HTMLElement {
   }
 
   replay(clip = "Play") {
-    if (reduced.matches || !this.clips?.has(clip)) return;
+    if (motionReduced() || !this.clips?.has(clip)) return;
     this.manual = { clip, started: performance.now() };
     queue(this);
   }
@@ -276,7 +279,7 @@ class TerrasonicAvatar extends HTMLElement {
 
   animation(now) {
     const idle = this.clips.get("Idle");
-    if (reduced.matches || this.dataset.muted === "true") {
+    if (motionReduced() || this.dataset.muted === "true") {
       this.manual = null;
       return [idle, 0, false];
     }
@@ -318,7 +321,7 @@ class TerrasonicAvatar extends HTMLElement {
       this.mixer.update(0);
     }
     const targetYaw = view === "portrait" ? this.targetYaw : view === "stage" ? .17 : .12;
-    this.yaw = reduced.matches ? targetYaw : this.yaw + (targetYaw - this.yaw) * .29;
+    this.yaw = motionReduced() ? targetYaw : this.yaw + (targetYaw - this.yaw) * .29;
     this.model.rotation.y = this.yaw;
 
     const aspect = this.width / this.height;
@@ -360,8 +363,15 @@ class TerrasonicAvatar extends HTMLElement {
 customElements.define("ts-avatar", TerrasonicAvatar);
 reduced.addEventListener("change", () => {
   for (const avatar of visible) {
-    if (reduced.matches) avatar.manual = null;
+    if (motionReduced()) avatar.manual = null;
     queue(avatar);
   }
 });
 document.addEventListener("visibilitychange", schedule);
+
+window.addEventListener("terrasonic:motion", () => {
+  for (const avatar of visible) {
+    if (motionReduced()) avatar.manual = null;
+    queue(avatar);
+  }
+});

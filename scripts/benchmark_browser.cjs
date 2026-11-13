@@ -39,6 +39,10 @@ async function main() {
     for (let run = 0; run < 3; run++) {
       const context = await browser.newContext({ viewport: profile.viewport,
         reducedMotion: profile.reducedMotion, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
+      await context.addInitScript(() => {
+        localStorage.setItem('ts_lang', 'es');
+        localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
+      });
       const page = await context.newPage();
       const bytes = { local: 0, glb: 0 };
       page.on("pageerror", error => report.failures.push(error.message));

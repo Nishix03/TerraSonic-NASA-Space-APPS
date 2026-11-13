@@ -21,6 +21,8 @@ async function main() {
       return route.fulfill({ status: 404 });
     });
     await context.addInitScript(() => {
+      localStorage.setItem('ts_lang', 'es');
+      localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
       Object.defineProperty(window, 'DCLogic', { configurable: true, set(value) {
         Object.defineProperty(window, 'DCLogic', { value, writable: true, configurable: true });
         const original = value.prototype.setState;

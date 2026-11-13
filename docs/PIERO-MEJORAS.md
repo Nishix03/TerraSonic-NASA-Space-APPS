@@ -24,7 +24,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | R2 | Retirar A/B | Eliminar vista, estado, audio, ayudas, traducciones, estilos y recursos exclusivos. Conservar fechas del reproductor. | Implementado. Se retiraron pantalla, entradas, hash, estilos, estado, análisis y audio exclusivo en ambos idiomas. La regresión recorre las seis fechas de los diez discos. 81 pruebas pasan. |
 | R3 | Banda en Escuchar | Cinco cuerpos completos, activación compartida con Escenario y respaldo estático con carga lenta o sin WebGL. | Implementado. Mezcla compartida y cancelación de notas/reverberación por músico comprobadas en Chromium. Falta reverificar en la URL independiente final. |
 | R4 | Convertir | Imagen de ejemplo y propia como acciones principales, CSV y lluvia secundarios. Casos inválidos, tamaño, columnas y procesamiento local. | Implementado. Ocho escenarios Chromium y cuatro anchos, 98 pruebas de producto. Comprobadas muestra NASA, imagen propia, CSV multicolumna, límites de bytes/píxeles y conservación ante errores. Ver docs/CONVERTIR.md. |
-| R5 | Brisa, preferencias e idioma | Guía separada, tutorial con acciones reales, foco y voz cancelable, primera visita y elección guardada. | Pendiente. Silbo todavía es guía. |
+| R5 | Brisa, preferencias e idioma | Guía separada, tutorial con acciones reales, foco y voz cancelable, primera visita y elección guardada. | Implementado. 107 pruebas y recorrido Chromium de idioma, preferencias, foco, tutorial, voz simulada y APIs ausentes. Brisa usa nombre y símbolo de ayuda porque falta una referencia visual aprobada. Ver docs/BRISA.md. |
 | R6 | Accesibilidad | Teclado, estados, contraste, zoom, móvil, movimiento reducido y alternativas a sonido/vista/arrastre. Vibración optativa y cancelable. | Parcial en base. Requiere nueva verificación integral. |
 | R7 | Armonía | Seis perfiles con acordes y notas concretas, incluidos disminuidos y sus4. Concordancia entre rótulo y motor. | Implementado. 81 pruebas: seis progresiones, notas MIDI emitidas por el sintetizador, rótulos bilingües y umbral de Yaku cálido. Pendiente prueba de audio final en navegador. |
 | R8 | Impactos | Catálogo con episodio, territorio, periodo, métrica, fecha y fuente oficial. Al menos una regla musical editorial activada por evidencia del periodo. | Pendiente. |
@@ -33,7 +33,7 @@ El enlace compartido de la conversación original no devolvió contenido legible
 | R10 | Método y Tecnología | Documentar comportamiento real, niveles derivados y decisiones artísticas. Conservar Retos. Retirar tecnología planeada o no usada. | Pendiente. |
 | R11 | Pruebas y rendimiento | Antes/después con perfil idéntico, Inicio/Escuchar/Banda, peso, audio, ambos catálogos y modos, ausencia de APIs. | Línea base y 3 recorridos por versión medidos. 90 pruebas del producto, 5 GLB, seis escenarios 3D y cuatro recorridos con Web Audio medido. Falta continuidad bajo carga y medir la versión final. |
 | R12 | Entrega | Matriz, tiempo real, decisiones, commits, URL pública independiente, main intacto, paquete portable e instrucciones. | Este documento es el checkpoint inicial. |
-| R13 | Disco y recursos | Comprobar C periódicamente, salidas en D, limpiar solo temporales identificados si fuera necesario. | C conserva 18.581.864.448 bytes libres en la revisión de las 01:02, unos 17,3 GiB. No se ha realizado limpieza. Salidas en D. |
+| R13 | Disco y recursos | Comprobar C periódicamente, salidas en D, limpiar solo temporales identificados si fuera necesario. | C conserva 17.875.857.408 bytes libres en la revisión de las 01:46, unos 16,6 GiB. No se ha realizado limpieza. Salidas en D. |
 | R14 | 420 minutos efectivos | Registrar bloques reales de trabajo y excluir pausas y esperas. No mantener procesos inactivos para completar horas. | Registro iniciado. Tiempo histórico no acreditado. |
 
 ## Registro de trabajo efectivo
@@ -47,8 +47,9 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | 3 | 13 nov 2026, 00:45–01:09 | Armonía, retirada A/B, transporte, paletas oficiales, voz/volumen, historial y composición del reproductor. 90 pruebas y verificación de Web Audio en ambos catálogos/modos. | 22 |
 | 4 | 13 nov 2026, 01:09–01:17 | Salidas individuales con reverberación, cancelación de fuentes, cinco muestras de instrumento, cambio de protagonista y regresiones de audio. 94 pruebas y cinco muestras medidas en navegador. | 7 |
 | 5 | 13 nov 2026, 01:17–01:24 | Imágenes como entrada principal, lluvia/CSV secundarios, límites de memoria, concurrencia y errores recuperables. 98 pruebas y recorrido Chromium de conversión. | 6 |
+| 6 | 13 nov 2026, 01:24–01:48 | Brisa, preferencias, idioma inicial, contexto conservado, tutorial de tres acciones, ciclo de voz y movimiento reducido. 107 pruebas y recorridos Chromium con voz simulada y APIs ausentes. | 22 |
 
-Total conservador acreditado: **62 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
+Total conservador acreditado: **84 de 420 minutos**. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan Chromium con rasterización WebGL por software, no un teléfono físico.
 
 ## Decisiones
 

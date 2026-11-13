@@ -59,15 +59,17 @@ test('Method 02 preserves the ten legend mappings and translates its explanatory
   assert.equal(preserved(), before);
 });
 
-function setup() {
+function setup(options = {}) {
   const elements = new Map(), timers = new Map(), events = new Map();
+  const storage = new Map(Object.entries(options.storage || {}));
+  if (!options.firstVisit && !storage.has('ts_prefs')) storage.set('ts_prefs', JSON.stringify({ version: 1, configured: true, values: {} }));
   let serial = 0;
   const listen = (type, fn) => events.set(type, fn);
   const unlisten = type => events.delete(type);
   const context = {
-    localStorage: { getItem: () => null, setItem: () => {} },
+    localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, String(value)) },
     document: { hidden: false, documentElement: {}, getElementById: id => elements.get(id),
-      querySelector: () => null, addEventListener: listen, removeEventListener: unlisten },
+      querySelector: () => null, querySelectorAll: () => [], addEventListener: listen, removeEventListener: unlisten },
     window: { innerWidth: 1200, innerHeight: 900, matchMedia: () => ({ matches: true }),
       addEventListener: listen, removeEventListener: unlisten,
       visualViewport: { addEventListener: listen, removeEventListener: unlisten } },
@@ -77,6 +79,7 @@ function setup() {
     cancelAnimationFrame: id => timers.delete(id),
     DCLogic: class { constructor(props) { this.props = props; } setState(patch, done) { Object.assign(this.state, patch); done?.(); } }
   };
+  if (options.language) context.navigator = { language: options.language };
   vm.createContext(context);
   vm.runInContext(source + '\nglobalThis.ComponentUnderTest = Component;', context);
   const component = new context.ComponentUnderTest({});
@@ -87,7 +90,7 @@ function setup() {
     elements.set(id, el);
     return el;
   }
-  return { component, context, elements, timers, events, element };
+  return { component, context, elements, timers, events, element, storage };
 }
 
 test('the six base harmonies preserve every specified chord, note, tempo and scale', () => {
@@ -185,18 +188,18 @@ test('closing resumes the section step; skipping resets only guide progress', ()
   assert.equal(JSON.stringify({ disc: c.state.disc, frame: c.state.frame, mute: c.state.mute, playing: c.state.playing }), original);
 });
 
-test('guide restoration stops playback on a screen change while retaining scroll and instrument choices', () => {
+test('contextual help stays on the current screen and retains playback, scroll and instrument choices', () => {
   const { component: c, context } = setup();
   const screen = { scrollTop: 135, scrollLeft: 0 }, app = { scrollTop: 0, scrollLeft: 0 };
   context.document.querySelector = selector => selector === '.px .scr' ? screen : selector === '.px.app' ? app : null;
-  c.state.tab = 'juke'; c.state.sub = 0;
-  c.tourOpen(); c.tourGo(4);
+  c.state.tab = 'juke'; c.state.sub = 2;
+  c.tourOpen(); c.tourGo(3);
   assert.equal(c.state.sub, 2);
   screen.scrollTop = 400; app.scrollTop = 2;
   c.state.playing = true; c.state.mute.inti = false;
   c.tourClose();
-  assert.equal(c.state.sub, 0); assert.equal(screen.scrollTop, 135); assert.equal(app.scrollTop, 0);
-  assert.equal(c.state.playing, false); assert.equal(c.state.mute.inti, false);
+  assert.equal(c.state.sub, 2); assert.equal(screen.scrollTop, 135); assert.equal(app.scrollTop, 0);
+  assert.equal(c.state.playing, true); assert.equal(c.state.mute.inti, false);
 });
 
 test('guide targeting scrolls only the screen, never hidden app or document ancestors', () => {
@@ -275,9 +278,9 @@ test('card placement accounts for its measured height', () => {
   assert(top >= 12 && top + 500 <= 888, card.cardSt);
 });
 
-test('Silbo remains visible when a guide points to him; Escape closes the guide', () => {
+test('Brisa’s help button stays visible when targeted and Escape closes the guide', () => {
   const { component: c, context, events } = setup();
-  c.componentDidMount(); c.state.tab = 'home'; c.tourGo(5);
+  c.componentDidMount(); c.state.tab = 'home'; c.tourGo(4);
   assert.equal(c.guideStep().id, 'tour-guide');
   assert.notEqual(c.renderVals().guideFabCls, 'hide');
   let prevented = false;
@@ -1419,4 +1422,107 @@ test('failed local header reads and the file-size limit preserve an accepted fil
   c.handleFile({ name: 'oversize.png', type: 'image/png', size: 8 * 1024 * 1024 + 1 });
   assert.equal(c.state.custom, accepted); assert.match(c.renderVals().upMsg, /8 MB/);
   c.setLang('en'); assert.match(c.renderVals().upMsg, /larger than 8 MB/);
+});
+
+test('first-visit language follows the browser and a stored manual choice has priority', () => {
+  for (const language of ['es','es-PE','es-CO','ES-mx']) assert.equal(setup({firstVisit:true,language}).component.state.lang, 'es');
+  for (const language of ['en-US','fr-FR','pt-BR','ja-JP']) assert.equal(setup({firstVisit:true,language}).component.state.lang, 'en');
+  assert.equal(setup({firstVisit:true,language:'fr-FR',storage:{ts_lang:'es'}}).component.state.lang, 'es');
+  assert.equal(setup({firstVisit:true,language:'es-PE',storage:{ts_lang:'en'}}).component.state.lang, 'en');
+});
+
+test('the four preferences combine and persist without asking for a diagnosis or opening a guide', () => {
+  const { component:c, context, storage } = setup({ firstVisit:true, language:'es-PE' });
+  context.window.matchMedia=()=>({matches:false});
+  assert.equal(c.state.showPreferences,true); assert.equal(c.state.tour,0);
+  assert.equal(c.renderVals().preferences.choices.length,4);
+  for (const key of ['voice','big','contrast','reducedMotion']) c.setPreference(key,true);
+  assert.equal(c.bandReduced(),true); c.finishPreferences(false);
+  assert.equal(c.state.showPreferences,false); assert.equal(c.state.tour,0);
+  const next=setup({language:'es-PE',storage:Object.fromEntries(storage)}).component;
+  assert.equal(next.state.showPreferences,false);
+  for (const key of ['voice','big','contrast','reducedMotion']) assert.equal(next.state[key],true);
+});
+
+test('stored preferences only accept known boolean values and recover from invalid JSON', () => {
+  let c=setup({firstVisit:true,storage:{ts_prefs:'not JSON'}}).component;
+  assert.equal(c.state.showPreferences,true);
+  c=setup({storage:{ts_prefs:JSON.stringify({version:1,configured:true,values:{big:'yes',contrast:true,unknown:true}})}}).component;
+  assert.equal(c.state.big,false); assert.equal(c.state.contrast,true); assert.equal(c.state.unknown,undefined);
+});
+
+test('contextual help never changes the active file, date, position or playback', () => {
+  for (const [tab,sub] of [['juke',0],['juke',1],['juke',2],['data',1],['how',1],['tech',1]]) {
+    const {component:c}=setup();
+    c.state.tab=tab; c.state.sub=sub; c.state.frame=2; c.state.col=11; c.state.playing=true;
+    c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};
+    const before=JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key]));
+    c.tourOpen(); c.tourGo(2); c.tourGo(3); c.tourClose();
+    assert.equal(JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key])),before);
+  }
+});
+
+test('the tutorial progresses only through choosing a disc, playback and interpreting the legend', async () => {
+  const {component:c}=playbackHarness();
+  c.startTutorial(); assert.equal(c.state.tour,1); assert(c.renderVals().tour.nextOff);
+  c.renderVals().tour.next(); assert.equal(c.state.tour,1);
+  c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
+  c.renderVals().tour.next(); assert.equal(c.state.tour,2);
+  await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
+  c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
+  c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
+  c.renderVals().tour.next(); assert.equal(c.state.tour,0); assert.equal(c.state.tutorial,false);
+  assert.equal(c.state.disc,2); assert.equal(c.state.sub,1); assert.equal(c.state.playing,true); c.stop();
+});
+
+test('skipping the tutorial restores the previous file and paused position', () => {
+  const {component:c}=playbackHarness();
+  c.state.tab='data'; c.state.sub=1; c.state.disc=5; c.state.frame=0; c.state.col=7;
+  c.state.custom={name:'retained.png',kind:'image',url:'blob:retained',mode:'free'};
+  const before=JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key]));
+  c.startTutorial(); c.renderVals().discs[0].pick(); c.tourEnd();
+  assert.equal(JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key])),before);
+  assert.equal(c.state.tutorial,false); assert.equal(c.state.tour,0);
+});
+
+test('guide narration selects a matching language, ducks music and cancels on step, language or screen change', async () => {
+  const {component:c,context}=playbackHarness(), spoken=[];
+  const voices=[{lang:'es-MX',name:'Spanish fixture'},{lang:'en-GB',name:'English fixture'}];
+  let cancelled=0;
+  context.window.SpeechSynthesisUtterance=class { constructor(text){this.text=text;} };
+  context.window.speechSynthesis={getVoices:()=>voices,cancel(){cancelled++;},speak(utterance){spoken.push(utterance);}};
+  await c.play(); c.speak('Prueba',true); assert.equal(spoken.at(-1).lang,'es-MX'); assert.equal(c.state.speaking,true);
+  assert(Math.abs(c.master.gain.value-.24)<1e-9);
+  const old=spoken.at(-1); c.speak('Nuevo',true); old.onend(); assert.equal(c.state.speaking,true);
+  c.tourOpen(); c.tourGo(2); assert.equal(c.state.speaking,false); assert(Math.abs(c.master.gain.value-.8)<1e-9);
+  c.speak('Otra',true); c.setLang('en'); assert.equal(c.state.speaking,false);
+  c.speak('English',true); assert.equal(spoken.at(-1).lang,'en-GB');
+  c.goTab('how'); assert.equal(c.state.speaking,false); assert(cancelled>=5);
+});
+
+test('missing speech APIs or a voice for the selected language keep written help available', () => {
+  for (const mode of ['no-api','no-voices','different-language']) {
+    const {component:c,context}=setup();
+    if (mode!=='no-api') {
+      context.window.SpeechSynthesisUtterance=class {};
+      context.window.speechSynthesis={getVoices:()=>mode==='no-voices'?[]:[{lang:'de-DE'}],cancel(){},speak(){assert.fail('wrong-language voice must not start');}};
+    }
+    c.state.tab='juke'; c.tourOpen(); c.speak(c.guideStep().b,true);
+    assert.equal(c.state.speaking,false); assert(c.renderVals().tour.body); assert(c.renderVals().tour.speechNotice);
+    c.setLang('en'); assert(c.renderVals().tour.body); assert(c.renderVals().tour.speechNotice);
+  }
+});
+
+test('every contextual guide targets content on its own screen, including credits', () => {
+  const {component:c}=setup();
+  for (const tab of ['home','juke','band','data','how','tech']) {
+    c.state.tab=tab;
+    for (let sub=0;sub<c.subCount();sub++) {
+      c.state.sub=sub;
+      for (const step of c.guideSteps()) {
+        assert(html.includes('id="'+step.id+'"'),tab+':'+sub+' missing '+step.id);
+        assert.equal(step.sub,undefined,'contextual help must not navigate');
+      }
+    }
+  }
 });
