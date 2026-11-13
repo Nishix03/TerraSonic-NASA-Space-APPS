@@ -10,6 +10,8 @@ La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](htt
 
 La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve el checkpoint `c4f7aca`, verificado sin credenciales: HTML y 96 activos idénticos al paquete, ambos catálogos/modos, saltos con teclado, CSV multicolumna, cinco personajes y respaldo sin WebGL. Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
 
+La entrega y sus comprobaciones se resumen en [ENTREGA_2026-11-13.md](docs/ENTREGA_2026-11-13.md).
+
 El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
 ## Qué incluye
