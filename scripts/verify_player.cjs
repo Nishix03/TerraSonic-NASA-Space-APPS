@@ -12,7 +12,7 @@ async function main() {
   fs.mkdirSync(output, { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.TERRASONIC_CHROMIUM,
     args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
-  const report = { audio: [], layouts: [], fixture: 'Chromium headless, silent final output, real Web Audio nodes; no human listening' };
+  const report = { audio: [], previews: [], layouts: [], fixture: 'Chromium headless, silent final output, real Web Audio nodes; no human listening' };
   try {
     const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
     await context.route('**/*', async route => {
@@ -108,6 +108,42 @@ async function main() {
         console.log('PASS playback', set, mode, 'pause/resume/seek/keyboard/history/language/audio silence');
       }
       if (setIndex === 0) await page.evaluate(() => __app.goSub(0));
+    }
+    if (!process.argv.includes('--layout-only')) {
+      await page.evaluate(() => {
+        __app.setEngine('melody'); __app.setBandMute(__app.only('mama')); __app.seekPosition(0);
+      });
+      await page.locator('#tour-play button').click();
+      await page.waitForFunction(() => __app.state.col === 1 && __audioPeak() > .00001);
+      const mama = page.locator('.listen-member').nth(2);
+      await mama.click();
+      await page.waitForTimeout(150);
+      assert.equal(await page.evaluate(() => __app.state.playing), true);
+      assert((await page.evaluate(() => __audioPeak())) < .00001, 'Individual mute also cuts reverb');
+      assert.equal(await page.evaluate(() => !!__app.voiceGroups.mama), false);
+      await mama.click();
+      await page.waitForTimeout(30);
+      assert((await page.evaluate(() => __audioPeak())) < .00001, 'Unmuting must not revive an earlier tail');
+      await page.locator('#tour-play button').click();
+      console.log('PASS isolated mute with no resumed reverb tail');
+      await page.locator('#tour-nav button').nth(1).click();
+      for (const [i, key] of ['silbo','inti','mama','yaku','illapa'].entries()) {
+        await page.locator('.bpick button').nth(i).click();
+        const preview = page.locator('.avatar-actions > button').first();
+        await preview.click();
+        await page.waitForFunction(key => __app.state.previewKey === key && !__app.state.audioPending, key);
+        await page.waitForFunction(() => __audioPeak() > .00001);
+        const peak = await page.evaluate(() => __audioPeak());
+        assert.deepEqual(await page.evaluate(() => Object.keys(__app.voiceGroups)), [key]);
+        await preview.click(); await page.waitForTimeout(150);
+        const afterStop = await page.evaluate(() => __audioPeak());
+        assert(afterStop < .00001, key + ' solo must stop completely');
+        assert.equal(await page.evaluate(() => __app.state.previewKey), '');
+        report.previews.push({ key, peak, afterStop });
+        console.log('PASS instrument preview', key, 'start/stop/reduced motion/isolated graph');
+      }
+      await page.locator('#tour-nav button').first().click();
+      await page.locator('.discgrid .dcard').first().click();
     }
     for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
       await page.setViewportSize(viewport);

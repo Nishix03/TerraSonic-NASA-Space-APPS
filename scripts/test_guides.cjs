@@ -1325,3 +1325,58 @@ test('black legacy land yields absent cells rather than diluting cold ocean with
   assert.equal(map.cells.filter(value => value === null).length, 224);
   assert.equal(map.warm, 0); assert(map.cold > 3);
 });
+
+test('muting a musician retires only their dry and wet graph and scheduled sources', async () => {
+  const { component: c } = playbackHarness();
+  await c.play();
+  const master = c.master, mama = c.voiceInput('mama'), inti = c.voiceInput('inti');
+  const stopped = [];
+  c.trackSource({ stop: at => stopped.push(['mama', at]) }, 'mama');
+  c.trackSource({ stop: at => stopped.push(['inti', at]) }, 'inti');
+  const muted = c.allMute(false); muted.mama = true;
+  c.state.levels.mama = 1; c.state.hits.mama = 9;
+  c.setBandMute(muted);
+  assert.equal(c.master, master); assert.equal(c.state.playing, true);
+  assert.equal(c.voiceGroups.mama, undefined); assert.equal(c.voiceGroups.inti.input, inti);
+  assert.deepEqual(stopped, [['mama', .025]]);
+  assert.equal(c.state.levels.mama, 0); assert.equal(c.state.hits.mama, 0);
+  muted.mama = false; c.setBandMute(muted);
+  assert.notEqual(c.voiceInput('mama'), mama, 'unmuting cannot reopen tails from the retired graph');
+});
+
+test('all five instrument previews are stoppable solos without changing the disc or band', async () => {
+  const { component: c, intervals, timers } = playbackHarness();
+  const sounds = [];
+  for (const method of ['note','marimba','flute','droplet','timpani']) c[method] = (...args) => sounds.push([method, args[0]]);
+  const retained = JSON.stringify([c.state.disc,c.state.frame,c.state.col,c.state.mute]);
+  const methods = { silbo: 'flute', inti: 'marimba', mama: 'note', yaku: 'droplet', illapa: 'timpani' };
+  let oldEnd;
+  for (const key of Object.keys(methods)) {
+    sounds.length = 0;
+    await c.previewInstrument(key);
+    assert.equal(c.state.previewKey, key); assert.equal(c.state.playing, false);
+    assert.equal(c.state.audioPending, false); assert.equal(intervals.size, 0);
+    assert(sounds.length > 0); assert(sounds.every(sound => sound[0] === methods[key]));
+    if (oldEnd) { oldEnd(); assert.equal(c.state.previewKey, key); }
+    oldEnd = timers.get(c.previewTimer);
+    await c.previewInstrument(key); assert.equal(c.state.previewKey, '');
+    assert.equal(JSON.stringify([c.state.disc,c.state.frame,c.state.col,c.state.mute]), retained);
+  }
+});
+
+test('changing character or leaving the band cancels an instrument sample', async () => {
+  const { component: c } = playbackHarness(); c.state.tab = 'band';
+  c.flute = () => {};
+  await c.previewInstrument('silbo'); assert.equal(c.state.previewKey, 'silbo');
+  c.pickBand(1); assert.equal(c.state.previewKey, '');
+  await c.previewInstrument('silbo'); c.goTab('how'); assert.equal(c.state.previewKey, '');
+});
+
+test('a new lead retires the previous harmony while keeping position and play state', async () => {
+  const { component: c, intervals } = playbackHarness();
+  await c.play(); c.tick(); const oldMaster = c.master, stale = [...intervals][0];
+  c.selectLead('inti'); stale();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(c.state.col, 0); assert.equal(c.state.leadOverride, 'inti');
+  assert.equal(c.state.playing, true); assert.equal(intervals.size, 1); assert.notEqual(c.master, oldMaster);
+});

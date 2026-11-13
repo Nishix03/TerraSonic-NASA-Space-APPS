@@ -1764,6 +1764,7 @@ a{color:inherit}
   <span>{{tx.constellation}} · {{bandCur.instrumentName}}</span>
   <strong>{{bandCur.number}} / 05</strong>
   <div class="avatar-actions">
+    <button type="button" class="btn sm" aria-pressed="{{bandCur.previewOn}}" onClick="{{bandCur.preview}}">{{bandCur.previewLabel}}</button>
     <sc-for list="{{avatarActions}}" as="action">
       <button type="button" class="btn sm quiet" disabled="{{action.off}}" onClick="{{action.run}}">{{action.label}}</button>
     </sc-for>
@@ -1771,6 +1772,9 @@ a{color:inherit}
 </figcaption>
 </figure>
 <div id="tour-binfo" class="binfo">
+<sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
+<p role="status" class="small">{{bandCur.previewStatus}}</p>
+<sc-if value="{{bandCur.previewMuted}}"><button type="button" class="btn sm" onClick="{{bandCur.previewUnmute}}">{{bandCur.previewUnmuteLabel}}</button></sc-if>
 <dl class="bdl">
 <dt class="muted">{{tx.starring}}</dt><dd>{{bandCur.disc}}</dd>
 <dt class="muted">{{tx.listens}}</dt><dd>{{bandCur.listens}}</dd>
@@ -2591,6 +2595,8 @@ class Component extends DCLogic {
     this.eventSerial = 0;
     this.state.audioPending = false; this.state.audioError = ''; this.audioRun = 0; this.cancelAudioWait = null;
     this.audioGraph = null; this.audioRetirements = new Map(); this.reverbImpulse = null; this.cueRun = 0;
+    this.voiceGroups = Object.create(null);
+    this.state.previewKey = '';
     this.state.speaking = false;
     this.state.leadPulse = null;
     this.leadTimers = new Set();
@@ -2898,6 +2904,7 @@ class Component extends DCLogic {
   }
   pickBand(index) {
     if (!Number.isInteger(index) || index < 0 || index >= BAND.length || this.state.tab !== 'band' || this.disposed || (index === this.state.bsel && this.state.bphase !== 'idle')) return;
+    if (this.state.previewKey && this.state.previewKey !== BAND[index].k) this.stop();
     var restarting = this.state.bphase === 'entry' || this.state.bphase === 'reset';
     var previous = restarting && this.bandPrevious != null ? this.bandPrevious : this.state.bsel;
     this.cancelBandClip();
@@ -2969,6 +2976,8 @@ class Component extends DCLogic {
     if (value !== 'auto' && !lead) return;
     var override = lead ? lead.k : null, s = this.state;
     if (s.leadOverride === override) return;
+    var was = s.playing || (s.audioPending && !s.previewKey);
+    this.stop(); this.stopSpeech();
     var key = override || this.discLead(s.disc, this.cur());
     var mute = Object.assign({}, s.mute);
     mute[key] = false;
@@ -2977,9 +2986,7 @@ class Component extends DCLogic {
     this.setState({ leadOverride: override, leadPulse: null, mute: mute, chord: '',
       caption: lead ? T('Protagonista: ', 'Lead: ') + lead.name + '.' : T('El protagonista sigue la sugerencia del disco.', 'The lead follows the disc’s suggestion.')
     }, function () {
-      if (!self.state.playing || self.state.engine !== 'melody') return;
-      clearInterval(self.timer);
-      self.timer = setInterval(function () { self.tick(); }, self.stepMs());
+      if (was) self.play();
     });
   }
   loadDisc(d) { if (d === 5) return; for (var f = 0; f < DISCS[d].files.length; f++) this.analyze(d, f); }
@@ -3490,6 +3497,71 @@ class Component extends DCLogic {
     if (ac.state !== 'running') throw new Error('audio-resume');
     return ac;
   }
+  voiceInput(key) {
+    if (this.voiceGroups[key]) return this.voiceGroups[key].input;
+    var ac = this.ac, input = ac.createGain(), output = ac.createGain(), send = ac.createGain(), convolution = ac.createConvolver();
+    send.gain.value = .3; convolution.buffer = this.reverbImpulse;
+    input.connect(output); input.connect(send); send.connect(convolution); convolution.connect(output); output.connect(this.master);
+    var nodes = [input, output, send, convolution];
+    this.voiceGroups[key] = { input: input, output: output, nodes: nodes, sources: new Set() };
+    this.audioGraph.push.apply(this.audioGraph, nodes);
+    return input;
+  }
+  trackSource(source, key) {
+    var group = this.voiceGroups[key];
+    if (!group) return;
+    group.sources.add(source);
+    source.onended = function () { group.sources.delete(source); };
+  }
+  retireVoice(key) {
+    var group = this.voiceGroups[key];
+    if (!group) return;
+    delete this.voiceGroups[key];
+    this.audioGraph = this.audioGraph.filter(function (node) { return group.nodes.indexOf(node) < 0; });
+    var self = this, now = this.ac.currentTime;
+    group.sources.forEach(function (source) { try { source.stop(now + .025); } catch (ignored) {} });
+    var cleanup = function () { group.nodes.forEach(function (node) { try { node.disconnect(); } catch (ignored) {} }); group.sources.clear(); };
+    if (typeof group.output.gain.linearRampToValueAtTime === 'function') {
+      group.output.gain.cancelScheduledValues(now); group.output.gain.setValueAtTime(group.output.gain.value, now);
+      group.output.gain.linearRampToValueAtTime(0, now + .02);
+      var timer = setTimeout(function () { cleanup(); self.audioRetirements.delete(timer); }, 35);
+      this.audioRetirements.set(timer, cleanup);
+    } else cleanup();
+  }
+  setBandMute(mute) {
+    var self = this, levels = Object.assign({}, this.state.levels), hits = Object.assign({}, this.state.hits);
+    BAND.forEach(function (b) { if (mute[b.k]) { self.retireVoice(b.k); levels[b.k] = 0; hits[b.k] = 0; } });
+    this.setState({ mute: mute, levels: levels, hits: hits,
+      leadPulse: this.state.leadPulse && mute[this.state.leadPulse.key] ? null : this.state.leadPulse });
+  }
+  async previewInstrument(key) {
+    if (!MUSIC[key] || this.disposed) return;
+    if (this.state.previewKey === key) { this.stop(); return; }
+    this.stop(); this.stopSpeech();
+    var self = this, run = ++this.audioRun;
+    this.setState({ previewKey: key, audioPending: true, audioError: '' });
+    try {
+      await this.waitForAudio(this.ensureAudio());
+      if (this.disposed || run !== this.audioRun || this.state.previewKey !== key) return;
+      var profile = MUSIC[key], t = this.ac.currentTime + .06, chord = chordOf(profile, profile.prog[0]);
+      if (key === 'mama') {
+        this.note('sine', chord.root - 12, t, 1.6, .2, { att: .03, rel: .3, cut: 500 });
+        chord.notes.forEach(function (n, i) { self.note('triangle', n, t + i * .08, 1.5, .045, { att: .05, rel: .7, cut: 1100 }); });
+      } else if (key === 'inti') {
+        [0, 1, 2, 1].forEach(function (i, step) { self.marimba(chord.notes[i] + 12, t + step * .4, .16, 0); });
+      } else if (key === 'silbo') {
+        [0, 2, 1, 0].forEach(function (degree, step) { self.flute(scaleMidi(profile.scale, profile.root + 12, degree), t + step * .4, .36, .11, 0); });
+      } else if (key === 'yaku') {
+        [0, 1, 2, 4, 2].forEach(function (degree, step) { self.droplet(scaleMidi(profile.scale, profile.root + 24, degree), t + step * .27, .13, 0); });
+      } else { this.timpani(profile.root - 12, t, .25); this.timpani(profile.root - 12, t + .8, .22); }
+      this.setState({ audioPending: false });
+      this.previewTimer = setTimeout(function () { if (run === self.audioRun) self.stop(); }, 3100);
+    } catch (error) {
+      if (this.disposed || run !== this.audioRun) return;
+      this.stop();
+      this.setState({ audioError: uiMessage('No se pudo iniciar la muestra. Puedes seguir leyendo la ficha o volver a intentarlo.', 'The sample could not start. You can continue reading the profile or try again.') });
+    }
+  }
   waitForAudio(activation) {
     var self = this;
     return new Promise(function (resolve, reject) {
@@ -3508,24 +3580,28 @@ class Component extends DCLogic {
       Promise.resolve(activation).then(function (value) { settle(resolve, value); }, function (error) { settle(reject, error); });
     });
   }
-  tone(type, f, t, vol, dec, pan, glide) {
+  tone(type, f, t, vol, dec, pan, glide, key) {
+    key = key || 'inti';
     var ac = this.ac, o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
     o.type = type; o.frequency.setValueAtTime(glide ? f * glide : f, t); if (glide) o.frequency.exponentialRampToValueAtTime(f, t + 0.04);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
-    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.master); } else g.connect(this.master);
+    var output = this.voiceInput(key);
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(output); } else g.connect(output);
+    this.trackSource(o, key);
     o.start(t); o.stop(t + dec + 0.05);
   }
   noiseBurst(t, vol, dec, freq) {
     var ac = this.ac, n = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
     n.buffer = this.noise; f.type = 'lowpass'; f.frequency.setValueAtTime(freq, t); f.frequency.exponentialRampToValueAtTime(80, t + dec);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
-    n.connect(f); f.connect(g); g.connect(this.master); n.start(t); n.stop(t + dec + 0.05);
+    n.connect(f); f.connect(g); g.connect(this.voiceInput('illapa')); this.trackSource(n, 'illapa'); n.start(t); n.stop(t + dec + 0.05);
   }
   whistle(t, dur, amt) {
     var ac = this.ac, o = ac.createOscillator(), l = ac.createOscillator(), lg = ac.createGain(), g = ac.createGain(), n = ac.createBufferSource(), bp = ac.createBiquadFilter();
     o.type = 'sine'; o.frequency.value = 1318.5; l.frequency.value = 5.5; lg.gain.value = 16; l.connect(lg); lg.connect(o.frequency);
     n.buffer = this.noise; bp.type = 'bandpass'; bp.frequency.value = 1318.5; bp.Q.value = 20;
-    n.connect(bp); bp.connect(g); o.connect(g); g.connect(this.master);
+    n.connect(bp); bp.connect(g); o.connect(g); g.connect(this.voiceInput('silbo'));
+    [o, l, n].forEach(function (source) { this.trackSource(source, 'silbo'); }, this);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05 + 0.12 * amt, t + dur * 0.35); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.start(t); l.start(t); n.start(t); o.stop(t + dur + 0.05); l.stop(t + dur + 0.05); n.stop(t + dur + 0.05);
   }
@@ -3537,7 +3613,7 @@ class Component extends DCLogic {
       var w = 0, c = 0, k = 0; for (var j = col; j < Math.min(28, col + 4); j++) { var ci = this.colInfo(a, j); if (!ci.k) continue; w += ci.w; c += ci.c; k++; }
       w = k ? w / k : 0; c = k ? c / k : 0;
       if (!m.inti && w > 0.05) { this.tone('triangle', mtof(60 + Math.min(5, w) * 2.4), t, Math.min(0.16, 0.03 + 0.06 * w), sp * 3.5, pan * 0.5); lv.inti = Math.min(1, w / 3); notes.push(T('Inti: nivel cálido ', 'Inti: warm level ') + w.toFixed(1)); }
-      if (!m.mama && c > 0.05) { this.tone('sine', mtof(48 - Math.min(5, c) * 2.4), t, Math.min(0.32, 0.06 + 0.2 * c), sp * 3.5, 0); lv.mama = Math.min(1, c / 2); notes.push(T('Mamacocha: nivel frío ', 'Mamacocha: cold level ') + (-c).toFixed(1)); }
+      if (!m.mama && c > 0.05) { this.tone('sine', mtof(48 - Math.min(5, c) * 2.4), t, Math.min(0.32, 0.06 + 0.2 * c), sp * 3.5, 0, null, 'mama'); lv.mama = Math.min(1, c / 2); notes.push(T('Mamacocha: nivel frío ', 'Mamacocha: cold level ') + (-c).toFixed(1)); }
     } else { lv.inti = s.levels.inti * 0.8; lv.mama = s.levels.mama * 0.8; }
     if (!m.yaku && info.strong.length) {
       var picks = info.strong.slice().sort(function (p, q) { return Math.abs(q[1]) - Math.abs(p[1]); }).slice(0, Math.min(3, Math.ceil(info.strong.length / 4)));
@@ -3545,7 +3621,7 @@ class Component extends DCLogic {
       picks.forEach(function (p, q) {
         var deg = 15 - p[0], oct = Math.floor(deg / 5), f = 440 * Math.pow(2, (oct * 12 + PENTA[deg % 5]) / 12) / 2;
         var onset = t + q * sp / 3;
-        self2.tone('sine', f, onset, 0.12, 0.22, pan, 1.4);
+        self2.tone('sine', f, onset, 0.12, 0.22, pan, 1.4, 'yaku');
         self2.leadNote('yaku', onset, Math.min(0.22, sp / 3));
       });
       lv.yaku = Math.min(1, info.strong.length / 10);
@@ -3608,7 +3684,9 @@ class Component extends DCLogic {
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a);
     g.gain.setValueAtTime(peak, hold); g.gain.exponentialRampToValueAtTime(0.0001, hold + rel);
     osc.connect(f); f.connect(g);
-    if (p) { p.pan.value = o.pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    var output = this.voiceInput(o.voice || 'mama');
+    if (p) { p.pan.value = o.pan || 0; g.connect(p); p.connect(output); } else g.connect(output);
+    this.trackSource(osc, o.voice || 'mama');
     osc.start(t); osc.stop(hold + rel + 0.05);
     return osc;
   }
@@ -3616,30 +3694,34 @@ class Component extends DCLogic {
     var ac = this.ac, o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
     o.type = type; o.frequency.value = mtof(midi);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
-    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    var output = this.voiceInput('inti');
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(output); } else g.connect(output);
+    this.trackSource(o, 'inti');
     o.start(t); o.stop(t + dec + 0.05);
   }
   marimba(midi, t, vol, pan) { this.pluck('sine', midi, t, vol, 0.45, pan); this.pluck('triangle', midi + 19, t, vol * 0.12, 0.12, pan); }
   flute(midi, t, dur, vol, pan) {
-    var ac = this.ac, o = this.note('sine', midi, t, dur, vol, { att: 0.07, rel: 0.12, cut: 5000, pan: pan });
+    var ac = this.ac, o = this.note('sine', midi, t, dur, vol, { att: 0.07, rel: 0.12, cut: 5000, pan: pan, voice: 'silbo' });
     var l = ac.createOscillator(), lg = ac.createGain(); l.frequency.value = 5.2; lg.gain.value = 9; l.connect(lg); lg.connect(o.detune); l.start(t + 0.1); l.stop(t + dur + 0.3);
     var n = ac.createBufferSource(), bp = ac.createBiquadFilter(), ng = ac.createGain();
     n.buffer = this.noise; bp.type = 'bandpass'; bp.frequency.value = mtof(midi) * 2; bp.Q.value = 6;
     ng.gain.setValueAtTime(0.0001, t); ng.gain.exponentialRampToValueAtTime(Math.max(vol * 0.18, 0.0002), t + 0.05); ng.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.1);
-    n.connect(bp); bp.connect(ng); ng.connect(this.bus); n.start(t); n.stop(t + dur + 0.15);
+    n.connect(bp); bp.connect(ng); ng.connect(this.voiceInput('silbo')); this.trackSource(l, 'silbo'); this.trackSource(n, 'silbo'); n.start(t); n.stop(t + dur + 0.15);
   }
   droplet(midi, t, vol, pan) {
     var ac = this.ac, f = mtof(midi), o = ac.createOscillator(), g = ac.createGain(), p = ac.createStereoPanner ? ac.createStereoPanner() : null;
     o.type = 'sine'; o.frequency.setValueAtTime(f * 1.5, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.035);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(this.bus); } else g.connect(this.bus);
+    var output = this.voiceInput('yaku');
+    o.connect(g); if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(output); } else g.connect(output);
+    this.trackSource(o, 'yaku');
     o.start(t); o.stop(t + 0.4);
   }
   timpani(midi, t, vol) {
     var ac = this.ac, f = mtof(midi), o = ac.createOscillator(), g = ac.createGain();
     o.type = 'sine'; o.frequency.setValueAtTime(f * 1.7, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.12);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
-    o.connect(g); g.connect(this.bus); o.start(t); o.stop(t + 1.2);
+    o.connect(g); g.connect(this.voiceInput('illapa')); this.trackSource(o, 'illapa'); o.start(t); o.stop(t + 1.2);
     this.noiseBurst(t, vol * 0.5, 0.25, 500);
   }
   stepMelody(col) {
@@ -3754,6 +3836,7 @@ class Component extends DCLogic {
   }
   async play() {
     if (this.disposed || this.state.trans || this.state.playing || this.state.audioPending) return;
+    if (this.state.previewKey) this.stop();
     var self = this, run = ++this.audioRun;
     this.setState({ audioPending: true, audioError: '' });
     try {
@@ -3805,7 +3888,7 @@ class Component extends DCLogic {
   }
   stopForScreen(tab, sub) {
     if (tab === this.state.tab && sub === this.state.sub) return;
-    if (this.state.playing || this.state.audioPending) this.stop();
+    if (this.state.playing || this.state.audioPending || this.state.previewKey) this.stop();
     this.stopSpeech();
   }
   retireAudioGraph() {
@@ -3815,12 +3898,18 @@ class Component extends DCLogic {
       this.audioRetirements.clear();
     }
     if (!this.master) return;
+    var stopAt = this.ac ? this.ac.currentTime + .025 : 0;
+    Object.values(this.voiceGroups).forEach(function (group) {
+      group.sources.forEach(function (source) { try { source.stop(stopAt); } catch (ignored) {} });
+      group.sources.clear();
+    });
+    this.voiceGroups = Object.create(null);
     var master = this.master, nodes = this.audioGraph || [master, this.bus];
     this.master = null; this.bus = null; this.audioGraph = null;
     var cleanup = function () { nodes.forEach(function (node) { try { if (node) node.disconnect(); } catch (ignored) {} }); };
     // Stop scheduling immediately; fade the complete dry/wet output to avoid a click.
     // A new run gets a separate graph, so reopening its output cannot revive old notes or reverb.
-    if (!this.disposed && this.state.playing && this.ac && this.ac.state === 'running' && master.gain && typeof master.gain.linearRampToValueAtTime === 'function') {
+    if (!this.disposed && (this.state.playing || this.state.previewKey) && this.ac && this.ac.state === 'running' && master.gain && typeof master.gain.linearRampToValueAtTime === 'function') {
       try {
         var now = this.ac.currentTime, gain = master.gain;
         if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
@@ -3843,10 +3932,11 @@ class Component extends DCLogic {
     this.leadTimers.clear();
     clearTimeout(this.leadRestTimer);
     this.leadRestTimer = null;
+    clearTimeout(this.previewTimer); this.previewTimer = null;
     this.retireAudioGraph();
     if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') { try { navigator.vibrate(0); } catch (ignored) {} }
-    if (this.state.playing || this.state.audioPending || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
-      this.setState({ playing: false, audioPending: false, leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
+    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
+      this.setState({ playing: false, audioPending: false, previewKey: '', leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
     }
   }
@@ -3865,7 +3955,7 @@ class Component extends DCLogic {
     var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1;
     var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
-    var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setState({ mute: mm }); }; };
+    var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
     var tog = function (k) { return function () {
       var p = {}; p[k] = !s[k]; self.setState(p);
       if (k === 'big' || k === 'legible') self.ensureNavVisible();
@@ -4062,7 +4152,6 @@ class Component extends DCLogic {
       techCur: { title: techCur.title, items: techCur.items, empty: !techCur.items.length, num: ('0' + (sub + 1)).slice(-2) },
       bandViewClass: isBand ? 'band-view' : '',
       avatarActions: [
-        [T('Tocar', 'Play instrument'), 'Play'],
         [T('Caminar', 'Walk'), 'Walk'],
         [T('Bailar', 'Dance'), 'Dance'],
         [T('Girar', 'Rotate'), 'rotate']
@@ -4075,9 +4164,16 @@ class Component extends DCLogic {
         } };
       }),
       bandCur: Object.assign({}, band[bandIndex], {
+        previewOn: s.previewKey === bandKey,
+        previewLabel: s.previewKey === bandKey ? T('Detener instrumento', 'Stop instrument') : T('Escuchar instrumento', 'Hear instrument'),
+        preview: function () { self.previewInstrument(bandKey); },
+        previewMuted: s.masterMuted || s.volume === 0,
+        previewUnmuteLabel: T('Activar sonido general', 'Enable sound'),
+        previewUnmute: function () { self.setState({ masterMuted: false }); self.setVolume(s.volume || 50); },
+        previewStatus: s.previewKey === bandKey ? s.audioPending ? T('Preparando muestra…', 'Preparing sample…') : T('Suena solo ', 'Solo sample: ') + BAND[bandIndex].name + T('. Se detiene en tres segundos.', '. Stops after three seconds.') : '',
         loading: T('Cargando personaje 3D…', 'Loading 3D character…'),
         unavailable: T('La vista 3D no está disponible en este navegador.', '3D is unavailable in this browser.'),
-        modelCue: bandPhase === 'play' ? 'selection-' + bandTurn : bandPhase === 'entry' ? 'entry-' + bandTurn : '',
+        modelCue: s.previewKey === bandKey ? 'preview-' + this.audioRun : bandPhase === 'play' ? 'selection-' + bandTurn : bandPhase === 'entry' ? 'entry-' + bandTurn : '',
         previousKey: this.bandPrevious != null ? BAND[this.bandPrevious].k : '',
         hasOutgoing: this.bandPrevious != null && (bandPhase === 'entry' || bandPhase === 'reset'),
         accent: hc ? th.fg : band[bandIndex].color,
@@ -4126,8 +4222,8 @@ class Component extends DCLogic {
       speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
       caption: s.caption,
       bandStatus: activeN === 0 ? T('Banda apagada. Pulsa Reproducir para activar al protagonista.', 'Band off. Press Play to switch on the lead.') : activeN === 5 ? T('Banda completa: suenan los cinco.', 'Full band: all five are playing.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
-      bandAll: function () { self.setState({ mute: self.allMute(false) }); },
-      bandNone: function () { self.setState({ mute: self.allMute(true) }); },
+      bandAll: function () { self.setBandMute(self.allMute(false)); },
+      bandNone: function () { self.setBandMute(self.allMute(true)); },
       bandGo: function () { self.setState({ mute: self.allMute(false), caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
       overCls: s.over ? 'over' : '',

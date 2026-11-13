@@ -26,4 +26,8 @@ Melodía usa escalas y progresiones. Datos asigna frecuencias a niveles cálidos
 
 El mismo recorrido comprueba anchos de 320, 390, 768, 1366 y 1920 píxeles y guarda capturas y geometría. Una vista de 320 píxeles ayuda a comprobar el [reflujo de WCAG 1.4.10](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html); las pruebas de zoom de navegador y tecnologías de asistencia se documentarán por separado. No se afirma certificación.
 
-Quedan para el siguiente bloque la cancelación individual de las notas al silenciar un músico y la medición de continuidad bajo carga sostenida. La secuencia actual depende del temporizador de la interfaz y puede retrasarse si el hilo principal se bloquea.
+Cada músico tiene una salida seca y reverberada propia. Al silenciarlo se retiran ambas y se cancelan sus fuentes programadas; activarlo de nuevo crea una salida nueva. Las otras voces mantienen su grafo. La ficha de cada personaje ofrece una muestra del mismo sintetizador, de tres segundos y detenible; una nueva muestra, cambiar de personaje o salir cancela la anterior. La muestra respeta el volumen y el silencio general y funciona con movimiento reducido.
+
+La regresión de navegador también mide salida cero al silenciar una voz sostenida, comprueba que activarla no reabra su reverberación anterior y verifica las cinco muestras de instrumentos por separado. El recorrido se mantiene en pausa al terminar cada muestra.
+
+Queda pendiente medir y corregir la continuidad bajo carga sostenida. La secuencia actual depende del temporizador de la interfaz y puede retrasarse si el hilo principal se bloquea.
