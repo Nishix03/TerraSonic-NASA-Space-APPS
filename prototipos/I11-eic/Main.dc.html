@@ -1359,7 +1359,7 @@ a{color:inherit}
 .px .player-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:22px}
 .px .player-sidebar{grid-column:2;grid-row:1;display:grid;gap:8px;min-width:0}
 .px .player-visual{grid-column:1;grid-row:1;display:grid;gap:10px;min-width:0}
-.px .uni{max-width:1200px}
+.px .uni{max-width:1200px;container-type:inline-size;container-name:player}
 .px .player-sidebar .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .px .player-sidebar .controls .when{min-width:100px;flex:1 1 auto}
 .px .player-sidebar .controls #tour-more{width:100%}
@@ -1429,6 +1429,34 @@ a{color:inherit}
 .px .player-impact p{max-width:82ch;margin:8px 0}
 .px .player-impact ul{padding-left:22px}
 .px .player-impact a{display:inline-block;max-width:100%;overflow-wrap:anywhere;text-underline-offset:3px;margin-block:4px}
+@media(min-width:1101px) and (min-height:540px) and (max-height:700px){
+  .px .workspace>.in:has(.uni){padding-block:6px}
+  @container player (min-width:60em){
+    .px .uni .pagehead.slim{padding-bottom:4px;align-items:center}
+    .px .uni .pagehead.slim .kicker{display:none}
+    .px .uni .pagehead.slim h1{font-size:2em}
+    .px .uni .timeline img{height:20px}
+    .px .player-visual{gap:6px}
+    .px .listen-member ts-avatar{height:60px}
+    .px .listen-member{padding-block:4px;gap:4px}
+    .px .map-legend{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+    .px .map-legend>h2,.px .map-legend>p,.px .map-legend>ul{grid-column:1/-1}
+    .px .map-legend>.legend-detail{grid-column:1}
+    .px .map-legend>button{grid-column:2;padding-inline:6px}
+    .px .map-legend .legend-choice{min-height:44px;padding:4px}
+    .px .map-legend .legend-detail summary{min-height:44px}
+    .px .transport{gap:6px;padding-block:8px}
+    .px .transport-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 10px}
+    .px .transport-tools .seek-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .px .transport-tools .seek-buttons .btn{padding-inline:6px;white-space:nowrap;overflow-wrap:normal}
+    .px .volume-control{grid-column:1/-1;grid-row:2;grid-template-columns:minmax(106px,auto) minmax(0,1fr);gap:0 10px}
+    .px .volume-control button{padding-inline:10px;white-space:nowrap;overflow-wrap:normal}
+    .px .volume-control input{width:100%}
+    .px .transport-speed{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+    .px .transport-speed select{width:100%;max-width:none;min-width:0}
+    .px .player-modes{gap:6px}
+  }
+}
 @media(max-width:1100px){
   .px .player-layout{grid-template-columns:minmax(0,1fr);gap:12px}
   .px .player-sidebar{grid-column:1;grid-row:1}
@@ -1638,8 +1666,8 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 <div class="transport-tools">
 <div class="row seek-buttons"><button type="button" class="btn sm" onClick="{{player.back}}" disabled="{{player.atStart}}" aria-label="{{player.backLabel}}">−5 s</button><button type="button" class="btn sm" onClick="{{player.forward}}" disabled="{{player.atEnd}}" aria-label="{{player.forwardLabel}}">+5 s</button></div>
-<div class="volume-control"><button type="button" class="btn sm" aria-pressed="{{player.muted}}" onClick="{{player.toggleMute}}">{{player.muteLabel}}</button><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
 <button type="button" class="btn sm" onClick="{{player.toggleRepeat}}" aria-pressed="{{player.repeat}}">{{player.repeatLabel}}</button>
+<div class="volume-control"><button type="button" class="btn sm" aria-pressed="{{player.muted}}" onClick="{{player.toggleMute}}">{{player.muteLabel}}</button><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
 <label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
 </div>
 <div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="muted small">{{engineDesc}}</p></div>
@@ -1736,7 +1764,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <p><span class="tag">{{tx.see}}</span><span>{{seeText}}</span></p>
 <p><span class="tag">{{tx.hear}}</span><span>{{hearText}}</span></p>
 <sc-if value="{{showHarmony}}"><div class="row chordsrow">
-<div class="chips" aria-label="{{tx.chordsAria}}"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
+<div class="chips" role="group" aria-label="{{tx.chordsAria}}"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
 <span class="muted small">{{moodText}}</span>
 </div></sc-if>
 </div>
@@ -2048,7 +2076,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" title="{{tx.prevScreen}}"><span aria-hidden="true">←</span> {{tx.back}}</button></div>
 <div class="mid">
 <sc-if value="{{nav.showDots}}"><div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-current="{{d.cur}}"><b aria-hidden="true">{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div></sc-if>
-<span class="pagecount" aria-label="{{nav.countAria}}">{{nav.counter}}</span>
+<span class="pagecount"><span aria-hidden="true">{{nav.counter}}</span><span class="sr">{{nav.countAria}}</span></span>
 </div>
 <sc-if value="{{nav.showMini}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm nav-mini" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}">{{playLabel}}</button></sc-if>
 <div class="side r">

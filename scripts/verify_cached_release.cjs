@@ -20,9 +20,11 @@ async function main(){
   await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/i.test(type)?null:get.call(this,type,...args);};Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
   for(const suffix of ['old','old-again']){await page.goto(base+'?release='+suffix);await page.waitForFunction(()=>window.__app);await page.evaluate(()=>document.fonts.ready);}
-  report.oldSupportRequests=requests.filter(item=>item.url==='/support.js').length;assert.equal(report.oldSupportRequests,1,'precondition: the old script must really be reused from HTTP cache');
+  const oldScript=await page.locator('script[src*="support.js"]').getAttribute('src'),oldUrl=new URL(oldScript,base),oldSupportPath=oldUrl.pathname+oldUrl.search;
+  report.oldSupportUrl=oldSupportPath;report.oldSupportRequests=requests.filter(item=>item.url===oldSupportPath).length;assert.equal(report.oldSupportRequests,1,'precondition: the old script must really be reused from HTTP cache');
   current=next;await page.goto(base+'?release=new');await page.waitForFunction(()=>window.__app);
   const script=await page.locator('script[src*="support.js"]').getAttribute('src'),version=new URL(script,base).searchParams.get('v');assert.equal(version,digest(path.join(next,'support.js')).slice(0,12));
+  assert.notEqual(oldSupportPath,new URL(script,base).pathname+new URL(script,base).search,'the new release must use a different runtime URL');
   await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().click();await page.locator('#tour-play button').waitFor();await page.waitForFunction(()=>__app.state.sub===1&&!__app.state.trans&&__app.cur());
   assert.equal(await page.locator('.analysis-panel').getAttribute('open'),null);assert.equal(await page.locator('.analysis-panel .heard>div').count(),0);
   await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);

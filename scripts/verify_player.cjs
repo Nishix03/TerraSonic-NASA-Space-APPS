@@ -162,7 +162,8 @@ async function main() {
       report.allMutedPreserved=true;console.log('PASS explicit all-instruments mute survives play and resume');
     }
     if(process.argv.includes('--all-muted'))await page.evaluate(()=>__app.setBandMute(__app.allMute(true)));
-    for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
+    else await page.evaluate(()=>__app.setBandMute(__app.only('mama')));
+    for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1342, height: 605 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
       await page.setViewportSize(viewport);
       await page.evaluate(() => __app.resetScreenScroll());
       await page.waitForTimeout(80);
@@ -181,7 +182,7 @@ async function main() {
       report.layouts.push({ viewport, geometry });
       assert.deepEqual(geometry.clipped, [], 'Controls and legend must stay within the viewport');
       assert(geometry.screenWidth <= geometry.screenClientWidth + 1, 'No horizontal player overflow');
-      if (viewport.width >= 1280) assert(geometry.bandBottom <= geometry.footerTop,
+      if (viewport.width >= 1280 && !process.argv.includes('--all-muted')) assert(geometry.bandBottom <= Math.min(geometry.footerTop,viewport.height),
         'Desktop must show the map, controls, legend and five complete musicians together: ' + JSON.stringify(geometry));
     }
     assert.deepEqual(errors, []);

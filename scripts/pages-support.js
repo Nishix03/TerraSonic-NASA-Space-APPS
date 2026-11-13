@@ -63,8 +63,10 @@
         node.removeAttribute(name);
         updates.push(scope => { node[name] = direct(value, scope) ?? null; });
       } else if (name === "disabled" || name === "hidden" || name === "checked" || name === "open") {
+        node.removeAttribute(name);
         updates.push(scope => { const on = !!direct(value, scope); node.toggleAttribute(name, on); if (name === "checked") node.checked = on; });
       } else if (name === "value" && ["select", "input", "textarea"].includes(tag) && node.type !== "file") {
+        node.removeAttribute(name);
         updates.push(scope => { const selected = interpolate(value, scope); if (node.value !== selected) node.value = selected; });
       } else {
         updates.push(scope => {

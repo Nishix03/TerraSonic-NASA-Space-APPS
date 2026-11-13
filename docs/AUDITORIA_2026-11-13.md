@@ -47,7 +47,7 @@ El pulido de las 04:00 añadió un menú de preferencias con columnas sensibles 
 
 La cabecera usa una [consulta de contenedor relativa a su fuente](https://www.w3.org/TR/css-contain-3/) para responder también al texto ampliado, y conserva la redistribución anterior como respaldo. Evidencia de este pulido: `_work/a11y/preferences-final/`, `_work/home/compact-small/`, `_work/a11y/reflow-header/`. Scripts: `verify_preferences_layout.cjs` y `verify_home.cjs`.
 
-La suite de producto actual suma 136 pruebas. Los recuentos de las pasadas de accesibilidad siguientes corresponden al código con fuentes locales y cabecera corregida; no constituyen una prueba de cada cambio posterior. El build parte de `prototipos/I11-eic/Main.dc.html`.
+La suite de producto actual suma 139 pruebas. Los recuentos de las pasadas de accesibilidad siguientes corresponden al código con fuentes locales y cabecera corregida; no constituyen una prueba de cada cambio posterior. El build parte de `prototipos/I11-eic/Main.dc.html`.
 
 ```powershell
 python scripts/build_pages.py _site
@@ -73,6 +73,30 @@ La inspección visual posterior encontró un problema que no era desbordamiento:
 El historial necesitó una corrección adicional: WebKit no incluía su lista desplazable en Tab. Ahora tiene foco explícito solo cuando hay eventos y permite usar `Fin` para recorrerlos. Las diferencias entre `Control+Fin` y `Fin` se diagnosticaron como comportamiento nativo de los motores de prueba, sin interceptar esas teclas en la aplicación. El control final se comprueba contra el viewport visible además del contenedor, porque en móvil la página puede desplazar el documento completo.
 
 La pasada ampliada de axe añade el reproductor con todos esos paneles abiertos y 200 eventos: **90 estados y cero infracciones detectadas en cada uno de Chromium, Firefox y WebKit**. Los 36 recorridos de redistribución desplegada pasan también en cada motor. Evidencia nueva: `_work/a11y/expanded-{chromium,firefox,webkit}/` y `_work/layout/expanded-with-history-{chromium,firefox,webkit}/`. La lista larga es sintética y las pruebas de audio se mantienen separadas. Se conservan los casos incompletos de axe y todos los límites de revisión humana/nativa anteriores.
+
+La ampliación posterior incluye ambos motores musicales: **72 combinaciones de paneles pasan en cada navegador**, con acordes visibles solo en Melodía y explicaciones de niveles derivados en Datos. Chromium y WebKit se reejecutaron secuencialmente tras presión de memoria; las pasadas interrumpidas no cuentan. Evidencias: `_work/qa/content-chromium-sequential/`, `content-firefox/` y `content-webkit-sequential/`. También pasan allí Método y el ciclo de página. La URL pública del checkpoint `f4ba00a` tiene un recorrido ampliado propio, documentado en [PUBLICACION.md](PUBLICACION.md).
+
+## Reproductor en la ventana original
+
+La revisión específica de 1342×605 encontró un fallo que la comprobación anterior no detectaba: comparaba el final de la banda con el pie, aunque ambos estuvieran fuera de la ventana. Ahora se comprueba también la altura visible. Antes, la banda acababa en 659,45 px. La distribución nueva reduce el espacio del encabezado, organiza leyenda y transporte, y conserva completos los cinco músicos y controles principales. En Chromium y Firefox el borde inferior queda aproximadamente en 597 px. El botón «Silenciar» mantiene la palabra entera y los controles conservan al menos 44 px de altura.
+
+`verify_compact_player.cjs` comprueba 48 casos: 1342×605 y 1366×600 × texto normal/doble/espaciado × ES/EN × EIC/GIBS × Melodía/Datos. Con texto normal exige mapa/banda y controles dentro de la ventana; con texto ampliado permite crecer verticalmente y comprueba la anchura. El orden DOM de saltos, repetir, volumen y velocidad sigue el orden visual; el recorrido de teclado añade 1342×605 y suma ocho trayectos. Las consultas de contenedor relativas al texto evitan imponer el diseño compacto a texto de 32 px. Paneles abiertos y estados que necesitan más explicación conservan desplazamiento vertical. No se intenta meter todo el contenido de todas las secciones en una pantalla.
+
+Evidencia del ajuste: `_work/qa/compact-chromium/`, `compact-keyboard/` y `compact-firefox/`. Son viewports CSS y eventos de teclado de motores Windows; permanecen los límites de zoom nativo y equipos físicos.
+
+Una segunda inspección de interacción encontró que fijar la fila del botón de voz lo adelantaba visualmente cuando aparecía la explicación del color seleccionado. Se dejó que ambos controles ocupen la fila siguiente en su orden natural. La regresión compacta añade 80 estados: los cuatro colores y el aviso de silencio total en cada combinación de texto normal. Comprueba orden visual/teclado, ausencia de superposición y acceso al último músico desplazando. Evidencia antes/corrección: `_work/player/legend-order-before-2/` y `compact-interactions-chromium/`. No se exige ocultar mensajes ni comprimir texto para que todos esos estados ocupen siempre una sola pantalla.
+
+La pasada con atributos corregidos ya pasó en WebKit: portada, 48 estados iniciales, 544 pantallas de redistribución, 72 estados desplegados, preferencias, conversión y Brisa. Chromium también completó de nuevo 90 estados axe sin infracciones, ocho trayectos de teclado, conversión, Brisa y audio/pausa. Evidencias en `_work/qa/conformance-{chromium,webkit}/`; los 80 estados de interacción tienen su pasada separada.
+
+## Validación del HTML renderizado
+
+Se descargó el [Nu HTML Checker oficial](https://github.com/validator/validator) `26.11.9 (0f0f1f9)`, asset 726509742, y se contrastó su SHA-256 con el publicado por GitHub. Se ejecuta localmente con Java 24 y un heap máximo de 256 MiB; no se envió el producto a un servicio de validación. Su comprobación del HTML estático no basta para revisar una aplicación cuyas plantillas se resuelven en el navegador.
+
+`export_html_states.cjs` exporta 45 estados resueltos ES/EN: bienvenida, secciones, dos catálogos/modos, detalles abiertos, muestra y diálogo. La revisión detectó atributos booleanos que conservaban el texto de plantilla cuando estaban activos, atributos `value` impropios en `select` y dos nombres ARIA sobre elementos genéricos. Se corrigió la compilación de atributos; el contador de pantallas ahora ofrece texto accesible explícito y la progresión tiene un grupo con nombre. Las 45 copias ya no contienen atributos sin resolver.
+
+La pasada con estilos conserva **315 mensajes CSS** relativos a consultas de contenedor y la unidad `cqw`, que esta versión del comprobador no reconoce. Esas funciones se documentan en [CSS Containment Level 3](https://www.w3.org/TR/css-contain-3/), un borrador del grupo CSS, y se comprueban en los tres motores de prueba; eso no acredita conformidad CSS universal. Por separado, las 45 copias `structure-only` eliminan estilos únicamente de las copias diagnósticas y pasan con **cero mensajes HTML**. No se borran ni filtran los errores del informe completo. Scripts, plantillas inertes y Shadow DOM no forman parte de estas copias y tienen pruebas funcionales separadas.
+
+Evidencia: `_work/nu-validator/provenance.json`, `rendered-before.json`, `rendered-after.json`, `structure-final.json` y `_work/html/resolved-final/`. Se usa `--skip-non-html` para no interpretar el JSON de resultados como HTML. El informe estático conserva además un aviso de detección de idioma basado en texto de código; el idioma visible real se comprueba en los recorridos bilingües.
 
 ## Proyectos similares revisados
 

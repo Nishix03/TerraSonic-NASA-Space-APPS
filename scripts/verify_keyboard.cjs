@@ -6,8 +6,8 @@ async function main(){
  const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const report={checks:[],focus:[],errors:[],fixture:'Native Chromium keyboard events and AX tree, test-only final audio silenced; no screen reader or human listening'};
  try{
-  for(const width of [320,390,1366])for(const language of ['es','en']){
-   const context=await browser.newContext({viewport:{width,height:width===320?256:width===390?844:768},reducedMotion:'reduce'});
+  for(const width of [320,390,1342,1366])for(const language of ['es','en']){
+   const context=await browser.newContext({viewport:{width,height:width===320?256:width===390?844:width===1342?605:768},reducedMotion:'reduce'});
    await context.route('**/*',async route=>{if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
    await context.addInitScript(language=>{
     localStorage.setItem('ts_lang',language);localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));
