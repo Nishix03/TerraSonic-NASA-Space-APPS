@@ -24,12 +24,17 @@ async function main() {
     });
     await context.addInitScript(options => {
       if (options.savedLang && !localStorage.getItem('ts_lang')) localStorage.setItem('ts_lang', options.savedLang);
-      if (options.configured && !localStorage.getItem('ts_prefs')) localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
+      if (options.configured && !localStorage.getItem('ts_prefs')) localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{voice:options.automatic??false}}));
       Object.defineProperty(window, 'DCLogic', { configurable: true, set(value) {
         Object.defineProperty(window, 'DCLogic', { value, writable: true, configurable: true });
         const original = value.prototype.setState;
         value.prototype.setState = function(...args) { window.__app = this; return original.apply(this, args); };
       } });
+      if (options.stubSpeech) window.Audio=undefined;
+      if (options.muteNarration) {
+        const NativeAudio=window.Audio;
+        window.Audio=function (src) { const audio=new NativeAudio(src);audio.muted=true;return audio; };
+      }
       if (options.noSpeech) {
         Object.defineProperty(window,'speechSynthesis',{value:undefined,configurable:true});
         Object.defineProperty(window,'SpeechSynthesisUtterance',{value:undefined,configurable:true});
@@ -148,7 +153,7 @@ async function main() {
     assert.match(await page.locator('.bportrait-live').getAttribute('src'),/inti\/pose-banda\.webp$/);
     report.journeys.push('The reduced-motion preference leaves the original 2D pose visible');
     await context.close();
-    for (const options of [{noAudio:true,noSpeech:true},{stubSpeech:true,emptyVoices:true}]) {
+    for (const options of [{noAudio:true,noSpeech:true,muteNarration:true},{stubSpeech:true,emptyVoices:true}]) {
       const {context,page}=await create({configured:true,...options});
       await page.locator('#tour-guide').click();
       if (options.emptyVoices) {
@@ -167,6 +172,29 @@ async function main() {
       report.journeys.push(options.emptyVoices?'Empty voice list keeps written help':'Tutorial has a written fallback without Web Audio or speech APIs');
       await context.close();
     }
+    const automatic = await create({configured:true,automatic:true,noSpeech:true,muteNarration:true});
+    const speaking = automatic.page;
+    const nav = speaking.locator('#tour-nav button');
+    for(const [index,section] of [[0,'juke'],[1,'band'],[2,'how'],[3,'tech']]){
+      await nav.nth(index).click();
+      await speaking.waitForFunction(section=>__app.brisaAudio?.src.endsWith('/es-'+section+'-1.mp3')&&__app.brisaAudio.currentTime>0,section);
+      assert(await speaking.locator('.section-voice').getByText('Detener voz',{exact:true}).isVisible());
+    }
+    await speaking.locator('#tour-lang button').nth(1).click();
+    await speaking.waitForFunction(()=>__app.brisaAudio?.src.endsWith('/en-tech-1.mp3')&&__app.brisaAudio.currentTime>0);
+    await speaking.locator('#tour-a11y summary').click();
+    await speaking.getByRole('button',{name:'Voice mode',exact:true}).click();
+    assert.equal(await speaking.evaluate(()=>__app.state.speaking),false);
+    await speaking.keyboard.press('Escape');
+    await nav.nth(1).click();
+    assert.equal(await speaking.evaluate(()=>__app.state.speaking),false);
+    await speaking.getByRole('button',{name:'Listen to voice',exact:true}).click();
+    await speaking.waitForFunction(()=>__app.brisaAudio?.currentTime>0);
+    await speaking.getByRole('button',{name:'Stop voice',exact:true}).click();
+    await speaking.reload();
+    assert.equal(await speaking.evaluate(()=>JSON.parse(localStorage.getItem('ts_prefs')).values.voice),false);
+    await automatic.context.close();
+    report.journeys.push('Bundled Brisa narration plays in Spanish and English without system voices, and respects stop and opt-out');
     assert.deepEqual(report.errors,[]);
     report.journeys.forEach(check=>console.log('PASS',check));
   } finally { fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2)); await browser.close(); }

@@ -24,7 +24,7 @@ async function main() {
     });
     await context.addInitScript(() => {
       localStorage.setItem('ts_lang', 'es');
-      localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
+      localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{voice:false}}));
       Object.defineProperty(window, 'DCLogic', { configurable: true, set(value) {
         Object.defineProperty(window, 'DCLogic', { value, writable: true, configurable: true });
         const original = value.prototype.setState;
@@ -72,9 +72,8 @@ async function main() {
       await page.evaluate(() => { __app.setState({ mute: __app.allMute(false), leadOverride: 'mama' }); });
       for (const mode of ['melody', 'raw']) {
         await page.locator('.player-modes button').nth(mode === 'melody' ? 0 : 1).click();
-        await page.locator('#tour-more button').click();
-        assert.match(await page.locator('#more-dialog').textContent(),mode==='melody'?/Tonalidad|escala/i:/Niveles convertidos en tonos/i);
-        await page.keyboard.press('Escape');
+        assert.equal(await page.locator('.player-detail .chips').count(),mode==='melody'?1:0);
+        assert.equal(await page.locator('.band-stage .stage-musician').count(),5);
         const slider = page.locator('#playback-position');
         await slider.focus(); await slider.press('Home'); await slider.press('ArrowRight');
         assert.equal(await page.evaluate(() => __app.playerPosition()), 1);
@@ -97,10 +96,8 @@ async function main() {
         assert.deepEqual(await page.evaluate(() => [__app.state.frame, __app.state.col, __app.state.playing]), [1, 6, false]);
         assert.equal(await slider.inputValue(), '35');
         const date = await page.locator('.when b').textContent();
-        await page.locator('.event-history summary').click();
-        await page.locator('.event-history li').first().waitFor();
-        assert(await page.locator('.event-history li').count() > 0);
-        await page.locator('.event-history summary').click();
+        assert(await page.evaluate(() => __app.state.events.length > 0));
+        assert.equal(await page.locator('.event-history, #tour-more, .current-event').count(),0);
         assert.equal(await page.locator('.map-legend .legend-choice').count(),3);
         assert.equal(await page.locator('#tour-machine .heard > div').count(),448);
         assert.equal(await page.getByRole('button',{name:'Escenario',exact:true}).count(),0);
@@ -124,11 +121,13 @@ async function main() {
       await page.waitForFunction(() => __app.state.col === 1 && __audioPeak() > .00001);
       const mama = page.locator('.listen-member').nth(2);
       await mama.click();
+      assert.equal(await page.locator('.band-stage .stage-musician').count(),0);
       await page.waitForTimeout(150);
       assert.equal(await page.evaluate(() => __app.state.playing), true);
       assert((await page.evaluate(() => __audioPeak())) < .00001, 'Individual mute also cuts reverb');
       assert.equal(await page.evaluate(() => !!__app.voiceGroups.mama), false);
       await mama.click();
+      assert.equal(await page.locator('.band-stage .stage-musician').count(),1);
       await page.waitForTimeout(30);
       assert((await page.evaluate(() => __audioPeak())) < .00001, 'Unmuting must not revive an earlier tail');
       await page.locator('#tour-play button').click();

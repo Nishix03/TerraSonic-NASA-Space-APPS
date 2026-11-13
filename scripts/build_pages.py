@@ -1,4 +1,4 @@
-"""Package the interactive TerraSonic prototype for GitHub Pages."""
+"""Package the interactive EarthBeat prototype for GitHub Pages."""
 
 from hashlib import sha256
 import json
@@ -52,7 +52,7 @@ def build(destination: Path) -> None:
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
-    for folder in ("fotogramas", "fotogramas-anteriores"):
+    for folder in ("fotogramas", "fotogramas-anteriores", "brisa"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     for musician in sorted(musicians):
         for filename in ("miniatura-banda.webp", "pose-banda.webp", "pose-banda-animada.webp"):

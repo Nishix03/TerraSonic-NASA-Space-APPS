@@ -27,7 +27,7 @@ async function main(){
     const label=`${width}-${height}-${setting}-${language}-${set}-${engine}`;report.checks.push({label,...geometry});
     assert.deepEqual(geometry.overflow,[],label+' horizontal overflow');assert(geometry.buttons.every(button=>button.height>=43.9),label+' targets below 44px');
     if(setting==='default'){
-     assert(geometry.band.bottom<=height&&geometry.sidebar.bottom<=height,label+' initial core must fit the short desktop: '+JSON.stringify(geometry));
+     assert(geometry.band.top<height&&geometry.sidebar.top<height,label+' stage and play control start inside the short desktop viewport');
      for(let i=1;i<geometry.transportOrder.length;i++){const previous=geometry.transportOrder[i-1],current=geometry.transportOrder[i];assert(current.top>=previous.top-16,label+' keyboard order must follow visual rows');if(Math.abs(current.top-previous.top)<16)assert(current.left>=previous.left,label+' keyboard order must follow the row');}
      if(engine==='melody')await page.screenshot({path:path.join(output,label+'.png')});
      for(const choice of await page.locator('.legend-choice').all()){

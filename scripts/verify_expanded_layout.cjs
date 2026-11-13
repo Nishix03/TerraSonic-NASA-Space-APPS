@@ -1,4 +1,4 @@
-// Disclosures and the explanatory dialog must remain usable after opening them.
+// The enlarged player and its plain-language explanation remain usable at narrow widths.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/layout/expanded'),base='http://terrasonic.test/';
@@ -38,27 +38,16 @@ async function main(){
     await page.waitForFunction(()=>__app.cur()&&!__app.state.trans);
     await page.evaluate(engine=>__app.setEngine(engine),engine);
     await page.evaluate(()=>{const events=Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''));__app.setState({events});});
-    await openDetails(page);await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
+    await page.getByRole('button',{name:language==='es'?'Explícamelo fácil':'Explain it simply',exact:true}).click();
+    await page.locator('#easy-explanation .easy-panel').waitFor();
     await page.waitForFunction(()=>document.querySelectorAll('#tour-machine .heard>div').length===448);
     assert(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>new Set(cells.map(el=>el.style.background)).size>4),'the open grid must contain the current map analysis');
     await page.evaluate(()=>__app.seekPosition(69));
     assert.equal(await page.locator('#tour-machine .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16,'the visible grid keeps exactly the current scan column highlighted');
-    await page.locator('.event-history summary').focus();await page.keyboard.press('Tab');
-    assert(await page.locator('.event-history ol').evaluate(el=>el===document.activeElement),'the scrollable event list must be reachable by Tab');
-    await page.keyboard.press('End');await page.waitForFunction(()=>{const el=document.querySelector('.event-history ol');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
-    const label=`${width}-${height}-${setting}-${language}-${engine}`,player=await audit(page,label+' player'),end=await checkEnd(page);
-    if(setting==='default'&&language==='es'&&[390,1342].includes(width))await page.screenshot({path:path.join(output,label+'-player-end.png')});
-    const snapshot=await page.evaluate(()=>JSON.stringify([__app.state.disc,__app.state.frame,__app.state.col,__app.state.events.length]));
-    await page.locator('#tour-more button').click();await page.locator('#more-dialog').waitFor();const dialog=await audit(page,label+' dialog','#more-dialog');
-    const size=await page.locator('#more-dialog').evaluate(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el),col=el.querySelector('.col').getBoundingClientRect();return {width:r.width,left:r.left,right:r.right,top:r.top,bottom:r.bottom,bodyWidth:col.width,innerWidth:r.width-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-2,decisions:el.querySelectorAll('.why').length};});
-    assert.equal(size.decisions,4);assert(size.bodyWidth>=size.innerWidth-2,'dialog body must use its available width');assert(size.left>=0&&size.right<=width+1&&size.top>=0&&size.bottom<=height+1,JSON.stringify(size));
-    if(language==='es'&&[320,1342].includes(width))await page.screenshot({path:path.join(output,label+'-dialog.png')});
-    await page.locator('#more-close').focus();await page.keyboard.press('End');
-    await page.waitForFunction(()=>{const el=document.getElementById('more-dialog');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
-    const readingEnd=await page.locator('#more-dialog .why').last().evaluate(el=>{const r=el.getBoundingClientRect(),dialog=el.closest('[role="dialog"]').getBoundingClientRect();return {bottom:r.bottom,dialogBottom:dialog.bottom};});assert(readingEnd.bottom<=readingEnd.dialogBottom+1,'the explanation can be read to the end with the keyboard');
-    await page.keyboard.press('Escape');assert.equal(await page.locator('#more-dialog').count(),0);assert.equal(await page.evaluate(()=>JSON.stringify([__app.state.disc,__app.state.frame,__app.state.col,__app.state.events.length])),snapshot);assert.equal(await page.locator('#tour-more button').evaluate(el=>el===document.activeElement),true);
+    const label=[width,height,setting,language,engine].join('-');
+    const player=await audit(page,label+' player'),end=await checkEnd(page);
     await page.evaluate(()=>__app.goTab('how',1));await page.waitForFunction(()=>!__app.state.trans);await openDetails(page);const convert=await audit(page,label+' convert'),convertEnd=await checkEnd(page);
-    report.checks.push({width,height,setting,language,engine,player,end,dialog,size,readingEnd,convert,convertEnd});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
+    report.checks.push({width,height,setting,language,engine,player,end,convert,convertEnd});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
    }
   }
   assert.deepEqual(report.errors,[]);await context.close();console.log('PASS expanded layouts',report.checks.length,'viewport/settings/language combinations');

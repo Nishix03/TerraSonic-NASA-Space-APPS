@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Terrasonic · Earth Jukebox</title>
+<title>EarthBeat · Earth Jukebox</title>
 <style>html,body{margin:0;background:#171e2b;color:#eff3f8}</style>
 <script src="./support.js"></script>
 </head>
@@ -1014,7 +1014,7 @@ a{color:inherit}
 .px .nav-short{display:none}
 .px .nav button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
 .px .top .wrap{max-width:1560px;padding-inline:max(var(--gutter),env(safe-area-inset-left,0px)) max(var(--gutter),env(safe-area-inset-right,0px))}
-.px .top{container:terrasonic-header / inline-size}
+.px .top{container:EarthBeat-header / inline-size}
 .px .top .brand{min-height:44px;min-width:0}
 .px .top .brandmark{flex-shrink:0}
 .px .top .nav button{flex:0 1 auto;min-width:0;white-space:normal;text-wrap:balance}
@@ -1068,7 +1068,7 @@ a{color:inherit}
   .px .top .nav button{padding-inline:3px;font-size:max(.6em,.6875rem);letter-spacing:0}
 }
 /* Font-relative space also responds to enlarged text without splitting the name. */
-@container terrasonic-header (max-width:18em){
+@container EarthBeat-header (max-width:18em){
   .px .top .wrap,.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto}
   .px .top .brand,.px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1/-1}
   .px .top .wordmark{white-space:nowrap;overflow-wrap:normal}
@@ -1447,11 +1447,83 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .bsel img{object-fit:contain;flex-shrink:0}
 .px .credit-sources{margin-top:10px;overflow-wrap:anywhere}
 .px .credit-sources summary{cursor:pointer;min-height:44px;align-content:center}
+
+.px.app[data-theme="dark"][data-contrast="false"]{background:#070b14}
+.px .skyfix .stl{opacity:.39}
+.px .skyfix .n1{top:-30vw;left:-24vw}
+.px .skyfix .n2{right:-23vw;bottom:-30vw}
+.px .skyfix .limb{bottom:-65vh;height:81vh;background:linear-gradient(145deg,#10132c,#0b2b42);box-shadow:0 -1px 0 #7996d74d}
+.px.app[data-theme="light"] .skyfix{opacity:.2}
+.px.app[data-theme="light"] .skyfix .limb{background:linear-gradient(145deg,#d8d9f8,#a9dbe9)}
+.px.app[data-contrast="true"] .skyfix{display:none}
+.px .disc-source-switch{display:inline-grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:100%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.px .disc-source-switch .btn{display:grid;justify-items:center;gap:1px;min-height:48px;padding:5px 16px;border:0;border-radius:0}
+.px .disc-source-switch .btn+.btn{border-inline-start:2px solid var(--line)}
+.px .disc-source-switch .btn[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.px .disc-source-switch .btn:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.px .disc-source-switch small{font-size:.82em;letter-spacing:.04em}
+.px .workspace:has(.uni)>.in{max-width:1480px}
+.px .uni{max-width:none}
+.px .player-layout{grid-template-columns:minmax(0,2.15fr) minmax(0,1fr);grid-template-rows:auto;gap:12px 16px}
+.px .player-visual,.px .listen-band{grid-row:auto}
+.px .player-sidebar{grid-column:auto;grid-row:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.px .player-sidebar .when{flex:1 1 auto}
+.px .player-tools{border:0;padding:0;display:flex;flex-wrap:wrap}
+.px .player-visual .views{grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);align-items:stretch}
+.px .uni .views>.vpanel{grid-template-rows:auto auto 1fr}
+.px .uni .views>.vpanel .vcap{min-height:24px}
+.px #tour-frame .vcap{justify-content:flex-end}
+.px .uni .views .mapbox,.px .uni .views .mbox{height:auto;min-height:0}
+.px .uni .views .mapbox{aspect-ratio:560/350}
+.px .map-legend{grid-template-columns:minmax(0,1fr);gap:5px;margin-top:8px}
+.px .map-legend h2{grid-column:1}
+.px .legend-labels{grid-template-columns:repeat(3,minmax(0,1fr))}
+.px .legend-choice{line-height:1.15;font-size:.7em}
+.px .legend-scale{height:12px}
+.px .listen-band{gap:7px;padding:8px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .band-stage{display:grid;grid-template-rows:minmax(0,1fr) auto;height:clamp(120px,22vh,210px);background-image:linear-gradient(#080c15b8,#080c15f5),var(--stage-map);background-position:center;background-size:cover;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.px .band-stage-musicians{display:flex;justify-content:center;align-items:end;gap:4px;min-height:0;padding:8px 5px 0}
+.px .stage-musician{position:relative;flex:0 1 22%;max-width:110px;height:100%;min-width:0;display:grid;place-items:end center}
+.px .stage-musician img{width:100%;height:100%;min-height:0;object-fit:contain;transform:translateY(calc(var(--intensity) * -5px));filter:drop-shadow(0 0 calc(var(--intensity) * 7px) var(--member-color));transition:transform .16s ease-out}
+.px .stage-musician.playing{background:radial-gradient(ellipse at bottom,color-mix(in srgb,var(--member-color) 26%,transparent),transparent 67%)}
+.px.reduce-motion .stage-musician img{transform:none;transition:none}
+@media(prefers-reduced-motion:reduce){.px .stage-musician img{transform:none;transition:none}}
+.px.app[data-contrast="true"] .band-stage{background-image:none;background:var(--surface)}
+.px .band-stage-beat{display:flex;justify-content:space-between;gap:8px;padding:3px 8px;color:#ffdc71;background:#080c15;font:500 .72em var(--head)}
+.px .listen-members{grid-template-columns:repeat(2,minmax(0,1fr))}
+.px .player-detail{display:grid;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.px .player-detail .transport{border-top:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:center;gap:10px 22px;padding-top:0}
+.px .player-detail .player-modes .engines{flex:0 1 auto}
+.px .player-detail .readout{display:grid;gap:7px;padding:0}
+.px .player-detail .readout p{display:flex;align-items:start;gap:12px}
+.px .player-detail .readout strong{color:var(--accent)}
+.px .player-detail .chips{display:flex;flex-wrap:wrap;gap:5px}
+.px .brisa-badge{object-fit:cover;border-radius:50%;background:#03151c}
+.px .tguide .brisa-badge{width:54px;height:54px;flex-basis:54px;border:1px solid #54dbc8}
+.px .section-voice{min-height:44px;white-space:normal}
+.px .disc-library>.section-voice,.px .binfo>.section-voice{justify-self:start;align-self:start}
+.px .section-voice-status:empty{display:none}
+@media(min-width:1001px) and (max-height:720px){.px .band-stage{height:118px}.px .player-detail .transport-tools{display:flex}}
+@media(max-width:1000px){
+  .px .player-layout{grid-template-columns:minmax(0,1fr)}
+  .px .player-visual,.px .listen-band{grid-column:1}
+  .px .player-detail .transport{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .px .player-detail .transport-position{grid-column:1/-1}
+}
+@media(max-width:620px){
+  .px .player-visual .views,.px .player-detail .transport{grid-template-columns:minmax(0,1fr)}
+  .px .player-visual{display:flex;flex-direction:column}
+  .px .player-visual .player-sidebar{order:-1}
+  .px .player-visual .file-settings{order:-2}
+  .px .player-tools{flex:1 1 100%;justify-content:flex-start}
+  .px .player-tools .btn{width:auto;min-height:44px}
+  .px .band-stage{height:145px}
+}
 </style>
 </helmet>
-<div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
+<div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" data-contrast="{{highContrast}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; font-size: {{th.fs}}">
 
-<div class="skyfix" aria-hidden="true"><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div></div>
+<div class="skyfix" aria-hidden="true"><div class="neb n1"></div><div class="neb n2"></div><div class="limb"></div><div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div></div>
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
 <header class="top {{headerClass}}">
@@ -1459,7 +1531,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="wrap">
 <button type="button" class="brand" onClick="{{goHome}}" aria-label="{{tx.brandAria}}">
 <svg class="brandmark" width="38" height="24" viewBox="0 0 25 16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h8v1h-8zM20 0h1v1h-1zM2 1h3v1h-3zM11 1h3v1h-3zM18 1h6v1h-6zM1 2h2v1h-2zM13 2h2v1h-2zM20 2h2v1h-2zM1 3h1v1h-1zM14 3h1v1h-1zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h2v1h-2zM14 11h2v1h-2zM1 12h1v1h-1zM14 12h1v1h-1zM1 13h2v1h-2zM13 13h2v1h-2zM2 14h3v1h-3zM11 14h3v1h-3zM4 15h8v1h-8z"></path><path d="M19 4h1v1h-1zM3 5h2v1h-2zM9 5h2v1h-2zM18 5h1v1h-1zM21 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM8 6h1v1h-1zM11 6h1v1h-1zM17 6h1v1h-1zM20 6h1v1h-1zM6 7h2v1h-2zM12 7h2v1h-2zM19 7h1v1h-1zM3 9h2v1h-2zM9 9h2v1h-2zM2 10h1v1h-1zM5 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM6 11h2v1h-2zM12 11h2v1h-2z" fill="#FFD447"></path></svg>
-<span class="wordmark">Terrasonic</span>
+<span class="wordmark">EarthBeat</span>
 </button>
 <nav id="tour-nav" class="nav" aria-label="{{tx.sections}}" onKeyDown="{{onNavKey}}">
 <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
@@ -1487,6 +1559,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <main id="main-content" class="viewport" tabindex="-1">
 <div class="scr {{scrCls}} {{scrKind}}">
 <div class="in">
+<p class="section-voice-status small" role="status">{{sectionVoiceNotice}}</p>
 
 <sc-if value="{{nav.topics}}">
 <nav id="tour-topics" class="topics" aria-label="{{tx.screensAria}}">
@@ -1516,7 +1589,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <li class="flow-step"><span class="flow-art flow-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>{{tx.flowMusic}}</strong></li>
 </ol>
 <button id="tour-guide" type="button" class="guidefab" onClick="{{tourOpen}}" aria-expanded="{{tour.on}}" aria-label="{{tx.guideOpen}}" title="{{tx.guideOpen}}">
-<span class="brisa-badge" aria-hidden="true">?</span>
+<img class="brisa-badge" src="./brisa/portrait.webp" alt="">
 </button>
 </div>
 </div>
@@ -1528,16 +1601,19 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <section class="disc-library" aria-labelledby="disc-library-title">
 <div class="pagehead">
 <div><p class="kicker">{{tx.discKicker}}</p><h1 id="disc-library-title" class="display md" tabindex="-1">{{tx.discTitle}}</h1><p class="lede">{{tx.discLede}}</p></div>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 </div>
-<div id="tour-sets" class="disc-sources" role="group" aria-label="{{tx.setsAria}}">
-<span class="tag">{{tx.setsAria}}</span>
-<sc-for list="{{sets}}" as="o" hint-placeholder-count="2"><button type="button" class="btn sm" onClick="{{o.pick}}" aria-pressed="{{o.on}}">{{o.label}} · {{o.years}}</button></sc-for>
+<div id="tour-sets" class="disc-sources">
+<span id="source-label" class="tag">{{tx.setsAria}}</span>
+<div class="disc-source-switch" role="group" aria-labelledby="source-label">
+<sc-for list="{{sets}}" as="o" hint-placeholder-count="2"><button type="button" class="btn sm" onClick="{{o.pick}}" aria-pressed="{{o.on}}"><span>{{o.label}}</span><small>{{o.years}}</small></button></sc-for>
+</div>
 </div>
 <div id="tour-discs" class="discgrid" role="group" aria-label="{{tx.discsAria}}">
 <sc-for list="{{discs}}" as="d" hint-placeholder-count="5">
 <button type="button" class="dcard" onClick="{{d.pick}}">
 <span class="dimg"><img decoding="async" fetchpriority="low" src="{{d.thumb}}" alt=""></span>
-<span class="tx"><span class="t">{{d.title}}</span><span class="s">{{d.period}} · {{d.hero}}</span></span>
+<span class="tx"><span class="t">{{d.title}}</span><span class="s">{{d.period}}</span></span>
 <span class="disc-arrow" aria-hidden="true">→</span>
 </button>
 </sc-for>
@@ -1549,6 +1625,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{scr.dUp}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <h1 class="display">{{convert.practiceTitle}}</h1>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 </div>
 <div class="convert-options">
 <section class="convert-card practice-example">
@@ -1592,26 +1669,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <div class="player-layout">
-<aside class="player-sidebar" aria-label="{{player.controlsLabel}}">
-<div class="controls">
-<div id="tour-play" class="playwrap">
-<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
-</div>
-<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
-</div>
-<section class="transport" aria-label="{{player.controlsLabel}}">
-<div class="transport-position">
-<label for="playback-position">{{player.positionLabel}}</label>
-<output for="playback-position" class="mono">{{player.elapsed}} <span aria-hidden="true">/</span><span class="sr">{{player.of}}</span> {{player.duration}}</output>
-<input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
-</div>
-<div class="transport-tools">
-<div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
-<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
-</div>
-<div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="sr">{{engineDesc}}</p></div>
-</section>
-</aside>
 <div class="player-visual">
 <sc-if value="{{showFileSettings}}">
 <div class="file-settings">
@@ -1620,19 +1677,9 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 </sc-if>
 
-<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<div id="tour-strip">
-<div class="timeline" role="group" aria-label="{{tx.timelineAria}}">
-<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
-<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
-</sc-for>
-</div>
-</div>
-</sc-if>
-
 <div class="views">
 <figure id="tour-frame" class="vpanel">
-<figcaption class="vcap"><span class="tag">{{tx.youSee}}</span><span class="muted">{{mapSource}}</span></figcaption>
+<figcaption class="vcap"><span class="muted">{{mapSource}}</span></figcaption>
 <div class="mapbox">
 <img decoding="async" fetchpriority="high" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
 <div aria-hidden="true" class="scanline" style="left: {{scanLeft}}"></div>
@@ -1648,13 +1695,10 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </figure>
 
 <figure id="tour-machine" class="vpanel">
-<figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
+<figcaption class="vcap"><span class="sr">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
 <div class="mbox" aria-hidden="true">
 <div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
 <div class="scanline" style="left: {{scanLeft}}"></div>
-</div>
-<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.strongWarm}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
-</figure>
 </div>
 <aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
 <h2 id="map-legend-title">{{player.legendTitle}}</h2>
@@ -1666,11 +1710,47 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <button type="button" class="legend-choice" aria-pressed="{{level.on}}" onClick="{{level.choose}}">{{level.label}}</button>
 </sc-for>
 </div>
-<button type="button" class="btn sm legend-voice" onClick="{{player.readLegend}}" disabled="{{speechUnavailable}}">{{player.readLegendLabel}}</button>
+
 <p role="status" class="small muted legend-reading">{{player.speechNotice}}</p>
 </aside>
+</figure>
+</div>
+<div class="controls player-sidebar" aria-label="{{player.controlsLabel}}">
+<div id="tour-play" class="playwrap">
+<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
+</div>
+<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
+<div class="player-tools">
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
+<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{easyLabel}}</button></sc-if>
+<button type="button" class="btn sm quiet" onClick="{{describe}}" disabled="{{speechUnavailable}}">{{describeLabel}}</button>
+</div>
+</div>
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<div id="tour-strip">
+<div class="timeline" role="group" aria-label="{{tx.timelineAria}}">
+<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
+<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
 </div>
 <section class="listen-band" aria-labelledby="listen-band-title">
+<div class="band-stage" style="--stage-map:url('{{frameUrl}}')" aria-hidden="true">
+<div class="band-stage-musicians">
+<sc-for list="{{stageMusicians}}" as="musician">
+<div class="stage-musician {{musician.playingClass}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
+<img src="{{musician.poseUrl}}" alt="">
+</div>
+</sc-for>
+</div>
+<div class="band-stage-beat">
+<span>{{stageChord}}</span>
+<sc-if value="{{stageShowBeat}}"><span>{{stageBeat}}</span></sc-if>
+</div>
+</div>
 <h2 id="listen-band-title">{{tx.theBand}}</h2>
 <sc-if value="{{bandAllMuted}}"><p role="status" class="small muted">{{bandStatus}}</p></sc-if>
 <div class="listen-members" role="group" aria-label="{{tx.bandAria}}">
@@ -1683,11 +1763,19 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 </section>
 </div>
-<div class="player-tools">
-<div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{easyLabel}}</button></sc-if>
-<button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
+<div class="player-detail">
+<section class="transport" aria-label="{{player.controlsLabel}}">
+<div class="transport-position">
+<label for="playback-position">{{player.positionLabel}}</label>
+<output for="playback-position" class="mono">{{player.elapsed}} <span aria-hidden="true">/</span><span class="sr">{{player.of}}</span> {{player.duration}}</output>
+<input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
 </div>
+<div class="transport-tools">
+<div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
+<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
+</div>
+<div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="sr">{{engineDesc}}</p></div>
+</section>
 <div id="easy-explanation">
 <sc-if value="{{easyVisible}}">
 <section class="easy-panel" aria-labelledby="easy-title">
@@ -1697,8 +1785,17 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </section>
 </sc-if>
 </div>
-<p class="current-event small">{{caption}}</p>
-<details class="event-history" open="{{player.eventsOpen}}" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
+<div class="readout">
+<p><strong>{{tx.see}}</strong> <span>{{seeText}}</span></p>
+<sc-if value="{{showHarmony}}">
+<div class="chips" role="group" aria-label="{{tx.chordsAria}}">
+<sc-for list="{{progItems}}" as="chord">
+<span class="chip" style="color:{{chord.fg}};background:{{chord.bg}};border-color:{{chord.border}}">{{chord.label}}</span>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
 <p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
 </div>
 </sc-if>
@@ -1769,6 +1866,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </figcaption>
 </figure>
 <div id="tour-binfo" class="binfo">
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <p role="status" class="small">{{bandCur.previewStatus}}</p>
 <sc-if value="{{bandCur.previewMuted}}"><button type="button" class="btn sm" onClick="{{bandCur.previewUnmute}}">{{bandCur.previewUnmuteLabel}}</button></sc-if>
@@ -1784,6 +1882,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{scr.hA}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <h1 class="display">{{tx.howTitle1}}</h1>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 <p class="lede">{{tx.howLede1}}</p>
 </div>
 <ol id="tour-steps" class="cards4">
@@ -1797,6 +1896,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{scr.tPage}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{techCur.title}}</h1></div>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 </div>
 <div id="tour-techcards" class="tech-list">
 <sc-for list="{{techCur.items}}" as="t" hint-placeholder-count="6">
@@ -1811,6 +1911,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{scr.tCred}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{tx.credTitle}}</h1></div>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
 </div>
 <div class="credits-layout">
 <section class="credit-section" aria-labelledby="credit-science-title">
@@ -1865,26 +1966,15 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-if>
 
 <button id="tour-guide" type="button" class="guidefab" onClick="{{tourOpen}}" aria-expanded="{{tour.on}}" aria-label="{{tx.guideOpen}}" title="{{tx.guideOpen}}">
-<span class="brisa-badge" aria-hidden="true">?</span><span class="glabel">{{tx.guide}}</span>
+<img class="brisa-badge" src="./brisa/portrait.webp" alt=""><span class="glabel">{{tx.guide}}</span>
 </button>
-</div>
-</sc-if>
-
-<sc-if value="{{moreOpen}}" hint-placeholder-val="{{ false }}">
-<div class="mdim" onClick="{{closeMore}}" aria-hidden="true"></div>
-<div id="more-dialog" class="modal" role="dialog" aria-modal="true" aria-labelledby="more-t" tabindex="-1">
-<div class="mhead"><h2 id="more-t" class="display md">{{tx.moreOptions}}</h2><button id="more-close" type="button" class="btn sm" onClick="{{closeMore}}">{{tx.close}}</button></div>
-<div class="col">
-<span class="tag">{{tx.fourDecisions}}</span>
-<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div class="why"><strong>{{w.title}}</strong><span class="muted small">{{w.body}}</span></div></sc-for>
-</div>
 </div>
 </sc-if>
 
 <sc-if value="{{preferences.on}}">
 <div class="preferences-dim" aria-hidden="true"></div>
 <section id="preferences-dialog" class="preferences-dialog" role="dialog" aria-modal="true" aria-labelledby="preferences-title" aria-describedby="preferences-body" tabindex="-1">
-<p class="kicker">TerraSonic · Brisa</p>
+<p class="kicker">EarthBeat · Brisa</p>
 <h2 id="preferences-title">{{preferences.title}}</h2><p id="preferences-body">{{preferences.body}}</p>
 <div class="preferences-choices"><sc-for list="{{preferences.choices}}" as="p"><label for="{{p.id}}"><input id="{{p.id}}" type="checkbox" checked="{{p.on}}" onChange="{{p.change}}"><span><strong>{{p.label}}</strong><span class="small muted">{{p.hint}}</span></span></label></sc-for></div>
 <div class="row" role="group" aria-label="{{tx.langAria}}"><sc-for list="{{langs}}" as="l"><button type="button" class="btn sm" aria-pressed="{{l.on}}" onClick="{{l.pick}}" lang="{{l.code}}">{{l.short}}</button></sc-for></div>
@@ -1901,9 +1991,9 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{tour.spot}}" hint-placeholder-val="{{ false }}"><div class="tourspot" aria-hidden="true" style="{{tour.spotSt}}"></div></sc-if>
 <div id="tour-card" class="tour {{tour.place}} {{tour.compact}}" role="dialog" aria-modal="false" aria-labelledby="tour-t" aria-describedby="tour-b" style="{{tour.cardSt}}">
 <div class="tguide">
-<span class="brisa-badge" aria-hidden="true">?</span>
+<img class="brisa-badge" src="./brisa/portrait.webp" alt="">
 <div class="tmeta"><span class="tn">{{tour.who}}</span><span class="tn dim">{{tour.count}}</span></div>
-<button type="button" class="tsay" onClick="{{tour.say}}" disabled="{{speechUnavailable}}" aria-label="{{tour.voiceLabel}}" title="{{tour.voiceLabel}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg></button>
+<button type="button" class="tsay" onClick="{{tour.say}}" disabled="{{brisaUnavailable}}" aria-label="{{tour.voiceLabel}}" title="{{tour.voiceLabel}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg></button>
 <button type="button" class="tsay" onClick="{{tour.close}}" aria-label="{{tx.guideClose}}" title="{{tx.guideClose}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg></button>
 </div>
 <div class="tbubble" tabindex="0" role="region" aria-labelledby="tour-t">
@@ -1984,10 +2074,10 @@ var GUIDES = {
     {
       "id": "tour-cta",
       "t": "Hola, soy Brisa",
-      "b": "Te ayudo a explorar TerraSonic. Puedes leer esta ayuda, escucharla si quieres o cerrarla en cualquier momento.",
+      "b": "Te ayudo a explorar EarthBeat. Puedes leer esta ayuda, escucharla si quieres o cerrarla en cualquier momento.",
       "en": {
         "t": "Hi, I’m Brisa",
-        "b": "I help you explore TerraSonic. Read this help, listen if you want, or close it at any time."
+        "b": "I help you explore EarthBeat. Read this help, listen if you want, or close it at any time."
       }
     },
     {
@@ -2118,10 +2208,10 @@ var GUIDES = {
     {
       "id": "tour-drop",
       "t": "Elige tu imagen",
-      "b": "Elige o arrastra una imagen. TerraSonic muestra cómo se convierte en música.",
+      "b": "Elige o arrastra una imagen. EarthBeat muestra cómo se convierte en música.",
       "en": {
         "t": "Choose your image",
-        "b": "Choose or drop an image. TerraSonic shows how it becomes music."
+        "b": "Choose or drop an image. EarthBeat shows how it becomes music."
       }
     }
   ],
@@ -2169,10 +2259,10 @@ var GUIDES = {
     {
       "id": "credit-science-title",
       "t": "Fuentes NASA",
-      "b": "Estos enlaces identifican los productos y datos utilizados. TerraSonic es un proyecto independiente.",
+      "b": "Estos enlaces identifican los productos y datos utilizados. EarthBeat es un proyecto independiente.",
       "en": {
         "t": "NASA sources",
-        "b": "These links identify the products and data used. TerraSonic is an independent project."
+        "b": "These links identify the products and data used. EarthBeat is an independent project."
       }
     },
     {
@@ -2198,10 +2288,10 @@ var GUIDES = {
     {
       "id": "tour-discs",
       "t": "1. Elige un disco",
-      "b": "Pulsa una portada de la colección NASA. Se abrirá su primera fecha; todavía no empezará la música. Puedes saltar o cerrar este tutorial.",
+      "b": "Hola, soy Brisa. Te acompañaré a explorar el mapa y escuchar la Tierra en música. Pulsa la portada de un disco para empezar.",
       "en": {
         "t": "1. Pick a disc",
-        "b": "Select a NASA collection cover. Its first date opens; music will not start yet. You can skip or close this tutorial."
+        "b": "Hi, I’m Brisa. I’ll guide you as you explore the map and listen to Earth through music. Select a disc cover to start."
       },
       "sub": 0,
       "action": "disc"
@@ -2209,10 +2299,10 @@ var GUIDES = {
     {
       "id": "tour-play",
       "t": "2. Pulsa Reproducir",
-      "b": "Inicia el reproductor. Puedes seguir el mapa, la fecha y los eventos escritos sin depender de oír. La pausa conserva tu posición.",
+      "b": "Pulsa Reproducir y sigue el mapa y su fecha. Puedes activar o silenciar a los músicos. Al pausar conservas tu posición.",
       "en": {
         "t": "2. Press Play",
-        "b": "Start the player. Follow the map, date and written events without relying on hearing. Pause keeps your position."
+        "b": "Press Play and follow the map and its date. You can switch musicians on or off. Pausing keeps your position."
       },
       "sub": 1,
       "action": "play"
@@ -2230,6 +2320,9 @@ var GUIDES = {
     }
   ]
 };
+Object.keys(GUIDES).forEach(function (section) {
+  GUIDES[section].forEach(function (step, index) { step.audio = section + '-' + (index + 1); });
+});
 var DISC_CHAR = ['mama', 'inti', 'silbo', 'yaku', 'illapa'];
 var MES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var MES_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -2547,14 +2640,14 @@ var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', how: 'How does 
 /* Textos fijos de la interfaz */
 var TX = {
   es: {
-    brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad', skipContent: 'Saltar al contenido',
+    brandAria: 'EarthBeat, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad', skipContent: 'Saltar al contenido',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
     heroLede: 'El agua cantaba en el antiguo Perú. Hoy la banda convierte mapas de la NASA en música.',
     heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
     homeMapAlt: 'Mapa del Pacífico con franjas de temperatura del mar más cálidas y más frías de lo habitual',
     homeMapCaption: 'Pacífico · Anomalías de temperatura del mar · NASA',
     flowAria: 'Del mapa NASA al análisis de píxeles y a la música', flowImage: 'Imagen NASA', flowPixels: 'Análisis · 28×16', flowMusic: 'Música',
-    discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Abre un disco para escuchar seis meses de cambios en la temperatura del Pacífico.',
+    discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Abre un disco para ver los cambios en la temperatura del Pacífico.',
     setsAria: 'Origen de los datos', discsAria: 'Discos',
     listenKicker: 'Escuchar · paso 2', changeDisc: 'Cambiar disco', changeFile: 'Cambiar archivo',
     youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: '28×16 píxeles de color',
@@ -2563,10 +2656,10 @@ var TX = {
     theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Propuesta artística del proyecto. Las referencias culturales y las historias se documentan por separado.',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
-    teamCharacter: 'Personaje de ficción del equipo', storyTitle: 'Historia', howItPlays: 'Cómo suena en TerraSonic', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Propuesta visual', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
+    teamCharacter: 'Personaje de ficción del equipo', storyTitle: 'Historia', howItPlays: 'Cómo suena en EarthBeat', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Propuesta visual', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
     sample: 'Probar con la lluvia de Chiclayo', dataListenKicker: 'Prueba práctica',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
-    howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'TerraSonic convierte los colores del Pacífico en música dentro de tu navegador.',
+    howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'EarthBeat convierte los colores del Pacífico en música dentro de tu navegador.',
     methodSourcesTitle: 'Consultar las fuentes', originalPalette: 'Paleta original', monthlyData: 'Datos mensuales', impactCatalog: 'Catálogo de impactos v1',
     techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', techNote: 'Detalle técnico', techEmpty: 'No hay herramientas con este filtro en la categoría. Elige «Todo» para verlas.', module: 'Módulo', credTitle: 'Datos, créditos y uso de IA', credData: 'Datos',
     credDataP1: 'Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA’s Scientific Visualization Studio.',
@@ -2582,14 +2675,14 @@ var TX = {
     guide: 'Guía', guideOpen: 'Abrir ayuda de Brisa', guideClose: 'Cerrar guía y continuar después', guideListen: 'Escuchar a Brisa', skipGuide: 'Saltar guía', guideBy: 'Brisa · tu guía'
   },
   en: {
-    brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options', skipContent: 'Skip to content',
+    brandAria: 'EarthBeat, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options', skipContent: 'Skip to content',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
     heroLede: 'Water sang in ancient Peru. Today the band turns NASA maps into music.',
     heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
     homeMapAlt: 'Pacific map showing bands of warmer and cooler than usual sea temperatures',
     homeMapCaption: 'Pacific Ocean · Sea surface temperature anomalies · NASA',
     flowAria: 'From NASA imagery to pixel analysis and music', flowImage: 'NASA image', flowPixels: 'Analysis · 28×16', flowMusic: 'Music',
-    discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Open a disc to hear six months of temperature changes in the Pacific.',
+    discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Open a disc to see how Pacific temperatures change.',
     setsAria: 'Data source', discsAria: 'Discs',
     listenKicker: 'Listen · step 2', changeDisc: 'Change disc', changeFile: 'Change file',
     youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: '28×16 colored pixels',
@@ -2598,10 +2691,10 @@ var TX = {
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic proposal for the project. Cultural references and stories are documented separately.',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
-    teamCharacter: 'Fictional character by the team', storyTitle: 'Story', howItPlays: 'How it sounds in TerraSonic', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Visual proposal', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
+    teamCharacter: 'Fictional character by the team', storyTitle: 'Story', howItPlays: 'How it sounds in EarthBeat', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Visual proposal', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
     sample: 'Try Chiclayo rainfall', dataListenKicker: 'Try it',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
-    howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'TerraSonic turns the colors of the Pacific into music in your browser.',
+    howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'EarthBeat turns the colors of the Pacific into music in your browser.',
     methodSourcesTitle: 'Consult the sources', originalPalette: 'Original palette', monthlyData: 'Monthly data', impactCatalog: 'Impact catalog v1',
     techKicker: 'Technology', techFilterAria: 'Filter technologies', techNote: 'Technical detail', techEmpty: 'No tools in this category match the filter. Choose “All” to see them.', module: 'Module', credTitle: 'Data, credits and AI use', credData: 'Data',
     credDataP1: 'Frames from the Earth Information Center visualization “Sea Surface Temperature (SST) Anomaly – Near Real Time” (NASA SVS 5176, Pacific variant, 16 May 2024 – 2 Nov 2026), cropped to the southeast Pacific; JPL MUR SST data. Credit: NASA’s Scientific Visualization Studio.',
@@ -2785,7 +2878,7 @@ function analyzeMapImage(img, free, legacy) {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { tab: 'home', sub: 0, tour: 0, lang: LANG, tourRect: null, vw: 0, vh: 0, more: false, bsel: 0, bphase: 'idle', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: false, vibe: false,
+    this.state = { tab: 'home', sub: 0, tour: 0, lang: LANG, tourRect: null, vw: 0, vh: 0, more: false, bsel: 0, bphase: 'idle', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: true, vibe: false,
       trans: false, routeArrived: false, route: ROUTE_LOOK.home, engine: 'melody', leadOverride: null, chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: '',
       mute: { silbo: false, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: T('Elige un disco y un protagonista, y pulsa Reproducir.', 'Pick a disc and a lead, then press Play.') };
@@ -2846,7 +2939,10 @@ class Component extends DCLogic {
       cancelAnimationFrame(self.tourRaf);
       self.tourRaf = requestAnimationFrame(function () { self.measureTour(); });
     };
-    this.onTourVisible = function () { if (!document.hidden && self.state.tour) self.focusTourTarget(); };
+    this.onTourVisible = function () {
+      if (document.hidden) self.stopSpeech();
+      else if (self.state.tour) self.focusTourTarget();
+    };
     this.onTourResize = function () {
       self.onTourLayout();
       clearTimeout(self.navResizeTimer);
@@ -2912,7 +3008,10 @@ class Component extends DCLogic {
     if (PREFERENCE_KEYS.indexOf(key) < 0) return;
     var patch = {}; patch[key] = !!value;
     this.setState(patch); this.savePreferences();
-    if (key === 'voice' && !value) this.stopSpeech();
+    if (key === 'voice') {
+      if (!value) this.stopSpeech();
+      else if (!this.state.showPreferences) this.narrateBrisa(this.guideStep() || this.sectionNarration());
+    }
     if (key === 'big' || key === 'legible') this.ensureNavVisible();
     if (key === 'sfx') this.syncVolume();
     if (key === 'reducedMotion') {
@@ -2961,6 +3060,7 @@ class Component extends DCLogic {
     if (!target || !target.isConnected) target = document.querySelector('.hero .btn.primary') || document.getElementById('tour-guide');
     if (target) target.focus({ preventScroll: true });
     if (tutorial) this.startTutorial();
+    else if (this.state.voice) this.narrateBrisa(this.sectionNarration());
   }
   preferencesKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); this.finishPreferences(false); return; }
@@ -3003,7 +3103,11 @@ class Component extends DCLogic {
     this.stopSpeech();
     var chord = chordIndex < 0 ? s.chord : chordOf(this.profile(), this.profile().prog[chordIndex]).label;
     this.setState({ lang: code, chord: chord, route: Object.assign({}, s.route, { title: this.subTitles()[s.sub] || ROUTE_LOOK[s.tab].title, section: ROUTE_LOOK[s.tab].title + ' · ' + PAGES[s.tab][0] }),
-      caption: T('Idioma: español.', 'Language: English.') }, function () { if (s.tour) self.focusTourTarget(); self.ensureNavVisible(); });
+      caption: T('Idioma: español.', 'Language: English.') }, function () {
+        if (s.tour) self.focusTourTarget();
+        self.ensureNavVisible();
+        if (s.voice && !s.showPreferences) self.narrateBrisa(self.guideStep() || self.sectionNarration());
+      });
   }
   guideKey() { return this.state.tutorial ? 'tutorial' : this.state.tab + ':' + this.state.sub; }
   guideSteps(tab) {
@@ -3017,6 +3121,43 @@ class Component extends DCLogic {
     return GUIDES[key] || [];
   }
   guideStep() { var s = this.state; return s.tour ? this.guideSteps()[s.tour - 1] || null : null; }
+  sectionNarration() {
+    var s = this.state;
+    if (s.tab === 'how' && s.sub === 1) return GUIDES.practice[0];
+    if (s.tab === 'tech') {
+      var category = this.techPages()[s.sub];
+      return category && category.credits ? GUIDES.credits[0] : GUIDES.tech[0];
+    }
+    return this.guideSteps(s.tab)[0];
+  }
+  narrateBrisa(step, manual) {
+    if (!step || (!manual && !this.state.voice)) return;
+    if (typeof window.Audio !== 'function' || !step.audio) {
+      this.speak(step.t + '. ' + step.b, manual);
+      return;
+    }
+    this.stopSpeech();
+    var self = this;
+    var audio = new window.Audio('./brisa/' + LANG + '-' + step.audio + '.mp3');
+    var finish = function (failed) {
+      if (self.brisaAudio !== audio) return;
+      self.brisaAudio = null;
+      self.setState({ speaking: false, speechNotice: failed ? uiMessage(
+        'Pulsa «Escuchar voz» para iniciar la narración. También puedes leer la explicación.',
+        'Press “Listen to voice” to start narration. You can also read the explanation.') : null });
+      self.syncVolume();
+    };
+    this.brisaAudio = audio;
+    audio.onended = function () { finish(false); };
+    audio.onerror = function () { finish(true); };
+    this.setState({ speaking: true, speechNotice: null });
+    this.syncVolume();
+    try { audio.play().catch(function () { finish(true); }); } catch (ignored) { finish(true); }
+  }
+  toggleSectionVoice() {
+    if (this.state.speaking) this.stopSpeech();
+    else this.narrateBrisa(this.sectionNarration(), true);
+  }
   tourOpen(event) {
     if (!this.settleArrivedRoute()) return;
     if (this.state.tour) { this.tourClose(); return; }
@@ -3128,7 +3269,7 @@ class Component extends DCLogic {
     this.guideProgress[this.guideKey()] = n;
     var self = this;
     this.setState(patch, function () { self.focusTourTarget(); var heading = document.getElementById('tour-t'); if (heading) heading.focus({ preventScroll: true }); });
-    if (s.voice) this.speak(st.t + '. ' + st.b);
+    if (s.voice) this.narrateBrisa(st);
   }
   tourClose(keepTutorialState) {
     if (!this.state.tour) return;
@@ -3250,8 +3391,7 @@ class Component extends DCLogic {
     this.routeTimers.forEach(clearTimeout);
     this.routeTimers = [];
     this.cancelBandClip();
-    this.utterance = null;
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    this.stopSpeech();
     this.stop();
     if (this.ac) this.ac.close();
   }
@@ -3461,6 +3601,7 @@ class Component extends DCLogic {
       self.setState(Object.assign({ routeArrived: !finished && self.state.trans }, patch, finished ? { trans: false, routeArrived: false } : {}), function () {
         self.resetScreenScroll();
         self.ensureNavVisible();
+        if (self.state.voice && !self.state.tutorial && !self.state.showPreferences) self.narrateBrisa(self.sectionNarration());
         if (self.state.tab === 'juke') {
           var sub = self.state.sub;
           if (sub === 1 && patch.disc != null) self.loadDisc(patch.disc);
@@ -4234,6 +4375,11 @@ class Component extends DCLogic {
     return DISCS[s.disc].title + ', ' + MES[dt.m] + T(' de ', ' ') + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + T(' por ciento de los píxeles de mar incluidos tienen nivel cálido de al menos +4. ', ' percent of the included ocean pixels have a warm level of at least +4. ') + coast;
   }
   stopSpeech() {
+    if (this.brisaAudio) {
+      var audio = this.brisaAudio;
+      this.brisaAudio = null;
+      audio.pause();
+    }
     this.utterance = null;
     if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (ignored) {} }
     if (this.state.speaking) this.setState({ speaking: false });
@@ -4419,7 +4565,7 @@ class Component extends DCLogic {
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
     var tog = function (k) { return function () { self.setPreference(k, !self.state[k]); }; };
     var tabDef = PAGE_ORDER.map(function (k) { return { k: k, l: ROUTE_LOOK[k].title }; });
-    var a11yDef = [{ k: 'contrast', l: T('Alto contraste', 'High contrast') }, { k: 'big', l: T('Texto grande', 'Large text') }, { k: 'legible', l: T('Fuente legible', 'Readable font') }, { k: 'voice', l: T('Voz', 'Voice') }, { k: 'vibe', l: T('Vibración', 'Vibration') }, { k: 'sfx', l: T('Efectos de sonido', 'Sound effects') }, { k: 'reducedMotion', l: T('Movimiento reducido', 'Reduced motion') }];
+    var a11yDef = [{ k: 'contrast', l: T('Alto contraste', 'High contrast') }, { k: 'big', l: T('Texto grande', 'Large text') }, { k: 'legible', l: T('Fuente legible', 'Readable font') }, { k: 'voice', l: T('Modo voz', 'Voice mode') }, { k: 'vibe', l: T('Vibración', 'Vibration') }, { k: 'sfx', l: T('Efectos de sonido', 'Sound effects') }, { k: 'reducedMotion', l: T('Movimiento reducido', 'Reduced motion') }];
     var activeN = BAND.filter(function (b) { return !s.mute[b.k]; }).length;
     var isJuke = s.tab === 'juke', isData = s.tab === 'how' && s.sub === 1, hasCustom = !!s.custom;
     var gl = this.glowFor(a);
@@ -4436,7 +4582,7 @@ class Component extends DCLogic {
     var bandKey = BAND[bandIndex].k;
     var bandInstrument = BAND_INSTRUMENTS[bandKey];
     var bandPhase = this.bandReduced() ? 'idle' : s.bphase;
-    // Guía: Silbo señala el elemento del paso con un foco que sigue al elemento aunque la ventana cambie.
+    // Guía: Brisa señala el elemento del paso con un foco que sigue al elemento aunque la ventana cambie.
     var gsteps = this.guideSteps(), tstep = s.tour ? gsteps[s.tour - 1] || null : null;
     var vw = s.vw || window.innerWidth, vh = s.vh || window.innerHeight, vx = s.vleft || 0, vy = s.vtop || 0;
     var measuredR = tstep && tstep.id ? s.tourRect : null;
@@ -4477,7 +4623,7 @@ class Component extends DCLogic {
       nextLabel: s.tour === gsteps.length ? (s.tutorial ? T('Terminar', 'Finish') : T('Entendido', 'Got it')) : T('Siguiente', 'Next'),
       next: function () { if (tutorialBlocked) return; if (s.tour >= gsteps.length) self.tourEnd(); else self.tourGo(s.tour + 1); },
       back: function () { self.tourGo(s.tour - 1); }, close: function () { self.tourClose(); }, skip: function () { self.tourEnd(); },
-      say: function () { if (s.speaking) self.stopSpeech(); else if (tstep) self.speak(tstep.t + '. ' + tstep.b, true); },
+      say: function () { if (s.speaking) self.stopSpeech(); else self.narrateBrisa(tstep, true); },
       extra: function () { if (!s.playing) self.play(); } };
     var titles = this.subTitles(), cnt = titles.length, sub = Math.min(s.sub, cnt - 1), pgOrder = PAGE_ORDER, pgNext = s.tab === 'home' ? 'juke' : pgOrder[(pgOrder.indexOf(s.tab) + 1) % pgOrder.length];
     var lastSub = sub === cnt - 1, techPgs = s.tab === 'tech' ? this.techPages() : [], techCur = techPgs[sub] || { title: '', items: [] };
@@ -4524,23 +4670,23 @@ class Component extends DCLogic {
         pick: function () { self.setEngine(e.key); } };
     });
     return {
-      th: th, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      th: th, highContrast: hc, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
       engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes.', 'Data: derived levels converted into tones, without a chord progression.')),
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, showHarmony: melody,
       player: this.playerVm(),
       motionClass: s.reducedMotion ? 'reduce-motion' : '',
       preferences: {
-        on: s.showPreferences, title: T('¿Cómo prefieres usar TerraSonic?', 'How would you like to use TerraSonic?'),
+        on: s.showPreferences, title: T('¿Cómo prefieres usar EarthBeat?', 'How would you like to use EarthBeat?'),
         body: T('Combina las opciones que te resulten cómodas. Puedes cambiarlas después en Accesibilidad.', 'Combine the options that suit you. You can change them later in Accessibility.'),
         choices: [
-          ['voice', T('Guía hablada', 'Spoken guide'), T('Voz opcional, cuando haya una del idioma en tu dispositivo.', 'Optional voice, when your device has one for this language.')],
+          ['voice', T('Modo voz de Brisa', 'Brisa voice mode'), T('Brisa habla al entrar en cada apartado. Puedes desactivar su voz aquí.', 'Brisa speaks as you open each section. You can turn her voice off here.')],
           ['big', T('Texto grande', 'Large text'), T('Aumenta el tamaño de lectura.', 'Increase the reading size.')],
           ['contrast', T('Alto contraste', 'High contrast'), T('Bordes y texto con mayor contraste.', 'Stronger contrast for borders and text.')],
           ['reducedMotion', T('Movimiento reducido', 'Reduced motion'), T('Personajes y transiciones sin animación.', 'Characters and transitions without animation.')]
         ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
         continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Aprender con tres acciones', 'Learn with three actions'),
         continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); },
-        reopenLabel: T('Cómo prefiero usar TerraSonic', 'How I prefer to use TerraSonic'), open: function () { self.openPreferences(); }
+        reopenLabel: T('Cómo prefiero usar EarthBeat', 'How I prefer to use EarthBeat'), open: function () { self.openPreferences(); }
       },
       frameCount: s.disc === 5 ? T('tu archivo', 'your file') : T('fotograma ', 'frame ') + (s.frame + 1) + T(' de ', ' of ') + d.files.length, prevOff: s.frame <= 0, nextOff: s.frame >= d.files.length - 1,
       trans: s.trans, route: s.route, pageName: ROUTE_LOOK[s.tab].title,
@@ -4578,6 +4724,10 @@ class Component extends DCLogic {
       toggleEasy: function () { if (s.easyOpen) self.stopSpeech(); self.setState({ easyOpen: !s.easyOpen }); },
       readEasyLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Leer en voz alta', 'Read aloud'),
       speechUnavailable: !window.speechSynthesis || !window.SpeechSynthesisUtterance,
+      brisaUnavailable: typeof window.Audio !== 'function' && (!window.speechSynthesis || !window.SpeechSynthesisUtterance),
+      sectionVoiceLabel: s.speaking ? T('Detener voz', 'Stop voice') : T('Escuchar voz', 'Listen to voice'),
+      sectionVoice: function () { self.toggleSectionVoice(); },
+      sectionVoiceNotice: uiText(s.speechNotice),
       speechSupport: window.speechSynthesis && window.SpeechSynthesisUtterance ? '' : T('La lectura en voz alta no está disponible en este navegador.', 'Read aloud is unavailable in this browser.'),
       readEasy: function () {
         if (s.speaking) { self.stopSpeech(); return; }
@@ -4599,8 +4749,7 @@ class Component extends DCLogic {
         return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };
       }),
       discs: DISCS.slice(0, 5).map(function (x, k) {
-        var hero = k < 5 ? BAND.find(function (b) { return b.k === DISC_CHAR[k]; }).name : T('según tu archivo', 'based on your file');
-        return { thumb: self.url(k, 0), title: x.title, hero: hero, period: k === 5 && hasCustom ? uiLabel(s.custom) : x.period,
+        return { thumb: self.url(k, 0), title: x.title, period: x.period,
           pick: function (event) {
             self.settleArrivedRoute();
             if (self.state.tab !== 'juke' || self.state.sub !== 0 || self.state.trans) return;
@@ -4668,9 +4817,9 @@ class Component extends DCLogic {
       playPending: s.audioPending, audioError: uiText(s.audioError),
       playLabel: s.audioPending ? T('Preparando audio…', 'Preparing audio…') : s.playing ? T('Pausar', 'Pause') : s.ended ? T('Volver a reproducir', 'Play again') : s.col >= 0 ? T('Reanudar', 'Resume') : T('Reproducir', 'Play'), playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },
-      describeLabel: s.speaking ? T('Detener voz', 'Stop voice') : T('Describir en voz alta', 'Describe aloud'),
+      describeLabel: this.utterance ? T('Detener descripción', 'Stop description') : T('Describir en voz alta', 'Describe aloud'),
       describe: function () {
-        if (self.state.speaking) { self.stopSpeech(); return; }
+        if (self.utterance) { self.stopSpeech(); return; }
         var text = self.describeText();
         self.setState({ caption: text });
         self.speak(text, true);
@@ -4682,6 +4831,14 @@ class Component extends DCLogic {
       bandStatus: activeN === 0 ? T('Todos los instrumentos están silenciados. Activa un músico para escucharlo.', 'All instruments are muted. Switch a musician on to hear them.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandGo: function () { self.setBandMute(self.allMute(false)); self.setState({ caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
+      stageMusicians: band.filter(function (member) { return member.on; }).map(function (member) {
+        var level = s.levels[member.key] || 0;
+        return { poseUrl: 'sprites/' + member.key + '/pose-banda.webp', color: member.color,
+          intensity: level, playingClass: s.playing && level > .04 ? 'playing' : '' };
+      }),
+      stageShowBeat: melody,
+      stageChord: melody ? T('Acorde', 'Chord') + ' ' + (s.chord || '—') : T('Datos', 'Data'),
+      stageBeat: bpmEff + T(' ppm', ' bpm'),
       overCls: s.over ? 'over' : '',
       showFileSettings: s.disc === 5 && hasCustom && s.custom.kind === 'image',
       customMode: s.customMode,

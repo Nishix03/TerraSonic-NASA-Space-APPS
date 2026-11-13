@@ -1388,6 +1388,7 @@ test('skipping the tutorial restores the previous file and paused position', () 
 
 test('guide narration selects a matching language, ducks music and cancels on step, language or screen change', async () => {
   const {component:c,context}=playbackHarness(), spoken=[];
+  c.state.voice=false;
   const voices=[{lang:'es-MX',name:'Spanish fixture'},{lang:'en-GB',name:'English fixture'}];
   let cancelled=0;
   context.window.SpeechSynthesisUtterance=class { constructor(text){this.text=text;} };

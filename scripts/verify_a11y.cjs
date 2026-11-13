@@ -31,9 +31,8 @@ async function main(){
    for(const lang of ['es','en']){
     await page.locator('#tour-lang button').nth(lang==='es'?0:1).click();
     await page.locator('.brand').click();await audit(lang+'-home');
-    for(const [nav,tab,count] of [[0,'juke',3],[1,'band',1],[2,'data',3],[3,'how',3],[4,'tech',5]]){
+    for(const [nav,tab,count] of [[0,'juke',2],[1,'band',1],[2,'how',2],[3,'tech',5]]){
      await page.locator('#tour-nav button').nth(nav).click();
-     if(tab==='data'){await page.evaluate(()=>__app.goSub(0));await page.getByRole('button',{name:lang==='es'?'Usar imagen de ejemplo':'Use sample image',exact:true}).click();}
      if(tab==='juke')await page.locator('.discgrid .dcard').nth(2).click();
      for(let sub=0;sub<count;sub++){
       if(tab==='juke'||tab==='data')await page.evaluate(sub=>__app.goSub(sub),sub);
@@ -42,13 +41,9 @@ async function main(){
      }
     }
     await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').nth(2).click();
-    const legend=page.locator('.legend-detail summary');if(await legend.count())await legend.click();
-    await audit(lang+'-player-legend-expanded');
-    await page.evaluate(()=>__app.setState({events:Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''))}));
-    for(const detail of await page.locator('.scr .in details').all())if(await detail.getAttribute('open')===null)await detail.locator(':scope > summary').click();
-    await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);await audit(lang+'-player-all-panels-expanded');
-    for(const detail of await page.locator('.scr .in details').all())if(await detail.getAttribute('open')!==null)await detail.locator(':scope > summary').click();
-    await page.evaluate(()=>__app.openMore());await audit(lang+'-music-dialog');await page.keyboard.press('Escape');
+    await audit(lang+'-player-legend');
+    const explain=page.getByRole('button',{name:lang==='es'?'Explícamelo fácil':'Explain it simply',exact:true});
+    await explain.click();await audit(lang+'-player-explanation');await explain.click();
     await page.locator('#tour-guide').click();await audit(lang+'-Brisa');await page.keyboard.press('Escape');
     await page.locator('#tour-a11y > summary').click();await audit(lang+'-accessibility-menu');await page.keyboard.press('Escape');
     assert.equal(await page.locator('#tour-a11y').getAttribute('open'),null,'Escape closes the preference popover');

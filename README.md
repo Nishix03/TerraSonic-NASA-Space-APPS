@@ -1,6 +1,6 @@
-# TerraSonic · Earth Information Jukebox
+# EarthBeat · Earth Information Jukebox
 
-TerraSonic convierte imágenes del Pacífico y datos locales en música con cinco personajes. Proyecto de NASA Space Apps Challenge 2026 · Chiclayo, para [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/).
+EarthBeat convierte imágenes del Pacífico y datos locales en música con cinco personajes. Proyecto de NASA Space Apps Challenge 2026 · Chiclayo, para [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/).
 
 La aplicación es estática y funciona en español e inglés. Usa Canvas y Web Audio en el navegador; no requiere backend, AWS, base de datos remota ni servicios de IA para procesar archivos o generar sonido.
 
@@ -8,10 +8,11 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 `piero-mejoras-v2` parte de `piero-mejoras` en `fcb1396`. Recupera las ilustraciones 2D de `prueba-acordes`.
 
-- **Escuchar** muestra el mapa NASA junto a la cuadrícula de 28 × 16, con una escala de frío a cálido y controles por músico.
+- **Escuchar** muestra el mapa NASA junto a la cuadrícula de 28 × 16. La leyenda está debajo de la cuadrícula y los músicos activos se ven juntos en el escenario.
 - **La banda** presenta a los cinco músicos con sus historias y muestras de instrumento.
 - **¿Cómo funciona?** reúne una explicación breve y una prueba con lluvia de Chiclayo o una imagen propia procesada en el navegador.
 - **Tecnología** conserva sus categorías y créditos.
+- **Brisa** narra en español o inglés tras la primera interacción. El modo voz se puede desactivar en Accesibilidad y cada apartado tiene un botón para volver a escuchar la narración.
 
 Los niveles de color de −5 a +5 se usan para la sonificación. Las progresiones y el carácter musical son decisiones artísticas.
 
