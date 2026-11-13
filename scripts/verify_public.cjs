@@ -2,10 +2,11 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
 const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
 const target=process.argv[2],site=path.resolve(process.argv[3]||'_site'),output=path.resolve(process.argv[4]||'_work/public/browser');
+const fullPlayer=process.argv.includes('--full-player');
 assert(target?.startsWith('https://'),'Pass the published HTTPS URL');const origin=new URL(target).origin;
 async function main(){
  fs.mkdirSync(output,{recursive:true});const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const report={url:target,credentialFree:true,checks:[],assets:[],html:[],errors:[],failedResponses:[]};
+ const report={url:target,credentialFree:true,fullPlayer,checks:[],assets:[],html:[],errors:[],failedResponses:[],writeRequests:[]};
  try{
   for(const scenario of ['normal','no-webgl']){
    const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce',locale:'es-PE'});
@@ -16,6 +17,7 @@ async function main(){
    });
    if(scenario==='no-webgl')await context.addInitScript(()=>{const getContext=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/i.test(type)?null:getContext.call(this,type,...args);};});
    const page=await context.newPage();page.on('pageerror',error=>report.errors.push({scenario,message:error.message}));page.on('response',response=>{if(response.url().startsWith(origin)&&response.status()>=400)report.failedResponses.push({scenario,url:response.url(),status:response.status()});});
+   page.on('request',request=>{if(/^https?:/.test(request.url())&&!['GET','HEAD'].includes(request.method()))report.writeRequests.push({method:request.method(),url:request.url()});});
    const response=await page.goto(target);assert.equal(response.status(),200);assert.equal(new URL(page.url()).origin,origin);
    const received=await response.body(),expected=fs.readFileSync(path.join(site,'index.html'));let providerScripts=0;
    // Compare source without the observed Cloudflare transport insertion. The real
@@ -39,10 +41,22 @@ async function main(){
     }
    }
    await page.locator('#tour-nav button').first().click();
+   const playerJourneys=[];
    for(const catalog of [0,1]){
     await page.locator('#tour-sets button').nth(catalog).click();await page.locator('.discgrid .dcard').first().click();await page.waitForFunction(()=>__app.cur());
     await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
-    assert.equal(await page.locator('.legend-choice').count(),4);await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing&&__app.state.col>=2);await page.locator('#tour-play button').click();assert.equal(await page.evaluate(()=>__app.state.playing),false);
+    assert.equal(await page.locator('.legend-choice').count(),4);
+    for(const mode of fullPlayer?[0,1]:[0]){
+     if(fullPlayer){await page.locator('.player-modes button').nth(mode).click();const position=page.locator('#playback-position');await position.focus();await position.press('Home');await position.press('ArrowRight');assert.equal(await position.inputValue(),'1');assert.equal(await page.locator('.chordsrow').count(),mode===0?1:0);}
+     await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing&&__app.state.col>=2);await page.locator('#tour-play button').click();assert.equal(await page.evaluate(()=>__app.state.playing),false);
+     if(fullPlayer){
+      const position=page.locator('#playback-position');await position.focus();await position.press('Home');await position.press('ArrowRight');assert.equal(await position.inputValue(),'1');
+      await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
+      assert.equal(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16);
+      await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===0);
+     }
+     playerJourneys.push({catalog:catalog===0?'eic':'gibs',mode:mode===0?'melody':'data',playPause:true,keyboardSeek:fullPlayer,analysis:fullPlayer});
+    }
     await page.locator('.headtools button').click();
    }
    await page.locator('#tour-nav button').nth(1).click();
@@ -54,10 +68,16 @@ async function main(){
     await page.screenshot({path:path.join(output,`${scenario}-${key}.png`)});
    }
    await page.locator('#tour-nav button').nth(2).click();await page.evaluate(()=>__app.goSub(0));await page.getByRole('button',{name:'Usar imagen de ejemplo',exact:true}).click();await page.waitForFunction(()=>__app.state.custom&&__app.cur());assert.equal(await page.evaluate(()=>__app.state.custom.source),'eic');
-   report.checks.push({scenario,home:true,collections:2,playPause:true,legend:true,characters:5,decodedPoses:5,sampleImage:true});console.log('PASS public',scenario);
+   if(fullPlayer){
+    await page.locator('.headtools button').click();await page.locator('.convert-secondary summary').first().click();
+    await page.locator('.csv-picker input').setInputFiles({name:'public-review.csv',mimeType:'text/csv',buffer:Buffer.from('day,rain,temp\n1,3,25\n2,6,24\n3,2,26\n4,8,27\n5,4,23\n6,9,24\n7,2,25\n8,7,26\n')});
+    await page.locator('.file-settings select option[value="2"]').waitFor({state:'attached'});await page.locator('.file-settings select').selectOption('2');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
+    await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('.file-settings select').inputValue(),'2');assert.equal(await page.locator('html').getAttribute('lang'),'en');
+   }
+   report.checks.push({scenario,home:true,collections:2,modes:fullPlayer?2:1,playerJourneys,playPause:true,legend:true,characters:5,decodedPoses:5,sampleImage:true,csvColumns:fullPlayer?3:0,languageRetainsColumn:fullPlayer});console.log('PASS public',scenario);
    await context.close();
   }
-  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);console.log('PASS',report.assets.length,'public assets match the packaged SHA-256');
+  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);assert.deepEqual(report.writeRequests,[]);console.log('PASS',report.assets.length,'public assets match the packaged SHA-256');
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

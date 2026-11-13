@@ -2,7 +2,6 @@
 import argparse
 from datetime import datetime, timezone
 from hashlib import sha256
-import io
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -22,7 +21,8 @@ FORBIDDEN = {".git", ".env", ".vercel", "node_modules", "_work", "__pycache__"}
 
 def allowed(path: str, data: bytes) -> None:
     parts = PurePosixPath(path).parts
-    if not parts or PurePosixPath(path).is_absolute() or ".." in parts or any(part in FORBIDDEN or part.startswith(".env.") for part in parts):
+    if (not parts or "\\" in path or ":" in path or PurePosixPath(path).is_absolute() or ".." in parts
+            or any(part.casefold() in FORBIDDEN or part.casefold().startswith(".env.") for part in parts)):
         raise ValueError(f"Forbidden package path: {path}")
     if any(pattern.search(data) for pattern in SECRET_PATTERNS):
         raise ValueError(f"Possible private credential in {path}; no package was accepted")
@@ -30,6 +30,21 @@ def allowed(path: str, data: bytes) -> None:
 
 def git(*args: str) -> bytes:
     return subprocess.check_output(["git", *args], cwd=ROOT)
+
+
+def file_hash(path: Path) -> str:
+    digest = sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def archive_to_file(output: Path, commit: str, *paths: str) -> None:
+    if output.exists():
+        raise ValueError("Refusing to overwrite an archive")
+    subprocess.run(["git", "archive", "--format=zip", "--output", str(output), commit,
+                    *(["--", *paths] if paths else [])], cwd=ROOT, check=True)
 
 
 def create(output: Path, commit: str, evidence: list[Path], preview: str | None, preview_commit: str | None, baseline_commit: str | None) -> Path:
@@ -43,28 +58,31 @@ def create(output: Path, commit: str, evidence: list[Path], preview: str | None,
         raise ValueError("Package output must not replace the project or a parent directory")
     portable = destination.with_suffix(".zip")
     staging = destination.parent / (destination.name + "-source-check")
-    if portable.exists() or staging.exists():
+    archive_input = destination.parent / (destination.name + "-source-input.zip")
+    if portable.exists() or staging.exists() or archive_input.exists():
         raise ValueError("Package ZIP or source verification directory already exists; choose another output name")
-    archive_data = git("archive", "--format=zip", full_commit)
-    with zipfile.ZipFile(io.BytesIO(archive_data)) as source:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    archive_to_file(archive_input, full_commit)
+    with zipfile.ZipFile(archive_input) as source:
         for entry in source.infolist():
             if entry.is_dir():
                 continue
             allowed(entry.filename, source.read(entry))
     destination.mkdir(parents=True)
-    (destination / "source.zip").write_bytes(archive_data)
+    source_archive = destination / "source.zip"
+    archive_input.rename(source_archive)
     baseline_sha = None
     if baseline_commit:
         baseline_sha = git("rev-parse", "--verify", f"{baseline_commit}^{{commit}}").decode().strip()
-        backup = git("archive", "--format=zip", baseline_sha, "--", "assets/avatares/terrasonic-banda.blend", "prototipos/I11-eic/modelos")
-        with zipfile.ZipFile(io.BytesIO(backup)) as original:
+        baseline_archive = destination / "baseline-models.zip"
+        archive_to_file(baseline_archive, baseline_sha, "assets/avatares/terrasonic-banda.blend", "prototipos/I11-eic/modelos")
+        with zipfile.ZipFile(baseline_archive) as original:
             for entry in original.infolist():
                 if not entry.is_dir():
                     allowed(entry.filename, original.read(entry))
-        (destination / "baseline-models.zip").write_bytes(backup)
     # A new, isolated staging tree proves the build does not depend on ignored local files.
     staging.mkdir()
-    with zipfile.ZipFile(io.BytesIO(archive_data)) as source:
+    with zipfile.ZipFile(source_archive) as source:
         source.extractall(staging)
     subprocess.run([sys.executable, str(staging / "scripts" / "verify_fonts.py")], check=True, cwd=staging)
     subprocess.run([sys.executable, str(staging / "scripts" / "build_pages.py"), str(destination / "site")], check=True, cwd=staging)
@@ -117,7 +135,7 @@ Vista independiente: {preview or 'consultar docs/PUBLICACION.md en source.zip'}.
 {preview_note} La huella de este paquete identifica esta copia.
 
 1. Extrae el ZIP completo en una carpeta nueva.
-2. Con Python 3 instalado, ejecuta `python serve.py` desde esa carpeta.
+2. Con Python 3.10 o posterior instalado, ejecuta `python serve.py` desde esa carpeta.
 3. Abre http://127.0.0.1:8765/. Para detener el servidor, pulsa Ctrl+C.
 
 `site/` contiene el producto estático listo para un host. No requiere Node, Blender, cuenta, backend, AWS ni base de datos. Archivos, fuentes, mapas, modelos y poses se incluyen. El audio requiere una acción del usuario y un navegador con Web Audio. Voz/vibración dependen del dispositivo y las voces instaladas; el texto y las poses permiten continuar sin esas APIs. Los enlaces documentales externos requieren red. Abrir index.html con file:// no es el modo soportado.
@@ -138,13 +156,15 @@ from pathlib import Path, PurePosixPath
 root=Path(__file__).resolve().parent
 manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
 expected={item['path']:item for item in manifest['files']}
-actual={file.relative_to(root).as_posix() for file in root.rglob('*') if file.is_file() and file.name!='manifest.json'}
+actual={file.relative_to(root).as_posix() for file in root.rglob('*') if file.is_file() and file!=root/'manifest.json'}
 if actual!=set(expected): raise SystemExit('Package files differ from the manifest')
 for name,item in expected.items():
     target=(root/name).resolve()
     if not target.is_relative_to(root) or PurePosixPath(name).is_absolute() or '..' in PurePosixPath(name).parts: raise SystemExit('Unsafe manifest path')
-    data=target.read_bytes()
-    if len(data)!=item['bytes'] or sha256(data).hexdigest()!=item['sha256']: raise SystemExit('File integrity failed: '+name)
+    digest=sha256()
+    with target.open('rb') as stream:
+        for chunk in iter(lambda:stream.read(1024*1024),b''): digest.update(chunk)
+    if target.stat().st_size!=item['bytes'] or digest.hexdigest()!=item['sha256']: raise SystemExit('File integrity failed: '+name)
 print('PASS package integrity:',len(expected),'files; source commit',manifest['sourceCommit'])
 '''
     (destination / "verify_package.py").write_text(verifier, encoding="utf-8")
@@ -152,9 +172,11 @@ print('PASS package integrity:',len(expected),'files; source commit',manifest['s
     for file in sorted(destination.rglob("*")):
         if not file.is_file():
             continue
-        relative, data = file.relative_to(destination).as_posix(), file.read_bytes()
-        allowed(relative, data)
-        files.append({"path": relative, "bytes": len(data), "sha256": sha256(data).hexdigest()})
+        relative = file.relative_to(destination).as_posix()
+        # Both source archives have already been checked member by member.
+        # Hash them from disk without keeping an entire archive in memory.
+        allowed(relative, b"" if relative in {"source.zip", "baseline-models.zip"} else file.read_bytes())
+        files.append({"path": relative, "bytes": file.stat().st_size, "sha256": file_hash(file)})
     manifest = {"version": 1, "createdAt": datetime.now(timezone.utc).isoformat(), "sourceCommit": full_commit,
                 "branch": "piero-mejoras", "preview": preview, "previewSourceCommit": preview_commit,
                 "baselineModelsCommit": baseline_sha, "evidence": evidence_sources, "files": files}
@@ -164,7 +186,7 @@ print('PASS package integrity:',len(expected),'files; source commit',manifest['s
         for file in sorted(destination.rglob("*")):
             if file.is_file():
                 bundle.write(file, file.relative_to(destination).as_posix())
-    fingerprint = sha256(portable.read_bytes()).hexdigest()
+    fingerprint = file_hash(portable)
     portable.with_suffix(".zip.sha256").write_text(f"{fingerprint}  {portable.name}\n", encoding="ascii")
     print(json.dumps({"archive": str(portable), "bytes": portable.stat().st_size, "sha256": fingerprint,
                       "sourceCommit": full_commit, "files": len(files) + 1}, ensure_ascii=False))

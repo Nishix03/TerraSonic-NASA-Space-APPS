@@ -8,7 +8,7 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
-La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve el checkpoint `0fefefd`, verificado sin credenciales: HTML y 96 activos idénticos al paquete, ambos catálogos, cinco personajes y respaldo sin WebGL. Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
+La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve el checkpoint `f4ba00a`, verificado sin credenciales: HTML y 96 activos idénticos al paquete, ambos catálogos/modos, saltos con teclado, CSV multicolumna, cinco personajes y respaldo sin WebGL. Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
 
 El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
@@ -24,7 +24,7 @@ Los niveles derivados de las imágenes **no son grados de temperatura**. Las pro
 
 ## Ejecutar localmente
 
-Con Python 3, desde la raíz del repositorio:
+Con Python 3.10 o posterior, desde la raíz del repositorio (revisión realizada con 3.12.14):
 
 ```bash
 python scripts/verify_fonts.py

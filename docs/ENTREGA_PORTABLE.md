@@ -2,7 +2,7 @@
 
 El build normaliza los saltos de línea de los archivos de texto distribuidos y de la clave de caché del runtime 3D. Git puede producir CRLF en `archive` según `core.autocrlf`, incluso cuando el blob del repositorio es LF. La normalización evita que esa preferencia local cambie las huellas del sitio. Los binarios y los cuatro avisos originales OFL con huellas fijadas se conservan byte por byte; no se cambia la configuración Git global.
 
-La prueba del commit `0fefefd` comparó exportaciones reales de Git con `core.autocrlf=true`, `false` y el árbol de trabajo: los 103 archivos generados coinciden byte por byte. Son 7.152.631 bytes, con HTML SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90`, y las doce fuentes/avisos originales siguen intactos. Evidencia en `_work/reproducible-0fefefd/results.json`. Esa misma salida sirve en la [vista pública actual](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/); los paquetes históricos de abajo conservan su procedencia anterior.
+La prueba del commit `0fefefd` comparó exportaciones reales de Git con `core.autocrlf=true`, `false` y el árbol de trabajo: los 103 archivos generados coinciden byte por byte. Son 7.152.631 bytes, con HTML SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90`, y las doce fuentes/avisos originales siguen intactos. Evidencia en `_work/reproducible-0fefefd/results.json`. Esa salida corresponde a la publicación inicial de GitHub Pages; la [vista pública actual](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) tiene una fuente posterior identificada en PUBLICACION.md. Los paquetes históricos de abajo conservan su procedencia anterior.
 
 El primer paquete verificado de esta revisión es un checkpoint del commit `122fd9d536393528b84d9871fe734ac93a761101`. No incluye las correcciones posteriores de este chat. Se conserva para recuperación y para comprobar el procedimiento de entrega.
 
@@ -37,8 +37,12 @@ Evidencia: `_work/delivery/http-122fd9d.json`, `_work/delivery/browser-122fd9d/r
 
 ## Generar otro checkpoint
 
+El empaquetador actual escribe los archivos Git directamente en disco y calcula SHA-256 en bloques de 1 MiB, para no conservar dos ZIP grandes completos en RAM. Se comprobaron seis controles en un repositorio sintético nuevo: fuente comprometida sin el `.env` sin seguimiento, evidencia limitada, archivo de más de 2 MiB, integridad/alteración, archivo extra llamado `site/manifest.json`, rechazo de sobrescritura y rechazo de evidencia con forma de credencial. El verificador solo excluye el manifiesto raíz; antes podía pasar por alto otro archivo con ese nombre. Ejecutar `python scripts/test_package_portable.py`. El control sintético no sustituye la comprobación del paquete real.
+
+La construcción real con el commit `f4ba00a` y los modelos base también pasó usando el flujo por disco: `_work/delivery/streaming-f4ba00a.zip`, 56.507.482 bytes, SHA-256 `b2d1f96e04062bef013576895fb140213ac0904ecd1e06135bc995798837d2f6`. Es una comprobación técnica sin la evidencia final y anterior al ajuste compacto; se conserva como checkpoint, no como entrega actual.
+
 ```powershell
-python scripts/package_portable.py _work/delivery/terrasonic-NUEVO --commit COMMIT_COMPLETO --preview https://terrasonic-piero-preview-20261113.satinkoi3.chatgpt.site --preview-source-commit 409f19758f44954eeb304645a5699a1ca72a6717 --evidence _work/benchmarks
+python scripts/package_portable.py _work/delivery/terrasonic-NUEVO --commit COMMIT_COMPLETO --preview https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/ --preview-source-commit COMMIT_PUBLICADO_VERIFICADO --evidence _work/benchmarks
 ```
 
 Usar un directorio nuevo. El empaquetador no borra ni sobrescribe paquetes anteriores. Construye desde el commit, no desde el HTML generado de la copia de trabajo, y verifica las fuentes. Solo copia evidencia JSON/PNG/WebP de las carpetas elegidas; nunca copiar todo `_work`, que contiene cachés y logs privados de despliegue.

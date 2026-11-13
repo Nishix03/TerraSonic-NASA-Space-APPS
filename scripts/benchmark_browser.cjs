@@ -6,6 +6,7 @@ const path = require("node:path");
 const { createHash } = require("node:crypto");
 const { performance } = require("node:perf_hooks");
 const { gzipSync } = require("node:zlib");
+const os=require('node:os');
 const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-core");
 
 const site = path.resolve(process.argv[2] || "_site");
@@ -49,7 +50,7 @@ async function main() {
   const files=[];
   const walk=directory=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.name.startsWith('.'))continue;const file=path.join(directory,entry.name);if(entry.isDirectory())walk(file);else files.push({path:path.relative(site,file).replaceAll('\\','/'),bytes:fs.statSync(file).size});}};
   walk(site);
-  const report = { base, profile, browserVersion:browser.version(), recordedAt:new Date().toISOString(),
+  const report = { base, profile, browserVersion:browser.version(), recordedAt:new Date().toISOString(),host:{platform:os.platform(),release:os.release(),totalMemoryBytes:os.totalmem(),freeMemoryAtStart:os.freemem()},
     indexSha256:createHash('sha256').update(fs.readFileSync(path.join(site,'index.html'))).digest('hex'),
     visit:'Returning visitor: Spanish and configured preferences saved in a fresh browser context',
     audioFixture:'Final gain output silenced in the fixture; sound-effect computation remains enabled as configured. No human listening.',
@@ -58,6 +59,7 @@ async function main() {
     samples: [], failures: [] };
   try {
     for (let run = 0; run < 3; run++) {
+      const freeMemoryBeforeRun=os.freemem();
       const context = await browser.newContext({ viewport: profile.viewport,
         reducedMotion: profile.reducedMotion, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
       await context.addInitScript(() => {
@@ -133,7 +135,7 @@ async function main() {
         }
         return {...__labVitals,cls,maxScriptedInteractionMs:Math.max(0,...__labVitals.events.map(entry=>entry.duration))};
       });
-      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, totalBytes: { ...bytes },
+      report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, totalBytes: { ...bytes },freeMemoryBeforeRun,freeMemoryAfterRun:os.freemem(),
         ...(measureVitals?{homeVitals,vitals,diagnostic:'Extra 3 s before interaction; LCP/CLS and scripted Event Timing only, not field INP'}:{}),
         modelsRendered: await page.locator("ts-avatar[data-rendered]").count() });
       fs.mkdirSync(path.dirname(output), { recursive: true });

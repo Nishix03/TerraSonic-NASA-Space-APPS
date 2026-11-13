@@ -1,6 +1,6 @@
 # Pruebas reproducibles y límites
 
-El sitio se genera desde `prototipos/I11-eic/Main.dc.html`; editar `_site/index.html` no modifica la fuente. Python 3 construye el paquete sin dependencias. Node ejecuta las regresiones de producto. Los navegadores, axe y Blender son herramientas de revisión, no servicios del producto.
+El sitio se genera desde `prototipos/I11-eic/Main.dc.html`; editar `_site/index.html` no modifica la fuente. Se recomienda Python 3.10 o posterior para todos los scripts de build/paquete/pruebas; esta revisión utiliza 3.12.14. No requiere instalar dependencias Python. Node ejecuta las regresiones de producto. Los navegadores, axe y Blender son herramientas de revisión, no servicios del producto.
 
 ```powershell
 python scripts/verify_fonts.py
@@ -11,6 +11,10 @@ python scripts/run_browser_checks.py --list
 ```
 
 Para los recorridos, `TERRASONIC_PLAYWRIGHT` debe apuntar a una instalación de `playwright-core`, y `TERRASONIC_CHROMIUM` al ejecutable de Chromium de prueba. Para axe se usa `TERRASONIC_AXE`. El runner mantiene los procesos secuenciales y guarda JSON con código de salida, duración real del proceso y log de cada caso; esa duración no se suma al tiempo efectivo de trabajo.
+
+El runner admite `--timeout` por caso, con 300 segundos predeterminados. Si vence, termina únicamente el árbol del proceso de prueba que creó y mantiene el código 124; no deja su navegador huérfano ni presenta el timeout como una pasada. Una regresión controlada con un padre/hijo propios confirmó terminación del hijo en 1,6 segundos para un límite de un segundo. Los 72 casos de paneles en WebKit pueden requerir un límite mayor en una laptop con presión de memoria. Las pasadas de navegadores se ejecutan de una en una.
+
+Cada proceso Node del runner limita explícitamente su generación antigua de heap a 256 MiB; esto no limita buffers nativos ni memoria de los navegadores. Una repetición de Firefox de las 09:46 terminó con código 134 por falta de memoria del driver antes de producir evidencia del caso desplegado. Las comprobaciones compactas, preferencias y conversión de ese mismo recorrido sí pasaron. Se conservó el fallo y la inspección no encontró un Firefox huérfano del PID fallido. No se cerraron procesos personales ni se cambió el archivo de paginación. La nueva ejecución acotada conserva su propio reporte; no se transforma el fallo anterior en una pasada.
 
 ```powershell
 python scripts/run_browser_checks.py --site _site --evidence _work/qa/local --only home fonts preferences reflow keyboard a11y method characters convert image-geometry image-formats expanded-layout brisa player impacts models avatar-interactions
@@ -56,6 +60,8 @@ El zoom nativo no se pudo revisar por la herramienta de control de ventana y se 
 ```powershell
 node scripts/verify_cached_release.cjs ruta/al/build-anterior ruta/al/build-nuevo _work/cache-release
 ```
+
+El fixture de caché obtiene el URL real del runtime anterior, incluidos sus parámetros, para cubrir también una actualización entre dos versiones ya identificadas. El conteo antiguo asumía `/support.js` sin query y rechazaba ese escenario antes de evaluar la aplicación. La actualización f4ba00a → compilación de atributos nueva pasa en Chromium y Firefox: una descarga de cada runtime y reutilización posterior. Los JSON conservan `oldSupportUrl` y `supportVersion`; las cabeceras siguen siendo exclusivas del servidor de prueba.
 
 La emulación de cambio de movimiento en WebKit de esta instalación dejó objetos `MediaQueryList` creados antes del cambio con `matches: true`, aunque una consulta nueva ya devolvía false. El diagnóstico se conserva; no se atribuye ese resultado a un teléfono ni al sistema operativo real. Los contextos nuevos con cada preferencia sí permiten verificar las poses iniciales y animaciones, y la preferencia manual de la aplicación detiene los clips. Chromium y Firefox mantienen además el recorrido de cambio de preferencia del sistema dentro de la sesión.
 

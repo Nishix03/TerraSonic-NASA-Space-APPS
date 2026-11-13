@@ -8,20 +8,20 @@ La copia estática independiente está en [Alvaro-mendoza-12/terrasonic-piero-pr
 
 | Procedencia | Valor |
 | --- | --- |
-| Código de aplicación original | `0fefefd79358b20d9969314ffa59fac9a0a603c0` en `piero-mejoras` |
-| Commit estático de la copia | `cded88381a70f9fd534e3da1f8db89de0713726e` |
+| Código de aplicación original | `f4ba00aab6709f6bd149393f20e11349a9562918` en `piero-mejoras` |
+| Commit estático de la copia | `1f67440baffada3396807ec2bffb820362b2443d`, descendiente directo de `cded88381a70f9fd534e3da1f8db89de0713726e` |
 | Rama de la copia y fuente Pages | `piero-mejoras`, directorio `/`, `build_type: legacy` |
 | Archivos de la copia | 107; 103 del build más README, procedencia y dos archivos de configuración estática |
-| HTML publicado | 420.438 bytes, SHA-256 `ce9a2c6869246106dce477e491165dc1a8002ed33b8dbbf3f1c38a7b67988a90` |
+| HTML publicado | 421.892 bytes, SHA-256 `8a9f497fac6844cd6159a78c039b74407d835f3e6719286b12f2fe007216fa85` |
 | HTTPS y acceso | Valores iniciales del proveedor: `https_enforced: true`, `public: true` |
 | Resultado | API Pages `built` para el commit estático exacto; navegador anónimo y Python reciben HTTP 200 |
 
-La preparación parte de `git archive` del commit identificado, sin archivos ignorados, y conserva las licencias incluidas. Se sirvió localmente bajo el mismo subdirectorio que usa Pages: dos recorridos reales por HTTP pasaron antes de crear/publicar el repositorio. La copia solo tiene la rama `piero-mejoras`, que GitHub seleccionó como predeterminada tras el primer push. No se creó una rama main en ella ni se añadió un workflow propio. No se modificaron la protección Vercel ni los ajustes de publicación del repositorio original, ni se contrataron pagos.
+La preparación parte de `git archive` del commit identificado, sin archivos ignorados, y conserva las licencias incluidas. Se sirvió localmente bajo el mismo subdirectorio que usa Pages: dos recorridos reales por HTTP pasaron antes de publicar cada checkpoint. La actualización de las 08:54 fue un fast-forward del mismo repositorio, sin force-push. La copia solo tiene la rama `piero-mejoras`, que GitHub seleccionó como predeterminada tras el primer push. No se creó una rama main en ella ni se añadió un workflow propio. No se modificaron la protección Vercel ni los ajustes de publicación del repositorio original, ni se contrataron pagos.
 
-`verify_public.cjs` abrió dos contextos nuevos sin credenciales, normal y sin WebGL. Pasaron portada completa móvil, EIC/GIBS, reproducir/pausar, leyenda, los cinco GLB/poses y la imagen de ejemplo. Las 96 huellas comprobadas incluyen fuentes/licencias locales además de los 81 activos de la primera copia. El HTML completo coincide sin necesitar excluir inserciones del proveedor. No hubo errores JavaScript ni respuestas HTTP fallidas del sitio. Evidencia: `_work/github-preview/browser-public/`, `pages-created.json`, `pushed.json` y `official-after-publication.json`. `source.json` en la URL pública identifica la fuente.
+`verify_public.cjs --full-player` abrió dos contextos nuevos sin credenciales, normal y sin WebGL. Pasaron portada completa móvil, EIC/GIBS × Melodía/Datos, reproducir/pausar, saltos con teclado en pausa, leyenda, cuadrícula de 448 celdas bajo demanda, los cinco GLB/poses, la imagen de ejemplo y CSV de tres columnas. Cambiar a inglés conserva la columna. Las 96 huellas comprobadas incluyen fuentes/licencias locales además de los 81 activos de la primera copia. El HTML completo coincide sin necesitar excluir inserciones del proveedor. No hubo errores JavaScript, respuestas HTTP fallidas ni solicitudes de escritura. Evidencia actual: `_work/github-preview/browser-public-f4ba00a-full/`, `pushed-f4ba00a.json` y `readback-f4ba00a.json`; la comprobación inicial se conserva en `browser-public/` y `official-after-publication.json`. `source.json` en la URL pública identifica la fuente.
 
 ```powershell
-node scripts/verify_public.cjs https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/ ruta/al/build-exacto _work/public/actual
+node scripts/verify_public.cjs https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/ ruta/al/build-exacto _work/public/actual --full-player
 ```
 
 La comprobación de las 06:10 de Bogotá mantuvo el remoto main original en `59310ac`, el main local en `a8f8203`, cero cambios de `.github/` y la web oficial con su SHA-256 `a10648034b25fc4cda32a67d9c991960fab4f5c3a1ce0e4c180a57a708a98536`. El push original solo actualizó `piero-mejoras` a `0fefefd`. Para publicar otro checkpoint se reutiliza esta misma copia, después de generar y verificar sus archivos; no se debe crear otra ni enviar el build a main del proyecto.
