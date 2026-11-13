@@ -2,7 +2,17 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · controles 2D y viaje al Pacífico · 13 noviembre, 17:10 Bogotá
+## Edición vigente · activación real de movimiento · 13 noviembre, 18:19 Bogotá
+
+Aplicación **`58cecc25a64410019380a2980d57f8bfe229b835`**, commit estático **`5491a3d9f7e4b08df76faf90ed5ce20b8fdfbc46`**, fast-forward desde `f798af8`. Pages confirmó `built` a las **18:17:06**; la lectura anónima de las **18:19:00** comprobó `source.json` y HTML exacto de **449.555 bytes**, SHA-256 **`6dcf246608e5ba61fb413b4c63a0825bf755929523213fb5ede4900376ca21a1`**.
+
+Se eliminó la lámina «Ver presentación sin movimiento». «Activar animaciones y ver intro» ahora guarda una elección explícita, reproduce la secuencia y activa el cielo aun si el sistema solicita reducción. El botón de pausa y el menú muestran el estado efectivo. La introducción incluye tres meteoros y el cielo reduce la espera inicial. La entrada omitida por reducción no se marca como vista. [Cambios, criterios y resultados](MOVIMIENTO.md).
+
+El build exacto pasó 15 recorridos de presentación por motor en Chromium, Firefox y WebKit, además de las regresiones de redistribución, accesibilidad, personajes y producto. Se grabaron dos recorridos reales desde la URL pública, 1342×605 y 390×667, reproduciendo la combinación de preferencias de la captura. Las grabaciones comprueban movimiento visible del Sol, meteoros y pausa; no se limitan a verificar variables internas.
+
+Evidencias: `_work/github-preview/browser-local-58cecc2/`, `readback-58cecc2.json`, `http-58cecc2.json`, `_work/motion-release/` y `_work/motion-public-video/`. La comprobación de las 18:19:01 conservó main remoto `885cd51e977f96bc421a3ad2d18cef322d28039b`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y la huella oficial `bf4db6d86b2f293ebbee90cf85ae4b4ac8973aaafb8ba50c88a9d32d18f6f951`. Esta actualización solo hizo push a `piero-mejoras` y a la copia de revisión.
+
+## Checkpoint · controles 2D y viaje al Pacífico · 13 noviembre, 17:10 Bogotá
 
 La URL sirve la aplicación **`2fec2269fedde019ad05102afb5e1cfcf131f91d`**, commit estático **`f798af8c09f3f64c5cdfc76735418959e9a64eca`**, por fast-forward desde `665b1cd`. Pages confirmó `built` a las **17:09:35**; la lectura anónima de las **17:10:09** comprobó `source.json` y HTML exacto: **445.614 bytes**, SHA-256 **`135a4dd6c80861643436a427e024dae3eff7b50c5778d294357e039c45fa5e4b`**. Hay 112 archivos de aplicación y cuatro metadatos en la copia pública.
 
