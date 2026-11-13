@@ -2,7 +2,19 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · RETO 05 · 13 noviembre, 15:31 Bogotá
+## Edición vigente · ajuste de zoom · 13 noviembre, 15:47 Bogotá
+
+La misma URL sirve la aplicación **`e28c31f900103db54ef1885748ceb79f040f7f8b`**, commit estático **`c0ad86569b421f4991fd0fe4acfecbb82de13847`**. Pages confirmó `built` a las 15:47; la lectura anónima de las 15:48 verificó `source.json` y el HTML exacto: **409.567 bytes**, SHA-256 **`6af64c0f08ca360b7f2abe2041d07768ad0af02ade52a9ca79d4dc3418661bc4`**. El build conserva 112 archivos / **16.624.177 bytes** y los personajes 2D originales; la copia publicada añade cuatro metadatos.
+
+Esta actualización añade la composición de bienvenida y guía para ventanas de hasta 320 píxeles de alto y abrevia las acciones de la guía. Pasan 16 casos de poca altura por motor en Chromium, Firefox y WebKit y se mantienen las 134 pruebas de lógica. [Alcance, evidencia y límites](RETO_05.md). El recorrido público completo volvió a comprobar **106 activos por SHA-256**, los dos catálogos y modos, los cinco personajes, lluvia, imagen propia e idioma, normal/sin WebGL, sin errores JavaScript, respuestas fallidas ni escrituras.
+
+Evidencias de esta versión: `_work/github-preview/browser-local-e28c31f/`, `browser-public-e28c31f-full/`, `pushed-e28c31f.json`, `readback-e28c31f.json`, `http-e28c31f.json` y `official-after-e28c31f.json`. La comprobación pública de poca altura inicial completó 14 de 16 casos y terminó por tiempo de carga del documento. Se conserva separada; la repetición `browser-public-e28c31f-short-retry` completó los 16 casos, sin errores ni respuestas fallidas. Espera el DOM y la aplicación real, en lugar del evento global `load`.
+
+A las 15:48, main remoto seguía en `59310ac43cd25e76cc68022a109326ca5cb27712`, main local en `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y la web oficial con SHA-256 **`a10648034b25fc4cda32a67d9c991960fab4f5c3a1ce0e4c180a57a708a98536`**. Los commits posteriores de pruebas y documentación no cambian el producto servido; la procedencia sigue identificada por `source.json`.
+
+La entrega final queda en `_work/delivery/terrasonic-reto05-2026-11-13-final.zip` y su archivo `.sha256`. El manifiesto identifica el commit de la fuente completa, el commit de aplicación publicado y los resultados incluidos. La copia anterior sin el sufijo final conserva la primera publicación como checkpoint.
+
+## Primera publicación RETO 05 · 13 noviembre, 15:31 Bogotá
 
 La vista independiente sirve la aplicación **`ae859222721b655a9288ff745ad366fac4f0f03c`**, commit estático **`1813cad1f357e4a13f5b79de9d3818a383309509`**, publicado por fast-forward desde `4514aba`. Pages confirmó `built` a las 15:28. `source.json` identifica la procedencia. Esta edición utiliza exclusivamente la banda 2D original en el producto y aplica el brief confirmado, incluida la bienvenida/guía sin scroll interno, carga solo de imágenes, lluvia destacada y ¿Cómo funciona?. [Cambios, auditoría y límites](RETO_05.md).
 
