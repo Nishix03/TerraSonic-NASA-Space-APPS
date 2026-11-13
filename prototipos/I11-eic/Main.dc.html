@@ -1752,6 +1752,12 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
  .px .meteor-three{display:none}
 }
 @media(max-height:400px){.px .space-sun{width:64px;top:28%}.px .space-moon{width:55px;top:30%}.px .space-horizon{bottom:-50vh}}
+
+.px .haptics-settings{grid-column:1/-1;display:grid;gap:8px;border-top:1px solid var(--line);padding:12px 8px 4px;min-width:0}
+.px .haptics-settings h2{font-size:1em;line-height:1.3}
+.px .haptics-settings p{font-size:.85em;line-height:1.45;color:var(--muted);max-width:70ch}
+.px .haptics-settings .row{gap:8px;flex-wrap:wrap}
+.px .haptics-settings button{min-height:44px;white-space:normal;flex:1 1 140px;letter-spacing:.03em}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
@@ -1800,10 +1806,11 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <summary aria-label="{{tx.a11yAria}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="7.2" r="1.5" fill="currentColor" stroke="none"></circle><path d="M7 10h10M12 10v4m0 0-3 4.5m3-4.5 3 4.5"></path></svg><span class="mlabel">{{tx.a11y}}</span></summary>
 <div class="pop" role="group" aria-label="{{tx.a11y}}">
 <sc-for list="{{a11y}}" as="a" hint-placeholder-count="5">
-<button type="button" class="opt" onClick="{{a.toggle}}" aria-pressed="{{a.on}}"><span>{{a.label}}</span><span class="sw" aria-hidden="true"></span></button>
+<button type="button" class="opt" onClick="{{a.toggle}}" aria-pressed="{{a.on}}" disabled="{{a.disabled}}"><span>{{a.label}}</span><span class="sw" aria-hidden="true"></span></button>
 </sc-for>
 <button type="button" class="opt" onClick="{{theme.toggle}}" aria-pressed="{{theme.light}}"><span>{{theme.label}}</span><span class="sw" aria-hidden="true"></span></button>
 <button type="button" class="opt" onClick="{{preferences.open}}">{{preferences.reopenLabel}}</button>
+<section class="haptics-settings" role="group" aria-labelledby="haptics-title"><h2 id="haptics-title">{{haptic.title}}</h2><p id="haptics-status" role="status" aria-live="polite">{{haptic.status}}</p><div class="row"><button type="button" class="btn sm" onClick="{{haptic.test}}" disabled="{{haptic.testOff}}" aria-describedby="haptics-status">{{haptic.testLabel}}</button><button type="button" class="btn sm" onClick="{{haptic.stop}}" disabled="{{haptic.stopOff}}">{{haptic.stopLabel}}</button></div></section>
 </div>
 </details>
 </div>
@@ -3189,6 +3196,54 @@ function analyzeMapImage(img, free, legacy) {
   return { cells: cells, warm: warm / n, cold: cold / n, hot: hot / n, coast: cn ? cs / cn : 0, coastPixels: cn };
 }
 
+// Durations only: the Vibration API cannot set mechanical intensity or prove
+// that hardware moved. Environment getters keep this controller independently testable.
+var HAPTIC_PATTERNS = Object.freeze({ confirm: 15, notice: 45, alert: Object.freeze([35,55,35]), event: Object.freeze([30,45,60]), test: Object.freeze([25,50,25]) });
+class HapticFeedback {
+  constructor(env) {
+    this.env = env; this.activated = false; this.active = false; this.failed = false;
+    this.lastStatus = 'ready'; this.lastAt = -Infinity; this.requests = []; this.seen = new Set();
+  }
+  supported() { return typeof this.env.navigator()?.vibrate === 'function'; }
+  activate() { this.activated = true; }
+  status() {
+    if (!this.supported()) return 'unsupported';
+    if (!this.env.enabled()) return 'off';
+    if (this.env.reduced()) return 'reduced';
+    if (!this.env.visible()) return 'hidden';
+    return this.failed ? 'error' : this.lastStatus;
+  }
+  play(pattern, id) {
+    var named = typeof pattern === 'string', value = named ? HAPTIC_PATTERNS[pattern] : pattern;
+    if (value == null) return false;
+    var parts = Array.isArray(value) ? Array.from(value) : [value];
+    if (!parts.length || parts.length > 5 || parts.some(function (n) { return !Number.isInteger(n) || n < 0 || n > 150; }) || !parts.some(Boolean) || parts.reduce(function (a,b) { return a+b; },0) > 500) return false;
+    if (!this.supported() || !this.env.enabled() || this.env.reduced() || !this.env.visible() || this.failed) return false;
+    var nav = this.env.navigator(), activation = nav.userActivation;
+    if (activation ? !activation.hasBeenActive : !this.activated) { this.lastStatus = 'interaction'; return false; }
+    var now = this.env.now(), cooldown = pattern === 'event' ? 2200 : 700;
+    if (id && this.seen.has(id)) return false;
+    if (now - this.lastAt < cooldown) { this.lastStatus = 'limited'; return false; }
+    this.requests = this.requests.filter(function (at) { return now - at < 60000; });
+    if (this.requests.length >= 12) { this.lastStatus = 'limited'; return false; }
+    this.lastAt = now; this.requests.push(now);
+    try {
+      var accepted = nav.vibrate(Array.isArray(value) ? parts : value) === true;
+      this.active = accepted; this.lastStatus = accepted ? 'accepted' : 'blocked';
+      if (accepted && id) { this.seen.add(id); if (this.seen.size > 32) this.seen.delete(this.seen.values().next().value); }
+      return accepted;
+    } catch (error) { this.active = false; this.failed = true; this.lastStatus = 'error'; return false; }
+  }
+  stop() {
+    if (!this.active) return false;
+    this.active = false;
+    if (!this.supported()) return false;
+    try { return this.env.navigator().vibrate(0) === true; }
+    catch (error) { this.failed = true; this.lastStatus = 'error'; return false; }
+  }
+  retry() { this.failed = false; this.lastStatus = 'ready'; }
+}
+
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -3233,6 +3288,13 @@ class Component extends DCLogic {
     this.loadEpoch = 0; this.fileRun = 0; this.imageLoads = Object.create(null); this.disposed = false;
     this.pendingImageUrl = null;
     this.stars = makeStars(); this.logo = makeLogo(); this.icons = makeIcons(); this.leadCount = 0; this.lastLead = ''; this.frameCount = 0; this.lastFrameKey = '';
+    this.haptics = new HapticFeedback({
+      navigator: function () { return typeof navigator === 'undefined' ? null : navigator; },
+      enabled: function () { return self.state.vibe && !self.disposed; },
+      reduced: function () { return self.bandReduced(); },
+      visible: function () { return !document.hidden; }, now: function () { return Date.now(); }
+    });
+    this.hapticRequestSerial = 0;
   }
   componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); if (self.state.tour) self.measureTour(); }, 200);
     this.onDiscPointer = function (event) {
@@ -3256,6 +3318,7 @@ class Component extends DCLogic {
     };
     this.onTourVisible = function () {
       document.documentElement?.toggleAttribute?.('data-ts-page-hidden', !!document.hidden);
+      if (document.hidden) self.haptics.stop();
       if (!document.hidden && self.state.tour) self.focusTourTarget();
     };
     this.onTourVisible();
@@ -3266,8 +3329,8 @@ class Component extends DCLogic {
       clearTimeout(self.tourResizeTimer);
       if (self.state.tour) self.tourResizeTimer = setTimeout(function () { self.focusTourTarget(); }, 160);
     };
-    this.onTourKey = function (e) { if (self.state.showPreferences) { self.preferencesKey(e); return; } if (self.state.more) { self.moreKey(e); return; } if (e.key === 'Escape') { if (self.state.tour) { e.preventDefault(); self.tourClose(); } else self.closeMenus(true); } };
-    this.onMenuPointer = function (event) { document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(event.target)) menu.open = false; }); };
+    this.onTourKey = function (e) { if (e.isTrusted) self.haptics.activate(); if (self.state.showPreferences) { self.preferencesKey(e); return; } if (self.state.more) { self.moreKey(e); return; } if (e.key === 'Escape') { if (self.state.tour) { e.preventDefault(); self.tourClose(); } else self.closeMenus(true); } };
+    this.onMenuPointer = function (event) { if (event.isTrusted) self.haptics.activate(); document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(event.target)) menu.open = false; }); };
     document.addEventListener('pointerdown', this.onMenuPointer, true);
     this.onMoreFocus = function (e) {
       document.querySelectorAll('details.menu[open]').forEach(function (menu) {
@@ -3296,6 +3359,7 @@ class Component extends DCLogic {
     this.routeMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.onRouteMotion = function () {
       if (!self.routeMedia.matches) return;
+      self.haptics.stop();
       if (self.routeFinish) self.routeFinish();
       if (self.state.tab === 'band') self.cancelBandClip();
     };
@@ -3335,20 +3399,47 @@ class Component extends DCLogic {
     if (key === 'sfx') this.syncVolume();
     if (key === 'reducedMotion') {
       if (value && this.routeFinish) this.routeFinish();
-      if (value) this.cancelBandClip();
+      if (value) { this.cancelBandClip(); this.haptics.stop(); }
       this.syncPreferenceMotion();
     }
-    if (key === 'vibe' && !value) this.vibrateSafely(0);
+    if (key === 'vibe') {
+      if (value) this.vibrateSafely('confirm', 'enable:' + (++this.hapticRequestSerial)); else this.haptics.stop();
+      this.setState({ hapticNotice: '' });
+    }
   }
   setColorScheme(mode) {
     if (mode !== 'light' && mode !== 'dark') return;
     this.setState({ colorScheme: mode });
     try { localStorage.setItem('ts_theme', mode); } catch (ignored) {}
   }
-  vibrateSafely(pattern) {
-    if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return false;
-    if (pattern && (!this.state.vibe || this.vibrationFailed)) return false;
-    try { return navigator.vibrate(pattern); } catch (ignored) { this.vibrationFailed = true; return false; }
+  vibrateSafely(pattern, id) {
+    return pattern === 0 ? this.haptics.stop() : this.haptics.play(pattern, id);
+  }
+  hapticFileError(message) {
+    this.vibrateSafely('alert', 'file-error:' + this.fileRun);
+    this.setState({ upMsg: message });
+  }
+  hapticVm() {
+    var self = this, status = this.haptics.status();
+    var messages = {
+      unsupported: T('Este navegador no ofrece vibración. Puedes continuar con imagen, texto y sonido.', 'This browser does not offer vibration. Continue with images, text and sound.'),
+      off: T('Apagada. Actívala para recibir pulsos en momentos clave.', 'Off. Enable it for pulses at key moments.'),
+      reduced: T('Pausada por Movimiento reducido.', 'Paused by Reduced motion.'),
+      hidden: T('Pausada mientras esta página está oculta.', 'Paused while this page is hidden.'),
+      ready: T('Activada. Depende del motor y de los ajustes de tu dispositivo.', 'Enabled. It depends on your device’s motor and settings.'),
+      interaction: T('Toca Probar vibración para solicitar un pulso.', 'Tap Test vibration to request a pulse.'),
+      accepted: T('El navegador aceptó el pulso. Confirma si lo sientes en tu dispositivo.', 'The browser accepted the pulse. Check whether you feel it on your device.'),
+      blocked: T('El navegador rechazó la vibración. Revisa los ajustes del dispositivo.', 'The browser rejected vibration. Check your device settings.'),
+      error: T('No se pudo iniciar la vibración. Puedes volver a probar.', 'Vibration could not start. You can try again.'),
+      limited: T('Espera un momento antes de otro pulso.', 'Wait a moment before another pulse.')
+    };
+    return {
+      title: T('Vibración del dispositivo', 'Device vibration'), status: messages[status] || messages.ready,
+      testLabel: T('Probar vibración', 'Test vibration'), stopLabel: T('Detener vibración', 'Stop vibration'),
+      testOff: !this.haptics.supported() || !this.state.vibe || this.bandReduced(), stopOff: !this.haptics.supported(),
+      test: function () { self.haptics.retry(); self.vibrateSafely('test', 'test:' + (++self.hapticRequestSerial)); self.setState({ hapticNotice: '' }); },
+      stop: function () { self.haptics.stop(); self.haptics.lastStatus = 'ready'; self.setState({ hapticNotice: '' }); }
+    };
   }
   syncPreferenceMotion() {
     if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion);
@@ -4079,6 +4170,7 @@ class Component extends DCLogic {
       if (pendingCustom) self.releasePendingImage();
       var patch = { upMsg: message, caption: uiText(message) };
       if (file && file.previousCustom) { patch.custom = file.previousCustom; patch.customMode = file.previousCustom.mode; }
+      if (file) self.vibrateSafely('alert', 'file-error:' + self.fileRun);
       self.setState(patch);
     };
     var free = d === 5 && custom && custom.mode === 'free', legacy = d < 5 && !!DISCS[d].legacy;
@@ -4175,6 +4267,7 @@ class Component extends DCLogic {
     this.pendingImageUrl = null;
   }
   startFileLoad() {
+    this.haptics.stop();
     if (this.state.audioPending) this.stop();
     ++this.fileRun;
     this.releasePendingImage();
@@ -4192,6 +4285,7 @@ class Component extends DCLogic {
     this.stop(); this.lastThunder = -9;
     var mute = this.state.mixCustomized ? this.state.mute : this.state.leadOverride ? this.only(this.state.leadOverride) : initialMute || this.only(this.discLead(5, an));
     var self = this;
+    this.vibrateSafely('confirm', 'file-ready:' + this.fileRun);
     this.setState({ custom: custom, customMode: custom.mode || this.state.customMode, an: ans, disc: 5, frame: 0, col: -1, ended: false, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
       self.resetScreenScroll();
       var heading = document.getElementById('player-title');
@@ -4201,7 +4295,7 @@ class Component extends DCLogic {
   handleFile(f) {
     if (this.disposed) return;
     var self = this, name = f.name, operation = this.startFileLoad();
-    if (f.size > 8 * 1024 * 1024) { this.setState({ upMsg: uiMessage('El archivo pesa más de 8 MB. Prueba con uno más pequeño.', 'The file is larger than 8 MB. Try a smaller one.') }); return; }
+    if (f.size > 8 * 1024 * 1024) { this.hapticFileError(uiMessage('El archivo pesa más de 8 MB. Prueba con uno más pequeño.', 'The file is larger than 8 MB. Try a smaller one.')); return; }
     if (/^image\/(png|jpeg|webp|gif)$/.test(f.type) || /\.(png|jpe?g|webp|gif)$/i.test(name)) {
       var accept = function () {
         if (!self.fileLoadCurrent(operation)) return;
@@ -4215,15 +4309,15 @@ class Component extends DCLogic {
           if (!self.fileLoadCurrent(operation)) return;
           var dimensions = rasterDimensions(new Uint8Array(buffer));
           if (dimensions && dimensions[0] * dimensions[1] > 32000000) {
-            self.setState({ upMsg: uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.') });
+            self.hapticFileError(uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.'));
             return;
           }
           accept();
-        }).catch(function () { if (self.fileLoadCurrent(operation)) self.setState({ upMsg: uiMessage('No se pudo leer la imagen. Prueba con otro archivo.', 'The image could not be read. Try another file.') }); });
+        }).catch(function () { if (self.fileLoadCurrent(operation)) self.hapticFileError(uiMessage('No se pudo leer la imagen. Prueba con otro archivo.', 'The image could not be read. Try another file.')); });
       } else accept();
       return;
     }
-    this.setState({ upMsg: uiMessage('Formato no admitido. Elige una imagen PNG, JPG, WebP o GIF.', 'Unsupported format. Choose a PNG, JPG, WebP or GIF image.') });
+    this.hapticFileError(uiMessage('Formato no admitido. Elige una imagen PNG, JPG, WebP o GIF.', 'Unsupported format. Choose a PNG, JPG, WebP or GIF image.'));
   }
   seriesAnalysis(values) {
     // Scaling first keeps finite inputs finite and preserves very small ranges.
@@ -4275,7 +4369,7 @@ class Component extends DCLogic {
     fetch('/_blob/73710d959697d6b73c436a389b19a0de').then(function (r) { if (self.fileLoadCurrent(operation)) return r.json(); }).then(function (d) {
       if (!self.fileLoadCurrent(operation)) return;
       self.useSeries(T('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), [{ name: T('lluvia (mm/día)', 'rainfall (mm/day)'), nameText: uiMessage('lluvia (mm/día)', 'rainfall (mm/day)'), values: d.chiclayo.p.slice(34 * 12, 38 * 12) }], 0, uiMessage('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), operation);
-    }).catch(function () { if (self.fileLoadCurrent(operation)) self.setState({ upMsg: uiMessage('No se pudieron cargar los datos de ejemplo.', 'The sample data could not be loaded.') }); });
+    }).catch(function () { if (self.fileLoadCurrent(operation)) self.hapticFileError(uiMessage('No se pudieron cargar los datos de ejemplo.', 'The sample data could not be loaded.')); });
   }
   colInfo(a, col) {
     var w = 0, c = 0, strong = [], ext = 0, k = 0;
@@ -4492,7 +4586,7 @@ class Component extends DCLogic {
     if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push(T('¡Illapa truena!', 'Illapa thunders!')); }
     if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push(T('Silbo silba: nivel cálido alto en la zona costera seleccionada', 'Silbo whistles: high warm level in the selected coastal area')); }
     else if (col >= 23 && col <= 26) lv.silbo = s.levels.silbo * 0.85;
-    var vibration = s.vibe && (lv.illapa > 0.3 || info.strong.length > 4) ? lv.illapa > 0.3 ? 120 : 25 : 0;
+    var vibration = s.vibe && lv.illapa > 0.3 ? 'event' : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var feel = info.k === 0 ? T('sin valores utilizables en esta columna', 'no usable values in this column') : info.w > 2 ? T('nivel positivo alto', 'high positive level') : info.w > 0.8 ? T('predominio de niveles positivos', 'positive levels dominate') : info.c > 0.8 ? T('predominio de niveles negativos', 'negative levels dominate') : T('nivel cercano a la referencia', 'level near the reference');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
@@ -4538,7 +4632,7 @@ class Component extends DCLogic {
   }
   emitStep(patch, fired, chord, scheduled, vibration) {
     if (!scheduled) {
-      if (vibration) this.vibrateSafely(vibration);
+      if (vibration) this.vibrateSafely(vibration, 'music:' + this.audioRun + ':' + this.state.disc + ':' + this.state.frame + ':' + patch.col);
       patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
       this.setState(patch); return;
     }
@@ -4566,8 +4660,8 @@ class Component extends DCLogic {
       if (frameChanged) patch.playerAnnouncement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
       this.heardThunder = event.thunder;
       patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      if (event.vibration && (!event.fired.illapa || fired.illapa)) this.vibrateSafely(event.vibration, 'music:' + this.audioRun + ':' + this.state.disc + ':' + event.frame + ':' + patch.col);
       this.setState(patch);
-      if (event.vibration) this.vibrateSafely(event.vibration);
     }
   }
   scheduleAudio() {
@@ -4708,7 +4802,7 @@ class Component extends DCLogic {
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push(T('¡Illapa truena!', 'Illapa thunders!'));
       } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); this.leadNote('illapa', t, 0.4); lv.illapa = Math.max(lv.illapa, 0.3); }
     }
-    var vibration = s.vibe && lv.illapa > 0.5 ? 100 : 0;
+    var vibration = s.vibe && lv.illapa > 0.5 ? 'event' : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
     var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }), s);
@@ -5120,7 +5214,8 @@ class Component extends DCLogic {
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('¿Cómo funciona?','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
-      a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      haptic: this.hapticVm(),
+      a11y: a11yDef.map(function (o) { var disabled = o.k === 'vibe' && !self.haptics.supported(), on = !disabled && !!s[o.k]; return { disabled: disabled, ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;
         return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };

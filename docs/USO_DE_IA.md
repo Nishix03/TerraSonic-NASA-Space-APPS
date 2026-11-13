@@ -17,6 +17,8 @@ Como recomendaron en la orientación: declarar la IA da credibilidad. Se agrega 
 | 2026-11-13 | M4–M6 | ChatGPT Codex | Por instrucción posterior, retiro del 3D del build y recuperación de los cinco sprites/veinte PNG originales; controles de secuencia y pasos; corrección de bienvenida y guía móvil | Arte original sin redibujar ni recomprimir, comprobado con Git main. Caminar/Bailar son coreografías 2D sobre cuatro dibujos, sin un ciclo nuevo de piernas. Pruebas de navegador y límites en SPRITES_2D.md |
 | 2026-11-13 | RETO 05 | ChatGPT Codex | Aplicación de los PDF confirmados: redistribución adaptable, bienvenida/guía sin scroll interno, imágenes y lluvia, explicación breve, filtros retirados, originales de prueba-acordes | Pruebas de lógica, navegador y redistribución; sin generación ni retoque de los dibujos originales. Alcance y límites en RETO_05.md |
 | | | | | |
+| 2026-11-13 | Fondo espacial | ChatGPT Codex | SVG y CSS originales para sol, luna, estrellas fugaces, cohetes y horizonte; controles decorativos fuera del árbol accesible | Seis tamaños y dos temas por motor; movimiento reducido y pausa al ocultar la página. No se generaron ni retocaron los personajes originales |
+| 2026-11-13 | Vibración | ChatGPT Codex | Auditoría e integración nativa de navigator.vibrate con patrones, preferencia, límites y cancelación | Pruebas de invocación y frontera de hardware inyectada, claramente separadas. No se afirma validación del motor físico en un celular |
 
 Las filas marcadas «hackathon» son propuestas históricas de registro, no evidencia de que esas funciones, retoques o revisiones hayan ocurrido. No se acredita aquí una exportación WAV, un uso de ElevenLabs o un repintado en Krita.
 

@@ -1538,7 +1538,7 @@ test('vibration is initially off, handles absent or failing APIs, and stops on t
     const {component:c,context}=playbackHarness(),pulses=[];
     context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
     assert.equal(c.state.vibe,false);assert.equal(c.vibrateSafely(25),false);assert.equal(pulses.length,0);
-    c.setPreference('vibe',true);assert.equal(c.vibrateSafely(25),true);assert.equal(pulses.at(-1),25);
+    context.window.matchMedia=()=>({matches:false});context.navigator.userActivation={hasBeenActive:true,isActive:true};c.haptics.activate();c.state.vibe=true;assert.equal(c.vibrateSafely(25),true);assert.equal(pulses.at(-1),25);
     await c.play();
     if(operation==='pause')c.stop();
     if(operation==='seek')c.seekPosition(50);
@@ -1549,7 +1549,7 @@ test('vibration is initially off, handles absent or failing APIs, and stops on t
     if(operation==='preference')c.setPreference('vibe',false);
     assert.equal(pulses.at(-1),0,operation);
   }
-  const {component:c,context}=playbackHarness();c.state.vibe=true;
+  const {component:c,context}=playbackHarness();c.state.vibe=true;context.window.matchMedia=()=>({matches:false});context.navigator.userActivation={hasBeenActive:true,isActive:true};c.haptics.activate();
   delete context.navigator.vibrate;assert.equal(c.vibrateSafely(25),false);
   let attempts=0;context.navigator.vibrate=()=>{attempts++;throw new Error('unavailable hardware');};
   assert.equal(c.vibrateSafely(25),false);assert.equal(c.vibrateSafely(25),false);assert.equal(attempts,1);
@@ -1570,7 +1570,7 @@ function clockHarness() {
 
 test('audio clock schedules ahead while position, history and vibration follow the heard step', async()=>{
   const {component:c,context,scheduled}=clockHarness(),pulses=[];context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
-  c.state.vibe=true;await c.play();c.scheduleAudio();
+  c.state.vibe=true;context.window.matchMedia=()=>({matches:false});context.navigator.userActivation={hasBeenActive:true,isActive:true};c.haptics.activate();await c.play();c.scheduleAudio();
   assert(scheduled.length>=1);assert(scheduled.every(event=>event.at>c.ac.currentTime));
   assert.equal(c.state.col,-1);assert.equal(c.state.events.length,0);assert.deepEqual(pulses,[]);
   c.ac.currentTime=scheduled[0].at;c.scheduleAudio();assert.equal(c.state.col,0);assert.equal(c.state.events.length,1);assert.equal(pulses.at(-1),25);

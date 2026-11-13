@@ -31,6 +31,7 @@ CHECKS = {
     "reto05": "verify_reto05.cjs",
     "short-viewport": "verify_short_viewport.cjs",
     "space-background": "verify_space_background.cjs",
+    "haptics": "verify_haptics.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 
