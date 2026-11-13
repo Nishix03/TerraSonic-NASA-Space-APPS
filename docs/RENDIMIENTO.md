@@ -2,6 +2,8 @@
 
 Se reconstruyó `origin/main` en `59310ac43cd25e76cc68022a109326ca5cb27712` mediante `git archive`, sin cambiar ninguna rama. Tanto esa base como la revisión se sirvieron por HTTP local con el mismo fixture: viewport 390×844, DPR 1, toque/móvil emulado, CPU ×4, latencia 150 ms, descarga 200 KiB/s, subida 100 KiB/s, caché deshabilitada y movimiento reducido. Cada serie usa tres contextos nuevos y una visita con idioma español/preferencias configuradas. No se ejecutaron otros recorridos del proyecto al mismo tiempo.
 
+La primera comparación de este documento corresponde al checkpoint `122fd9d`, con sus fuentes locales. Sus cifras históricas se conservan; la serie adicional del código público `c4f7aca` se identifica al final y no se mezcla con ella.
+
 ## Tiempos de tarea
 
 | Hito | Base, mediana de 3 | Revisión con fuentes locales, mediana de 3 |
@@ -57,3 +59,21 @@ La respuesta pública de GitHub Pages se comprobó con `Accept-Encoding: gzip`: 
 Se exploró mover las hojas y estilos estáticos del prototipo al `head` generado y diferir `support.js`, solo en `_work/critical-head-experiment`. Con tres contextos nuevos por versión, gzip y la misma ventana diagnóstica, el tiempo mediano hasta Inicio fue 1176 → 1146 ms; los LCP, 1252/1108/1124 → 1224/1092/1068 ms. Es una diferencia pequeña y no demuestra una mejora estable. CLS se mantuvo aproximadamente en 0,008 y los mayores eventos programados fueron 312/280/264 → 304/272/280 ms, todavía superiores a 200 ms en estas muestras. El traslado de estilos no se incorporó al producto: no se justifica cambiar el montaje por esta señal. Se añadió únicamente un fondo negro inicial en el documento para conservar la apariencia durante la carga.
 
 Evidencia: `response-compression.json` en `_work/github-preview/` y `gzip-head-before.json`/`gzip-head-after.json` en `_work/benchmarks/`. La columna `textTransferEncoding` identifica el perfil; el JSON conserva FCP/LCP, eventos y huellas. La salida de sonido del fixture está silenciada, manteniendo el cómputo de los efectos configurados. No se afirma que estas mediciones locales sean percentiles de visitantes reales ni que el producto cumpla un objetivo de INP de campo.
+
+
+## Serie adicional del código público c4f7aca
+
+Se exportó otra vez Git 59310ac con `core.autocrlf=false`, sin cambiar ramas, y se comparó con el build c4f7aca publicado. Tres contextos por versión, mismo fixture móvil/CPU/red/caché y transferencia identity, con un límite de heap antiguo Node de 256 MiB. No corrió otro navegador de este proyecto simultáneamente. El JSON incorpora memoria libre antes/después de cada muestra.
+
+| Hito | Base nueva, mediana de 3 | c4f7aca, mediana de 3 |
+| --- | ---: | ---: |
+| Inicio | 6867 ms | 3470 ms |
+| Escuchar incremental | 4569 ms | 4110 ms |
+| Controles de la ficha | 980 ms | 929 ms |
+| Primer modelo de la ficha | 29632 ms | 8460 ms |
+
+La RAM libre al comenzar las muestras base fue de 415 a 989 MiB, frente a 1127–1245 MiB en la revisión. Los primeros modelos base tardaron 14,4–36,4 s; esa dispersión y la presión variable de otras aplicaciones impiden atribuir una mejora exacta al código o presentar los números como un objetivo garantizado. No se cerraron aplicaciones ajenas para estabilizar la laptop. Tampoco se toma este recorrido como reproducción completa de cinco músicos simultáneos.
+
+El inventario sí es exacto: base nueva **76 archivos / 11.819.550 B**; revisión **103 archivos / 7.156.501 B**; HTML c4f7aca **423.697 B**, SHA-256 `4e89a5db6c675b9d477dd5d1059d5c96d6055ea17ac2f77ceb9bcd93db92fd27`. El pequeño cambio del peso base respecto de la tabla histórica procede de la exportación con otros saltos de línea; no son archivos borrados del sitio oficial. El contador CDP de respuestas completadas sigue siendo parcial y no se usa como tamaño total de modelos, ni se interpreta un valor GLB cero como ausencia de descarga.
+
+Evidencia: `_work/benchmarks/final-base-c4-profile.json` y `final-c4-profile.json`. Se conservan las seis observaciones, sus huellas, perfil, fallos vacíos y memoria de host. No son mediciones de teléfonos físicos ni percentiles de producción.

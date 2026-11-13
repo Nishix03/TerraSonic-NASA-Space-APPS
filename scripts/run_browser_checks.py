@@ -24,6 +24,7 @@ CHECKS = {
     "fallback-audio": "verify_fallback_audio.cjs",
     "avatar-interactions": "verify_avatar_interactions.cjs",
     "compact-player": "verify_compact_player.cjs",
+    "models-framing": "verify_model_framing.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

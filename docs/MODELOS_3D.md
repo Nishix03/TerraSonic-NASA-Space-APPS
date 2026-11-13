@@ -79,3 +79,12 @@ El perfil local emula 390 × 844, latencia de 150 ms, descarga de 200 KiB/s, CPU
 Las fichas históricas y culturales ya se incorporaron a `data/characters.v1.json` y se explican en `docs/PERSONAJES.md`. Las menciones de tareas históricas pendientes en el inventario inicial de arriba quedan resueltas por ese catálogo; la revisión cultural externa y la referencia visual para una posible adaptación de Silbo siguen pendientes.
 
 La continuidad del nuevo reproductor ya se midió bajo carga y en cuatro discos completos; [AUDIO_RELOJ.md](AUDIO_RELOJ.md) distingue programación, renders y salida sintetizada de escucha humana. El paquete `f0f5d06` tiene integridad comprobada y conserva los originales, pero las correcciones posteriores requieren otro checkpoint. Siguen pendientes teléfono físico, escucha humana y revisión cultural. Esta revisión de modelos no acredita el cierre del encargo completo de TerraSonic.
+
+
+## Encuadre animado en el navegador
+
+`verify_model_framing.cjs` comprueba el volumen animado contra la cámara ortográfica real del runtime, sin copiar su fórmula de encuadre. El fixture captura esa cámara y usa los vértices con skinning de Three.js. Si la envolvente de una caja parece cruzar el encuadre, verifica los vértices reales para evitar atribuir un recorte a una esquina vacía.
+
+Pasaron **2.500 muestras Chromium**, con cero recortes detectados: cinco personajes × cinco clips × cinco fracciones de cada clip, en retrato, músico del reproductor y escenario, a 390×844 y 1342×605. El retrato incluye ocho giros separados por 45°; escenario y músicos conservan sus orientaciones reales. Son muestras de geometría/pose conducidas por el fixture, sin audio, no todos los fotogramas ni una aprobación cultural. Los encuadres de cara/busto deliberados y las imágenes estáticas tienen comprobaciones separadas.
+
+Evidencia: `_work/models/framing-native-chromium/results.json`. Reproducción: `node --max-old-space-size=256 scripts/verify_model_framing.cjs _site _work/models/framing`. También figura como `models-framing` en el runner. La prueba usa un perfil de navegador aislado y no modifica el .blend, los GLB ni la fórmula de cámara del producto.

@@ -48,3 +48,6 @@ python scripts/package_portable.py _work/delivery/terrasonic-NUEVO --commit COMM
 Usar un directorio nuevo. El empaquetador no borra ni sobrescribe paquetes anteriores. Construye desde el commit, no desde el HTML generado de la copia de trabajo, y verifica las fuentes. Solo copia evidencia JSON/PNG/WebP de las carpetas elegidas; nunca copiar todo `_work`, que contiene cachés y logs privados de despliegue.
 
 Se rechazan rutas de credenciales y patrones de claves conocidos. La selección limitada de entradas evita `.git`, `.env`, `.vercel`, `node_modules` y los directorios de trabajo. Un escaneo de patrones tiene límites: no se declara una auditoría universal de secretos ni una certificación de producción.
+
+
+La exportación adicional c4f7aca con `core.autocrlf=true` produjo exactamente los mismos **103 archivos / 7.156.501 B** que la preparación pública desde Git con LF. La fuente del runtime exportada realmente contenía 138 líneas CRLF; no se supuso la conversión. Los doce archivos de fuentes/licencias pasan y el HTML conserva SHA-256 `4e89a5db6c675b9d477dd5d1059d5c96d6055ea17ac2f77ceb9bcd93db92fd27`. Evidencia: `_work/reproducible-c4f7aca/results.json`.
