@@ -14,4 +14,10 @@ Archivo: `_work/delivery/terrasonic-reto05-2026-11-13-final.zip`, con su `.zip.s
 
 Verificación de producto: 148 pruebas de lógica, 14 recorridos de introducción por motor y 60 de sprites por motor, 408 estados de redistribución y 74 pantallas de axe sin infracciones detectadas. En la URL pública pasaron dos recorridos completos normal/sin WebGL, 106 hashes de activos, 14 recorridos de presentación y 10 hápticos. Las versiones exactas y los resultados iniciales corregidos se distinguen en [CINEMATICA.md](CINEMATICA.md) y [PUBLICACION.md](PUBLICACION.md).
 
+## Recibo del paquete verificado
+
+ZIP: **62.408.463 bytes**, SHA-256 `7b10e13ce54f0c21125c230deb13941b6976f3bea56aa1619225a9c0ba64d68c`. Fuente completa del paquete: `d877dc991d0c753d68f921b9bca20e3a032fc632`; aplicación: `2fec2269fedde019ad05102afb5e1cfcf131f91d`. Este recibo posterior solo documenta el artefacto ya sellado y no cambia esos commits.
+
+La extracción independiente pasó la integridad de 148 archivos más el manifiesto. La reconstrucción desde su fuente produjo los mismos 112 archivos y el HTML público exacto; el runtime no contiene modelos 3D. Los dos recorridos HTTP de la copia extraída pasaron a 390×844 y 1342×605, sin errores JavaScript, respuestas fallidas ni peticiones externas. Evidencia: `_work/delivery/portable-verification-d877dc9/results.json` y `browser/results.json`.
+
 No se afirma certificación WCAG, revisión cultural, escucha humana, rendimiento garantizado ni prueba de zoom nativo o teléfono físico. La vibración fue comprobada a nivel de API y preferencias; falta confirmar el motor en un Android compatible. Los tamaños móviles automatizados son viewports CSS.
