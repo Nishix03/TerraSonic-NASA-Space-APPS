@@ -23,6 +23,7 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 - **Convertir:** lluvia de Chiclayo destacada o imagen propia, procesada localmente. Sustitución de la vista por la última imagen aceptada, límites y errores recuperables. Ya no importa CSV.
 - **Brisa y preferencias:** bienvenida y guía sin desplazamiento interno, práctica saltable/reabrible, voz opcional, idioma, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Modo claro y oscuro pizarra guardados.
 - **Fondo espacial:** sol luminoso, eclipse decorativo, luna, planetas, satélite y estrellas fugaces, con una composición más sencilla en móvil. Respeta Movimiento reducido y alto contraste. [Diseño y comprobaciones](docs/FONDO_ESPACIAL.md).
+- **Viaje al Pacífico:** introducción ilustrada de 5,2 segundos (3 en móvil), saltable y repetible, una vez por sesión. Sin audio automático; alternativa estática y limpieza al salir. [Implementación](docs/CINEMATICA.md) y [prompt detallado con referencias](docs/PROMPT_CINEMATICO.md).
 - **Vibración física opcional:** usa `navigator.vibrate()` cuando existe, con controles de prueba/parada, patrones limitados y cancelación. Sigue apagada inicialmente. La aceptación del navegador no demuestra que haya vibrado un motor: [compatibilidad, pruebas y comprobación desde Android](docs/HAPTICA.md).
 - **¿Cómo funciona? y Tecnología:** ocho tarjetas breves, fuentes y cuatro categorías completas sin filtros genéricos. Se retiran las pantallas Método, Retos del Space Apps y Escenario según el brief confirmado.
 

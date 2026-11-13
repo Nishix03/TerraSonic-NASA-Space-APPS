@@ -185,7 +185,7 @@ a{color:inherit}
 .px ts-sprite-controls .btn{min-height:44px;padding:6px;white-space:normal;overflow-wrap:anywhere;font-size:.8em;letter-spacing:.025em}
 .px .sprite-actions [aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .px .sprite-readout{font-size:.8em;line-height:1.5;color:var(--muted)}
-.px .bstage-label ts-sprite-controls{font:400 1rem/1.45 var(--body);letter-spacing:normal;color:var(--fg)}
+.px .bstage-label ts-sprite-controls{font:400 max(1rem,1.35em)/1.45 var(--body);letter-spacing:normal;color:var(--fg)}
 .px ts-sprite-controls .btn{font:600 .875em/1.3 var(--body);text-transform:none;letter-spacing:normal;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:10px 6px;min-height:46px}
 .px ts-sprite-controls .btn:hover:not(:disabled){border-color:var(--accent);background:var(--surface)}
 .px .sprite-actions .btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
@@ -195,7 +195,7 @@ a{color:inherit}
 .px .sprite-permission[hidden],.px .sprite-notice:empty{display:none}
 .px .sprite-permission input{width:22px;height:22px;flex:0 0 22px;accent-color:var(--accent)}
 .px .sprite-notice{font-size:.825em;line-height:1.5;color:var(--muted)}
-.px .bstage-label .avatar-actions .btn{font:600 .875rem/1.4 var(--body);text-transform:none;letter-spacing:normal;min-height:44px;border-radius:8px}
+.px .bstage-label .avatar-actions .btn{font:600 max(.875rem,1.2em)/1.4 var(--body);text-transform:none;letter-spacing:normal;min-height:44px;border-radius:8px}
 .px .sprite-inspector{border-top:1px solid var(--line);padding-top:6px}
 .px .sprite-inspector summary{cursor:pointer;min-height:44px;display:list-item;align-content:center;font-size:.85em}
 .px .sprite-inspector>p{font-size:.85em;line-height:1.55;margin:6px 0 10px;color:var(--muted)}
@@ -1792,6 +1792,46 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @media(max-width:700px){.px .space-sun{opacity:.65}.px .planet-ringed{width:66px;bottom:14%;right:0;opacity:.38}.px .planet-distant{display:none}.px .space-bright-stars{opacity:.35}.px .space-sun .solar-satellite svg{width:16px;height:11px;left:calc(50% - 8px)}}
 @media(max-height:450px){.px .space-planet{display:none}}
 @media(prefers-reduced-motion:reduce){.px .solar-eclipse{display:none}}
+/* Cinematic presentation: decorative illustration, never a NASA observation. */
+.ts-cinema{position:fixed;inset:0;z-index:120;overflow:hidden;pointer-events:none;background:#101d30;color:#eef3fa;font:400 16px/1.45 "Inter",sans-serif;isolation:isolate}
+.ts-cinema *{box-sizing:border-box}
+.ts-cinema .cinema-space{position:absolute;inset:-10%;background:radial-gradient(ellipse at 12% 18%,#e8b96925,transparent 45%),radial-gradient(ellipse at 80% 80%,#258da32b,transparent 60%),#101d30}
+.ts-cinema .cinema-stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 18%,#d1e8ff 90%,transparent),radial-gradient(1px 1px at 52% 66%,#8be7e9 90%,transparent),radial-gradient(1.5px 1.5px at 82% 34%,#fff 90%,transparent);background-size:173px 191px,277px 311px,419px 367px;opacity:.7}
+.ts-cinema .cinema-stars.near{inset:-8%;background-size:353px 271px,461px 349px,607px 433px;opacity:.45}
+.ts-cinema .cinema-sun{position:absolute;width:clamp(110px,18vw,250px);aspect-ratio:1;top:9%;left:-3%;border-radius:50%;background:radial-gradient(circle at 64% 40%,#fff1b7,#e8b969 45%,#ae602e 70%);box-shadow:0 0 60px 20px #e8b96944,0 0 170px 60px #e8b96918}
+.ts-cinema .cinema-world{position:absolute;width:min(68vh,48vw,650px);aspect-ratio:1;right:12%;top:8%;filter:drop-shadow(0 0 24px #63bbdb35);transform-origin:50% 55%}
+.ts-cinema .cinema-world svg{display:block;width:100%;height:100%}
+.ts-cinema .cinema-orbit{transform-origin:50% 50%}
+.ts-cinema .cinema-wave{position:absolute;width:min(560px,76vw);height:110px;left:calc(50% - min(280px,38vw));top:55%;color:#8be7e9}
+.ts-cinema .cinema-copy{position:absolute;left:8%;bottom:17%;width:min(620px,84%);text-shadow:0 2px 24px #101d30}
+.ts-cinema .cinema-brand{font-size:clamp(1rem,1.5vw,1.4rem);font-weight:700;letter-spacing:.22em;margin:0 0 12px}
+.ts-cinema .cinema-copy h2{font-size:clamp(2rem,4.5vw,4rem);line-height:1.06;letter-spacing:-.025em;margin:0;max-width:15ch}
+.ts-cinema .cinema-copy p:last-child{max-width:42ch;color:#c4d9e8;margin:14px 0 0}
+.ts-cinema .cinema-toolbar{position:absolute;inset:auto max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.8rem;color:#c4d9e8}
+.ts-cinema .cinema-toolbar p{margin:0;max-width:35ch}
+.ts-cinema button{pointer-events:auto;min-height:44px;max-width:60%;padding:10px 16px;border:1px solid #b6c5d5;border-radius:8px;color:#eef3fa;background:#182332;font:600 .875rem/1.3 sans-serif;cursor:pointer}
+.ts-cinema button:focus-visible{outline:3px solid #e8b969;outline-offset:4px}
+.ts-cinema button:hover{background:#294059}
+.px .home-cinema{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.px .home-cinema button{min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);font:600 .8em/1.3 var(--body);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.px .home-cinema button:hover{border-color:var(--accent);color:var(--fg)}
+.px .home-cinema svg{width:18px;height:18px;flex:0 0 18px}
+.px .home-demo{box-shadow:0 12px 40px #050d191a;border-color:color-mix(in srgb,var(--accent) 42%,var(--line))}
+.px .hero .cta .btn{border-radius:8px}
+.px .hero .cta .primary{background:var(--fg);color:var(--bg)}
+.px .top button:focus-visible,.px .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.px .btn:active:not(:disabled){box-shadow:inset 0 0 0 2px var(--accent)}
+.px .home-demo .flow-step{min-width:0}
+.px .space-ocean-wave{position:absolute;inset:auto 15% 4%;width:70%;height:70px;color:#8be7e9;opacity:.16}
+.px .space-ocean-wave path{transform-origin:center;animation:none}
+.px .space-ocean-wave[data-playing="true"] path{animation:space-music-pulse 1.8s ease-in-out infinite alternate}
+@keyframes space-music-pulse{from{transform:scaleY(.55);opacity:.35}to{transform:scaleY(1);opacity:.8}}
+.px.reduce-motion .space-ocean-wave path{animation:none!important}
+.px.app[data-theme="light"] .space-ocean-wave{color:#286d87}
+@media(max-width:640px){.ts-cinema .cinema-world{width:min(82vw,47vh);top:10%;right:9%}.ts-cinema .cinema-copy{left:8%;bottom:20%}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem)}.ts-cinema .cinema-copy p:last-child{font-size:.875rem}.ts-cinema .cinema-wave{top:48%;height:70px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}}
+@media(max-height:450px){.ts-cinema .cinema-world{width:65vh;right:12%;top:0}.ts-cinema .cinema-copy{bottom:24%;width:55%;left:6%}.ts-cinema .cinema-copy h2{font-size:clamp(1.5rem,5vh,2.5rem)}.ts-cinema .cinema-brand{font-size:.8rem;margin-bottom:6px}.ts-cinema .cinema-copy p:last-child{display:none}.ts-cinema .cinema-toolbar{font-size:.7rem}.ts-cinema .cinema-toolbar p{max-width:23ch}}
+@media(prefers-reduced-motion:reduce){.px .space-ocean-wave path{animation:none!important}}
+@media(forced-colors:active){.ts-cinema .cinema-world,.ts-cinema .cinema-stars,.ts-cinema .cinema-sun,.ts-cinema .cinema-wave{display:none}.ts-cinema{background:Canvas;color:CanvasText}.ts-cinema button{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
 .px .haptics-settings{grid-column:1/-1;display:grid;gap:8px;border-top:1px solid var(--line);padding:12px 8px 4px;min-width:0}
 .px .haptics-settings h2{font-size:1em;line-height:1.3}
 .px .haptics-settings p{font-size:.85em;line-height:1.45;color:var(--muted);max-width:70ch}
@@ -1804,6 +1844,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <sc-if value="{{showBg}}">
 <div class="skyfix space-sky" aria-hidden="true" inert>
 <div class="space-atmosphere"></div>
+<svg class="space-ocean-wave" data-playing="{{musicActive}}" viewBox="0 0 900 100" aria-hidden="true"><path d="M0 50h240l20-10 20 20 20-36 20 52 20-70 20 88 20-74 20 50 20-34 20 24 20-20 20 24 20-30 20 32 20-22 20 12h220" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
 <div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div>
 <div class="space-sun">
 <span class="solar-halo"></span>
@@ -1882,6 +1923,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <button type="button" class="btn" onClick="{{heroBand}}">{{tx.heroBand}}</button>
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
+<div class="home-cinema"><button type="button" onClick="{{intro.replay}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div>
 </div>
 <div class="home-demo">
 <figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
@@ -3287,6 +3329,70 @@ class HapticFeedback {
   retry() { this.failed = false; this.lastStatus = 'ready'; }
 }
 
+// A finite, optional illustration. The application is already usable underneath.
+class CinematicIntro {
+  constructor(owner) { this.owner=owner; this.animations=[]; this.timers=[]; this.seen=false; }
+  markSeen() { this.seen=true; try { sessionStorage.setItem('ts_intro_seen','1'); } catch (ignored) {} }
+  hasSeen() { try { return this.seen||sessionStorage.getItem('ts_intro_seen')==='1'; } catch (ignored) { return this.seen; } }
+  start(replay=false) {
+    var self=this, app=this.owner;
+    if(typeof document.createElement!=='function'||!document.body?.append)return;
+    if(app.disposed||app.state.tab!=='home'||app.state.showPreferences||app.state.tour||document.hidden||(!replay&&this.hasSeen()))return;
+    this.finish(false); this.markSeen();
+    var still=app.bandReduced()||app.state.contrast||window.matchMedia?.('(forced-colors: active)').matches;
+    if(still&&!replay)return;
+    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static=String(!!still);root.setAttribute('aria-label',T('Presentación de TerraSonic','TerraSonic presentation'));
+    root.innerHTML=`<div class="cinema-space" aria-hidden="true"><div class="cinema-stars"></div><div class="cinema-stars near"></div><div class="cinema-sun"></div></div>
+<div class="cinema-world" aria-hidden="true"><svg viewBox="0 0 500 500"><defs>
+<radialGradient id="intro-ocean" cx="30%" cy="28%" r="77%"><stop stop-color="#3f9bb5"/><stop offset=".45" stop-color="#1e6088"/><stop offset=".8" stop-color="#14324e"/><stop offset="1" stop-color="#0d192b"/></radialGradient>
+<radialGradient id="intro-air"><stop offset=".82" stop-color="#5bbadc" stop-opacity="0"/><stop offset=".9" stop-color="#8be7e9" stop-opacity=".65"/><stop offset=".93" stop-color="#8be7e9" stop-opacity=".08"/><stop offset="1" stop-color="#8be7e9" stop-opacity="0"/></radialGradient>
+<linearGradient id="intro-land" x2="1" y2="1"><stop stop-color="#9cbdb0"/><stop offset=".6" stop-color="#668f8b"/><stop offset="1" stop-color="#284e58"/></linearGradient>
+<linearGradient id="intro-night"><stop offset=".4" stop-color="#07131f" stop-opacity="0"/><stop offset="1" stop-color="#07131f" stop-opacity=".9"/></linearGradient>
+<clipPath id="intro-disc"><circle cx="250" cy="250" r="210"/></clipPath></defs>
+<circle cx="250" cy="250" r="245" fill="url(#intro-air)"/><circle cx="250" cy="250" r="210" fill="url(#intro-ocean)"/>
+<g clip-path="url(#intro-disc)"><g fill="url(#intro-land)"><path d="M20 80l42-33 42 8 27 26 23 6 12 22-22 20-13 28-23 8-13 34-24 11 2 22-19 31-32-4-21-55zM73 251l20-13 17 14 8 22-7 16 24 18 29 5 26 30-4 34-29 19-34-8-19-23-24 4-20-20-7-36zM126 223l9 9-4 11-7-5zM142 256l8 8 2 15-7-1zM352 45l77 7 48 63-5 45-30 7-10 21-23 13 1 18 12 18-4 16-24-11-10-26-16-10-8-32-21-15-3-28-16-16zM405 248l24 12 27 30 29 22 5 34-24 18-13 29-9 33-23 9-10-35-14-24 4-28-13-30 2-30z"/></g>
+<g fill="none" stroke="#bae9ed" stroke-opacity=".2"><ellipse cx="250" cy="250" rx="205" ry="75"/><ellipse cx="250" cy="250" rx="110" ry="210"/><path d="M40 250h420M63 155q187-40 374 0M63 345q187 40 374 0"/></g>
+<g fill="none" stroke="#e8f9ff" stroke-opacity=".3" stroke-linecap="round" stroke-width="5"><path d="M119 141q63-26 103-8m75 34q43-12 65 3M163 264q38-18 69-4m46 71q39-17 78-3M136 378q55 19 106 5"/></g><circle cx="250" cy="250" r="210" fill="url(#intro-night)"/></g>
+<g class="cinema-orbit" fill="none" stroke="#e8b969" stroke-opacity=".4"><ellipse cx="250" cy="250" rx="242" ry="93" transform="rotate(-24 250 250)"/><path d="M250 12v16m0 444v16M12 250h16m444 0h16"/></g></svg></div>
+<svg class="cinema-wave" viewBox="0 0 560 110" fill="none" aria-hidden="true"><path d="M0 55h80l16-9 16 18 16-29 16 46 16-65 16 81 16-66 16 42 16-28 16 20 16-17 16 13 16-18 16 25 16-36 16 43 16-36 16 25 16-16 16 9h80" stroke="currentColor" stroke-width="1.5"/></svg>
+<div class="cinema-copy" aria-hidden="true"><p class="cinema-brand">TERRASONIC</p><h2></h2><p class="cinema-description"></p></div>
+<div class="cinema-toolbar"><p></p><button type="button"></button></div>`;
+    this.update();this.returnFocus=document.activeElement;document.body.append(root);
+    root.style.fontFamily=getComputedStyle(document.querySelector('.px.app')).fontFamily;
+    var skip=root.querySelector('button');skip.addEventListener('click',function(){self.finish(true);});skip.focus({preventScroll:true});
+    this.onKey=function(event){if(event.key==='Escape'||(event.key==='Tab'&&root.contains(document.activeElement))){event.preventDefault();event.stopPropagation();self.finish(true);}else if(!root.contains(event.target))self.finish(false);};
+    this.onPointer=function(event){if(!root.contains(event.target))self.finish(false);};
+    this.onHidden=function(){if(document.hidden)self.finish(false);};
+    document.addEventListener('keydown',this.onKey,true);document.addEventListener('pointerdown',this.onPointer,true);document.addEventListener('visibilitychange',this.onHidden);
+    if(still)return;
+    var duration=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches?3000:5200;root.dataset.duration=String(duration);
+    function animate(selector,frames,options={}){var el=selector==='root'?root:root.querySelector(selector);if(!el?.animate)throw Error('Animation unavailable');var animation=el.animate(frames,{duration:duration,fill:'both',easing:'linear',...options});self.animations.push(animation);return animation;}
+    try{
+      animate('.cinema-space',[{transform:'scale(1)',offset:0},{transform:'scale(1.07)',offset:1}]);
+      animate('.cinema-stars.near',[{transform:'scale(.98)',opacity:0},{transform:'scale(1.15)',opacity:.45}]);
+      animate('.cinema-sun',[{opacity:0,transform:'scale(.8)',offset:0},{opacity:1,transform:'scale(1)',offset:.25},{opacity:.7,transform:'scale(1.03)',offset:1}]);
+      animate('.cinema-world',[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
+      animate('.cinema-orbit',[{opacity:0,transform:'rotate(-12deg)',offset:0},{opacity:1,transform:'rotate(0deg)',offset:.5},{opacity:0,transform:'rotate(8deg)',offset:1}]);
+      animate('.cinema-wave',[{opacity:0,transform:'scaleX(.3)',offset:0},{opacity:0,transform:'scaleX(.3)',offset:.46},{opacity:.85,transform:'scaleX(1)',offset:.7},{opacity:0,transform:'scaleX(1.1)',offset:1}]);
+      animate('.cinema-copy',[{opacity:0,transform:'translateY(14px)',offset:0},{opacity:0,transform:'translateY(14px)',offset:.22},{opacity:1,transform:'translateY(0)',offset:.45},{opacity:1,transform:'translateY(0)',offset:.75},{opacity:0,transform:'translateY(-6px)',offset:1}]);
+      var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.72},{opacity:0,offset:1}]);
+      // Real UI stays visible by default; only this optional run adds keyframes.
+      var targets=['.brand','.top','#main-content .hero h1','.hero .lede','.hero .cta','.home-demo','.hero .facts'];
+      targets.forEach(function(selector,i){var el=document.querySelector(selector);if(!el?.animate)return;var delay=duration*.7+i*55;self.animations.push(el.animate([{opacity:0,transform:selector==='.home-demo'?'translateX(14px) rotate(1deg)':'translateY(8px)'},{opacity:1,transform:'translate(0,0) rotate(0)'}],{duration:Math.min(380,duration-delay-20),delay:delay,fill:'backwards',easing:'cubic-bezier(.2,.7,.2,1)'}));});
+      end.onfinish=function(){self.finish(true);};this.timers.push(setTimeout(function(){self.finish(true);},duration+250));
+    }catch(ignored){this.finish(true);}
+  }
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración artística · océano Pacífico','Artistic illustration · Pacific Ocean');this.root.querySelector('button').textContent=this.root.dataset.static==='true'?T('Cerrar presentación','Close presentation'):T('Saltar introducción','Skip intro');}
+  finish(restoreFocus=false){
+    if(!this.root)return;
+    var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
+    this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];
+    root?.remove();document.removeEventListener('keydown',this.onKey,true);document.removeEventListener('pointerdown',this.onPointer,true);document.removeEventListener('visibilitychange',this.onHidden);
+    if(restoreFocus&&focused){var target=this.returnFocus?.isConnected&&this.returnFocus!==document.body?this.returnFocus:document.querySelector('.hero .btn.primary');target?.focus({preventScroll:true});}
+    this.returnFocus=null;
+  }
+}
+
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -3402,6 +3508,7 @@ class Component extends DCLogic {
     this.routeMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.onRouteMotion = function () {
       if (!self.routeMedia.matches) return;
+      self.cinema?.finish(true);
       self.haptics.stop();
       if (self.routeFinish) self.routeFinish();
       if (self.state.tab === 'band') self.cancelBandClip();
@@ -3420,7 +3527,9 @@ class Component extends DCLogic {
       this.onVoicesChanged();
       window.speechSynthesis.addEventListener?.('voiceschanged', this.onVoicesChanged);
     }
+    this.cinema = new CinematicIntro(this);
     if (this.state.showPreferences) { this.setPreferencesInert(true); this.focusPreferences(); }
+    else this.cinema.start();
   }
   closeMenus(restoreFocus) {
     document.querySelectorAll('details.menu[open]').forEach(function (menu) {
@@ -3437,10 +3546,12 @@ class Component extends DCLogic {
     if (PREFERENCE_KEYS.indexOf(key) < 0) return;
     var patch = {}; patch[key] = !!value;
     this.setState(patch); this.savePreferences();
+    if (key === 'contrast' && value) this.cinema?.finish(true);
     if (key === 'voice' && !value) this.stopSpeech();
     if (key === 'big' || key === 'legible') this.ensureNavVisible();
     if (key === 'sfx') this.syncVolume();
     if (key === 'reducedMotion') {
+      if (value) this.cinema?.finish(true);
       if (value && this.routeFinish) this.routeFinish();
       if (value) { this.cancelBandClip(); this.haptics.stop(); }
       this.syncPreferenceMotion();
@@ -3501,6 +3612,7 @@ class Component extends DCLogic {
   }
   focusPreferences() { var target = document.getElementById('preferences-voice') || document.getElementById('preferences-dialog'); if (target) target.focus({ preventScroll: true }); }
   openPreferences() {
+    this.cinema?.finish(false);
     if (this.state.more) this.closeMore();
     if (this.state.tour) this.tourClose();
     this.preferencesReturnFocus = document.activeElement;
@@ -3512,7 +3624,8 @@ class Component extends DCLogic {
     var target = this.preferencesReturnFocus;
     if (!target || !target.isConnected) target = document.querySelector('.hero .btn.primary') || document.getElementById('tour-guide');
     if (target) target.focus({ preventScroll: true });
-    if (tutorial) this.startTutorial();
+    if (tutorial) { this.cinema?.markSeen(); this.startTutorial(); }
+    else this.cinema?.start();
   }
   preferencesKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); this.finishPreferences(false); return; }
@@ -3552,6 +3665,7 @@ class Component extends DCLogic {
     LANG = code;
     try { localStorage.setItem('ts_lang', code); } catch (e) {}
     applyLang();
+    this.cinema?.update();
     this.stopSpeech();
     var chord = chordIndex < 0 ? s.chord : chordOf(this.profile(), this.profile().prog[chordIndex]).label;
     this.setState({ lang: code, chord: chord, route: Object.assign({}, s.route, { title: this.subTitles()[s.sub] || ROUTE_LOOK[s.tab].title, section: ROUTE_LOOK[s.tab].title + ' · ' + PAGES[s.tab][0] }),
@@ -3784,6 +3898,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     if (this.disposed) return;
+    this.cinema?.finish(false);
     this.setPreferencesInert(false);
     if (window.speechSynthesis) window.speechSynthesis.removeEventListener?.('voiceschanged', this.onVoicesChanged);
     this.disposed = true;
@@ -4002,6 +4117,7 @@ class Component extends DCLogic {
     this.routeChange({ sub: i }, s.tab, this.subTitles()[i]);
   }
   goTab(k, sub) {
+    this.cinema?.finish(false);
     this.settleArrivedRoute();
     var s = this.state;
     if (k === 'juke' && k === s.tab && sub == null && s.sub !== 0) { this.goSub(0); return; }
@@ -5172,7 +5288,8 @@ class Component extends DCLogic {
     var leadKey = this.leadChar();
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
-      th: th, ic: this.icons, showBg: !hc, stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      th: th, ic: this.icons, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      intro: { replayLabel: this.bandReduced() ? T('Ver presentación sin movimiento','View presentation without motion') : T('Repetir introducción','Replay intro'), replay: function () { self.cinema?.start(true); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
       stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),
