@@ -11,3 +11,11 @@ La capa es `aria-hidden`, `inert` y no recibe punteros. Movimiento reducido del 
 `verify_space_background.cjs` comprueba seis viewports, temas claro/oscuro, avance real de las líneas de tiempo CSS, propiedades animadas, portada completa, clics, movimiento reducido, evento de ocultación simulado y alto contraste. Chromium, Firefox y WebKit completan los seis casos cada uno. La simulación del evento de visibilidad verifica el controlador; no acredita gestión de batería en un teléfono físico.
 
 La escena queda guardada en un commit independiente de la ampliación háptica. Los resultados y capturas están en `_work/space-sky-qa/`; las 134 pruebas de lógica existentes siguen pasando.
+
+## Ampliación solicitada
+
+El sol tiene un halo más luminoso con una variación suave de doce segundos. Un satélite pequeño recorre su órbita. Un eclipse decorativo pasa una vez por ciclo de 76 segundos: la silueta atraviesa el disco y deja visible la corona. No es una simulación astronómica ni sigue posiciones o fechas reales.
+
+Las estrellas mantienen su posición y algunas varían suavemente su brillo en siete u once segundos, con acentos azul agua y azul marino. Se añaden dos planetas discretos, uno con anillos cerca del horizonte. En móvil se conserva solo el planeta con anillos; en ventanas de poca altura se retiran ambos. Los objetos siguen dentro de la capa fija y no alteran el tamaño de la página. Movimiento reducido también detiene el halo y la órbita y oculta el paso del eclipse.
+
+La prueba de fondo adicional inspecciona la fase del eclipse mediante la línea de tiempo nativa del navegador y guarda una captura, además de las fases clara, oscura y con movimiento reducido. No se utiliza una animación como demostración de vibración física.

@@ -22,6 +22,8 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 - **Banda:** cinco ilustraciones 2D originales, Animar/Caminar/Bailar, pausa, pasos e inspector de cuatro dibujos. Muestras de instrumento detenibles e historias identificadas como ficción.
 - **Convertir:** lluvia de Chiclayo destacada o imagen propia, procesada localmente. Sustitución de la vista por la última imagen aceptada, límites y errores recuperables. Ya no importa CSV.
 - **Brisa y preferencias:** bienvenida y guía sin desplazamiento interno, práctica saltable/reabrible, voz opcional, idioma, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Modo claro y oscuro pizarra guardados.
+- **Fondo espacial:** sol luminoso, eclipse decorativo, luna, planetas, satélite y estrellas fugaces, con una composición más sencilla en móvil. Respeta Movimiento reducido y alto contraste. [Diseño y comprobaciones](docs/FONDO_ESPACIAL.md).
+- **Vibración física opcional:** usa `navigator.vibrate()` cuando existe, con controles de prueba/parada, patrones limitados y cancelación. Sigue apagada inicialmente. La aceptación del navegador no demuestra que haya vibrado un motor: [compatibilidad, pruebas y comprobación desde Android](docs/HAPTICA.md).
 - **¿Cómo funciona? y Tecnología:** ocho tarjetas breves, fuentes y cuatro categorías completas sin filtros genéricos. Se retiran las pantallas Método, Retos del Space Apps y Escenario según el brief confirmado.
 
 Los niveles derivados de las imágenes **no son grados de temperatura**. Las progresiones y el carácter musical son decisiones artísticas. EIC y GIBS usan paletas y rangos diferentes; no se presentan sus niveles como magnitudes físicas comparables.
