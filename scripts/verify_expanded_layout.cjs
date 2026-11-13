@@ -31,11 +31,13 @@ async function main(){
   for(const [width,height]of [[320,256],[320,568],[390,844],[667,375],[1342,605],[1920,1080]])for(const setting of ['default','large','spacing']){
    await page.setViewportSize({width,height});await page.locator('#expanded-text-fixture').evaluateAll(els=>els.forEach(el=>el.remove()));
    if(setting!=='default')await page.addStyleTag({content:setting==='large'?'.px.app{font-size:32px!important}':'*{line-height:1.5!important;letter-spacing:.12em!important;word-spacing:.16em!important}p{margin-bottom:2em!important}'}).then(handle=>handle.evaluate(el=>el.id='expanded-text-fixture'));
-   for(const language of ['es','en']){
+   for(const language of ['es','en'])for(const engine of ['melody','raw']){
     await page.evaluate(language=>{__app.setLang(language);__app.goTab('juke');},language);
     await page.waitForFunction(()=>!__app.state.trans);await page.locator('#tour-sets button').nth(1).click();
     await page.locator('.discgrid .dcard').nth(3).click();await page.evaluate(()=>__app.gotoFrame(2));
     await page.waitForFunction(()=>__app.cur()&&!__app.state.trans);
+    await page.evaluate(engine=>__app.setEngine(engine),engine);
+    assert.equal(await page.locator('.chordsrow').count(),engine==='melody'?1:0);
     await page.evaluate(()=>{const events=Array.from({length:200},()=>__app.eventFor({silbo:true,inti:true,mama:true,yaku:true,illapa:true},''));__app.setState({events});});
     await openDetails(page);await page.waitForFunction(()=>document.querySelectorAll('.event-history li').length===200);
     await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
@@ -48,7 +50,7 @@ async function main(){
     await page.locator('.event-history summary').focus();await page.keyboard.press('Tab');
     assert(await page.locator('.event-history ol').evaluate(el=>el===document.activeElement),'the scrollable event list must be reachable by Tab');
     await page.keyboard.press('End');await page.waitForFunction(()=>{const el=document.querySelector('.event-history ol');return el.scrollHeight-el.scrollTop-el.clientHeight<=2;});
-    const label=`${width}-${height}-${setting}-${language}`,player=await audit(page,label+' player'),end=await checkEnd(page);
+    const label=`${width}-${height}-${setting}-${language}-${engine}`,player=await audit(page,label+' player'),end=await checkEnd(page);
     if(setting==='default'&&language==='es'&&[390,1342].includes(width))await page.screenshot({path:path.join(output,label+'-player-end.png')});
     const snapshot=await page.evaluate(()=>JSON.stringify([__app.state.disc,__app.state.frame,__app.state.col,__app.state.events.length]));
     await page.locator('#tour-more button').click();await page.locator('#more-dialog').waitFor();const dialog=await audit(page,label+' dialog','#more-dialog');
@@ -60,10 +62,10 @@ async function main(){
     const readingEnd=await page.locator('#more-dialog .why').last().evaluate(el=>{const r=el.getBoundingClientRect(),dialog=el.closest('[role="dialog"]').getBoundingClientRect();return {bottom:r.bottom,dialogBottom:dialog.bottom};});assert(readingEnd.bottom<=readingEnd.dialogBottom+1,'the explanation can be read to the end with the keyboard');
     await page.keyboard.press('Escape');assert.equal(await page.locator('#more-dialog').count(),0);assert.equal(await page.evaluate(()=>JSON.stringify([__app.state.disc,__app.state.frame,__app.state.col,__app.state.events.length])),snapshot);assert.equal(await page.locator('#tour-more button').evaluate(el=>el===document.activeElement),true);
     await page.evaluate(()=>__app.goTab('data'));await page.waitForFunction(()=>!__app.state.trans);await openDetails(page);const convert=await audit(page,label+' convert'),convertEnd=await checkEnd(page);
-    report.checks.push({width,height,setting,language,player,end,dialog,size,readingEnd,convert,convertEnd});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
+    report.checks.push({width,height,setting,language,engine,player,end,dialog,size,readingEnd,convert,convertEnd});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
    }
   }
   assert.deepEqual(report.errors,[]);await context.close();console.log('PASS expanded layouts',report.checks.length,'viewport/settings/language combinations');
- }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}
+ }finally{try{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));}finally{await browser.close();}}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

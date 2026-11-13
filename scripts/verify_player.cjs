@@ -72,6 +72,10 @@ async function main() {
       await page.evaluate(() => { __app.setState({ mute: __app.allMute(false), leadOverride: 'mama' }); });
       for (const mode of ['melody', 'raw']) {
         await page.locator('.player-modes button').nth(mode === 'melody' ? 0 : 1).click();
+        assert.equal(await page.locator('.chordsrow').count(),mode==='melody'?1:0,'Data must not show an unused chord progression');
+        await page.locator('.player-readout summary').click();
+        if(mode==='raw')assert.match(await page.locator('.player-readout').textContent(),/niveles derivados/i);
+        await page.locator('.player-readout summary').click();
         const slider = page.locator('#playback-position');
         await slider.focus(); await slider.press('Home'); await slider.press('ArrowRight');
         assert.equal(await page.evaluate(() => __app.playerPosition()), 1);

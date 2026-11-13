@@ -1850,3 +1850,30 @@ test('analysis indicators name the positive threshold and never invent an ocean 
   c.state.custom={name:'NASA',source:'eic',mode:'palette'};assert.equal(c.renderVals().stats.coast,'+2.0');assert.equal(c.playerVm().legend[3].label,'No ocean data');
   c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:0,coastPixels:0});assert.equal(c.renderVals().stats.coast,'—');
 });
+
+test('player explanations distinguish derived Data tones from composed harmony and local image position',()=>{
+  const {component:c}=setup();
+  c.setEngine('raw');let view=c.renderVals();assert.equal(view.showHarmony,false);assert.equal(view.progItems.length,0);assert.equal(view.moodText,'');assert.match(view.hearText,/niveles derivados/i);assert(!/Datos puros|traducción.*literal/.test(view.hearText));
+  c.setLang('en');view=c.renderVals();assert.match(view.hearText,/derived levels/);assert.match(view.whyTiles[0].body,/not measured degrees/);
+  c.setEngine('melody');c.state.disc=5;c.state.custom={name:'values.csv',cols:[]};view=c.renderVals();assert(view.showHarmony);assert(view.progItems.length>=4);assert.match(view.whyTiles[2].title,/Vertical position/);assert(!/Latitude/.test(view.whyTiles[2].body));
+});
+
+test('the EIC player dates and stated Method coverage match the versioned extraction manifest',()=>{
+  const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/discos.json'),'utf8'));
+  const {component:c,context}=setup();
+  assert.equal(manifest.length,5);
+  manifest.forEach((disc,index)=>{
+    const player=context.DISC_SETS.eic[index];assert.equal(player.id,disc.id);
+    assert.deepEqual(Array.from(player.dates),disc.fotogramas.map(frame=>frame.fecha));
+    assert.deepEqual(Array.from(player.files),disc.fotogramas.map(frame=>frame.url.replace(/^data\//,'')));
+  });
+  assert.equal(manifest.at(-1).fotogramas.at(-1).fecha,'2026-10-03');
+  assert.match(c.renderVals().tx.methodCoverage,/3 de octubre de 2026/);c.setLang('en');assert.match(c.renderVals().tx.methodCoverage,/3 October 2026/);
+});
+
+test('final disposal revokes the accepted file once while repeated disposal remains harmless',()=>{
+  const {component:c,context}=setup(),revoked=[];context.URL={revokeObjectURL:url=>revoked.push(url)};
+  c.state.custom={name:'accepted.csv',url:'blob:accepted'};c.pendingImageUrl='blob:pending';
+  c.componentWillUnmount();assert(revoked.includes('blob:accepted'));assert(revoked.includes('blob:pending'));
+  const first=JSON.stringify(revoked);c.componentWillUnmount();assert.equal(JSON.stringify(revoked),first);
+});

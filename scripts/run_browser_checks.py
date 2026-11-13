@@ -19,6 +19,7 @@ CHECKS = {
     "image-geometry": "verify_image_geometry.cjs",
     "image-formats": "verify_image_formats.cjs",
     "expanded-layout": "verify_expanded_layout.cjs",
+    "page-lifecycle": "verify_page_lifecycle.cjs", "memory": "measure_memory.cjs",
     "fallback-audio": "verify_fallback_audio.cjs",
     "avatar-interactions": "verify_avatar_interactions.cjs",
 }
@@ -37,8 +38,8 @@ def main() -> int:
         print("\n".join(f"{key}: {value}" for key, value in CHECKS.items()))
         return 0
     checks = args.only or DEFAULT
-    if args.browser != "chromium" and any(key in {"fonts", "keyboard"} for key in checks):
-        parser.error("fonts and keyboard currently collect Chrome DevTools evidence; run these with chromium")
+    if args.browser != "chromium" and any(key in {"fonts", "keyboard", "memory"} for key in checks):
+        parser.error("fonts, keyboard and memory collect Chrome DevTools evidence; run these with chromium")
     site, output = args.site.resolve(), args.evidence.resolve()
     if not (site / "index.html").is_file():
         parser.error("Generate the static site before running browser checks")

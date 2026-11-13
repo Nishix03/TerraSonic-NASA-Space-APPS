@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Terrasonic · Earth Jukebox</title>
+<style>html,body{margin:0;background:#000;color:#fff}</style>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -1734,10 +1735,10 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="readout">
 <p><span class="tag">{{tx.see}}</span><span>{{seeText}}</span></p>
 <p><span class="tag">{{tx.hear}}</span><span>{{hearText}}</span></p>
-<div class="row chordsrow">
+<sc-if value="{{showHarmony}}"><div class="row chordsrow">
 <div class="chips" aria-label="{{tx.chordsAria}}"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
 <span class="muted small">{{moodText}}</span>
-</div>
+</div></sc-if>
 </div>
 </details>
 <div class="player-tools">
@@ -3040,7 +3041,7 @@ var TX = {
     dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
     noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
     howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Del mapa a una interpretación musical explicable. El análisis y el sonido se ejecutan en tu navegador.',
-    methodCoverageTitle: 'Qué zona y qué fechas', methodCoverage: 'Recorte del Pacífico: 140°–70°O y 25°S–15°N. EIC contiene cinco selecciones de seis imágenes cada 30 días, del 16 de mayo de 2024 al 2 de noviembre de 2026. GIBS incluye julio–diciembre de 2010 y 2015, diciembre de 2016–mayo de 2017 y enero–junio y julio–diciembre de 2023. Son archivos almacenados; no un monitoreo en vivo.',
+    methodCoverageTitle: 'Qué zona y qué fechas', methodCoverage: 'Recorte del Pacífico: 140°–70°O y 25°S–15°N. EIC contiene cinco selecciones de seis imágenes cada 30 días, del 16 de mayo de 2024 al 3 de octubre de 2026. GIBS incluye julio–diciembre de 2010 y 2015, diciembre de 2016–mayo de 2017 y enero–junio y julio–diciembre de 2023. Son archivos almacenados; no un monitoreo en vivo.',
     methodChiclayo: 'Chiclayo es el vínculo local: el ejemplo alternativo usa 48 promedios mensuales de precipitación diaria de NASA POWER, 2015–2018, en −6,77°, −79,84°. El archivo conserva 1981–2024. Esta serie no prueba que un color del océano cause lluvia en la ciudad.',
     methodLimitsTitle: 'Qué significa y qué limita', methodLimits: 'Una anomalía compara la temperatura con una referencia climática: cero no significa 0 °C. La imagen puede perder detalle al comprimirse y reducirse. EIC deriva niveles de una escala original −4 a +4 °C; GIBS usa su propia escala y extremos abiertos, acotados a −3 y +3 para la sonificación. El nivel −5 a +5 no es una medida en grados ni permite comparar físicamente ambos productos.',
     methodRule: 'Los hechos de impacto se vinculan a episodio, territorio y mes. En Pacora/marzo 2023, 29 viviendas afectadas documentadas activan una reducción editorial fija de 10 ppm en Melodía de Yaku. No se calcula tristeza ni se escala el daño en notas. Sin evidencia y regla aplicables se mantiene la armonía base.',
@@ -3091,7 +3092,7 @@ var TX = {
     dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
     noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
     howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'From a map to an explainable musical interpretation. Analysis and sound run in your browser.',
-    methodCoverageTitle: 'Which area and dates', methodCoverage: 'Pacific crop: 140°–70°W and 25°S–15°N. EIC contains five selections of six images, spaced 30 days apart, from 16 May 2024 to 2 November 2026. GIBS covers July–December 2010 and 2015, December 2016–May 2017, and January–June and July–December 2023. These are stored files, not live monitoring.',
+    methodCoverageTitle: 'Which area and dates', methodCoverage: 'Pacific crop: 140°–70°W and 25°S–15°N. EIC contains five selections of six images, spaced 30 days apart, from 16 May 2024 to 3 October 2026. GIBS covers July–December 2010 and 2015, December 2016–May 2017, and January–June and July–December 2023. These are stored files, not live monitoring.',
     methodChiclayo: 'Chiclayo is the local connection: the alternative sample uses 48 monthly means of daily precipitation from NASA POWER, 2015–2018, at −6.77°, −79.84°. The stored file retains 1981–2024. This series does not prove that an ocean color causes rain in the city.',
     methodLimitsTitle: 'Meaning and limits', methodLimits: 'An anomaly compares temperature with a climate reference: zero does not mean 0 °C. Compression and downsampling may lose image detail. EIC derives levels from an original −4 to +4 °C scale; GIBS uses its own scale with open extremes, bounded to −3 and +3 for sonification. The −5 to +5 level is not measured in degrees and does not enable physical comparison of the two products.',
     methodRule: 'Impact facts match an episode, territory and month. In Pacora/March 2023, 29 documented affected homes activate a fixed editorial reduction of 10 bpm in Yaku Melody. Sadness is not calculated, and damage is not scaled into notes. Without applicable evidence and a rule, base harmony remains.',
@@ -3719,6 +3720,7 @@ class Component extends DCLogic {
     document.getAnimations().forEach(function (an) { if (an.animationName === 'sprplay' && an.startTime !== t0) { try { an.startTime = t0; } catch (e) {} } });
   }
   componentWillUnmount() {
+    if (this.disposed) return;
     this.setPreferencesInert(false);
     if (window.speechSynthesis) window.speechSynthesis.removeEventListener?.('voiceschanged', this.onVoicesChanged);
     this.disposed = true;
@@ -3727,6 +3729,7 @@ class Component extends DCLogic {
       this.discPointerRoot.removeEventListener('click', this.onDiscPointer, true);
     }
     this.invalidateLoads();
+    this.revokeCustom();
     this.setMoreInert(false);
     this.moreReturnFocus = null;
     clearInterval(this.syncTimer);
@@ -4614,11 +4617,11 @@ class Component extends DCLogic {
       lv.yaku = Math.min(1, info.strong.length / 10);
     }
     if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push(T('¡Illapa truena!', 'Illapa thunders!')); }
-    if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push(T('Silbo silba: la costa del Perú está caliente', 'Silbo whistles: the Peruvian coast is hot')); }
+    if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push(T('Silbo silba: nivel cálido alto en la zona costera seleccionada', 'Silbo whistles: high warm level in the selected coastal area')); }
     else if (col >= 23 && col <= 26) lv.silbo = s.levels.silbo * 0.85;
     var vibration = s.vibe && (lv.illapa > 0.3 || info.strong.length > 4) ? lv.illapa > 0.3 ? 120 : 25 : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
-    var feel = info.k === 0 ? T('tierra, silencio', 'land, silence') : info.w > 2 ? T('muy cálido', 'very warm') : info.w > 0.8 ? T('cálido', 'warm') : info.c > 0.8 ? T('frío', 'cold') : T('casi normal', 'near normal');
+    var feel = info.k === 0 ? T('sin valores utilizables en esta columna', 'no usable values in this column') : info.w > 2 ? T('nivel positivo alto', 'high positive level') : info.w > 0.8 ? T('predominio de niveles positivos', 'positive levels dominate') : info.c > 0.8 ? T('predominio de niveles negativos', 'negative levels dominate') : T('nivel cercano a la referencia', 'level near the reference');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
     var fired = { inti: has('Inti'), mama: has('Mamacocha'), illapa: has(T('¡Illapa', 'Illapa thunders')), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 };
     if (fired.inti) this.leadNote('inti', t, sp * 3);
@@ -5117,21 +5120,21 @@ class Component extends DCLogic {
       tPage: s.tab === 'tech' && !techCur.credits, tCred: s.tab === 'tech' && !!techCur.credits };
     var prof = this.profile(), factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
     var chordLabels = prof.prog.map(function (c) { return chordOf(prof, c).label; });
-    var progItems = chordLabels.map(function (l) { var on = s.playing && l === s.chord; return { label: l, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line }; });
+    var progItems = melody ? chordLabels.map(function (l) { var on = s.playing && l === s.chord; return { label: l, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line }; }) : [];
     var seeText = a ? this.describeText() : T('Analizando el fotograma.', 'Analyzing the frame.');
     var hearText = melody
       ? prof.key + ' ' + prof.mode + ' · ' + bpmEff + T(' pulsaciones por minuto · progresión ', ' beats per minute · progression ') + chordLabels.join(' – ') + (s.playing && s.chord ? T(' · ahora suena ', ' · now playing ') + s.chord : '') + '.'
-      : T('Datos puros: cada color suena directo, sin tonalidad ni progresión. Es la traducción más literal.', 'Raw data: each color plays directly, with no key or progression. It is the most literal translation.');
+      : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes. Las alturas y los timbres siguen reglas artísticas.', 'Data: derived levels converted into tones, without a chord progression. Pitches and timbres follow artistic rules.');
     var whyTiles = melody ? [
-      { tag: T('TONALIDAD', 'KEY'), title: prof.key + ' ' + prof.mode, body: T('Una tonalidad por disco, elegida para el carácter de ', 'One key per disc, chosen for the personality of ') + prof.name + ': ' + prof.story + '.' },
+      { tag: T('TONALIDAD', 'KEY'), title: prof.key + ' ' + prof.mode, body: T('Escala y acordes elegidos para el carácter musical de ', 'Scale and chords chosen for the musical personality of ') + prof.name + ': ' + prof.story + '.' },
       { tag: 'TEMPO', title: bpmEff + T(' ppm', ' bpm'), body: T('Cada columna del fotograma es una corchea. Un fotograma dura unos ', 'Each column of the frame is an eighth note. A frame lasts about ') + Math.round(840 / bpmEff) + T(' segundos.', ' seconds.') },
-      { tag: T('MELODÍA', 'MELODY'), title: T('La latitud pone la nota', 'Latitude sets the note'), body: T('La anomalía más fuerte de cada columna decide la altura: más al norte, más agudo. En los tiempos fuertes la nota se ajusta al acorde.', 'The strongest anomaly in each column sets the pitch: further north, higher. On strong beats the note snaps to the chord.') },
+      { tag: T('MELODÍA', 'MELODY'), title: referenceCoast ? T('La posición norte–sur orienta la nota', 'North–south position guides the note') : T('La posición vertical orienta la nota', 'Vertical position guides the note'), body: T('La celda de mayor intensidad de cada columna orienta la altura: más arriba, más agudo. Se limitan los saltos y, en tiempos fuertes, la nota se ajusta al acorde.', 'The strongest cell in each column guides the pitch: higher up, higher pitch. Leaps are limited and, on strong beats, the note snaps to the chord.') },
       { tag: T('DATOS', 'DATA'), title: T('Lo cálido y lo frío se oyen', 'You can hear warm and cold'), body: T('Lo cálido enciende arpegios (Inti), lo frío el bajo y el colchón (Mamacocha), las anomalías fuertes las gotas (Yaku) y los extremos el trueno (Illapa).', 'Warmth triggers arpeggios (Inti), cold the bass and pad (Mamacocha), strong anomalies the drops (Yaku) and extremes the thunder (Illapa).') }
     ] : [
-      { tag: T('MODO', 'MODE'), title: T('Datos puros', 'Raw data'), body: T('Cada color se convierte en un nivel de −5 a +5 y suena directo.', 'Each color becomes a level from −5 to +5 and plays directly.') },
-      { tag: T('ESCALA', 'SCALE'), title: T('Solo en las gotas', 'Only in the drops'), body: T('Únicamente Yaku usa una escala pentatónica; el resto es la traducción literal.', 'Only Yaku uses a pentatonic scale; the rest is the literal translation.') },
+      { tag: T('MODO', 'MODE'), title: T('Niveles convertidos en tonos', 'Levels converted into tones'), body: T('Se usan niveles derivados de −5 a +5. Las frecuencias y umbrales siguen reglas artísticas; no son grados medidos.', 'Derived levels from −5 to +5 are used. Frequencies and thresholds follow artistic rules; they are not measured degrees.') },
+      { tag: T('ESCALA', 'SCALE'), title: T('Las gotas usan cinco notas', 'The drops use five notes'), body: T('Yaku usa una escala pentatónica fija en este modo. Inti y Mamacocha siguen la intensidad cálida y fría de la columna.', 'Yaku uses a fixed pentatonic scale in this mode. Inti and Mamacocha follow the column’s warm and cool intensity.') },
       { tag: T('RITMO', 'RHYTHM'), title: T('Escaneo libre', 'Free scan'), body: T('Cada columna dura lo que marque la velocidad, sin pulso musical.', 'Each column lasts as long as the speed says, with no musical pulse.') },
-      { tag: T('USO', 'USE'), title: T('Para estudiar', 'For study'), body: T('Sirve para comparar discos sin que la música «embellezca» los datos.', 'Useful to compare discs without the music “prettifying” the data.') }
+      { tag: T('USO', 'USE'), title: T('Explorar patrones', 'Explore patterns'), body: T('Permite contrastar patrones dentro de una misma fuente. Los niveles no son magnitudes físicas comparables entre productos.', 'Explore patterns within the same source. Levels are not physical quantities comparable across products.') }
     ];
     var engines = [
       { key: 'melody', short: T('Melodía', 'Melody'), label: T('Melodía con escala y acordes', 'Melody with a scale and chords') },
@@ -5151,8 +5154,8 @@ class Component extends DCLogic {
       beatDots: [0, 1, 2, 3, 4, 5, 6, 7].map(function (i) { return { c: s.playing && s.col >= 0 && (s.col % 8) === i ? th.accent : th.line }; }),
       chordHud: melody ? T('ACORDE ', 'CHORD ') + (s.playing && s.chord ? s.chord : '—') + ' · ' + bpmEff + T(' ppm', ' bpm') : T('DATOS PUROS · ', 'RAW DATA · ') + s.speed + T(' ms por columna', ' ms per column'),
       shakeCls: s.flash ? (s.flash % 2 ? 'sh1' : 'sh2') : '', flashCls: s.flash ? (s.flash % 2 ? 'fl1' : 'fl2') : '',
-      engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos puros: cada color suena directo, sin armonía.', 'Raw data: each color plays directly, with no harmony.')),
-      engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, objectives: objectives,
+      engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes.', 'Data: derived levels converted into tones, without a chord progression.')),
+      engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, showHarmony: melody, objectives: objectives,
       player: this.playerVm(),
       impact: this.impactVm(),
       motionClass: s.reducedMotion ? 'reduce-motion' : '',
@@ -5307,7 +5310,7 @@ class Component extends DCLogic {
       noFile: s.tab === 'data' && !hasCustom,
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
-      moodText: prof.mood ? T('Carácter artístico elegido: ', 'Chosen artistic character: ') + prof.mood + T('. No mide emociones.', '. It does not measure emotions.') : '',
+      moodText: melody && prof.mood ? T('Carácter artístico elegido: ', 'Chosen artistic character: ') + prof.mood + T('. No mide emociones.', '. It does not measure emotions.') : '',
       tourOpen: function (event) { self.tourOpen(event); },
       goHome: function () { self.goTab('home'); },
       skipContent: function (event) { event.preventDefault(); var main = document.getElementById('main-content'); if (main) { main.focus({ preventScroll: true }); main.scrollIntoView({ block: 'start', behavior: 'instant' }); } },

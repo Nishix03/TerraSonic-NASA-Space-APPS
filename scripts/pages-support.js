@@ -109,7 +109,23 @@
       component.goTab("juke");
     }
     matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", render);
-    window.addEventListener("pagehide", () => component.componentWillUnmount?.(), { once: true });
+    window.addEventListener("pagehide", event => {
+      if (event.persisted) {
+        // A history-cache entry can return with the same component and files.
+        // Pause transient work without permanently disposing that component.
+        component.stopSpeech?.();
+        component.stop?.();
+        component.cancelBandClip?.();
+        component.routeFinish?.();
+      } else component.componentWillUnmount?.();
+    });
+    window.addEventListener("pageshow", event => {
+      if (event.persisted) {
+        render();
+        component.ensureNavVisible?.();
+        component.onTourResize?.();
+      }
+    });
   };
   document.addEventListener("DOMContentLoaded", () => {
     const source = document.querySelector("script[data-dc-script]");

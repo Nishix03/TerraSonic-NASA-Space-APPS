@@ -65,6 +65,15 @@ La regresión de navegador prueba cinco personajes en seis situaciones: carga no
 
 ## Rendimiento y límites
 
+La revisión normativa adicional usa [glTF Validator de Khronos](https://github.com/KhronosGroup/glTF-Validator), paquete oficial `2.0.0-dev.3.10`, descargado localmente desde npm con SHA-512 comprobado y sin ejecutar scripts de instalación. Ningún modelo se subió a una herramienta remota. Los cinco GLB tienen **cero errores**, una advertencia por archivo y reportes completos sin truncar en `_work/models/validator-current/`.
+
+La advertencia `NODE_SKINNED_MESH_NON_ROOT` indica que la malla articulada es hija del rig. El nodo padre exportado no tiene traslación, rotación, escala ni matriz adicionales; las animaciones pertenecen a los huesos y los recorridos web comprueban poses, tamaños y movimiento. Se conserva esta advertencia de portabilidad: no equivale a cinco archivos sin advertencias ni asegura el comportamiento de cualquier visor que añada transformaciones al padre. No se ocultó con opciones del validador.
+
+```powershell
+$env:TERRASONIC_GLTF_VALIDATOR = 'ruta/al/paquete/gltf-validator'
+node scripts/validate_gltf.cjs prototipos/I11-eic/modelos _work/models/validator
+```
+
 El perfil local emula 390 × 844, latencia de 150 ms, descarga de 200 KiB/s, CPU ×4 y caché deshabilitada. La comparación de tres recorridos entre la base `59310ac` y el checkpoint `122fd9d` dio medianas de 6,067 → 2,726 s hasta Inicio utilizable y 36,516 → 8,765 s desde Banda hasta el primer render 3D. Son recorridos emulados en esta laptop, con SwiftShader. Las imágenes de respaldo permanecen visibles durante la descarga. Los bytes GLB completos se obtienen del disco, pues CDP puede registrar transferencias parciales cuando se cambia de pantalla. Perfil, tiempos de Escuchar, muestras y límites: [RENDIMIENTO.md](RENDIMIENTO.md).
 
 Las fichas históricas y culturales ya se incorporaron a `data/characters.v1.json` y se explican en `docs/PERSONAJES.md`. Las menciones de tareas históricas pendientes en el inventario inicial de arriba quedan resueltas por ese catálogo; la revisión cultural externa y la referencia visual para una posible adaptación de Silbo siguen pendientes.

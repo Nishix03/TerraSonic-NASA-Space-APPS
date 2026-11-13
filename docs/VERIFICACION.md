@@ -60,3 +60,28 @@ node scripts/verify_cached_release.cjs ruta/al/build-anterior ruta/al/build-nuev
 La emulación de cambio de movimiento en WebKit de esta instalación dejó objetos `MediaQueryList` creados antes del cambio con `matches: true`, aunque una consulta nueva ya devolvía false. El diagnóstico se conserva; no se atribuye ese resultado a un teléfono ni al sistema operativo real. Los contextos nuevos con cada preferencia sí permiten verificar las poses iniciales y animaciones, y la preferencia manual de la aplicación detiene los clips. Chromium y Firefox mantienen además el recorrido de cambio de preferencia del sistema dentro de la sesión.
 
 Referencias: [Playwright y sus motores](https://playwright.dev/docs/browsers), [WCAG 2.2](https://www.w3.org/TR/WCAG22/), [COGA](https://www.w3.org/TR/coga-usable/).
+
+## Salida, regreso e historial del navegador
+
+El listener `pagehide` cerraba permanentemente el componente incluso con `persisted: true`, aunque ese documento pudiera volver desde la caché de navegación. Ahora ese caso detiene voz, audio, colas y clips sin revocar el archivo aceptado ni destruir listeners. `pageshow` vuelve a dibujar y medir el contenido; la salida definitiva sigue liberando el componente. Se quitó el listener de un solo uso para que varios ciclos conserven el mismo comportamiento. Véase [caché Atrás/Adelante, web.dev](https://web.dev/articles/bfcache).
+
+`verify_page_lifecycle.cjs` distingue la evidencia: navegación HTTP real hacia un documento local y regreso no activó una restauración persistida en ninguno de los tres motores de esta instalación. Chromium comunicó un motivo `masked`; no se le atribuye una causa más concreta. Por separado, tres pares de `PageTransitionEvent` sintéticos `pagehide/pageshow` con `persisted: true` verifican archivo/URL/mezcla/posición conservados, reproducción manual recuperable, colas canceladas y salida sintetizada cero tras 150 ms. Chromium y Firefox usan Web Audio nativo con salida final del fixture silenciada; WebKit comprueba su error de audio recuperable. El evento final no persistido destruye el componente. Esas pruebas pasan en los tres motores y no acreditan una restauración nativa de BFCache ni suspensión física.
+
+Las carpetas `before-*` conservan el fallo y los intentos nativos. Resultados corregidos: `_work/lifecycle/after-chromium-audio/`, `after-firefox/`, `after-webkit/`. El runner lo llama `page-lifecycle`; `--native-only` omite los eventos sintéticos en una ejecución directa.
+
+## Memoria y presión de la laptop
+
+La pasada paralela de las 08:31 consumió la memoria disponible junto con las demás aplicaciones abiertas. Chromium falló al escribir evidencia y se detuvieron exclusivamente los procesos identificados de esos recorridos; WebKit quedó interrumpido. Sus reportes no son pasadas válidas. Firefox sí terminó sus 72 combinaciones y los recorridos de Método/ciclo de página. Se cambió a ejecución secuencial y el `finally` de la prueba de paneles garantiza cerrar su navegador incluso si falla la escritura del JSON. No se cerraron aplicaciones personales ni se borraron archivos.
+
+C pasó de unos 30,0 GB libres a 16,9 GB en esa observación. Se comprobó que `C:\pagefile.sys` fue ampliado por Windows a 25.652.625.408 bytes; no se modificó su configuración. La recuperación posterior de espacio no se atribuye a una limpieza del agente. Las evidencias y descargas del proyecto siguen en D.
+
+`measure_memory.cjs` mide 25 ciclos de archivo CSV, paneles con 200 eventos, personaje y regreso a Inicio, con un único Chromium sin WebGL ni sonido. El cierre definitivo no liberaba la URL del archivo aceptado: se corrigió y se hizo idempotente. Hay una sola URL activa durante el uso y cero después del cierre; 139 pruebas de producto pasan.
+
+El diagnóstico inicial sumaba 50 nodos y dos listeners por ciclo después de recoger basura. El snapshot controlado encontró referencias directas del inspector a antiguos `HTMLInputElement`. No se atribuye esa retención al producto: un control que usa `File/DataTransfer` sintéticos y el mismo manejador nativo `change`, sin `setInputFiles`, dio cero nodos y cero listeners netos entre ciclos 5 y 25. El heap JS todavía creció 199.224 bytes en esa ventana; no se afirma crecimiento cero de toda la memoria ni una garantía de duración ilimitada. El estado conserva siete análisis y 200 eventos, y el fixture mantiene su propio registro de URLs.
+
+Evidencias separadas: `_work/memory/navigation-upload-journey/` antes de liberar la URL; `cleanup-with-snapshot/` para el diagnóstico del inspector; `file-api-control/` para el control de 25 ciclos. La recogida explícita y la inspección son técnicas de diagnóstico, no código de gestión de memoria del producto. El snapshot no se incluye en la entrega pública. La versión `--file-api` no acredita un selector físico de archivos.
+
+```powershell
+node scripts/measure_memory.cjs ruta/al/build _work/memory/native-input
+node scripts/measure_memory.cjs ruta/al/build _work/memory/file-api --file-api
+```

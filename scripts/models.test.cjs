@@ -47,6 +47,15 @@ for (const key of keys) {
     assert(size[2] / size[1] > .12, "The body and instrument should have real depth");
     assert(Math.abs(minimum[1]) < .02, "Neutral feet should be on the ground");
     assert(data.skins[0].joints.length >= 17);
+    // Khronos warns about non-root skinned meshes. Their exported container
+    // must stay identity; motion belongs to the skeleton rather than its parent.
+    const parents=new Map();data.nodes.forEach((node,index)=>(node.children||[]).forEach(child=>parents.set(child,index)));
+    for(const [index,node]of data.nodes.entries())if(node.skin!==undefined){
+      for(let parent=parents.get(index);parent!==undefined;parent=parents.get(parent)){
+        const ancestor=data.nodes[parent];
+        for(const [field,identity]of [['translation',[0,0,0]],['rotation',[0,0,0,1]],['scale',[1,1,1]],['matrix',[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]]])if(ancestor[field])assert(ancestor[field].every((value,i)=>Math.abs(value-identity[i])<1e-7),'The skin container must not introduce unsupported parent transforms');
+      }
+    }
     const weights = accessor(geometry.attributes.WEIGHTS_0);
     assert(weights.every(row => Math.abs(row.reduce((a, b) => a + b) - 1) < .002));
     const joints = accessor(geometry.attributes.JOINTS_0);

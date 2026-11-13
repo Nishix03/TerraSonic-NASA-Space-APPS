@@ -4,7 +4,7 @@ La interfaz pública explica la secuencia real: imágenes fechadas, reducción a
 
 ## Datos y alcance
 
-- EIC: 30 archivos conservados del video Pacífico SVS 5176, selección cada 30 días entre el 16 de mayo de 2024 y el 2 de noviembre de 2026. `data/discos.json` y `scripts/descargar_fotogramas.py` conservan la selección y fechas. No se consulta una actualización diaria durante la visita.
+- EIC: 30 archivos conservados del video Pacífico SVS 5176, selección cada 30 días entre el 16 de mayo de 2024 y el 3 de octubre de 2026. `data/discos.json` y `scripts/descargar_fotogramas.py` conservan la selección y fechas. Se corrigió el texto que anunciaba noviembre aunque el último archivo seleccionado es de octubre. No se consulta una actualización diaria durante la visita.
 - GIBS: 30 mapas de los cinco episodios históricos de 2010–2023. La fecha de cada mapa es el día 15. Se conserva la [paleta oficial GHRSST](https://gitc.earthdata.nasa.gov/colormaps/v1.0/output/GHRSST_Sea_Surface_Temperature_Anomalies.html) y su huella en `data/colormaps/`.
 - Región: Pacífico 140°–70°O y 25°S–15°N. El recuadro costero utilizado por Silbo es una selección del algoritmo, no la delimitación administrativa de todas las localidades citadas.
 - NASA POWER: el JSON existente conserva precipitación, temperatura y humedad mensuales 1981–2024 de tres lugares. El ejemplo público utiliza 48 valores de Chiclayo 2015–2018, en −6,77°, −79,84°, parámetro PRECTOTCORR. Son promedios mensuales de precipitación diaria en mm/día, no acumulados mensuales. [Documentación del servicio mensual](https://power.larc.nasa.gov/docs/services/api/temporal/monthly/).
@@ -16,6 +16,8 @@ En tablas se selecciona el valor de mayor desviación respecto a la media en cad
 ## Música y fuentes de impactos
 
 Las escalas y acordes son decisiones compositivas. `docs/REPRODUCTOR.md` documenta su concordancia con las notas; `docs/IMPACTOS.md` documenta el catálogo y la reducción fija de 10 ppm en Melodía de Yaku durante marzo de 2023, basada en el registro de Pacora. La regla no convierte víctimas en emociones ni aplica daños de periodos distintos. Las fichas culturales se explican en `docs/PERSONAJES.md`.
+
+El modo Datos no presenta una progresión que no reproduce: oculta los acordes y el carácter compositivo de Melodía. Se retiraron las promesas «datos puros»/«traducción literal»; también este modo utiliza normalización, selección de frecuencias y timbres artísticos. La explicación de posición usa «vertical» para archivos propios y distingue la orientación norte–sur de los mapas. Los textos de niveles no confunden ausencia de valores con tierra ni atribuyen una medición física a un silbido.
 
 ## Tecnología
 
