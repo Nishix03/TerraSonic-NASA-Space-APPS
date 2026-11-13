@@ -124,6 +124,8 @@ async function main() {
           assert(fallback.visible, "A real pose must remain visible while 3D is unavailable or pending");
           report.characters.push({ key: keys[i], fallback });
         }
+        assert(await page.locator('.avatar-actions button[aria-pressed]').isVisible(),
+          'Listening to an instrument must remain available independently of the 3D view');
         await page.screenshot({ path: path.join(output, scenario + "-" + keys[i] + ".png") });
       }
       if (scenario === "slow-model") {

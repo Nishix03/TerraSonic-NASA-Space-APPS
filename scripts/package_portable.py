@@ -32,7 +32,7 @@ def git(*args: str) -> bytes:
     return subprocess.check_output(["git", *args], cwd=ROOT)
 
 
-def create(output: Path, commit: str, evidence: list[Path], preview: str | None) -> Path:
+def create(output: Path, commit: str, evidence: list[Path], preview: str | None, preview_commit: str | None, baseline_commit: str | None) -> Path:
     full_commit = git("rev-parse", "--verify", f"{commit}^{{commit}}").decode().strip()
     if not re.fullmatch(r"[0-9a-f]{40}", full_commit):
         raise ValueError("The source commit must resolve to a full Git object ID")
@@ -53,6 +53,15 @@ def create(output: Path, commit: str, evidence: list[Path], preview: str | None)
             allowed(entry.filename, source.read(entry))
     destination.mkdir(parents=True)
     (destination / "source.zip").write_bytes(archive_data)
+    baseline_sha = None
+    if baseline_commit:
+        baseline_sha = git("rev-parse", "--verify", f"{baseline_commit}^{{commit}}").decode().strip()
+        backup = git("archive", "--format=zip", baseline_sha, "--", "assets/avatares/terrasonic-banda.blend", "prototipos/I11-eic/modelos")
+        with zipfile.ZipFile(io.BytesIO(backup)) as original:
+            for entry in original.infolist():
+                if not entry.is_dir():
+                    allowed(entry.filename, original.read(entry))
+        (destination / "baseline-models.zip").write_bytes(backup)
     # A new, isolated staging tree proves the build does not depend on ignored local files.
     staging.mkdir()
     with zipfile.ZipFile(io.BytesIO(archive_data)) as source:
@@ -100,11 +109,12 @@ if __name__ == "__main__":
         server.server_close()
 '''
     (destination / "serve.py").write_text(serve, encoding="utf-8")
+    preview_note = f"La vista publicada corresponde al código de aplicación `{preview_commit}`; puede diferir de este paquete." if preview_commit else "La URL puede servir una versión distinta; consulta docs/PUBLICACION.md del archivo fuente antes de atribuirle cambios."
     (destination / "README.md").write_text(f'''# TerraSonic · copia portable de revisión
 
 Fuente: Nishix03/TerraSonic-NASA-Space-APPS, rama piero-mejoras, commit `{full_commit}`.
 Vista independiente: {preview or 'consultar docs/PUBLICACION.md en source.zip'}.
-El Site puede recibir revisiones posteriores; la huella de este paquete identifica esta copia.
+{preview_note} La huella de este paquete identifica esta copia.
 
 1. Extrae el ZIP completo en una carpeta nueva.
 2. Con Python 3 instalado, ejecuta `python serve.py` desde esa carpeta.
@@ -113,6 +123,8 @@ El Site puede recibir revisiones posteriores; la huella de este paquete identifi
 `site/` contiene el producto estático listo para un host. No requiere Node, Blender, cuenta, backend, AWS ni base de datos. Archivos, fuentes, mapas, modelos y poses se incluyen. El audio requiere una acción del usuario y un navegador con Web Audio. Voz/vibración dependen del dispositivo y las voces instaladas; el texto y las poses permiten continuar sin esas APIs. Los enlaces documentales externos requieren red. Abrir index.html con file:// no es el modo soportado.
 
 `source.zip` contiene solo archivos del commit Git. Extráelo en otra carpeta para editar: `python scripts/build_pages.py _site`; `node scripts/test_guides.cjs _site/index.html`. Node solo es necesario para pruebas; Blender solo para regenerar modelos. Instrucciones y límites en docs/PIERO-MEJORAS.md, AUDITORIA_2026-11-13.md, MODELOS_3D.md y PUBLICACION.md.
+
+{('baseline-models.zip conserva el .blend y los cinco GLB originales del commit '+baseline_sha+', separados de la propuesta nueva.') if baseline_sha else 'Los modelos anteriores se pueden recuperar del commit base indicado en la documentación del repositorio.'}
 
 `evidence/` conserva una selección de JSON/capturas. Son pruebas automatizadas y renders de esta laptop; no acreditan certificación WCAG, prueba con personas, escucha humana ni aprobación cultural. Los 420 minutos efectivos y requisitos pendientes siguen en el registro fuente; el paquete es un checkpoint, no una declaración automática de cierre.
 
@@ -144,7 +156,8 @@ print('PASS package integrity:',len(expected),'files; source commit',manifest['s
         allowed(relative, data)
         files.append({"path": relative, "bytes": len(data), "sha256": sha256(data).hexdigest()})
     manifest = {"version": 1, "createdAt": datetime.now(timezone.utc).isoformat(), "sourceCommit": full_commit,
-                "branch": "piero-mejoras", "preview": preview, "evidence": evidence_sources, "files": files}
+                "branch": "piero-mejoras", "preview": preview, "previewSourceCommit": preview_commit,
+                "baselineModelsCommit": baseline_sha, "evidence": evidence_sources, "files": files}
     (destination / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     subprocess.run([sys.executable, str(destination / "verify_package.py")], check=True)
     with zipfile.ZipFile(portable, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as bundle:
@@ -164,5 +177,7 @@ if __name__ == "__main__":
     parser.add_argument("--commit", default="HEAD")
     parser.add_argument("--evidence", type=Path, action="append", default=[])
     parser.add_argument("--preview")
+    parser.add_argument("--preview-source-commit", help="source application commit verified at the independent URL")
+    parser.add_argument("--baseline-models-commit", help="also include the original .blend and five GLB from this Git commit")
     options = parser.parse_args()
-    create(options.output, options.commit, options.evidence, options.preview)
+    create(options.output, options.commit, options.evidence, options.preview, options.preview_source_commit, options.baseline_models_commit)

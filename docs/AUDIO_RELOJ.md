@@ -36,3 +36,9 @@ node scripts/verify_impacts.cjs _site _work/impacts/clock-browser
 ```
 
 La referencia técnica es [A tale of two clocks, Chris Wilson / web.dev](https://web.dev/articles/audio-scheduling). Se aplicó la separación entre reloj de audio y tareas de interfaz; el código de esta implementación se escribió para TerraSonic y no se copió del ejemplo.
+
+## Actualización atómica del estado oído
+
+El perfil de interfaz detectó dos renders por paso: posición/mapa y luego registro. Ahora el evento se construye para la nueva posición y ambos se publican en una sola actualización. Las regresiones comprueban el evento del mes correcto y un solo render por paso; el recorrido de cuatro discos completos observa el estado ya comprometido, no depende de interceptar un método interno de registro.
+
+En dos muestras individuales del mismo perfil de nueve segundos, Melodía pasó de 50 actualizaciones/580 ms de trabajo síncrono medido a 31/321 ms; Datos, de 192/2155 ms a 114/1323 ms. El máximo individual de Datos fue mayor en la segunda muestra (51 frente a 33 ms): no se presenta como una mejora de todos los tiempos. Ambos conservaron cero inicios de oscilador pasados. Son muestras diagnósticas, no estadística de campo ni una prueba de percepción. Evidencia: `audio-render-before.json` y `audio-render-after.json`.

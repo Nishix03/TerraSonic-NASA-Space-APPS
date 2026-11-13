@@ -13,7 +13,8 @@ async function main(){
    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'no-preference'});
    await context.addInitScript(()=>{
     localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));
-    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
+    window.__renders=[];
+    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;const start=performance.now(),result=original.apply(this,args);if(__renders.length<2000)__renders.push({at:start,ms:performance.now()-start,keys:Object.keys(args[0]||{})});return result;};}});
     window.__starts=[];window.__ticks=[];window.__longTasks=[];
     try{new PerformanceObserver(list=>__longTasks.push(...list.getEntries().map(entry=>({start:entry.startTime,duration:entry.duration})))).observe({type:'longtask',buffered:true});}catch(ignored){}
     const Native=window.AudioContext;window.AudioContext=class extends Native{
@@ -31,11 +32,11 @@ async function main(){
    },mode);
    const start=performance.now();await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing);
    await page.evaluate(()=>{
-    window.__startWall=performance.now();window.__taskTimer=setTimeout(()=>{const from=performance.now();while(performance.now()-from<200){};window.__block={start:from,duration:performance.now()-from};},2000);
+    window.__startWall=performance.now();window.__renders.length=0;window.__taskTimer=setTimeout(()=>{const from=performance.now();while(performance.now()-from<200){};window.__block={start:from,duration:performance.now()-from};},2000);
     const band=document.querySelector('.listen-band')||document.querySelector('#tour-band');band?.scrollIntoView({block:'center'});
    });
    await page.waitForFunction(()=>performance.now()-__startWall>=9000,{},{timeout:30000});
-   const sample=await page.evaluate(()=>{__app.stop();clearTimeout(__taskTimer);return {ticks:__ticks,starts:__starts,block:__block,longTasks:__longTasks,models:document.querySelectorAll('ts-avatar[data-rendered]').length,position:{frame:__app.state.frame,col:__app.state.col}};});
+   const sample=await page.evaluate(()=>{__app.stop();clearTimeout(__taskTimer);return {ticks:__ticks,starts:__starts,block:__block,longTasks:__longTasks,renders:__renders,models:document.querySelectorAll('ts-avatar[data-rendered]').length,position:{frame:__app.state.frame,col:__app.state.col}};});
    sample.mode=mode;sample.observedMs=performance.now()-start;
    const intervals=sample.ticks.slice(1).map((tick,index)=>({actualMs:1000*(tick.at-sample.ticks[index].at),expectedMs:sample.ticks[index].expectedMs}));
    sample.summary={steps:sample.ticks.length,medianIntervalMs:median(intervals.map(item=>item.actualMs)),maxLateMs:Math.max(...intervals.map(item=>item.actualMs-item.expectedMs)),meanAbsoluteJitterMs:intervals.reduce((total,item)=>total+Math.abs(item.actualMs-item.expectedMs),0)/intervals.length,scheduledInPast:sample.starts.filter(event=>event.at<event.calledAt-.003).length};

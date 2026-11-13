@@ -9,6 +9,7 @@ const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-co
 
 const site = path.resolve(process.argv[2] || "_site");
 const output = path.resolve(process.argv[3] || "_work/benchmarks/result.json");
+const measureVitals = process.argv.includes('--vitals');
 const contentTypes = {
   ".html": "text/html", ".js": "text/javascript", ".json": "application/json",
   ".css": "text/css", ".woff2": "font/woff2",
@@ -54,6 +55,20 @@ async function main() {
         localStorage.setItem('ts_prefs', JSON.stringify({version:1,configured:true,values:{}}));
         Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
       });
+      if(measureVitals)await context.addInitScript(()=>{
+        window.__labVitals={lcp:[],shifts:[],events:[],supported:PerformanceObserver.supportedEntryTypes};
+        for(const type of ['largest-contentful-paint','layout-shift','event']){
+          if(!PerformanceObserver.supportedEntryTypes.includes(type))continue;
+          const observer=new PerformanceObserver(list=>{
+            for(const entry of list.getEntries()){
+              if(type==='largest-contentful-paint')__labVitals.lcp.push({at:entry.startTime,size:entry.size,tag:entry.element?.tagName,cls:entry.element?.className});
+              if(type==='layout-shift')__labVitals.shifts.push({at:entry.startTime,value:entry.value,recentInput:entry.hadRecentInput,sources:entry.sources.map(source=>({tag:source.node?.tagName,cls:source.node?.className,previous:source.previousRect.toJSON(),current:source.currentRect.toJSON()}))});
+              if(type==='event'&&entry.interactionId)__labVitals.events.push({at:entry.startTime,name:entry.name,duration:entry.duration,interactionId:entry.interactionId});
+            }
+          });
+          observer.observe(type==='event'?{type,buffered:true,durationThreshold:16}:{type,buffered:true});
+        }
+      });
       const page = await context.newPage();
       const bytes = { local: 0, glb: 0 };
       page.on("pageerror", error => report.failures.push(error.message));
@@ -76,6 +91,13 @@ async function main() {
       await page.locator(".hero .btn.primary").waitFor();
       const homeMs = performance.now() - start;
       const atHome = { ...bytes };
+      let homeVitals;
+      if(measureVitals){
+        // A declared extra observation window makes this a separate diagnostic
+        // series; its later navigation milestones must not replace normal runs.
+        await page.waitForTimeout(3000);
+        homeVitals=await page.evaluate(()=>({at:performance.now(),lcp:__labVitals.lcp,shifts:__labVitals.shifts}));
+      }
       const listen = performance.now();
       await page.locator("#tour-nav button").nth(0).click();
       await page.locator(".discgrid .dcard").first().click();
@@ -89,11 +111,22 @@ async function main() {
       const bandControlsMs=performance.now()-band;
       await page.locator(".bportrait-live[data-rendered]").waitFor({ timeout: 120000 });
       const bandMs = performance.now() - band;
+      let vitals;
+      if(measureVitals)vitals=await page.evaluate(()=>{
+        let cls=0,sum=0,first=0,last=0;
+        for(const shift of __labVitals.shifts.filter(item=>!item.recentInput)){
+          if(shift.at-last<1000&&shift.at-first<5000)sum+=shift.value;else{sum=shift.value;first=shift.at;}
+          last=shift.at;cls=Math.max(cls,sum);
+        }
+        return {...__labVitals,cls,maxScriptedInteractionMs:Math.max(0,...__labVitals.events.map(entry=>entry.duration))};
+      });
       report.samples.push({ run: run + 1, homeMs, listenMs, bandMs, bandControlsMs, atHome, totalBytes: { ...bytes },
+        ...(measureVitals?{homeVitals,vitals,diagnostic:'Extra 3 s before interaction; LCP/CLS and scripted Event Timing only, not field INP'}:{}),
         modelsRendered: await page.locator("ts-avatar[data-rendered]").count() });
       fs.mkdirSync(path.dirname(output), { recursive: true });
       fs.writeFileSync(output, JSON.stringify(report, null, 2));
-      console.log(JSON.stringify(report.samples.at(-1)));
+      const latest=report.samples.at(-1);
+      console.log(JSON.stringify({...latest,...(measureVitals?{homeVitals:undefined,vitals:{lcpMs:latest.vitals.lcp.at(-1)?.at,cls:latest.vitals.cls,maxScriptedInteractionMs:latest.vitals.maxScriptedInteractionMs}}:{})}));
       await context.close();
     }
   } finally {

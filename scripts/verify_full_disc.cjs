@@ -9,14 +9,14 @@ async function main(){
   await context.route('**/*',async route=>{if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
   await context.addInitScript(()=>{
    localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));
-   Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
+   Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;const result=original.apply(this,args);if(window.__fullTrace&&args[0]?.events){const event=this.state.events.at(-1);if(event&&!__traceIds.has(event.id)){__traceIds.add(event.id);__fullTrace.push({frame:this.state.frame,col:this.state.col,chord:this.state.chord,at:this.ac.currentTime,eventId:event.id});}}return result;};}});
    const Native=window.AudioContext;window.AudioContext=class extends Native{createDynamicsCompressor(){const compressor=super.createDynamicsCompressor(),connect=compressor.connect.bind(compressor);compressor.connect=(destination,...args)=>{if(destination===this.destination){const silent=this.createGain();silent.gain.value=0;connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return compressor;}};
   });
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
   for(const catalog of ['eic','prev'])for(const mode of ['melody','raw']){
    await page.evaluate(({catalog,mode})=>{__app.stop();__app.goTab('juke');__app.applySet(catalog);__app.setState({disc:0,frame:0,col:-1,sub:1,engine:mode,speed:70,leadOverride:'mama',mute:__app.allMute(false),repeat:false,ended:false});__app.loadDisc(0);}, {catalog,mode});
    await page.waitForFunction(()=>__app.cur());
-   await page.evaluate(()=>{window.__fullTrace=[];if(!__app.__originalRecordEvent){__app.__originalRecordEvent=__app.recordEvent;__app.recordEvent=function(...args){__fullTrace.push({frame:this.state.frame,col:this.state.col,chord:this.state.chord,at:this.ac.currentTime});return this.__originalRecordEvent(...args);};}});
+   await page.evaluate(()=>{window.__fullTrace=[];window.__traceIds=new Set();});
    const expectedSeconds=await page.evaluate(()=>__app.playerSeconds(__app.playerSteps()));
    await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing);
    await page.waitForFunction(()=>__app.state.ended&&!__app.state.playing,{},{timeout:120000});

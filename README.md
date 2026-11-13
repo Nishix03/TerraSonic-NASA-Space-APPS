@@ -1,66 +1,67 @@
-# Terrasonic · Earth Information Jukebox
+# TerraSonic · Earth Information Jukebox
 
-> Hace más de 1500 años, el agua ya cantaba en el norte del Perú. Ahora canta el Pacífico visto por la NASA.
+TerraSonic convierte imágenes del Pacífico y datos locales en música con cinco personajes. Proyecto de NASA Space Apps Challenge 2026 · Chiclayo, para [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/).
 
-Proyecto para **NASA Space Apps Challenge 2026 · Chiclayo · Reto 5: [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/)**.
+La aplicación es estática y funciona en español e inglés. Usa Canvas y Web Audio en el navegador; no requiere backend, AWS, base de datos remota ni servicios de IA para procesar archivos o generar sonido.
 
-**Terrasonic** es una jukebox retro pixelada que escanea, de oeste a este, los fotogramas de anomalía de temperatura del mar de las visualizaciones del **Earth Information Center** y los convierte en música en tiempo real. La toca una banda de cinco personajes:
+## Estado de esta rama
 
-| Personaje | Escucha | Toca |
-|---|---|---|
-| **Silbo**, el huaco silbador | la costa del Perú | silbido de alarma |
-| **Inti** | píxeles cálidos | acordes |
-| **Mamacocha** | píxeles fríos | bajo |
-| **Yaku** | densidad de anomalías | gotas pentatónicas |
-| **Illapa** | extremos | truenos |
+La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
-| | |
-|---|---|
-| Plan de desarrollo | [`docs/PLAN.md`](docs/PLAN.md) |
-| Contratos entre módulos | [`docs/CONTRATOS.md`](docs/CONTRATOS.md) |
-| Prototipo interactivo (boceto) | https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU *(privado: el dueño debe compartirlo)* |
-| Uso de IA | [`docs/USO_DE_IA.md`](docs/USO_DE_IA.md) |
-| Historial de iteraciones del prototipo (qué cambió y quién) | [`docs/ITERACIONES.md`](docs/ITERACIONES.md) · código en [`prototipos/`](prototipos/README.md) |
-| Créditos | [`docs/CREDITOS.md`](docs/CREDITOS.md) |
+La [vista pública independiente](https://terrasonic-piero-preview-20261113.satinkoi3.chatgpt.site) está verificada sin credenciales, pero continúa en el checkpoint de aplicación `409f197`. Los cambios posteriores están en esta rama y en los paquetes locales: la integración dejó de ofrecer acceso para actualizar ese Site. [Publicación y procedencia](docs/PUBLICACION.md).
 
-## Módulos y dueños
+El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
-| Carpeta | Módulo | Dueño |
-|---|---|---|
-| `data/`, `scripts/`, `src/fotogramas/` | M1 · Fotogramas EIC y datos | [Miembro 1] |
-| `src/analizador/` | M2 · Analizador visual | [Miembro 2] |
-| `src/sonido/` | M3 · Motor de sonido: la banda | [Miembro 3] |
-| `src/arte/`, `assets/` | M4 · Arte, avatares anime y componentes | [Miembro 4] |
-| `src/accesibilidad/`, `docs/pitch/` | M5 · Accesibilidad, textos y narrativa | [Miembro 5] |
-| `index.html`, `src/app/`, `.github/` | M6 · App, integración y entrega | [Miembro 6] |
+## Qué incluye
 
-## Cómo correrlo
+- **Escuchar:** diez discos, sesenta mapas EIC/GIBS, selección de fechas, modos Melodía y Datos, posición/tiempo, pausa y reanudación, saltos, velocidad, volumen, silencio y repetición. Leyenda escrita, símbolos y registro consultable.
+- **Banda:** cinco cuerpos 3D, mezcla compartida con Escenario, muestras de instrumento detenibles y poses de respaldo sin WebGL o con recursos lentos/ausentes. Fuentes históricas y propuestas de ficción diferenciadas.
+- **Convertir:** muestra NASA e imagen propia como entradas principales; lluvia de Chiclayo y CSV como alternativas. Procesamiento local, elección de columna, límites y errores recuperables. Las imágenes se centran sin deformarse y usan la misma vista fija que el análisis.
+- **Brisa y preferencias:** tutorial saltable/reabrible, texto, voz opcional, idioma guardado, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Vibración optativa donde exista.
+- **Método y Tecnología:** fuentes NASA, niveles derivados, seis perfiles armónicos, catálogo estático de impactos y una regla editorial mensual verificable, con límites científicos explícitos.
 
-Genera el paquete estático que usa GitHub Pages y sírvelo desde `_site`:
+Los niveles derivados de las imágenes **no son grados de temperatura**. Las progresiones y el carácter musical son decisiones artísticas. EIC y GIBS usan paletas y rangos diferentes; no se presentan sus niveles como magnitudes físicas comparables.
+
+## Ejecutar localmente
+
+Con Python 3, desde la raíz del repositorio:
 
 ```bash
+python scripts/verify_fonts.py
 python scripts/build_pages.py _site
 python -m http.server 8765 --bind 127.0.0.1 --directory _site
 ```
 
-Abre [la vista local](http://127.0.0.1:8765/). En [La banda](http://127.0.0.1:8765/#banda) puedes girar cada personaje y verlo tocar, caminar y bailar.
+Abrir [http://127.0.0.1:8765/](http://127.0.0.1:8765/). Detener el servidor con Ctrl+C. El build incluye mapas, modelos, poses y tipografías locales. Abrir el HTML por `file://` no es el modo soportado. La reproducción requiere una acción del usuario; voz y vibración dependen del navegador/dispositivo.
 
-La escena editable está en `assets/avatares/terrasonic-banda.blend`. Para regenerarla y exportar los cinco GLB de `prototipos/I11-eic/modelos/`, ejecuta `blender --background --factory-startup --python scripts/modelar_banda.py` y vuelve a generar `_site`.
+La fuente canónica es **`prototipos/I11-eic/Main.dc.html`**. `scripts/build_pages.py` genera el HTML y copia los recursos; editar solamente `_site/index.html` no cambia la aplicación fuente. El `index.html` de la raíz y parte de `src/` son material histórico de organización del equipo.
 
-En la plantilla web, `ts-avatar` reutiliza cada GLB mediante `data-character`. Los atributos `data-view` y `data-cue` indican el encuadre y la señal que activa la animación. La vista de personajes requiere WebGL 2.
+## Verificar y entregar
 
-En `piero-mejoras` se está completando el encargo ampliado. El estado verificable y los pasos para reanudar están en [docs/PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). La revisión de modelos y sus comandos están en [docs/MODELOS_3D.md](docs/MODELOS_3D.md). Las vistas nuevas usan una pose estática durante la carga o cuando WebGL no está disponible.
+```bash
+node scripts/test_guides.cjs _site/index.html
+node --test scripts/models.test.cjs
+python scripts/run_browser_checks.py --list
+```
 
-La [vista independiente de revisión](https://terrasonic-piero-preview-20261113.satinkoi3.chatgpt.site) conserva la web oficial. La publicación y su verificación sin credenciales se documentan en [docs/PUBLICACION.md](docs/PUBLICACION.md).
+Node es una herramienta de pruebas; no hace falta para usar el sitio generado. Los recorridos requieren Playwright y un navegador de prueba configurados como describe [VERIFICACION.md](docs/VERIFICACION.md). Incluyen Chromium, Firefox y WebKit de Windows con límites documentados. WebKit de esta instalación no ofrece Web Audio: se comprueba la alternativa escrita y no se afirma audio en Safari.
 
-## Datos
+- [Auditoría de diseño, Nielsen y objetivo WCAG/COGA](docs/AUDITORIA_2026-11-13.md)
+- [Transporte, leyenda y mezcla](docs/REPRODUCTOR.md) · [Reloj de audio](docs/AUDIO_RELOJ.md)
+- [Mediciones comparables](docs/RENDIMIENTO.md) · [Paquete portable y recuperación](docs/ENTREGA_PORTABLE.md)
+- [Conversión local](docs/CONVERTIR.md) · [Brisa](docs/BRISA.md) · [Método](docs/METODO.md)
+- [Impactos y fuentes](docs/IMPACTOS.md) · [Historias y referencias culturales](docs/PERSONAJES.md)
 
-- Fotogramas: los de la visualización oficial del EIC *SST Anomaly – Near Real Time*, variante Pacífico ([SVS 5176](https://svs.gsfc.nasa.gov/5176)), extraídos y recortados con `python scripts/descargar_fotogramas.py` (necesita ffmpeg; baja un video de ~340 MB que no se sube a git). Cubren del 16 may 2024 al 2 nov 2026: cinco discos de seis fotogramas, uno cada 30 días.
-- Lluvia de Chiclayo (extra): NASA POWER, con `python scripts/descargar_power.py`.
+## Modelos editables
 
-## Cómo trabajamos
+La escena está en `assets/avatares/terrasonic-banda.blend`. Se inspeccionó y generó con Blender 5.2.2 LTS. `scripts/modelar_banda.py` construye los cinco personajes y exporta los GLB; `scripts/inspect_banda.py` documenta rig, clips, dimensiones y renders multivista. [Inventario y comandos](docs/MODELOS_3D.md).
 
-1. Cada quien trabaja **solo en su carpeta**, en la rama `mod/<módulo>`.
-2. Entre módulos solo se usa lo que define `docs/CONTRATOS.md`, además del bus de eventos.
-3. Cada PR lo revisa otra persona y se prueba en el navegador, también si el código lo generó una IA.
-4. Cada uso de IA se anota en `docs/USO_DE_IA.md`.
+Los originales se conservan en Git, las ilustraciones del equipo y checkpoints de trabajo. El empaquetador puede incluir el `.blend` y los cinco GLB del commit base en un ZIP de recuperación separado. Los retratos pequeños no necesitan cargar el motor 3D.
+
+## Datos, créditos e historia
+
+Los fotogramas EIC proceden de [NASA SVS 5176](https://svs.gsfc.nasa.gov/5176/), y los históricos de NASA GIBS/Worldview. La serie de lluvia mensual procede de NASA POWER. Los catálogos versionados de impactos y personajes están en `data/`; cada hecho conserva fuente, periodo y limitaciones.
+
+[Créditos y licencias](docs/CREDITOS.md) · [Uso de IA documentado](docs/USO_DE_IA.md) · [Licencias de tipografías](assets/fonts/README.md).
+
+Se conserva la documentación histórica del equipo: [plan](docs/PLAN.md), [contratos entre módulos](docs/CONTRATOS.md), [iteraciones](docs/ITERACIONES.md) y [prototipos](prototipos/README.md). El [boceto privado original](https://claude.ai/artifact/L5G8i3kpm4XSqQgzxBs7FU) requiere acceso del propietario y no es la versión desplegada de esta rama.

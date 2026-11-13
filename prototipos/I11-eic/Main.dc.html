@@ -186,8 +186,9 @@ a{color:inherit}
 .px ts-avatar:is([data-view="face"],[data-view="bust"])[data-character="illapa"]{--avatar-image:url("./sprites/illapa/face-volume.webp")}
 .px .bentering .bportrait-live>canvas{animation:bcut-reveal var(--band-entry) var(--cut-ease) both}
 .px .bresetting .bportrait-live>canvas{opacity:0}
-.px .avatar-actions{display:none;gap:5px;flex-wrap:wrap;justify-content:center}
-.px .bshow:has(.bportrait-live[data-rendered]) .avatar-actions{display:flex}
+.px .avatar-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.px .avatar-actions .model-action{display:none}
+.px .bshow:has(.bportrait-live[data-rendered]) .avatar-actions .model-action{display:inline-flex}
 .px .avatar-actions .btn{padding-inline:9px;min-height:36px;letter-spacing:.07em}
 
 /* convierte en música */
@@ -1695,6 +1696,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 
 <section class="listen-band" aria-labelledby="listen-band-title">
 <div class="row bandhead"><h2 id="listen-band-title">{{tx.theBand}}</h2><span class="muted small">{{tx.bandMixHelp}}</span></div>
+<sc-if value="{{bandAllMuted}}"><p role="status" class="small muted">{{bandStatus}}</p></sc-if>
 <div class="listen-members" role="group" aria-label="{{tx.bandAria}}">
 <sc-for list="{{band}}" as="b">
 <button type="button" class="listen-member" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="--member-color: {{b.color}}">
@@ -1899,7 +1901,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
   <div class="avatar-actions">
     <button type="button" class="btn sm" aria-pressed="{{bandCur.previewOn}}" onClick="{{bandCur.preview}}">{{bandCur.previewLabel}}</button>
     <sc-for list="{{avatarActions}}" as="action">
-      <button type="button" class="btn sm quiet" disabled="{{action.off}}" onClick="{{action.run}}">{{action.label}}</button>
+      <button type="button" class="btn sm quiet model-action" disabled="{{action.off}}" onClick="{{action.run}}">{{action.label}}</button>
     </sc-for>
   </div>
 </figcaption>
@@ -3288,6 +3290,7 @@ class Component extends DCLogic {
     this.state.easyOpen = false;
     this.state.volume = 100;
     this.state.masterMuted = false;
+    this.state.mixCustomized = false;
     this.state.repeat = false;
     this.state.ended = false;
     this.state.playerAnnouncement = '';
@@ -3527,7 +3530,7 @@ class Component extends DCLogic {
     if (this.state.tour) this.tourClose();
     this.rememberTourOrigin();
     var s = this.state, values = {};
-    ['tab','sub','disc','frame','col','custom','customMode','engine','speed','leadOverride','mute','ended','upMsg'].forEach(function (key) { values[key] = s[key]; });
+    ['tab','sub','disc','frame','col','custom','customMode','engine','speed','leadOverride','mute','mixCustomized','ended','upMsg'].forEach(function (key) { values[key] = s[key]; });
     this.tutorialSnapshot = { values: values, playing: s.playing };
     if (s.tab === 'data') this.startFileLoad();
     if (s.tab === 'band') this.cancelBandClip();
@@ -3878,7 +3881,7 @@ class Component extends DCLogic {
     var was = s.playing || (s.audioPending && !s.previewKey);
     this.stop(); this.stopSpeech();
     var key = override || this.discLead(s.disc, this.cur());
-    var mute = Object.assign({}, s.mute);
+    var mute = s.mixCustomized ? Object.assign({}, s.mute) : this.only(key);
     mute[key] = false;
     this.melDeg = null;
     var self = this;
@@ -4050,15 +4053,19 @@ class Component extends DCLogic {
     }
     this.seekPosition(step);
   }
-  recordEvent(fired, chord) {
-    var s = this.state;
-    var event = { id: ++this.eventSerial, discId: DISCS[s.disc].id, set: s.set, frame: s.frame,
+  eventFor(fired, chord, patch) {
+    var s = patch ? Object.assign({}, this.state, patch) : this.state;
+    var analysis = s.frame === this.state.frame ? this.cur() : s.an[s.disc + '_' + s.frame];
+    var profile = this.profile(analysis, s.frame);
+    return { id: ++this.eventSerial, discId: DISCS[s.disc].id, set: s.set, frame: s.frame,
       date: this.frameDate(s.disc, s.frame), column: s.col + 1, engine: s.engine,
-      seconds: this.playerSeconds(Math.max(0, this.playerPosition() - 1)),
-      chord: chord ? this.profile().prog.findIndex(function (item) { return chordOf(this.profile(), item).label === chord; }, this) : -1,
-      profile: this.leadChar(), dark: this.profile().scale === MUSIC.yaku.dark.scale,
+      seconds: this.playerSeconds(Math.max(0, Math.min(this.playerSteps() - 1, s.frame * 28 + s.col))),
+      chord: chord ? profile.prog.findIndex(function (item) { return chordOf(profile, item).label === chord; }) : -1,
+      profile: s.leadOverride || this.discLead(s.disc, analysis), dark: profile.scale === MUSIC.yaku.dark.scale,
       musicians: BAND.filter(function (b) { return fired[b.k]; }).map(function (b) { return b.name; }) };
-    this.setState({ events: s.events.concat([event]).slice(-200) });
+  }
+  recordEvent(fired, chord) {
+    this.setState({ events: this.state.events.concat([this.eventFor(fired, chord)]).slice(-200) });
   }
   playerVm() {
     var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
@@ -4162,7 +4169,7 @@ class Component extends DCLogic {
         }
         var an = Object.assign({}, self.state.an); an[key] = res;
         var nm = self.state.custom ? uiLabel(self.state.custom) : T('tu imagen', 'your image');
-        self.setState(d === 5 ? { an: an, mute: self.only(res.cold > res.warm ? 'mama' : 'inti'), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
+        self.setState(d === 5 ? { an: an, mute: self.state.mixCustomized ? self.state.mute : self.only(self.state.leadOverride || self.discLead(5, res)), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
       } catch (e) { fail(uiMessage('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.')); }
     };
     img.onload = function () {
@@ -4250,7 +4257,7 @@ class Component extends DCLogic {
   showCustom(custom, an, msg, initialMute) {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
-    var mute = initialMute || (this.state.leadOverride ? this.state.mute : this.only(this.discLead(5, an)));
+    var mute = this.state.mixCustomized ? this.state.mute : this.state.leadOverride ? this.only(this.state.leadOverride) : initialMute || this.only(this.discLead(5, an));
     var self = this;
     this.setState({ custom: custom, customMode: custom.mode || this.state.customMode, an: ans, disc: 5, frame: 0, col: -1, ended: false, sub: 1, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
       self.resetScreenScroll();
@@ -4500,7 +4507,7 @@ class Component extends DCLogic {
   setBandMute(mute) {
     var self = this, levels = Object.assign({}, this.state.levels), hits = Object.assign({}, this.state.hits);
     BAND.forEach(function (b) { if (mute[b.k]) { self.retireVoice(b.k); levels[b.k] = 0; hits[b.k] = 0; } });
-    this.setState({ mute: mute, levels: levels, hits: hits,
+    this.setState({ mute: mute, mixCustomized: true, levels: levels, hits: hits,
       leadPulse: this.state.leadPulse && mute[this.state.leadPulse.key] ? null : this.state.leadPulse });
   }
   async previewInstrument(key) {
@@ -4646,7 +4653,8 @@ class Component extends DCLogic {
   emitStep(patch, fired, chord, scheduled, vibration) {
     if (!scheduled) {
       if (vibration) this.vibrateSafely(vibration);
-      this.setState(patch); this.recordEvent(fired, chord); return;
+      patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      this.setState(patch); return;
     }
     scheduled.patch = patch;
     var profile = this.profile(scheduled.analysis, scheduled.state.frame);
@@ -4671,7 +4679,8 @@ class Component extends DCLogic {
         (names.length ? ' · ' + names.join(' · ') : T(' · sin ataque nuevo', ' · no new attack'));
       if (frameChanged) patch.playerAnnouncement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
       this.heardThunder = event.thunder;
-      this.setState(patch); this.recordEvent(fired, chord);
+      patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      this.setState(patch);
       if (event.vibration) this.vibrateSafely(event.vibration);
     }
   }
@@ -4897,7 +4906,6 @@ class Component extends DCLogic {
     try {
       await this.waitForAudio(this.ensureAudio());
       if (this.disposed || run !== this.audioRun) return;
-      var s = this.state, allOff = BAND.every(function (b) { return s.mute[b.k]; }), k = this.leadChar();
       var go = function () {
         BAND.forEach(function (member) { if (!self.state.mute[member.k]) self.voiceInput(member.k); });
         self.melDeg = null; self.playT0 = document.timeline.currentTime;
@@ -4907,10 +4915,7 @@ class Component extends DCLogic {
         self.startSequencer();
         self.tutorialAction('play');
       };
-      if (allOff) {
-        var nm = BAND.filter(function (b) { return b.k === k; })[0].name;
-        this.setState({ mute: this.only(k), caption: T('La banda estaba apagada: activé a ', 'The band was off: I switched on ') + nm + T(', el protagonista seleccionado.', ', the selected lead.') }, go);
-      } else go();
+      go();
     } catch (e) {
       if (this.disposed || run !== this.audioRun) return;
       this.stop();
@@ -5226,7 +5231,7 @@ class Component extends DCLogic {
             var manual = self.state.leadOverride;
             var who = manual || self.discLead(k, self.state.an[k + '_0']);
             var name = BAND.find(function (b) { return b.k === who; }).name;
-            self.routeChange({ disc: k, frame: 0, col: -1, sub: 1, easyOpen: false,
+            self.routeChange({ disc: k, frame: 0, col: -1, sub: 1, easyOpen: false, mute: self.state.mixCustomized ? self.state.mute : self.only(who),
               caption: T('Disco ', 'Disc ') + x.n + ': ' + x.title + T('. Protagonista: ', '. Lead: ') + name + T('. Pulsa Reproducir.', '. Press Play.') }, 'juke', x.title);
             self.tutorialAction('disc');
           } };
@@ -5313,10 +5318,11 @@ class Component extends DCLogic {
       prevFrame: function () { self.gotoFrame(s.frame - 1); }, nextFrame: function () { self.gotoFrame(s.frame + 1); },
       speed: String(s.speed), onSpeed: function (e) { var was = s.playing; self.stop(); self.setState({ speed: parseInt(e.target.value, 10) }, function () { if (was) self.play(); }); },
       caption: s.caption,
-      bandStatus: activeN === 0 ? T('Banda apagada. Pulsa Reproducir para activar al protagonista.', 'Band off. Press Play to switch on the lead.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
+      bandAllMuted: activeN === 0,
+      bandStatus: activeN === 0 ? T('Todos los instrumentos están silenciados. Activa un músico para escucharlo.', 'All instruments are muted. Switch a musician on to hear them.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandAll: function () { self.setBandMute(self.allMute(false)); },
       bandNone: function () { self.setBandMute(self.allMute(true)); },
-      bandGo: function () { self.setState({ mute: self.allMute(false), caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
+      bandGo: function () { self.setBandMute(self.allMute(false)); self.setState({ caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
       overCls: s.over ? 'over' : '',
       showFileSettings: s.disc === 5 && hasCustom && (s.custom.kind === 'image' || s.custom.cols?.length > 1),

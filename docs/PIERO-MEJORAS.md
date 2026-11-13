@@ -59,7 +59,10 @@ Los intervalos usan America/Bogota. El tiempo se registra de forma conservadora 
 | 15 | 13 nov 2026, 04:20–04:38 | Git preserva bytes de licencias; prueba de archivo fuente recuperable. Firefox/WebKit: portada y 544 estados cada uno; foco visible en preferencias y movimiento reducido del documento corregidos. Imagen propia sin deformación ni animación discrepante, cinco archivos sintéticos en tres motores, guardas de conversión tardía y 128 pruebas. | 16 |
 | 16 | 13 nov 2026, 04:38–04:47 | Selector CSV corregido y comprobado en tres motores; devolución de foco de Brisa, alternativa escrita en WebKit sin Web Audio. Nuevo empaquetador desde commit con manifiesto y comprobación de fuentes. Mediciones finales de carga y diagnóstico de clic perdido durante transición bajo CPU limitada. Sites devuelve 404 al renovar acceso, sin cambiar audiencia ni crear otra copia. | 8 |
 
-Total conservador acreditado: **226 de 420 minutos**. El bloque 9 se corrigió para no contar un minuto futuro. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan motores de prueba en Windows, no un teléfono físico.
+| 17 | 13 nov 2026, 04:48–04:59 | Checkpoint 122fd9d subido, ZIP de 48,5 MB creado desde Git, extracción e integridad independientes, detección de alteración y 103 respuestas HTTP. Dos recorridos completos del paquete servido. Muestra de instrumentos desacoplada del 3D: diez muestras nativas start/stop y seis situaciones de modelos pasan. Web oficial conserva su hash; vista Sites v1 sigue disponible con 81 activos y HTML de aplicación comprobados. | 9 |
+| 18 | 13 nov 2026, 04:59–05:10 | LCP/CLS y eventos de laboratorio medidos con sus límites; reducción de doble render por paso, 134 pruebas y cuatro discos completos. Mezcla manual conservada ante pausa/reanudación, cambio de disco y archivo; corrección del solo inicial del protagonista. Audio nativo y CSV/color comprueban el silencio deliberado. | 9 |
+
+Total conservador acreditado: **244 de 420 minutos**. El bloque 9 se corrigió para no contar un minuto futuro. Las esperas de Blender y navegador sin otra actividad no se sumaron. Los recorridos de navegador usan motores de prueba en Windows, no un teléfono físico.
 
 ## Decisiones
 

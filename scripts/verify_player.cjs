@@ -148,6 +148,16 @@ async function main() {
       await page.locator('#tour-nav button').first().click();
       await page.locator('.discgrid .dcard').first().click();
     }
+    if(!process.argv.includes('--layout-only')){
+      await page.evaluate(()=>{__app.stop();__app.setBandMute(__app.allMute(true));__app.seekPosition(0);});
+      for(let pass=0;pass<2;pass++){
+        const before=await page.evaluate(()=>__app.playerPosition());await page.locator('#tour-play button').click();await page.waitForFunction(position=>__app.state.playing&&__app.playerPosition()>position+1,before);
+        assert(await page.evaluate(()=>Object.values(__app.state.mute).every(Boolean)),'Play must preserve an explicit all-instruments mute');
+        assert((await page.evaluate(()=>__audioPeak()))<.00001);await page.locator('#tour-play button').click();
+      }
+      report.allMutedPreserved=true;console.log('PASS explicit all-instruments mute survives play and resume');
+    }
+    if(process.argv.includes('--all-muted'))await page.evaluate(()=>__app.setBandMute(__app.allMute(true)));
     for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
       await page.setViewportSize(viewport);
       await page.evaluate(() => __app.resetScreenScroll());

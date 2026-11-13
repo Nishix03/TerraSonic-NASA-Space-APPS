@@ -1132,7 +1132,7 @@ test('leaving a playback screen stops immediately, clears activity and preserves
 
 test('opening a disc reaches the player at its first frame and preserves the configured band', async () => {
   const {component:c,intervals}=audioHarness(); c.state.tab='juke';c.state.sub=2;
-  c.state.mute={silbo:false,inti:false,mama:true,yaku:false,illapa:true};
+  c.setBandMute({silbo:false,inti:false,mama:true,yaku:false,illapa:true});
   const mute=JSON.stringify(c.state.mute); await c.play();
   c.goSub(0);
   c.state.frame=2;
@@ -1799,4 +1799,33 @@ test('a newly visible disc accepts an immediate selection while the previous cut
   c.renderVals().discs[2].pick();assert.equal(c.routeTimers.length,2);
   previous[1]();assert.equal(c.state.tab,'juke');assert.equal(c.state.sub,0,'the stale cut cannot override the new selection');
   c.routeFinish();assert.equal(c.state.disc,2);assert.equal(c.state.sub,1);assert.equal(c.state.trans,false);
+});
+
+test('a heard step commits map position and its textual event in one render',async()=>{
+  const {component:c,scheduled}=clockHarness();await c.play();c.scheduleAudio();
+  const patches=[],set=c.setState;c.setState=function(patch,...args){patches.push(patch);return set.call(this,patch,...args);};
+  c.ac.currentTime=scheduled[0].at;c.flushPlayback(c.ac.currentTime);
+  assert.equal(patches.length,1);assert.equal(patches[0].col,0);assert.equal(patches[0].events.length,1);
+  assert.equal(c.state.events[0].frame,c.state.frame);assert.equal(c.state.events[0].column,c.state.col+1);
+});
+
+test('the suggested solo follows a new disc while an explicitly edited band mix is preserved',()=>{
+  const {component:c}=setup();c.state.tab='juke';c.state.sub=0;c.renderVals().discs[0].pick();
+  assert.equal(c.leadChar(),'mama');assert.equal(c.state.mute.mama,false);assert.equal(c.state.mute.silbo,true);
+  c.goSub(0);const manual=c.allMute(false);manual.yaku=true;c.setBandMute(manual);c.renderVals().discs[4].pick();
+  assert.deepEqual(c.state.mute,manual);assert.equal(c.leadChar(),'illapa');
+});
+
+test('play and resume never override an explicit all-instruments mute',async()=>{
+  const {component:c}=playbackHarness();c.setBandMute(c.allMute(true));await c.play();
+  assert.equal(c.state.playing,true);assert(Object.values(c.state.mute).every(Boolean));
+  c.stop();await c.play();assert(Object.values(c.state.mute).every(Boolean));
+});
+
+test('an accepted local file preserves an edited mix and explicit lead choice',()=>{
+  const {component:c}=setup();const analysis={cells:Array(448).fill(-1),warm:0,cold:1,hot:0,coast:0};
+  c.selectLead('illapa');c.showCustom({name:'first.png',url:'blob:first',kind:'image'},analysis,'ready',c.only('mama'));
+  assert.equal(c.state.mute.illapa,false);assert.equal(Object.values(c.state.mute).filter(value=>!value).length,1);
+  const manual=c.allMute(true);c.setBandMute(manual);c.showCustom({name:'next.csv',url:'blob:next',cols:[]},analysis,'ready');
+  assert.deepEqual(c.state.mute,manual);assert.equal(c.state.mixCustomized,true);
 });

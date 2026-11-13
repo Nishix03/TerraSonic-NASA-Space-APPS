@@ -17,6 +17,7 @@ CHECKS = {
     "player": "verify_player.cjs", "impacts": "verify_impacts.cjs",
     "models": "verify_models.cjs", "full-disc": "verify_full_disc.cjs",
     "image-geometry": "verify_image_geometry.cjs",
+    "fallback-audio": "verify_fallback_audio.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

@@ -5,7 +5,7 @@ const target=process.argv[2],site=path.resolve(process.argv[3]||'_site'),output=
 assert(target?.startsWith('https://'),'Pass the published HTTPS URL');const origin=new URL(target).origin;
 async function main(){
  fs.mkdirSync(output,{recursive:true});const browser=await chromium.launch({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const report={url:target,credentialFree:true,checks:[],assets:[],errors:[],failedResponses:[]};
+ const report={url:target,credentialFree:true,checks:[],assets:[],html:[],errors:[],failedResponses:[]};
  try{
   for(const scenario of ['normal','no-webgl']){
    const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce',locale:'es-PE'});
@@ -16,14 +16,23 @@ async function main(){
    });
    if(scenario==='no-webgl')await context.addInitScript(()=>{const getContext=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/i.test(type)?null:getContext.call(this,type,...args);};});
    const page=await context.newPage();page.on('pageerror',error=>report.errors.push({scenario,message:error.message}));page.on('response',response=>{if(response.url().startsWith(origin)&&response.status()>=400)report.failedResponses.push({scenario,url:response.url(),status:response.status()});});
-   const response=await page.goto(target);assert.equal(response.status(),200);assert.equal(new URL(page.url()).origin,origin);assert.equal(createHash('sha256').update(await response.body()).digest('hex'),createHash('sha256').update(fs.readFileSync(path.join(site,'index.html'))).digest('hex'),'published HTML must match the generated application');await page.waitForFunction(()=>window.__app);
+   const response=await page.goto(target);assert.equal(response.status(),200);assert.equal(new URL(page.url()).origin,origin);
+   const received=await response.body(),expected=fs.readFileSync(path.join(site,'index.html'));let providerScripts=0;
+   // Compare source without the observed Cloudflare transport insertion. The real
+   // browser response stays untouched and still executes its provider script.
+   const normalized=received.toString('utf8').replace(/<script>([\s\S]*?)<\/script>/g,(whole,body)=>{
+    if(body.startsWith('(function(){function c(){var b=a.contentDocument')&&body.includes('window.__CF$cv$params=')&&body.includes('/cdn-cgi/challenge-platform/scripts/jsd/main.js')){providerScripts++;return '';}
+    return whole;
+   });
+   assert(providerScripts<=1);const sourceHash=createHash('sha256').update(normalized).digest('hex'),expectedHash=createHash('sha256').update(expected).digest('hex');
+   assert.equal(sourceHash,expectedHash,'all application HTML must match after removing only the identified provider insertion');report.html.push({scenario,receivedSha256:createHash('sha256').update(received).digest('hex'),applicationSha256:sourceHash,providerScripts});await page.waitForFunction(()=>window.__app);
    assert.equal(await page.locator('html').getAttribute('lang'),'es');await page.getByRole('button',{name:'Continuar',exact:true}).click();
    await page.evaluate(()=>__app.setPreference('sfx',false));
    const flow=await page.locator('.home-process').boundingBox();assert(flow&&flow.y>=0&&flow.y+flow.height<=844,'The whole map-to-music strip fits in the initial mobile home');
    await page.screenshot({path:path.join(output,`${scenario}-home.png`)});
    if(scenario==='normal'){
     const files=await page.evaluate(()=>[...DISC_SETS.eic,...DISC_SETS.prev].flatMap(disc=>disc.files).concat(['support.js','runtime/avatar3d.js','runtime/vendor/three-gltf.js','data/impacts.v1.json','data/characters.v1.json','data/nasa_power_monthly.json'],['silbo','inti','mama','yaku','illapa'].flatMap(key=>[`modelos/${key}.glb`,`sprites/${key}/pose-volume.webp`,`sprites/${key}/face-volume.webp`])));
-    files.push(...fs.readdirSync(path.join(site,'fonts')).map(file=>'fonts/'+file));
+    if(fs.existsSync(path.join(site,'fonts')))files.push(...fs.readdirSync(path.join(site,'fonts')).map(file=>'fonts/'+file));
     for(const file of files){
      const result=await page.evaluate(async file=>{const response=await fetch(new URL(file,location.href),{credentials:'omit'});const bytes=await response.arrayBuffer(),hash=await crypto.subtle.digest('SHA-256',bytes);return {status:response.status,bytes:bytes.byteLength,sha256:[...new Uint8Array(hash)].map(v=>v.toString(16).padStart(2,'0')).join(''),contentType:response.headers.get('Content-Type')};},file);
      assert.equal(result.status,200,file);const local=fs.readFileSync(path.join(site,file));assert.equal(result.sha256,createHash('sha256').update(local).digest('hex'),file+' must match the packaged file');report.assets.push({file,...result});
