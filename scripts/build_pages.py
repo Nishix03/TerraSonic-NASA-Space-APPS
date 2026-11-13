@@ -85,6 +85,7 @@ def build(destination: Path) -> None:
     copy2(avatar_runtime, runtime)
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
+    copy2(root / "data" / "chiclayo-rain.svg", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")
     copy2(root / "data" / "characters.v1.json", destination / "data")
     # git archive also applies core.autocrlf. Normalize shipped text and the

@@ -1,5 +1,7 @@
 # Brisa, preferencias y tutorial
 
+> Alcance actualizado: [RETO 05](RETO_05.md). Este documento conserva detalles de la revisión anterior. Se retiraron CSV, Escenario, Método y los controles marcados en el brief; la guía permite omitir pasos y ya no usa una caja con scroll interno.
+
 Brisa es la guía de la interfaz, separada de los cinco músicos. No se encontró una referencia visual aprobada de Brisa en los recursos disponibles ni se pudo recuperar la conversación compartida. Se utiliza su nombre con un símbolo de ayuda convencional. No se inventó un retrato, vestimenta o personaje 3D para ella.
 
 En la primera visita se pregunta «¿Cómo prefieres usar TerraSonic?». Guía hablada, texto grande, alto contraste y movimiento reducido se pueden combinar. No se pide información sobre discapacidad. Las preferencias se guardan como booleanos conocidos en `ts_prefs`, con versión, y se pueden reabrir desde Accesibilidad. No requieren una cuenta.

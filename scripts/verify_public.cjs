@@ -33,7 +33,7 @@ async function main(){
    const flow=await page.locator('.home-process').boundingBox();assert(flow&&flow.y>=0&&flow.y+flow.height<=844,'The whole map-to-music strip fits in the initial mobile home');
    await page.screenshot({path:path.join(output,`${scenario}-home.png`)});
    if(scenario==='normal'){
-    const files=await page.evaluate(()=>[...DISC_SETS.eic,...DISC_SETS.prev].flatMap(disc=>disc.files).concat(['support.js','runtime/avatar2d.js','data/impacts.v1.json','data/characters.v1.json','data/nasa_power_monthly.json'],['silbo','inti','mama','yaku','illapa'].flatMap(key=>[`sprites/${key}/pose-banda.webp`,...[0,1,2,3].map(n=>`sprites/${key}/keyframes/0${n}.png`)])));
+    const files=await page.evaluate(()=>[...DISC_SETS.eic,...DISC_SETS.prev].flatMap(disc=>disc.files).concat(['support.js','runtime/avatar2d.js','data/impacts.v1.json','data/characters.v1.json','data/nasa_power_monthly.json','data/chiclayo-rain.svg'],['silbo','inti','mama','yaku','illapa'].flatMap(key=>[`sprites/${key}/pose-banda.webp`,...[0,1,2,3].map(n=>`sprites/${key}/keyframes/0${n}.png`)])));
     if(fs.existsSync(path.join(site,'fonts')))files.push(...fs.readdirSync(path.join(site,'fonts')).map(file=>'fonts/'+file));
     for(const file of files){
      const result=await page.evaluate(async file=>{const response=await fetch(new URL(file,location.href),{credentials:'omit'});const bytes=await response.arrayBuffer(),hash=await crypto.subtle.digest('SHA-256',bytes);return {status:response.status,bytes:bytes.byteLength,sha256:[...new Uint8Array(hash)].map(v=>v.toString(16).padStart(2,'0')).join(''),contentType:response.headers.get('Content-Type')};},file);
@@ -45,15 +45,13 @@ async function main(){
    for(const catalog of [0,1]){
     await page.locator('#tour-sets button').nth(catalog).click();await page.locator('.discgrid .dcard').first().click();await page.waitForFunction(()=>__app.cur());
     await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
-    assert.equal(await page.locator('.legend-choice').count(),4);
+    assert.equal(await page.locator('.legend-choice').count(),14);
     for(const mode of fullPlayer?[0,1]:[0]){
-     if(fullPlayer){await page.locator('.player-modes button').nth(mode).click();const position=page.locator('#playback-position');await position.focus();await position.press('Home');await position.press('ArrowRight');assert.equal(await position.inputValue(),'1');assert.equal(await page.locator('.chordsrow').count(),mode===0?1:0);}
+     if(fullPlayer){await page.locator('.player-modes button').nth(mode).click();const position=page.locator('#playback-position');await position.focus();await position.press('Home');await position.press('ArrowRight');assert.equal(await position.inputValue(),'1');}
      await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing&&__app.state.col>=2);await page.locator('#tour-play button').click();assert.equal(await page.evaluate(()=>__app.state.playing),false);
      if(fullPlayer){
       const position=page.locator('#playback-position');await position.focus();await position.press('Home');await position.press('ArrowRight');assert.equal(await position.inputValue(),'1');
-      await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===448);
-      assert.equal(await page.locator('.analysis-panel .heard>div').evaluateAll(cells=>cells.filter(el=>el.style.opacity==='1').length),16);
-      await page.locator('.analysis-panel summary').click();await page.waitForFunction(()=>document.querySelectorAll('.analysis-panel .heard>div').length===0);
+      assert.equal(await page.locator('.analysis-panel .heard>div').count(),448);
      }
      playerJourneys.push({catalog:catalog===0?'eic':'gibs',mode:mode===0?'melody':'data',playPause:true,keyboardSeek:fullPlayer,analysis:fullPlayer});
     }
@@ -66,14 +64,10 @@ async function main(){
     const decoded=await page.evaluate(async key=>{const img=new Image();img.src=`sprites/${key}/pose-banda.webp`;await img.decode();return img.naturalWidth>0&&img.naturalHeight>0;},key);assert(decoded);
     await page.screenshot({path:path.join(output,`${scenario}-${key}.png`)});
    }
-   await page.locator('#tour-nav button').nth(2).click();await page.evaluate(()=>__app.goSub(0));await page.getByRole('button',{name:'Usar imagen de ejemplo',exact:true}).click();await page.waitForFunction(()=>__app.state.custom&&__app.cur());assert.equal(await page.evaluate(()=>__app.state.custom.source),'eic');
-   if(fullPlayer){
-    await page.locator('.headtools button').click();await page.locator('.convert-secondary summary').first().click();
-    await page.locator('.csv-picker input').setInputFiles({name:'public-review.csv',mimeType:'text/csv',buffer:Buffer.from('day,rain,temp\n1,3,25\n2,6,24\n3,2,26\n4,8,27\n5,4,23\n6,9,24\n7,2,25\n8,7,26\n')});
-    await page.locator('.file-settings select option[value="2"]').waitFor({state:'attached'});await page.locator('.file-settings select').selectOption('2');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
-    await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('.file-settings select').inputValue(),'2');assert.equal(await page.locator('html').getAttribute('lang'),'en');
-   }
-   report.checks.push({scenario,home:true,collections:2,modes:fullPlayer?2:1,playerJourneys,playPause:true,legend:true,characters:5,decodedPoses:5,sampleImage:true,csvColumns:fullPlayer?3:0,languageRetainsColumn:fullPlayer});console.log('PASS public',scenario);
+   await page.locator('#tour-nav button').nth(2).click();await page.evaluate(()=>__app.goSub(0));await page.locator('#tour-sample button').first().click();await page.waitForFunction(()=>__app.state.custom&&__app.cur());assert.equal(await page.evaluate(()=>__app.state.custom.kind),'rain');
+   await page.locator('.headtools button').click();await page.locator('input[type=file]').setInputFiles({name:'public-review.webp',mimeType:'image/webp',buffer:fs.readFileSync(path.join(site,'fotogramas/ver2025_2.webp'))});await page.waitForFunction(()=>__app.state.custom?.kind==='image'&&__app.state.sub===1);
+   await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('html').getAttribute('lang'),'en');
+   report.checks.push({scenario,home:true,collections:2,modes:fullPlayer?2:1,playerJourneys,playPause:true,legend:true,characters:5,decodedPoses:5,rainfall:true,imageUpload:true,languageRetainsImage:true});console.log('PASS public',scenario);
    await context.close();
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);assert.deepEqual(report.writeRequests,[]);console.log('PASS',report.assets.length,'public assets match the packaged SHA-256');

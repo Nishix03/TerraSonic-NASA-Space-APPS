@@ -8,13 +8,13 @@ const path = require('node:path');
 const html = fs.readFileSync(process.argv[2] || path.join(__dirname, '../prototipos/I11-eic/Main.dc.html'), 'utf8');
 const source = html.match(/<script[^>]*data-dc-script[^>]*>([\s\S]*?)<\/script>/)[1];
 
-test('Listen has only discs, player and stage, while every date remains selectable', () => {
+test('Listen has only discs and player, while every date remains selectable', () => {
   const { component: c, context } = setup();
   c.state.tab = 'juke';
   for (const lang of ['es', 'en']) {
     c.setLang(lang);
-    assert.equal(c.subCount(), 3);
-    assert.equal(c.subTitles().length, 3);
+    assert.equal(c.subCount(), 2);
+    assert.equal(c.subTitles().length, 2);
     c.goSub(3);
     assert.equal(c.state.sub, 0);
     for (const set of ['eic', 'prev']) {
@@ -164,7 +164,7 @@ test('each section has a brief, bilingual guide with real target IDs', () => {
     c.setLang(lang);
     for (const tab of context.PAGE_ORDER) {
       const steps = c.guideSteps(tab);
-      assert(steps.length >= 3 && steps.length <= 5, tab + ' needs 3–5 steps');
+      assert(steps.length >= 1 && steps.length <= 5, tab + ' needs 1–5 steps');
       for (const step of steps) {
         assert(step.t && step.b && step.en.t && step.en.b);
         assert(html.includes('id="' + step.id + '"'), 'missing target ' + step.id);
@@ -194,13 +194,13 @@ test('contextual help stays on the current screen and retains playback, scroll a
   const { component: c, context } = setup();
   const screen = { scrollTop: 135, scrollLeft: 0 }, app = { scrollTop: 0, scrollLeft: 0 };
   context.document.querySelector = selector => selector === '.px .scr' ? screen : selector === '.px.app' ? app : null;
-  c.state.tab = 'juke'; c.state.sub = 2;
-  c.tourOpen(); c.tourGo(3);
-  assert.equal(c.state.sub, 2);
+  c.state.tab = 'juke'; c.state.sub = 1;
+  c.tourOpen(); c.tourGo(2);
+  assert.equal(c.state.sub, 1);
   screen.scrollTop = 400; app.scrollTop = 2;
   c.state.playing = true; c.state.mute.inti = false;
   c.tourClose();
-  assert.equal(c.state.sub, 2); assert.equal(screen.scrollTop, 135); assert.equal(app.scrollTop, 0);
+  assert.equal(c.state.sub, 1); assert.equal(screen.scrollTop, 135); assert.equal(app.scrollTop, 0);
   assert.equal(c.state.playing, true); assert.equal(c.state.mute.inti, false);
 });
 
@@ -265,8 +265,8 @@ test('guide geometry stays in the visual viewport when zoomed and panned', () =>
   assert.deepEqual(JSON.parse(JSON.stringify(c.state.tourRect)), { x:100, y:120, w:500, h:320 });
   const style = c.renderVals().tour.cardSt;
   const x = +style.match(/left:([\d.]+)px/)[1], y = +style.match(/top:([\d.]+)px/)[1];
-  const width = +style.match(/width:([\d.]+)px/)[1], maxHeight = +style.match(/max-height:calc\(([\d.]+)px/)[1];
-  assert(x >= 112 && x + width <= 588, style); assert(y >= 132 && y + Math.min(296,maxHeight) <= 428, style);
+  const width = +style.match(/width:([\d.]+)px/)[1];
+  assert(x >= 112 && x + width <= 588, style); assert(y >= 132 && y + 296 <= 428, style);
 });
 
 test('card placement accounts for its measured height', () => {
@@ -309,21 +309,7 @@ test('language changes retain upload errors, filenames and application state', (
   assert.equal(c.renderVals().upMsg, spanishError);
 });
 
-test('generated CSV column labels and status messages follow the selected language', () => {
-  const { component: c } = setup();
-  c.drawSeries = (_, done) => done('data:image/png;base64,test');
-  c.state.tab = 'data';
-  c.loadCsv('columna 1.csv', '1,11\n2,12\n3,13\n4,14\n5,15\n6,16\n7,17\n8,18');
-  const custom = c.state.custom;
-  c.setLang('en');
-  const v = c.renderVals();
-  assert.equal(c.state.custom, custom);
-  assert.equal(v.colOpts[0].l, 'column 1');
-  assert.match(v.fileName, /^columna 1\.csv · column /, 'user filename must remain untouched');
-  assert.match(v.upMsg, /^Ready:/);
-  c.setLang('es');
-  assert.equal(c.renderVals().colOpts[0].l, 'columna 1');
-});
+
 
 test('language switching keeps the current chord highlighted without changing musical values', () => {
   const { component: c } = setup();
@@ -477,19 +463,11 @@ test('late transition callbacks cannot update an unmounted component', () => {
   assert.equal(JSON.stringify(c.state), before);
 });
 
-test('the 448-cell display model is built only while its player analysis is open', () => {
-  const { component: c } = setup();
-  for (const tab of ['home', 'band', 'how', 'tech']) {
-    c.state.tab = tab; c.state.sub = 0;
-    assert.equal(c.renderVals().cells.length, 0);
-  }
-  for (const tab of ['juke', 'data']) {
-    c.state.tab = tab;
-    for (const sub of [0, 1, 2]) for (const open of [false,true]) {
-      c.state.sub = sub; c.state.analysisOpen = open;
-      assert.equal(c.renderVals().cells.length, sub === 1 && open ? 448 : 0);
-    }
-  }
+test('the 448-cell display is always visible in the player and absent on other pages', () => {
+ const {component:c}=setup();c.state.tab='juke';c.state.sub=1;
+ assert.equal(c.renderVals().cells.length,448);
+ c.state.analysisOpen=false;assert.equal(c.renderVals().cells.length,448);
+ c.state.tab='band';assert.equal(c.renderVals().cells.length,0);
 });
 
 function delayedImages() {
@@ -526,25 +504,7 @@ test('out-of-order image success and error cannot replace the newest complete fi
   assert.equal(c.state.custom.name, 'second.png', 'keep the accepted image and analysis together until the new one is ready');
 });
 
-test('CSV reads cannot overwrite a newer image and stale CSV canvases release their URLs', () => {
-  const { component: c, context, images, upload, revoked } = delayedImages();
-  const readers = [], drawings = [];
-  context.FileReader = class { constructor() { readers.push(this); } readAsText() {} };
-  c.drawSeries = (_, done) => drawings.push(done);
-  const csv = 'rain\n1\n2\n3\n4\n5\n6\n7\n8';
-  c.handleFile({ name: 'old.csv', type: 'text/csv', size: 100 });
-  upload('second.png'); images[0].onload();
-  const state = JSON.stringify(c.state);
-  readers[0].result = csv; readers[0].onload(); readers[0].onerror();
-  assert.equal(JSON.stringify(c.state), state);
-  assert.equal(drawings.length, 0, 'stale text must not start a canvas job');
-  c.loadCsv('pending.csv', csv);
-  upload('newest.png'); images[1].onload();
-  const accepted = JSON.stringify(c.state);
-  drawings[0]('blob:stale-canvas');
-  assert.equal(JSON.stringify(c.state), accepted);
-  assert(revoked.includes('blob:stale-canvas'));
-});
+
 
 test('switching disc sets and unmounting invalidate pending image callbacks', () => {
   for (const cancel of [c => c.applySet('prev'), c => c.componentWillUnmount()]) {
@@ -564,18 +524,7 @@ test('late NASA frame analyses from the previous disc set are discarded', () => 
   assert.equal(JSON.stringify(c.state), state);
 });
 
-test('repeated column selections accept only the newest canvas response', () => {
-  const { component: c, context } = setup(), drawings = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.state.custom = { name: 'data.csv', baseName: 'data.csv', kind: 'csv', url: 'blob:old', col: 0,
-    cols: [{ name: 'A', values: [1,2,3,4,5,6,7,8] }, { name: 'B', values: [8,7,6,5,4,3,2,1] }] };
-  c.drawSeries = (_, done) => drawings.push(done);
-  c.setCol(1); c.setCol(0);
-  drawings[1]('blob:newest'); const state = JSON.stringify(c.state);
-  drawings[0]('blob:stale');
-  assert.equal(JSON.stringify(c.state), state);
-  assert.equal(c.state.custom.col, 0); assert(revoked.includes('blob:stale'));
-});
+
 
 function modalHarness() {
   const h = setup(), background = { inert: false }, opener = { isConnected: true, focus() { h.context.document.activeElement = this; } };
@@ -594,29 +543,9 @@ function modalHarness() {
   return { ...h, background, opener, controls, dialog, key };
 }
 
-test('More options moves focus inside, wraps Tab both ways and restores its opener', () => {
-  const { component: c, context, background, opener, controls, key } = modalHarness();
-  c.renderVals().toggleMore({ currentTarget: opener });
-  assert.equal(context.document.activeElement, controls[0]); assert(background.inert);
-  assert(key('Tab', true).prevented); assert.equal(context.document.activeElement, controls[2]);
-  assert(key('Tab').prevented); assert.equal(context.document.activeElement, controls[0]);
-  controls[1].focus(); assert.equal(key('Tab').prevented, false, 'normal Tab between interior controls must remain native');
-  assert(key('Escape').prevented); assert.equal(c.state.more, false);
-  assert.equal(context.document.activeElement, opener); assert.equal(background.inert, false);
-});
 
-test('modal focus containment handles external focus, removed openers and an active guide', () => {
-  const { component: c, context, events, opener, controls, key } = modalHarness();
-  c.state.tour = 2;
-  c.renderVals().toggleMore({ currentTarget: opener });
-  context.document.activeElement = opener;
-  events.get('focusin')?.({ target: opener });
-  assert.equal(context.document.activeElement, controls[0]);
-  opener.isConnected = false;
-  key('Escape');
-  assert.equal(c.state.more, false); assert.equal(c.state.tour, 2, 'Escape must close only the modal');
-  c.componentWillUnmount(); assert.equal(events.has('focusin'), false);
-});
+
+
 
 test('preference menu closes on Escape, outside pointer or focus leaving, and restores its summary', () => {
   const {component:c,context,events}=setup();
@@ -676,36 +605,15 @@ test('re-analysis of the same frame or custom image ignores superseded callbacks
   assert(JSON.stringify(c.state.an) === frames);
 });
 
-test('pending CSV canvas callbacks after unmount release resources without setting state', () => {
-  const { component: c, context } = setup(), callbacks = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.drawSeries = (_, done) => callbacks.push(done);
-  c.loadCsv('pending.csv', 'rain\n1\n2\n3\n4\n5\n6\n7\n8');
-  c.componentWillUnmount(); const state = JSON.stringify(c.state);
-  callbacks[0]('blob:late');
-  assert(JSON.stringify(c.state) === state); assert(revoked.includes('blob:late'));
+
+
+test('leaving image upload invalidates pending files instead of changing another page',()=>{
+ const {component:c,images,upload,revoked}=delayedImages();c.state.tab='data';upload('pending.png');
+ c.goTab('how');const state=JSON.stringify(c.state);images[0].onload();images[0].onerror();
+ assert.equal(JSON.stringify(c.state),state);assert.equal(c.state.sub,0);assert(revoked.includes('blob:pending.png'));
 });
 
-test('leaving the upload section invalidates pending files instead of changing another screen', () => {
-  const { component: c, context } = setup(), callbacks = [], revoked = [];
-  context.URL = { revokeObjectURL: url => revoked.push(url) };
-  c.state.tab = 'data'; c.drawSeries = (_, done) => callbacks.push(done);
-  c.loadCsv('pending.csv', 'rain\n1\n2\n3\n4\n5\n6\n7\n8');
-  c.goTab('how'); const state = JSON.stringify(c.state);
-  callbacks[0]('blob:late');
-  assert(JSON.stringify(c.state) === state); assert.equal(c.state.sub, 0);
-  assert(revoked.includes('blob:late'));
-});
 
-test('modal Tab excludes disabled and hidden controls and handles an empty dialog', () => {
-  const { component: c, context, dialog, controls, key } = modalHarness();
-  c.renderVals().toggleMore();
-  controls[1].disabled = true; controls[2].hidden = true;
-  assert(key('Tab').prevented); assert.equal(context.document.activeElement, controls[0]);
-  controls[0].disabled = true;
-  assert(key('Tab', true).prevented); assert.equal(context.document.activeElement, dialog);
-  c.renderVals().closeMore(); assert.equal(c.state.more, false);
-});
 
 test('modal restores existing inert state and releases the background before navigation', () => {
   const { component: c, background } = modalHarness();
@@ -813,45 +721,13 @@ test('images with no usable pixels retain the accepted file and report errors in
   }
 });
 
-test('CSV handles quoted separators, escaped quotes, multiline fields and a BOM', () => {
-  const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-  const rows = ['\uFEFFstation,"rain, ""daily"""', ...Array.from({ length: 8 }, (_, i) => '"Lima, ""Centro""\nPeru",' + (i + 1))];
-  c.loadCsv('quoted.csv', rows.join('\r\n'));
-  assert(c.state.custom);
-  assert.equal(c.state.custom.cols[0].name, 'rain, "daily"');
-  assert.equal(JSON.stringify(c.state.custom.cols[0].values), '[1,2,3,4,5,6,7,8]');
-});
 
-test('CSV retains semicolon decimal commas, TSV and headerless compatibility', () => {
-  for (const text of [
-    ['station;rain', ...Array.from({ length: 8 }, (_, i) => '"Lima, Peru";' + (i + 1) + ',5')].join('\n'),
-    ['station\train', ...Array.from({ length: 8 }, (_, i) => '"Lima, Peru"\t' + (i + 1))].join('\n'),
-    Array.from({ length: 8 }, (_, i) => (i + 1) + ',' + (i + 11)).join('\n')
-  ]) {
-    const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-    c.loadCsv('supported.csv', text); assert(c.state.custom); assert.equal(c.state.custom.cols[0].values.length, 8);
-  }
-});
 
-test('CSV accepts 5000 data records but rejects overflow without partial processing', () => {
-  const { component: c } = setup(); let rendered = 0;
-  c.drawSeries = (_, done) => { rendered++; done('data:image/png;base64,csv'); };
-  const records = Array.from({ length: 5000 }, (_, i) => String(i));
-  c.loadCsv('limit.csv', ['rain', ...records].join('\n')); assert(c.state.custom);
-  assert.equal(c.state.custom.cols[0].values.length, 5000);
-  const accepted = c.state.custom;
-  for (const header of [[], ['rain']]) c.loadCsv('overflow.csv', [...header, ...records, '5001'].join('\n'));
-  assert.equal(c.state.custom, accepted); assert.equal(rendered, 1);
-  assert.match(c.renderVals().upMsg, /5000/); c.setLang('en'); assert.match(c.renderVals().upMsg, /5000/);
-  assert.match(c.renderVals().upMsg, /not processed|no rows/i);
-});
 
-test('malformed CSV quotes show a bilingual error without replacing accepted data', () => {
-  const { component: c } = setup();
-  c.loadCsv('broken.csv', 'station,rain\n"Lima,1\n"Peru,2');
-  assert.equal(c.state.custom, null); assert.match(c.renderVals().upMsg, /comillas/);
-  c.setLang('en'); assert.match(c.renderVals().upMsg, /quot/i);
-});
+
+
+
+
 
 test('audio rejects non-Error failures safely and supports the prefixed browser API', async () => {
   const { component: c, context, AudioContextStub } = audioHarness();
@@ -893,12 +769,7 @@ test('neutral but visible image pixels remain valid and an invalid color mode ro
   assert.equal(c.state.custom, previous); assert.equal(c.state.customMode, 'free'); assert.equal(c.state.an['5_0'], analysis);
 });
 
-test('CSV row limit counts logical records rather than newlines inside quoted fields', () => {
-  const { component: c } = setup(); c.drawSeries = (_, done) => done('data:image/png;base64,csv');
-  const rows = ['station,rain', ...Array.from({ length: 5000 }, (_, i) => '"Lima\nPeru",' + i)];
-  c.loadCsv('multiline.csv', rows.join('\n'));
-  assert(c.state.custom); assert.equal(c.state.custom.cols[0].values.length, 5000);
-});
+
 
 test('resume that never settles times out, restores Play and permits retry', async () => {
   const { component: c, context, timers, intervals, AudioContextStub } = audioHarness(), delays = [];
@@ -940,7 +811,7 @@ test('late completion of a timed-out resume cannot finish a newer activation', a
 });
 
 test('stop, navigation, file operations and unmount settle a pending activation immediately', async () => {
-  for (const cancel of [c => c.stop(), c => c.goTab('how'), c => c.loadCsv('new.csv', 'v\n1\n2\n3\n4\n5\n6\n7\n8'), c => c.componentWillUnmount()]) {
+  for (const cancel of [c => c.stop(), c => c.goTab('how'), c => c.startFileLoad(), c => c.componentWillUnmount()]) {
     const { component: c, context, timers, intervals, AudioContextStub } = audioHarness();
     c.state.tab = 'data'; c.drawSeries = (_, done) => done('data:image/png;base64,new');
     let rejectLate;
@@ -972,34 +843,12 @@ test('successful and rejected audio activations release their deadline timers', 
   }
 });
 
-test('Technology categories remain reachable and selected when filtering in either language', () => {
-  for (const [width, height] of [[320,568],[390,844],[660,900],[768,1024],[1366,768],[1920,1080]]) {
-    const { component: c, context } = setup(); context.window.innerWidth = width; context.window.innerHeight = height;
-    for (const lang of ['es', 'en']) {
-      c.setLang(lang); c.state.tab = 'tech'; c.state.sub = 0;
-      for (let sub = 0; sub < c.subCount(); sub++) {
-        const v = c.renderVals();
-        assert.equal(v.nav.counter, ('0' + (sub + 1)).slice(-2) + ' / 05');
-        assert.equal(v.nav.shortNext, lang === 'es' ? 'Siguiente' : 'Next');
-        assert.equal(v.nav.dots.length, 5);
-        assert(v.nav.topics);
-        assert(v.bottomNavClass.includes('with-pages'));
-        if (sub < 4) v.nav.next();
-      }
-      for (let sub = 4; sub > 0; sub--) c.renderVals().nav.prev();
-      assert.equal(c.state.sub, 0);
-      c.renderVals().nav.dots[2].go();
-      const all = c.renderVals();
-      all.techFilters[2].pick();
-      const filtered = c.renderVals();
-      assert.equal(c.state.sub, 2);
-      assert.equal(filtered.techCur.title, all.techCur.title);
-      assert(filtered.techCur.items.length < all.techCur.items.length);
-      assert.equal(filtered.techCur.items.length, 0, 'music runtime is not a production tool');
-      assert.equal(filtered.nav.dots.length, all.nav.dots.length);
-      filtered.techFilters[0].pick();
-    }
-  }
+test('Technology keeps four complete categories without generic filters in both languages',()=>{
+ const {component:c,context}=setup();
+ for(const lang of ['es','en']){c.setLang(lang);c.state.tab='tech';
+  assert.equal(c.subCount(),5);for(let sub=0;sub<4;sub++){c.goSub(sub);const v=c.renderVals();assert(v.techCur.items.length);assert.equal(v.techFilters,undefined);}
+  assert.equal(c.techGroups().reduce((n,g)=>n+g.items.length,0),context.TECH.length);
+ }
 });
 
 test('Technology lists only used tools with browser, source or production scope and keeps planned services absent', () => {
@@ -1014,7 +863,7 @@ test('Technology lists only used tools with browser, source or production scope 
       c.state.techFilter=filter;
       const groups=c.techGroups();assert.equal(groups.length,4);
       for(const group of groups)for(const tool of group.items)assert(!/planeado|planned|M[1-6]/i.test(tool.chip));
-      assert.equal(groups.reduce((total,group)=>total+group.items.length,0),context.TECH.filter(tool=>filter==='all'||tool.scope===filter).length);
+      assert.equal(groups.reduce((total,group)=>total+group.items.length,0),context.TECH.length);
     }
   }
 });
@@ -1069,7 +918,7 @@ test('navigation keyboard supports arrows, Home and End without activating anoth
 test('compact navigation has five bilingual labels while preserving full section names and the active page', () => {
   const { component: c, context } = setup();
   c.state.tab = 'data'; c.state.sub = 1;
-  const expected = { es: ['Escuchar','Banda','Convierte','Método','Tecnología'], en: ['Listen','Band','Convert','Method','Technology'] };
+  const expected = { es: ['Escuchar','Banda','Convierte','¿Cómo funciona?','Tecnología'], en: ['Listen','Band','Convert','How it works','Technology'] };
   for (const lang of ['es','en','es']) {
     c.setLang(lang);
     const tabs = c.renderVals().tabs;
@@ -1436,15 +1285,7 @@ test('a new lead retires the previous harmony while keeping position and play st
   assert.equal(c.state.playing, true); assert.equal(intervals.size, 1); assert.notEqual(c.master, oldMaster);
 });
 
-test('the primary image example uses a bundled NASA asset and retains its source and language', () => {
-  const { component: c, images } = delayedImages();
-  c.loadImageSample(); assert.equal(images[0].url, 'fotogramas/ver2025_2.webp');
-  images[0].onload(); assert.equal(c.state.custom.kind, 'image');
-  assert.equal(c.state.custom.source, 'eic'); assert.equal(c.state.custom.mode, 'palette');
-  assert.equal(c.state.customMode, 'palette'); assert.equal(c.state.disc, 5); assert.equal(c.state.sub, 1);
-  c.setLang('en'); assert.equal(c.renderVals().fileName, 'Sample NASA map');
-  assert.match(c.playerVm().paletteNote, /EIC/);
-});
+
 
 test('oversized image dimensions are rejected before creating a URL or decoding the file', async () => {
   const { component: c, images, revoked, upload } = delayedImages();
@@ -1541,7 +1382,7 @@ test('practicing the three tutorial actions advances and retains the completed p
   c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
   await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
   c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
-  c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
+  c.playerVm().legend.at(-1).choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
   c.renderVals().tour.next(); assert.equal(c.state.tour,0); assert.equal(c.state.tutorial,false);
   assert.equal(c.state.disc,2); assert.equal(c.state.sub,1); assert.equal(c.state.playing,true); c.stop();
 });
@@ -1875,10 +1716,10 @@ test('analysis indicators name the positive threshold and never invent an ocean 
   const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:2,coastPixels:8});
   assert.equal(c.renderVals().stats.coast,'+2.0');assert.match(c.renderVals().tx.strongWarm,/≥ \+4/);
   c.state.disc=5;c.state.custom={name:'drawing.png',mode:'free'};
-  assert.equal(c.renderVals().stats.coast,'—');assert.match(c.renderVals().statsHelp,/no define una costa/);assert.equal(c.playerVm().legend[3].label,'Sin valor utilizable');
+  assert.equal(c.renderVals().stats.coast,'—');assert.match(c.renderVals().statsHelp,/no define una costa/);
   c.state.custom={name:'values.csv',cols:[{name:'value'}]};assert.match(c.renderVals().statsHelp,/celdas dibujadas/);
-  c.setLang('en');assert.equal(c.playerVm().legend[3].label,'No usable value');assert.match(c.renderVals().statsHelp,/drawn cells/);
-  c.state.custom={name:'NASA',source:'eic',mode:'palette'};assert.equal(c.renderVals().stats.coast,'+2.0');assert.equal(c.playerVm().legend[3].label,'No ocean data');
+  c.setLang('en');assert.match(c.renderVals().statsHelp,/drawn cells/);
+  c.state.custom={name:'NASA',source:'eic',mode:'palette'};assert.equal(c.renderVals().stats.coast,'+2.0');
   c.cur=()=>({cells:Array(448).fill(1),warm:1,cold:0,hot:.25,coast:0,coastPixels:0});assert.equal(c.renderVals().stats.coast,'—');
 });
 
@@ -1907,4 +1748,28 @@ test('final disposal revokes the accepted file once while repeated disposal rema
   c.state.custom={name:'accepted.csv',url:'blob:accepted'};c.pendingImageUrl='blob:pending';
   c.componentWillUnmount();assert(revoked.includes('blob:accepted'));assert(revoked.includes('blob:pending'));
   const first=JSON.stringify(revoked);c.componentWillUnmount();assert.equal(JSON.stringify(revoked),first);
+});
+
+test('image import rejects CSV without replacing the last accepted image',()=>{
+ const {component:c}=setup();const accepted={name:'accepted.png',url:'blob:accepted',kind:'image'};c.state.custom=accepted;
+ c.handleFile({name:'table.csv',type:'text/csv',size:30});assert.equal(c.state.custom,accepted);assert.match(c.renderVals().upMsg,/Formato no admitido/);
+ c.setLang('en');assert.match(c.renderVals().upMsg,/Unsupported format/);assert.equal(c.loadCsv,undefined);assert.equal(c.setCol,undefined);
+});
+test('the pixel legend uses every actual grid color and only explains warm neutral cold',()=>{
+ const {component:c,context}=setup();const legend=c.playerVm().legend;
+ assert.equal(legend.length,context.RAMP.length);
+ assert.deepEqual(Array.from(legend,l=>l.color),Array.from(context.RAMP).reverse().map(p=>p[1]));
+ for(const l of legend)assert(!/Silbo|Inti|Yaku|Illapa|Mamacocha/.test(l.meaning));
+});
+test('music event history is paginated without dropping its retained events',()=>{
+ const {component:c}=setup();c.state.eventsOpen=true;c.state.events=Array.from({length:20},()=>c.eventFor({silbo:true},''));
+ assert.equal(c.playerVm().events.length,6);assert.equal(c.playerVm().historyPage,'1 / 4');
+ c.playerVm().historyNext();assert.equal(c.playerVm().historyPage,'2 / 4');c.playerVm().historyPrevious();assert.equal(c.playerVm().historyPage,'1 / 4');
+ c.playerVm().clearEvents();assert.equal(c.state.events.length,0);assert.equal(c.playerVm().historyNextOff,true);
+});
+
+test('How it sounds opens the standalone explanation instead of an internally scrolling modal',()=>{
+ const {component:c}=setup();c.state.tab='juke';c.state.sub=1;c.renderVals().toggleMore();
+ assert.equal(c.state.tab,'how');assert.equal(c.state.sub,0);assert.equal(c.state.more,false);assert.equal(c.subCount(),1);
+ assert(!html.includes('id="more-dialog"'));
 });

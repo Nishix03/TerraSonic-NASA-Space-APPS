@@ -28,6 +28,7 @@ CHECKS = {
     "themes": "verify_themes.cjs",
     "sprites": "verify_sprites.cjs",
     "mobile-guide": "verify_mobile_guide.cjs",
+    "reto05": "verify_reto05.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

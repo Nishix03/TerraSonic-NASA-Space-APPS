@@ -15,18 +15,16 @@ async function main(){
    const process=await page.locator('.home-process').boundingBox();assert(process.y>=0&&process.y+process.height<=viewport.height);
    assert(await page.evaluate(()=>document.fonts.check('700 16px Barlow')));await page.screenshot({path:path.join(output,'home-'+viewport.width+'.png')});
    await page.locator('#tour-nav button').first().click();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
-   assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),4);
+   assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),14);
    await page.evaluate(()=>document.fonts.ready);
    const playerCore=await page.locator('.uni').evaluate(root=>({bandBottom:root.querySelector('.listen-band').getBoundingClientRect().bottom,controlsBottom:root.querySelector('.player-sidebar').getBoundingClientRect().bottom}));
    if(viewport.width>=1280)assert(playerCore.bandBottom<=viewport.height&&playerCore.controlsBottom<=viewport.height,'The initial player must fit the original desktop window: '+JSON.stringify(playerCore));
    await page.screenshot({path:path.join(output,'player-'+viewport.width+'.png')});
    await page.locator('#tour-nav button').nth(1).click();await page.waitForFunction(()=>document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'));
-   await page.locator('#tour-nav button').nth(2).click();await page.locator('#tour-image-sample button').click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
-   await page.locator('.headtools button').click();await page.locator('.convert-secondary summary').first().click();
-   await page.locator('.csv-picker input').setInputFiles({name:'portable.csv',mimeType:'text/csv',buffer:Buffer.from('station,rain,temp\n1,3,25\n2,6,24\n3,2,26\n4,8,27\n5,4,23\n6,9,24\n7,2,25\n8,7,26\n')});
-   await page.locator('.file-settings select option[value="2"]').waitFor({state:'attached'});await page.locator('.file-settings select').selectOption('2');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
-   await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('html').getAttribute('lang'),'en');assert.equal(await page.locator('.file-settings select').inputValue(),'2');
-   report.checks.push({viewport,home:true,fonts:true,mapAndLegend:true,playerCore,originalSprite2d:true,sample:true,csv:true,language:true});await page.screenshot({path:path.join(output,'csv-'+viewport.width+'.png')});await context.close();
+   await page.locator('#tour-nav button').nth(2).click();await page.locator('#tour-sample button').first().click();await page.locator('#playback-position').waitFor();
+   await page.locator('.headtools button').click();const bytes=await page.evaluate(async()=>Array.from(new Uint8Array(await (await fetch(new URL('fotogramas/ver2025_2.webp',location.href))).arrayBuffer())));await page.locator('input[type=file]').setInputFiles({name:'portable.webp',mimeType:'image/webp',buffer:Buffer.from(bytes)});
+   await page.locator('#playback-position').waitFor();await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('html').getAttribute('lang'),'en');
+   report.checks.push({viewport,home:true,fonts:true,mapAndLegend:true,playerCore,originalSprite2d:true,rainfall:true,imageUpload:true,language:true});await page.screenshot({path:path.join(output,'image-'+viewport.width+'.png')});await context.close();
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);assert.deepEqual(report.externalRequests,[]);console.log('PASS standalone package journeys',report.checks.length,'real HTTP viewports');
  }finally{fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));await browser.close();}

@@ -69,9 +69,9 @@ async function main() {
       await page.locator('#preferences-dialog').waitFor();
       assert.equal(await page.locator('html').getAttribute('lang'), sample.expected);
       assert.equal(await page.evaluate(() => document.activeElement.id), 'preferences-voice');
-      await page.keyboard.press('Shift+Tab');
+      await page.locator('.preferences-header button').first().focus();await page.keyboard.press('Shift+Tab');
       assert.equal(await page.evaluate(() => document.activeElement.textContent), await page.locator('.preferences-actions button').last().textContent());
-      await page.keyboard.press('Tab'); assert.equal(await page.evaluate(() => document.activeElement.id), 'preferences-voice');
+      await page.keyboard.press('Tab'); assert(await page.locator('.preferences-header button').first().evaluate(e=>e===document.activeElement));
       await page.screenshot({ path: path.join(output,'preferences-'+sample.locale+'-'+sample.expected+'.png') });
       for (const id of ['big','contrast','reducedMotion']) await page.locator('#preferences-'+id).check();
       await page.locator('.preferences-actions button').first().click();
@@ -89,8 +89,8 @@ async function main() {
     const nativeAudio=await page.evaluate(()=>typeof(window.AudioContext||window.webkitAudioContext)==='function');
     report.nativeAudioAvailable=nativeAudio;
     await page.locator('#tour-nav button').nth(2).click();
-    await page.locator('#tour-image-sample button').click();
-    await page.waitForFunction(() => __app.state.custom?.source === 'eic' && __app.state.sub === 1);
+    await page.locator('#tour-sample button').click();
+    await page.waitForFunction(() => __app.state.custom?.kind === 'rain' && __app.state.sub === 1);
     await page.locator('#playback-position').evaluate(el => { el.value='8'; el.dispatchEvent(new Event('input',{bubbles:true})); });
     const snapshot = await page.evaluate(() => JSON.stringify([__app.state.tab,__app.state.sub,__app.state.disc,__app.state.frame,__app.state.col,__app.state.custom.url,__app.state.customMode,__app.state.mute,__app.state.playing]));
     await page.locator('#tour-guide').click();
@@ -102,7 +102,7 @@ async function main() {
     await next(page).click(); assert.equal(await page.evaluate(() => __app.state.speaking),false);
     await page.locator('#tour-card .tguide .tsay').first().click();
     await page.locator('#tour-lang button').nth(1).click(); assert.equal(await page.evaluate(() => __app.state.speaking),false);
-    assert.match(await page.locator('#tour-b').textContent(),/Text and symbols/);
+    assert.match(await page.locator('#tour-b').textContent(),/Red: warm; zero: neutral; blue: cold/);
     await page.locator('#tour-lang button').first().click(); await close(page).click();
     assert.equal(await page.evaluate(() => JSON.stringify([__app.state.tab,__app.state.sub,__app.state.disc,__app.state.frame,__app.state.col,__app.state.custom.url,__app.state.customMode,__app.state.mute,__app.state.playing])),snapshot);
     assert.equal(await page.evaluate(() => document.activeElement.id),'tour-guide');
@@ -131,7 +131,7 @@ async function main() {
       if(!nativeAudio){await page.waitForFunction(()=>!!__app.state.audioError);await page.locator('#tour-card .tbubble .btn').click();}
       await page.waitForFunction(() => __app.state.tour===3);
       await page.locator('.legend-choice').first().click(); assert.equal(await page.evaluate(()=>__app.state.tutorialDone.legend),false);
-      await page.locator('.legend-choice').nth(2).click(); assert.equal(await next(page).isDisabled(),false);
+      await page.locator('.legend-choice').last().click(); assert.equal(await next(page).isDisabled(),false);
       await page.screenshot({path:path.join(output,'tutorial-'+viewport.width+'.png')});
       await next(page).click(); assert.equal(await page.locator('#tour-card').count(),0);
       assert.equal(await page.evaluate(() => __app.state.playing),nativeAudio);
@@ -160,7 +160,7 @@ async function main() {
         await page.locator('#tour-play button').click();
         await page.waitForFunction(()=>!!__app.state.audioError);
         await page.locator('#tour-card .tbubble .btn').click();
-        await page.locator('.legend-choice').nth(2).click(); await next(page).click();
+        await page.locator('.legend-choice').last().click(); await next(page).click();
         assert.equal(await page.locator('#tour-card').count(),0);
       }
       report.journeys.push(options.emptyVoices?'Empty voice list keeps written help':'Tutorial has a written fallback without Web Audio or speech APIs');

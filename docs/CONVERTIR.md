@@ -1,5 +1,7 @@
 # Conversión local de imágenes y tablas
 
+> Alcance actualizado: [RETO 05](RETO_05.md). Este documento conserva detalles de la revisión anterior. Se retiraron CSV, Escenario, Método y los controles marcados en el brief; la guía permite omitir pasos y ya no usa una caja con scroll interno.
+
 La normalización de CSV se calcula tras escalar por el mayor valor absoluto, manteniendo intactos los números originales de la columna. Esto evita desbordar la suma con valores finitos cercanos a 10^308 y evita aplanar series pequeñas por un corte absoluto de 10^−9. Las constantes se representan en cero. La regresión compara patrones equivalentes a escalas muy grandes y muy pequeñas, y el recorrido de navegador selecciona ambas columnas. No convierte niveles artísticos en unidades físicas.
 
 El panel secundario nombra el porcentaje «Nivel ≥ +4», explica su denominador y no atribuye una costa a una imagen propia o una tabla. La leyenda de esos archivos dice «Sin valor utilizable»; la referencia al mar se conserva solo para los mapas NASA. La suma actual es de 136 pruebas de producto, que incluye esta distinción.

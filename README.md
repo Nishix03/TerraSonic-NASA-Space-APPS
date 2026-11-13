@@ -10,7 +10,7 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 
-La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) sirve `9c38535`, con modo claro y oscuro azul pizarra. Se verificaron sin credenciales el HTML y 96 activos, ambos catálogos/modos, teclado, CSV multicolumna y respaldo sin WebGL. El cambio de tema conserva el archivo y la columna y persiste al recargar. **Los personajes visibles todavía corresponden a la propuesta rechazada; la revisión artística no está terminada.** Se publica desde una copia estática separada en la cuenta verificada, sin cambiar Pages ni main del proyecto original. La primera copia Sites permanece en `409f197` por pérdida de acceso de actualización. [Publicación y procedencia](docs/PUBLICACION.md).
+La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) permite revisar la aplicación sin modificar la web oficial. Consulta `source.json` en esa URL para identificar su código exacto y [PUBLICACION.md](docs/PUBLICACION.md) para la comprobación de publicación. La edición RETO 05 y sus criterios están en [RETO_05.md](docs/RETO_05.md).
 
 La entrega y sus comprobaciones se resumen en [ENTREGA_2026-11-13.md](docs/ENTREGA_2026-11-13.md).
 
@@ -18,11 +18,11 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 
 ## Qué incluye
 
-- **Escuchar:** diez discos, sesenta mapas EIC/GIBS, selección de fechas, modos Melodía y Datos, posición/tiempo, pausa y reanudación, saltos, velocidad, volumen, silencio y repetición. Leyenda escrita, símbolos y registro consultable.
-- **Banda:** cinco ilustraciones 2D originales, Animar/Caminar/Bailar, pausa y pasos, inspector de los cuatro dibujos; mezcla compartida con Escenario y muestras de instrumento detenibles. Fuentes históricas y propuestas de ficción diferenciadas.
-- **Convertir:** muestra NASA e imagen propia como entradas principales; lluvia de Chiclayo y CSV como alternativas. Procesamiento local, elección de columna, límites y errores recuperables. Las imágenes se centran sin deformarse y usan la misma vista fija que el análisis.
-- **Brisa y preferencias:** tutorial saltable/reabrible, texto, voz opcional, idioma guardado, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Vibración optativa donde exista.
-- **Método y Tecnología:** fuentes NASA, niveles derivados, seis perfiles armónicos, catálogo estático de impactos y una regla editorial mensual verificable, con límites científicos explícitos.
+- **Escuchar:** diez discos, sesenta mapas EIC/GIBS, seis fechas por disco, Melodía y Datos, posición/tiempo, pausa, velocidad y volumen. Mapa y cuadrícula visibles, escala compacta y mezcla de cinco músicos. Historial paginado.
+- **Banda:** cinco ilustraciones 2D originales, Animar/Caminar/Bailar, pausa, pasos e inspector de cuatro dibujos. Muestras de instrumento detenibles e historias identificadas como ficción.
+- **Convertir:** lluvia de Chiclayo destacada o imagen propia, procesada localmente. Sustitución de la vista por la última imagen aceptada, límites y errores recuperables. Ya no importa CSV.
+- **Brisa y preferencias:** bienvenida y guía sin desplazamiento interno, práctica saltable/reabrible, voz opcional, idioma, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Modo claro y oscuro pizarra guardados.
+- **¿Cómo funciona? y Tecnología:** ocho tarjetas breves, fuentes y cuatro categorías completas sin filtros genéricos. Se retiran las pantallas Método, Retos del Space Apps y Escenario según el brief confirmado.
 
 Los niveles derivados de las imágenes **no son grados de temperatura**. Las progresiones y el carácter musical son decisiones artísticas. EIC y GIBS usan paletas y rangos diferentes; no se presentan sus niveles como magnitudes físicas comparables.
 
@@ -53,7 +53,7 @@ Node es una herramienta de pruebas; no hace falta para usar el sitio generado. L
 - [Auditoría de diseño, Nielsen y objetivo WCAG/COGA](docs/AUDITORIA_2026-11-13.md)
 - [Transporte, leyenda y mezcla](docs/REPRODUCTOR.md) · [Reloj de audio](docs/AUDIO_RELOJ.md)
 - [Mediciones comparables](docs/RENDIMIENTO.md) · [Paquete portable y recuperación](docs/ENTREGA_PORTABLE.md)
-- [Conversión local](docs/CONVERTIR.md) · [Brisa](docs/BRISA.md) · [Método](docs/METODO.md)
+- [Conversión local](docs/CONVERTIR.md) · [Brisa](docs/BRISA.md) · [¿Cómo funciona?](docs/RETO_05.md)
 - [Impactos y fuentes](docs/IMPACTOS.md) · [Historias y referencias culturales](docs/PERSONAJES.md)
 
 ## Modelos editables

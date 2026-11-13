@@ -25,9 +25,9 @@ async function main(){
     if(setting==='large-text')await page.addStyleTag({content:'.px.app{font-size:32px!important}'}).then(el=>el.evaluate(node=>node.id='user-text-fixture'));
     for(const language of ['es','en']){
      await page.evaluate(language=>__app.setLang(language),language);
-     for(const [tab,count]of [['home',1],['juke',3],['band',1],['data',3],['how',3],['tech',5]]){
+     for(const [tab,count]of [['home',1],['juke',2],['band',1],['data',2],['how',1],['tech',5]]){
       await page.evaluate(tab=>__app.goTab(tab),tab);
-      if(tab==='data'){await page.evaluate(()=>{__app.goSub(0);__app.loadImageSample();});await page.waitForFunction(()=>__app.state.custom&&__app.cur());}
+      if(tab==='data'){await page.evaluate(()=>{__app.goSub(0);__app.loadSample();});await page.waitForFunction(()=>__app.state.custom&&__app.cur());}
       for(let sub=0;sub<count;sub++){
        await page.evaluate(sub=>{__app.goSub(sub);const scroller=document.querySelector('.scr');scroller.scrollTop=0;window.scrollTo(0,0);},sub);
        const result=await page.evaluate(()=>{

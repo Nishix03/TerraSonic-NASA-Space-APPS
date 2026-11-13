@@ -46,11 +46,10 @@ async function main(){
    await page.evaluate(()=>__app.setPreference('reducedMotion',false));
    await page.locator('[data-action="Walk"]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
    await page.evaluate(()=>window.__departingSprite=document.querySelector('.bportrait-live'));
-   await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().click();assert.equal(await page.locator('.listen-members ts-avatar').count(),5);
+   await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().click();await page.locator('.listen-members ts-avatar').nth(4).waitFor();assert.equal(await page.locator('.listen-members ts-avatar').count(),5);
    assert.equal(await page.evaluate(()=>__departingSprite.isConnected),false);assert.equal(await page.evaluate(()=>__departingSprite.timer),0);assert.equal(await page.evaluate(()=>__departingSprite.running),false);
    await page.locator('.listen-members').scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.listen-members ts-avatar img')].every(im=>im.complete&&im.naturalWidth>0));
-   await page.evaluate(()=>__app.goSub(2));await page.locator('.musicians').scrollIntoViewIfNeeded();assert.equal(await page.locator('.musicians ts-avatar').count(),5);
-   await page.waitForFunction(()=>[...document.querySelectorAll('.musicians ts-avatar img')].every(im=>im.complete&&im.naturalWidth>0));await context.close();
+   await context.close();
   }
   assert(!report.requests.some(u=>/\.glb|three-gltf|avatar3d|volume\.webp/.test(u)));assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);
  }finally{fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(report,null,2));await browser.close();}

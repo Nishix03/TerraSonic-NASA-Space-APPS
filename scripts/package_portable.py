@@ -138,13 +138,13 @@ Vista independiente: {preview or 'consultar docs/PUBLICACION.md en source.zip'}.
 2. Con Python 3.10 o posterior instalado, ejecuta `python serve.py` desde esa carpeta.
 3. Abre http://127.0.0.1:8765/. Para detener el servidor, pulsa Ctrl+C.
 
-`site/` contiene el producto estático listo para un host. No requiere Node, Blender, cuenta, backend, AWS ni base de datos. Archivos, fuentes, mapas, modelos y poses se incluyen. El audio requiere una acción del usuario y un navegador con Web Audio. Voz/vibración dependen del dispositivo y las voces instaladas; el texto y las poses permiten continuar sin esas APIs. Los enlaces documentales externos requieren red. Abrir index.html con file:// no es el modo soportado.
+`site/` contiene el producto estático listo para un host. No requiere Node, Blender, cuenta, backend, AWS ni base de datos. Se incluyen fuentes, mapas, poses y fotogramas 2D originales. El audio requiere una acción del usuario y un navegador con Web Audio. Voz/vibración dependen del dispositivo y las voces instaladas; el texto y las poses permiten continuar sin esas APIs. Los enlaces documentales externos requieren red. Abrir index.html con file:// no es el modo soportado.
 
-`source.zip` contiene solo archivos del commit Git. Extráelo en otra carpeta para editar: `python scripts/build_pages.py _site`; `node scripts/test_guides.cjs _site/index.html`. Node solo es necesario para pruebas; Blender solo para regenerar modelos. Instrucciones y límites en docs/PIERO-MEJORAS.md, AUDITORIA_2026-11-13.md, MODELOS_3D.md y PUBLICACION.md.
+`source.zip` contiene solo archivos del commit Git. Extráelo en otra carpeta para editar: `python scripts/build_pages.py _site_2d`; `node scripts/test_guides.cjs _site_2d/index.html`. Node solo es necesario para pruebas. Instrucciones y límites vigentes en docs/RETO_05.md, SPRITES_2D.md y PUBLICACION.md. Los estudios 3D del historial no forman parte de la aplicación generada.
 
 {('baseline-models.zip conserva el .blend y los cinco GLB originales del commit '+baseline_sha+', separados de la propuesta nueva.') if baseline_sha else 'Los modelos anteriores se pueden recuperar del commit base indicado en la documentación del repositorio.'}
 
-`evidence/` conserva una selección de JSON/capturas. Son pruebas automatizadas y renders de esta laptop; no acreditan certificación WCAG, prueba con personas, escucha humana ni aprobación cultural. Los 420 minutos efectivos y requisitos pendientes siguen en el registro fuente; el paquete es un checkpoint, no una declaración automática de cierre.
+`evidence/` conserva una selección de JSON/capturas. Son pruebas automatizadas de esta laptop; no acreditan certificación WCAG, prueba con personas, escucha humana ni aprobación cultural. El registro fuente identifica las funciones comprobadas y sus límites.
 
 `manifest.json` enumera bytes y SHA-256. `python verify_package.py` comprueba la integridad. El empaquetador rechaza rutas de credenciales y patrones de claves conocidos; también evita .git, .env, .vercel, node_modules y _work. No se incluyen tokens, el enlace privado de reclamación de Vercel ni logs privados. Una búsqueda de patrones no demuestra ausencia universal de secretos; las entradas se limitan a fuente comprometida y evidencia seleccionada.
 ''', encoding="utf-8")

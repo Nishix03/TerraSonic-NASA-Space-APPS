@@ -1,5 +1,7 @@
 # Continuación de TerraSonic
 
+**R10 · alcance vigente confirmado:** [RETO 05](RETO_05.md) y [banda 2D](SPRITES_2D.md). El usuario descartó el encargo 3D, retiró CSV y las pantallas Método/Escenario/Retos, y pidió bienvenida y guía sin scroll interno. El resto de este archivo conserva la cronología anterior. Las referencias nuevas están verificadas en `prueba-acordes`; no se deben tomar como pendientes las fases 3D canceladas.
+
 ## Alcance y punto de partida
 
 Se sigue el encargo de `pasted-text-1.txt` adjunto a esta conversación y la ampliación sobre cinco modelos, recursos de la laptop y limpieza segura.

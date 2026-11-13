@@ -12,14 +12,16 @@ async function main(){
    if(large)await p.locator('#preferences-big').check();
    const label=`${width}-${height}-${language}-${large?'large':'normal'}`;
    const visible=async locator=>{const box=await locator.boundingBox();assert(box&&box.x>=0&&box.x+box.width<=width+1&&box.y>=0&&box.y+box.height<=height+1,JSON.stringify({label,box}));return box;};
-   for(const button of await p.locator('.preferences-actions button').all())await visible(button);
+   for(const button of await p.locator('.preferences-actions button, .preferences-header button, .preferences-choices label').all())await visible(button);
+   assert(await p.locator('#preferences-dialog').evaluate(e=>e.scrollHeight<=e.clientHeight+1&&e.scrollWidth<=e.clientWidth+1),'The whole welcome fits without internal scrolling');
+   await visible(p.locator('#preferences-dialog'));
    await p.screenshot({path:path.join(out,label+'-welcome.png')});await p.locator('.preferences-actions button').last().click();
-   for(let step=1;step<=3;step++){await p.waitForFunction(step=>__app.state.tour===step,step);const next=p.locator('#tour-card .tact .primary');assert.equal(await next.isDisabled(),false);await visible(next);await p.screenshot({path:path.join(out,label+`-skip-${step}.png`)});await next.click();}
+   for(let step=1;step<=3;step++){await p.waitForFunction(step=>__app.state.tour===step,step);const next=p.locator('#tour-card .tact .primary');assert.equal(await next.isDisabled(),false);await visible(next);assert(await p.locator('#tour-card .tbubble').evaluate(e=>e.scrollHeight<=e.clientHeight+1),'No internal guide scroll');await visible(p.locator('#tour-card'));await p.screenshot({path:path.join(out,label+`-skip-${step}.png`)});await next.click();}
    assert.equal(await p.locator('#tour-card').count(),0);assert.equal(await p.evaluate(()=>__app.state.playing),false);
    // Reopen and complete actual disc and legend actions; continue with text when audio is absent.
    await p.evaluate(()=>__app.startTutorial());await p.locator('.discgrid .dcard').first().click();await p.waitForFunction(()=>__app.state.tour===2);
    await p.locator('#tour-play button').click();await p.waitForFunction(()=>!!__app.state.audioError);await p.locator('#tour-card .tbubble .btn').click();await p.waitForFunction(()=>__app.state.tour===3);
-   await p.locator('.legend-choice').nth(2).click();await p.locator('#tour-card .tact .primary').click();assert.equal(await p.locator('#tour-card').count(),0);
+   await p.locator('.legend-choice').last().click();await p.locator('#tour-card .tact .primary').click();assert.equal(await p.locator('#tour-card').count(),0);
    assert.equal(await p.evaluate(()=>__app.state.tutorialDone.disc&&__app.state.tutorialDone.play&&__app.state.tutorialDone.legend),true);
    await p.locator('#tour-guide').click();await p.keyboard.press('Escape');assert.equal(await p.locator('#tour-card').count(),0);assert.equal(await p.evaluate(()=>document.activeElement.id),'tour-guide');
    assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));report.checks.push({label,entryActionsVisible:true,skipAllSteps:true,realActionsAndWrittenFallback:true,escapeAndReturnFocus:true});await c.close();

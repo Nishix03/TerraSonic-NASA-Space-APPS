@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Terrasonic · Earth Jukebox</title>
-<style>html,body{margin:0;background:#171e2b;color:#eff3f8}</style>
+<style>html,body{margin:0;background:#171e2b;color:#eff3f8}
+</style>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -1540,11 +1541,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 /* Entry actions remain visible; only the preference content scrolls. */
 .px .bscene>ts-avatar.bportrait{inset:5% 14%;width:72%;height:90%}
 .px .bmeta .nm,.px .stagebox.big .mname{color:var(--fg)!important}
-.px .preferences-dialog{height:min(720px,calc(100dvh - 24px));max-height:calc(100dvh - 24px);overflow:hidden;grid-template-rows:minmax(0,1fr) auto;gap:12px}
-.px .preferences-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;display:grid;gap:12px;padding:2px 6px 8px 2px}
-.px .preferences-content>p{color:var(--muted);font-size:.9em}
-.px .preferences-actions{background:var(--bg);padding-top:10px;border-top:1px solid var(--line)}
-.px .preferences-actions button{min-height:44px;white-space:normal;line-height:1.35}
 .px .tour .tbubble p:empty{display:none}
 .px .tour.mobile{padding:10px;gap:6px;border-radius:8px;box-shadow:0 -8px 32px #0008}
 .px .tour.mobile .tdots{display:none}
@@ -1552,6 +1548,125 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .tour.mobile .tact .skip{grid-column:3;grid-row:1}
 .px .tour.mobile .tbubble{padding:8px 10px}
 @media(max-width:699px){.px .scr{padding-bottom:calc(var(--guide-space,0px) + 20px)}.px .tour.mobile .tguide .tsay{width:44px;height:44px}.px .tour.mobile .tmeta{font-size:.85em}}
+/* RETO 05: content fits its panel; longer pages use the document flow. */
+.px.app{height:auto;min-height:100dvh;overflow:visible}
+.px .viewport{flex:1 0 auto;display:block}
+.px .scr{position:relative;inset:auto;overflow:visible;min-height:0}
+.px .steps{flex-wrap:wrap;overflow:visible}
+.px .top details.menu .pop{max-height:none;overflow:visible}
+.px .preferences-dialog{width:min(720px,calc(100% - 24px));height:auto;max-height:none;overflow:visible;padding:20px;gap:14px}
+.px .preferences-content{display:grid;gap:10px;min-width:0}
+.px .preferences-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.px .preferences-header .kicker{font-size:11px;letter-spacing:.16em}
+.px .preferences-header .row{gap:0;flex-wrap:nowrap}
+.px .preferences-header .btn{min-width:44px;padding:8px}
+.px .preferences-dialog h2{font-size:clamp(1.25em,2.7vw,1.7em);line-height:1.2}
+.px .preferences-content>p{font-size:.85em;color:var(--muted);line-height:1.45}
+.px .preferences-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.px .preferences-choices label{min-height:74px;padding:10px;gap:10px}
+.px .preferences-choices strong{font-size:.88em;line-height:1.3;overflow-wrap:anywhere}
+.px .preferences-choices .small{font-size:.76em;line-height:1.35}
+.px .preferences-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.px .preferences-actions button{min-width:0;min-height:44px;line-height:1.35;white-space:normal;padding:10px;font-size:.75em;letter-spacing:.07em}
+.px .event-history ol{max-height:none;overflow:visible}
+.px .history-pages{justify-content:space-between;gap:8px;flex-wrap:wrap}
+.px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.px .uni .views>.analysis-panel{grid-column:auto;border:0;padding:0;margin:0;min-width:0;font-size:1em}
+.px .uni .views>.analysis-panel .vpanel{max-width:none;margin:0}
+.px .uni .views>.vpanel,.px .uni .views>.analysis-panel .vpanel{display:grid;grid-row:auto;grid-template-rows:auto auto;align-content:start}
+.px .uni .views .mbox{aspect-ratio:28/16;height:auto;min-height:0}
+.px .map-legend{grid-column:auto;border:0;border-block:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.px .map-legend ul{grid-column:1/-1;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.px .map-legend li{min-width:0}
+.px .map-legend .legend-choice{display:grid;justify-items:center;gap:3px;padding:4px 2px;min-height:54px;text-align:center}
+.px .map-legend .legend-choice strong{font-size:.7em;font-weight:500}
+.px .legend-swatch{width:100%;height:16px;min-width:0;border-radius:2px;font-size:0}
+.px .map-legend .legend-reading{grid-column:1/-1}
+.px .map-legend>button{grid-column:2;grid-row:1/3}
+.px .map-legend h2,.px .map-legend>p{grid-column:1}
+.px .map-legend h2{align-self:end}
+.px .listen-member ts-avatar{height:110px}
+.px .convert-options{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr);align-items:stretch}
+.px .convert-main{display:grid;gap:12px;padding:16px;margin:0;border:1px solid var(--line);background:var(--panel);min-width:0}
+.px .convert-main img{display:block;width:100%;height:auto;aspect-ratio:28/16;object-fit:contain;background:#111d2c}
+.px .convert-main figcaption{display:grid;gap:6px}
+.px .convert-main h2{font-size:1.15em}
+.px .convert-main .row{gap:8px}
+.px .convert-main .btn{white-space:normal;min-height:44px}
+.px .convert-card .drop{min-height:180px}
+.px .tech-item{grid-template-columns:minmax(0,1fr)}
+@media(max-height:700px), (max-width:480px){
+ .px .preferences-dialog{padding:12px;gap:10px}
+ .px .preferences-content{gap:8px}
+ .px .preferences-choices label{min-height:64px;padding:8px;gap:8px}
+ .px .preferences-choices .small{display:none}
+ .px .preferences-actions{padding-top:10px}
+}
+@media(max-height:430px) and (min-width:480px){
+ .px .preferences-dialog{width:min(840px,calc(100% - 24px));grid-template-columns:1fr;gap:8px}
+ .px .preferences-content{grid-template-columns:1fr 1.25fr;column-gap:18px}
+ .px .preferences-header{grid-column:1/-1}
+ .px .preferences-dialog h2{grid-column:1;align-self:end}
+ .px .preferences-content>p{grid-column:1;align-self:start}
+ .px .preferences-choices{grid-column:2;grid-row:2/4}
+ .px .preferences-choices label{min-height:56px}
+ .px .preferences-actions{padding-top:8px}
+}
+@media(max-width:699px){
+ .px .convert-options{grid-template-columns:minmax(0,1fr)}
+ .px .uni .views{gap:8px}
+ .px .vpanel .vcap{font-size:.75em;flex-wrap:wrap;gap:2px}
+ .px .map-legend ul{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .px .map-legend>button{grid-row:1/3}
+ .px .listen-member ts-avatar{height:86px}
+}
+@media(max-width:380px){.px .uni .views{grid-template-columns:minmax(0,1fr)}}
+
+
+.px .tour{grid-template-rows:auto auto auto auto;max-height:none}
+.px .tour .tbubble{overflow:visible;min-height:auto}
+.px .tour .tbubble p{font-size:.85em;line-height:1.4}
+.px .tour .tbubble .guide-state{display:none}
+.px .tour .tbubble h3{font-size:1em;letter-spacing:.02em}
+.px .tour .tact .primary{font-size:.72em}
+.px .tour .tmeta{flex-direction:row;flex-wrap:wrap;gap:4px 8px}
+.px .map-legend ul{grid-template-columns:repeat(14,minmax(0,1fr))}
+.px .listen-member ts-avatar{height:90px}
+.px .map-legend>button{grid-row:1;padding:8px;max-width:190px}
+.px .map-legend>p{grid-column:1/-1}
+.px .map-legend>p:empty{display:none}
+@media(max-width:400px){.px .preferences-choices label{flex-direction:column;align-items:flex-start;gap:6px;min-height:88px}.px .preferences-choices label>span{width:100%}.px .preferences-choices strong{overflow-wrap:normal}}
+@media(max-width:699px){.px .map-legend ul{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(max-width:480px){
+ .px .top .nav,.px .top:not(.readable-nav) .nav,.px .top:has(details.menu[open]) .nav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 6px}
+ .px .top .nav button,.px .top:not(.readable-nav) .nav button{grid-column:span 2;padding:4px;font-size:max(12px,.75em);letter-spacing:.025em;overflow-wrap:normal}
+ .px .top .nav button:nth-child(n+4){grid-column:span 3}
+ .px .top details.menu[open] .pop{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .px .top .pop .opt{min-width:0;white-space:normal;gap:6px;font-size:.85em}
+ .px .hero .lede{font-size:.9em}
+}
+@media(max-height:430px){.px .tour .tbubble p{font-size:.78em}.px .tour .tact button{letter-spacing:0}}
+@media(min-width:1280px) and (max-height:800px){
+ .px .player-visual{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}
+ .px .player-visual>#tour-strip,.px .player-visual>.file-settings,.px .player-visual>.views{grid-column:1/-1}
+ .px .player-visual>.map-legend,.px .player-visual>.listen-band{grid-column:auto;align-self:start}
+ .px .uni .player-visual .mapbox,.px .uni .views .mbox{height:150px;min-height:0;aspect-ratio:auto}
+ .px .player-visual .mapbox img.map{height:100%;object-fit:contain}
+ .px .uni .views .heard{max-width:262.5px;margin-inline:auto;height:150px}
+ .px .map-legend ul{grid-template-columns:repeat(7,minmax(0,1fr))}
+ .px .map-legend .legend-choice{min-height:44px;gap:1px}
+ .px .map-legend{padding:6px 0;gap:4px 8px}
+ .px .map-legend>button{max-width:150px;min-height:44px;font-size:.65em}
+ .px .map-legend>p{font-size:.75em}
+ .px .listen-band{padding:6px 0;margin:0}
+ .px .listen-band .bandhead{display:grid;gap:2px;margin-bottom:6px}
+ .px .listen-band .bandhead span{font-size:.75em}
+ .px .listen-members{gap:4px}
+ .px .listen-member{padding:3px;gap:2px}
+ .px .listen-member ts-avatar{height:60px}
+ .px .listen-member strong,.px .listen-member>span{font-size:.65em}
+ .px .listen-member strong{font-size:max(10px,.6em);letter-spacing:0}
+}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}} {{motionClass}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
@@ -1657,11 +1772,10 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <p class="lede">{{tx.dataLede}}</p>
 </div>
 <div class="convert-options">
-<section id="tour-image-sample" class="convert-card" aria-labelledby="image-sample-title">
-<img class="sample-preview" src="fotogramas/ver2025_2.webp" alt="{{convert.sampleAlt}}" decoding="async">
-<div><h2 id="image-sample-title">{{convert.sampleTitle}}</h2><p class="muted small">{{convert.sampleBody}}</p></div>
-<button type="button" class="btn primary" onClick="{{useImageSample}}">{{convert.sampleAction}}</button>
-</section>
+<figure id="tour-sample" class="convert-main">
+<img src="{{convert.preview}}" alt="{{convert.previewAlt}}" decoding="async">
+<figcaption><h2>{{convert.previewTitle}}</h2><p class="muted small">{{convert.previewBody}}</p><div class="row"><button type="button" class="btn primary" onClick="{{convert.listen}}">{{convert.listenLabel}}</button><sc-if value="{{convert.hasImage}}"><button type="button" class="btn sm" onClick="{{useSample}}">{{tx.sample}}</button></sc-if></div></figcaption>
+</figure>
 <section class="convert-card" aria-labelledby="own-image-title">
 <h2 id="own-image-title">{{convert.ownTitle}}</h2>
 <label id="tour-drop" class="drop {{overCls}}" onDragOver="{{onDragOver}}" onDragLeave="{{onDragLeave}}" onDrop="{{onDrop}}">
@@ -1674,19 +1788,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </section>
 </div>
 <p role="status" aria-live="polite" class="upload-status muted small">{{upMsg}}</p>
-<details class="convert-secondary"><summary>{{convert.secondaryTitle}}</summary>
-<div class="convert-data">
-<section id="tour-sample"><h2>{{convert.rainTitle}}</h2><p class="muted small">{{convert.rainBody}}</p><button type="button" class="btn" onClick="{{useSample}}">{{tx.sample}}</button></section>
-<section><h2>{{convert.csvTitle}}</h2><label class="csv-picker"><span>{{convert.chooseCsv}}</span><input type="file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain" onChange="{{onFile}}" aria-describedby="csv-pick-help"></label><p id="csv-pick-help" class="muted small">{{convert.csvLimits}}</p></section>
-</div>
-</details>
-<details id="tour-howdata" class="convert-secondary"><summary id="data-explainer">{{tx.dataExplainer}}</summary>
-<div class="convert-explainer">
-<sc-for list="{{howData}}" as="h" hint-placeholder-count="3">
-<div class="hrow"><strong>{{h.title}}</strong><span class="muted small">{{h.body}}</span></div>
-</sc-for>
-</div>
-</details>
 </sc-if>
 
 <!-- ESCUCHAR · 2 · Reproductor (también para tu imagen) -->
@@ -1713,7 +1814,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
 <div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span><span class="small muted">{{player.tempoLabel}}</span></div>
-<div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}" aria-haspopup="dialog">{{tx.moreOptions}}</button></div>
+<div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}">{{tx.moreOptions}}</button></div>
 </div>
 <section class="transport" aria-label="{{player.controlsLabel}}">
 <div class="transport-position">
@@ -1722,9 +1823,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
 </div>
 <div class="transport-tools">
-<div class="row seek-buttons"><button type="button" class="btn sm" onClick="{{player.back}}" disabled="{{player.atStart}}" aria-label="{{player.backLabel}}">−5 s</button><button type="button" class="btn sm" onClick="{{player.forward}}" disabled="{{player.atEnd}}" aria-label="{{player.forwardLabel}}">+5 s</button></div>
-<button type="button" class="btn sm" onClick="{{player.toggleRepeat}}" aria-pressed="{{player.repeat}}">{{player.repeatLabel}}</button>
-<div class="volume-control"><button type="button" class="btn sm" aria-pressed="{{player.muted}}" onClick="{{player.toggleMute}}">{{player.muteLabel}}</button><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
+<div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
 <label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
 </div>
 <div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="muted small">{{engineDesc}}</p></div>
@@ -1736,10 +1835,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{isImageUp}}">
 <label class="field">{{tx.colorsHow}}
 <select onChange="{{onUpMode}}" value="{{customMode}}"><option value="palette">{{tx.modePalette}}</option><option value="free">{{tx.modeFree}}</option></select></label>
-</sc-if>
-<sc-if value="{{isCsvUp}}">
-<label class="field">{{tx.column}}
-<select onChange="{{onCol}}" value="{{colIdx}}"><template data-sc-for="{{colOpts}}" data-sc-as="o"><option value="{{o.v}}">{{o.l}}</option></template></select></label>
 </sc-if>
 </div>
 </sc-if>
@@ -1769,19 +1864,31 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <button type="button" class="arrow" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="{{tx.nextFrame}}" style="right: 8px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5"></path></svg></button>
 </sc-if>
 </div>
-<div class="vfoot"><span>{{capL}}</span><span>{{capM}}</span><span>{{capR}}</span></div>
 </figure>
+
+<section id="tour-machine" class="analysis-panel">
+<figure class="vpanel">
+<figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
+<div class="mbox" aria-hidden="true">
+<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
+<div class="scanline" style="left: {{scanLeft}}"></div>
+</div>
+
+
+</figure>
+</section>
+
+</div>
 
 <aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
 <h2 id="map-legend-title">{{player.legendTitle}}</h2>
 <p class="muted small">{{player.legendIntro}}</p>
-<ul><sc-for list="{{player.legend}}" as="l"><li><button type="button" class="legend-choice" aria-pressed="{{l.on}}" onClick="{{l.choose}}"><span class="legend-swatch" style="--swatch: {{l.color}}" aria-hidden="true">{{l.symbol}}</span><strong>{{l.label}}</strong></button></li></sc-for></ul>
+<ul><sc-for list="{{player.legend}}" as="l"><li><button type="button" class="legend-choice" aria-pressed="{{l.on}}" onClick="{{l.choose}}" aria-label="{{l.aria}}"><span class="legend-swatch" style="background: {{l.color}}" aria-hidden="true"></span><strong>{{l.label}}</strong></button></li></sc-for></ul>
 <p role="status" class="legend-reading small">{{player.legendSelectionText}}</p>
-<details class="legend-detail"><summary>{{player.paletteTitle}}</summary><p class="small muted">{{player.paletteNote}}</p></details>
+
 <button type="button" class="btn sm" onClick="{{player.readLegend}}" disabled="{{speechUnavailable}}">{{player.readLegendLabel}}</button>
 <p role="status" class="small muted legend-reading">{{player.speechNotice}}</p>
 </aside>
-</div>
 
 <section class="listen-band" aria-labelledby="listen-band-title">
 <div class="row bandhead"><h2 id="listen-band-title">{{tx.theBand}}</h2><span class="muted small">{{tx.bandMixHelp}}</span></div>
@@ -1798,136 +1905,13 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 </div>
 
-<details class="player-impact"><summary>{{impact.summary}}</summary>
-<sc-if value="{{impact.on}}"><h2>{{impact.territory}}</h2><p>{{impact.fact}}</p><ul><sc-for list="{{impact.metrics}}" as="metric"><li>{{metric.text}}</li></sc-for></ul><p class="small muted">{{impact.cutLabel}}{{impact.cut}} · {{impact.qualification}}</p><a href="{{impact.source}}" target="_blank" rel="noopener noreferrer" lang="es">{{impact.sourceTitle}}</a><p class="small muted">{{impact.locator}}</p></sc-if>
-<p>{{impact.rule}}</p><p class="small muted">{{impact.artistic}}</p><a href="data/impacts.v1.json" target="_blank" rel="noopener">{{impact.catalogLabel}}</a>
-</details>
-
-<details id="tour-machine" class="analysis-panel" open="{{player.analysisOpen}}" onToggle="{{player.toggleAnalysis}}"><summary>{{tx.machineSees}} · 28×16</summary>
-<figure class="vpanel">
-<figcaption class="vcap"><span class="tag">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
-<div class="mbox" aria-hidden="true">
-<div class="heard"><sc-for list="{{cells}}" as="c" hint-placeholder-count="448"><div style="background: {{c.bg}}; opacity: {{c.o}}"></div></sc-for></div>
-<div class="scanline" style="left: {{scanLeft}}"></div>
-</div>
-<div class="vfoot mono"><span>{{tx.warm}} {{stats.warm}}</span><span>{{tx.cold}} {{stats.cold}}</span><span>{{tx.strongWarm}} {{stats.hot}}</span><span>{{tx.coast}} {{stats.coast}}</span></div>
-<p class="small muted">{{statsHelp}}</p>
-</figure>
-</details>
-
-<details class="player-readout">
-<summary>{{tx.playerReadout}}</summary>
-<div class="readout">
-<p><span class="tag">{{tx.see}}</span><span>{{seeText}}</span></p>
-<p><span class="tag">{{tx.hear}}</span><span>{{hearText}}</span></p>
-<sc-if value="{{showHarmony}}"><div class="row chordsrow">
-<div class="chips" role="group" aria-label="{{tx.chordsAria}}"><sc-for list="{{progItems}}" as="c" hint-placeholder-count="4"><span class="chip" style="border-color: {{c.border}}; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</span></sc-for></div>
-<span class="muted small">{{moodText}}</span>
-</div></sc-if>
-</div>
-</details>
 <div class="player-tools">
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{easyLabel}}</button></sc-if>
+
 <button type="button" class="btn sm quiet" onClick="{{describe}}">{{describeLabel}}</button>
 </div>
-<div id="easy-explanation">
-<sc-if value="{{easyVisible}}">
-<section class="easy-panel" aria-labelledby="easy-title">
-  <h2 id="easy-title">{{easyLabel}}</h2>
-  <p>{{easyText}}</p>
-  <div class="row"><button type="button" class="btn sm" onClick="{{readEasy}}" disabled="{{speechUnavailable}}">{{readEasyLabel}}</button><span class="muted small">{{speechSupport}}</span></div>
-</section>
-</sc-if>
-</div>
 <p class="current-event small">{{caption}}</p>
-<details class="event-history" open="{{player.eventsOpen}}" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
+<details class="event-history" open="{{player.eventsOpen}}" onToggle="{{player.toggleHistory}}"><summary>{{player.historyLabel}} · {{player.eventCount}}</summary><p class="muted small">{{player.historyHelp}}</p><ol tabindex="{{player.historyTabIndex}}" aria-label="{{player.historyLabel}}"><sc-for list="{{player.events}}" as="event"><li><span class="mono">{{event.time}}</span><span>{{event.text}}</span></li></sc-for></ol><div class="row history-pages"><button type="button" class="btn sm" onClick="{{player.historyPrevious}}" disabled="{{player.historyPreviousOff}}">← {{tx.back}}</button><span class="small mono">{{player.historyPage}}</span><button type="button" class="btn sm" onClick="{{player.historyNext}}" disabled="{{player.historyNextOff}}">{{tx.nextScreen}} →</button></div><button type="button" class="btn sm quiet" onClick="{{player.clearEvents}}">{{player.clearLabel}}</button></details>
 <p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
-</div>
-</sc-if>
-</sc-if>
-
-<!-- ESCUCHAR · 3 · Escenario -->
-<sc-if value="{{scr.stg}}" hint-placeholder-val="{{ false }}">
-<sc-if value="{{noFile}}" hint-placeholder-val="{{ false }}">
-<div class="panel empty"><h2 class="display md">{{tx.noFileTitle}}</h2><p class="muted">{{tx.noFileBody}}</p><button type="button" class="btn primary" onClick="{{backToUpload}}">{{tx.upload}}</button></div>
-</sc-if>
-<sc-if value="{{showPlayer}}" hint-placeholder-val="{{ false }}">
-<div class="pagehead slim">
-<div><p class="kicker">{{stageKicker}}</p><h1 class="display md">{{tx.stageTitle}}</h1></div>
-<div class="row headtools">
-<span class="signal-state {{signalClass}}">{{signalLabel}}</span>
-<button type="button" class="btn primary sm" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="12" height="12" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
-</div>
-</div>
-<sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
-<sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
-<div class="stagegrid">
-<section id="tour-stage" class="stagebox big shk {{shakeCls}}" aria-label="{{tx.stageAria}}">
-<p role="status" aria-live="polite" class="sr">{{tx.onStage}} {{stageNames}}</p>
-<div class="stagebg" aria-hidden="true">
-<img decoding="async" class="{{frameAnim}}" src="{{frameUrl}}" alt="">
-<div class="fade"></div><div class="floor"></div>
-<div style="position: absolute; left: 0; top: 0; width: 100%; height: 70%; overflow: hidden"><div class="scanline" style="left: {{scanLeft}}; height: 100%"></div></div>
-</div>
-<div class="flash {{flashCls}}" aria-hidden="true"></div>
-<div class="musicians" role="group" aria-label="{{tx.musiciansAria}}">
-<sc-for list="{{stage}}" as="m" hint-placeholder-count="5">
-<div class="mem {{m.memCls}}" aria-hidden="{{m.hidden}}" style="--member-color: {{m.color}}; --member-glow: {{m.coneC}}; --light-level: {{m.coneOp}}">
-<div class="cone"></div><span class="stage-emitter" aria-hidden="true"></span>
-<div class="sp {{m.cls}}" style="color: {{m.color}}">
-<ts-avatar class="spr" data-view="stage" data-character="{{m.key}}" data-cue="{{m.modelCue}}" data-seconds="{{m.sprDur}}" data-muted="{{m.hidden}}" data-active="{{m.active}}" aria-hidden="true"></ts-avatar>
-<span class="pt" style="background-image: url({{m.partUrl}}); --pf: {{m.pf}}"></span>
-</div>
-<div class="mname" style="color: {{m.color}}">{{m.name}}</div>
-</div>
-</sc-for>
-</div>
-<sc-if value="{{stageEmpty}}" hint-placeholder-val="{{ false }}">
-<div class="stageempty"><p>{{tx.stageEmpty1}}<br><span class="muted">{{tx.stageEmpty2}}</span></p></div>
-</sc-if>
-<div class="stagebar">
-<span aria-hidden="true" class="beats"><sc-for list="{{beatDots}}" as="bd" hint-placeholder-count="8"><span style="background: {{bd.c}}"></span></sc-for></span>
-<span class="chordhud">{{chordHud}}</span>
-</div>
-</section>
-
-<div class="stageside">
-<aside id="tour-lead" aria-label="{{tx.leadAria}}" class="lead lh {{lead.pop}}" style="--lead-color: {{lead.color}}">
-<div class="leadface" role="img" aria-label="{{lead.spriteAria}}" style="background: radial-gradient(ellipse at 50% 90%, {{lead.glow}}, transparent 70%)">
-<div class="sp {{lead.cls}}" style="color: {{lead.color}}; --dur: {{lead.fDur}}">
-<ts-avatar class="face" data-view="bust" data-character="{{lead.key}}" data-cue="{{lead.modelCue}}" data-seconds="{{lead.fDur}}" data-muted="{{lead.muted}}" aria-hidden="true"></ts-avatar>
-<span class="pt" style="background-image: url({{lead.partUrl}}); --pf: {{lead.pf}}; top: 6px; right: 8px"></span>
-</div>
-</div>
-<div class="meta">
-<span class="tag">{{tx.leadLabel}}</span>
-<div class="name" style="color: {{lead.color}}" aria-live="polite" aria-atomic="true"><span>{{lead.name}}</span></div>
-<small class="mono muted">{{lead.state}}</small>
-<sc-if value="{{isJuke}}">
-<div class="lead-choice" role="group" aria-label="{{tx.leadChange}}">
-  <button type="button" onClick="{{prevLead}}" aria-label="{{tx.leadPrev}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 8H2m0 0 5-5M2 8l5 5"></path></svg></button>
-  <button type="button" class="lead-auto" onClick="{{autoLead}}" aria-pressed="{{leadAuto}}"><span class="lead-index" aria-hidden="true">{{leadPosition}}</span><span>{{tx.leadAuto}}</span></button>
-  <button type="button" onClick="{{nextLead}}" aria-label="{{tx.leadNext}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h12m0 0-5-5m5 5-5 5"></path></svg></button>
-</div>
-</sc-if>
-<button type="button" class="btn sm" onClick="{{lead.toggle}}" aria-pressed="{{lead.on}}" style="border-color: {{lead.color}}; background: {{lead.btnBg}}; color: {{lead.btnFg}}">{{lead.toggleLabel}}</button>
-</div>
-</aside>
-
-<div id="tour-band" class="bandbox">
-<div class="row bandhead"><span class="tag">{{tx.theBand}}</span>
-<span class="row"><button type="button" class="btn sm quiet" onClick="{{bandAll}}">{{tx.all}}</button><button type="button" class="btn sm quiet" onClick="{{bandNone}}">{{tx.none}}</button></span></div>
-<p role="status" aria-live="polite" class="sr">{{bandStatus}}</p>
-<div class="band two" role="group" aria-label="{{tx.bandAria}}">
-<sc-for list="{{band}}" as="b" hint-placeholder-count="5">
-<button type="button" class="bchip" onClick="{{b.toggle}}" aria-pressed="{{b.on}}" aria-label="{{b.muteAria}}" style="border-color: {{b.btnBorder}}">
-<ts-avatar class="bst" data-view="face" data-character="{{b.key}}" data-cue="{{b.modelCue}}" data-seconds=".55" data-muted="{{b.muted}}" aria-hidden="true"></ts-avatar>
-<span class="bmeta"><span class="nm" style="color: {{b.color}}">{{b.name}}</span><span class="bar" aria-hidden="true"><i style="width: {{b.lvlW}}; background: {{b.color}}"></i></span></span>
-</button>
-</sc-for>
-</div>
-</div>
-</div>
 </div>
 </sc-if>
 </sc-if>
@@ -2003,16 +1987,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="bstory"><h2>{{tx.proposedStory}}</h2><p class="small muted">{{bandCur.place}}</p><p>{{bandCur.story}}</p></div>
 <div id="tour-bgo" class="row"><button type="button" class="btn primary" onClick="{{bandGo}}">{{tx.bandGo}} →</button></div>
 <div class="bnotes">
-<details><summary>{{tx.howItPlays}}</summary><dl class="bdl">
-<dt class="muted">{{tx.listens}}</dt><dd>{{bandCur.listens}}</dd>
-<dt class="muted">{{tx.plays}}</dt><dd>{{bandCur.plays}}</dd>
-<dt class="muted">{{tx.instrument}}</dt><dd>{{bandCur.instrumentDetail}}</dd>
-</dl></details>
-<details><summary>{{tx.factsAndReferences}}</summary>
-<section class="bsource"><h3>{{tx.documentedEpisode}}</h3><p>{{bandCur.impactFact}}</p><p class="small muted">{{bandCur.impactQualification}}</p><a href="{{bandCur.impactUrl}}" target="_blank" rel="noopener noreferrer">{{bandCur.impactSource}} ↗</a></section>
-<sc-for list="{{bandCur.references}}" as="reference"><section class="bsource"><h3>{{tx.culturalReference}}</h3><p>{{reference.fact}}</p><p class="small muted">{{reference.limit}}</p><a href="{{reference.url}}" target="_blank" rel="noopener noreferrer">{{reference.source}} ↗</a></section></sc-for>
-<section class="bsource"><h3>{{tx.visualProposal}}</h3><p>{{bandCur.visual}}</p><p class="small muted">{{bandCur.ethicsNote}}</p><a href="{{bandCur.ethicsUrl}}" target="_blank" rel="noopener noreferrer">UNESCO · {{tx.ethicalPrinciples}} ↗</a></section>
-</details>
 <details><summary>{{tx.teamInspiration}}</summary><p>{{bandCur.origin}}</p><p class="small muted">{{tx.bandDesign}}</p></details>
 </div>
 </div>
@@ -2031,8 +2005,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-for>
 </ol>
 <div class="method-notes">
-<details><summary>{{tx.methodCoverageTitle}}</summary><p>{{tx.methodCoverage}}</p><p>{{tx.methodChiclayo}}</p></details>
-<details><summary>{{tx.methodLimitsTitle}}</summary><p>{{tx.methodLimits}}</p><p>{{tx.methodRule}}</p></details>
 <details><summary>{{tx.methodSourcesTitle}}</summary><ul class="method-sources">
 <li><a href="https://svs.gsfc.nasa.gov/5176/" target="_blank" rel="noopener noreferrer">NASA SVS 5176 · EIC SST Anomaly ↗</a></li>
 <li><a href="https://gitc.earthdata.nasa.gov/colormaps/v1.0/output/GHRSST_Sea_Surface_Temperature_Anomalies.html" target="_blank" rel="noopener noreferrer">NASA GIBS · {{tx.originalPalette}} ↗</a></li>
@@ -2042,44 +2014,11 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </ul></details>
 </div>
 </sc-if>
-<sc-if value="{{scr.hB}}" hint-placeholder-val="{{ false }}">
-<div class="color-method">
-<div class="pagehead">
-<div><p class="kicker">{{tx.howKicker}} · 02</p><h1 class="display">{{tx.howTitle2}}</h1></div>
-<p class="lede">{{tx.scaleIntro}}</p>
-</div>
-<section id="tour-legend" class="scale-panel" aria-label="{{tx.scaleLabel}}">
-<p class="scale-music">{{tx.scaleMusic}}</p>
-<p class="scale-direction">{{tx.scaleDirection}}</p>
-<ol class="scale-list">
-<sc-for list="{{legend}}" as="l" hint-placeholder-count="10">
-<li class="scale-row" style="--level-color: {{l.c}}">
-<span class="scale-swatch" aria-hidden="true"></span><strong class="scale-value">{{l.v}}</strong>
-<span class="scale-musician">{{l.who}}</span><span class="scale-sound">{{l.sound}}</span>
-</li>
-</sc-for>
-</ol>
-</section>
-<details class="scale-reading"><summary>{{tx.scaleRead}}</summary><p>{{tx.scaleContext}}</p><p class="scale-source">{{tx.scaleSource}}</p></details>
-</div>
-</sc-if>
-<sc-if value="{{scr.hC}}" hint-placeholder-val="{{ false }}">
-<div class="pagehead">
-<div><p class="kicker">{{tx.howKicker}} · 03</p><h1 class="display">{{tx.howTitle3}}</h1></div>
-</div>
-<div id="tour-objs" class="cards4">
-<sc-for list="{{objectives}}" as="o" hint-placeholder-count="8">
-<button type="button" onClick="{{o.go}}" class="cardx compact"><span class="tag">{{o.tag}} →</span><strong>{{o.title}}</strong><span class="muted small">{{o.where}}</span></button>
-</sc-for>
-</div>
-</sc-if>
-
 <!-- TECNOLOGÍA -->
 <sc-if value="{{scr.tPage}}" hint-placeholder-val="{{ false }}">
 <div class="pagehead">
 <div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{techCur.title}}</h1></div>
 <div class="techtools">
-<div id="tour-techfilter" class="seg" role="group" aria-label="{{tx.techFilterAria}}"><sc-for list="{{techFilters}}" as="f" hint-placeholder-count="3"><button type="button" onClick="{{f.pick}}" aria-pressed="{{f.on}}">{{f.label}}</button></sc-for></div>
 <span class="muted small" role="status">{{techSummary}}</span>
 </div>
 </div>
@@ -2087,7 +2026,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{techCur.empty}}"><p class="tech-empty muted">{{tx.techEmpty}}</p></sc-if>
 <sc-for list="{{techCur.items}}" as="t" hint-placeholder-count="6">
 <article class="tech-item">
-<h2>{{t.name}}</h2><div class="tech-chipline"><span class="techchip" style="background: {{t.chipBg}}">{{t.chip}}</span></div>
+<h2>{{t.name}}</h2>
 <p class="muted small">{{t.use}}</p>
 <sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><details><summary class="small" aria-label="{{tx.techNote}} · {{t.name}}">{{tx.techNote}}</summary><p class="muted small">{{t.note}}</p></details></sc-if>
 </article>
@@ -2147,25 +2086,13 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 </sc-if>
 
-<sc-if value="{{moreOpen}}" hint-placeholder-val="{{ false }}">
-<div class="mdim" onClick="{{closeMore}}" aria-hidden="true"></div>
-<div id="more-dialog" class="modal" role="dialog" aria-modal="true" aria-labelledby="more-t" tabindex="-1">
-<div class="mhead"><h2 id="more-t" class="display md">{{tx.moreOptions}}</h2><button id="more-close" type="button" class="btn sm" onClick="{{closeMore}}">{{tx.close}}</button></div>
-<div class="col">
-<span class="tag">{{tx.fourDecisions}}</span>
-<sc-for list="{{whyTiles}}" as="w" hint-placeholder-count="4"><div class="why"><strong>{{w.title}}</strong><span class="muted small">{{w.body}}</span></div></sc-for>
-</div>
-</div>
-</sc-if>
-
 <sc-if value="{{preferences.on}}">
 <div class="preferences-dim" aria-hidden="true"></div>
 <section id="preferences-dialog" class="preferences-dialog" role="dialog" aria-modal="true" aria-labelledby="preferences-title" aria-describedby="preferences-body" tabindex="-1">
-<div class="preferences-content" tabindex="0">
-<p class="kicker">TerraSonic · Brisa</p>
+<div class="preferences-content">
+<div class="preferences-header"><p class="kicker">TerraSonic · Brisa</p><div class="row" role="group" aria-label="{{tx.langAria}}"><sc-for list="{{langs}}" as="l"><button type="button" class="btn sm" aria-pressed="{{l.on}}" onClick="{{l.pick}}" lang="{{l.code}}">{{l.short}}</button></sc-for></div></div>
 <h2 id="preferences-title">{{preferences.title}}</h2><p id="preferences-body">{{preferences.body}}</p>
 <div class="preferences-choices"><sc-for list="{{preferences.choices}}" as="p"><label for="{{p.id}}"><input id="{{p.id}}" type="checkbox" checked="{{p.on}}" onChange="{{p.change}}"><span><strong>{{p.label}}</strong><span class="small muted">{{p.hint}}</span></span></label></sc-for></div>
-<div class="row" role="group" aria-label="{{tx.langAria}}"><sc-for list="{{langs}}" as="l"><button type="button" class="btn sm" aria-pressed="{{l.on}}" onClick="{{l.pick}}" lang="{{l.code}}">{{l.short}}</button></sc-for></div>
 </div>
 <div class="preferences-actions"><button type="button" class="btn primary" onClick="{{preferences.continue}}">{{preferences.continueLabel}}</button><button type="button" class="btn" onClick="{{preferences.tutorial}}">{{preferences.tutorialLabel}}</button></div>
 </section>
@@ -2188,7 +2115,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="tbubble" tabindex="0" role="region" aria-labelledby="tour-t">
 <h3 id="tour-t" tabindex="-1">{{tour.title}}</h3>
 <p id="tour-b" aria-live="polite">{{tour.body}}</p>
-<p class="small muted">{{tour.stateLabel}}</p>
+<p class="small muted guide-state">{{tour.stateLabel}}</p>
 <p role="status" class="small">{{tour.feedback}}</p>
 <p class="small muted">{{tour.speechNotice}}</p>
 <sc-if value="{{tour.showTutorialStart}}"><button type="button" class="btn sm" onClick="{{tour.startTutorial}}">{{preferences.tutorialLabel}}</button></sc-if>
@@ -2228,39 +2155,6 @@ function uiText(value) {
   return T(value.es, value.en).replace(/\{(\w+)\}/g, function (_, key) { return uiText(value.values[key]); });
 }
 function uiLabel(item) { return item ? uiText(item.nameText || item.name) : ''; }
-function readCsv(text) {
-  var source = String(text).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
-  var quoted = false, content = false, counts = { ',': 0, ';': 0, '\t': 0 }, i, ch;
-  // Detecta separadores en el primer registro, fuera de campos entrecomillados.
-  for (i = 0; i < source.length; i++) {
-    ch = source[i];
-    if (ch === '"') { content = true; if (quoted && source[i + 1] === '"') i++; else quoted = !quoted; }
-    else if (!quoted && ch === '\n') { if (content) break; counts = { ',': 0, ';': 0, '\t': 0 }; }
-    else { if (/\S/.test(ch)) content = true; if (!quoted && ch in counts) counts[ch]++; }
-  }
-  var delimiter = counts[';'] ? ';' : counts['\t'] ? '\t' : ',';
-  var rows = [], row = [], field = '', cellQuoted = false, closed = false;
-  quoted = false; content = false;
-  function cell() { row.push(cellQuoted ? field : field.trim()); field = ''; cellQuoted = false; closed = false; }
-  function record() { cell(); if (content) rows.push(row); row = []; content = false; }
-  for (i = 0; i < source.length; i++) {
-    ch = source[i];
-    if (quoted) {
-      if (ch === '"') { if (source[i + 1] === '"') { field += '"'; i++; } else { quoted = false; closed = true; } }
-      else field += ch;
-    } else if (ch === delimiter) { if (ch !== '\t') content = true; cell(); }
-    else if (ch === '\n') {
-      record();
-      // Basta este registro adicional para rechazar el exceso sin procesar un prefijo.
-      if (rows.length > 5001) return { rows: rows, delimiter: delimiter };
-    } else if (closed) { if (/\S/.test(ch)) throw new Error('csv-quotes'); }
-    else if (ch === '"' && !field.trim()) { quoted = true; cellQuoted = true; content = true; field = ''; }
-    else { field += ch; if (/\S/.test(ch)) content = true; }
-  }
-  if (quoted) throw new Error('csv-quotes');
-  if (content) record();
-  return { rows: rows, delimiter: delimiter };
-}
 var DISC_SETS = {
   eic: [
   { id: 'inv2024', n: '1', title: 'Invierno 2024', period: 'may 2024 – oct 2024', color: '#38C6E8', dates: ["2024-05-16", "2024-06-15", "2024-07-15", "2024-08-14", "2024-09-13", "2024-10-13"], files: ["fotogramas/inv2024_0.webp", "fotogramas/inv2024_1.webp", "fotogramas/inv2024_2.webp", "fotogramas/inv2024_3.webp", "fotogramas/inv2024_4.webp", "fotogramas/inv2024_5.webp"] },
@@ -2305,10 +2199,10 @@ var GUIDES = {
     {
       "id": "tour-nav",
       "t": "Elige lo que quieres hacer",
-      "b": "Escuchar ofrece mapas NASA; Banda presenta a los músicos; Convierte usa tus imágenes o tablas. Método y Tecnología explican el proyecto.",
+      "b": "Escuchar ofrece mapas NASA; Banda presenta a los músicos; Convierte usa tus imágenes. ¿Cómo funciona? y Tecnología explican el proyecto.",
       "en": {
         "t": "Choose what to do",
-        "b": "Listen offers NASA maps; Band introduces the musicians; Convert uses your images or tables. Method and Technology explain the project."
+        "b": "Listen offers NASA maps; Band introduces the musicians; Convert uses your images. How it works explains the experience."
       }
     },
     {
@@ -2363,57 +2257,19 @@ var GUIDES = {
     {
       "id": "tour-play",
       "t": "Tú controlas el sonido",
-      "b": "Reproduce, pausa y reanuda. El tiempo del disco está separado de la fecha del mapa; los botones de cinco segundos evitan arrastrar.",
+      "b": "Reproduce, pausa y reanuda. El tiempo del disco está separado de la fecha del mapa.",
       "en": {
         "t": "You control the sound",
-        "b": "Play, pause and resume. Disc time is separate from the map date; the five-second buttons avoid dragging."
+        "b": "Play, pause and resume. Disc time is separate from the map date."
       }
     },
     {
       "id": "player-legend",
-      "t": "Lee la leyenda",
-      "b": "Texto y símbolos distinguen cálido, referencia, frío y ausencia de datos. El mapa original y la cuadrícula usan paletas distintas.",
+      "t": "Cálido, neutral o frío",
+      "b": "Esta escala corresponde a la cuadrícula. Rojo: cálido; cero: neutral; azul: frío.",
       "en": {
-        "t": "Read the legend",
-        "b": "Text and symbols distinguish warm, reference, cold and missing data. The original map and grid use different palettes."
-      }
-    },
-    {
-      "id": "listen-band-title",
-      "t": "Decide quién toca",
-      "b": "Activa o silencia a cada músico. Los mismos interruptores se conservan en Escenario. Melodía usa acordes; Datos convierte niveles en tonos.",
-      "en": {
-        "t": "Choose who plays",
-        "b": "Enable or mute each musician. The same choices remain on Stage. Melody uses chords; Data converts levels into tones."
-      }
-    }
-  ],
-  "stage": [
-    {
-      "id": "tour-stage",
-      "t": "La banda completa",
-      "b": "Aquí aparecen los músicos activados con sus ilustraciones 2D originales. En pausa y con movimiento reducido permanecen quietos.",
-      "en": {
-        "t": "The full band",
-        "b": "Enabled musicians use the team’s original sprites. Paused and reduced-motion characters stay still."
-      }
-    },
-    {
-      "id": "tour-band",
-      "t": "La misma mezcla",
-      "b": "Los interruptores cambian al instante la mezcla de Escuchar y Escenario. Todos y Ninguno permiten cambiar el conjunto.",
-      "en": {
-        "t": "The same mix",
-        "b": "Switches immediately change the Listen and Stage mix. All and None change the whole group."
-      }
-    },
-    {
-      "id": "tour-subnav",
-      "t": "Vuelve al reproductor",
-      "b": "Atrás te lleva a los controles. Cambiar de pantalla detiene el sonido; la posición se conserva.",
-      "en": {
-        "t": "Return to the player",
-        "b": "Back takes you to the controls. Changing screens stops sound; position remains."
+        "t": "Warm, neutral or cold",
+        "b": "This scale matches the grid. Red: warm; zero: neutral; blue: cold."
       }
     }
   ],
@@ -2428,21 +2284,12 @@ var GUIDES = {
       }
     },
     {
-      "id": "tour-bshow",
-      "t": "Mira y escucha a tu ritmo",
-      "b": "Escuchar instrumento ofrece una muestra breve y detenible. Animar, Caminar y Bailar usan los dibujos originales. Puedes pausar y revisar paso a paso; se respeta movimiento reducido.",
-      "en": {
-        "t": "Explore at your pace",
-        "b": "Hear instrument offers a short, stoppable sample. Animate, Walk and Dance use the original drawings. Pause or step through the sequence; animation respects reduced motion."
-      }
-    },
-    {
       "id": "tour-binfo",
       "t": "Historia y referencias",
-      "b": "La ficha separa la personalidad del equipo, las fuentes culturales y las nuevas propuestas. Los personajes son ficción.",
+      "b": "Cada personaje conserva su identidad y una historia de ficción.",
       "en": {
-        "t": "Stories and references",
-        "b": "The profile separates the team’s personality, cultural sources and new proposals. The characters are fictional."
+        "t": "Meet the character",
+        "b": "Each character keeps their identity and a fictional story."
       }
     },
     {
@@ -2457,30 +2304,21 @@ var GUIDES = {
   ],
   "data": [
     {
-      "id": "tour-image-sample",
-      "t": "Prueba la imagen de ejemplo",
-      "b": "Este mapa ya está incluido. Elige Usar imagen de ejemplo para abrir su cuadrícula y el reproductor.",
+      "id": "tour-sample",
+      "t": "Empieza con la lluvia",
+      "b": "Escucha el ejemplo de Chiclayo o elige tu imagen. Tu imagen ocupará su lugar.",
       "en": {
-        "t": "Try the sample image",
-        "b": "This map is already included. Choose Use sample image to open its grid and player."
+        "t": "Start with rainfall",
+        "b": "Listen to the Chiclayo sample or choose your image. It replaces the sample."
       }
     },
     {
       "id": "tour-drop",
-      "t": "Elige tu imagen",
-      "b": "Usa el selector o arrastra un PNG, JPG, WebP o GIF. Se procesa en tu navegador, sin subirlo a un servidor.",
+      "t": "Elige una imagen",
+      "b": "PNG, JPG, WebP o GIF. Se procesa aquí y puedes reemplazarla.",
       "en": {
-        "t": "Choose your image",
-        "b": "Use the file picker or drop a PNG, JPG, WebP or GIF. It is processed in your browser, without uploading to a server."
-      }
-    },
-    {
-      "id": "tour-howdata",
-      "t": "También hay tablas y lluvia",
-      "b": "La sección secundaria ofrece NASA POWER y CSV. La explicación desplegable muestra cómo se transforman imágenes y columnas numéricas.",
-      "en": {
-        "t": "Tables and rainfall too",
-        "b": "The secondary section offers NASA POWER and CSV. The expandable explanation shows how images and numeric columns are transformed."
+        "t": "Choose an image",
+        "b": "PNG, JPG, WebP or GIF. It is processed here and you can replace it."
       }
     }
   ],
@@ -2495,79 +2333,12 @@ var GUIDES = {
       }
     },
     {
-      "id": "tour-topics",
-      "t": "Elige un tema",
-      "b": "Las pestañas muestran el proceso, la escala y los retos de Space Apps. Esta ayuda permanece en tu tema actual.",
-      "en": {
-        "t": "Choose a topic",
-        "b": "Tabs show the process, scale and Space Apps goals. This help stays on your current topic."
-      }
-    },
-    {
       "id": "tour-guide",
       "t": "Consulta sin perderte",
       "b": "Puedes cerrar la ayuda o volver al paso anterior. No cambia la música, los archivos ni la selección de fechas.",
       "en": {
         "t": "Browse without losing your place",
         "b": "Close help or return to an earlier step. It does not change music, files or date selection."
-      }
-    }
-  ],
-  "scale": [
-    {
-      "id": "tour-legend",
-      "t": "Colores con explicación",
-      "b": "Cada fila combina color, nivel y texto. Son asociaciones de TerraSonic, no instrucciones musicales de NASA.",
-      "en": {
-        "t": "Colors explained",
-        "b": "Each row combines color, level and text. These are TerraSonic associations, not NASA music instructions."
-      }
-    },
-    {
-      "id": "tour-topics",
-      "t": "Tu tema actual",
-      "b": "Puedes explorar la escala completa y después elegir otro tema. La ayuda no te cambia de pantalla.",
-      "en": {
-        "t": "Your current topic",
-        "b": "Explore the full scale, then choose another topic. Help does not change your screen."
-      }
-    },
-    {
-      "id": "tour-guide",
-      "t": "Texto y voz opcional",
-      "b": "La explicación siempre está escrita. Si tu dispositivo ofrece una voz del idioma puedes escucharla y detenerla.",
-      "en": {
-        "t": "Text and optional voice",
-        "b": "The explanation is always written. If your device offers a voice for this language, you can listen and stop it."
-      }
-    }
-  ],
-  "goals": [
-    {
-      "id": "tour-objs",
-      "t": "Los retos del proyecto",
-      "b": "Cada objetivo indica dónde se puede explorar en TerraSonic. Los enlaces permiten revisar la fuente de Space Apps.",
-      "en": {
-        "t": "Project goals",
-        "b": "Each objective points to where it can be explored in TerraSonic. Links let you review the Space Apps source."
-      }
-    },
-    {
-      "id": "tour-topics",
-      "t": "Una cosa a la vez",
-      "b": "Elige el tema que quieras revisar. No necesitas recordar el contenido de una pantalla anterior.",
-      "en": {
-        "t": "One thing at a time",
-        "b": "Choose the topic you want to review. You do not need to remember content from a previous screen."
-      }
-    },
-    {
-      "id": "tour-guide",
-      "t": "Vuelve cuando quieras",
-      "b": "La ayuda es opcional y se puede abrir otra vez desde este botón.",
-      "en": {
-        "t": "Return whenever you want",
-        "b": "Help is optional and can be reopened with this button."
       }
     }
   ],
@@ -2633,10 +2404,10 @@ var GUIDES = {
     {
       "id": "tour-discs",
       "t": "1. Elige un disco",
-      "b": "Pulsa una portada de la colección NASA. Se abrirá su primera fecha; todavía no empezará la música. Puedes saltar o cerrar este tutorial.",
+      "b": "Elige una portada. Se abre su primera fecha sin iniciar la música.",
       "en": {
         "t": "1. Pick a disc",
-        "b": "Select a NASA collection cover. Its first date opens; music will not start yet. You can skip or close this tutorial."
+        "b": "Choose a cover. Its first date opens without starting music."
       },
       "sub": 0,
       "action": "disc"
@@ -2644,10 +2415,10 @@ var GUIDES = {
     {
       "id": "tour-play",
       "t": "2. Pulsa Reproducir",
-      "b": "Inicia el reproductor. Puedes seguir el mapa, la fecha y los eventos escritos sin depender de oír. La pausa conserva tu posición.",
+      "b": "Pulsa Reproducir. Pausar conserva tu posición.",
       "en": {
         "t": "2. Press Play",
-        "b": "Start the player. Follow the map, date and written events without relying on hearing. Pause keeps your position."
+        "b": "Press Play. Pause keeps your position."
       },
       "sub": 1,
       "action": "play"
@@ -2655,10 +2426,10 @@ var GUIDES = {
     {
       "id": "player-legend",
       "t": "3. Interpreta la leyenda",
-      "b": "En la cuadrícula, el azul lleva el símbolo de flecha hacia abajo. ¿Qué indica? Escoge su significado en la leyenda. No necesitas escuchar ni responder rápido.",
+      "b": "¿Qué indica el azul? Elige un nivel frío en la escala.",
       "en": {
         "t": "3. Read the legend",
-        "b": "In the grid, blue has a downward-arrow symbol. What does it indicate? Choose its meaning in the legend. No hearing or quick response is needed."
+        "b": "What does blue mean? Choose a cold level on the scale."
       },
       "sub": 1,
       "action": "legend"
@@ -2679,7 +2450,7 @@ var ROUTE_LOOK = {
   juke: { title: 'Escuchar', color: '#FFD447', mark: 'M20 48h9l7-13 8 26 8-35 9 44 8-22h7' },
   band: { title: 'La banda', color: '#F06BB0', mark: 'M25 60l12-25 18 11 15-17m-33 6 7 33 26-39M22 60h6m-3-3v6M34 35h6m-3-3v6M52 46h6m-3-3v6M67 29h6m-3-3v6M41 68h6m-3-3v6' },
   data: { title: 'Convierte en música', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
-  how: { title: 'Método', color: '#7BE38A', mark: 'M25 69h46M30 64V52m9 12V41m9 23V27m9 37V36m9 28V48' },
+  how: { title: '¿Cómo funciona?', color: '#7BE38A', mark: 'M25 69h46M30 64V52m9 12V41m9 23V27m9 37V36m9 28V48' },
   tech: { title: 'Tecnología', color: '#AB9CFF', mark: 'M34 34h28v28H34zM42 42h12v12H42zM41 34V24m14 10V24m-14 38v10m14-10v10M34 41H24m10 14H24m38-14h10M62 55h10' }
 };
 var BAND_ENTRY_DURATION = 640;
@@ -2773,9 +2544,9 @@ var TECH = [
   },
   {
     "cat": "Interfaz y código",
-    "name": "FileReader + Blob + localStorage",
+    "name": "Blob + localStorage",
     "scope": "browser",
-    "use": "Lectura local de imágenes y tablas; guarda idioma y preferencias. Los archivos no se guardan en localStorage."
+    "use": "Lectura local de imágenes; guarda idioma y preferencias. Los archivos no se guardan en localStorage."
   },
   {
     "cat": "Interfaz y código",
@@ -2862,51 +2633,19 @@ var OBJ = [
   { tag: 'DE LA VISTA AL OÍDO', title: 'Del color al sonido', where: 'La cuadrícula «Lo que ve la máquina» muestra qué lee el algoritmo, y «Cómo suena» explica por qué suena así.', page: 'juke' },
   { tag: 'MUSICAL', title: 'Agradable, no ruido', where: 'El motor Melodía usa escalas, acordes y una progresión por disco, no píxeles convertidos a tonos al azar.', page: 'juke' },
   { tag: 'ACCESIBLE', title: 'Para personas ciegas o con baja visión', where: 'Descripción por voz, subtítulos de sonido, vibración, teclado, alto contraste y texto grande.', page: 'juke' },
-  { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen o un CSV y suena con la misma banda.', page: 'data' },
+  { tag: 'EXPLORAR', title: 'Explora con tus propios datos', where: 'Sube una imagen y suena con la misma banda.', page: 'data' },
   { tag: 'HISTORIA', title: 'Contar el porqué', where: 'Cinco personajes de ficción con historias propuestas, fuentes de episodios y referencias culturales diferenciadas.', page: 'band' },
   { tag: 'PROCESO', title: 'Documentar el método', where: 'Tecnología distingue ejecución en el navegador, datos y herramientas de producción; los créditos explican el uso documentado de IA.', page: 'tech' }
 ];
 var STEPS = [
-  {
-    "n": "01",
-    "title": "Mapas con fecha",
-    "body": "Diferencia respecto a una referencia climática, no temperatura absoluta. EIC y GIBS aportan dos colecciones almacenadas de seis fechas por disco."
-  },
-  {
-    "n": "02",
-    "title": "28×16 celdas",
-    "body": "Canvas reduce el recorte a 448 celdas. Se excluyen colores identificados como tierra o sin datos; es una aproximación visual."
-  },
-  {
-    "n": "03",
-    "title": "Colores y niveles",
-    "body": "Se compara con la paleta del producto y se deriva un nivel entre −5 y +5. No son grados ni valores científicos recuperados sin pérdida."
-  },
-  {
-    "n": "04",
-    "title": "Barrido con controles",
-    "body": "28 columnas de oeste a este. Puedes pausar, reanudar o saltar con botones y teclado; la fecha del mapa es distinta al tiempo del audio."
-  },
-  {
-    "n": "05",
-    "title": "Melodía o Datos",
-    "body": "Melodía compone con escala y acordes del protagonista. Datos traduce niveles a tonos sin progresión. Cinco controles permiten elegir qué instrumentos oír."
-  },
-  {
-    "n": "06",
-    "title": "Decisiones artísticas",
-    "body": "La regla documentada de Pacora ralentiza marzo de 2023 en 10 ppm. Tensión y melancolía son elecciones editoriales; no se calculan emociones."
-  },
-  {
-    "n": "07",
-    "title": "Chiclayo y tus archivos",
-    "body": "La imagen de ejemplo permite empezar. Lluvia de Chiclayo 2015–2018 y tablas son alternativas locales; los valores se normalizan dentro de la serie elegida."
-  },
-  {
-    "n": "08",
-    "title": "Más de una forma",
-    "body": "Mapa con leyenda escrita y símbolos, registro consultable, teclado y preferencias combinables. Voz y vibración son ayudas opcionales si están disponibles."
-  }
+ {title:'Un mapa con fecha',body:'Mira cómo cambia el Pacífico en seis imágenes de cada disco.'},
+ {title:'Una cuadrícula',body:'La computadora resume la imagen en 28 columnas y 16 filas de color.'},
+ {title:'Cálido, neutral o frío',body:'Cada color se convierte en un nivel. Estos niveles no son grados de temperatura.'},
+ {title:'De oeste a este',body:'Una línea recorre el mapa. Cada columna añade un paso a la música.'},
+ {title:'Tu banda',body:'Enciende o silencia a los cinco músicos para decidir qué instrumentos escuchar.'},
+ {title:'Dos formas de oír',body:'Melodía crea una canción. Datos convierte los niveles directamente en tonos.'},
+ {title:'Prueba tu imagen',body:'Empieza con la lluvia de Chiclayo o elige una imagen. Se procesa en tu navegador.'},
+ {title:'A tu manera',body:'Usa texto, teclado o la guía. Ajusta el tamaño, el contraste y el movimiento.'}
 ];
 var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
 var CHORDS = { Am: [[220,261.63,329.63],110], C: [[261.63,329.63,392],130.81], F: [[174.61,220,261.63],87.31], G: [[196,246.94,293.66],98], E: [[164.81,207.65,246.94],82.41] };
@@ -3008,7 +2747,7 @@ var TECH_EN = {
   "Vibration API": {
     "use": "Optional short pulses, initially off. Availability depends on the device and browser."
   },
-  "FileReader + Blob + localStorage": {
+  "Blob + localStorage": {
     "use": "Local image and table reading; stores language and preferences. Files are not stored in localStorage."
   },
   "CSS + tipografías": {
@@ -3057,52 +2796,28 @@ var OBJ_EN = [
   { tag: 'FROM SIGHT TO SOUND', title: 'From color to sound', where: 'The “What the machine sees” grid shows what the algorithm reads, and “How it sounds” explains why it sounds that way.' },
   { tag: 'MUSICAL', title: 'Pleasant, not noise', where: 'The Melody engine uses scales, chords and a progression per disc, not pixels turned into random pitches.' },
   { tag: 'ACCESSIBLE', title: 'For blind and low-vision people', where: 'Spoken description, sound captions, vibration, keyboard, high contrast and large text.' },
-  { tag: 'EXPLORE', title: 'Explore with your own data', where: 'Upload an image or a CSV and it plays with the same band.' },
+  { tag: 'EXPLORE', title: 'Explore with your own data', where: 'Upload an image and it plays with the same band.' },
   { tag: 'STORY', title: 'Telling the why', where: 'Five fictional characters with proposed stories, episode sources and clearly distinguished cultural references.' },
   { tag: 'PROCESS', title: 'Documenting the method', where: 'Technology distinguishes browser execution, data and production tools; credits explain documented AI use.' }
 ];
 var STEPS_EN = [
-  {
-    "title": "Dated maps",
-    "body": "Difference from a climate reference, not absolute temperature. EIC and GIBS provide two stored collections of six dates per disc."
-  },
-  {
-    "title": "28×16 cells",
-    "body": "Canvas reduces the crop to 448 cells. Colors identified as land or missing data are excluded; this is a visual approximation."
-  },
-  {
-    "title": "Colors and levels",
-    "body": "Colors are matched to the product palette to derive levels between −5 and +5. These are neither degrees nor lossless scientific values."
-  },
-  {
-    "title": "Scan with controls",
-    "body": "28 columns from west to east. Pause, resume or seek with buttons and keyboard; the map date differs from playback time."
-  },
-  {
-    "title": "Melody or Data",
-    "body": "Melody composes with the lead’s scale and chords. Data maps levels to tones without a progression. Five controls select which instruments to hear."
-  },
-  {
-    "title": "Artistic decisions",
-    "body": "The documented Pacora rule slows March 2023 by 10 bpm. Tension and melancholy are editorial choices; emotions are not calculated."
-  },
-  {
-    "title": "Chiclayo and your files",
-    "body": "Start with the sample image. Chiclayo rainfall for 2015–2018 and tables are local alternatives; values are normalized within the selected series."
-  },
-  {
-    "title": "More than one way",
-    "body": "Map with written legend and symbols, browsable log, keyboard and combined preferences. Voice and vibration are optional where available."
-  }
+ {title:'A dated map',body:'Watch the Pacific change through six images in each disc.'},
+ {title:'A small grid',body:'The computer summarizes the image as 28 columns and 16 rows of color.'},
+ {title:'Warm, neutral or cold',body:'Each color becomes a level. These levels are not degrees of temperature.'},
+ {title:'West to east',body:'A line travels across the map. Each column adds a step to the music.'},
+ {title:'Your band',body:'Switch the five musicians on or off to choose which instruments you hear.'},
+ {title:'Two ways to listen',body:'Melody makes a song. Data turns the levels directly into tones.'},
+ {title:'Try your image',body:'Start with Chiclayo rainfall or choose an image. It stays in your browser.'},
+ {title:'Your way',body:'Use text, a keyboard or the guide. Adjust size, contrast and motion.'}
 ];
-var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert to music', how: 'Method', tech: 'Technology' };
+var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert to music', how: 'How it works', tech: 'Technology' };
 
 /* Textos fijos de la interfaz */
 var TX = {
   es: {
     brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad', skipContent: 'Saltar al contenido',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
-    heroLede: 'El agua cantaba en el antiguo Perú. Hoy la banda convierte mapas de la NASA en música.',
+    heroLede: 'Mapas de la NASA, cinco músicos y una nueva forma de escuchar el Pacífico.',
     heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
     homeMapAlt: 'Mapa del Pacífico con franjas de temperatura del mar más cálidas y más frías de lo habitual',
     homeMapCaption: 'Pacífico · Anomalías de temperatura del mar · NASA',
@@ -3116,16 +2831,16 @@ var TX = {
     stageKicker: 'Escuchar · paso 3', stageTitle: 'La banda en escena', stageAria: 'Escenario de la banda', onStage: 'En el escenario:', musiciansAria: 'Músicos en escena',
     stageEmpty1: 'Escenario vacío', stageEmpty2: 'enciende un músico',
     leadAria: 'Protagonista de la reproducción', leadLabel: 'Protagonista', leadChange: 'Cambiar protagonista', leadPrev: 'Protagonista anterior', leadAuto: 'Según el disco', leadNext: 'Protagonista siguiente',
-    theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Propuesta artística del proyecto. Las referencias culturales y las historias se documentan por separado.',
+    theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Diseño artístico del proyecto. Las referencias culturales y las historias se documentan por separado.',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
-    teamCharacter: 'Personaje de ficción del equipo', proposedStory: 'Historia propuesta', howItPlays: 'Cómo suena en TerraSonic', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Propuesta visual', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
-    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Escucha cómo suena una imagen o una serie de datos.',
-    dropTitle: 'Elegir una imagen o un CSV', dropSub: 'También puedes arrastrar el archivo aquí. Máx. 8 MB. CSV con al menos 8 valores numéricos y hasta 5000 filas.', sample: 'Probar con la lluvia de Chiclayo', dataExplainer: 'Cómo sonará tu archivo',
+    teamCharacter: 'Personaje de ficción del equipo', proposedStory: 'Historia del personaje', howItPlays: 'Cómo suena en TerraSonic', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Diseño del personaje', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
+    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Prueba la lluvia de Chiclayo o escucha los colores de tu imagen.',
+    dropTitle: 'Elegir una imagen', dropSub: 'También puedes arrastrar el archivo aquí. Máx. 8 MB. Solo imágenes PNG, JPG, WebP o GIF.', sample: 'Probar con la lluvia de Chiclayo', dataExplainer: 'Cómo sonará tu archivo',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
     dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
-    noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen o un CSV, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
-    howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Del mapa a una interpretación musical explicable. El análisis y el sonido se ejecutan en tu navegador.',
+    noFileTitle: 'Aún no hay archivo', noFileBody: 'Vuelve al paso anterior y sube una imagen, o prueba con la lluvia de Chiclayo.', upload: 'Subir un archivo',
+    howKicker: '¿Cómo funciona?', howTitle1: 'Cómo suena un mapa', howLede1: 'Del color a la música, en ocho pasos sencillos.',
     methodCoverageTitle: 'Qué zona y qué fechas', methodCoverage: 'Recorte del Pacífico: 140°–70°O y 25°S–15°N. EIC contiene cinco selecciones de seis imágenes cada 30 días, del 16 de mayo de 2024 al 3 de octubre de 2026. GIBS incluye julio–diciembre de 2010 y 2015, diciembre de 2016–mayo de 2017 y enero–junio y julio–diciembre de 2023. Son archivos almacenados; no un monitoreo en vivo.',
     methodChiclayo: 'Chiclayo es el vínculo local: el ejemplo alternativo usa 48 promedios mensuales de precipitación diaria de NASA POWER, 2015–2018, en −6,77°, −79,84°. El archivo conserva 1981–2024. Esta serie no prueba que un color del océano cause lluvia en la ciudad.',
     methodLimitsTitle: 'Qué significa y qué limita', methodLimits: 'Una anomalía compara la temperatura con una referencia climática: cero no significa 0 °C. La imagen puede perder detalle al comprimirse y reducirse. EIC deriva niveles de una escala original −4 a +4 °C; GIBS usa su propia escala y extremos abiertos, acotados a −3 y +3 para la sonificación. El nivel −5 a +5 no es una medida en grados ni permite comparar físicamente ambos productos.',
@@ -3144,7 +2859,7 @@ var TX = {
     credDevP: 'Interfaz en HTML, CSS y JavaScript. Canvas 2D analiza los fotogramas y Web Audio sintetiza los instrumentos en el navegador. La versión estática para GitHub Pages se genera con scripts/build_pages.py.',
     credAiReview: 'El registro docs/USO_DE_IA.md aún contiene entradas pendientes de revisión y detalle. La declaración debe contrastarse con ese registro antes de presentar el proyecto.',
     credAi: 'Declaración de uso de IA',
-    credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código, pruebas y modelos procedurales creados con Blender. Las ilustraciones previas del equipo se conservaron. Hay propuestas visuales e historias nuevas identificadas como tales; la revisión humana y cultural sigue pendiente.',
+    credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código y pruebas. Los modelos de Blender se retiraron de esta edición 2D. Las ilustraciones previas del equipo se conservaron. Hay historias de ficción identificadas como tales; la revisión humana y cultural sigue pendiente.',
     notice: 'Aviso', noticeP: 'Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.',
     back: 'Atrás', prevScreen: 'Pantalla anterior', nextScreen: 'Pantalla siguiente', screensAria: 'Pantallas de esta sección',
     close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad del escaneo', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
@@ -3153,7 +2868,7 @@ var TX = {
   en: {
     brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options', skipContent: 'Skip to content',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
-    heroLede: 'Water sang in ancient Peru. Today the band turns NASA maps into music.',
+    heroLede: 'NASA maps, five musicians and a new way to hear the Pacific.',
     heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
     homeMapAlt: 'Pacific map showing bands of warmer and cooler than usual sea temperatures',
     homeMapCaption: 'Pacific Ocean · Sea surface temperature anomalies · NASA',
@@ -3167,16 +2882,16 @@ var TX = {
     stageKicker: 'Listen · step 3', stageTitle: 'The band on stage', stageAria: 'The band’s stage', onStage: 'On stage:', musiciansAria: 'Musicians on stage',
     stageEmpty1: 'Empty stage', stageEmpty2: 'switch a musician on',
     leadAria: 'Lead of the playback', leadLabel: 'Lead', leadChange: 'Change lead', leadPrev: 'Previous lead', leadAuto: 'Follow the disc', leadNext: 'Next lead',
-    theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic proposal for the project. Cultural references and stories are documented separately.',
+    theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic design for the project. Cultural references and stories are documented separately.',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
-    teamCharacter: 'Fictional character by the team', proposedStory: 'Proposed story', howItPlays: 'How it sounds in TerraSonic', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Visual proposal', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
-    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Hear what an image or a data series sounds like.',
-    dropTitle: 'Choose an image or CSV', dropSub: 'You can also drag the file here. 8 MB max. CSV files need at least 8 numeric values and can have up to 5000 rows.', sample: 'Try Chiclayo’s rainfall', dataExplainer: 'How your file will sound',
+    teamCharacter: 'Fictional character by the team', proposedStory: 'Character story', howItPlays: 'How it sounds in TerraSonic', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Character design', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
+    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Try Chiclayo rainfall or listen to the colors in your image.',
+    dropTitle: 'Choose an image', dropSub: 'You can also drag the file here. 8 MB max. PNG, JPG, WebP or GIF images only.', sample: 'Try Chiclayo’s rainfall', dataExplainer: 'How your file will sound',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
     dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
-    noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image or a CSV, or try Chiclayo’s rainfall.', upload: 'Upload a file',
-    howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'From a map to an explainable musical interpretation. Analysis and sound run in your browser.',
+    noFileTitle: 'No file yet', noFileBody: 'Go back one step and upload an image, or try Chiclayo’s rainfall.', upload: 'Upload a file',
+    howKicker: 'How it works', howTitle1: 'How a map sounds', howLede1: 'From color to music in eight simple steps.',
     methodCoverageTitle: 'Which area and dates', methodCoverage: 'Pacific crop: 140°–70°W and 25°S–15°N. EIC contains five selections of six images, spaced 30 days apart, from 16 May 2024 to 3 October 2026. GIBS covers July–December 2010 and 2015, December 2016–May 2017, and January–June and July–December 2023. These are stored files, not live monitoring.',
     methodChiclayo: 'Chiclayo is the local connection: the alternative sample uses 48 monthly means of daily precipitation from NASA POWER, 2015–2018, at −6.77°, −79.84°. The stored file retains 1981–2024. This series does not prove that an ocean color causes rain in the city.',
     methodLimitsTitle: 'Meaning and limits', methodLimits: 'An anomaly compares temperature with a climate reference: zero does not mean 0 °C. Compression and downsampling may lose image detail. EIC derives levels from an original −4 to +4 °C scale; GIBS uses its own scale with open extremes, bounded to −3 and +3 for sonification. The −5 to +5 level is not measured in degrees and does not enable physical comparison of the two products.',
@@ -3195,7 +2910,7 @@ var TX = {
     credDevP: 'Interface built with HTML, CSS and JavaScript. Canvas 2D analyzes the frames and Web Audio synthesizes the instruments in the browser. The static GitHub Pages version is generated with scripts/build_pages.py.',
     credAiReview: 'The docs/USO_DE_IA.md log still contains entries awaiting review and detail. This declaration should be checked against that log before submitting the project.',
     credAi: 'AI use statement',
-    credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This review uses Codex for code, tests and procedural models created with Blender. The team’s earlier illustrations were preserved. New visual proposals and stories are labelled as such; human and cultural review remains pending.',
+    credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This review uses Codex for code and tests. Blender models were removed from this 2D edition. The team’s earlier illustrations were preserved. Fictional stories are labelled as such; human and cultural review remains pending.',
     notice: 'Notice', noticeP: 'Independent project created for the NASA Space Apps Challenge; it is not affiliated with or endorsed by NASA.',
     back: 'Back', prevScreen: 'Previous screen', nextScreen: 'Next screen', screensAria: 'Screens in this section',
     close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Scan speed', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
@@ -3461,7 +3176,13 @@ class Component extends DCLogic {
     document.addEventListener('focusin', this.onMoreFocus);
     window.addEventListener('focus', this.onTourVisible);
     if (window.visualViewport) { window.visualViewport.addEventListener('resize', this.onTourResize); window.visualViewport.addEventListener('scroll', this.onTourLayout); }
-    if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourLayout); this.tourObserver.observe(document.body); }
+    // ResizeObserver must not write layout during its delivery cycle (WebKit).
+    this.onTourObservedResize = function () {
+      if (!self.state.tour) return;
+      cancelAnimationFrame(self.tourRaf);
+      self.tourRaf = requestAnimationFrame(function () { if (!self.disposed) self.measureTour(); });
+    };
+    if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourObservedResize); this.tourObserver.observe(document.body); }
     this.routeMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.onRouteMotion = function () {
       if (!self.routeMedia.matches) return;
@@ -3689,7 +3410,7 @@ class Component extends DCLogic {
     if (el && page && page.scrollHeight > page.clientHeight) {
       var target = el.getBoundingClientRect(), visible = window.visualViewport;
       var viewportTop = visible ? visible.offsetTop : 0, viewportHeight = visible ? visible.height : window.innerHeight;
-      if (window.innerWidth < 700) viewportHeight -= Math.min(this.state.tourCardH || 280, viewportHeight * (viewportHeight < 500 ? .65 : .48)) + 28;
+      if (window.innerWidth < 700) viewportHeight -= Math.min(this.state.tourCardH || 280, viewportHeight - 24) + 28;
       if (target.top < viewportTop || target.bottom > viewportTop + viewportHeight) {
         page.scrollTo({ top: page.scrollTop + target.top - viewportTop - Math.max(0, (viewportHeight - target.height) / 2), behavior: behavior });
       }
@@ -4022,10 +3743,10 @@ class Component extends DCLogic {
   subTitles() {
     var t = this.state.tab;
     if (t === 'home') return [ROUTE_LOOK.home.title];
-    if (t === 'juke') return [T('Elige un disco', 'Pick a disc'), T('Escucha', 'Listen'), T('Escenario', 'Stage')];
+    if (t === 'juke') return [T('Elige un disco', 'Pick a disc'), T('Escucha', 'Listen')];
     if (t === 'band') return [ROUTE_LOOK.band.title];
-    if (t === 'data') return [T('Tu archivo', 'Your file'), T('Escucha', 'Listen'), T('Escenario', 'Stage')];
-    if (t === 'how') return [T('Del mapa al sonido', 'From map to sound'), T('Escala de color', 'Color scale'), T('Retos del Space Apps', 'Space Apps goals')];
+    if (t === 'data') return [T('Tu imagen', 'Your image'), T('Escucha', 'Listen')];
+    if (t === 'how') return [T('¿Cómo funciona?', 'How it works')];
     return this.techPages().map(function (p) { return p.title; });
   }
   goSub(i) {
@@ -4053,7 +3774,7 @@ class Component extends DCLogic {
     if (s.tour) this.tourClose();
     var patch = { tab: k, sub: sub || 0, tour: 0, tourRect: null, more: false };
     if (s.tab === 'data') patch.upMsg = '';
-    if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; patch.sub = 1; }
+    if (k === 'data' && s.custom) { patch.disc = 5; patch.frame = 0; }
     this.routeChange(patch, k);
   }
   resetScreenScroll() {
@@ -4175,21 +3896,15 @@ class Component extends DCLogic {
   playerVm() {
     var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
     var elapsed = this.formatClock(this.playerSeconds(position)), duration = this.formatClock(this.playerSeconds(steps));
-    var source = s.disc === 5 ? (s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette' ? 'eic' : s.custom && s.custom.cols ? 'csv' : 'image') : s.set;
-    var legend = [
-      { symbol: '↑', color: '#FF6A2B', label: source === 'csv' ? T('Sobre la media', 'Above the mean') : source === 'image' ? T('Color cálido', 'Warm color') : T('Más cálido de lo esperado', 'Warmer than expected'), meaning: T('Nivel positivo · Inti, Yaku; extremos: Illapa.', 'Positive level · Inti, Yaku; extremes: Illapa.') },
-      { symbol: '≈', color: '#7E849E', label: source === 'csv' ? T('Cerca de la media', 'Near the mean') : source === 'image' ? T('Nivel cercano a cero', 'Level near zero') : T('Cerca de lo esperado', 'Near expected'), meaning: T('Referencia · no implica silencio total.', 'Reference · does not mean complete silence.') },
-      { symbol: '↓', color: '#38C6E8', label: source === 'csv' ? T('Bajo la media', 'Below the mean') : source === 'image' ? T('Color frío', 'Cool color') : T('Más frío de lo esperado', 'Cooler than expected'), meaning: T('Nivel negativo · Mamacocha y Yaku.', 'Negative level · Mamacocha and Yaku.') },
-      { symbol: '□', color: '#232A4A', label: source === 'image' || source === 'csv' ? T('Sin valor utilizable', 'No usable value') : T('Sin datos de mar', 'No ocean data'), meaning: T('Celda sin valor utilizable · sin nota de datos.', 'Cell without a usable value · no data note.') }
-    ];
-    legend.forEach(function (entry, index) {
-      entry.on = s.legendSelection === index;
-      entry.choose = function () { self.setState({ legendSelection: index }); self.tutorialAction('legend', index === 2); };
+    var legend = RAMP.slice().reverse().map(function (point, index) {
+      var value = point[0], label = (value > 0 ? '+' : '') + String(value).replace('-', '−');
+      return { color: point[1], label: label, symbol: value > 0 ? '↑' : value < 0 ? '↓' : '≈',
+        meaning: value > 0 ? T('Más cálido', 'Warmer') : value < 0 ? T('Más frío', 'Colder') : T('Neutral', 'Neutral'),
+        aria: label + ' · ' + (value > 0 ? T('Más cálido', 'Warmer') : value < 0 ? T('Más frío', 'Colder') : T('Neutral', 'Neutral')), on: s.legendSelection === index,
+        choose: function () { self.setState({ legendSelection: index }); self.tutorialAction('legend', value < 0); } };
     });
-    var paletteNote = source === 'eic' ? T('Original EIC: azul, referencia clara y marrón. Cuadrícula: paleta propia de TerraSonic.', 'EIC original: blue, a light reference and brown. Grid: TerraSonic’s own palette.') :
-      source === 'prev' ? T('Original GIBS: violeta/azul, verde/beige y naranja/rojo. La cuadrícula usa los colores de TerraSonic.', 'GIBS original: purple/blue, green/beige and orange/red. The grid uses TerraSonic’s colors.') :
-      source === 'csv' ? T('Los niveles se normalizan respecto a la media de la columna elegida; no son anomalías del océano.', 'Levels are normalized relative to the selected column’s mean; they are not ocean anomalies.') :
-      T('Lectura artística del color de tu imagen. No mide temperaturas.', 'An artistic reading of your image’s colors. It does not measure temperatures.');
+    var paletteNote = T('Rojo: más cálido. Cero: neutral. Azul: más frío. Niveles de la cuadrícula, no grados de temperatura.', 'Red: warmer. Zero: neutral. Blue: colder. Grid levels, not temperature degrees.');
+    var historyPage = Math.min(s.historyPage || 0, Math.max(0, Math.ceil(s.events.length / 6) - 1));
     return {
       controlsLabel: T('Controles de reproducción', 'Playback controls'), positionLabel: T('Tiempo del disco', 'Disc playback time'),
       tempoLabel: s.engine === 'melody' ? Math.round(this.profile().bpm * this.speedFactor()) + T(' ppm', ' bpm') : this.stepMs() + T(' ms por paso', ' ms per step'),
@@ -4203,10 +3918,10 @@ class Component extends DCLogic {
       muteLabel: s.masterMuted ? T('Sonido silenciado', 'Sound muted') : T('Silenciar', 'Mute'),
       toggleMute: function () { self.toggleMasterMute(); }, changeVolume: function (e) { self.setVolume(Number(e.target.value)); },
       repeat: s.repeat, repeatLabel: T('Repetir', 'Repeat'), toggleRepeat: function () { self.setState({ repeat: !self.state.repeat }); },
-      legendTitle: T('Cómo interpretar el mapa', 'How to read the map'), legend: legend,
+      legendTitle: T('Escala de color', 'Color scale'), legend: legend,
       legendSelectionText: Number.isInteger(s.legendSelection) ? legend[s.legendSelection].label + '. ' + legend[s.legendSelection].meaning : '',
-      speechNotice: uiText(s.speechNotice),
-      legendIntro: T('Niveles derivados −5…+5, no grados medidos.', 'Derived levels −5…+5, not measured degrees.'), paletteNote: paletteNote,
+      speechNotice: uiText(s.speechNotice) || (!window.speechSynthesis || !window.SpeechSynthesisUtterance ? T('Voz no disponible; puedes leer la escala.', 'Voice unavailable; read the scale instead.') : ''),
+      legendIntro: T('Rojo: cálido · 0: neutral · azul: frío.', 'Red: warm · 0: neutral · blue: cold.'), paletteNote: paletteNote,
       paletteTitle: T('Mapa original y análisis', 'Original map and analysis'),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () { if (self.state.speaking) self.stopSpeech(); else self.speak(legend.map(function (l) { return l.label + '. ' + l.meaning; }).join(' ') + ' ' + paletteNote, true); },
@@ -4214,7 +3929,7 @@ class Component extends DCLogic {
       toggleAnalysis: function (event) { if (!event.target.isConnected) return; var open = event.target.open; if (open !== !!self.state.analysisOpen) self.setState({ analysisOpen: open }); },
       historyLabel: T('Eventos musicales', 'Music events'), eventCount: s.events.length, eventsOpen: !!s.eventsOpen, historyTabIndex: s.events.length ? 0 : -1,
       historyHelp: T('Últimos 200 pasos. Se conservan al pausar o cambiar de disco. El lector de pantalla los lee cuando tú los consultas.', 'Last 200 steps. They remain when you pause or change discs. Your screen reader reads them when you choose to browse them.'),
-      events: s.eventsOpen ? s.events.slice().reverse().map(function (event) {
+      events: s.eventsOpen ? s.events.slice().reverse().slice(historyPage * 6, historyPage * 6 + 6).map(function (event) {
         var disc = DISC_SETS.eic.concat(DISC_SETS.prev).find(function (item) { return item.id === event.discId; });
         var profile = event.dark ? MUSIC.yaku.dark : MUSIC[event.profile];
         var chord = event.chord >= 0 && profile.prog[event.chord] ? chordOf(profile, profile.prog[event.chord]).label : '';
@@ -4223,7 +3938,9 @@ class Component extends DCLogic {
           (chord ? ' · ' + T('acorde ', 'chord ') + chord : '') + ' · ' + (event.musicians.join(', ') || T('Sin entradas nuevas.', 'No new instrument entries.')) };
       }) : [],
       toggleHistory: function (event) { if (!event.target.isConnected) return; var open = event.target.open; if (open !== !!self.state.eventsOpen) self.setState({ eventsOpen: open }); },
-      clearLabel: T('Vaciar historial', 'Clear history'), clearEvents: function () { self.setState({ events: [] }); },
+      historyPage: (historyPage + 1) + ' / ' + Math.max(1, Math.ceil(s.events.length / 6)), historyPreviousOff: historyPage === 0, historyNextOff: (historyPage + 1) * 6 >= s.events.length,
+      historyPrevious: function () { self.setState({ historyPage: Math.max(0, historyPage - 1) }); }, historyNext: function () { self.setState({ historyPage: historyPage + 1 }); },
+      clearLabel: T('Vaciar historial', 'Clear history'), clearEvents: function () { self.setState({ events: [], historyPage: 0 }); },
       announcement: s.playerAnnouncement
     };
   }
@@ -4319,10 +4036,9 @@ class Component extends DCLogic {
     return '#38C6E8';
   }
   techGroups() {
-    var f = this.state.techFilter, groups = {}, order = [];
+    var groups = {}, order = [];
     TECH.forEach(function (t) {
       if (!groups[t.cat]) { groups[t.cat] = []; order.push(t.cat); }
-      if (f !== 'all' && t.scope !== f) return;
       groups[t.cat].push({ name: t.name, use: t.use, note: t.note || '', hasNote: !!t.note,
         chip: t.scope === 'browser' ? T('En tu navegador', 'In your browser') : t.scope === 'source' ? T('Fuente de datos', 'Data source') : T('Producción y revisión', 'Production and review'),
         chipBg: t.scope === 'browser' ? '#7BE38A' : t.scope === 'source' ? '#38C6E8' : '#FFD447' });
@@ -4397,48 +4113,7 @@ class Component extends DCLogic {
       } else accept();
       return;
     }
-    if (/\.(csv|tsv|txt)$/i.test(name) || /^text\//.test(f.type)) {
-      var rd = new FileReader();
-      rd.onload = function () { if (self.fileLoadCurrent(operation)) self.loadCsv(name, String(rd.result), operation); };
-      rd.onerror = function () { if (self.fileLoadCurrent(operation)) self.setState({ upMsg: uiMessage('No se pudo leer el archivo.', 'The file could not be read.') }); };
-      rd.readAsText(f);
-      return;
-    }
-    this.setState({ upMsg: uiMessage('Formato no admitido. Usa una imagen (PNG, JPG, WebP) o un CSV.', 'Unsupported format. Use an image (PNG, JPG, WebP) or a CSV.') });
-  }
-  loadImageSample() {
-    var operation = this.startFileLoad(); this.stop();
-    var custom = { name: T('Mapa NASA de ejemplo', 'Sample NASA map'), nameText: uiMessage('Mapa NASA de ejemplo', 'Sample NASA map'),
-      kind: 'image', source: 'eic', url: 'fotogramas/ver2025_2.webp', mode: 'palette' };
-    this.setState({ customMode: 'palette', upMsg: uiMessage('Analizando la imagen de ejemplo…', 'Analyzing the sample image…') });
-    this.analyze(5, 0, true, operation, custom);
-  }
-  loadCsv(name, text, operation) {
-    operation = operation || this.startFileLoad();
-    if (!this.fileLoadCurrent(operation)) return;
-    var parsed;
-    try { parsed = readCsv(text); }
-    catch (e) { this.setState({ upMsg: uiMessage('El CSV tiene comillas mal cerradas o campos incorrectos. Revisa el archivo y vuelve a intentarlo.', 'The CSV has unclosed quotes or invalid fields. Check the file and try again.') }); return; }
-    var rows = parsed.rows, delim = parsed.delimiter;
-    if (rows.length < 3) { this.setState({ upMsg: uiMessage('El CSV tiene muy pocas filas.', 'The CSV has too few rows.') }); return; }
-    var num = function (c) { if (c === undefined || c === '') return null; var v = Number(delim === ';' ? c.replace(',', '.') : c); return isFinite(v) ? v : null; };
-    var headerRow = rows[0].every(function (c) { return num(c) === null; });
-    var body = headerRow ? rows.slice(1) : rows, cols = [];
-    if (body.length > 5000) { this.setState({ upMsg: uiMessage('El CSV supera el límite de 5000 filas de datos. No se ha procesado ninguna fila. Reduce el archivo y vuelve a intentarlo.', 'The CSV exceeds the limit of 5000 data rows. No rows were processed. Reduce the file and try again.') }); return; }
-    for (var j = 0; j < rows[0].length; j++) {
-      var vals = [];
-      for (var i = 0; i < body.length; i++) { var v = num(body[i][j]); if (v !== null) vals.push(v); }
-      if (vals.length >= 8 && vals.length >= body.length * 0.7) cols.push({ name: headerRow ? (rows[0][j] || T('columna ', 'column ') + (j + 1)) : T('columna ', 'column ') + (j + 1), nameText: headerRow && rows[0][j] ? rows[0][j] : uiMessage('columna {n}', 'column {n}', { n: j + 1 }), values: vals });
-    }
-    if (!cols.length) { this.setState({ upMsg: uiMessage('No encontré una columna numérica con al menos 8 valores.', 'No numeric column with at least 8 values was found.') }); return; }
-    var pick = 0;
-    for (var q = 0; q < cols.length; q++) { if (!this.isIndexLike(cols[q].values)) { pick = q; break; } }
-    this.useSeries(name, cols, pick, null, operation);
-  }
-  isIndexLike(v) {
-    var d = v[1] - v[0]; if (!d) return false;
-    for (var i = 2; i < v.length; i++) if (Math.abs((v[i] - v[i - 1]) - d) > 1e-9) return false;
-    return true;
+    this.setState({ upMsg: uiMessage('Formato no admitido. Elige una imagen PNG, JPG, WebP o GIF.', 'Unsupported format. Choose a PNG, JPG, WebP or GIF image.') });
   }
   seriesAnalysis(values) {
     // Scaling first keeps finite inputs finite and preserves very small ranges.
@@ -4474,18 +4149,8 @@ class Component extends DCLogic {
       if (!self.fileLoadCurrent(operation)) { URL.revokeObjectURL(url); return; }
       self.revokeCustom();
       var label = cols.length > 1 ? uiMessage('{file} · {column}', '{file} · {column}', { file: nameText || name, column: cols[pick].nameText || cols[pick].name }) : nameText || name;
-      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), nameText: label, baseName: name, baseNameText: nameText || name, kind: 'csv', url: url, cols: cols, col: pick, mode: 'palette' }, an,
+      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), nameText: label, baseName: name, baseNameText: nameText || name, kind: 'rain', url: url, cols: cols, col: pick, mode: 'palette' }, an,
         uiMessage('Listo: {count} valores de «{column}». Pulsa Reproducir.', 'Ready: {count} values from “{column}”. Press Play.', { count: vals.length, column: cols[pick].nameText || cols[pick].name }));
-    });
-  }
-  setCol(i) {
-    var c = this.state.custom; if (!c || !c.cols || !c.cols[i]) return;
-    var self = this, operation = this.startFileLoad(), vals = c.cols[i].values, an = this.seriesAnalysis(vals);
-    this.drawSeries(an, function (url) {
-      if (!self.fileLoadCurrent(operation)) { URL.revokeObjectURL(url); return; }
-      self.revokeCustom(); var ans = Object.assign({}, self.state.an); ans['5_0'] = an; self.stop();
-      var label = uiMessage('{file} · {column}', '{file} · {column}', { file: c.baseNameText || c.baseName, column: c.cols[i].nameText || c.cols[i].name });
-      self.setState({ custom: Object.assign({}, c, { col: i, url: url, name: c.baseName + ' · ' + c.cols[i].name, nameText: label }), an: ans, col: -1, upMsg: uiMessage('Columna «{column}»: {count} valores.', 'Column “{column}”: {count} values.', { column: c.cols[i].nameText || c.cols[i].name, count: vals.length }) });
     });
   }
   setMode(m) {
@@ -5131,7 +4796,7 @@ class Component extends DCLogic {
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
     var referenceCoast = s.disc !== 5 || s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette';
     var isBand = s.tab === 'band';
-    var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1 && s.analysisOpen;
+    var showCells = (s.tab === 'juke' || s.tab === 'data') && s.sub === 1;
     var cells = []; for (var i = 0; showCells && i < 448; i++) { var v = a ? a.cells[i] : null; var c = i % 28; cells.push({ bg: v === null ? (hc ? '#000000' : '#232A4A') : rampColor(v), o: s.col >= 0 && c !== s.col ? '0.55' : '1' }); }
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
@@ -5178,10 +4843,10 @@ class Component extends DCLogic {
     // Fixed coordinates use the layout viewport; visible bounds may shrink or pan at zoom.
     var visibleStyle = function (style) { return style.replace(/(left|top):([\d.]+)px/g, function (_, axis, value) { return axis + ':' + (+value + (axis === 'left' ? vx : vy)) + 'px'; }); };
     if (vw < 700) {
-      cardH = Math.min(s.tourCardH || 280, vh * (vh < 500 ? .65 : .48));
+      cardH = Math.min(s.tourCardH || 280, vh - 24);
       place = 'mobile'; cardSt = 'left:12px;top:' + Math.max(8, vh - cardH - 12) + 'px;width:' + Math.max(0,vw - 24) + 'px';
     }
-    cardSt = visibleStyle(cardSt) + ';max-height:calc(' + Math.max(0, vw < 700 ? vh * (vh < 500 ? .65 : .48) : vh - 24) + 'px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))';
+    cardSt = visibleStyle(cardSt);
     spotSt = visibleStyle(spotSt);
     var tutorialBlocked = !!(s.tutorial && tstep && !s.tutorialDone[tstep.action]);
     var tourVm = { on: !!tstep, n: s.tour, total: gsteps.length, title: tstep ? tstep.t : '', body: tstep ? tstep.b : '',
@@ -5212,15 +4877,15 @@ class Component extends DCLogic {
       extra: function () { if (!s.playing) self.play(); } };
     var titles = this.subTitles(), cnt = titles.length, sub = Math.min(s.sub, cnt - 1), pgOrder = PAGE_ORDER, pgNext = s.tab === 'home' ? 'juke' : pgOrder[(pgOrder.indexOf(s.tab) + 1) % pgOrder.length];
     var lastSub = sub === cnt - 1, techPgs = s.tab === 'tech' ? this.techPages() : [], techCur = techPgs[sub] || { title: '', items: [] };
-    var topics = s.tab === 'how' || s.tab === 'tech';
+    var topics = s.tab === 'tech';
     var playerStep = (s.tab === 'juke' || s.tab === 'data') && sub === 1;
     var navVm = { label: titles[sub], n: sub + 1, total: cnt, compact: cnt > 3 ? 'compact' : '',
       counter: ('0' + (sub + 1)).slice(-2) + ' / ' + ('0' + cnt).slice(-2),
       countAria: T('Pantalla ', 'Screen ') + (sub + 1) + T(' de ', ' of ') + cnt,
-      shortNext: playerStep ? T('Escenario', 'Stage') : T('Siguiente', 'Next'),
+      shortNext: lastSub ? ROUTE_LOOK[s.tab === 'tech' ? 'home' : pgNext].title : T('Siguiente', 'Next'),
       dots: titles.map(function (x, i) { return { cls: i === sub ? 'on' : '', cur: i === sub ? 'step' : 'false', n: ('0' + (i + 1)).slice(-2), label: x, aria: T('Ir a ', 'Go to ') + x, go: function () { self.goSub(i); } }; }),
       show: cnt > 1, topics: topics, showDots: !topics, prevOff: sub === 0, nextOff: s.tab === 'data' && sub === 0 && !hasCustom,
-      nextLabel: lastSub ? (s.tab === 'tech' ? ROUTE_LOOK.home.title : ROUTE_LOOK[pgNext].title) : playerStep ? T('Escenario', 'Stage') : T('Siguiente', 'Next'),
+      nextLabel: lastSub ? (s.tab === 'tech' ? ROUTE_LOOK.home.title : ROUTE_LOOK[pgNext].title) : T('Siguiente', 'Next'),
       prev: function () { self.goSub(sub - 1); },
       next: function () { if (lastSub) self.goTab(s.tab === 'tech' ? 'home' : pgNext); else self.goSub(sub + 1); },
       showMini: s.playing && (s.tab === 'juke' || s.tab === 'data') && sub === 0 };
@@ -5273,15 +4938,15 @@ class Component extends DCLogic {
       impact: this.impactVm(),
       motionClass: s.reducedMotion ? 'reduce-motion' : '',
       preferences: {
-        on: s.showPreferences, title: T('¿Cómo prefieres usar TerraSonic?', 'How would you like to use TerraSonic?'),
-        body: T('Combina las opciones que te resulten cómodas. Puedes cambiarlas después en Accesibilidad.', 'Combine the options that suit you. You can change them later in Accessibility.'),
+        on: s.showPreferences, title: T('¿Cómo prefieres usarlo?', 'Make it comfortable for you'),
+        body: T('Puedes cambiarlo luego en Accesibilidad.', 'Change these later in Accessibility.'),
         choices: [
           ['voice', T('Guía hablada', 'Spoken guide'), T('Voz opcional, cuando haya una del idioma en tu dispositivo.', 'Optional voice, when your device has one for this language.')],
           ['big', T('Texto grande', 'Large text'), T('Aumenta el tamaño de lectura.', 'Increase the reading size.')],
           ['contrast', T('Alto contraste', 'High contrast'), T('Bordes y texto con mayor contraste.', 'Stronger contrast for borders and text.')],
           ['reducedMotion', T('Movimiento reducido', 'Reduced motion'), T('Personajes y transiciones sin animación.', 'Characters and transitions without animation.')]
         ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
-        continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Aprender con tres acciones', 'Learn with three actions'),
+        continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Ver guía · 3 pasos', 'Try the guide · 3 steps'),
         continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); },
         reopenLabel: T('Cómo prefiero usar TerraSonic', 'How I prefer to use TerraSonic'), open: function () { self.openPreferences(); }
       },
@@ -5299,20 +4964,24 @@ class Component extends DCLogic {
       heroStats: [{ k: '10', l: T('discos', 'discs') }, { k: '60', l: T('fotogramas NASA', 'NASA frames') }, { k: '5', l: T('músicos', 'musicians') }],
       howData: [
         { tag: T('IMAGEN', 'IMAGE'), color: th.accent, title: T('Se lee por colores', 'Read by its colors'), body: T('Cada imagen se reduce a una cuadrícula de 28×16. Lo cálido suena como Inti y Yaku; lo frío, como Mamacocha. Elige entre la paleta de anomalías de la NASA o color libre.', 'Each image is reduced to a 28×16 grid. Warm areas sound like Inti and Yaku; cold ones like Mamacocha. Choose between the NASA anomaly palette and free color.') },
-        { tag: 'CSV', color: th.cold, title: T('Se lee por valores', 'Read by its values'), body: T('Una columna numérica se resume en 28 pasos. Lo que está sobre la media es cálido; lo que está bajo la media, frío. Los picos extremos hacen tronar a Illapa.', 'A numeric column is summarized in 28 steps. Values above the mean are warm; values below are cold. Extreme peaks make Illapa thunder.') },
+        { tag: 'RAIN', color: th.cold, title: T('Se lee por valores', 'Read by its values'), body: T('Una columna numérica se resume en 28 pasos. Lo que está sobre la media es cálido; lo que está bajo la media, frío. Los picos extremos hacen tronar a Illapa.', 'A numeric column is summarized in 28 steps. Values above the mean are warm; values below are cold. Extreme peaks make Illapa thunder.') },
         { tag: T('PRIVADO', 'PRIVATE'), color: th.magenta, title: T('Nada sale de tu equipo', 'Nothing leaves your device'), body: T('El archivo se procesa dentro del navegador. No se sube a ningún servidor. Prueba primero con la lluvia de Chiclayo de NASA POWER.', 'The file is processed inside the browser and never uploaded to a server. Try Chiclayo’s NASA POWER rainfall first.') }
       ],
       tx: tx,
       convert: {
-        sampleTitle: T('Prueba una imagen', 'Try an image'), sampleBody: T('Un mapa NASA de enero de 2025. Descubre cómo sus colores se convierten en música.', 'A NASA map from January 2025. Explore how its colors turn into music.'),
+        preview: s.custom && s.custom.kind === 'image' ? s.custom.url : 'data/chiclayo-rain.svg', hasImage: !!(s.custom && s.custom.kind === 'image'),
+        previewTitle: s.custom ? uiLabel(s.custom) : T('Lluvia de Chiclayo', 'Chiclayo rainfall'),
+        previewAlt: s.custom ? T('Vista previa de la imagen seleccionada: ', 'Selected image preview: ') + uiLabel(s.custom) : T('Lluvia mensual de Chiclayo, 2015–2018. Datos NASA POWER, en mm por día.', 'Chiclayo monthly rainfall, 2015–2018. NASA POWER data in mm per day.'),
+        previewBody: s.custom && s.custom.kind === 'image' ? T('Tu imagen reemplaza el ejemplo. Puedes elegir otra cuando quieras.', 'Your image replaces the sample. Choose another whenever you like.') : T('48 promedios mensuales · 2015–2018 · NASA POWER · mm/día.', '48 monthly averages · 2015–2018 · NASA POWER · mm/day.'),
+        listenLabel: s.custom && s.custom.kind === 'image' ? T('Escuchar esta imagen', 'Listen to this image') : T('Escuchar la lluvia', 'Listen to the rainfall'),
+        listen: function () { if (self.state.custom) self.goSub(1); else self.loadSample(); },
+        sampleTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), sampleBody: T('Un mapa NASA de enero de 2025. Descubre cómo sus colores se convierten en música.', 'A NASA map from January 2025. Explore how its colors turn into music.'),
         sampleAlt: T('Mapa NASA de anomalía del Pacífico, enero de 2025.', 'NASA Pacific anomaly map, January 2025.'), sampleAction: T('Usar imagen de ejemplo', 'Use sample image'),
         ownTitle: T('Ahora, tu imagen', 'Now, your image'), chooseImage: T('Elegir imagen', 'Choose image'),
         imageLimits: T('PNG, JPG, WebP o GIF. Hasta 8 MB y 32 millones de píxeles. Se usa una vista fija, centrada y sin deformar; las animaciones no se reproducen. También puedes arrastrar el archivo aquí.', 'PNG, JPG, WebP or GIF. Up to 8 MB and 32 million pixels. A centered, undistorted still preview is used; animations do not play. You can also drop the file here.'),
         imagePrivacy: T('Se analiza una imagen fija, dentro de tu navegador. El archivo permanece en tu equipo.', 'A still image is analyzed inside your browser. Your file stays on your device.'),
         secondaryTitle: T('También puedes escuchar lluvia o una tabla', 'You can also listen to rainfall or a table'),
-        rainTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), rainBody: T('Muestra mensual de NASA POWER. No necesitas preparar un archivo.', 'A monthly NASA POWER sample. No file preparation needed.'),
-        csvTitle: T('Tus datos en una columna', 'Your data in one column'), chooseCsv: T('Elegir CSV o tabla de texto', 'Choose CSV or text table'),
-        csvLimits: T('CSV, TSV o TXT. Hasta 8 MB y 5000 filas. Al menos ocho valores numéricos; podrás elegir la columna que quieres escuchar.', 'CSV, TSV or TXT. Up to 8 MB and 5000 rows. At least eight numeric values; you can choose the column to hear.')
+        rainTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), rainBody: T('Muestra mensual de NASA POWER. No necesitas preparar un archivo.', 'A monthly NASA POWER sample. No file preparation needed.')
       },
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
       scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
@@ -5340,7 +5009,7 @@ class Component extends DCLogic {
       bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : '') + (topics ? ' with-topics' : ''),
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
-      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('Método','Method'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
+      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('¿Cómo funciona?','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;
@@ -5407,7 +5076,7 @@ class Component extends DCLogic {
       bandSel: band.map(function (x, i) {
         return { key: x.key, name: x.name, color: hc ? th.fg : x.color, on: i === bandIndex, pick: function () { self.pickBand(i); } };
       }),
-      moreOpen: s.more, toggleMore: function (event) { if (self.state.more) self.closeMore(); else self.openMore(event); }, closeMore: function () { self.closeMore(); },
+      moreOpen: s.more, toggleMore: function () { self.goTab('how'); }, closeMore: function () { self.closeMore(); },
       fileName: hasCustom ? uiLabel(s.custom) : T('Tu archivo', 'Your file'),
       noFile: s.tab === 'data' && !hasCustom,
       backToUpload: function () { self.goSub(0); },
@@ -5449,20 +5118,15 @@ class Component extends DCLogic {
       customMode: s.customMode, colIdx: hasCustom && s.custom.cols ? String(s.custom.col) : '0',
       colOpts: hasCustom && s.custom.cols ? s.custom.cols.map(function (cc, ci) { return { v: String(ci), l: uiLabel(cc) }; }) : [],
       uploadStatus: isData && !!s.upMsg,
-      upMsg: uiText(s.upMsg) || T('Sube tu propia imagen o CSV y escúchalo.', 'Upload your own image or CSV and listen to it.'),
+      upMsg: uiText(s.upMsg) || T('Sube tu propia imagen y escúchalo.', 'Upload your own image and listen to it.'),
       onFile: function (e) { var fl = e.target.files && e.target.files[0]; if (fl) self.handleFile(fl); e.target.value = ''; },
       onDragOver: function (e) { e.preventDefault(); if (!s.over) self.setState({ over: true }); },
       onDragLeave: function () { self.setState({ over: false }); },
       onDrop: function (e) { e.preventDefault(); self.setState({ over: false }); var fl = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (fl) self.handleFile(fl); },
       useSample: function () { self.loadSample(); },
-      useImageSample: function () { self.loadImageSample(); },
+
       onUpMode: function (e) { self.setMode(e.target.value); },
-      onCol: function (e) { self.setCol(parseInt(e.target.value, 10)); },
-      techFilters: [['all', T('Todo', 'All')], ['browser', T('Navegador', 'Browser')], ['production', T('Producción', 'Production')], ['source', T('Datos', 'Data')]].map(function (x) {
-        return { label: x[1], on: s.techFilter === x[0], pick: function () {
-          if (self.state.techFilter !== x[0]) self.setState({ techFilter: x[0] });
-        } };
-      }),
+
       techSummary: techCur.items.length + (techCur.items.length === 1 ? T(' herramienta', ' tool') : T(' herramientas', ' tools')),
       steps: STEPS.map(function (x, i) { return { n: x.n, title: x.title, body: x.body, delay: (i * 0.07).toFixed(2) + 's' }; }),
       legend: [{ v: '+5', c: '#7A0F1E', who: 'Illapa', sound: T('Truenos y percusión de Illapa.', 'Illapa’s thunder and percussion.') }, { v: T('+4,5', '+4.5'), c: '#C21F7A', who: 'Illapa', sound: T('Percusión de Illapa en la zona cálida extrema.', 'Illapa’s percussion in the extreme warm range.') }, { v: '+4', c: '#E8283A', who: 'Inti · Yaku', sound: T('Marimba de Inti y gotas de Yaku.', 'Inti’s marimba and Yaku’s droplets.') }, { v: '+3', c: '#FF6A2B', who: 'Inti · Yaku', sound: T('Texturas cálidas de Inti y gotas de Yaku.', 'Inti’s warm textures and Yaku’s droplets.') }, { v: '+2', c: '#FFA62B', who: 'Inti · Yaku', sound: T('Inti y Yaku: armonía y gotas.', 'Inti and Yaku: harmony and droplets.') }, { v: '+1', c: '#FFD447', who: 'Inti', sound: T('Armonía cálida de Inti.', 'Inti’s warm harmony.') }, { v: '0', c: '#7E849E', who: T('referencia', 'reference'), sound: T('Nivel cercano a lo esperado. Melodía puede mantener la armonía base; Datos no añade notas en cero.', 'Close-to-expected level. Melody may keep the base harmony; Data adds no notes at zero.') }, { v: '−1', c: '#7BE38A', who: 'Mamacocha', sound: T('Registro grave de Mamacocha.', 'Mamacocha’s low register.') }, { v: '−2 / −3', c: '#38C6E8', who: 'Mamacocha · Yaku', sound: T('Graves de Mamacocha y gotas de Yaku.', 'Mamacocha’s bass and Yaku’s droplets.') }, { v: '−4 / −5', c: '#2F4FD0', who: 'Mamacocha · Yaku', sound: T('Texturas frías de Mamacocha y gotas de Yaku.', 'Mamacocha’s cold textures and Yaku’s droplets.') }]

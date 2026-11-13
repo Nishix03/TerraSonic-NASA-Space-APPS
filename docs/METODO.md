@@ -1,5 +1,7 @@
 # Método y tecnologías de esta versión
 
+> Alcance actualizado: [RETO 05](RETO_05.md). Este documento conserva detalles de la revisión anterior. Se retiraron CSV, Escenario, Método y los controles marcados en el brief; la guía permite omitir pasos y ya no usa una caja con scroll interno.
+
 La interfaz pública explica la secuencia real: imágenes fechadas, reducción a 448 celdas, búsqueda de color en la paleta del producto, niveles derivados, barrido por columnas, motor Melodía/Datos, decisiones editoriales y alternativas locales. Conserva los ocho objetivos de Space Apps y sus rutas al producto. El enlace del reto usa la ruta oficial `the-earth-information-jukebox`; la búsqueda oficial la confirma, aunque la consulta directa devolvió 502 durante esta revisión.
 
 ## Datos y alcance

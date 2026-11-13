@@ -1,5 +1,7 @@
 # Reproductor, leyenda y verificación
 
+> Alcance actualizado: [RETO 05](RETO_05.md). Este documento conserva detalles de la revisión anterior. Se retiraron CSV, Escenario, Método y los controles marcados en el brief; la guía permite omitir pasos y ya no usa una caja con scroll interno.
+
 ## Controles
 
 El mismo reproductor atiende los discos EIC, los históricos GIBS y los archivos locales. Pausar conserva fotograma y columna. Reanudar continúa en la siguiente columna. Seleccionar una fecha salta al principio de ese fotograma; si estaba en pausa conserva la pausa. La barra nativa admite flechas, Inicio y Fin, y los botones permiten saltar cinco segundos sin arrastrar.
