@@ -16,7 +16,7 @@ async function main(){
   for(const catalog of ['eic','prev'])for(const mode of ['melody','raw']){
    await page.evaluate(({catalog,mode})=>{__app.stop();__app.goTab('juke');__app.applySet(catalog);__app.setState({disc:0,frame:0,col:-1,sub:1,engine:mode,speed:70,leadOverride:'mama',mute:__app.allMute(false),repeat:false,ended:false});__app.loadDisc(0);}, {catalog,mode});
    await page.waitForFunction(()=>__app.cur());
-   await page.evaluate(()=>{window.__fullTrace=[];window.__traceIds=new Set();});
+   await page.evaluate(()=>{window.__fullTrace=[];window.__traceIds=new Set(__app.state.events.map(event=>event.id));});
    const expectedSeconds=await page.evaluate(()=>__app.playerSeconds(__app.playerSteps()));
    await page.locator('#tour-play button').click();await page.waitForFunction(()=>__app.state.playing);
    await page.waitForFunction(()=>__app.state.ended&&!__app.state.playing,{},{timeout:120000});
