@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
+const { createHash } = require("node:crypto");
 const { performance } = require("node:perf_hooks");
 const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-core");
 
@@ -38,7 +39,9 @@ async function main() {
   const files=[];
   const walk=directory=>{for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.name.startsWith('.'))continue;const file=path.join(directory,entry.name);if(entry.isDirectory())walk(file);else files.push({path:path.relative(site,file).replaceAll('\\','/'),bytes:fs.statSync(file).size});}};
   walk(site);
-  const report = { base, profile, visit:'Returning visitor: Spanish and configured preferences saved in a fresh browser context',
+  const report = { base, profile, browserVersion:browser.version(), recordedAt:new Date().toISOString(),
+    indexSha256:createHash('sha256').update(fs.readFileSync(path.join(site,'index.html'))).digest('hex'),
+    visit:'Returning visitor: Spanish and configured preferences saved in a fresh browser context',
     bytesDefinition:'CDP encoded bytes of completed local responses at the milestone; cancelled/in-flight responses can be incomplete. File inventory is exact uncompressed disk size.',
     assets:{files:files.length,totalBytes:files.reduce((total,file)=>total+file.bytes,0),models:files.filter(file=>file.path.endsWith('.glb')),index:files.find(file=>file.path==='index.html')},
     samples: [], failures: [] };

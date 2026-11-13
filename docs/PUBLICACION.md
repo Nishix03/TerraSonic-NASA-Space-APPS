@@ -49,3 +49,9 @@ El CLI existente 54.7.1 estaba autenticado en `alvaro-mendoza-12`, equipo `alvar
 Se probó el flujo temporal oficial con Vercel CLI 65.15.0, obtenido del registro npm oficial en una caché de D. Se usaron un directorio de build y una configuración temporal separados, sin cerrar la sesión existente. Vercel informó `READY` en `https://sonic-reef-tiugkfl.tmp.now`, con vencimiento el 13 nov a las 09:21:33 UTC, pero devolvió 403 tanto a Python como a un navegador sin credenciales. No se presenta como vista pública utilizable. El enlace privado de reclamación no se publicó ni se incluye en paquetes.
 
 La URL de Sites anterior es la alternativa verificada. La entrega completa y el registro de tiempo siguen en `PIERO-MEJORAS.md`; publicar este checkpoint no acredita por sí solo el cierre de todos los requisitos.
+
+## Revisión posterior y acceso de actualización
+
+A las 04:45 de Bogotá, `get_site` seguía devolviendo el Site activo, su URL y versión 1. Sin embargo, no devolvía rol ni credencial de edición; `create_source_repository_write_credential` respondió `NOT_FOUND / project_not_found / 404`, y `list_sites(include_editable: true)` devolvió una lista vacía en la cuenta seleccionada. La credencial de la creación había vencido a las 08:35 UTC. No se reutilizó un token vencido, no se creó otro Site ni se cambió la audiencia.
+
+Las correcciones posteriores de fuentes locales, selector CSV, foco en WebKit e imágenes sin deformación siguen separadas del checkpoint publicado. Para actualizar esta misma URL falta recuperar el acceso editor/propietario al Site existente desde la integración. El paquete portable y Git permiten revisar el código nuevo mientras tanto. El diagnóstico anterior no es un rechazo de aprobación automática ni significa que el enlace público haya dejado de funcionar.

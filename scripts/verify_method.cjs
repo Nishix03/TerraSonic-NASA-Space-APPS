@@ -11,7 +11,7 @@ async function main(){
   for(const width of [320,390,768,1366,1920]){
    const context=await browser.newContext({viewport:{width,height:width<768?844:768},reducedMotion:'reduce'});
    await context.route('**/*',async route=>{
-    if(!route.request().url().startsWith(base))return route.abort();
+    if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();
     const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');
     return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});
    });

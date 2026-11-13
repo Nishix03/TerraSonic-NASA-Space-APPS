@@ -14,7 +14,7 @@ async function main() {
   const report = {checks:[],errors:[]};
   try {
     await context.route('**/*',async route=>{
-      if(!route.request().url().startsWith(base))return route.abort();
+      if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();
       const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');
       if(file.startsWith(site+path.sep)&&fs.existsSync(file))return route.fulfill({path:file});
       return route.fulfill({status:404});

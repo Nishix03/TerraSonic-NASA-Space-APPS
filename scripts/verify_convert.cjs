@@ -15,6 +15,7 @@ async function main() {
   try {
     await context.route('**/*', async route => {
       requests.push({ method: route.request().method(), url: route.request().url() });
+      if (/^(blob:|data:)/.test(route.request().url())) return route.continue();
       if (!route.request().url().startsWith(base)) return route.abort();
       const file = path.resolve(site, new URL(route.request().url()).pathname.slice(1) || 'index.html');
       if (file.startsWith(site + path.sep) && fs.existsSync(file)) return route.fulfill({ path: file });
@@ -71,6 +72,7 @@ async function main() {
     await csvInput.setInputFiles({ name: 'three-columns.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
     await page.waitForFunction(() => __app.state.custom?.cols?.length === 3 && __app.state.sub === 1);
     const column = page.locator('.file-settings select');
+    assert.deepEqual(await column.locator('option').evaluateAll(options=>options.map(option=>option.value)),['0','1','2'],'all numeric columns survive native select parsing');
     await column.selectOption('2');
     await page.waitForFunction(() => __app.state.custom?.col === 2 && __app.cur());
     assert.equal(await column.inputValue(), '2');

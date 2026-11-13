@@ -6,7 +6,7 @@ async function main(){
  try{
   for(const [width,height]of [[320,256],[320,568],[390,844],[768,1024],[1342,605]]){
    const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});
-   await context.route('**/*',async route=>{if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
+   await context.route('**/*',async route=>{if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
    await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
    const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
    for(const language of ['es','en'])for(const setting of ['default','large','spacing']){
@@ -25,9 +25,16 @@ async function main(){
     assert.equal(brand.lines,1,JSON.stringify({width,height,setting,brand}));assert(brand.left>=0&&brand.right<=width);
     result.options.forEach(option=>{assert(option.width>=44&&option.height>=44);assert(!option.overflow&&option.left>=0&&option.right<=width,JSON.stringify(option));});
     if(setting==='large'&&width<=390)assert.equal(result.columns.split(' ').length,1,'enlarged text gets a full-width option');
-    for(let count=0;count<8;count++){await page.keyboard.press('Tab');const visible=await page.evaluate(()=>{const el=document.activeElement,r=el.getBoundingClientRect();return el.classList.contains('opt')&&r.bottom>0&&r.top<innerHeight;});assert(visible,'all eight options remain reachable by Tab and scroll');}
+    const reached=[],traversal=[];
+    for(let count=0;count<16&&reached.length<8;count++){
+     await page.keyboard.press('Tab');await page.waitForFunction(()=>{const r=document.activeElement.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight;},{},{timeout:1000}).catch(()=>{});
+     const focus=await page.evaluate(()=>{const el=document.activeElement,r=el.getBoundingClientRect();return {name:el.textContent.trim().slice(0,100),cls:el.className,tag:el.tagName,top:r.top,bottom:r.bottom,viewport:innerHeight,panelScroll:document.querySelector('#tour-a11y .pop').scrollTop,pageScroll:scrollY};});traversal.push(focus);
+     if(focus.cls==='pop')continue; // Firefox also tabs to a native scrollable group.
+     assert(focus.cls==='opt'&&focus.bottom>0&&focus.top<height,JSON.stringify({width,height,language,setting,count,focus}));reached.push(focus.name);
+    }
+    assert.deepEqual(reached,result.options.map(option=>option.name),'every preference remains reachable in DOM order');
     await page.keyboard.press('Escape');assert.equal(await toggle.evaluate(el=>document.activeElement===el),true);
-    report.checks.push({viewportWidth:width,viewportHeight:height,language,setting,...result});
+    report.checks.push({viewportWidth:width,viewportHeight:height,language,setting,...result,traversal});
    }
    await context.close();console.log('PASS preferences layout',width,height);
   }

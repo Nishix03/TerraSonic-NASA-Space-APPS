@@ -505,6 +505,9 @@ function delayedImages() {
     } }) };
   };
   h.component.state.tab = 'data'; h.component.state.customMode = 'free';
+  // Concurrency cases keep decoding/encoding synchronous. Native geometry is covered in
+  // verify_image_geometry.cjs; delayed encoding has its own lifecycle regression below.
+  h.component.freezeImage = (image, custom, done) => done(image, {name:custom.name+'-preview'});
   return { ...h, images, revoked, upload: name => h.component.handleFile({ name, type: 'image/png', size: 100 }) };
 }
 
@@ -647,7 +650,7 @@ test('late image errors preserve the previous accepted image and its analysis', 
   const custom = c.state.custom, analysis = c.state.an['5_0'];
   upload('broken.png'); images[1].onerror();
   assert.equal(c.state.custom, custom); assert.equal(c.state.an['5_0'], analysis);
-  assert(!revoked.includes('blob:accepted.png')); assert(revoked.includes('blob:broken.png'));
+  assert(!revoked.includes(custom.url)); assert(revoked.includes('blob:broken.png'));
 });
 
 test('background NASA errors cannot overwrite the status of the accepted user file', () => {
@@ -1760,4 +1763,40 @@ test('map descriptions report derived source values independently of mute and av
   c.state.disc=5;c.state.custom={name:'lluvia.csv',cols:[{name:'lluvia'}]};
   assert.match(c.describeText(),/por debajo de la media de la columna/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
   c.setLang('en');assert.match(c.describeText(),/below the column mean/);assert.match(c.describeText(),/drawn cells/);
+});
+
+test('a stale preview encoder cannot create URLs, replace the accepted image, or commit after navigation',()=>{
+  const {component:c,images,upload,revoked}=delayedImages(),encoders=[];
+  upload('accepted.png');images[0].onload();const accepted=c.state.custom;
+  c.freezeImage=(image,custom,done)=>encoders.push({image,custom,done});
+  upload('old.png');images[1].onload();assert.equal(encoders.length,1);
+  upload('new.png');images[2].onload();assert.equal(encoders.length,2);
+  encoders[0].done(encoders[0].image,{name:'stale-preview'});assert.equal(c.state.custom,accepted);
+  assert(revoked.includes('blob:old.png'));assert(!revoked.includes(accepted.url));
+  encoders[1].done(encoders[1].image,{name:'new-preview'});assert.equal(c.state.custom.name,'new.png');assert.equal(c.state.custom.url,'blob:new-preview');assert(revoked.includes(accepted.url));
+  upload('leaving.png');images[3].onload();c.goTab('how');const snapshot=JSON.stringify(c.state);
+  encoders[2].done(encoders[2].image,{name:'offscreen-preview'});assert.equal(JSON.stringify(c.state),snapshot);assert(revoked.includes('blob:leaving.png'));
+});
+
+test('preview encoding failure retains an accepted file and presents a recoverable translated message',()=>{
+  const {component:c,images,upload,revoked}=delayedImages();upload('accepted.png');images[0].onload();const accepted=c.state.custom;
+  c.freezeImage=(image,custom,done)=>done(image,null);upload('broken.png');images[1].onload();
+  assert.equal(c.state.custom,accepted);assert(!revoked.includes(accepted.url));assert(revoked.includes('blob:broken.png'));
+  assert.match(c.renderVals().upMsg,/vista fija/);c.setLang('en');assert.match(c.renderVals().upMsg,/still preview/);
+});
+
+test('contextual help restores its explicit pointer trigger even when clicking did not move browser focus',()=>{
+  const {component:c,context}=setup();const trigger={isConnected:true,focus(){context.document.activeElement=this;}};
+  const previous={isConnected:true};context.document.activeElement=previous;
+  c.tourOpen({currentTarget:trigger});assert.equal(c.tourReturnFocus,trigger);
+  c.tourClose();assert.equal(context.document.activeElement,trigger);
+});
+
+test('a newly visible disc accepts an immediate selection while the previous cut finishes',()=>{
+  const {component:c,context,timers}=setup();context.window.matchMedia=()=>({matches:false});
+  c.goTab('juke');const previous=c.routeTimers.map(id=>timers.get(id));
+  previous[0]();assert.equal(c.state.tab,'juke');assert.equal(c.state.routeArrived,true);
+  c.renderVals().discs[2].pick();assert.equal(c.routeTimers.length,2);
+  previous[1]();assert.equal(c.state.tab,'juke');assert.equal(c.state.sub,0,'the stale cut cannot override the new selection');
+  c.routeFinish();assert.equal(c.state.disc,2);assert.equal(c.state.sub,1);assert.equal(c.state.trans,false);
 });

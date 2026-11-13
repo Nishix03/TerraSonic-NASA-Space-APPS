@@ -17,12 +17,13 @@
     }
     if (node.nodeType !== Node.ELEMENT_NODE) return [];
     const tag = node.localName;
-    if (tag === "sc-if" || tag === "sc-for") {
-      const list = tag === "sc-for";
-      const alias = node.getAttribute("as");
-      const binding = node.getAttribute(list ? "list" : "value");
+    const nativeList = tag === "template" && node.hasAttribute("data-sc-for");
+    if (tag === "sc-if" || tag === "sc-for" || nativeList) {
+      const list = tag === "sc-for" || nativeList;
+      const alias = node.getAttribute(nativeList ? "data-sc-as" : "as");
+      const binding = node.getAttribute(nativeList ? "data-sc-for" : list ? "list" : "value");
       const template = document.createElement("template");
-      template.content.append(...node.childNodes);
+      template.content.append(...(nativeList ? node.content.childNodes : node.childNodes));
       const anchor = document.createComment(tag);
       node.replaceWith(anchor);
       const entries = [];

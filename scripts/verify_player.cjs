@@ -16,6 +16,7 @@ async function main() {
   try {
     const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
     await context.route('**/*', async route => {
+      if (/^(blob:|data:)/.test(route.request().url())) return route.continue();
       if (!route.request().url().startsWith(base)) return route.abort();
       const file = path.resolve(site, new URL(route.request().url()).pathname.slice(1) || 'index.html');
       if (file.startsWith(site + path.sep) && fs.existsSync(file)) await route.fulfill({ path: file });

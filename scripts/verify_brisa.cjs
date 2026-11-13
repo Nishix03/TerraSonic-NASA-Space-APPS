@@ -16,6 +16,7 @@ async function main() {
     const context = await browser.newContext({ locale: options.locale || 'es-PE',
       viewport: options.viewport || { width: 1366, height: 768 }, reducedMotion: 'no-preference' });
     await context.route('**/*', async route => {
+      if (/^(blob:|data:)/.test(route.request().url())) return route.continue();
       if (!route.request().url().startsWith(base)) return route.abort();
       const file = path.resolve(site, new URL(route.request().url()).pathname.slice(1) || 'index.html');
       if (file.startsWith(site + path.sep) && fs.existsSync(file)) return route.fulfill({ path: file });
@@ -43,8 +44,8 @@ async function main() {
       }
       if (options.noAudio) { window.AudioContext = undefined; window.webkitAudioContext = undefined; }
       else {
-        const Native = window.AudioContext;
-        window.AudioContext = class extends Native {
+        const Native = window.AudioContext || window.webkitAudioContext;
+        if (typeof Native === 'function') window.AudioContext = class extends Native {
           createDynamicsCompressor() {
             const compressor = super.createDynamicsCompressor(), connect = compressor.connect.bind(compressor);
             compressor.connect = (target, ...args) => {
@@ -85,6 +86,8 @@ async function main() {
       await context.close();
     }
     const { context, page } = await create({ configured:true, stubSpeech:true });
+    const nativeAudio=await page.evaluate(()=>typeof(window.AudioContext||window.webkitAudioContext)==='function');
+    report.nativeAudioAvailable=nativeAudio;
     await page.locator('#tour-nav button').nth(2).click();
     await page.locator('#tour-image-sample button').click();
     await page.waitForFunction(() => __app.state.custom?.source === 'eic' && __app.state.sub === 1);
@@ -104,6 +107,7 @@ async function main() {
     assert.equal(await page.evaluate(() => JSON.stringify([__app.state.tab,__app.state.sub,__app.state.disc,__app.state.frame,__app.state.col,__app.state.custom.url,__app.state.customMode,__app.state.mute,__app.state.playing])),snapshot);
     assert.equal(await page.evaluate(() => document.activeElement.id),'tour-guide');
     report.journeys.push('Contextual help preserves file/date/position, restores focus and cancels voice on step/language changes');
+    if(nativeAudio){
     await page.locator('#tour-play button').click(); await page.waitForFunction(() => __app.state.playing);
     await page.locator('#tour-guide').click();
     await page.locator('#tour-card .tguide .tsay').first().click();
@@ -112,6 +116,7 @@ async function main() {
     assert(Math.abs(await page.evaluate(() => __app.master.gain.value)-.8)<.0001);
     await close(page).click(); await page.locator('#tour-play button').click();
     report.journeys.push('Spoken help ducks and restores real music output without restarting playback');
+    }else report.journeys.push('Native Web Audio is absent in this test build; mixing and audible playback are not verified here');
     for (const viewport of [{width:1366,height:768},{width:390,height:844}]) {
       await page.setViewportSize(viewport);
       await page.locator('#tour-guide').click();
@@ -122,14 +127,16 @@ async function main() {
       await page.locator('.discgrid .dcard').first().click();
       await page.waitForFunction(() => __app.state.tour===2);
       assert(await next(page).isDisabled());
-      await page.locator('#tour-play button').click(); await page.waitForFunction(() => __app.state.tour===3);
+      await page.locator('#tour-play button').click();
+      if(!nativeAudio){await page.waitForFunction(()=>!!__app.state.audioError);await page.locator('#tour-card .tbubble .btn').click();}
+      await page.waitForFunction(() => __app.state.tour===3);
       await page.locator('.legend-choice').first().click(); assert(await next(page).isDisabled());
       await page.locator('.legend-choice').nth(2).click(); assert.equal(await next(page).isDisabled(),false);
       await page.screenshot({path:path.join(output,'tutorial-'+viewport.width+'.png')});
       await next(page).click(); assert.equal(await page.locator('#tour-card').count(),0);
-      assert.equal(await page.evaluate(() => __app.state.playing),true);
-      await page.locator('#tour-play button').click();
-      report.journeys.push('Three real tutorial actions completed at '+viewport.width+'px with optional voice off');
+      assert.equal(await page.evaluate(() => __app.state.playing),nativeAudio);
+      if(nativeAudio)await page.locator('#tour-play button').click();
+      report.journeys.push('Tutorial completed at '+viewport.width+'px with '+(nativeAudio?'real playback':'the written no-audio alternative'));
     }
     await page.locator('#tour-nav button').nth(1).click();
     await page.waitForFunction(() => document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'));

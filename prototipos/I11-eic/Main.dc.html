@@ -1050,7 +1050,7 @@ a{color:inherit}
 .px .top details.menu[open]>summary{grid-row:1;grid-column:3;justify-self:end}
 .px .top:has(details.menu[open]) .nav{grid-row:2;grid-column:1/-1;width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:center}
 .px details.menu[open] .pop{position:static;grid-row:3;grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;width:100%;min-width:0;max-height:50svh;overflow:auto}
-.px details.menu[open] .pop .opt{min-height:44px}
+.px details.menu[open] .pop .opt{min-height:44px;scroll-margin:4px}
 @media(min-width:901px){.px details.menu[open] .pop{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1279px){
   .px .top .wrap{gap:4px 12px;min-height:0}
@@ -1461,6 +1461,7 @@ a{color:inherit}
 .px .guidefab::after{display:none}
 .px.reduce-motion,.px.reduce-motion *,.px.reduce-motion *::before,.px.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media(max-width:620px){.px .preferences-dialog{padding:16px;gap:12px}.px .preferences-choices label{padding:9px;min-height:60px}}
 </style>
 </helmet>
@@ -1648,7 +1649,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </sc-if>
 <sc-if value="{{isCsvUp}}">
 <label class="field">{{tx.column}}
-<select onChange="{{onCol}}" value="{{colIdx}}"><sc-for list="{{colOpts}}" as="o"><option value="{{o.v}}">{{o.l}}</option></sc-for></select></label>
+<select onChange="{{onCol}}" value="{{colIdx}}"><template data-sc-for="{{colOpts}}" data-sc-as="o"><option value="{{o.v}}">{{o.l}}</option></template></select></label>
 </sc-if>
 </div>
 </sc-if>
@@ -3348,7 +3349,10 @@ class Component extends DCLogic {
     this.onMenuPointer = function (event) { document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(event.target)) menu.open = false; }); };
     document.addEventListener('pointerdown', this.onMenuPointer, true);
     this.onMoreFocus = function (e) {
-      document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(e.target)) menu.open = false; });
+      document.querySelectorAll('details.menu[open]').forEach(function (menu) {
+        if (!menu.contains(e.target)) menu.open = false;
+        else if (e.target.classList && e.target.classList.contains('opt')) e.target.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
+      });
       var preferences = document.getElementById('preferences-dialog');
       if (self.state.showPreferences && preferences && !preferences.contains(e.target)) { self.focusPreferences(); return; }
       var dialog = document.getElementById('more-dialog');
@@ -3387,7 +3391,7 @@ class Component extends DCLogic {
   closeMenus(restoreFocus) {
     document.querySelectorAll('details.menu[open]').forEach(function (menu) {
       var focused = menu.contains(document.activeElement); menu.open = false;
-      if (restoreFocus && focused) menu.querySelector('summary')?.focus();
+      if (restoreFocus && focused) { var summary = menu.querySelector('summary'); summary?.focus(); summary?.scrollIntoView?.({ block: 'nearest', inline: 'nearest', behavior: 'instant' }); }
     });
   }
   savePreferences() {
@@ -3501,10 +3505,11 @@ class Component extends DCLogic {
     return GUIDES[key] || [];
   }
   guideStep() { var s = this.state; return s.tour ? this.guideSteps()[s.tour - 1] || null : null; }
-  tourOpen() {
-    if (this.state.trans) return;
+  tourOpen(event) {
+    if (!this.settleArrivedRoute()) return;
     if (this.state.tour) { this.tourClose(); return; }
     this.rememberTourOrigin();
+    if (event && event.currentTarget) this.tourReturnFocus = event.currentTarget;
     this.tourGo(this.guideProgress[this.guideKey()] || 1);
   }
   rememberTourOrigin() {
@@ -3517,7 +3522,7 @@ class Component extends DCLogic {
       pageTop: page ? page.scrollTop : 0 };
   }
   startTutorial() {
-    if (this.state.trans) return;
+    if (!this.settleArrivedRoute()) return;
     if (this.state.more) this.closeMore();
     if (this.state.tour) this.tourClose();
     this.rememberTourOrigin();
@@ -3916,6 +3921,7 @@ class Component extends DCLogic {
     return this.techPages().map(function (p) { return p.title; });
   }
   goSub(i) {
+    this.settleArrivedRoute();
     var s = this.state, cnt = this.subCount();
     if (!Number.isInteger(i) || i < 0 || i >= cnt || i === s.sub || s.trans) return;
     if (s.more) this.closeMore();
@@ -3923,6 +3929,7 @@ class Component extends DCLogic {
     this.routeChange({ sub: i }, s.tab, this.subTitles()[i]);
   }
   goTab(k, sub) {
+    this.settleArrivedRoute();
     var s = this.state;
     if (k === 'juke' && k === s.tab && sub == null && s.sub !== 0) { this.goSub(0); return; }
     if ((k === s.tab && (sub == null || sub === s.sub)) || s.trans) return;
@@ -3947,8 +3954,12 @@ class Component extends DCLogic {
     var page = document.scrollingElement;
     if (page && page.scrollTop) page.scrollTo({ top: 0, behavior: 'instant' });
   }
+  settleArrivedRoute() {
+    if (this.state.trans && this.state.routeArrived && this.routeFinish) this.routeFinish();
+    return !this.state.trans;
+  }
   routeChange(patch, tab, title) {
-    if (this.state.trans) return;
+    if (!this.settleArrivedRoute()) return;
     this.stopForScreen(tab, patch.sub == null ? this.state.sub : patch.sub);
     this.routeTimers.forEach(clearTimeout);
     this.routeTimers = [];
@@ -4134,23 +4145,19 @@ class Component extends DCLogic {
     img.decoding = 'async';
     img.fetchPriority = d === 5 || (d === this.state.disc && f === this.state.frame) ? 'high' : 'low';
     img.onerror = function () { fail(uiMessage('No se pudo leer la imagen.', 'The image could not be read.')); };
-    img.onload = function () {
+    var consume = function (image, readyCustom) {
       if (!current()) return;
-      if (d === 5 && img.naturalWidth * img.naturalHeight > 32000000) {
-        fail(uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.'));
-        return;
-      }
       try {
-        var res = analyzeMapImage(img, free, legacy);
+        var res = analyzeMapImage(image, free, legacy);
         if (!res) {
           fail(uiMessage('La imagen no contiene píxeles analizables. Prueba con una imagen visible o cambia el modo de color.', 'The image contains no analyzable pixels. Try a visible image or change the color mode.'));
           return;
         }
         if (!current()) return;
-        if (pendingCustom) {
+        if (readyCustom) {
           self.pendingImageUrl = null;
           self.revokeCustom();
-          self.showCustom(pendingCustom, res, uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: uiLabel(pendingCustom) }), self.only(res.cold > res.warm ? 'mama' : 'inti'));
+          self.showCustom(readyCustom, res, uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: uiLabel(readyCustom) }), self.only(res.cold > res.warm ? 'mama' : 'inti'));
           return;
         }
         var an = Object.assign({}, self.state.an); an[key] = res;
@@ -4158,7 +4165,33 @@ class Component extends DCLogic {
         self.setState(d === 5 ? { an: an, mute: self.only(res.cold > res.warm ? 'mama' : 'inti'), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
       } catch (e) { fail(uiMessage('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.')); }
     };
+    img.onload = function () {
+      if (!current()) return;
+      if (d === 5 && img.naturalWidth * img.naturalHeight > 32000000) {
+        fail(uiMessage('La imagen supera 32 millones de píxeles. Reduce sus dimensiones y vuelve a intentarlo.', 'The image exceeds 32 million pixels. Reduce its dimensions and try again.'));
+        return;
+      }
+      if (!pendingCustom || pendingCustom.source === 'eic') { consume(img, pendingCustom); return; }
+      try {
+        self.freezeImage(img, pendingCustom, function (canvas, blob) {
+          if (!current()) return;
+          if (!blob) { fail(uiMessage('No se pudo preparar la vista fija. Prueba con otra imagen.', 'The still preview could not be prepared. Try another image.')); return; }
+          var url = URL.createObjectURL(blob);
+          if (pendingCustom.url.indexOf('blob:') === 0) URL.revokeObjectURL(pendingCustom.url);
+          self.pendingImageUrl = url;
+          consume(canvas, Object.assign({}, pendingCustom, { url: url, previewFrozen: true }));
+        });
+      } catch (e) { fail(uiMessage('No se pudo preparar la vista fija. Prueba con otra imagen.', 'The still preview could not be prepared. Try another image.')); }
+    };
     img.src = d === 5 && custom ? custom.url : this.url(d, f);
+  }
+  freezeImage(image, custom, done) {
+    // Use the format's default still frame, preserving proportions and transparent padding.
+    var canvas = document.createElement('canvas'); canvas.width = 560; canvas.height = 320;
+    var context = canvas.getContext('2d'), ratio = Math.min(560 / image.naturalWidth, 320 / image.naturalHeight);
+    var width = image.naturalWidth * ratio, height = image.naturalHeight * ratio;
+    context.drawImage(image, (560 - width) / 2, (320 - height) / 2, width, height);
+    canvas.toBlob(function (blob) { done(canvas, blob); }, 'image/png');
   }
   cur() { return this.state.an[this.state.disc + '_' + this.state.frame]; }
   glowColor(a) {
@@ -4856,6 +4889,7 @@ class Component extends DCLogic {
     this.leadTimers.add(start);
   }
   async play() {
+    this.settleArrivedRoute();
     if (this.disposed || this.state.trans || this.state.playing || this.state.audioPending) return;
     if (this.state.previewKey) this.stop();
     var self = this, run = ++this.audioRun;
@@ -5140,7 +5174,7 @@ class Component extends DCLogic {
         sampleTitle: T('Prueba una imagen', 'Try an image'), sampleBody: T('Un mapa NASA de enero de 2025. Descubre cómo sus colores se convierten en música.', 'A NASA map from January 2025. Explore how its colors turn into music.'),
         sampleAlt: T('Mapa NASA de anomalía del Pacífico, enero de 2025.', 'NASA Pacific anomaly map, January 2025.'), sampleAction: T('Usar imagen de ejemplo', 'Use sample image'),
         ownTitle: T('Ahora, tu imagen', 'Now, your image'), chooseImage: T('Elegir imagen', 'Choose image'),
-        imageLimits: T('PNG, JPG, WebP o GIF. Hasta 8 MB y 32 millones de píxeles. También puedes arrastrar el archivo aquí.', 'PNG, JPG, WebP or GIF. Up to 8 MB and 32 million pixels. You can also drop the file here.'),
+        imageLimits: T('PNG, JPG, WebP o GIF. Hasta 8 MB y 32 millones de píxeles. Se usa una vista fija, centrada y sin deformar; las animaciones no se reproducen. También puedes arrastrar el archivo aquí.', 'PNG, JPG, WebP or GIF. Up to 8 MB and 32 million pixels. A centered, undistorted still preview is used; animations do not play. You can also drop the file here.'),
         imagePrivacy: T('Se analiza una imagen fija, dentro de tu navegador. El archivo permanece en tu equipo.', 'A still image is analyzed inside your browser. Your file stays on your device.'),
         secondaryTitle: T('También puedes escuchar lluvia o una tabla', 'You can also listen to rainfall or a table'),
         rainTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), rainBody: T('Muestra mensual de NASA POWER. No necesitas preparar un archivo.', 'A monthly NASA POWER sample. No file preparation needed.'),
@@ -5177,12 +5211,13 @@ class Component extends DCLogic {
       a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;
-        return { label: o.label, years: o.years, on: on, pick: function () { if (!on && !self.state.trans) self.applySet(o.key); } };
+        return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };
       }),
       discs: DISCS.filter(function (x, k) { return k < 5 || (hasCustom && !s.tutorial); }).map(function (x, k) {
         var hero = k < 5 ? BAND.find(function (b) { return b.k === DISC_CHAR[k]; }).name : T('según tu archivo', 'based on your file');
         return { thumb: self.url(k, 0), title: x.title, hero: hero, period: k === 5 && hasCustom ? uiLabel(s.custom) : x.period,
           pick: function (event) {
+            self.settleArrivedRoute();
             if (self.state.tab !== 'juke' || self.state.sub !== 0 || self.state.trans) return;
             self.discPointerOpening = !!(event && event.detail);
             self.stop();
@@ -5254,7 +5289,7 @@ class Component extends DCLogic {
       backToUpload: function () { self.goSub(0); },
       startFlow: function () { self.goSub(1); },
       moodText: prof.mood ? T('Carácter artístico elegido: ', 'Chosen artistic character: ') + prof.mood + T('. No mide emociones.', '. It does not measure emotions.') : '',
-      tourOpen: function () { self.tourOpen(); },
+      tourOpen: function (event) { self.tourOpen(event); },
       goHome: function () { self.goTab('home'); },
       skipContent: function (event) { event.preventDefault(); var main = document.getElementById('main-content'); if (main) { main.focus({ preventScroll: true }); main.scrollIntoView({ block: 'start', behavior: 'instant' }); } },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
