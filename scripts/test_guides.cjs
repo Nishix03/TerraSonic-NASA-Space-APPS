@@ -580,7 +580,7 @@ function modalHarness() {
     getClientRects: () => [{}], closest: () => null, focus() { h.context.document.activeElement = this; } }));
   dialog.querySelectorAll = () => controls; dialog.querySelector = () => controls[0];
   h.elements.set('more-dialog', dialog); h.elements.set('more-close', controls[0]);
-  h.context.document.querySelectorAll = () => [background];
+  h.context.document.querySelectorAll = selector => selector === 'details.menu[open]' ? [] : [background];
   h.context.document.activeElement = opener;
   h.component.componentDidMount();
   function key(key, shiftKey = false) {
@@ -612,6 +612,19 @@ test('modal focus containment handles external focus, removed openers and an act
   key('Escape');
   assert.equal(c.state.more, false); assert.equal(c.state.tour, 2, 'Escape must close only the modal');
   c.componentWillUnmount(); assert.equal(events.has('focusin'), false);
+});
+
+test('preference menu closes on Escape, outside pointer or focus leaving, and restores its summary', () => {
+  const {component:c,context,events}=setup();
+  const summary={focus(){context.document.activeElement=this;}}, inside={};
+  const menu={open:true,contains:node=>node===inside||node===summary,querySelector:()=>summary};
+  context.document.querySelectorAll=selector=>selector==='details.menu[open]'&&menu.open?[menu]:[];
+  c.componentDidMount();context.document.activeElement=inside;
+  events.get('keydown')({key:'Escape'});assert.equal(menu.open,false);assert.equal(context.document.activeElement,summary);
+  menu.open=true;events.get('pointerdown')({target:inside});assert(menu.open);
+  events.get('pointerdown')({target:{}});assert.equal(menu.open,false);
+  menu.open=true;events.get('focusin')({target:{}});assert.equal(menu.open,false);
+  c.componentWillUnmount();assert.equal(events.has('pointerdown'),false);
 });
 
 test('late sample fetch successes and errors cannot replace a later upload', async () => {
@@ -1643,4 +1656,27 @@ test('culture sources never activate a musical impact and later Paita context re
   assert.match(profile.impactQualification,/posterior al disco julio–diciembre de 2015/);
   assert.match(profile.instrumentDetail,/no a Paita/); assert.equal(c.currentImpact(),null);
   const before=c.profile().bpm; c.characterVm('inti'); assert.equal(c.profile().bpm,before);
+});
+
+test('vibration is initially off, handles absent or failing APIs, and stops on transport and navigation changes', async () => {
+  for(const operation of ['pause','seek','date','disc','mode','navigation','preference']){
+    const {component:c,context}=playbackHarness(),pulses=[];
+    context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
+    assert.equal(c.state.vibe,false);assert.equal(c.vibrateSafely(25),false);assert.equal(pulses.length,0);
+    c.setPreference('vibe',true);assert.equal(c.vibrateSafely(25),true);assert.equal(pulses.at(-1),25);
+    await c.play();
+    if(operation==='pause')c.stop();
+    if(operation==='seek')c.seekPosition(50);
+    if(operation==='date')c.gotoFrame(2);
+    if(operation==='disc')c.applySet('prev');
+    if(operation==='mode')c.setEngine('raw');
+    if(operation==='navigation')c.goTab('how');
+    if(operation==='preference')c.setPreference('vibe',false);
+    assert.equal(pulses.at(-1),0,operation);
+  }
+  const {component:c,context}=playbackHarness();c.state.vibe=true;
+  delete context.navigator.vibrate;assert.equal(c.vibrateSafely(25),false);
+  let attempts=0;context.navigator.vibrate=()=>{attempts++;throw new Error('unavailable hardware');};
+  assert.equal(c.vibrateSafely(25),false);assert.equal(c.vibrateSafely(25),false);assert.equal(attempts,1);
+  assert.doesNotThrow(()=>c.stop());
 });

@@ -112,7 +112,7 @@ a{color:inherit}
 .px .band{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .px .bchip{display:flex;align-items:center;gap:12px;padding:10px 14px;min-height:64px;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.02)}
 .px .bchip:hover{border-color:var(--fg)}
-.px .bchip[aria-pressed="false"]{opacity:.55}
+.px .bchip[aria-pressed="false"] .bst{opacity:.55;filter:grayscale(1)}
 .px .bchip .nm{font-family:var(--head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.85em;display:block}
 .px .bchip .bar{display:block;height:2px;background:var(--line);margin-top:7px}
 .px .bchip .bar i{display:block;height:2px;transition:width .12s}
@@ -1043,6 +1043,17 @@ a{color:inherit}
 .px .top .nav button{flex:0 1 auto;min-width:0;white-space:normal;text-wrap:balance}
 .px details.menu .pop{width:min(16rem,calc(100vw - 2 * var(--gutter)));min-width:0;max-height:calc(100dvh - 4.5rem);overflow-y:auto}
 .px details.menu .opt{padding:6px 8px;gap:8px;overflow-wrap:anywhere}
+/* Expand preferences in the header flow so they do not cover another control. */
+.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding-block:8px}
+.px .top:has(details.menu[open]) .right,.px details.menu[open]{display:contents}
+.px details.menu[open]::details-content{display:contents}
+.px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1}
+.px .top:has(details.menu[open]) .langsw{grid-row:1;grid-column:2}
+.px .top details.menu[open]>summary{grid-row:1;grid-column:3;justify-self:end}
+.px .top:has(details.menu[open]) .nav{grid-row:2;grid-column:1/-1;width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:center}
+.px details.menu[open] .pop{position:static;grid-row:3;grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;min-width:0;max-height:50svh;overflow:auto}
+.px details.menu[open] .pop .opt{min-height:44px}
+@media(max-width:340px){.px details.menu[open] .pop{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:1279px){
   .px .top .wrap{gap:4px 12px;min-height:0}
   .px .top .nav button{min-height:48px;padding-inline:6px;font-size:max(.8em,.8125rem);letter-spacing:.04em}
@@ -1197,6 +1208,12 @@ a{color:inherit}
 .px .listen-member ts-avatar{width:100%;height:118px}
 .px .listen-member strong{max-width:100%;overflow-wrap:anywhere;font:700 max(.7em,.75rem)/1.3 var(--head)}
 .px .listen-member span{font-size:.75em;color:var(--muted)}
+.px .listen-member{min-width:0;white-space:normal;overflow-wrap:anywhere}
+.px .file-settings{width:100%;min-width:0}
+.px .file-settings .field{max-width:100%;display:grid}
+.px .file-settings select{width:100%;box-sizing:border-box}
+.px .skip-content{position:fixed;top:6px;left:8px;z-index:150;padding:12px 16px;background:#fff;color:#000;font-weight:700;transform:translateY(-180%)}
+.px .skip-content:focus{transform:none;outline:3px solid #FFD447;outline-offset:2px}
 .px .model-live-label{display:none}
 .px .bshow:has(.bportrait-live[data-rendered]) .model-live-label{display:inline}
 .px .bshow:has(.bportrait-live[data-rendered]) .model-static-label{display:none}
@@ -1351,7 +1368,8 @@ a{color:inherit}
 .px .map-legend li{align-items:center}
 .px .map-legend ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .px .map-legend li{display:block}
-.px .map-legend .legend-choice{display:flex;align-items:center;gap:6px;padding:5px;width:100%;min-height:48px;text-align:left;border-color:var(--line);border-radius:3px}
+.px .map-legend .legend-choice{display:flex;align-items:center;gap:6px;padding:5px;width:100%;min-width:0;min-height:48px;white-space:normal;overflow-wrap:anywhere;text-align:left;border-color:var(--line);border-radius:3px}
+.px .map-legend .legend-choice strong{min-width:0}
 .px .map-legend .legend-choice strong{font-size:.85em}
 .px .map-legend .legend-choice[aria-pressed="true"]{border-color:var(--fg);background:var(--panel)}
 .px .legend-reading:empty{display:none}
@@ -1425,6 +1443,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div role="status" aria-live="polite" class="sr">{{pageName}} · {{nav.label}}</div>
 
 <header class="top {{headerClass}}">
+<a class="skip-content" href="#main-content" onClick="{{skipContent}}">{{tx.skipContent}}</a>
 <div class="wrap">
 <button type="button" class="brand" onClick="{{goHome}}" aria-label="{{tx.brandAria}}">
 <svg class="brandmark" width="38" height="24" viewBox="0 0 25 16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h8v1h-8zM20 0h1v1h-1zM2 1h3v1h-3zM11 1h3v1h-3zM18 1h6v1h-6zM1 2h2v1h-2zM13 2h2v1h-2zM20 2h2v1h-2zM1 3h1v1h-1zM14 3h1v1h-1zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h2v1h-2zM14 11h2v1h-2zM1 12h1v1h-1zM14 12h1v1h-1zM1 13h2v1h-2zM13 13h2v1h-2zM2 14h3v1h-3zM11 14h3v1h-3zM4 15h8v1h-8z"></path><path d="M19 4h1v1h-1zM3 5h2v1h-2zM9 5h2v1h-2zM18 5h1v1h-1zM21 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM8 6h1v1h-1zM11 6h1v1h-1zM17 6h1v1h-1zM20 6h1v1h-1zM6 7h2v1h-2zM12 7h2v1h-2zM19 7h1v1h-1zM3 9h2v1h-2zM9 9h2v1h-2zM2 10h1v1h-1zM5 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM6 11h2v1h-2zM12 11h2v1h-2z" fill="#FFD447"></path></svg>
@@ -1452,7 +1471,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 </header>
 
-<main class="viewport">
+<main id="main-content" class="viewport" tabindex="-1">
 <div class="scr {{scrCls}} {{scrKind}}">
 <div class="in">
 
@@ -1650,7 +1669,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="row bandhead"><h2 id="listen-band-title">{{tx.theBand}}</h2><span class="muted small">{{tx.bandMixHelp}}</span></div>
 <div class="listen-members" role="group" aria-label="{{tx.bandAria}}">
 <sc-for list="{{band}}" as="b">
-<button type="button" class="listen-member" aria-label="{{b.muteAria}}" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="--member-color: {{b.color}}">
+<button type="button" class="listen-member" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="--member-color: {{b.color}}">
 <ts-avatar data-view="member" data-character="{{b.key}}" data-cue="{{b.modelCue}}" data-muted="{{b.muted}}" data-active="{{b.modelActive}}" aria-hidden="true"></ts-avatar>
 <strong>{{b.name}}</strong><span>{{b.mixLabel}}</span>
 </button>
@@ -1767,7 +1786,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{isJuke}}">
 <div class="lead-choice" role="group" aria-label="{{tx.leadChange}}">
   <button type="button" onClick="{{prevLead}}" aria-label="{{tx.leadPrev}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 8H2m0 0 5-5M2 8l5 5"></path></svg></button>
-  <button type="button" class="lead-auto" onClick="{{autoLead}}" aria-label="{{tx.leadAuto}}" aria-pressed="{{leadAuto}}"><span class="lead-index" aria-hidden="true">{{leadPosition}}</span><span>{{tx.leadAuto}}</span></button>
+  <button type="button" class="lead-auto" onClick="{{autoLead}}" aria-pressed="{{leadAuto}}"><span class="lead-index" aria-hidden="true">{{leadPosition}}</span><span>{{tx.leadAuto}}</span></button>
   <button type="button" onClick="{{nextLead}}" aria-label="{{tx.leadNext}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h12m0 0-5-5m5 5-5 5"></path></svg></button>
 </div>
 </sc-if>
@@ -1932,7 +1951,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 </div>
 <div id="tour-objs" class="cards4">
 <sc-for list="{{objectives}}" as="o" hint-placeholder-count="8">
-<button type="button" onClick="{{o.go}}" aria-label="{{o.goLabel}}: {{o.title}}" class="cardx compact"><span class="tag">{{o.tag}} →</span><strong>{{o.title}}</strong><span class="muted small">{{o.where}}</span></button>
+<button type="button" onClick="{{o.go}}" class="cardx compact"><span class="tag">{{o.tag}} →</span><strong>{{o.title}}</strong><span class="muted small">{{o.where}}</span></button>
 </sc-for>
 </div>
 </sc-if>
@@ -1993,7 +2012,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <div class="in2">
 <div class="side"><button type="button" class="btn quiet sm" onClick="{{nav.prev}}" disabled="{{nav.prevOff}}" title="{{tx.prevScreen}}"><span aria-hidden="true">←</span> {{tx.back}}</button></div>
 <div class="mid">
-<sc-if value="{{nav.showDots}}"><div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-label="{{d.aria}}" aria-current="{{d.cur}}"><b aria-hidden="true">{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div></sc-if>
+<sc-if value="{{nav.showDots}}"><div class="steps {{nav.compact}}" role="group" aria-label="{{tx.screensAria}}"><sc-for list="{{nav.dots}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.go}}" aria-current="{{d.cur}}"><b aria-hidden="true">{{d.n}}</b><span>{{d.label}}</span></button></sc-for></div></sc-if>
 <span class="pagecount" aria-label="{{nav.countAria}}">{{nav.counter}}</span>
 </div>
 <sc-if value="{{nav.showMini}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn sm nav-mini" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}">{{playLabel}}</button></sc-if>
@@ -2961,7 +2980,7 @@ var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert 
 /* Textos fijos de la interfaz */
 var TX = {
   es: {
-    brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad',
+    brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad', skipContent: 'Saltar al contenido',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
     heroLede: 'El agua cantaba en el antiguo Perú. Hoy la banda convierte mapas de la NASA en música.',
     heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
@@ -3012,7 +3031,7 @@ var TX = {
     guide: 'Guía', guideOpen: 'Abrir ayuda de Brisa', guideClose: 'Cerrar guía y continuar después', guideListen: 'Escuchar a Brisa', skipGuide: 'Saltar guía', guideBy: 'Brisa · tu guía'
   },
   en: {
-    brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options',
+    brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options', skipContent: 'Skip to content',
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
     heroLede: 'Water sang in ancient Peru. Today the band turns NASA maps into music.',
     heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
@@ -3297,8 +3316,11 @@ class Component extends DCLogic {
       clearTimeout(self.tourResizeTimer);
       if (self.state.tour) self.tourResizeTimer = setTimeout(function () { self.focusTourTarget(); }, 160);
     };
-    this.onTourKey = function (e) { if (self.state.showPreferences) { self.preferencesKey(e); return; } if (self.state.more) { self.moreKey(e); return; } if (e.key === 'Escape' && self.state.tour) { e.preventDefault(); self.tourClose(); } };
+    this.onTourKey = function (e) { if (self.state.showPreferences) { self.preferencesKey(e); return; } if (self.state.more) { self.moreKey(e); return; } if (e.key === 'Escape') { if (self.state.tour) { e.preventDefault(); self.tourClose(); } else self.closeMenus(true); } };
+    this.onMenuPointer = function (event) { document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(event.target)) menu.open = false; }); };
+    document.addEventListener('pointerdown', this.onMenuPointer, true);
     this.onMoreFocus = function (e) {
+      document.querySelectorAll('details.menu[open]').forEach(function (menu) { if (!menu.contains(e.target)) menu.open = false; });
       var preferences = document.getElementById('preferences-dialog');
       if (self.state.showPreferences && preferences && !preferences.contains(e.target)) { self.focusPreferences(); return; }
       var dialog = document.getElementById('more-dialog');
@@ -3334,6 +3356,12 @@ class Component extends DCLogic {
     }
     if (this.state.showPreferences) { this.setPreferencesInert(true); this.focusPreferences(); }
   }
+  closeMenus(restoreFocus) {
+    document.querySelectorAll('details.menu[open]').forEach(function (menu) {
+      var focused = menu.contains(document.activeElement); menu.open = false;
+      if (restoreFocus && focused) menu.querySelector('summary')?.focus();
+    });
+  }
   savePreferences() {
     var self = this, values = {};
     PREFERENCE_KEYS.forEach(function (key) { values[key] = !!self.state[key]; });
@@ -3351,7 +3379,12 @@ class Component extends DCLogic {
       if (value) this.cancelBandClip();
       this.syncPreferenceMotion();
     }
-    if (key === 'vibe' && !value && typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') { try { navigator.vibrate(0); } catch (ignored) {} }
+    if (key === 'vibe' && !value) this.vibrateSafely(0);
+  }
+  vibrateSafely(pattern) {
+    if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return false;
+    if (pattern && (!this.state.vibe || this.vibrationFailed)) return false;
+    try { return navigator.vibrate(pattern); } catch (ignored) { this.vibrationFailed = true; return false; }
   }
   syncPreferenceMotion() {
     if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion);
@@ -3666,6 +3699,7 @@ class Component extends DCLogic {
     document.removeEventListener('visibilitychange', this.onTourVisible);
     document.removeEventListener('keydown', this.onTourKey);
     document.removeEventListener('focusin', this.onMoreFocus);
+    document.removeEventListener('pointerdown', this.onMenuPointer, true);
     window.removeEventListener('focus', this.onTourVisible);
     if (window.visualViewport) { window.visualViewport.removeEventListener('resize', this.onTourResize); window.visualViewport.removeEventListener('scroll', this.onTourLayout); }
     if (this.tourObserver) this.tourObserver.disconnect();
@@ -4006,7 +4040,7 @@ class Component extends DCLogic {
       positionText: elapsed + T(' de ', ' of ') + duration + '. ' + T('Mapa: ', 'Map: ') + this.frameTag(s.disc, s.frame) + '.',
       seek: function (e) { self.seekPosition(Number(e.target.value)); },
       back: function () { self.seekSeconds(-5); }, forward: function () { self.seekSeconds(5); },
-      backLabel: T('Retroceder cinco segundos', 'Go back five seconds'), forwardLabel: T('Avanzar cinco segundos', 'Go forward five seconds'),
+      backLabel: '−5 s · ' + T('Retroceder cinco segundos', 'Go back five seconds'), forwardLabel: '+5 s · ' + T('Avanzar cinco segundos', 'Go forward five seconds'),
       atStart: position === 0, atEnd: position === steps,
       volumeLabel: T('Volumen', 'Volume'), volume: s.volume, muted: s.masterMuted,
       muteLabel: s.masterMuted ? T('Sonido silenciado', 'Sound muted') : T('Silenciar', 'Mute'),
@@ -4494,7 +4528,7 @@ class Component extends DCLogic {
     if (!m.illapa && info.ext >= 0.25 && col - this.lastThunder >= 2) { this.noiseBurst(t, Math.min(0.5, 0.2 + info.ext), 0.9, 900); this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5); notes.push(T('¡Illapa truena!', 'Illapa thunders!')); }
     if (!m.silbo && s.disc !== 5 && col === 23 && a.coast >= 2) { this.whistle(t, Math.max(0.9, sp * 6), Math.min(1, (a.coast - 2) / 2.5)); lv.silbo = Math.min(1, a.coast / 5); notes.push(T('Silbo silba: la costa del Perú está caliente', 'Silbo whistles: the Peruvian coast is hot')); }
     else if (col >= 23 && col <= 26) lv.silbo = s.levels.silbo * 0.85;
-    if (s.vibe && navigator.vibrate && (lv.illapa > 0.3 || info.strong.length > 4)) navigator.vibrate(lv.illapa > 0.3 ? 120 : 25);
+    if (s.vibe && (lv.illapa > 0.3 || info.strong.length > 4)) this.vibrateSafely(lv.illapa > 0.3 ? 120 : 25);
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var feel = info.k === 0 ? T('tierra, silencio', 'land, silence') : info.w > 2 ? T('muy cálido', 'very warm') : info.w > 0.8 ? T('cálido', 'warm') : info.c > 0.8 ? T('frío', 'cold') : T('casi normal', 'near normal');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
@@ -4644,7 +4678,7 @@ class Component extends DCLogic {
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push(T('¡Illapa truena!', 'Illapa thunders!'));
       } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); this.leadNote('illapa', t, 0.4); lv.illapa = Math.max(lv.illapa, 0.3); }
     }
-    if (s.vibe && navigator.vibrate && lv.illapa > 0.5) navigator.vibrate(100);
+    if (s.vibe && lv.illapa > 0.5) this.vibrateSafely(100);
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
     var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }));
@@ -4820,7 +4854,7 @@ class Component extends DCLogic {
     this.leadRestTimer = null;
     clearTimeout(this.previewTimer); this.previewTimer = null;
     this.retireAudioGraph();
-    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') { try { navigator.vibrate(0); } catch (ignored) {} }
+    this.vibrateSafely(0);
     if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
       this.setState({ playing: false, audioPending: false, previewKey: '', leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
@@ -5116,6 +5150,7 @@ class Component extends DCLogic {
       moodText: prof.mood ? T('Carácter artístico elegido: ', 'Chosen artistic character: ') + prof.mood + T('. No mide emociones.', '. It does not measure emotions.') : '',
       tourOpen: function () { self.tourOpen(); },
       goHome: function () { self.goTab('home'); },
+      skipContent: function (event) { event.preventDefault(); var main = document.getElementById('main-content'); if (main) { main.focus({ preventScroll: true }); main.scrollIntoView({ block: 'start', behavior: 'instant' }); } },
       heroListen: function () { self.goSub(1); if (!s.playing) self.play(); },
       lead: this.leadInfo(th),
       leadPosition: (leadIndex + 1) + ' / ' + BAND.length,
@@ -5123,7 +5158,7 @@ class Component extends DCLogic {
       prevLead: function () { self.cycleLead(-1); },
       nextLead: function () { self.cycleLead(1); },
       autoLead: function () { self.selectLead('auto'); },
-      strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: T('Ver ', 'View ') + MES[fd.m] + T(' de ', ' ') + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
+      strip: d.files.map(function (id, f) { var fd = self.frameDate(s.disc, f), on = f === s.frame; return { url: self.url(s.disc, f), label: MESC[fd.m] + ' ' + String(fd.y).slice(2), aria: MESC[fd.m] + ' ' + String(fd.y).slice(2) + ' · ' + T('Ver ', 'View ') + MES[fd.m] + T(' de ', ' ') + fd.y, on: on, border: on ? th.accent : th.line, pick: function () { self.gotoFrame(f); } }; }),
       playPending: s.audioPending, audioError: uiText(s.audioError),
       playLabel: s.audioPending ? T('Preparando audio…', 'Preparing audio…') : s.playing ? T('Pausar', 'Pause') : s.ended ? T('Volver a reproducir', 'Play again') : s.col >= 0 ? T('Reanudar', 'Resume') : T('Reproducir', 'Play'), playIcon: s.playing ? 'M1 1h2v6H1zM5 1h2v6H5z' : 'M2 1v6l5-3z', playPulse: s.playing ? '' : 'pulse',
       togglePlay: function () { if (s.playing) self.stop(); else self.play(); },

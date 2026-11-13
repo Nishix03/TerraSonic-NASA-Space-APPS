@@ -1,5 +1,7 @@
 # Auditoría de diseño y usabilidad de TerraSonic
 
+> Documento histórico. La revisión actual y sus límites están en [AUDITORIA_2026-11-13.md](AUDITORIA_2026-11-13.md). Las afirmaciones antiguas sobre zoom nativo y vista previa no se usan como evidencia del checkpoint actual. Brisa sustituye a Silbo como guía y se retiraron las herramientas planeadas.
+
 ## Problemas observados
 
 - **Portada.** El mapa a pantalla completa ocupaba la altura que necesitaban las acciones, las cifras y la secuencia de sonificación. El mapa ahora tiene un marco propio. La secuencia y la guía de Silbo forman parte del mismo bloque de portada.
