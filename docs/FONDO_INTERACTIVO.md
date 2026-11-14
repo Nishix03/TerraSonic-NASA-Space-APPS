@@ -22,6 +22,8 @@ Dos resplandores blancos suaves, separados durante el viaje, alcanzan opacidad m
 
 Se añaden puntos azules/agua y una lluvia ocasional de seis trazos, cuatro en móvil, sobre los meteoros existentes. La lluvia ocupa un intervalo breve del ciclo de 64 segundos. Se anima con transformación y opacidad; pausa, página oculta y reducción de movimiento también se aplican a los astros interactivos. Con reducción se accede directamente al destino, sin vuelo ni resplandor.
 
+La primera grabación de la publicación detectó una regresión adicional: la corona del Sol y el satélite dependían de una variable CSS heredada solo del contenedor decorativo. Al convertir el dibujo en botón fuera de ese contenedor, su órbita quedaba sin duración válida. Se añadió el valor de respaldo de 96 segundos y una comprobación del cambio real de transformación del Sol, además de la órbita del satélite cuando es visible. Se conserva el intento de grabación fallido; no se presenta como vídeo aprobado.
+
 ## Comprobaciones técnicas
 
 | Recorrido | Resultado y alcance |
@@ -34,7 +36,7 @@ Se añaden puntos azules/agua y una lluvia ocasional de seis trazos, cuatro en m
 | Regresión de producto | Reproductor con señal Web Audio medida, pausa, posición, mezcla e instrumentos; seis ventanas del cielo; Método/Tecnología en dos idiomas y cinco anchuras |
 | Teclado y presentación | Ocho recorridos de teclado con árbol accesible, 74 pantallas axe sin fallos de reglas, 408 estados de redistribución sin fallos y 16 de ventanas bajas. Axe no acredita conformidad completa |
 
-Evidencias locales en `_work/portals/`: `viewport-qa`, `cross-firefox`, `cross-webkit/cinema`, `deep/player`, `deep/space-background`, `deep-retry`, `final-chromium/background-portals`, `final-webkit` y `final-keyboard`. `cross-webkit/background-portals` y las primeras pruebas de teclado conservan fallos de diagnóstico; sus repeticiones finales son las válidas. El muestreo de lluvia adelanta de forma controlada la línea temporal CSS y se identifica así en el informe; no es una observación física de un teléfono.
+Evidencias locales en `_work/portals/`: `viewport-qa`, `cross-firefox`, `cross-webkit/cinema`, `deep/player`, `deep/space-background`, `deep-retry`, `final-chromium/background-portals`, `final-webkit` y `final-keyboard`. La corrección final de órbita pasa nueve tamaños en `orbit-chromium`, dos en `orbit-firefox` y dos en `orbit-webkit-retry`; observa transformación real con sondeo de frames y comprueba el satélite en escritorio. `cross-webkit/background-portals`, el muestreo fijo demasiado breve de `orbit-webkit` y las primeras pruebas de teclado conservan fallos de diagnóstico; sus repeticiones finales son las válidas. El muestreo de lluvia adelanta de forma controlada la línea temporal CSS y se identifica así en el informe; no es una observación física de un teléfono.
 
 La publicación exacta, hashes y lectura pública se registran en [PUBLICACION.md](PUBLICACION.md). La mejora de propósito y primer uso se documenta en [CLARIDAD_PRODUCTO.md](CLARIDAD_PRODUCTO.md).
 

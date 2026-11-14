@@ -2,7 +2,19 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · revisión NSAC y destinos · 13 noviembre, 21:58 Bogotá
+## Edición vigente · entrada reparada y astros interactivos · 13 noviembre, 23:33 Bogotá
+
+Aplicación **`e93112b8931762f4287f6f05c76703b73f0a2dc8`**, commit estático **`c33b8e1cb73b27c1f138234e6585d3ae4a9b298c`**, fast-forward desde `92eb1a3`. Pages confirmó `built` a las **23:33:13**. La lectura pública de las **23:33:36** comprobó procedencia y HTML exacto: **498.444 bytes**, SHA-256 **`4e91dfadbda70b9e38ddcf8eac3a17fe5e180c79b7f3b60eb4d043c099e67fab`**. La copia tiene 112 archivos de aplicación y cuatro metadatos, **16.712.587 bytes** en total. El empaquetador conserva su huella `d909b7927de275f6caf7d97a964bb6573a8c636fc8a69966911588a6cb69aba5`.
+
+Incluye la elección de movimiento restaurada al entrar, alternativa estática con final automático, astros del propio fondo como accesos sin menú duplicado, viaje de cohete de 5,2 segundos, resplandor suave y lluvia ocasional. También publica la primera muestra directa y su contexto de mapa, fuente y reglas musicales. [Correcciones y comprobaciones](FONDO_INTERACTIVO.md) · [claridad del producto](CLARIDAD_PRODUCTO.md) · [protocolo humano pendiente](PROTOCOLO_USABILIDAD.md).
+
+El build exacto pasó dos recorridos HTTP previos a publicar, con mapa/leyenda, originales 2D, lluvia POWER, imagen propia e idioma; sin errores JavaScript, respuestas fallidas ni solicitudes externas. La primera preparación `73e1a20` conservó un fallo de la comprobación portátil antigua, que exigía toda la banda en el primer viewport pese al nuevo contexto; se actualizó el contrato para comprobar los controles iniciales visibles y la banda íntegra en el flujo antes del pie. La repetición y la preparación definitiva `e93112b` pasan. No hubo que alterar el contenido o recortarlo para superar esa comprobación.
+
+Evidencias: `_work/github-preview/browser-local-e93112b/`, `readback-e93112b.json`, `http-e93112b.json` y `official-after-e93112b.json`. Se conserva también el primer estado `building`, que aún servía el checkpoint anterior, en `readback-e93112b-building.json` y `http-e93112b-building.json`; la lectura posterior confirmó el nuevo código.
+
+La lectura de las **23:33:37** mantuvo main remoto `a8d91564d5393ef6c803acdbf49725094ea54bee`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y HTML oficial de 370.053 bytes / SHA-256 `d50ce659ea6660096e6c658841541c835d826fb4ee867f83ae17253732b05a76`, iguales al registro previo de las **23:30:17**. Esta entrega solo actualizó `piero-mejoras` y la copia independiente. Los commits posteriores de documentación no cambian la aplicación identificada en `source.json`.
+
+## Checkpoint · revisión NSAC y destinos · 13 noviembre, 21:58 Bogotá
 
 Aplicación **`b1abc7227defb899ea6328fea59555cdb69041f3`**, commit estático **`92eb1a35b8536b8b63450b5a5b8068b166a71156`**, fast-forward desde `5378a98`. Pages confirmó `built` a las **21:58:01**. La lectura pública de las **21:58:39** comprobó procedencia y HTML exacto: **477.428 bytes**, SHA-256 **`344a6c89820adf1753d92aaced7f9d1cb286deb9f92adb3bede7116e569bd1af`**. La copia tiene 112 archivos de aplicación y cuatro metadatos, **16.691.571 bytes** en total.
 
