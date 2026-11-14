@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {chromium}=require(process.env.TERRASONIC_PLAYWRIGHT||'playwright-core');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/a11y/keyboard'),base='http://terrasonic.test/';
@@ -15,8 +16,8 @@ async function main(){
     const Native=window.AudioContext;window.AudioContext=class extends Native{createDynamicsCompressor(){const compressor=super.createDynamicsCompressor(),connect=compressor.connect.bind(compressor);compressor.connect=(destination,...args)=>{if(destination===this.destination){const silent=this.createGain();silent.gain.value=0;connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return compressor;}};
     window.__vibrations=[];Object.defineProperty(navigator,'vibrate',{configurable:true,value:pattern=>{__vibrations.push(pattern);return true;}});
    },language);
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
-   await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.className),'skip-content');
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await dismissEntry(page);await page.waitForFunction(()=>window.__app);
+   await page.locator('.brand').focus();await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.className),'skip-content');
    await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>document.activeElement.id),'main-content');
    const nav=page.locator('#tour-nav button');await nav.first().focus();await page.keyboard.press('ArrowRight');
    assert.equal(await nav.nth(1).evaluate(el=>el===document.activeElement),true);

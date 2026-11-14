@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');const path=require('node:path');
-const {launchBrowser}=require('./browser_fixture.cjs');
+const {launchBrowser,dismissEntry}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/method/browser');
 const base='http://terrasonic.test/';
 async function main(){
@@ -16,7 +16,7 @@ async function main(){
     return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});
    });
    await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));});
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await dismissEntry(page);
    for(const lang of ['es','en']){
     await page.locator('#tour-lang button').nth(lang==='es'?0:1).click();
     await page.locator('#tour-nav button').nth(3).click();

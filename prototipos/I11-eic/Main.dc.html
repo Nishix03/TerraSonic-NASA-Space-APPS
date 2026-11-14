@@ -1882,6 +1882,31 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .haptics-settings button{min-height:44px;white-space:normal;flex:1 1 140px;letter-spacing:.03em}
 /* Named destinations stay in the content flow; no floating touch targets cover text. */
 .px .universe-portals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:min(100%,440px);margin-top:12px}
+.px .home-universe{width:min(100%,440px);text-align:left;border-top:1px solid var(--line);font-size:.85em}
+.px .home-universe>summary{min-height:44px;cursor:pointer;padding:10px 4px;color:var(--muted);font-weight:600;line-height:1.5}
+.px .home-universe>p{font-size:.9em;color:var(--muted);line-height:1.4}
+.px .hero .display{font-size:clamp(2rem,4.4vw,3.6rem);max-width:18ch}
+.px .listening-context{padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--panel);margin-bottom:14px;min-width:0}
+.px .sample-nowbar{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;align-items:center;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.px .sample-nowbar>img{display:block;width:104px;height:60px;object-fit:contain;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+.px .sample-nowbar .controls{margin:0;padding:0;min-width:0;grid-template-columns:auto minmax(0,1fr) auto}
+.px .listening-context h2{font-size:1.1em;line-height:1.35;margin:0 0 6px}
+.px .listening-context>p{font-size:.9em;line-height:1.5;max-width:85ch;color:var(--muted)}
+.px .context-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;align-items:start}
+.px .context-details details{border-top:1px solid var(--line);min-width:0}
+.px .context-details summary{min-height:44px;padding:10px 4px;font-size:.9em;line-height:1.5;cursor:pointer;font-weight:600}
+.px .context-details dl{display:grid;grid-template-columns:minmax(70px,.45fr) minmax(0,1fr);gap:8px;font-size:.85em;line-height:1.5;margin:6px 0 12px}
+.px .context-details dt{color:var(--muted)}
+.px .context-details dd{margin:0;overflow-wrap:anywhere}
+.px .context-details p,.px .context-details li{font-size:.85em;line-height:1.5;margin:6px 0}
+.px .context-details a{display:inline-block;padding:8px 0;min-height:44px;color:var(--accent);text-decoration:underline;overflow-wrap:anywhere}
+.px .context-details ol{margin:8px 0;padding-left:22px}
+.px .context-details .context-legend{font-size:.8em;min-height:44px;white-space:normal;letter-spacing:0}
+.px .band-science{max-width:65ch;color:var(--muted);font-size:.9em;line-height:1.5;border-left:3px solid var(--accent);padding-left:12px}
+@media(max-width:640px){.px .hero .display{font-size:clamp(1.65rem,7.4vw,2.8rem)}.px .context-details{grid-template-columns:minmax(0,1fr)}.px .listening-context{padding:10px}}
+@media(max-width:430px){.px .sample-nowbar{grid-template-columns:76px minmax(0,1fr);gap:10px}.px .sample-nowbar>img{width:76px;height:54px}.px .sample-nowbar .controls{grid-template-columns:auto minmax(0,1fr);gap:4px}.px .sample-nowbar #tour-more{grid-column:1/-1}.px .sample-nowbar #tour-more button{width:100%;min-height:44px}.px .sample-nowbar .when{font-size:.8em}}
+@media(max-width:359px) and (max-height:600px){.px .scr.home>.in{padding-block:6px}.px .hero{gap:8px}.px .scr.home .hero .cta{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.px .hero .cta .btn,.px .hero .cta .btn:not(.primary){grid-column:auto;min-width:0;padding-inline:6px;letter-spacing:0;font-size:.85em}}
+@media(min-width:641px) and (max-height:450px){.px .hero .display{font-size:1.8em}.px .home-universe>summary{padding-block:8px}}
 .px .portal-button{display:grid;justify-items:center;gap:5px;min-width:0;min-height:72px;padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);font:600 .8em/1.2 var(--body);cursor:pointer}
 .px .portal-button:hover{border-color:var(--accent);background:var(--surface)}
 .px .portal-planet{display:block;position:relative;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff9,var(--planet) 35%,#142b43 95%);box-shadow:inset -5px -3px 8px #09152666}
@@ -2015,12 +2040,12 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <h1 class="display xl">{{tx.heroTitle}}</h1>
 <p class="lede">{{tx.heroLede}}</p>
 <div id="tour-cta" class="row cta">
-<button type="button" class="btn primary" onClick="{{heroGo}}">{{tx.heroCta}}</button>
-<button type="button" class="btn" onClick="{{heroBand}}">{{tx.heroBand}}</button>
+<button id="hero-sample" type="button" class="btn primary" onClick="{{sample.start}}" disabled="{{sample.pending}}">{{sample.label}}</button>
+<button type="button" class="btn" onClick="{{heroHow}}">{{tx.heroBand}}</button>
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
 <div class="home-experience"><div class="home-cinema"><button type="button" onClick="{{intro.replay}}" style="--intro-play-bg:{{intro.bg}};--intro-play-fg:{{intro.fg}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div><button type="button" class="scene-motion-toggle" onClick="{{intro.toggle}}" aria-label="{{intro.toggleLabel}}" title="{{intro.toggleLabel}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="{{intro.togglePath}}"/></svg></button><sc-if value="{{intro.paused}}"><p class="home-motion-note" role="status">{{intro.notice}}</p></sc-if></div>
-<nav class="universe-portals" aria-label="{{universe.navLabel}}"><sc-for list="{{universe.destinations}}" as="p"><button type="button" class="portal-button" data-destination="{{p.key}}" onClick="{{p.open}}" aria-label="{{p.label}}"><span class="portal-planet" data-body="{{p.key}}" style="--planet:{{p.color}}" aria-hidden="true"></span><span>{{p.name}}</span></button></sc-for></nav>
+<details class="home-universe"><summary>{{universe.exploreLabel}}</summary><p>{{universe.artBrief}}</p><nav class="universe-portals" aria-label="{{universe.navLabel}}"><sc-for list="{{universe.destinations}}" as="p"><button type="button" class="portal-button" data-destination="{{p.key}}" onClick="{{p.open}}" aria-label="{{p.label}}"><span class="portal-planet" data-body="{{p.key}}" style="--planet:{{p.color}}" aria-hidden="true"></span><span>{{p.name}}</span></button></sc-for></nav></details>
 </div>
 <div class="home-demo">
 <figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
@@ -2112,16 +2137,22 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
-<sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
-<div class="player-layout">
-<aside class="player-sidebar" aria-label="{{player.controlsLabel}}">
-<div class="controls">
+<div class="sample-nowbar"><img src="{{frameUrl}}" alt="" width="104" height="60" decoding="async"><div class="controls">
 <div id="tour-play" class="playwrap">
 <button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
 </div>
 <div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span><span class="small muted">{{player.tempoLabel}}</span></div>
 <div id="tour-more" class="playwrap"><button type="button" class="btn sm quiet" onClick="{{toggleMore}}">{{tx.moreOptions}}</button></div>
-</div>
+</div></div>
+<section class="listening-context" aria-labelledby="listening-context-title">
+<h2 id="listening-context-title">{{context.title}}</h2><p>{{context.summary}}</p>
+<div class="context-details"><details id="context-data"><summary>{{context.dataLabel}}</summary><dl><dt>{{context.sourceLabel}}</dt><dd>{{context.source}}</dd><dt>{{context.variableLabel}}</dt><dd>{{context.variable}}</dd><dt>{{context.regionLabel}}</dt><dd>{{context.region}}</dd><dt>{{context.periodLabel}}</dt><dd>{{context.period}}</dd></dl><p>{{context.processing}}</p><sc-if value="{{context.hasSource}}"><a href="{{context.url}}" target="_blank" rel="noopener noreferrer">{{context.sourceLink}}</a></sc-if></details>
+<details id="context-mapping"><summary>{{context.mappingLabel}}</summary><ol><sc-for list="{{context.steps}}" as="step"><li><strong>{{step.title}}</strong> {{step.text}}</li></sc-for></ol><p>{{context.artNotice}}</p><button type="button" class="btn sm context-legend" onClick="{{context.legend}}">{{context.legendLabel}}</button></details></div>
+</section>
+<sc-if value="{{uploadStatus}}"><p role="status" aria-live="polite" class="muted small">{{upMsg}}</p></sc-if>
+<div class="player-layout">
+<aside class="player-sidebar" aria-label="{{player.controlsLabel}}">
+
 <section class="transport" aria-label="{{player.controlsLabel}}">
 <div class="transport-position">
 <label for="playback-position">{{player.positionLabel}}</label>
@@ -2285,6 +2316,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </figcaption>
 </figure>
 <div id="tour-binfo" class="binfo">
+<p class="band-science">{{bandScience}}</p>
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <p role="status" class="small">{{bandCur.previewStatus}}</p>
 <sc-if value="{{bandCur.previewMuted}}"><button type="button" class="btn sm" onClick="{{bandCur.previewUnmute}}">{{bandCur.previewUnmuteLabel}}</button></sc-if>
@@ -2755,7 +2787,7 @@ var ROUTE_LOOK = {
   home: { title: 'Inicio', color: '#FFFFFF', mark: 'M48 18a30 30 0 1 0 0 60a30 30 0 1 0 0-60z M22 52q13-10 26 0t26 0' },
   juke: { title: 'Escuchar', color: '#FFD447', mark: 'M20 48h9l7-13 8 26 8-35 9 44 8-22h7' },
   band: { title: 'La banda', color: '#F06BB0', mark: 'M25 60l12-25 18 11 15-17m-33 6 7 33 26-39M22 60h6m-3-3v6M34 35h6m-3-3v6M52 46h6m-3-3v6M67 29h6m-3-3v6M41 68h6m-3-3v6' },
-  data: { title: 'Convierte en música', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
+  data: { title: 'Tu imagen en música', color: '#5CE1FF', mark: 'M27 27h42v42H27z M41 27v42m14-42v42M27 41h42M27 55h42m-37-9 6 6m-6 0 6-6m21-13h6m-3-3v6' },
   how: { title: '¿Cómo funciona?', color: '#7BE38A', mark: 'M25 69h46M30 64V52m9 12V41m9 23V27m9 37V36m9 28V48' },
   tech: { title: 'Tecnología', color: '#AB9CFF', mark: 'M34 34h28v28H34zM42 42h12v12H42zM41 34V24m14 10V24m-14 38v10m14-10v10M34 41H24m10 14H24m38-14h10M62 55h10' }
 };
@@ -3116,19 +3148,19 @@ var STEPS_EN = [
  {title:'Try your image',body:'Start with Chiclayo rainfall or choose an image. It stays in your browser.'},
  {title:'Your way',body:'Use text, a keyboard or the guide. Adjust size, contrast and motion.'}
 ];
-var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Convert to music', how: 'How it works', tech: 'Technology' };
+var ROUTE_EN = { home: 'Home', juke: 'Listen', band: 'The band', data: 'Your image as music', how: 'How it works', tech: 'Technology' };
 
 /* Textos fijos de la interfaz */
 var TX = {
   es: {
     brandAria: 'Terrasonic, ir al inicio', sections: 'Secciones', langAria: 'Idioma', a11y: 'Accesibilidad', a11yAria: 'Opciones de accesibilidad', skipContent: 'Saltar al contenido',
-    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
-    heroLede: 'Mapas de la NASA, cinco músicos y una nueva forma de escuchar el Pacífico.',
-    heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
+    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha los datos del Pacífico',
+    heroLede: 'Convertimos los colores de mapas NASA en música para explorar cambios de temperatura del mar.',
+    heroCta: 'Escuchar una muestra', heroBand: 'Cómo funciona',
     homeMapAlt: 'Mapa del Pacífico con franjas de temperatura del mar más cálidas y más frías de lo habitual',
     homeMapCaption: 'Pacífico · Anomalías de temperatura del mar · NASA',
-    flowAria: 'Del mapa NASA al análisis de píxeles y a la música', flowImage: 'Imagen NASA', flowPixels: 'Análisis · 28×16', flowMusic: 'Música',
-    discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Abre un disco para escuchar seis meses de cambios en la temperatura del Pacífico.',
+    flowAria: 'Mapa NASA, colores convertidos en notas y música', flowImage: 'Mapa NASA', flowPixels: 'Colores a notas', flowMusic: 'Música',
+    discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Cada disco transforma seis mapas fechados de un episodio del Pacífico en música generada en tu navegador.',
     setsAria: 'Origen de los datos', discsAria: 'Discos',
     listenKicker: 'Escuchar · paso 2', changeDisc: 'Cambiar disco', changeFile: 'Cambiar archivo',
     youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: '28×16 píxeles de color',
@@ -3141,7 +3173,7 @@ var TX = {
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
     teamCharacter: 'Personaje de ficción del equipo', proposedStory: 'Historia del personaje', howItPlays: 'Cómo suena en TerraSonic', factsAndReferences: 'Hechos, cultura y fuentes', documentedEpisode: 'Episodio documentado', culturalReference: 'Referencia cultural', visualProposal: 'Diseño del personaje', ethicalPrinciples: 'Principios éticos', teamInspiration: 'Inspiración original del equipo',
-    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Convierte en música', dataLede: 'Prueba la lluvia de Chiclayo o escucha los colores de tu imagen.',
+    dataKicker: 'Convierte en música · paso 1', dataTitle: 'Tu imagen en música', dataLede: 'Elige una imagen: sus colores se convierten en notas. También puedes explorar una muestra de lluvia de NASA POWER.',
     dropTitle: 'Elegir una imagen', dropSub: 'También puedes arrastrar el archivo aquí. Máx. 8 MB. Solo imágenes PNG, JPG, WebP o GIF.', sample: 'Probar con la lluvia de Chiclayo', dataExplainer: 'Cómo sonará tu archivo',
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
     dataListenKicker: 'Convierte en música · paso 2', dataStageKicker: 'Convierte en música · paso 3',
@@ -3173,13 +3205,13 @@ var TX = {
   },
   en: {
     brandAria: 'Terrasonic, go home', sections: 'Sections', langAria: 'Language', a11y: 'Accessibility', a11yAria: 'Accessibility options', skipContent: 'Skip to content',
-    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
-    heroLede: 'NASA maps, five musicians and a new way to hear the Pacific.',
-    heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
+    heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Hear the Pacific through data',
+    heroLede: 'We turn colors in NASA maps into music, so you can explore changes in sea temperature.',
+    heroCta: 'Play a sample', heroBand: 'How it works',
     homeMapAlt: 'Pacific map showing bands of warmer and cooler than usual sea temperatures',
     homeMapCaption: 'Pacific Ocean · Sea surface temperature anomalies · NASA',
-    flowAria: 'From NASA imagery to pixel analysis and music', flowImage: 'NASA image', flowPixels: 'Analysis · 28×16', flowMusic: 'Music',
-    discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Open a disc to hear six months of temperature changes in the Pacific.',
+    flowAria: 'NASA map, colors mapped to notes, then music', flowImage: 'NASA map', flowPixels: 'Colors to notes', flowMusic: 'Music',
+    discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Each disc turns six dated maps from one Pacific episode into music generated in your browser.',
     setsAria: 'Data source', discsAria: 'Discs',
     listenKicker: 'Listen · step 2', changeDisc: 'Change disc', changeFile: 'Change file',
     youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: '28×16 colored pixels',
@@ -3192,7 +3224,7 @@ var TX = {
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
     teamCharacter: 'Fictional character by the team', proposedStory: 'Character story', howItPlays: 'How it sounds in TerraSonic', factsAndReferences: 'Facts, culture and sources', documentedEpisode: 'Documented episode', culturalReference: 'Cultural reference', visualProposal: 'Character design', ethicalPrinciples: 'Ethical principles', teamInspiration: 'The team’s original inspiration',
-    dataKicker: 'Convert to music · step 1', dataTitle: 'Convert to music', dataLede: 'Try Chiclayo rainfall or listen to the colors in your image.',
+    dataKicker: 'Convert to music · step 1', dataTitle: 'Your image as music', dataLede: 'Choose an image and turn its colors into notes. You can also explore a NASA POWER rainfall sample.',
     dropTitle: 'Choose an image', dropSub: 'You can also drag the file here. 8 MB max. PNG, JPG, WebP or GIF images only.', sample: 'Try Chiclayo’s rainfall', dataExplainer: 'How your file will sound',
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
     dataListenKicker: 'Convert to music · step 2', dataStageKicker: 'Convert to music · step 3',
@@ -3484,7 +3516,7 @@ class CinematicIntro {
       animate('.cinema-world',mobile?[{opacity:0,transform:'scale(.92)',offset:0},{opacity:1,transform:'scale(1)',offset:.2},{opacity:1,transform:'scale(1.04)',offset:.8},{opacity:0,transform:'scale(1.06)',offset:1}]:[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
       animate('.cinema-orbit',[{opacity:0,transform:'rotate(-12deg)',offset:0},{opacity:1,transform:'rotate(0deg)',offset:.5},{opacity:0,transform:'rotate(8deg)',offset:1}]);
       animate('.cinema-wave',[{opacity:0,transform:'scaleX(.3)',offset:0},{opacity:0,transform:'scaleX(.3)',offset:.46},{opacity:.85,transform:'scaleX(1)',offset:.7},{opacity:0,transform:'scaleX(1.1)',offset:1}]);
-      animate('.cinema-copy',[{opacity:0,transform:'translateY(14px)',offset:0},{opacity:0,transform:'translateY(14px)',offset:.22},{opacity:1,transform:'translateY(0)',offset:.45},{opacity:1,transform:'translateY(0)',offset:.75},{opacity:0,transform:'translateY(-6px)',offset:1}]);
+      animate('.cinema-copy',[{opacity:1,transform:'translateY(0)',offset:0},{opacity:1,transform:'translateY(0)',offset:.88},{opacity:0,transform:'translateY(-4px)',offset:1}]);
       var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.88},{opacity:0,offset:1}]);this.endAnimation=end;
       // Real UI stays visible by default; only this optional run adds keyframes.
       var targets=['.brand','.top','#main-content .hero h1','.hero .lede','.hero .cta','.home-demo','.hero .facts'];
@@ -3494,7 +3526,7 @@ class CinematicIntro {
   }
   showStatic(){this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];this.root.dataset.static='true';this.root.querySelector('.cinema-pause').hidden=true;this.update();}
   togglePause(){if(!this.root||this.root.dataset.static==='true')return;this.paused=!this.paused;this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(a=>this.paused?a.pause():a.play());if(!this.paused){var self=this;this.timers.push(setTimeout(function(){self.finish(true);},Math.max(0,this.duration-Number(this.endAnimation?.currentTime||0))+500));}this.update();}
-  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('Mapas NASA hechos música.','NASA maps, made musical.');this.root.querySelector('.cinema-description').textContent=T('Explora cambios de temperatura del Pacífico con la vista y el oído.','Explore Pacific temperature patterns through sight and sound.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
   finish(restoreFocus=false){
     if(!this.root)return;
     var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
@@ -3572,6 +3604,7 @@ class Component extends DCLogic {
     // Each entry presents the intro; saved and system reduction are respected.
     this.state.motionMode = this.state.reducedMotion ? 'reduced' : 'auto';
     this.state.destination = ''; this.state.ambientPlaying = false; this.ambientTimer=null;
+    this.state.sampleStarting=false;this.sampleRun=0;this.sampleTimer=null;
     this.journey = new SpaceJourney(this);
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
@@ -4105,6 +4138,37 @@ class Component extends DCLogic {
     this.setPreference('reducedMotion',false);
     this.cinema?.start(true,event?.currentTarget);
   }
+  cancelSample(){++this.sampleRun;clearTimeout(this.sampleTimer);this.sampleTimer=null;if(this.state.sampleStarting)this.setState({sampleStarting:false});}
+  startSample(){
+    if(this.disposed||this.state.tab!=='home'||this.state.sampleStarting)return;
+    this.cinema?.finish(false);this.stop();if(this.state.tour)this.tourClose();if(this.state.set!=='eic')this.applySet('eic');
+    this.setState({disc:2,frame:0,col:-1,engine:'melody',leadOverride:null,mute:this.allMute(false),mixCustomized:false,ended:false,audioError:''});this.goTab('juke',1);
+    var self=this,run=++this.sampleRun,deadline=Date.now()+12000;this.setState({sampleStarting:true});this.loadDisc(2);
+    // Unlock inside the explicit click; decoding may finish after user activation.
+    try{var ac=this.audioContext();if(ac&&ac.state!=='running')Promise.resolve(ac.resume()).catch(function(){});}catch(ignored){}
+    var ready=function(){
+      if(self.disposed||run!==self.sampleRun)return;
+      if(!self.state.trans&&(self.state.tab!=='juke'||self.state.sub!==1)){self.cancelSample();return;}
+      if(self.cur()&&!self.state.trans){self.sampleTimer=null;self.setState({sampleStarting:false});self.play();return;}
+      if(Date.now()>=deadline){self.cancelSample();self.setState({audioError:T('No se pudo preparar el mapa. Elige otro disco o vuelve a intentarlo.','The map could not be prepared. Choose another disc or try again.')});return;}
+      self.sampleTimer=setTimeout(ready,80);
+    };ready();
+  }
+  listeningContext(){
+    var self=this,s=this.state,custom=s.disc===5?s.custom:null,rain=custom?.kind==='rain',power=rain&&custom.source==='power',image=!!custom&&!rain,free=image&&custom.mode==='free',dt=this.frameDate(s.disc,s.frame),d=DISCS[s.disc];
+    var analysis=this.cur(),cacheKey=[LANG,s.set,s.disc,s.frame,s.engine,custom?.url,custom?.mode,custom?.source].join('|');if(this.contextCache?.key===cacheKey&&this.contextCache.analysis===analysis)return this.contextCache.value;
+    var source=custom?(power?'NASA POWER':custom.source==='eic'?'NASA SVS / EIC':T('Archivo local del visitante','Visitor’s local file')):s.set==='prev'?'NASA GIBS / GHRSST':'NASA SVS 5176 / EIC · JPL MUR';
+    var url=power?'https://power.larc.nasa.gov/':!custom||custom.source==='eic'?(s.set==='prev'&&!custom?'https://worldview.earthdata.nasa.gov/?l=GHRSST_Sea_Surface_Temperature_Anomalies&t='+dt.y+'-'+('0'+(dt.m+1)).slice(-2)+'-15':'https://svs.gsfc.nasa.gov/5176/'):'';
+    var period=power?T('Enero de 2015 a diciembre de 2018','January 2015 to December 2018'):custom?T('Según el archivo; sin fecha inferida','From the file; no date inferred'):MES[dt.m]+T(' de ',' ')+dt.y;
+    var variable=power?T('Precipitación media mensual, mm/día','Monthly mean precipitation, mm/day'):rain?T('Serie numérica seleccionada','Selected numeric series'):image?free?T('Color de una imagen; sin variable científica atribuida','Image color; no scientific variable assigned'):T('Colores interpretados con una paleta de anomalías','Colors interpreted with an anomaly palette'):T('Anomalía de temperatura superficial del mar','Sea surface temperature anomaly');
+    var region=power?T('Chiclayo, Perú','Chiclayo, Peru'):custom?T('No se infiere una ubicación de tu archivo','No location is inferred from your file'):T('Pacífico oriental, según el recorte del mapa','Eastern Pacific, as shown in the cropped map');
+    var summary=power?T('Escuchas lluvia de Chiclayo: 48 valores mensuales se resumen en 28 pasos sonoros.','You are hearing Chiclayo rainfall: 48 monthly values summarized into 28 musical steps.'):rain?T('Escuchas una interpretación de la serie numérica seleccionada.','You are hearing an interpretation of the selected numeric series.'):image?T('Escuchas los colores de tu imagen convertidos en notas. No se le atribuyen mediciones oceánicas por ser una imagen.','You are hearing your image’s colors mapped to notes. An image alone is not assigned ocean measurements.'):T('«','“')+d.title+T('», ','”, ')+period+T('. Sus colores representan diferencias de temperatura frente a una referencia; sus patrones guían las notas.','. Its colors represent temperature differences from a reference; their patterns guide the notes.');
+    var processing=rain?T('La serie se resume en 28 grupos y se normaliza respecto de su propia media. Los niveles del dibujo no conservan las unidades originales.','The series is summarized into 28 groups and normalized around its own mean. Display levels do not retain the original units.'):T('28 columnas × 16 filas: cada celda resume una zona de la imagen. Los niveles se derivan del color; no son grados de temperatura calibrados.','28 columns × 16 rows: each cell summarizes part of the image. Levels are derived from color; they are not calibrated temperature degrees.');
+    if(!custom&&analysis){var balance=analysis.warm-analysis.cold;summary+=' '+(balance>.15?T('En esta cuadrícula predominan niveles cálidos.','Warm levels dominate this grid.'):balance<-.15?T('En esta cuadrícula predominan niveles fríos.','Cool levels dominate this grid.'):T('El balance de la cuadrícula está cerca de la referencia.','The grid’s balance is close to the reference.'));}
+    var value={title:T('¿Qué estás escuchando?','What are you hearing?'),summary:summary,dataLabel:T('Ver los datos de esta muestra','See this sample’s data'),mappingLabel:T('Cómo se convierte en música','How it becomes music'),sourceLabel:T('Fuente','Source'),source:source,variableLabel:T('Variable','Variable'),variable:variable,regionLabel:T('Región','Region'),region:region,periodLabel:T('Periodo','Period'),period:period,processing:processing,url:url,hasSource:!!url,sourceLink:T('Abrir la fuente de esta muestra','Open this sample’s source'),artNotice:T('Las escalas, acordes, timbres y equivalencias son decisiones artísticas. No es una grabación del océano ni música certificada por NASA.','Scales, chords, timbres and mappings are artistic choices. This is not an ocean recording or NASA-certified music.'),
+      steps:[{title:T('Observación.','Observation.'),text:variable+'. '+source+'.'},{title:T('Análisis.','Analysis.'),text:processing},{title:T('Reglas sonoras.','Sound mapping.'),text:s.engine==='raw'?T('Los niveles cálidos orientan tonos de Inti; los fríos, graves de Mamacocha. La posición vertical orienta las gotas de Yaku.','Warm levels guide Inti’s tones; cool levels guide Mamacocha’s bass. Vertical position guides Yaku’s drops.'):T('El motor Melodía usa la posición vertical de las celdas para orientar notas y las ajusta a una escala y a acordes elegidos.','Melody mode uses cells’ vertical position to guide notes, then fits them to chosen scales and chords.')},{title:T('Música.','Music.'),text:T('El navegador sintetiza las voces activadas mientras recorre las columnas. Cambia de modo o elige un color para explorar la relación.','The browser synthesizes the enabled voices while moving across columns. Change mode or choose a color to explore the relationship.')}],legendLabel:T('Explorar los colores de la leyenda','Explore the legend colors'),legend:function(){var button=document.querySelector('#player-legend .legend-choice');button?.focus({preventScroll:true});button?.scrollIntoView({block:'center',behavior:'instant'});}};
+    this.contextCache={key:cacheKey,analysis:analysis,value:value};return value;
+  }
   openDestination(key,event) {
     if(!SPACE_DESTINATIONS[key]||this.disposed||this.state.tab!=='home')return;
     this.cinema?.finish(false);this.stop();this.closeMenus(false);this.portalReturnKey=key;
@@ -4115,7 +4179,7 @@ class Component extends DCLogic {
   }
   closeDestination() {
     this.journey.finish(false);this.stop();var self=this;
-    this.setState({destination:''},function(){self.resetScreenScroll();document.querySelector('.portal-button[data-destination="'+self.portalReturnKey+'"]')?.focus({preventScroll:true});});
+    this.setState({destination:''},function(){self.resetScreenScroll();var button=document.querySelector('.portal-button[data-destination="'+self.portalReturnKey+'"]');var group=button?.closest('details');if(group)group.open=true;button?.focus({preventScroll:true});});
   }
   async toggleAmbient() {
     var destination=this.state.destination,config=SPACE_DESTINATIONS[destination];if(!config||this.disposed)return;
@@ -4134,7 +4198,7 @@ class Component extends DCLogic {
   universeVm() {
     var self=this,key=this.state.destination||'sun',d=SPACE_DESTINATIONS[key],s=this.state,audioAvailable=typeof(window.AudioContext||window.webkitAudioContext)==='function';
     return {key:key,name:spaceText(d.name),title:spaceText(d.title),text:spaceText(d.text),fact:spaceText(d.fact),color:d.color,sky:d.sky,ground:d.ground,
-      navLabel:T('Explorar destinos del universo','Explore universe destinations'),destinations:Object.keys(SPACE_DESTINATIONS).map(function(k){var p=SPACE_DESTINATIONS[k];return {key:k,name:spaceText(p.name),color:p.color,label:T('Explorar ','Explore ')+spaceText(p.name),open:function(event){self.openDestination(k,event);}};}),
+      navLabel:T('Explorar destinos del universo','Explore universe destinations'),exploreLabel:T('Explorar el universo artístico','Explore the artistic universe'),artBrief:T('Escenas y música ambiental independientes de los mapas NASA.','Scenes and ambient music separate from the NASA maps.'),destinations:Object.keys(SPACE_DESTINATIONS).map(function(k){var p=SPACE_DESTINATIONS[k];return {key:k,name:spaceText(p.name),color:p.color,label:T('Explorar ','Explore ')+spaceText(p.name),open:function(event){self.openDestination(k,event);}};}),
       backLabel:T('Volver al universo','Back to the universe'),back:function(){self.closeDestination();},controlsLabel:T('Ambiente musical artístico','Artistic musical atmosphere'),pending:s.audioPending||!audioAvailable,
       playLabel:!audioAvailable?T('Audio no disponible','Audio unavailable'):s.audioPending?T('Preparando audio…','Preparing audio…'):s.ambientPlaying?T('Pausar ambiente','Pause atmosphere'):T('Escuchar ambiente','Listen to atmosphere'),play:function(){self.toggleAmbient();},
       status:!audioAvailable?T('Este navegador no ofrece Web Audio. Puedes explorar la escena y los mapas mediante texto.','This browser does not provide Web Audio. You can explore the scene and maps through text.'):s.audioError||(s.ambientPlaying?T('Ambiente en reproducción.','Atmosphere playing.'):T('En silencio. El audio empieza solo cuando lo eliges.','Silent. Audio starts only when you choose it.')),
@@ -4719,7 +4783,7 @@ class Component extends DCLogic {
       if (!self.fileLoadCurrent(operation)) { URL.revokeObjectURL(url); return; }
       self.revokeCustom();
       var label = cols.length > 1 ? uiMessage('{file} · {column}', '{file} · {column}', { file: nameText || name, column: cols[pick].nameText || cols[pick].name }) : nameText || name;
-      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), nameText: label, baseName: name, baseNameText: nameText || name, kind: 'rain', url: url, cols: cols, col: pick, mode: 'palette' }, an,
+      self.showCustom({ name: name + (cols.length > 1 ? ' · ' + cols[pick].name : ''), nameText: label, baseName: name, baseNameText: nameText || name, kind: 'rain', source:operation.source||'series', url: url, cols: cols, col: pick, mode: 'palette' }, an,
         uiMessage('Listo: {count} valores de «{column}». Pulsa Reproducir.', 'Ready: {count} values from “{column}”. Press Play.', { count: vals.length, column: cols[pick].nameText || cols[pick].name }));
     });
   }
@@ -4731,7 +4795,7 @@ class Component extends DCLogic {
   }
   loadSample() {
     if (this.disposed) return;
-    var self = this, operation = this.startFileLoad(); this.setState({ upMsg: uiMessage('Cargando datos de NASA POWER…', 'Loading NASA POWER data…') });
+    var self = this, operation = this.startFileLoad();operation.source='power'; this.setState({ upMsg: uiMessage('Cargando datos de NASA POWER…', 'Loading NASA POWER data…') });
     fetch('/_blob/73710d959697d6b73c436a389b19a0de').then(function (r) { if (self.fileLoadCurrent(operation)) return r.json(); }).then(function (d) {
       if (!self.fileLoadCurrent(operation)) return;
       self.useSeries(T('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), [{ name: T('lluvia (mm/día)', 'rainfall (mm/day)'), nameText: uiMessage('lluvia (mm/día)', 'rainfall (mm/day)'), values: d.chiclayo.p.slice(34 * 12, 38 * 12) }], 0, uiMessage('Chiclayo · lluvia 2015–2018 (NASA POWER)', 'Chiclayo · rainfall 2015–2018 (NASA POWER)'), operation);
@@ -5331,6 +5395,7 @@ class Component extends DCLogic {
     cleanup();
   }
   stop() {
+    this.cancelSample();
     clearInterval(this.ambientTimer);this.ambientTimer=null;
     if (this.state.playing && this.ac) this.flushPlayback(this.ac.currentTime);
     ++this.audioRun;
@@ -5496,7 +5561,7 @@ class Component extends DCLogic {
     var leadKey = this.leadChar();
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
-      th: th, ic: this.icons, universe:this.universeVm(), showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      th: th, ic: this.icons, universe:this.universeVm(), context:this.listeningContext(), sample:{pending:s.sampleStarting,label:s.sampleStarting?T('Preparando muestra…','Preparing sample…'):typeof(window.AudioContext||window.webkitAudioContext)==='function'?tx.heroCta:T('Explorar una muestra','Explore a sample'),start:function(){self.startSample();}}, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
       intro: { replayLabel: T('Repetir introducción','Replay intro'), bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b', replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: T('Movimiento reducido. Puedes activarlo cuando quieras.','Reduced motion. You can enable it whenever you like.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.setPreference('reducedMotion',!self.bandReduced()); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
@@ -5533,7 +5598,7 @@ class Component extends DCLogic {
       isJuke: isJuke, isData: isData, isBand: s.tab === 'band', isHow: s.tab === 'how', isTech: s.tab === 'tech',
       showMain: isJuke || isData, showPlayer: isJuke || (isData && hasCustom), dataEmpty: isData && !hasCustom,
       showStrip: s.disc !== 5, showSilbo: s.disc !== 5,
-      heroStats: [{ k: '10', l: T('discos', 'discs') }, { k: '60', l: T('fotogramas NASA', 'NASA frames') }, { k: '5', l: T('músicos', 'musicians') }],
+      heroStats: [{ k: '10', l: T('episodios · 6 mapas', 'episodes · 6 maps') }, { k: '60', l: T('mapas que se analizan', 'maps to analyze') }, { k: '5', l: T('voces musicales', 'musical voices') }],
       howData: [
         { tag: T('IMAGEN', 'IMAGE'), color: th.accent, title: T('Se lee por colores', 'Read by its colors'), body: T('Cada imagen se reduce a una cuadrícula de 28×16. Lo cálido suena como Inti y Yaku; lo frío, como Mamacocha. Elige entre la paleta de anomalías de la NASA o color libre.', 'Each image is reduced to a 28×16 grid. Warm areas sound like Inti and Yaku; cold ones like Mamacocha. Choose between the NASA anomaly palette and free color.') },
         { tag: 'RAIN', color: th.cold, title: T('Se lee por valores', 'Read by its values'), body: T('Una columna numérica se resume en 28 pasos. Lo que está sobre la media es cálido; lo que está bajo la media, frío. Los picos extremos hacen tronar a Illapa.', 'A numeric column is summarized in 28 steps. Values above the mean are warm; values below are cold. Extreme peaks make Illapa thunder.') },
@@ -5547,8 +5612,8 @@ class Component extends DCLogic {
         previewBody: s.custom && s.custom.kind === 'image' ? T('Tu imagen reemplaza el ejemplo. Puedes elegir otra cuando quieras.', 'Your image replaces the sample. Choose another whenever you like.') : T('48 promedios mensuales · 2015–2018 · NASA POWER · mm/día.', '48 monthly averages · 2015–2018 · NASA POWER · mm/day.'),
         listenLabel: s.custom && s.custom.kind === 'image' ? T('Escuchar esta imagen', 'Listen to this image') : T('Escuchar la lluvia', 'Listen to the rainfall'),
         listen: function () { if (self.state.custom) self.goSub(1); else self.loadSample(); },
-        sampleTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), sampleBody: T('Un mapa NASA de enero de 2025. Descubre cómo sus colores se convierten en música.', 'A NASA map from January 2025. Explore how its colors turn into music.'),
-        sampleAlt: T('Mapa NASA de anomalía del Pacífico, enero de 2025.', 'NASA Pacific anomaly map, January 2025.'), sampleAction: T('Usar imagen de ejemplo', 'Use sample image'),
+        sampleTitle: T('Lluvia de Chiclayo', 'Chiclayo rainfall'), sampleBody: T('48 valores mensuales de lluvia de Chiclayo, 2015–2018, procedentes de NASA POWER.', '48 monthly Chiclayo rainfall values, 2015–2018, from NASA POWER.'),
+        sampleAlt: T('Gráfico de lluvia de Chiclayo derivado de NASA POWER, 2015–2018.', 'Chiclayo rainfall chart derived from NASA POWER, 2015–2018.'), sampleAction: T('Usar imagen de ejemplo', 'Use sample image'),
         ownTitle: T('Ahora, tu imagen', 'Now, your image'), chooseImage: T('Elegir imagen', 'Choose image'),
         imageLimits: T('PNG, JPG, WebP o GIF. Hasta 8 MB y 32 millones de píxeles. Se usa una vista fija, centrada y sin deformar; las animaciones no se reproducen. También puedes arrastrar el archivo aquí.', 'PNG, JPG, WebP or GIF. Up to 8 MB and 32 million pixels. A centered, undistorted still preview is used; animations do not play. You can also drop the file here.'),
         imagePrivacy: T('Se analiza una imagen fija, dentro de tu navegador. El archivo permanece en tu equipo.', 'A still image is analyzed inside your browser. Your file stays on your device.'),
@@ -5557,9 +5622,9 @@ class Component extends DCLogic {
       },
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
       scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
-      heroUrl: 'fotogramas/ver2025_2.webp',
-      heroGo: function () { self.goTab('juke'); },
-      heroBand: function () { self.goTab('band'); },
+      heroUrl: DISC_SETS.eic[2].files[0],
+      heroHow:function(){self.goTab('how');},
+      bandScience:{silbo:T('En el modo Datos, Silbo responde a niveles cálidos altos en la zona costera seleccionada. «Escuchar instrumento» es una muestra artística de su voz.','In Data mode, Silbo responds to high warm levels in the selected coastal area. “Hear instrument” is an artistic sample of his voice.'),inti:T('En el modo Datos, los niveles cálidos orientan los tonos y la intensidad de Inti. Su instrumento se sintetiza en el navegador.','In Data mode, warm levels guide Inti’s tones and intensity. The instrument is synthesized in the browser.'),mama:T('En el modo Datos, los niveles fríos orientan los graves y la intensidad de Mamacocha. Su voz ayuda a reconocer patrones fríos.','In Data mode, cool levels guide Mamacocha’s bass and intensity. Her voice helps identify cool patterns.'),yaku:T('En el modo Datos, las zonas intensas activan las gotas de Yaku; su posición vertical orienta la nota. La escala pentatónica es una decisión musical.','In Data mode, strong areas trigger Yaku’s drops; vertical position guides the note. The pentatonic scale is a musical choice.'),illapa:T('En el modo Datos, una proporción alta de niveles cálidos extremos activa la percusión de Illapa. No es una predicción de tormentas.','In Data mode, a high share of extreme warm levels triggers Illapa’s percussion. It is not a storm prediction.')}[bandKey],
       easyLabel: T('Explícamelo fácil', 'Explain it simply'),
       easyOpen: s.easyOpen,
       easyVisible: isJuke && s.easyOpen,
@@ -5581,7 +5646,7 @@ class Component extends DCLogic {
       bottomNavClass: (navVm.show ? 'with-pages' : '') + (navVm.showMini ? ' has-mini' : '') + (topics ? ' with-topics' : ''),
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
-      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Convierte','Convert'), how: T('¿Cómo funciona?','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
+      tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), data: T('Tu imagen','Your image'), how: T('¿Cómo funciona?','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
       haptic: this.hapticVm(),
       a11y: a11yDef.map(function (o) { var disabled = o.k === 'vibe' && !self.haptics.supported(), on = !disabled && (o.k==='reducedMotion' ? !!self.bandReduced() : !!s[o.k]); return { disabled: disabled, ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {

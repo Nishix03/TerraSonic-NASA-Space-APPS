@@ -921,13 +921,13 @@ test('navigation keyboard supports arrows, Home and End without activating anoth
 test('compact navigation has five bilingual labels while preserving full section names and the active page', () => {
   const { component: c, context } = setup();
   c.state.tab = 'data'; c.state.sub = 1;
-  const expected = { es: ['Escuchar','Banda','Convierte','¿Cómo funciona?','Tecnología'], en: ['Listen','Band','Convert','How it works','Technology'] };
+  const expected = { es: ['Escuchar','Banda','Tu imagen','¿Cómo funciona?','Tecnología'], en: ['Listen','Band','Your image','How it works','Technology'] };
   for (const lang of ['es','en','es']) {
     c.setLang(lang);
     const tabs = c.renderVals().tabs;
     assert.deepEqual(JSON.parse(JSON.stringify(tabs.map(t => t.short))), expected[lang]);
     context.PAGE_ORDER.forEach((key,i) => assert.equal(tabs[i].label, context.ROUTE_LOOK[key].title));
-    assert.equal(tabs[2].label, lang === 'es' ? 'Convierte en música' : 'Convert to music');
+    assert.equal(tabs[2].label, lang === 'es' ? 'Tu imagen en música' : 'Your image as music');
     tabs.forEach(tab => assert(tab.label.toLowerCase().includes(tab.short.toLowerCase())));
     assert.equal(tabs[2].cur, 'page'); assert.equal(tabs.filter(t => t.cur === 'page').length, 1);
     assert.equal(c.state.tab, 'data'); assert.equal(c.state.sub, 1);
@@ -1368,6 +1368,17 @@ test('new entries honor saved and system reduction while an explicit replay can 
   c.setPreference('reducedMotion',false);assert.equal(c.bandReduced(),false);assert.equal(c.renderVals().motionClass,'');assert.equal(c.renderVals().motionMode,'full');assert.equal(storage.get('ts_motion_mode'),'full');
   c.setPreference('reducedMotion',true);assert.equal(c.bandReduced(),true);assert.equal(storage.get('ts_motion_mode'),'reduced');
   const restored=setup({entryMotion:true,storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),true);assert.equal(restored.storage.get('ts_motion_mode'),'reduced','Entering does not modify device or stored settings');
+});
+
+test('listening context distinguishes EIC, GIBS, POWER and a private image without inventing geography', () => {
+  const {component:c}=setup();c.state.disc=2;c.state.frame=0;let info=c.listeningContext();assert.match(info.source,/SVS 5176/);assert.match(info.variable,/Anomalía/);assert.match(info.url,/svs.gsfc/);
+  c.state.set='prev';info=c.listeningContext();assert.match(info.source,/GIBS/);assert.match(info.url,/worldview/);
+  c.state.disc=5;c.state.custom={kind:'rain',source:'power',url:'rain',mode:'palette'};info=c.listeningContext();assert.equal(info.source,'NASA POWER');assert.match(info.variable,/Precipitación/);assert.match(info.period,/2015.*2018/);assert.equal(info.region,'Chiclayo, Perú');
+  c.state.custom={kind:'image',source:'user',url:'blob:private',mode:'free'};info=c.listeningContext();assert.equal(info.hasSource,false);assert.match(info.variable,/sin variable científica/);assert.match(info.region,/No se infiere/);
+});
+
+test('a map context refreshes after analysis arrives and when the musical mode changes', () => {
+  const {component:c}=setup();c.state.disc=2;c.state.frame=0;let initial=c.listeningContext();c.state.an['2_0']={warm:1,cold:0};let analyzed=c.listeningContext();assert.notEqual(initial,analyzed);assert.match(analyzed.summary,/niveles cálidos/);assert.equal(c.listeningContext(),analyzed);c.state.engine='raw';assert.match(c.listeningContext().steps[2].text,/Inti/);c.setLang('en');assert.match(c.listeningContext().title,/What/);
 });
 
 test('leaving a destination cancels an audio start that resolves late', async () => {

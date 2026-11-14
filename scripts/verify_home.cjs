@@ -1,7 +1,7 @@
 // The original compact desktop and common mobile viewports must show the full home.
 // Enlarged text and very short viewports are checked by verify_reflow.cjs instead.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const {launchBrowser}=require('./browser_fixture.cjs');
+const {launchBrowser,dismissEntry}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),output=path.resolve(process.argv[3]||'_work/home/browser'),base='http://terrasonic.test/',missingFonts=process.argv.includes('--no-fonts');
 async function main(){
  fs.mkdirSync(output,{recursive:true});const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM,args:['--no-sandbox']});
@@ -10,11 +10,11 @@ async function main(){
   const context=await browser.newContext({reducedMotion:'reduce'});
   await context.route('**/*',async route=>{if(!route.request().url().startsWith(base)||missingFonts&&route.request().url().endsWith('.woff2'))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
   await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
-  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);await page.evaluate(()=>document.fonts.ready);
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);await dismissEntry(page);await page.evaluate(()=>document.fonts.ready);
   for(const [width,height]of [[1342,605],[1366,768],[1920,1080],[390,844],[375,667],[320,568],[667,375]]){
    await page.setViewportSize({width,height});
    for(const language of ['es','en']){
-    await page.evaluate(language=>{__app.setLang(language);window.scrollTo(0,0);document.querySelector('.scr').scrollTop=0;},language);
+    await page.locator('#tour-lang button').nth(language==='es'?0:1).click();await page.waitForFunction(language=>document.documentElement.lang===language&&document.querySelector('.hero h1').textContent.startsWith(language==='es'?'Escucha':'Hear'),language);await page.evaluate(()=>{window.scrollTo(0,0);document.querySelector('.scr').scrollTop=0;});
     const result=await page.evaluate(()=>{
      const elements=[...document.querySelectorAll('.hero h1,.hero .lede,.hero .cta button,.hero .facts,.home-process')];
      const brokenNavigation=[...document.querySelectorAll('.nav-short')].filter(el=>el.getClientRects().length).filter(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getClientRects().length>1;}).map(el=>el.textContent);

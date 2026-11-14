@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const {launchBrowser}=require('./browser_fixture.cjs');
+const {launchBrowser,dismissEntry}=require('./browser_fixture.cjs');
 const site = path.resolve(process.argv[2] || '_site');
 const output = path.resolve(process.argv[3] || '_work/convert/browser');
 const base = 'http://terrasonic.test/';
@@ -31,7 +31,7 @@ async function main() {
       } });
     });
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
-    await page.goto(base); await page.waitForFunction(() => window.__app);
+    await page.goto(base);await dismissEntry(page); await page.waitForFunction(() => window.__app);
     await page.evaluate(() => { __app.state.sfx = false; });
     await page.locator('#tour-nav button').nth(2).click();
     const back = async () => { await page.locator('.headtools button').click(); await page.locator('.convert-options').waitFor(); };

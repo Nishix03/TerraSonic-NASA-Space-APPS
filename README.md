@@ -2,7 +2,7 @@
 
 TerraSonic convierte imágenes del Pacífico y datos locales en música con cinco personajes. Proyecto de NASA Space Apps Challenge 2026 · Chiclayo, para [The Earth Information Jukebox](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/).
 
-La aplicación es estática y funciona en español e inglés. Usa Canvas y Web Audio en el navegador; no requiere backend, AWS, base de datos remota ni servicios de IA para procesar archivos o generar sonido.
+La aplicación es estática y funciona en español e inglés. Interpreta colores de mapas para explorar sus patrones mediante música y descripciones; no obtiene temperaturas calibradas de cualquier imagen. Usa Canvas y Web Audio en el navegador; no requiere backend, AWS, base de datos remota ni servicios de IA para procesar archivos o generar sonido.
 
 ## Estado de esta rama
 
@@ -12,7 +12,7 @@ La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](htt
 
 La [vista pública independiente](https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/) permite revisar la aplicación sin modificar la web oficial. Consulta `source.json` en esa URL para identificar su código exacto y [PUBLICACION.md](docs/PUBLICACION.md) para la comprobación de publicación. La edición RETO 05 y sus criterios están en [RETO_05.md](docs/RETO_05.md).
 
-La experiencia vigente centra y ralentiza la introducción móvil, respeta movimiento reducido y añade cuatro destinos con ambientación artística separada de los mapas NASA: [REVISION_NSAC.md](docs/REVISION_NSAC.md). La entrada sigue apareciendo en cada documento nuevo. Se mantiene un solo baile en la banda y una guía móvil compacta. El [borrador de entrega](docs/BORRADOR_ENTREGA_NSAC.md) contrasta los campos del formulario adjunto. La [entrega portátil anterior](docs/ENTREGA_2D_CINEMATICA.md) conserva un checkpoint con otra política de entrada.
+La [revisión de claridad del producto](docs/CLARIDAD_PRODUCTO.md) organiza la primera escucha en tres acciones: muestra, datos y sonificación; distingue EIC/GIBS, lluvia POWER e imágenes propias. La [validación con cinco participantes](docs/PROTOCOLO_USABILIDAD.md) está preparada y pendiente de ejecutar. Se conservan la introducción móvil centrada, movimiento reducido, baile único y los cuatro destinos artísticos de la [revisión NSAC](docs/REVISION_NSAC.md). El [borrador de entrega](docs/BORRADOR_ENTREGA_NSAC.md) contrasta los campos del formulario adjunto. La [entrega portátil anterior](docs/ENTREGA_2D_CINEMATICA.md) conserva un checkpoint con otra política de entrada.
 
 El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIERO-MEJORAS.md](docs/PIERO-MEJORAS.md). Las pruebas automatizadas no acreditan certificación WCAG, escucha humana ni aprobación cultural. Las tres referencias visuales históricas no están disponibles aquí.
 
