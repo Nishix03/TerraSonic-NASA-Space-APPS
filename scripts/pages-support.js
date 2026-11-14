@@ -131,6 +131,7 @@
       if (event.persisted) {
         // A history-cache entry can return with the same component and files.
         // Pause transient work without permanently disposing that component.
+        component.cinema?.finish(false);
         component.stopSpeech?.();
         component.stop?.();
         component.cancelBandClip?.();

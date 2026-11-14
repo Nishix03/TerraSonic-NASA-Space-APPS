@@ -17,22 +17,23 @@ async function main(){
     assert(await page.locator('#tour-a11y').getAttribute('open')!==null);
     const result=await page.locator('#tour-a11y .pop').evaluate(pop=>{
      const r=pop.getBoundingClientRect();return {width:r.width,height:r.height,scrollHeight:pop.scrollHeight,viewport:innerWidth,columns:getComputedStyle(pop).gridTemplateColumns,
-      options:[...pop.querySelectorAll('button')].map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent.trim(),width:r.width,height:r.height,overflow:el.scrollWidth>el.clientWidth+2,left:r.left,right:r.right};})};
+      options:[...pop.querySelectorAll('button')].map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent.trim(),disabled:el.disabled,width:r.width,height:r.height,overflow:el.scrollWidth>el.clientWidth+2,left:r.left,right:r.right};})};
     });
-    assert(result.width<=width);assert.equal(result.options.length,9);
+    assert(result.width<=width);assert.equal(result.options.length,11);
     const brand=await page.locator('.wordmark').evaluate(el=>{const r=el.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(el);return {lines:range.getClientRects().length,left:r.left,right:r.right,topFont:getComputedStyle(el.closest('header')).fontSize};});
     if(language==='es')await page.screenshot({path:path.join(output,`${width}-${height}-${setting}.png`)});
     assert.equal(brand.lines,1,JSON.stringify({width,height,setting,brand}));assert(brand.left>=0&&brand.right<=width);
     result.options.forEach(option=>{assert(option.width>=44&&option.height>=44);assert(!option.overflow&&option.left>=0&&option.right<=width,JSON.stringify(option));});
     if(setting==='large'&&width<=390)assert.equal(result.columns.split(' ').length,1,'enlarged text gets a full-width option');
+    const names=result.options.filter(option=>!option.disabled).map(option=>option.name);
     const reached=[],traversal=[];
-    for(let count=0;count<18&&reached.length<9;count++){
+    for(let count=0;count<18&&reached.length<names.length;count++){
      await page.keyboard.press('Tab');await page.waitForFunction(()=>{const r=document.activeElement.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight;},{},{timeout:1000}).catch(()=>{});
      const focus=await page.evaluate(()=>{const el=document.activeElement,r=el.getBoundingClientRect();return {name:el.textContent.trim().slice(0,100),cls:el.className,tag:el.tagName,top:r.top,bottom:r.bottom,viewport:innerHeight,panelScroll:document.querySelector('#tour-a11y .pop').scrollTop,pageScroll:scrollY};});traversal.push(focus);
      if(focus.cls==='pop')continue; // Firefox also tabs to a native scrollable group.
-     assert(focus.cls==='opt'&&focus.bottom>0&&focus.top<height,JSON.stringify({width,height,language,setting,count,focus}));reached.push(focus.name);
+     assert(focus.tag==='BUTTON'&&focus.bottom>0&&focus.top<height,JSON.stringify({width,height,language,setting,count,focus}));reached.push(focus.name);
     }
-    assert.deepEqual(reached,result.options.map(option=>option.name),'every preference remains reachable in DOM order');
+    assert.deepEqual(reached,names,'every enabled preference remains reachable in DOM order');
     await page.keyboard.press('Escape');assert.equal(await toggle.evaluate(el=>document.activeElement===el),true);
     report.checks.push({viewportWidth:width,viewportHeight:height,language,setting,...result,traversal});
    }

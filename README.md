@@ -6,13 +6,14 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 ## Reto 05
 
-`piero-mejoras-v2` parte de `piero-mejoras` en `fcb1396`. Recupera las ilustraciones 2D de `prueba-acordes`.
+`piero-mejoras-v3` incorpora la introducción del Pacífico y los bailes 2D de `piero-mejoras`. La introducción se puede saltar o repetir y respeta el movimiento reducido.
 
 - **Escuchar** muestra el mapa NASA junto a la cuadrícula de 28 × 16. La leyenda está debajo de la cuadrícula y los músicos activos se ven juntos en el escenario.
-- **La banda** presenta a los cinco músicos con sus historias y muestras de instrumento.
-- **¿Cómo funciona?** reúne una explicación breve y una prueba con lluvia de Chiclayo o una imagen propia procesada en el navegador.
+- **La banda** presenta a los cinco músicos con sus historias, muestras de instrumento y bailes que cargan al abrir cada ficha.
+- **¿Cómo funciona?** abre en Prueba práctica, con la lluvia de Chiclayo y la carga de una imagen. Del mapa al sonido reúne los ocho pasos, las fuentes visibles y los nombres del equipo.
 - **Tecnología** conserva sus categorías y créditos.
 - **Brisa** narra en español o inglés tras la primera interacción. El modo voz se puede desactivar en Accesibilidad y cada apartado tiene un botón para volver a escuchar la narración.
+- **Accesibilidad** reúne las preferencias y la vibración opcional. Hay pulsos de confirmación, de aviso y para eventos fuertes de Illapa durante la reproducción.
 
 Los niveles de color de −5 a +5 se usan para la sonificación. Las progresiones y el carácter musical son decisiones artísticas.
 
@@ -34,6 +35,7 @@ La fuente canónica es **`prototipos/I11-eic/Main.dc.html`**. `scripts/build_pag
 
 ```bash
 node scripts/test_guides.cjs _site/index.html
+node scripts/verify_reto05_v3.cjs _site
 python scripts/run_browser_checks.py --list
 ```
 

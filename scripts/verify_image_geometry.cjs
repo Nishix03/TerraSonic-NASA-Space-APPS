@@ -35,7 +35,7 @@ async function main(){
   fixtures.push({name:'animated.gif',mimeType:'image/gif',buffer:animatedGif(),shape:'animated'});
   for(const fixture of fixtures){
    await page.locator('#tour-drop input').setInputFiles({name:fixture.name,mimeType:fixture.mimeType,buffer:fixture.buffer});
-   await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.state.sub===1,fixture.name).catch(async error=>{report.failure={fixture:fixture.name,state:await page.evaluate(()=>({custom:__app.state.custom,message:__app.renderVals().upMsg,sub:__app.state.sub,pending:__app.pendingImageUrl,urls:[...__imageUrls.values()]}))};await page.screenshot({path:path.join(output,'failure.png')});throw error;});
+   await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.state.sub===0,fixture.name).catch(async error=>{report.failure={fixture:fixture.name,state:await page.evaluate(()=>({custom:__app.state.custom,message:__app.renderVals().upMsg,sub:__app.state.sub,pending:__app.pendingImageUrl,urls:[...__imageUrls.values()]}))};await page.screenshot({path:path.join(output,'failure.png')});throw error;});
    const result=await page.evaluate(async()=>{
     const custom=__app.state.custom,img=new Image();img.src=custom.url;await img.decode();const blob=await (await fetch(custom.url)).blob(),cells=__app.cur().cells;
     return {name:custom.name,type:blob.type,width:img.naturalWidth,height:img.naturalHeight,top:cells.slice(0,28),left:cells.filter((_,i)=>i%28===0),nonempty:cells.filter(value=>value!==null).length,activeUrls:[...__imageUrls.values()].filter(item=>!item.revoked).length,pending:__app.pendingImageUrl};

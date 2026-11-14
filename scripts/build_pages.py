@@ -16,8 +16,13 @@ def build(destination: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     prototype = root / "prototipos" / "I11-eic"
     support_runtime = root / "scripts" / "pages-support.js"
+    dance_runtime = root / "scripts" / "band-dance.js"
     musicians = {"silbo", "inti", "mama", "yaku", "illapa"}
     support_version = sha256(lf_bytes(support_runtime)).hexdigest()[:12]
+    dance_hash = sha256(lf_bytes(dance_runtime))
+    for frame in sorted((prototype / "sprites").glob("*/baile/*.webp")):
+        dance_hash.update(frame.read_bytes())
+    dance_version = dance_hash.hexdigest()[:12]
     html = (prototype / "Main.dc.html").read_text(encoding="utf-8")
     impact_catalog = json.loads((root / "data" / "impacts.v1.json").read_text(encoding="utf-8"))
     if impact_catalog.get("version") != 1 or not isinstance(impact_catalog.get("records"), list):
@@ -44,24 +49,30 @@ def build(destination: Path) -> None:
     support_marker = 'src="./support.js"'
     if support_marker not in html:
         raise ValueError("Falta el script de enlaces de estado del prototipo.")
-    html = html.replace(support_marker, f'src="./support.js?v={support_version}"', 1)
+    html = html.replace(support_marker, f'defer src="./support.js?v={support_version}"', 1)
+    html = html.replace("</head>", f'<script type="module" src="./runtime/band-dance.js?v={dance_version}"></script>\n</head>', 1)
     html = html.replace(
         "/_blob/73710d959697d6b73c436a389b19a0de", "./data/nasa_power_monthly.json"
     )
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
+    (destination / "runtime").mkdir(exist_ok=True)
+    copy2(dance_runtime, destination / "runtime")
     copy2(prototype / "earthbeat-icon.png", destination / "earthbeat-icon.png")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "brisa", "miniaturas"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
     for musician in sorted(musicians):
-        for filename in ("miniatura-banda.webp", "escenario.webp", "pose-banda.webp", "pose-banda-animada.webp"):
+        for filename in ("miniatura-banda.webp", "escenario.webp", "pose-banda.webp"):
             sprite = Path("sprites") / musician / filename
             (destination / sprite).parent.mkdir(parents=True, exist_ok=True)
             copy2(prototype / sprite, destination / sprite)
+        frames = Path("sprites") / musician / "baile"
+        copytree(prototype / frames, destination / frames, dirs_exist_ok=True)
     (destination / "data").mkdir(exist_ok=True)
     copy2(root / "data" / "nasa_power_monthly.json", destination / "data")
+    copy2(root / "data" / "chiclayo-rain.svg", destination / "data")
     copy2(root / "data" / "impacts.v1.json", destination / "data")
     copy2(root / "data" / "characters.v1.json", destination / "data")
     # Keep shipped text independent of checkout line endings and preserve font notices.

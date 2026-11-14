@@ -20,7 +20,7 @@ async function main(){
   const orders=[[0,1,2,3],[1,0,3,2],[3,2,1,0],[2,3,0,1],[0,2,1,3],[2,0,3,1],[3,1,2,0],[1,3,0,2]],colors=[[238,34,34],[34,238,34],[34,34,238],[238,238,34]];
   const fixtures=orders.map((order,i)=>({name:`orientation-${i+1}.jpg`,mimeType:'image/jpeg',buffer:exifJpeg(jpeg,i+1),order,portrait:i>=4}));fixtures.push({name:'quadrants.webp',mimeType:'image/webp',buffer:webp,order:orders[0],portrait:false});
   for(const fixture of fixtures){
-   await page.locator('#tour-drop input').setInputFiles({name:fixture.name,mimeType:fixture.mimeType,buffer:fixture.buffer});await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.state.sub===1,fixture.name);
+   await page.locator('#tour-drop input').setInputFiles({name:fixture.name,mimeType:fixture.mimeType,buffer:fixture.buffer});await page.waitForFunction(name=>__app.state.custom?.name===name&&__app.state.sub===0,fixture.name);
    const result=await page.evaluate(async portrait=>{
     const image=new Image();image.src=__app.state.custom.url;await image.decode();const c=document.createElement('canvas');c.width=560;c.height=320;const x=c.getContext('2d');x.drawImage(image,0,0);
     const width=portrait?160:560,height=portrait?320:280,left=(560-width)/2,top=(320-height)/2;

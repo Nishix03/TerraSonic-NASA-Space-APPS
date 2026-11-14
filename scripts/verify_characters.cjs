@@ -43,7 +43,7 @@ async function main() {
           assert(data.cur.story);
           assert.doesNotMatch(data.cur.story,/propues|proponemos|propos/i);
           await page.waitForFunction(()=>{const img=document.querySelector('.bportrait-live');return img?.complete&&img.naturalWidth>0;});
-          assert.equal(await page.locator('.bportrait-motion').count(),0);
+          assert.equal(await page.locator('earthbeat-dance[data-dancing]').count(),0);
           assert.equal(await page.evaluate(()=>__app.state.playing),data.playing,'reading references must not start audio');
           const overflowing=await page.evaluate(()=>[...document.querySelectorAll('.bpage *')].filter(el=>{
             const r=el.getBoundingClientRect(),cs=getComputedStyle(el);return r.width && cs.display!=='none' && r.right>innerWidth+2;

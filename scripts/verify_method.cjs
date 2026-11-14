@@ -21,10 +21,15 @@ async function main(){
     await page.locator('#tour-lang button').nth(lang==='es'?0:1).click();
     const nav = page.locator('#tour-nav button');
     await nav.nth(2).click();
-    assert.equal(await page.locator('#tour-steps li').count(),6);
+    assert.equal(await page.locator('#tour-drop input').count(),1);
     assert.equal(await page.locator('.topics button').count(),2);
     for(let sub=0;sub<2;sub++){
      await page.locator('.topics button').nth(sub).click();
+     if(sub===1){
+      assert.equal(await page.locator('#tour-steps li').count(),8);
+      assert.equal(await page.locator('.method-notes a:visible').count(),5);
+      assert.equal(await page.locator('.team-names li').count(),6);
+     }
      await checkOverflow(page,`${width} ${lang} how it works ${sub}`);
      if(lang==='es'&&[390,1366].includes(width)){await resetScroll(page);await page.screenshot({path:path.join(output,`${width}-how-${sub}.png`)});}
     }

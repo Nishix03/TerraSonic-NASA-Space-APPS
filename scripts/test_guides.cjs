@@ -281,7 +281,7 @@ test('Brisa’s help button stays visible when targeted and Escape closes the gu
 
 test('language changes retain upload errors, filenames and application state', () => {
   const { component: c } = setup();
-  c.state.tab = 'how'; c.state.sub = 1;
+  c.state.tab = 'how'; c.state.sub = 0;
   c.handleFile({ name: 'mi archivo.csv', size: 9 * 1024 * 1024 });
   const spanishError = c.renderVals().upMsg;
   c.state.frame = 2; c.state.playing = true; c.state.tour = 2; c.state.more = true;
@@ -332,7 +332,7 @@ test('all fixed UI keys, guides, method and technology content render in both la
 
 test('sample labels translate without replacing the rainfall analysis', async () => {
   const {component:c,context}=setup();
-  c.state.tab='how';c.state.sub=1;
+  c.state.tab='how';c.state.sub=0;
   context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
   c.drawSeries=(_,done)=>done('blob:sample');
   c.loadSample();
@@ -354,7 +354,7 @@ test('reduced motion keeps all five portraits static at mobile and desktop width
       const view = c.renderVals().bandCur;
       assert.equal(c.state.bsel, i);
       assert.equal(view.entering, false);
-      assert.equal(view.moving, false);
+      assert.equal(c.renderVals().motionMode, 'reduced');
       assert.equal(view.entrance, '');
       assert.match(c.renderVals().bandSel[i].thumbUrl,new RegExp('/'+view.key+'/'));
     }
@@ -447,7 +447,7 @@ test('the 448-cell grid is visible in the disc player and after a practical samp
   const {component:c}=setup();
   c.state.tab='juke';c.state.sub=0;assert.equal(c.renderVals().gridColors,null);
   c.state.sub=1;assert.equal(c.renderVals().gridColors.length,448);
-  c.state.tab='how';assert.equal(c.renderVals().gridColors,null);
+  c.state.tab='how';c.state.sub=0;assert.equal(c.renderVals().gridColors,null);
   c.state.custom={kind:'image',name:'map.webp'};assert.equal(c.renderVals().gridColors.length,448);
 });
 
@@ -464,7 +464,7 @@ function delayedImages() {
       return { data };
     } }) };
   };
-  h.component.state.tab = 'how'; h.component.state.sub = 1; h.component.state.customMode = 'free';
+  h.component.state.tab = 'how'; h.component.state.sub = 0; h.component.state.customMode = 'free';
   // Concurrency cases keep decoding/encoding synchronous. Native geometry is covered in
   // verify_image_geometry.cjs; delayed encoding has its own lifecycle regression below.
   h.component.freezeImage = (image, custom, done) => done(image, {name:custom.name+'-preview'});
@@ -606,7 +606,7 @@ test('re-analysis of the same frame or custom image ignores superseded callbacks
 
 test('late rainfall canvases are released after unmount', async () => {
   const {component:c,context}=setup(), callbacks=[], revoked=[];
-  c.state.tab='how';c.state.sub=1;
+  c.state.tab='how';c.state.sub=0;
   context.URL={revokeObjectURL:url=>revoked.push(url)};
   context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
   c.drawSeries=(_,done)=>callbacks.push(done);
@@ -618,12 +618,12 @@ test('late rainfall canvases are released after unmount', async () => {
 
 test('late rainfall canvases are released after leaving practice', async () => {
   const {component:c,context}=setup(), callbacks=[], revoked=[];
-  c.state.tab='how';c.state.sub=1;
+  c.state.tab='how';c.state.sub=0;
   context.URL={revokeObjectURL:url=>revoked.push(url)};
   context.fetch=async()=>({ok:true,json:async()=>({chiclayo:{p:Array.from({length:500},(_,i)=>i)}})});
   c.drawSeries=(_,done)=>callbacks.push(done);
   c.loadSample();await new Promise(resolve=>setImmediate(resolve));
-  c.goSub(0);const before=JSON.stringify(c.state);
+  c.goSub(1);const before=JSON.stringify(c.state);
   callbacks[0]('blob:late');
   assert.equal(JSON.stringify(c.state),before);assert.deepEqual(revoked,['blob:late']);
 });
@@ -831,7 +831,7 @@ test('late completion of a timed-out resume cannot finish a newer activation', a
 test('stop, navigation, file operations and unmount settle a pending activation immediately', async () => {
   for (const cancel of [c => c.stop(), c => c.goTab('tech'), c => c.handleFile({name:'new.csv',type:'text/csv',size:1}), c => c.componentWillUnmount()]) {
     const { component: c, context, timers, intervals, AudioContextStub } = audioHarness();
-    c.state.tab = 'how'; c.state.sub = 1;
+    c.state.tab = 'how'; c.state.sub = 0;
     let rejectLate;
     context.window.AudioContext = class extends AudioContextStub {
       constructor() { super(); this.state = 'suspended'; }
@@ -919,7 +919,7 @@ test('navigation keyboard supports arrows, Home and End without activating anoth
 
 test('compact navigation has four bilingual labels while preserving full section names and the active page', () => {
   const { component: c, context } = setup();
-  c.state.tab = 'how'; c.state.sub = 1;
+  c.state.tab = 'how'; c.state.sub = 0;
   const expected = { es: ['Escuchar','Banda','Cómo funciona','Tecnología'], en: ['Listen','Band','How it works','Technology'] };
   for (const lang of ['es','en','es']) {
     c.setLang(lang);
@@ -928,7 +928,7 @@ test('compact navigation has four bilingual labels while preserving full section
     context.PAGE_ORDER.forEach((key,i) => assert.equal(tabs[i].label, context.ROUTE_LOOK[key].title));
     assert.equal(tabs[2].label, lang === 'es' ? '¿Cómo funciona?' : 'How does it work?');
     assert.equal(tabs[2].cur, 'page'); assert.equal(tabs.filter(t => t.cur === 'page').length, 1);
-    assert.equal(c.state.tab, 'how'); assert.equal(c.state.sub, 1);
+    assert.equal(c.state.tab, 'how'); assert.equal(c.state.sub, 0);
   }
 });
 
@@ -962,7 +962,7 @@ test('resize reveals the active tab again and releases the resize callback on un
 
 test('leaving a playback screen stops immediately, clears activity and preserves instrument preferences', async () => {
   for (const [tab,sub,leave] of [
-    ['juke',1,c=>c.goSub(0)], ['how',1,c=>c.goSub(0)],
+    ['juke',1,c=>c.goSub(0)], ['how',0,c=>c.goSub(1)],
     ['juke',1,c=>c.goTab('juke')], ['juke',1,c=>c.goTab('how')],
     ['band',0,c=>c.goTab('juke')], ['band',0,c=>c.goTab('how')], ['band',0,c=>c.goTab('tech')]
   ]) {
@@ -1064,7 +1064,7 @@ test('character transition owns its outgoing portrait and removes temporary stat
   c.pickBand(1);
   assert.equal(c.renderVals().bandCur.hasOutgoing,true);assert.match(c.renderVals().bandCur.previousPoseUrl,/silbo\/pose-banda\.webp/);
   const id=c.bandTimer,finish=timers.get(id);timers.delete(id);finish();
-  assert.equal(c.renderVals().bandCur.moving,true);
+  assert.equal(c.state.bphase,'play');
   const gesture=c.bandTimer,settle=timers.get(gesture);timers.delete(gesture);settle();
   assert.equal(c.renderVals().bandCur.entering,false);assert.equal(c.renderVals().bandCur.hasOutgoing,false);assert.equal(c.bandTimer,null);
 });
@@ -1352,7 +1352,7 @@ test('color scheme persists independently from reading preferences and safely ig
 });
 
 test('switching theme preserves file, selected date, playback position, mix and open help', () => {
-  const {component:c}=setup();c.state.tab='how';c.state.sub=1;c.state.disc=5;c.state.frame=0;c.state.col=7;c.state.playing=true;c.state.tour=2;
+  const {component:c}=setup();c.state.tab='how';c.state.sub=0;c.state.disc=5;c.state.frame=0;c.state.col=7;c.state.playing=true;c.state.tour=2;
   c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};const keys=['tab','sub','disc','frame','col','playing','tour','custom','mute'];
   const before=JSON.stringify(keys.map(key=>c.state[key]));c.setColorScheme('light');assert.equal(JSON.stringify(keys.map(key=>c.state[key])),before);
 });
@@ -1385,7 +1385,7 @@ test('stored preferences only accept known boolean values and recover from inval
 });
 
 test('contextual help never changes the active file, date, position or playback', () => {
-  for (const [tab,sub] of [['juke',0],['juke',1],['how',1],['tech',1]]) {
+  for (const [tab,sub] of [['juke',0],['juke',1],['how',0],['tech',1]]) {
     const {component:c}=setup();
     c.state.tab=tab; c.state.sub=sub; c.state.frame=2; c.state.col=11; c.state.playing=true;
     c.state.custom={name:'retained.csv',url:'blob:retained',kind:'csv',cols:[]};
@@ -1395,12 +1395,11 @@ test('contextual help never changes the active file, date, position or playback'
   }
 });
 
-test('the tutorial progresses only through choosing a disc, playback and interpreting the legend', async () => {
+test('the tutorial progresses through choosing a disc, playback and interpreting the legend', async () => {
   const {component:c}=playbackHarness();
-  c.startTutorial(); assert.equal(c.state.tour,1); assert(c.renderVals().tour.nextOff);
-  c.renderVals().tour.next(); assert.equal(c.state.tour,1);
+  c.startTutorial(); assert.equal(c.state.tour,1); assert.match(c.renderVals().tour.nextLabel,/Saltar paso/);
   c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
-  c.renderVals().tour.next(); assert.equal(c.state.tour,2);
+  assert.match(c.renderVals().tour.nextLabel,/Saltar paso/);
   await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
   c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
   c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
@@ -1410,7 +1409,7 @@ test('the tutorial progresses only through choosing a disc, playback and interpr
 
 test('skipping the tutorial restores the previous file and paused position', () => {
   const {component:c}=playbackHarness();
-  c.state.tab='how'; c.state.sub=1; c.state.disc=5; c.state.frame=0; c.state.col=7;
+  c.state.tab='how'; c.state.sub=0; c.state.disc=5; c.state.frame=0; c.state.col=7;
   c.state.custom={name:'retained.png',kind:'image',url:'blob:retained',mode:'free'};
   const before=JSON.stringify(['tab','sub','disc','frame','col','custom','mute','playing'].map(key=>c.state[key]));
   c.startTutorial(); c.renderVals().discs[0].pick(); c.tourEnd();
@@ -1542,7 +1541,8 @@ test('vibration is initially off, handles absent or failing APIs, and stops on t
     const {component:c,context}=playbackHarness(),pulses=[];
     context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
     assert.equal(c.state.vibe,false);assert.equal(c.vibrateSafely(25),false);assert.equal(pulses.length,0);
-    c.setPreference('vibe',true);assert.equal(c.vibrateSafely(25),true);assert.equal(pulses.at(-1),25);
+    context.window.matchMedia=()=>({matches:false});context.navigator.userActivation={hasBeenActive:true};
+    c.setPreference('vibe',true);assert.equal(pulses.at(-1),15);
     await c.play();
     if(operation==='pause')c.stop();
     if(operation==='seek')c.seekPosition(50);
@@ -1553,7 +1553,7 @@ test('vibration is initially off, handles absent or failing APIs, and stops on t
     if(operation==='preference')c.setPreference('vibe',false);
     assert.equal(pulses.at(-1),0,operation);
   }
-  const {component:c,context}=playbackHarness();c.state.vibe=true;
+  const {component:c,context}=playbackHarness();c.state.vibe=true;context.window.matchMedia=()=>({matches:false});context.navigator.userActivation.hasBeenActive=true;
   delete context.navigator.vibrate;assert.equal(c.vibrateSafely(25),false);
   let attempts=0;context.navigator.vibrate=()=>{attempts++;throw new Error('unavailable hardware');};
   assert.equal(c.vibrateSafely(25),false);assert.equal(c.vibrateSafely(25),false);assert.equal(attempts,1);
@@ -1574,7 +1574,7 @@ function clockHarness() {
 
 test('audio clock schedules ahead while position, history and vibration follow the heard step', async()=>{
   const {component:c,context,scheduled}=clockHarness(),pulses=[];context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
-  c.state.vibe=true;await c.play();c.scheduleAudio();
+  c.state.vibe=true;context.window.matchMedia=()=>({matches:false});context.navigator.userActivation.hasBeenActive=true;await c.play();c.scheduleAudio();
   assert(scheduled.length>=1);assert(scheduled.every(event=>event.at>c.ac.currentTime));
   assert.equal(c.state.col,-1);assert.equal(c.state.events.length,0);assert.deepEqual(pulses,[]);
   c.ac.currentTime=scheduled[0].at;c.scheduleAudio();assert.equal(c.state.col,0);assert.equal(c.state.events.length,1);assert.equal(pulses.at(-1),25);
@@ -1625,9 +1625,12 @@ test('the audio cursor crosses a month using that frame’s tempo while the map 
   assert.equal(c.profile().bpm,76);assert.equal(c.state.events.at(-1).date.m,3);
 });
 
-test('loading a disc requests its selected date first and still covers all six dates once',()=>{
+test('loading a disc requests its selected date before loading the remaining dates',()=>{
   const {component:c,context}=setup(),calls=[];c.state.disc=3;c.state.frame=4;
   c.analyze=(disc,frame)=>calls.push([disc,frame]);context.ComponentUnderTest.prototype.loadDisc.call(c,3);
+  assert.deepEqual(calls,[[3,4]]);
+  c.state.an['3_4']={};calls.length=0;
+  context.ComponentUnderTest.prototype.loadDisc.call(c,3);
   assert.deepEqual(calls,[[3,4],[3,0],[3,1],[3,2],[3,3],[3,5]]);
   calls.length=0;context.ComponentUnderTest.prototype.loadDisc.call(c,5);assert.deepEqual(calls,[]);
 });
@@ -1650,7 +1653,7 @@ test('a stale preview encoder cannot create URLs, replace the accepted image, or
   encoders[0].done(encoders[0].image,{name:'stale-preview'});assert.equal(c.state.custom,accepted);
   assert(revoked.includes('blob:old.png'));assert(!revoked.includes(accepted.url));
   encoders[1].done(encoders[1].image,{name:'new-preview'});assert.equal(c.state.custom.name,'new.png');assert.equal(c.state.custom.url,'blob:new-preview');assert(revoked.includes(accepted.url));
-  upload('leaving.png');images[3].onload();c.goSub(0);const snapshot=JSON.stringify(c.state);
+  upload('leaving.png');images[3].onload();c.goSub(1);const snapshot=JSON.stringify(c.state);
   encoders[2].done(encoders[2].image,{name:'offscreen-preview'});assert.equal(JSON.stringify(c.state),snapshot);assert(revoked.includes('blob:leaving.png'));
 });
 
