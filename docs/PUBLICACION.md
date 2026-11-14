@@ -2,7 +2,15 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · entrada automática y baile único · 13 noviembre, 19:13 Bogotá
+## Edición vigente · revisión NSAC y destinos · 13 noviembre, 21:58 Bogotá
+
+Aplicación **`b1abc7227defb899ea6328fea59555cdb69041f3`**, commit estático **`92eb1a35b8536b8b63450b5a5b8068b166a71156`**, fast-forward desde `5378a98`. Pages confirmó `built` a las **21:58:01**. La lectura pública de las **21:58:39** comprobó procedencia y HTML exacto: **477.428 bytes**, SHA-256 **`344a6c89820adf1753d92aaced7f9d1cb286deb9f92adb3bede7116e569bd1af`**. La copia tiene 112 archivos de aplicación y cuatro metadatos, **16.691.571 bytes** en total.
+
+Incluye introducción móvil centrada de 6,8 segundos, pausa y portada estática con reducción de movimiento; cuatro destinos con viaje saltable y escenas; audio artístico separado de la sonificación NASA, con aviso de capacidad cuando Web Audio no está disponible. Se conservan los PNG originales, los datos y el motor musical. [Auditoría, pruebas, rendimiento y límites](REVISION_NSAC.md). El PDF de entrega se contrasta en un [borrador para revisión del equipo](BORRADOR_ENTREGA_NSAC.md); no se envió el formulario.
+
+El build exacto pasó los dos recorridos HTTP previos a publicar. Evidencias: `_work/github-preview/browser-local-b1abc72/`, `readback-b1abc72.json`, `http-b1abc72.json` y `official-after-b1abc72.json`. La lectura de las **21:58:46** mantuvo main remoto `a8d91564d5393ef6c803acdbf49725094ea54bee`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y HTML oficial de 370.053 bytes / SHA-256 `d50ce659ea6660096e6c658841541c835d826fb4ee867f83ae17253732b05a76`, iguales al registro previo de las **21:58:03**. Main y la web oficial habían cambiado externamente respecto del checkpoint anterior; esta entrega solo actualizó `piero-mejoras` y la copia independiente.
+
+## Checkpoint · entrada automática y baile único · 13 noviembre, 19:13 Bogotá
 
 Aplicación **`14fda6728cd1feb8bf09c1e59d6ba678fa33fe0d`**, commit estático **`5378a98be8fbe1dcc621ee57f2ad679f2422096c`**, fast-forward desde `5491a3d`. Pages confirmó `built` a las **19:10:49**; la lectura anónima de las **19:13:45** comprobó `source.json` y HTML exacto de **452.309 bytes**, SHA-256 **`633599c27c4b618e4c7d3fe53de518755790e7ff60a67338376dbbc517e07d47`**. La copia conserva 112 archivos de aplicación y cuatro metadatos.
 
