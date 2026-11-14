@@ -1,85 +1,25 @@
-// Original drawings, manual motion/steps, lifecycle and no-3D delivery.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
-const {launchBrowser}=require('./browser_fixture.cjs');
-const site=path.resolve(process.argv[2]||'_site'),out=path.resolve(process.argv[3]||'_work/sprites/browser'),base='http://terrasonic.test/';
-const keys=['silbo','inti','mama','yaku','illapa'];
-const hash=data=>createHash('sha256').update(data).digest('hex');
-async function main(){
- fs.mkdirSync(out,{recursive:true});const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM});
- const report={fixture:'Native 2D image decoding, real timers and DOM controls in CSS viewports. No physical phone or human animation review claimed.',assets:[],checks:[],errors:[],failedResponses:[],requests:[]};
- try{
-  for(const key of keys)for(let n=0;n<4;n++){
-   const relative=`sprites/${key}/keyframes/0${n}.png`,source=path.resolve('assets/avatares',key,'banda/keyframes',`0${n}.png`);
-   const packaged=fs.readFileSync(path.join(site,relative));assert.equal(hash(packaged),hash(fs.readFileSync(source)));report.assets.push({relative,sha256:hash(packaged),bytes:packaged.length});
+const {launchBrowser,dismissEntry}=require('./browser_fixture.cjs');
+const site=path.resolve(process.argv[2]||'_site'),out=path.resolve(process.argv[3]||'_work/sprites'),base='http://terrasonic.test/',keys=['silbo','inti','mama','yaku','illapa'];
+const hash=b=>createHash('sha256').update(b).digest('hex');
+(async()=>{fs.mkdirSync(out,{recursive:true});const browser=await launchBrowser({executablePath:process.env.TERRASONIC_CHROMIUM});const report={checks:[],assets:[],errors:[],failedResponses:[],fixture:'Automatic single dance, real PNG decoding and Web Animations. CSS viewports, no physical phone claim.'};
+try{
+ for(const key of keys)for(let n=0;n<4;n++){const file=`sprites/${key}/keyframes/0${n}.png`;const bytes=fs.readFileSync(path.join(site,file));assert.equal(hash(bytes),hash(fs.readFileSync(path.join('assets/avatares',key,'banda/keyframes',`0${n}.png`))));report.assets.push({file,sha256:hash(bytes)});}
+ for(const viewport of [{width:390,height:667},{width:1342,height:605},{width:320,height:256}]){
+  const context=await browser.newContext({viewport,reducedMotion:'reduce'});await context.route('**/*',r=>{const u=r.request().url();if(!u.startsWith(base))return r.abort();const f=path.resolve(site,new URL(u).pathname.slice(1)||'index.html');return f.startsWith(site+path.sep)&&fs.existsSync(f)?r.fulfill({path:f}):r.fulfill({status:404});});
+  await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...a){window.__app=this;return set.apply(this,a);};}});const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(/webgl/i.test(type))throw Error('No 3D allowed');return get.call(this,type,...args);};});
+  const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});await page.goto(base,{waitUntil:'domcontentloaded'});await dismissEntry(page);await page.locator('#tour-nav button').nth(1).click();
+  for(const [index,key]of keys.entries()){
+   await page.locator('.bsel').nth(index).click();const avatar=page.locator('.bportrait-live');await avatar.scrollIntoViewIfNeeded();await page.waitForFunction(key=>{const a=document.querySelector('.bportrait-live');return a?.key===key&&a.running&&a.mode==='Dance'&&a.image.complete;},key);
+   assert.equal(await page.locator('ts-sprite-controls button').count(),1);assert.equal(await page.getByRole('button',{name:/Caminar|Walk|Paso siguiente|Next step|Paso anterior|Previous step|Animar|Animate/,exact:true}).count(),0);
+   const seen=await avatar.evaluate(async a=>{const frames=new Set();const until=performance.now()+1450;while(performance.now()<until){frames.add(a.dataset.frame);await new Promise(r=>setTimeout(r,60));}return [...frames].sort();});assert.deepEqual(seen,['0','1','2','3']);
+   const before=await avatar.locator('img').evaluate(e=>getComputedStyle(e).transform);await page.waitForTimeout(180);assert.notEqual(await avatar.locator('img').evaluate(e=>getComputedStyle(e).transform),before);
+   const button=page.locator('ts-sprite-controls button');await button.click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').motion?.playState==='paused');await avatar.evaluate(a=>a.motion.ready);const frozen=await avatar.locator('img').evaluate(e=>getComputedStyle(e).transform),frame=await avatar.getAttribute('data-frame');await page.waitForTimeout(230);assert.equal(await avatar.locator('img').evaluate(e=>getComputedStyle(e).transform),frozen);assert.equal(await avatar.getAttribute('data-frame'),frame);assert.equal(await button.textContent(),'Bailar');
+   await button.click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);assert.equal(await button.textContent(),'Pausar baile');
+   report.checks.push({viewport,key,automaticDance:true,oneMotionControl:true,fourOriginalDrawings:true,smoothMotion:true,pauseFreezesFrameAndPosition:true,resumeWorks:true});
+   if(index===0)await page.screenshot({path:path.join(out,`band-${viewport.width}.png`),fullPage:true});
   }
-  assert(!fs.existsSync(path.join(site,'modelos')));assert(!fs.existsSync(path.join(site,'runtime/vendor')));
-  for(const viewport of [{width:390,height:667},{width:1342,height:605}]){
-   const context=await browser.newContext({viewport,locale:'es-PE',reducedMotion:'no-preference'});
-   await context.route('**/*',r=>{const u=r.request().url();report.requests.push(u);if(/^(blob:|data:)/.test(u))return r.continue();if(!u.startsWith(base))return r.abort();const f=path.resolve(site,new URL(u).pathname.slice(1)||'index.html');return f.startsWith(site+path.sep)&&fs.existsSync(f)?r.fulfill({path:f}):r.fulfill({status:404});});
-   await context.addInitScript(()=>{
-    localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));
-    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return set.apply(this,args);};}});
-    const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...a){if(/webgl/i.test(type))throw Error('No 3D contexts are allowed in the 2D edition');return get.call(this,type,...a);};
-   });
-   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});
-   await page.goto(base);await page.locator('#tour-nav button').nth(1).click();
-   for(const [i,key]of keys.entries()){
-    await page.locator('.bsel').nth(i).click();const avatar=page.locator('.bportrait-live');await avatar.scrollIntoViewIfNeeded();
-    await page.waitForFunction(key=>{const a=document.querySelector('.bportrait-live');return a?.key===key&&a.hasAttribute('data-rendered')&&a.image.complete&&a.image.naturalWidth>0;},key);
-    for(const mode of ['Play','Walk','Dance']){
-     await page.locator(`ts-sprite-controls [data-action="${mode}"]`).click();await page.waitForFunction(mode=>{const a=document.querySelector('.bportrait-live');return a.running&&a.mode===mode&&a.currentFrame===1;},mode);
-     await page.locator('ts-sprite-controls [data-action="pause"]').click();const frame=await avatar.getAttribute('data-frame');await page.waitForTimeout(240);assert.equal(await avatar.getAttribute('data-frame'),frame);assert.equal(await avatar.evaluate(a=>a.running),false);
-     const before=Number(await avatar.getAttribute('data-frame'));await page.locator('ts-sprite-controls [data-action="next"]').click();assert.equal(Number(await avatar.getAttribute('data-frame')),(before+1)%4);
-     await page.locator('ts-sprite-controls [data-action="previous"]').click();assert.equal(Number(await avatar.getAttribute('data-frame')),before);
-     await page.locator('ts-sprite-controls [data-action="pause"]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
-     await page.locator('ts-sprite-controls [data-action="pause"]').click();assert.equal(await avatar.evaluate(a=>a.running),false);
-     report.checks.push({viewport,key,mode,pauseFreezes:true,stepForwardAndBack:true});
-    }
-    await page.locator('ts-sprite-controls summary').click();await page.locator('.sprite-frames button').nth(3).waitFor();assert.equal(await page.locator('.sprite-frames button').count(),4);
-    for(let n=0;n<4;n++){await page.locator(`.sprite-frames [data-original="${n}"]`).click();assert.equal(await avatar.getAttribute('data-frame'),String(n));await page.waitForFunction(()=>document.querySelector('.bportrait-live img')?.complete);assert.equal(await avatar.locator('img').evaluate(im=>im.naturalWidth),512);}
-    await page.locator('ts-sprite-controls summary').click();await page.locator('ts-sprite-controls [data-action="stop"]').click();
-    assert.equal(await avatar.getAttribute('data-frame'),'rest');assert.match(await avatar.locator('img').getAttribute('src'),/pose-banda\.webp/);
-    await avatar.scrollIntoViewIfNeeded();if(viewport.width===390)await page.screenshot({path:path.join(out,`mobile-${key}.png`),fullPage:true});
-    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false);
-   }
-   await page.locator('ts-sprite-controls [data-action="Walk"]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
-   await page.evaluate(()=>__app.setPreference('reducedMotion',true));assert.equal(await page.locator('.bportrait-live').evaluate(a=>a.running),false);assert(await page.locator('[data-action="Walk"]').isDisabled());
-   await page.locator('[data-action="next"]').click();assert.equal(await page.locator('.bportrait-live').evaluate(a=>a.running),false);
-   await page.locator('#tour-lang button').nth(1).click();assert.equal(await page.locator('[data-action="next"]').textContent(),'Next step');
-   await page.evaluate(()=>__app.setPreference('reducedMotion',false));
-   await page.locator('[data-action="Walk"]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
-   await page.evaluate(()=>window.__departingSprite=document.querySelector('.bportrait-live'));
-   await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().click();await page.locator('.listen-members ts-avatar').nth(4).waitFor();assert.equal(await page.locator('.listen-members ts-avatar').count(),5);
-   assert.equal(await page.evaluate(()=>__departingSprite.isConnected),false);assert.equal(await page.evaluate(()=>__departingSprite.timer),0);assert.equal(await page.evaluate(()=>__departingSprite.running),false);
-   await page.locator('.listen-members').scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.listen-members ts-avatar img')].every(im=>im.complete&&im.naturalWidth>0));
-   await context.close();
-  }
-  // Reproduce the disabled controls in the user's screenshot, then verify the
-  // explicit local permission without changing OS/global preferences.
-  for(const viewport of [{width:360,height:640},{width:320,height:256}]){
-   const context=await browser.newContext({viewport,reducedMotion:'reduce'});
-   await context.route('**/*',r=>{const u=r.request().url();if(!u.startsWith(base))return r.abort();const f=path.resolve(site,new URL(u).pathname.slice(1)||'index.html');return f.startsWith(site+path.sep)&&fs.existsSync(f)?r.fulfill({path:f}):r.fulfill({status:404});});
-   await context.addInitScript(()=>{localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));});
-   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));await page.goto(base);await page.locator('#tour-nav button').nth(1).click();
-   for(const [i,key]of keys.entries()){
-    await page.locator('.bsel').nth(i).click();const avatar=page.locator('.bportrait-live');await page.waitForFunction(key=>document.querySelector('.bportrait-live')?.key===key,key);
-    assert(await page.locator('[data-action=Walk]').isDisabled());assert(await page.locator('.sprite-permission').isVisible());
-    await page.locator('[data-action=next]').click();assert.equal(await avatar.getAttribute('data-frame'),'1');assert.equal(await avatar.evaluate(a=>a.running),false);
-    await page.locator('.sprite-permission input').check();
-    for(const mode of ['Play','Walk','Dance']){
-     await page.locator(`[data-action=${mode}]`).click();await page.waitForFunction(mode=>{const a=document.querySelector('.bportrait-live');return a.running&&a.mode===mode&&a.currentFrame===1;},mode);
-     await page.locator('[data-action=pause]').click();const frame=await avatar.getAttribute('data-frame');await page.waitForTimeout(220);assert.equal(await avatar.getAttribute('data-frame'),frame);
-     await page.locator('[data-action=pause]').click();await page.waitForFunction(()=>document.querySelector('.bportrait-live').running);
-     await page.locator('[data-action=stop]').click();assert.equal(await avatar.getAttribute('data-frame'),'rest');
-     report.checks.push({viewport,key,mode,systemReduced:true,explicitLocalPermission:true,controlsRemainUsableOnShortViewport:true,pauseResumeRest:true});
-    }
-    await page.locator('.sprite-permission input').uncheck();assert(await page.locator('[data-action=Walk]').isDisabled());assert.equal(await avatar.evaluate(a=>a.running),false);
-    if(i===0)await page.screenshot({path:path.join(out,`reduced-${viewport.width}x${viewport.height}.png`),fullPage:true});
-   }
-   await context.close();
-  }
-  assert(!report.requests.some(u=>/\.glb|three-gltf|avatar3d|volume\.webp/.test(u)));assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);
- }finally{fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(report,null,2));await browser.close();}
- console.log('PASS original 2D sprites',report.assets.length,'original PNGs,',report.checks.length,'motion/step journeys');
-}
-main().catch(e=>{console.error(e);process.exitCode=1;});
+  await page.evaluate(()=>window.__oldAvatar=document.querySelector('.bportrait-live'));await page.locator('#tour-nav button').first().click();await page.waitForFunction(()=>!__oldAvatar.isConnected);assert.equal(await page.evaluate(()=>__oldAvatar.running),false);assert.equal(await page.evaluate(()=>__oldAvatar.timer),0);assert.equal(await page.evaluate(()=>__oldAvatar.motion),null);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);await context.close();
+ }
+ assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);
+}finally{fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(report,null,2));await browser.close();}console.log('PASS single automatic dance',report.checks.length,'character journeys');})().catch(e=>{console.error(e);process.exitCode=1;});

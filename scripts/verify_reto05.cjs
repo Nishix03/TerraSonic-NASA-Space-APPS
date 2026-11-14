@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 // RETO 05 acceptance: real DOM controls, image decoding and content fit.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
@@ -12,7 +13,7 @@ async function main(){
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...a){window.__app=this;return set.apply(this,a);};}});
    const Native=window.AudioContext||window.webkitAudioContext;if(Native)window.AudioContext=class extends Native{createGain(){const n=super.createGain(),connect=n.connect.bind(n);n.connect=(d,...a)=>{if(d===this.destination){const silent=super.createGain();silent.gain.value=0;connect(silent);silent.connect(d);return d;}return connect(d,...a);};return n;}};
   });
-  const p=await context.newPage();p.on('pageerror',e=>report.errors.push(e.message));p.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});await p.goto(base);
+  const p=await context.newPage();p.on('pageerror',e=>report.errors.push(e.message));p.on('response',r=>{if(r.status()>=400)report.failedResponses.push(r.url());});await p.goto(base);await dismissEntry(p);
   const audit=async label=>{const result=await p.evaluate(()=>({horizontal:document.documentElement.scrollWidth>innerWidth+1,scroll:[...document.querySelectorAll('.px *')].filter(e=>e.getClientRects().length&&e.clientHeight>1&&e.scrollHeight>e.clientHeight+1&&/auto|scroll/.test(getComputedStyle(e).overflowY)).map(e=>({tag:e.tagName,id:e.id,cls:e.className,height:e.clientHeight,content:e.scrollHeight}))}));assert(!result.horizontal,label+' horizontal overflow');report.internalScroll.push({viewport,label,...result});assert.deepEqual(result.scroll,[],label+' internal scroll');};
   await audit('welcome');await p.screenshot({path:path.join(out,viewport.width+'-welcome.png')});await p.getByRole('button',{name:'Continuar',exact:true}).click();await p.evaluate(()=>__app.setPreference('sfx',false));await audit('home');
   await p.locator('#tour-nav button').first().click();await p.locator('.discgrid .dcard').first().click();await p.waitForFunction(()=>__app.cur());assert.equal(await p.locator('.heard>div').count(),448);assert.equal(await p.locator('.legend-choice').count(),14);assert.equal(await p.locator('.listen-member').count(),5);

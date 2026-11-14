@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 // Tests native capability separately from an intercepted motor boundary.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
@@ -12,7 +13,7 @@ async function main(){fs.mkdirSync(out,{recursive:true});const b=await launchBro
    else Object.defineProperty(navigator,'vibrate',{configurable:true,value:pattern=>{const call={pattern:Array.isArray(pattern)?[...pattern]:pattern,activated:navigator.userActivation?.hasBeenActive};window.__vibrationCalls.push(call);if(mode==='throwing'){call.error='fixture';throw Error('Motor fixture unavailable');}const accepted=mode==='native'?native(pattern):mode!=='rejected';call.accepted=accepted;return accepted;}});
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...a){window.__app=this;return set.apply(this,a);};}});
   },mode);
-  const p=await c.newPage();p.on('pageerror',e=>report.errors.push(e.message));p.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)report.failedResponses.push(r.url());});await p.goto(base,{waitUntil:'domcontentloaded',timeout:45000});await p.waitForFunction(()=>window.__app);assert.equal(await p.evaluate(()=>__vibrationCalls.length),0,'No unsolicited initial vibration');
+  const p=await c.newPage();p.on('pageerror',e=>report.errors.push(e.message));p.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)report.failedResponses.push(r.url());});await p.goto(base,{waitUntil:'domcontentloaded',timeout:45000});await p.waitForFunction(()=>window.__app);await dismissEntry(p);assert.equal(await p.evaluate(()=>__vibrationCalls.length),0,'No unsolicited initial vibration');
   await p.locator('#tour-a11y>summary').click();const toggle=p.getByRole('button',{name:'Vibración',exact:true}),probe=p.getByRole('button',{name:'Probar vibración',exact:true}),stop=p.getByRole('button',{name:'Detener vibración',exact:true});const supported=await p.evaluate(()=>typeof navigator.vibrate==='function');
   if(!supported){assert(await toggle.isDisabled());assert(await probe.isDisabled());assert.match(await p.locator('#haptics-status').textContent(),/no ofrece vibración/);await p.keyboard.press('Escape');await p.locator('.hero .primary').click();await p.waitForFunction(()=>__app.state.tab==='juke');assert.equal(await p.locator('.discgrid .dcard').count(),5);}
   else{

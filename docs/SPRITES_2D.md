@@ -1,5 +1,7 @@
 # Banda 2D original y guía móvil
 
+**Interacción vigente:** baile automático con un solo botón de pausa/reanudación. Se retiraron Caminar, pasos e inspector por indicación posterior del usuario. [Diseño y comprobaciones actuales](EXPERIENCIA_AUTOMATICA.md). Las verificaciones de modos y pasos inferiores son checkpoints históricos.
+
 ## Reparación del transporte · 13 de noviembre de 2026
 
 La captura recibida muestra el estado desactivado que produce Movimiento reducido. Ahora se explica su causa y se ofrece permiso temporal solo para el personaje seleccionado; la preferencia global permanece activa y el permiso se revoca al cambiar personaje o preferencias. Los pasos siguen disponibles sin movimiento automático.

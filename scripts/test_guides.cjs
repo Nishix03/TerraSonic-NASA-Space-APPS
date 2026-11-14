@@ -85,6 +85,9 @@ function setup(options = {}) {
   if (!context.IMPACT_CATALOG.records.length) context.IMPACT_CATALOG = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/impacts.v1.json'), 'utf8'));
   if (!context.CHARACTER_CATALOG.characters.length) context.CHARACTER_CATALOG = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/characters.v1.json'), 'utf8'));
   const component = new context.ComponentUnderTest({});
+  // Most unit journeys isolate navigation with the mock OS reduction. Entry
+  // policy is tested against the unmodified constructor with entryMotion:true.
+  if (!options.entryMotion) component.state.motionMode='auto';
   component.loadDisc = component.preloadArt = component.playCue = component.warmBandClips = () => {};
   function element(id, left, top, width, height, clip = null) {
     const el = { getBoundingClientRect: () => ({ left, top, width, height, right: left + width, bottom: top + height }),
@@ -1353,23 +1356,24 @@ test('the four preferences combine and persist without asking for a diagnosis or
   for (const key of ['voice','big','contrast','reducedMotion']) c.setPreference(key,true);
   assert.equal(c.bandReduced(),true); c.finishPreferences(false);
   assert.equal(c.state.showPreferences,false); assert.equal(c.state.tour,0);
-  const next=setup({language:'es-PE',storage:Object.fromEntries(storage)}).component;
+  const next=setup({entryMotion:true,language:'es-PE',storage:Object.fromEntries(storage)}).component;
   assert.equal(next.state.showPreferences,false);
-  for (const key of ['voice','big','contrast','reducedMotion']) assert.equal(next.state[key],true);
+  for (const key of ['voice','big','contrast']) assert.equal(next.state[key],true);
+  assert.equal(next.state.reducedMotion,false);assert.equal(next.state.motionMode,'full');
 });
 
-test('explicit animation activation overrides reduced motion only for this site and persists', () => {
-  const {component:c,context,storage}=setup();context.window.matchMedia=()=>({matches:true});
-  assert.equal(!!c.bandReduced(),true);assert.equal(c.renderVals().preferences.choices.find(x=>x.id==='preferences-reducedMotion').on,true);
+test('each new entry starts animated even after an earlier visit was paused', () => {
+  const {component:c,context,storage}=setup({entryMotion:true});context.window.matchMedia=()=>({matches:true});
+  assert.equal(!!c.bandReduced(),false);assert.equal(c.renderVals().preferences.choices.find(x=>x.id==='preferences-reducedMotion').on,false);
   c.setPreference('reducedMotion',false);assert.equal(c.bandReduced(),false);assert.equal(c.renderVals().motionClass,'');assert.equal(c.renderVals().motionMode,'full');assert.equal(storage.get('ts_motion_mode'),'full');
-  const restored=setup({storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),false);
   c.setPreference('reducedMotion',true);assert.equal(c.bandReduced(),true);assert.equal(storage.get('ts_motion_mode'),'reduced');
+  const restored=setup({entryMotion:true,storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),false);assert.equal(restored.storage.get('ts_motion_mode'),'reduced','Entering does not modify device or stored settings');
 });
 
 test('a legacy reduced-motion preference can be explicitly enabled without opening a static presentation', () => {
   const {component:c,context}=setup({storage:{ts_prefs:JSON.stringify({version:1,configured:true,values:{reducedMotion:true}})}});context.window.matchMedia=()=>({matches:true});
   let played=false;c.cinema={start(replay,trigger){played=replay&&trigger==='button';}};c.playAnimatedIntro({currentTarget:'button'});
-  assert.equal(played,true);assert.equal(c.bandReduced(),false);assert.equal(c.state.reducedMotion,false);assert.match(c.renderVals().intro.replayLabel,/animada|animated/);
+  assert.equal(played,true);assert.equal(c.bandReduced(),false);assert.equal(c.state.reducedMotion,false);assert.match(c.renderVals().intro.replayLabel,/Repetir|Replay/);
 });
 
 test('the reduced-motion menu toggle reflects the effective OS setting and enables on its first click', () => {

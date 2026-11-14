@@ -8,4 +8,9 @@ async function launchBrowser(options={}){
  const browser=await playwright[browserName].launch({...common,headless:true,...(executablePath?{executablePath}:{}),...(browserName==='chromium'?{args:chromiumArgs}:{} )});
  console.log('BROWSER',browserName,browser.version());return browser;
 }
-module.exports={launchBrowser,browserName};
+async function dismissEntry(page){
+ await page.waitForFunction(()=>!!document.querySelector('.px.app'));
+ const skip=page.locator('.ts-cinema button');
+ if(await skip.count())await skip.click();
+}
+module.exports={launchBrowser,browserName,dismissEntry};

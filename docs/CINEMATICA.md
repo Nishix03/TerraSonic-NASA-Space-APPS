@@ -1,6 +1,6 @@
 # Del espacio al Pacífico
 
-**Reparación vigente:** [MOVIMIENTO.md](MOVIMIENTO.md). Se eliminó la presentación estática y se añadió activación explícita que funciona con movimiento reducido del sistema, pausa y persistencia. Las cifras de la primera entrega al final de este documento son un checkpoint anterior.
+**Política vigente:** [EXPERIENCIA_AUTOMATICA.md](EXPERIENCIA_AUTOMATICA.md). La introducción se reproduce en cada entrada y recarga, antes de la bienvenida; el botón verde permite repetirla. La banda tiene un solo baile automático. Los apartados de sesión/activación y cifras inferiores conservan las decisiones históricas anteriores.
 
 ## Auditoría y dirección
 

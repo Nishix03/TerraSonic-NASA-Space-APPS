@@ -1,5 +1,7 @@
 # Activación visible de las animaciones
 
+**Checkpoint anterior.** La instrucción posterior exige reproducción automática en cada entrada/recarga. La política vigente y el baile único se describen en [EXPERIENCIA_AUTOMATICA.md](EXPERIENCIA_AUTOMATICA.md).
+
 La captura del usuario mostró que la experiencia publicada estaba en movimiento reducido: el botón abría una lámina estática y el cielo no se animaba. La comprobación previa de esa alternativa no satisfacía la intención de ver una introducción animada. Esta reparación elimina la presentación estática y hace explícita la activación del movimiento.
 
 Dirección: conservar azul espacial, agua y dorado; mantener las fuentes y la composición existentes. Un control principal inicia el viaje y un botón de pausa de 44 px permite detener el movimiento. En móvil permanecen en una fila, con una explicación breve debajo cuando las animaciones están pausadas.

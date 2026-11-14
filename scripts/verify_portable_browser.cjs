@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 // Exercise an extracted, independently served HTTP package without route mocks.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
@@ -11,7 +12,7 @@ async function main(){
    const context=await browser.newContext({viewport,locale:'es-PE',reducedMotion:'reduce'}),page=await context.newPage();
    await context.addInitScript(()=>{const Native=window.AudioContext||window.webkitAudioContext;if(typeof Native!=='function')return;window.AudioContext=class extends Native{createGain(){const node=super.createGain(),connect=node.connect.bind(node);node.connect=(destination,...args)=>{if(destination===this.destination){const silent=super.createGain();silent.gain.value=0;connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return node;}};});
    page.on('pageerror',error=>report.errors.push(error.message));page.on('response',response=>{if(response.status()>=400&&response.url().startsWith(origin))report.failedResponses.push({url:response.url(),status:response.status()});});page.on('request',request=>{if(/^https?:/.test(request.url())&&!request.url().startsWith(origin))report.externalRequests.push(request.url());});
-   const response=await page.goto(target);assert.equal(response.status(),200);await page.getByRole('button',{name:'Continuar',exact:true}).click();await page.evaluate(()=>document.fonts.ready);
+   const response=await page.goto(target);assert.equal(response.status(),200);await dismissEntry(page);await page.getByRole('button',{name:'Continuar',exact:true}).click();await page.evaluate(()=>document.fonts.ready);
    const process=await page.locator('.home-process').boundingBox();assert(process.y>=0&&process.y+process.height<=viewport.height);
    assert(await page.evaluate(()=>document.fonts.check('700 16px Barlow')));await page.screenshot({path:path.join(output,'home-'+viewport.width+'.png')});
    await page.locator('#tour-nav button').first().click();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});

@@ -36,21 +36,13 @@ Mantener las fuentes locales existentes: titular compacto y fuerte; texto y cont
 
 Móvil: navegación, título, explicación corta, acciones, cifras y demostración en ese orden. Escritorio: texto y acciones a la izquierda; demostración NASA a la derecha. Alinear bordes, agrupar contenidos relacionados y sustituir separaciones arbitrarias por una escala de 4/8/12/16/24/32 px. Evitar el gran vacío inferior de la captura sin comprimir la lectura.
 
-### 3. Reparar todos los controles de la banda
+### 3. Una sola animación de la banda
 
-Para Silbo, Inti, Mamacocha, Yaku e Illapa, comprobar clic, teclado y estado real:
+Para Silbo, Inti, Mamacocha, Yaku e Illapa, iniciar automáticamente un baile ligero al abrir su ficha. Conservar los cuatro PNG originales y añadir balanceo suave. Mostrar solo «Pausar baile» / «Bailar» para el movimiento, más el control independiente de escuchar instrumento. Retirar Caminar, Animar, pasos anterior/siguiente, Reposo y el inspector de dibujos.
 
-1. Animar reproduce los cuatro dibujos con la cadencia original.
-2. Caminar recorre el escenario manteniendo los dibujos originales.
-3. Bailar combina dibujos y balanceo escénico.
-4. Pausar congela imagen y posición; Reanudar continúa y cambia su nombre correctamente.
-5. Paso anterior/siguiente muestran un dibujo distinto y dejan el movimiento pausado.
-6. Reposo cancela tiempos pendientes y recupera la pose original.
-7. Escuchar instrumento inicia audio únicamente por una acción expresa; el botón informa cuándo permite detenerlo y cualquier error real.
+La pausa conserva dibujo y posición; reanudar continúa. No iniciar sonido automáticamente. Medir la visibilidad del escenario con sus controles y detener tiempos/animación al ocultarse o salir de la sección. Mantener las ilustraciones de navegación legibles y la reacción de los músicos del reproductor ligada a su música real.
 
-Los controles deben medir al menos 44 px de alto como objetivo de comodidad del proyecto. Evitar tipografía diminuta heredada del pie de figura. En móvil, distribuir transporte en dos columnas y los tres modos de forma compacta. No colocar controles dentro de un contenedor con `role=img`.
-
-El modo reducido debe mantener los dibujos estáticos y los pasos disponibles. Explicar la causa de la desactivación. Ofrecer permiso expreso, temporal y exclusivo para ese personaje; no cambiar la preferencia global ni activar fondo, sonido o vibración. Revocar ese permiso al cambiar personaje o preferencias. Medir visibilidad del escenario completo para no cancelar el movimiento mientras se usa su transporte. Detener al salir de la sección, ocultar la pestaña o desmontar.
+Usar controles de al menos 44 px como objetivo de comodidad, foco perceptible y texto legible. La guía móvil tiene una instrucción breve por paso, contador, cerrar y acciones esenciales. No añadir un panel de scroll interno para unas pocas líneas.
 
 ### 4. Introducción cinematográfica
 
@@ -58,9 +50,9 @@ Crear una presentación narrativa de unos 5 segundos en escritorio y unos 3 en m
 
 Preferir SVG inline y Web Animations API/CSS. Las órbitas, ondas, coordenadas y planeta son ilustraciones, nunca observaciones NASA inventadas. Identificar la ilustración como tal cuando lleve información textual. Mantener intacta la leyenda de la imagen NASA real.
 
-Mostrarla solo una vez por sesión. No repetir al refrescar ni navegar; incluir «Repetir introducción» para jurados. Siempre ofrecer «Saltar introducción», alcanzable con teclado, y Escape. No reproducir audio ni vibración. La bienvenida de accesibilidad tiene prioridad; si se elige la guía, la introducción no debe taparla.
+Reproducirla automáticamente en cada carga de la web y en cada recarga, antes de la bienvenida. Las marcas de sesión antiguas y una pausa guardada no deben impedir una nueva entrada. El botón verde «Repetir introducción» permite verla otra vez sin recargar. Mantener «Saltar introducción» y Escape. No iniciar audio ni vibración. La navegación interna no debe repetirla ni interrumpir la guía.
 
-Si el sistema o la aplicación reducen movimiento, omitir la entrada automática y mostrar una acción clara: «Activar animaciones y ver intro». Esa acción debe activar realmente movimiento para la web y reproducir la secuencia; no abrir una lámina estática. Guardar la elección expresa y ofrecer una pausa visible. No cambiar ajustes del dispositivo. Si falla la animación o el almacenamiento, conservar contenido y navegación. No dejar capas invisibles capturando clics, temporizadores sin cancelar o elementos permanentemente transparentes.
+Aplicar la política explícita de entrada animada en cada carga. La pausa sigue disponible durante la visita actual y no modifica ajustes del dispositivo; una nueva recarga vuelve a iniciar la presentación. Al terminar, restaurar foco y acceso a la bienvenida si corresponde. Si falla la API de animación o el almacenamiento, mantener el contenido y la navegación utilizables, sin capas invisibles o controles atrapados.
 
 ### 5. Universo persistente y estados visuales
 

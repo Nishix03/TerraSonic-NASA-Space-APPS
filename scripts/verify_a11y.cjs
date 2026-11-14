@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 // Automated WCAG checks complement keyboard/zoom/AT review; they are not certification.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
@@ -20,7 +21,7 @@ async function main(){
     localStorage.setItem('ts_lang','es');
     Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
    });
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.addScriptTag({path:axePath});
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await dismissEntry(page);await page.addScriptTag({path:axePath});
    report.version=await page.evaluate(()=>axe.version);
    const audit=async label=>{
     const result=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa','best-practice']}}));

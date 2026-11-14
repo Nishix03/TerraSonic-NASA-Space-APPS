@@ -1,3 +1,4 @@
+const {dismissEntry}=require('./browser_fixture.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {launchBrowser}=require('./browser_fixture.cjs');
 const site=path.resolve(process.argv[2]||'_site'),out=path.resolve(process.argv[3]||'_work/mobile-guide'),base='http://terrasonic.test/';
@@ -8,7 +9,7 @@ async function main(){
    const c=await b.newContext({viewport:{width,height},locale:language==='es'?'es-PE':'en-US',reducedMotion:'reduce'});
    await c.route('**/*',r=>{const u=r.request().url();if(/^(data:|blob:)/.test(u))return r.continue();if(!u.startsWith(base))return r.abort();const f=path.resolve(site,new URL(u).pathname.slice(1)||'index.html');return fs.existsSync(f)?r.fulfill({path:f}):r.fulfill({status:404});});
    await c.addInitScript(()=>{window.AudioContext=undefined;window.webkitAudioContext=undefined;Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const set=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return set.apply(this,args);};}});});
-   const p=await c.newPage();p.on('pageerror',e=>report.errors.push(e.message));await p.goto(base);
+   const p=await c.newPage();p.on('pageerror',e=>report.errors.push(e.message));await p.goto(base);await dismissEntry(p);
    if(large)await p.locator('#preferences-big').check();
    const label=`${width}-${height}-${language}-${large?'large':'normal'}`;
    const visible=async locator=>{const box=await locator.boundingBox();assert(box&&box.x>=0&&box.x+box.width<=width+1&&box.y>=0&&box.y+box.height<=height+1,JSON.stringify({label,box}));return box;};
