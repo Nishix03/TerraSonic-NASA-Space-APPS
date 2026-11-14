@@ -1728,22 +1728,14 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .player-layout .band-stage-musicians{height:auto;align-items:stretch}
 .px .player-layout .stage-musician.listen-member{padding:4px 2px;border:1px solid transparent;text-align:center;align-items:end}
 .px .player-layout .stage-musician:focus-visible{outline:2px solid var(--fg);outline-offset:-2px}
-.px .stage-musician .stage-indicator{position:absolute;grid-column:auto;inset:6px auto auto 6px;width:10px;height:10px;border:1px solid var(--member-color);border-radius:2px}
-.px .stage-musician[aria-pressed="true"] .stage-indicator{background:var(--member-color)}
-.px .stage-musician .stage-note-track{position:absolute;grid-column:auto;inset:9% 2px auto;height:32%;pointer-events:none}
-.px .stage-note-track::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:#8798aa35}
-.px .stage-note-track::after{content:"";position:absolute;bottom:0;left:50%;width:18px;border-top:1px solid #a9b8ca88;transform:translateX(-50%)}
-.px .stage-musician .stage-note{position:absolute;grid-column:auto;inset:0 auto auto 50%;display:grid;justify-items:center;gap:2px;opacity:0;z-index:1;white-space:nowrap;transform:translateX(-50%);font:700 clamp(.53rem,.8vw,.66rem)/1.15 var(--head)}
+.px .stage-note-track{position:absolute;grid-column:auto;inset:5% 2px auto;height:35%;display:block;pointer-events:none;container-type:size}
+.px .stage-note-track::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:#8798aa55}
+.px .stage-note-track::after{content:"";position:absolute;bottom:0;left:50%;width:25px;border-top:2px solid #a9b8ca99;transform:translateX(-50%)}
+.px .stage-note{position:absolute;grid-column:auto;top:0;left:50%;display:grid;justify-items:center;gap:1px;z-index:1;white-space:nowrap;transform:translateX(-50%);--stage-drop:100cqh;font:700 clamp(.62rem,.9vw,.75rem)/1.15 var(--head)}
 .px .stage-note b,.px .stage-note small{padding:2px 3px;border-radius:3px;color:#fff;background:#0a0f1a;font-size:inherit}
-.px .stage-note b:empty,.px .stage-note small:empty{display:none}
-.px .stage-note::before{content:"";width:12px;height:12px;border:1px solid #fff9;border-radius:2px;background:var(--member-color)}
+.px .stage-note::before{content:"";width:19px;height:19px;border:1px solid #fff;border-radius:3px;background:var(--member-color);box-shadow:0 0 6px #0009}
 .px .stage-note[data-note="thunder"]::before{outline:1px solid var(--member-color);outline-offset:2px}
-.px:not(.reduce-motion) .stage-note.note-a{animation:stage-note-a .28s linear}
-.px:not(.reduce-motion) .stage-note.note-b{animation:stage-note-b .28s linear}
-@keyframes stage-note-a{0%{top:0;opacity:1}80%{top:88%;opacity:1}100%{top:88%;opacity:0}}
-@keyframes stage-note-b{0%{top:0;opacity:1}80%{top:88%;opacity:1}100%{top:88%;opacity:0}}
-@media(prefers-reduced-motion:reduce){.px .stage-note-track .stage-note{animation:none}}
-.px .stage-musician[aria-pressed="false"] .stage-indicator{background:#080c15}
+.px .stage-note.is-static{top:auto;bottom:0}
 @media(max-width:1000px){
  .px .player-layout{grid-template-columns:repeat(2,minmax(0,1fr))}
  .px .player-layout #tour-frame{grid-column:1/-1}
@@ -2054,7 +2046,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
 <button type="button" class="listen-member stage-musician" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
-<span class="stage-indicator" aria-hidden="true"></span><span class="stage-note-track" aria-hidden="true"><span class="stage-note {{musician.noteClass}}" data-note="{{musician.noteKind}}"><b>{{musician.noteChord}}</b><small>{{musician.noteLabel}}</small></span></span><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
+<earthbeat-note-track class="stage-note-track" data-hit="{{musician.noteId}}" data-kind="{{musician.noteKind}}" data-chord="{{musician.noteChord}}" data-label="{{musician.noteLabel}}" aria-hidden="true"></earthbeat-note-track><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
 <strong>{{musician.name}}</strong>
 </button>
 </sc-for>
@@ -4774,7 +4766,7 @@ class Component extends DCLogic {
   }
   updateStageNote(notes, key, kind, chord) {
     notes[key] = {
-      next: notes[key]?.next === 'a' ? 'b' : 'a',
+      id: (notes[key]?.id || 0) + 1,
       kind: kind === true ? 'note' : kind,
       chord: chord
     };
@@ -5469,7 +5461,7 @@ class Component extends DCLogic {
         var level = member.on ? s.levels[member.key] || 0 : 0;
         var note = member.on && s.playing && !s.masterMuted && s.volume > 0 ? s.stageNotes[member.key] : null;
         var noteLabel = note?.kind === 'thunder' ? T('Trueno', 'Thunder') : note?.kind === 'rhythm' ? T('Ritmo', 'Beat') : '';
-        return { noteClass: note ? 'note-' + note.next : '', noteKind: note?.kind || '', noteChord: note?.chord || '', noteLabel: noteLabel,
+        return { noteId: note?.id || '', noteKind: note?.kind || '', noteChord: note?.chord || '', noteLabel: noteLabel,
           name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color, intensity: level };
       }),
       stageShowBeat: melody,

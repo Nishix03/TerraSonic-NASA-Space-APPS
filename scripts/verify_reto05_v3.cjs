@@ -133,12 +133,11 @@ async function main() {
       const stage = page.locator('.stage-musician');
       await stage.first().waitFor();
       assert.equal(await stage.count(), 5);
-      assert.equal(await page.locator('.stage-musician[aria-pressed="true"] .stage-indicator').count(), 5);
-      const onColor = await stage.first().locator('.stage-indicator').evaluate(el => getComputedStyle(el).backgroundColor);
+      assert.equal(await page.locator('.stage-musician[aria-pressed="true"]').count(), 5);
+      assert.equal(await page.locator('.band-stage .stage-indicator, .band-stage .stage-note').count(), 0);
       await stage.first().click();
       assert.equal(await stage.count(), 5);
       assert.equal(await stage.first().getAttribute('aria-pressed'), 'false');
-      assert.notEqual(await stage.first().locator('.stage-indicator').evaluate(el => getComputedStyle(el).backgroundColor), onColor);
       await stage.first().press('Space');
       assert.equal(await stage.first().getAttribute('aria-pressed'), 'true');
       assert.equal(await page.locator('#tour-frame #playback-position').count(), 1);
@@ -188,10 +187,19 @@ async function main() {
       assert.equal(await page.locator('#playback-position').inputValue(), '0');
       await page.getByRole('button', { name: 'Reproducir', exact: true }).click();
       await page.locator('.band-stage').scrollIntoViewIfNeeded();
-      const illapa = page.locator('.stage-musician').last().locator('.stage-note[data-note="rhythm"]');
+      const illapa = page.locator('.stage-musician').last().locator('.stage-note[data-note="rhythm"]').first();
       await illapa.waitFor({timeout:10000});
       assert(await illapa.locator('b').textContent(), 'Rhythm cue shows its chord');
       assert.equal(await illapa.locator('small').textContent(), 'Ritmo');
+      const drop = await illapa.evaluate(async note => {
+        const animation = note.getAnimations()[0];
+        await animation.ready;
+        const start = note.getBoundingClientRect().top;
+        await new Promise(resolve => setTimeout(resolve, 150));
+        return note.getBoundingClientRect().top - start;
+      });
+      assert(drop > 8, 'The marker visibly falls in the actual DOM');
+      await page.waitForFunction(() => [...document.querySelectorAll('.stage-note-track')].some(track => track.children.length >= 2));
       await page.locator('.stage-musician earthbeat-dance[data-dancing]').first().waitFor({timeout:10000});
       for (const lane of await stage.all()) {
         const style = await lane.evaluate(el => {
@@ -204,7 +212,7 @@ async function main() {
       await page.screenshot({ path: path.join(output, `stage-${viewport.width}.png`) });
       await page.getByRole('button', { name: 'Pausar', exact: true }).click();
       assert.equal(await page.locator('.stage-musician earthbeat-dance[data-dancing]').count(), 0);
-      assert.equal(await page.locator('.stage-note:is(.note-a,.note-b)').count(), 0);
+      assert.equal(await page.locator('.stage-note').count(), 0);
       await page.screenshot({ path: path.join(output, `player-${viewport.width}.png`) });
       await page.locator('#tour-a11y summary').scrollIntoViewIfNeeded();
       const header = await page.locator('header.top').boundingBox();
@@ -252,6 +260,15 @@ async function main() {
     assert.equal(await staticIntro.evaluate(element => element.getAnimations({ subtree: true }).length), 0);
     await staticIntro.getByRole('button', { name: 'Enter', exact: true }).click();
     assert(await accessiblePage.getByRole('heading', { name: 'Listen to the Pacific' }).isVisible());
+    await accessiblePage.locator('#tour-nav button').first().click();
+    await accessiblePage.locator('.discgrid .dcard').first().click();
+    await accessiblePage.getByRole('button', { name: 'Play', exact: true }).click();
+    await accessiblePage.locator('.band-stage').scrollIntoViewIfNeeded();
+    const staticCue = accessiblePage.locator('.stage-note.is-static').first();
+    await staticCue.waitFor();
+    assert(await staticCue.evaluate(cue => getComputedStyle(cue).opacity === '1' && cue.getAnimations().length === 0));
+    await accessiblePage.getByRole('button', { name: 'Pause', exact: true }).click();
+    assert.equal(await accessiblePage.locator('.stage-note').count(), 0);
     await accessible.close();
     for (let attempt = 0; attempt < 3; attempt++) {
       const context = await browser.newContext({ viewport: mobile, locale: 'es-PE', isMobile: true, hasTouch: true });

@@ -176,3 +176,72 @@ class DanceButton extends HTMLElement {
 
 customElements.define('earthbeat-dance', BandDance);
 customElements.define('earthbeat-dance-button', DanceButton);
+
+class StageNoteTrack extends HTMLElement {
+  static observedAttributes = ['data-hit'];
+  cues = new Map();
+
+  clear = () => {
+    for (const note of this.cues.keys()) this.removeCue(note);
+  };
+
+  connectedCallback() {
+    window.addEventListener('terrasonic:motion', this.clear);
+    document.addEventListener('visibilitychange', this.clear);
+    this.showCue(this.dataset.hit);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('terrasonic:motion', this.clear);
+    document.removeEventListener('visibilitychange', this.clear);
+    this.clear();
+  }
+
+  attributeChangedCallback(_, previous, hit) {
+    if (previous === hit) return;
+    if (hit && this.isConnected) this.showCue(hit);
+    else if (!hit) this.clear();
+  }
+
+  showCue(hit) {
+    if (!hit) return;
+    // Read the labels after the template has applied this attack's attributes.
+    queueMicrotask(() => {
+      if (this.isConnected && this.dataset.hit === hit && !document.hidden) this.addCue();
+    });
+  }
+
+  addCue() {
+    const still = reduced() || typeof this.animate !== 'function';
+    // Keep the most recent attack readable with reduced motion.
+    if (still) this.clear();
+    const note = document.createElement('span');
+    note.className = still ? 'stage-note is-static' : 'stage-note';
+    note.dataset.note = this.dataset.kind;
+    for (const [tag, label] of [['b', this.dataset.chord], ['small', this.dataset.label]]) {
+      if (!label) continue;
+      const text = document.createElement(tag);
+      text.textContent = label;
+      note.append(text);
+    }
+    this.append(note);
+    const arrive = 'translate(-50%, calc(var(--stage-drop) - 15px))';
+    const animation = still ? null : note.animate([
+      { transform: 'translate(-50%, -12px)' },
+      { transform: arrive, offset: .80 },
+      { transform: arrive, opacity: .85 },
+    ], { duration: 780, fill: 'both' });
+    const timeout = setTimeout(() => this.removeCue(note), still ? 680 : 780);
+    this.cues.set(note, { animation, timeout });
+  }
+
+  removeCue(note) {
+    const cue = this.cues.get(note);
+    clearTimeout(cue.timeout);
+    cue.animation?.cancel();
+    this.cues.delete(note);
+    note.remove();
+  }
+}
+
+customElements.define('earthbeat-note-track', StageNoteTrack);

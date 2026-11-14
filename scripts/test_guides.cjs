@@ -1642,7 +1642,7 @@ test('Illapa cues reflect actual attacks and distinguish rhythm from the extreme
   assert.equal(c.state.stageNotes.illapa,cue,'a decaying note is never counted as a new entry');
   melody(8);
   assert.equal(c.state.stageNotes.illapa.kind,'rhythm');
-  assert.notEqual(c.state.stageNotes.illapa.next,cue.next);
+  assert.equal(c.state.stageNotes.illapa.id,cue.id + 1);
   assert.deepEqual(attacks.map(a=>a.type),['timpani','timpani']);
 
   c.state.engine='raw';
