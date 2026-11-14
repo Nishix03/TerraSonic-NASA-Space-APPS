@@ -519,7 +519,7 @@ a{color:inherit}
 .px.band-view .skyfix .neb,.px.band-view .skyfix .stl{animation:none;will-change:auto}
 .px.band-view .skyfix .neb{filter:none}
 .px.band-view .skyfix .shoot,.px.band-view .skyfix .sat{display:none;animation:none}
-.px .brandmark{display:block;width:48px;height:36px;object-fit:contain;border-radius:4px}
+.px .brandmark{display:block;color:var(--fg)}
 
 /* ===== auditoría visual: legibilidad, escalado y pantallas pequeñas ===== */
 .px .pix,.px .tag,.px .eyebrow,.px .title .n{font-size:max(.64em,10.5px)}
@@ -1050,7 +1050,7 @@ a{color:inherit}
 @media(max-width:900px){
   .px .top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 8px;padding-block:max(5px,env(safe-area-inset-top,0px)) 2px}
   .px .top .brand{justify-self:start;gap:6px}
-  .px .top .brandmark{width:40px;height:30px}
+  .px .top .brandmark{width:28px;height:22px}
   .px .top .wordmark{white-space:normal;letter-spacing:.06em;overflow-wrap:anywhere}
   .px .top .nav{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 4px;width:100%;margin:0;padding:0}
   .px .top .nav button{min-height:44px;line-height:1.2;overflow-wrap:anywhere}
@@ -1391,7 +1391,6 @@ a{color:inherit}
 /* Optional, combinable preferences. No diagnosis or account is requested. */
 .px .preferences-dim{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:1100}
 .px .preferences-dialog{position:fixed;z-index:1101;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;padding:24px;display:grid;gap:14px;background:var(--bg);border:1px solid var(--fg);border-radius:8px;box-shadow:0 12px 80px #000}
-.px .preferences-dialog .kicker{display:flex;align-items:center;gap:10px}
 .px .preferences-dialog h2{font:700 clamp(1.4em,2.5vw,1.8em)/1.2 var(--head)}
 .px .preferences-dialog>p:not(.kicker){font-size:.9em;color:var(--muted)}
 .px .preferences-choices{display:grid;gap:8px}
@@ -1437,6 +1436,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .stagebox.big .mname{background:var(--surface);text-shadow:none}
 .px .credit-section p{color:var(--muted)}
 .px.app[data-theme="light"] .skyfix{opacity:.1}
+.px.app[data-theme="light"] .brandmark{background:#172337;border-radius:4px}
 .px.app[data-theme="light"] .homeflow strong{color:var(--fg)}
 .px .guidefab{background:var(--surface)}
 .px.app[data-theme="light"] .tsay{color:var(--fg)}
@@ -1536,7 +1536,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <a class="skip-content" href="#main-content" onClick="{{skipContent}}">{{tx.skipContent}}</a>
 <div class="wrap">
 <button type="button" class="brand" onClick="{{goHome}}" aria-label="{{tx.brandAria}}">
-<img class="brandmark" src="./earthbeat-logo.webp" width="192" height="144" alt="">
+<svg class="brandmark" width="38" height="24" viewBox="0 0 25 16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h8v1h-8zM20 0h1v1h-1zM2 1h3v1h-3zM11 1h3v1h-3zM18 1h6v1h-6zM1 2h2v1h-2zM13 2h2v1h-2zM20 2h2v1h-2zM1 3h1v1h-1zM14 3h1v1h-1zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h2v1h-2zM14 11h2v1h-2zM1 12h1v1h-1zM14 12h1v1h-1zM1 13h2v1h-2zM13 13h2v1h-2zM2 14h3v1h-3zM11 14h3v1h-3zM4 15h8v1h-8z"></path><path d="M19 4h1v1h-1zM3 5h2v1h-2zM9 5h2v1h-2zM18 5h1v1h-1zM21 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM8 6h1v1h-1zM11 6h1v1h-1zM17 6h1v1h-1zM20 6h1v1h-1zM6 7h2v1h-2zM12 7h2v1h-2zM19 7h1v1h-1zM3 9h2v1h-2zM9 9h2v1h-2zM2 10h1v1h-1zM5 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM6 11h2v1h-2zM12 11h2v1h-2z" fill="#FFD447"></path></svg>
 <span class="wordmark">EarthBeat</span>
 </button>
 <nav id="tour-nav" class="nav" aria-label="{{tx.sections}}" onKeyDown="{{onNavKey}}">
@@ -1982,7 +1982,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 <sc-if value="{{preferences.on}}">
 <div class="preferences-dim" aria-hidden="true"></div>
 <section id="preferences-dialog" class="preferences-dialog" role="dialog" aria-modal="true" aria-labelledby="preferences-title" aria-describedby="preferences-body" tabindex="-1">
-<p class="kicker"><img class="brandmark" src="./earthbeat-logo.webp" width="192" height="144" alt=""><span>EarthBeat · Brisa</span></p>
+<p class="kicker">EarthBeat · Brisa</p>
 <h2 id="preferences-title">{{preferences.title}}</h2><p id="preferences-body">{{preferences.body}}</p>
 <div class="preferences-choices"><sc-for list="{{preferences.choices}}" as="p"><label for="{{p.id}}"><input id="{{p.id}}" type="checkbox" checked="{{p.on}}" onChange="{{p.change}}"><span><strong>{{p.label}}</strong><span class="small muted">{{p.hint}}</span></span></label></sc-for></div>
 <div class="row" role="group" aria-label="{{tx.langAria}}"><sc-for list="{{langs}}" as="l"><button type="button" class="btn sm" aria-pressed="{{l.on}}" onClick="{{l.pick}}" lang="{{l.code}}">{{l.short}}</button></sc-for></div>
