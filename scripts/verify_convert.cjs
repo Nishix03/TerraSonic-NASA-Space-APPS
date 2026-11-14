@@ -40,7 +40,8 @@ async function main() {
     await page.locator('#tour-sample button').click();
     await page.waitForFunction(() => __app.state.custom?.kind === 'rain' && __app.cur()?.cells.length === 448);
     assert.equal(await page.locator('#tour-machine canvas.heard').count(),1);
-    assert.match(await page.locator('#player-legend').textContent(),/Bajo el promedio/);
+    await page.locator('#player-legend .legend-choice').last().click();
+    assert.match(await page.locator('.legend-detail').textContent(),/debajo del promedio/);
     checks.push('NASA POWER rainfall opens a playable analysis with the right units');
     await imageInput().setInputFiles(path.join(site, 'fotogramas/ver2025_2.webp'));
     await page.waitForFunction(() => __app.state.custom?.name === 'ver2025_2.webp' && __app.state.sub === 0);
@@ -73,7 +74,9 @@ async function main() {
     assert.equal(await page.evaluate(() => __app.state.custom.url), accepted);
     checks.push('A tiny file declaring 1.6 billion pixels rejected before image decode');
     await page.locator('#tour-lang button').nth(1).click();
-    assert.match(await page.locator('#player-legend').textContent(),/Cooler.*Neutral.*Warmer/s);
+    assert.match(await page.locator('.legend-detail').textContent(),/Cool color/);
+    await page.locator('.legend-choice').first().click();
+    assert.match(await page.locator('.legend-detail').textContent(),/Warm color/);
     await page.getByRole('button',{name:'From map to sound',exact:true}).click();
     await page.getByRole('button',{name:'Try it',exact:true}).click();
     assert.equal(await page.locator('.practice-example img').getAttribute('src'),accepted);

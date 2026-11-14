@@ -1724,10 +1724,8 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px.app[data-contrast="true"] .legend-swatch{border-color:var(--fg)}
 .px .readout p>strong{flex:none}
 .px .player-layout .listen-band{grid-template-rows:auto 1fr auto auto;align-content:start}
-.px .stage-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 8px}
-.px .stage-motion-button{padding:3px 7px;min-height:28px;border:1px solid var(--line);border-radius:4px;font-size:.75em;cursor:pointer}
-.px .stage-motion-button:hover{border-color:var(--fg)}
-.px .stage-motion-status{grid-column:1/-1;margin:0;color:var(--muted);font-size:.72em;line-height:1.25}
+.px .stage-motion-status{margin:3px 0 0;color:var(--muted);font-size:.72em;line-height:1.25}
+.px .stage-motion-status:empty{display:none}
 .px .player-layout .band-stage{height:auto;min-height:200px}
 .px .player-layout .band-stage-musicians{height:auto;align-items:stretch}
 .px .player-layout .stage-musician.listen-member{padding:4px 2px;border:1px solid transparent;text-align:center;align-items:end}
@@ -2044,12 +2042,11 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </aside>
 </figure>
 <section class="listen-band" aria-labelledby="listen-band-title">
-<div class="stage-heading">
+<div>
 <h2 id="listen-band-title">{{tx.theBand}}</h2>
-<button type="button" class="stage-motion-button" onClick="{{stageMotion.toggle}}" aria-describedby="stage-motion-status">{{stageMotion.action}}</button>
-<p id="stage-motion-status" class="stage-motion-status" role="status">{{stageMotion.status}}</p>
+<p id="stage-motion-status" class="stage-motion-status" role="status">{{stageMotionNotice}}</p>
 </div>
-<div class="band-stage" role="group" aria-label="{{tx.bandAria}}" data-note-motion="{{stageMotion.mode}}">
+<div class="band-stage" role="group" aria-label="{{tx.bandAria}}">
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
 <button type="button" class="listen-member stage-musician" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
@@ -3367,11 +3364,6 @@ class Component extends DCLogic {
     this.preferencesConfigured = !!(preferences && preferences.configured);
     this.state.showPreferences = !this.preferencesConfigured;
     this.state.reducedMotion = !!this.state.reducedMotion;
-    this.state.stageNoteMotion = null;
-    try {
-      var stageNoteMotion = localStorage.getItem('ts_stage_note_motion');
-      if (stageNoteMotion === 'full' || stageNoteMotion === 'static') this.state.stageNoteMotion = stageNoteMotion;
-    } catch (ignored) {}
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
     this.state.tutorialSkipped = {};
@@ -3904,24 +3896,6 @@ class Component extends DCLogic {
     this.stopSpeech();
     this.stop();
     if (this.ac) this.ac.close();
-  }
-  stageMotionVm() {
-    var self = this, preference = this.state.stageNoteMotion;
-    var mode = preference || (this.bandReduced() ? 'static' : 'full');
-    var status = mode === 'full' ? T('Las fichas caen al sonar.', 'Markers fall when instruments play.')
-      : preference === 'static' ? T('Las fichas aparecen quietas.', 'Markers stay still.')
-      : this.state.reducedMotion ? T('Movimiento reducido en EarthBeat.', 'Reduced motion is on in EarthBeat.')
-      : T('Movimiento reducido en tu dispositivo.', 'Reduced motion is on in your device settings.');
-    return {
-      mode: mode, status: status,
-      action: mode === 'full' ? T('Pausar caída', 'Pause falling markers') : T('Activar caída', 'Enable falling markers'),
-      toggle: function () {
-        var next = mode === 'full' ? 'static' : 'full';
-        self.setState({ stageNoteMotion: next });
-        try { localStorage.setItem('ts_stage_note_motion', next); } catch (ignored) {}
-        self.syncPreferenceMotion();
-      }
-    };
   }
   bandReduced() {
     return this.state.reducedMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -5476,7 +5450,9 @@ class Component extends DCLogic {
       bandStatus: activeN === 0 ? T('Todos los instrumentos están silenciados. Activa un músico para escucharlo.', 'All instruments are muted. Switch a musician on to hear them.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandGo: function () { self.setBandMute(self.allMute(false)); self.setState({ caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
-      stageMotion: this.stageMotionVm(),
+      stageMotionNotice: s.reducedMotion
+        ? T('Movimiento reducido activado en Accesibilidad.', 'Reduced motion is on in Accessibility.')
+        : this.bandReduced() ? T('Movimiento reducido activado en tu dispositivo.', 'Reduced motion is on in your device settings.') : '',
       stageMusicians: band.map(function (member) {
         var level = member.on ? s.levels[member.key] || 0 : 0;
         var note = member.on && s.playing && !s.masterMuted && s.volume > 0 ? s.stageNotes[member.key] : null;

@@ -212,7 +212,7 @@ class StageNoteTrack extends HTMLElement {
   }
 
   addCue() {
-    const still = this.closest('.band-stage')?.dataset.noteMotion !== 'full' || typeof this.animate !== 'function';
+    const still = reduced() || typeof this.animate !== 'function';
     // Keep the most recent attack readable with reduced motion.
     if (still) this.clear();
     const note = document.createElement('span');

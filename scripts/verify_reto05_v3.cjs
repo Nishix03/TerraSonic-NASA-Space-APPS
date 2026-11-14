@@ -134,7 +134,8 @@ async function main() {
       await stage.first().waitFor();
       assert.equal(await stage.count(), 5);
       assert.equal(await page.locator('.stage-musician[aria-pressed="true"]').count(), 5);
-      assert.equal(await page.locator('.band-stage .stage-indicator, .band-stage .stage-note').count(), 0);
+      assert.equal(await page.locator('.band-stage .stage-indicator, .band-stage .stage-note, .stage-motion-button').count(), 0);
+      assert.equal(await page.locator('#stage-motion-status').textContent(), '');
       await stage.first().click();
       assert.equal(await stage.count(), 5);
       assert.equal(await stage.first().getAttribute('aria-pressed'), 'false');
@@ -190,6 +191,7 @@ async function main() {
       const illapa = page.locator('.stage-musician').last().locator('.stage-note[data-note="rhythm"]').first();
       await illapa.waitFor({timeout:10000});
       assert.equal(await illapa.locator('b').count(), 0);
+      assert.equal(await page.locator('.stage-note [data-chord], .stage-note-track[data-chord]').count(), 0);
       assert.equal(await illapa.evaluate(note => getComputedStyle(note, '::before').width), '12px');
       assert.equal(await illapa.locator('small').textContent(), 'Ritmo');
       const drop = await illapa.evaluate(async note => {
@@ -253,7 +255,10 @@ async function main() {
       await context.close();
     }
     const accessible = await browser.newContext({ viewport: mobile, locale: 'en', reducedMotion: 'reduce' });
-    await accessible.addInitScript(() => localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: true, values: { contrast: true } })));
+    await accessible.addInitScript(() => {
+      localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: true, values: { contrast: true } }));
+      localStorage.setItem('ts_stage_note_motion', 'full');
+    });
     const accessiblePage = await accessible.newPage();
     observe(accessiblePage);
     await accessiblePage.goto(releaseUrl);
@@ -266,15 +271,14 @@ async function main() {
     await accessiblePage.locator('.discgrid .dcard').first().click();
     await accessiblePage.getByRole('button', { name: 'Play', exact: true }).click();
     await accessiblePage.locator('.band-stage').scrollIntoViewIfNeeded();
-    const enableFall = accessiblePage.getByRole('button', { name: 'Enable falling markers', exact: true });
     assert.match(await accessiblePage.locator('#stage-motion-status').textContent(), /device settings/);
     const staticCue = accessiblePage.locator('.stage-note.is-static').first();
     await staticCue.waitFor();
     assert(await staticCue.evaluate(cue => getComputedStyle(cue).opacity === '1' && cue.getAnimations().length === 0));
-    await enableFall.click();
-    const stage = accessiblePage.locator('.band-stage');
-    assert.equal(await stage.getAttribute('data-note-motion'), 'full');
-    assert.equal(await accessiblePage.locator('.px.app').getAttribute('data-motion-mode'), 'reduced');
+    assert.equal(await accessiblePage.locator('.stage-motion-button').count(), 0);
+    await accessiblePage.emulateMedia({ reducedMotion: 'no-preference' });
+    await accessiblePage.waitForFunction(() => document.querySelector('.px.app').dataset.motionMode !== 'reduced');
+    assert.equal(await accessiblePage.locator('#stage-motion-status').textContent(), '');
     const activeCue = accessiblePage.locator('.stage-note:not(.is-static)').first();
     await activeCue.waitFor();
     const drop = await activeCue.evaluate(async note => {
@@ -283,11 +287,9 @@ async function main() {
       await new Promise(resolve => setTimeout(resolve, 120));
       return note.getBoundingClientRect().top - before;
     });
-    assert(drop > 5, 'Enabling only the falling markers works with system reduced motion');
-    assert.equal(await accessiblePage.evaluate(() => localStorage.getItem('ts_stage_note_motion')), 'full');
-    await accessiblePage.getByRole('button', { name: 'Pause falling markers', exact: true }).click();
+    assert(drop > 5, 'Falling markers resume after system reduced motion is turned off');
+    await accessiblePage.emulateMedia({ reducedMotion: 'reduce' });
     await staticCue.waitFor();
-    assert.equal(await stage.getAttribute('data-note-motion'), 'static');
     await accessiblePage.getByRole('button', { name: 'Pause', exact: true }).click();
     assert.equal(await accessiblePage.locator('.stage-note').count(), 0);
     await accessible.close();
