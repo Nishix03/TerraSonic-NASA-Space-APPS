@@ -2,7 +2,19 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · los astros abren directamente discos de temporada
+## Edición vigente · carrusel automático del mapa de portada
+
+Aplicación **`14cb994f2f2b5163c9d97736980f1024945ad615`**, commit estático **`107c12a4aa6d3ca810243042fcbbd5aef7280b6f`**, fast-forward desde `68040c0`. Pages confirmó `built`; la lectura anónima verificó procedencia y HTML exacto de **500.813 bytes**, SHA-256 **`d8b3ee9d8dbf534713a3cce6c1eb64365d74bcff1def30e603240caba081e18d`**. Se conservan 112 archivos de aplicación y cuatro metadatos, **16.714.956 bytes** en total, con el mismo empaquetador y los mismos recursos de imágenes.
+
+El mapa de portada rota entre cinco imágenes EIC existentes cada tres segundos nominales, con fecha, texto alternativo y miniatura sincronizados. La tarjeta conserva su tamaño; se precarga y decodifica el siguiente mapa. El botón de pausa existente, movimiento reducido, lectura con puntero/foco, página oculta y salida de Inicio detienen la rotación. Se conservan los accesos de astros a discos. [Comportamiento y pruebas](CARRUSEL_PORTADA.md).
+
+Pasan 143 pruebas de lógica, el recorrido de carrusel en tres ventanas Chromium (incluido ciclo completo, pausa, lectura, navegación, desmontaje y fallo de carga), dos ventanas por Firefox/WebKit y 14 comprobaciones de portada. El paquete exacto pasó los dos recorridos HTTP antes de publicar, sin errores JavaScript, respuestas fallidas ni peticiones externas.
+
+La URL pública exacta también pasa dos recorridos cronometrados, 390/1440 píxeles: cambios automáticos de imagen, fecha/texto alternativo/miniatura sincronizados, tamaño estable, pausa/reanudación, idioma y reducción de movimiento. No hubo errores JavaScript, respuestas fallidas ni fallos de reglas axe en la tarjeta. Capturas antes/después e informe en `_work/home-carousel/public/`. La prueba no acelera el reloj y no acredita un dispositivo físico.
+
+Evidencias: `_work/github-preview/browser-local-14cb994/`, `readback-14cb994.json`, `http-14cb994.json` y `official-after-14cb994.json`. Main remoto `a8d91564d5393ef6c803acdbf49725094ea54bee`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y HTML oficial SHA-256 `d50ce659ea6660096e6c658841541c835d826fb4ee867f83ae17253732b05a76` permanecieron iguales al registro anterior a publicar. Las horas exactas constan en los registros UTC. Solo se actualizaron `piero-mejoras` y la copia independiente; los commits posteriores de documentación no cambian la aplicación identificada en el `source.json` público.
+
+## Checkpoint · los astros abren directamente discos de temporada
 
 Aplicación **`e671380ef04bf8bbc3c827723d1d8bb89557fac8`**, commit estático **`68040c03e948cf4e9c86223ab66b9a2711a7d052`**, fast-forward desde `4cb2f17`. Pages confirmó `built`; la lectura anónima verificó procedencia y HTML exacto de **498.528 bytes**, SHA-256 **`104078cf2ec9db13b57cddb27efa70151dbb3da078fa204b02a1843049e41a40`**. Se conservan 112 archivos de aplicación y cuatro metadatos, **16.712.671 bytes** en total. El empaquetador mantiene su huella anterior.
 
