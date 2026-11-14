@@ -193,7 +193,6 @@ a{color:inherit}
 .px .tour .tdots i.on{background:#fff}
 .px .tour .tact{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .px .tour .tact .skip{margin-left:auto;border:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;min-height:36px;padding:0 6px;font-size:.8em}
-@media (prefers-reduced-motion: reduce){.px *{animation:none !important;transition:none !important}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .px .rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
 @keyframes fa{from{opacity:0}to{opacity:1}}
@@ -297,7 +296,7 @@ a{color:inherit}
 .px .wipe{position:fixed;inset:0 0 auto;height:2px;z-index:95;background:var(--route-color);pointer-events:none}
 .px .scr.route-arrive{animation:route-reveal 140ms ease-out both}
 @keyframes route-reveal{from{opacity:.75}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.px .wipe{display:none}}
+.px.reduce-motion .wipe{display:none}
 
 /* guía */
 .px .tourdim{position:fixed;inset:0;z-index:66;background:rgba(0,0,0,.74)}
@@ -397,9 +396,7 @@ a{color:inherit}
   25%{opacity:.8}
   100%{opacity:0;transform:translate(-5px,-7px) scale(1.32)}
 }
-@media (prefers-reduced-motion:reduce){
-  .px .bentry,.px .bsilbo-note{display:none}
-}
+.px.reduce-motion .bentry,.px.reduce-motion .bsilbo-note{display:none}
 .px .bfx,.px .bentry svg{position:absolute;inset:0;width:100%;height:100%;color:var(--band-light);pointer-events:none}
 .px .bfx{opacity:.5}
 .px .bplaying .bfx{animation:bfx-pulse 620ms ease-out both}
@@ -712,7 +709,6 @@ a{color:inherit}
 .px .nav{margin-left:auto;gap:2px;min-width:0;max-width:100%;flex-wrap:nowrap;overflow:visible;padding-block:4px;flex:1 1 auto;justify-content:space-evenly}
 .px .nav button{flex:0 0 auto;white-space:nowrap;justify-content:center}
 .px .top .right{flex-shrink:0}
-@media (prefers-reduced-motion:reduce){.px .nav,.px .steps{scroll-behavior:auto}}
 .px .nav button{min-height:64px;padding:0 14px;border:0;border-bottom:2px solid transparent;border-radius:0;font-family:var(--head);font-size:max(13px,.8em);font-weight:700;letter-spacing:.16em;color:rgba(255,255,255,.7)}
 .px .nav button:hover,.px .nav button:focus-visible{color:#fff}
 .px .nav button[aria-current="page"]{color:#fff;border-bottom-color:#fff}
@@ -839,7 +835,7 @@ a{color:inherit}
 .px .bquote{background:transparent}
 /* Capa independiente: el desenfoque no hereda la opacidad animada de .bentry. */
 .px .bentry-blur{position:absolute;inset:0;z-index:1;pointer-events:none;background:rgba(3,5,10,.6);-webkit-backdrop-filter:blur(16px) saturate(.6);backdrop-filter:blur(16px) saturate(.6);animation:bcut-focus var(--band-entry) var(--cut-ease) both}
-@media (prefers-reduced-motion:reduce){.px .bentry-blur{display:none}}
+.px.reduce-motion .bentry-blur{display:none}
 /* Rótulo y trazos por encima del desenfoque, con contraste localizado. */
 .px .bentry-underlay{stroke:rgba(0,0,0,.8);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .px .bentry-caption{position:absolute;z-index:1;left:12px;right:12px;bottom:12px;display:flex;justify-content:center}
@@ -908,7 +904,6 @@ a{color:inherit}
 .px .flow-wave i{display:block;width:3px;height:18px;background:#b5c7ce;transform:scaleY(.45);animation:flowPulse 2.8s ease-in-out infinite alternate}
 .px .flow-wave i:nth-child(2n){animation-delay:-.8s;height:24px}.px .flow-wave i:nth-child(3n){animation-delay:-1.6s;height:12px}
 @keyframes flowPulse{to{transform:scaleY(1)}}
-@media(prefers-reduced-motion:reduce){.px .flow-wave i{animation:none}}
 .px .bottomnav .bar{min-width:0;border-top:0}
 .px .guidefab{position:relative;grid-column:2;justify-self:end;right:auto;bottom:auto;z-index:62;display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:8px max(14px,env(safe-area-inset-right,0px)) 8px 8px;padding:3px;border:1px solid rgba(255,212,71,.55);border-radius:40px;background:#000;box-shadow:0 12px 34px rgba(0,0,0,.65);transition:transform .25s,opacity .25s,border-color .25s}
 .px .guidefab:hover{border-color:#FFD447;transform:translateY(-2px)}
@@ -917,7 +912,6 @@ a{color:inherit}
 .px .guidefab:hover .glabel,.px .guidefab:focus-visible .glabel{max-width:140px;padding:0 16px 0 10px}
 .px .guidefab .glabel{display:none}
 .px .guidefab::after{content:"";position:absolute;inset:0;outline:1px solid rgba(255,212,71,.45);border-radius:inherit;animation:fabRing 2.8s ease-out infinite;pointer-events:none}
-@media(prefers-reduced-motion:reduce){.px .guidefab::after{animation:none}}
 @keyframes fabRing{0%{opacity:.8;transform:scale(.96)}70%,100%{opacity:0;transform:scale(1.18)}}
 
 /* guía: foco que sigue al elemento y tarjeta junto a él */
@@ -1321,7 +1315,6 @@ a{color:inherit}
 .px .grid-dim{position:absolute;inset-block:0;left:0;background:#070b1470;pointer-events:none}
 .px .uni .scanline{left:0;width:calc(100% / 28);transform:translateX(var(--scan-x));transition:transform 110ms linear}
 .px.reduce-motion .uni .scanline{transition:none}
-@media(prefers-reduced-motion:reduce){.px .uni .scanline{transition:none}}
 .px .grid-dim-after{right:0}
 .px .map-legend{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;min-width:0}
 .px .map-legend h2{grid-column:1/-1;font:600 .88em/1.3 var(--head)}
@@ -1383,7 +1376,7 @@ a{color:inherit}
 .px .guidefab::after{display:none}
 .px.reduce-motion,.px.reduce-motion *,.px.reduce-motion *::before,.px.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){html:not([data-ts-reduced-motion="false"]){scroll-behavior:auto}}
 @media(max-width:620px){.px .preferences-dialog{padding:16px;gap:12px}.px .preferences-choices label{padding:9px;min-height:60px}}
 /* Shared surfaces keep reading regions consistent in both color schemes. */
 .px.app{color-scheme:dark}
@@ -1460,7 +1453,6 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .stage-musician{position:relative;flex:0 1 22%;max-width:110px;height:100%;min-width:0;display:grid;place-items:end center}
 .px .stage-musician img{width:100%;height:100%;min-height:0;object-fit:contain;transform:translateY(calc(var(--intensity) * -5px));transition:transform .16s ease-out}
 .px.reduce-motion .stage-musician img{transform:none;transition:none}
-@media(prefers-reduced-motion:reduce){.px .stage-musician img{transform:none;transition:none}}
 .px.app[data-contrast="true"] .band-stage{background-image:none;background:var(--surface)}
 .px .band-stage-beat{display:flex;justify-content:space-between;gap:8px;padding:3px 8px;color:#ffdc71;background:#080c15;font:500 .72em var(--head)}
 .px .listen-members{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1540,7 +1532,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px.reduce-motion .space-meteor,.px.reduce-motion .space-flight{display:none}
 .px.reduce-motion .space-sky *{animation:none!important}
 html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important}
-@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-sky *{animation:none!important}.px:not([data-motion-mode="full"]) .space-meteor,.px:not([data-motion-mode="full"]) .space-flight{display:none}}
+.px.reduce-motion .space-meteor,.px.reduce-motion .space-flight{display:none}
 @media(forced-colors:active){.px .space-sky{display:none}}
 @media(max-width:700px){
  .px .space-sun{width:80px;left:-34px;top:38%;opacity:.5}
@@ -1580,7 +1572,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px.app[data-theme="light"] .space-planet{opacity:.4}
 @media(max-width:700px){.px .space-sun{opacity:.65}.px .planet-ringed{width:66px;bottom:14%;right:0;opacity:.38}.px .planet-distant{display:none}.px .space-bright-stars{opacity:.35}.px .space-sun .solar-satellite svg{width:16px;height:11px;left:calc(50% - 8px)}}
 @media(max-height:450px){.px .space-planet{display:none}}
-@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .solar-eclipse{display:none}}
+.px.reduce-motion .solar-eclipse{display:none}
 /* Cinematic presentation: decorative illustration, never a NASA observation. */
 .ts-cinema{position:fixed;inset:0;z-index:2000;overflow:hidden;background:#101d30;color:#eef3fa;font:400 16px/1.45 "Inter",sans-serif;isolation:isolate}
 .ts-cinema *{box-sizing:border-box}
@@ -1665,7 +1657,6 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px.app[data-theme="light"] .space-ocean-wave{color:#286d87}
 @media(max-width:640px){.ts-cinema .cinema-world{width:min(72vw,38svh,320px);top:8%;left:0;right:0;margin-inline:auto}.ts-cinema .cinema-copy{left:6%;width:88%;bottom:24%;text-align:center}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem);margin-inline:auto}.ts-cinema .cinema-copy p:last-child{font-size:.875rem;margin-inline:auto}.ts-cinema .cinema-wave{left:10%;width:80%;top:49%;height:55px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}.ts-cinema .cinema-toolbar{flex-direction:column;align-items:center;text-align:center;gap:8px}.ts-cinema .cinema-toolbar p{max-width:100%;font-size:.7rem}.ts-cinema .cinema-actions{width:100%;justify-content:center}.ts-cinema button{max-width:100%;min-width:104px}}
 @media(max-height:450px){.ts-cinema .cinema-world{width:65vh;right:12%;top:0}.ts-cinema .cinema-copy{bottom:24%;width:55%;left:6%}.ts-cinema .cinema-copy h2{font-size:clamp(1.5rem,5vh,2.5rem)}.ts-cinema .cinema-brand{font-size:.8rem;margin-bottom:6px}.ts-cinema .cinema-copy p:last-child{display:none}.ts-cinema .cinema-toolbar{font-size:.7rem}.ts-cinema .cinema-toolbar p{max-width:23ch}}
-@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-ocean-wave path{animation:none!important}}
 @media(forced-colors:active){.ts-cinema .cinema-world,.ts-cinema .cinema-stars,.ts-cinema .cinema-sun,.ts-cinema .cinema-wave{display:none}.ts-cinema{background:Canvas;color:CanvasText}.ts-cinema button{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
 @media(max-height:450px){.ts-cinema .cinema-wave{display:none}}
 .px .haptics-settings{grid-column:1/-1;display:grid;gap:8px;border-top:1px solid var(--line);padding:12px 8px 4px;min-width:0}
@@ -3363,7 +3354,9 @@ class Component extends DCLogic {
     if (preferences) PREFERENCE_KEYS.forEach(function (key) { if (typeof preferences.values[key] === 'boolean') self.state[key] = preferences.values[key]; });
     this.preferencesConfigured = !!(preferences && preferences.configured);
     this.state.showPreferences = !this.preferencesConfigured;
-    this.state.reducedMotion = !!this.state.reducedMotion;
+    // Older saves wrote false by default even when the visitor never changed motion.
+    this.state.reducedMotion = preferences?.values.motionOverride === true || preferences?.values.reducedMotion === true
+      ? !!this.state.reducedMotion : null;
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
     this.state.tutorialSkipped = {};
@@ -3477,6 +3470,7 @@ class Component extends DCLogic {
   savePreferences() {
     var self = this, values = {};
     PREFERENCE_KEYS.forEach(function (key) { values[key] = !!self.state[key]; });
+    values.motionOverride = typeof this.state.reducedMotion === 'boolean';
     try { localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: this.preferencesConfigured, values: values })); } catch (ignored) {}
   }
   setPreference(key, value) {
@@ -3536,7 +3530,7 @@ class Component extends DCLogic {
     };
   }
   syncPreferenceMotion() {
-    if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion);
+    if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(this.bandReduced());
     if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') window.dispatchEvent(new window.CustomEvent('terrasonic:motion'));
   }
   positionAccessibilityMenu(event) {
@@ -3898,7 +3892,7 @@ class Component extends DCLogic {
     if (this.ac) this.ac.close();
   }
   bandReduced() {
-    return this.state.reducedMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    return this.state.reducedMotion ?? !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   }
   cancelBandClip() {
     clearTimeout(this.bandTimer);
@@ -5153,6 +5147,8 @@ class Component extends DCLogic {
     var gridColors = showCells ? this.gridColors(a, hc) : null;
     var meterOf = function (lvl, col) { var out = []; for (var q = 0; q < 10; q++) out.push({ c: q < Math.round(lvl * 10) ? col : th.line }); return out; };
     var toggleBand = function (k) { return function () { var mm = Object.assign({}, s.mute); mm[k] = !mm[k]; self.setBandMute(mm); }; };
+    var reducedMotion = this.bandReduced();
+    var toggleMotion = function () { self.setPreference('reducedMotion', !self.bandReduced()); };
     var tog = function (k) { return function () { self.setPreference(k, !self.state[k]); }; };
     var tabDef = PAGE_ORDER.map(function (k) { return { k: k, l: ROUTE_LOOK[k].title }; });
     var a11yDef = [{ k: 'contrast', l: T('Alto contraste', 'High contrast') }, { k: 'big', l: T('Texto grande', 'Large text') }, { k: 'legible', l: T('Fuente legible', 'Readable font') }, { k: 'voice', l: T('Modo voz', 'Voice mode') }, { k: 'vibe', l: T('Vibración', 'Vibration') }, { k: 'sfx', l: T('Efectos de sonido', 'Sound effects') }, { k: 'reducedMotion', l: T('Movimiento reducido', 'Reduced motion') }];
@@ -5280,18 +5276,18 @@ class Component extends DCLogic {
       engineDesc: (melody ? T('Melodía compuesta: escalas, acordes y ritmo por disco; la melodía sale de los datos.', 'Composed melody: scales, chords and rhythm per disc; the melody comes from the data.') : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes.', 'Data: derived levels converted into tones, without a chord progression.')),
       engines: engines, whyTiles: whyTiles, seeText: seeText, hearText: hearText, progItems: progItems, showHarmony: melody,
       player: showCells ? this.playerVm() : null,
-      motionClass: this.bandReduced() ? 'reduce-motion' : '',
-      motionMode: this.bandReduced() ? 'reduced' : 'auto',
+      motionClass: reducedMotion ? 'reduce-motion' : '',
+      motionMode: reducedMotion ? 'reduced' : 'full',
       musicActive: s.playing ? 'true' : 'false',
       intro: {
         bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b',
         replayLabel: T('Repetir introducción', 'Replay intro'),
         replay: function (e) { self.cinema?.start(true, e.currentTarget); },
-        paused: this.bandReduced(),
+        paused: reducedMotion,
         notice: T('Movimiento reducido activado.', 'Reduced motion is on.'),
-        toggleLabel: s.reducedMotion ? T('Reanudar animaciones', 'Resume animations') : T('Pausar animaciones', 'Pause animations'),
-        togglePath: s.reducedMotion ? 'M9 5l11 7-11 7z' : 'M9 5v14m6-14v14',
-        toggle: function () { self.setPreference('reducedMotion', !s.reducedMotion); }
+        toggleLabel: reducedMotion ? T('Reanudar animaciones', 'Resume animations') : T('Pausar animaciones', 'Pause animations'),
+        togglePath: reducedMotion ? 'M9 5l11 7-11 7z' : 'M9 5v14m6-14v14',
+        toggle: toggleMotion
       },
       haptic: this.hapticVm(),
       positionAccessibilityMenu: function (event) { self.positionAccessibilityMenu(event); },
@@ -5303,7 +5299,7 @@ class Component extends DCLogic {
           ['big', T('Texto grande', 'Large text'), T('Aumenta el tamaño de lectura.', 'Increase the reading size.')],
           ['contrast', T('Alto contraste', 'High contrast'), T('Bordes y texto con mayor contraste.', 'Stronger contrast for borders and text.')],
           ['reducedMotion', T('Movimiento reducido', 'Reduced motion'), T('Personajes y transiciones sin animación.', 'Characters and transitions without animation.')]
-        ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
+        ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: option[0] === 'reducedMotion' ? reducedMotion : !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
         continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Ver guía · 3 pasos', 'Open guide · 3 steps'),
         continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); }
       },
@@ -5363,7 +5359,7 @@ class Component extends DCLogic {
       onNavKey: function (event) { self.navKey(event); },
       headerClass: s.big || s.legible ? 'readable-nav' : '',
       tabs: tabDef.map(function (t) { var on = s.tab === t.k; return { ic: self.icons[t.k], label: t.l, short: { juke: T('Escuchar','Listen'), band: T('Banda','Band'), how: T('Cómo funciona','How it works'), tech: T('Tecnología','Technology') }[t.k], cur: on ? 'page' : 'false', bg: on ? th.accent : th.panel, fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line, go: function () { self.goTab(t.k); } }; }),
-      a11y: a11yDef.map(function (o) { var on = !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, disabled: o.k === 'vibe' && !self.haptics.supported(), bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: tog(o.k) }; }),
+      a11y: a11yDef.map(function (o) { var on = o.k === 'reducedMotion' ? reducedMotion : !!s[o.k]; return { ic: self.icons[{ contrast: 'contrast', big: 'bigtext', legible: 'legible', voice: 'voice', vibe: 'vibe', sfx: 'voice', reducedMotion: 'clock' }[o.k]], label: o.l, on: on, disabled: o.k === 'vibe' && !self.haptics.supported(), bg: on ? th.fg : 'transparent', fg: on ? th.bg : th.fg, toggle: o.k === 'reducedMotion' ? toggleMotion : tog(o.k) }; }),
       sets: [{ key: 'eic', label: 'EIC', years: '2024–26' }, { key: 'prev', label: 'NASA GIBS', years: '2010–23' }].map(function (o) {
         var on = s.set === o.key;
         return { label: o.label, years: o.years, on: on, pick: function () { if (!on && self.settleArrivedRoute()) self.applySet(o.key); } };
@@ -5452,7 +5448,7 @@ class Component extends DCLogic {
       band: band,
       stageMotionNotice: s.reducedMotion
         ? T('Movimiento reducido activado en Accesibilidad.', 'Reduced motion is on in Accessibility.')
-        : this.bandReduced() ? T('Movimiento reducido activado en tu dispositivo.', 'Reduced motion is on in your device settings.') : '',
+        : reducedMotion ? T('Movimiento reducido activado en tu dispositivo.', 'Reduced motion is on in your device settings.') : '',
       stageMusicians: band.map(function (member) {
         var level = member.on ? s.levels[member.key] || 0 : 0;
         var note = member.on && s.playing && !s.masterMuted && s.volume > 0 ? s.stageNotes[member.key] : null;

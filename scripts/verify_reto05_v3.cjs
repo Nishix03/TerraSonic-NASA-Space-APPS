@@ -256,8 +256,9 @@ async function main() {
     }
     const accessible = await browser.newContext({ viewport: mobile, locale: 'en', reducedMotion: 'reduce' });
     await accessible.addInitScript(() => {
-      localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: true, values: { contrast: true } }));
-      localStorage.setItem('ts_stage_note_motion', 'full');
+      if (!localStorage.getItem('ts_prefs')) localStorage.setItem('ts_prefs', JSON.stringify({
+        version: 1, configured: true, values: { voice: false, reducedMotion: false }
+      }));
     });
     const accessiblePage = await accessible.newPage();
     observe(accessiblePage);
@@ -276,8 +277,14 @@ async function main() {
     await staticCue.waitFor();
     assert(await staticCue.evaluate(cue => getComputedStyle(cue).opacity === '1' && cue.getAnimations().length === 0));
     assert.equal(await accessiblePage.locator('.stage-motion-button').count(), 0);
-    await accessiblePage.emulateMedia({ reducedMotion: 'no-preference' });
-    await accessiblePage.waitForFunction(() => document.querySelector('.px.app').dataset.motionMode !== 'reduced');
+    const motion = accessiblePage.getByRole('button', { name: 'Reduced motion', exact: true });
+    await accessiblePage.locator('#tour-a11y summary').click();
+    assert.equal(await motion.getAttribute('aria-pressed'), 'true');
+    await motion.click();
+    assert.equal(await motion.getAttribute('aria-pressed'), 'false');
+    assert(await accessiblePage.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches));
+    assert.equal(await accessiblePage.locator('.px.app').getAttribute('data-motion-mode'), 'full');
+    await accessiblePage.keyboard.press('Escape');
     assert.equal(await accessiblePage.locator('#stage-motion-status').textContent(), '');
     const activeCue = accessiblePage.locator('.stage-note:not(.is-static)').first();
     await activeCue.waitFor();
@@ -287,11 +294,18 @@ async function main() {
       await new Promise(resolve => setTimeout(resolve, 120));
       return note.getBoundingClientRect().top - before;
     });
-    assert(drop > 5, 'Falling markers resume after system reduced motion is turned off');
-    await accessiblePage.emulateMedia({ reducedMotion: 'reduce' });
-    await staticCue.waitFor();
-    await accessiblePage.getByRole('button', { name: 'Pause', exact: true }).click();
-    assert.equal(await accessiblePage.locator('.stage-note').count(), 0);
+    assert(drop > 5, 'Falling markers resume after reduced motion is turned off in EarthBeat');
+    await accessiblePage.reload();
+    const animatedIntro = accessiblePage.locator('.ts-cinema');
+    await animatedIntro.waitFor();
+    assert.equal(await animatedIntro.getAttribute('data-static'), 'false');
+    await assertMoving(accessiblePage, '.cinema-world');
+    await animatedIntro.locator('.cinema-skip').click();
+    await accessiblePage.locator('#tour-a11y summary').click();
+    assert.equal(await motion.getAttribute('aria-pressed'), 'false');
+    await motion.click();
+    assert.equal(await motion.getAttribute('aria-pressed'), 'true');
+    assert.equal(await accessiblePage.locator('.px.app').getAttribute('data-motion-mode'), 'reduced');
     await accessible.close();
     for (let attempt = 0; attempt < 3; attempt++) {
       const context = await browser.newContext({ viewport: mobile, locale: 'es-PE', isMobile: true, hasTouch: true });

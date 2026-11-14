@@ -3,7 +3,10 @@ const frames = [0, 1, 2, 3, 2, 1, 2, 0];
 const media = matchMedia('(prefers-reduced-motion: reduce)');
 const version = new URL(import.meta.url).search;
 const drawings = new Map();
-const reduced = () => media.matches || document.documentElement.dataset.tsReducedMotion === 'true';
+const reduced = () => {
+  const effective = document.documentElement.dataset.tsReducedMotion;
+  return effective === undefined ? media.matches : effective === 'true';
+};
 const playingFrames = [0, 1, 2, 3, 2, 1, 0];
 const timings = {
   silbo: [210, 230, 260, 175, 280, 210, 260], inti: [180, 250, 170, 145, 210, 170, 245],
