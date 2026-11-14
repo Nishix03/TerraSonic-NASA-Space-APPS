@@ -50,4 +50,37 @@ La fecha del PDF es una captura del formulario. Se debe confirmar plazo y estado
 
 ## Resultados y validaciones
 
-Se completará con la evidencia de esta edición. Las pruebas de navegador no sustituyen una revisión con lector de pantalla, usuarios con distintas discapacidades, evaluación cultural ni validación del motor háptico en un teléfono real.
+Pasan **139 pruebas de componente y 14 de control háptico**. Los resultados bajo `_work/nsac-2026/` conservan las ejecuciones iniciales y las repeticiones finales.
+
+| Recorrido | Resultado observado |
+|---|---|
+| Presentación | 15 recorridos por motor en Chromium, Firefox y WebKit: entrada, tres recargas, ocho tamaños, pausa, centrado, teclado, preferencias y ausencia de audio/vibración automática |
+| Destinos | 24 combinaciones en Chromium, seis anchos × cuatro destinos; ocho combinaciones en Firefox y ocho en WebKit, 390 y 1440 px |
+| Audio ambiental | AudioContext nativo y fuentes reales en Chromium/Firefox; el WebKit de Windows no expone Web Audio y se verifica el estado visible «Audio no disponible», sin fingir reproducción |
+| Accesibilidad automática | 74 pantallas de axe sin infracciones detectadas y 408 estados de redistribución sin fallos en el archivo exacto del primer commit de esta entrega; cada destino también se audita con axe |
+| Banda original | 15 recorridos de baile único, pausa y limpieza; las huellas de los veinte PNG coinciden con los originales |
+| Móvil y guía | 16 casos de ventana baja, 16 de guía ES/EN con texto normal/grande y seis tamaños del cielo; inicio comprobado también en 320×568 y 667×375 |
+| Háptica | Diez recorridos de capacidad y preferencias, separados de cualquier validación de motor físico |
+| Paquete HTTP | Dos recorridos de la copia independiente antes de publicar, sin errores JS ni respuestas fallidas |
+
+Informes: `chromium/cinema/`, `chromium/universe-final/`, `chromium/regression/`, `chromium/final/`, `chromium/candidate/`, `chromium-capability/`, `firefox/`, `webkit/`, `webkit-capability/` y `archive/` bajo `_work/nsac-2026/`. Las pruebas de destinos revisan llegada, Escape, retorno del foco, pausa, volumen, silencio al entrar, limpieza de temporizadores y acceso al mapa EIC. Las comprobaciones de estado oculto utilizan una frontera de visibilidad simulada, identificada en el informe.
+
+La primera prueba de ganancia encontró la representación Float32 de 0,8 y se corrigió su tolerancia. La prueba inicial del cielo detectó un pseudoelemento solar animado que escapaba de la pausa al ocultar la página: se retiró ese movimiento redundante. Se compactaron los accesos y se ocultaron estadísticas auxiliares en las vistas más bajas para conservar todos los controles. La antigua receta de sprites forzaba reducción de movimiento y esperaba baile automático; se actualizó para probar el baile en un contexto sin esa preferencia. La ausencia real de Web Audio en WebKit motivó el mensaje y bloqueo de reproducción por capacidad, con validación posterior de esa alternativa.
+
+## Sonificación y calidad del audio
+
+La sonificación científica existente se conserva. En Datos, el promedio positivo `w` orienta Inti mediante `mtof(60 + min(5,w)×2,4)`; el promedio frío `c` orienta Mamacocha mediante `mtof(48 − min(5,c)×2,4)`. La conversión `mtof(m)=440×2^((m−69)/12)` usa temperamento igual. Son decisiones artísticas sobre niveles derivados del color, no frecuencias físicas de la temperatura. Yaku utiliza posición vertical y una escala pentatónica; Illapa responde a una proporción de extremos y Silbo a la zona costera seleccionada. Melodía añade las escalas, acordes y tiempos ya documentados por disco.
+
+Los destinos usan **otra capa identificada como artística**: dos osciladores suaves por evento, raíces MIDI 60/48/55/53 y secuencias específicas para Sol/Luna/Saturno/Aqua. Se reutilizan el control de volumen, compresor y envolventes del motor. Solo hay una capa activa; navegar o pausar cancela la programación y desvanece la salida. Las fuentes se limpian al finalizar. Los efectos opcionales de interacción y la música de mapas conservan sus controles. No se reproduce música en la entrada ni por elegir un destino.
+
+## Rendimiento observado
+
+Tres recorridos Chromium a 390×844, CPU ralentizada ×4, latencia 150 ms, descarga 200 KiB/s, caché desactivada y gzip negociado: LCP observado **2.024–2.804 ms**, CLS **0,0094–0,0113**, máximos de interacciones programadas **888–1.104 ms**. Informe: `_work/nsac-2026/performance.json`. El máximo programado no es un INP de campo. La respuesta bajo CPU ralentizada necesita optimización; no se declara que cumpla un objetivo de 200 ms. La primera medida supera el objetivo orientativo de LCP 2,5 s. No se publican FPS ni consumo de GPU no medidos.
+
+El recorrido completo transfirió aproximadamente 1,04 MB, sin GLB; la llegada al inicio registró 137.686 bytes en este diagnóstico. Los datos de destinos con activos interceptados muestran CLS inferior a 0,005, pero ese recorrido no simula una red real y se mantiene separado. No se añaden dependencias ni nuevas imágenes rasterizadas. Cada viaje tiene duración acotada y cancela su temporizador/animaciones; el ambiente deja de programarse al ocultar la página. Las cifras son observaciones de laboratorio en este equipo, no promesas sobre teléfonos físicos.
+
+## Archivos y pendientes
+
+Producto: `prototipos/I11-eic/Main.dc.html`. Verificación: `scripts/verify_cinema.cjs`, `verify_universe.cjs`, `verify_sprites.cjs`, `browser_fixture.cjs`, `benchmark_browser.cjs`, `record_motion_demo.cjs`, `run_browser_checks.py` y `test_guides.cjs`. Documentación: esta revisión, el borrador de entrega, créditos, registro de IA y referencias del README. Los personajes, catálogos científicos y el constructor de publicación se conservan.
+
+**Estado: prototipo apto para revisión con pendientes documentados.** Las pruebas de navegador no sustituyen revisión con lector de pantalla, usuarios con distintas discapacidades, evaluación cultural, escucha humana ni validación del motor háptico en un teléfono real. Quedan por confirmar Safari/iOS físico, TalkBack/VoiceOver/NVDA, dispositivos de conmutación, audición y comodidad del movimiento con participantes. La revisión visual fue manual sobre capturas; no hay una comparación automática de píxeles que pruebe equivalencia con una referencia aprobada. También quedan la optimización del tiempo de respuesta bajo CPU ralentizada, la demo final y las acciones del formulario indicadas en el borrador.
