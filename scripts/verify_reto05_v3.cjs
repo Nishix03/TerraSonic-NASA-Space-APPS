@@ -102,8 +102,10 @@ async function main() {
       assert(await page.getByRole('button', { name: 'Probar vibración' }).isDisabled());
       await page.keyboard.press('Escape');
       await page.reload();
-      await page.locator('.hero h1').waitFor();
-      assert.equal(await intro.count(), 0, 'Reload honors the saved motion preference');
+      await intro.waitFor();
+      assert.equal(await intro.getAttribute('data-static'), 'true', 'Reload still shows the intro with reduced motion');
+      assert.equal(await intro.evaluate(el => el.getAnimations({ subtree: true }).length), 0);
+      await page.getByRole('button', { name: 'Saltar introducción' }).click();
       await page.locator('#tour-nav button').nth(2).click();
       assert(await page.locator('#tour-drop input').isVisible());
       assert.match(await page.locator('.rain-chart').getAttribute('alt'), /NASA POWER/);
@@ -117,6 +119,17 @@ async function main() {
       report.animation.push({ viewport, characters, patterns: [15, [25, 50, 25], 0] });
       await context.close();
     }
+    const accessible = await browser.newContext({ viewport: mobile, locale: 'en', reducedMotion: 'reduce' });
+    await accessible.addInitScript(() => localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: true, values: { contrast: true } })));
+    const accessiblePage = await accessible.newPage();
+    observe(accessiblePage);
+    await accessiblePage.goto(url);
+    const staticIntro = accessiblePage.getByRole('dialog', { name: 'EarthBeat presentation' });
+    assert.equal(await staticIntro.getAttribute('data-static'), 'true');
+    assert.equal(await staticIntro.getAttribute('data-contrast'), 'true');
+    await staticIntro.waitFor({ state: 'detached' });
+    assert(await accessiblePage.getByRole('heading', { name: 'Listen to the Pacific' }).isVisible());
+    await accessible.close();
     for (let attempt = 0; attempt < 3; attempt++) {
       const context = await browser.newContext({ viewport: mobile, locale: 'es-PE', isMobile: true, hasTouch: true });
       const page = await context.newPage();
