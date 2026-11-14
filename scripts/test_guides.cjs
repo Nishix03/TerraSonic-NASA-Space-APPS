@@ -1359,15 +1359,28 @@ test('the four preferences combine and persist without asking for a diagnosis or
   const next=setup({entryMotion:true,language:'es-PE',storage:Object.fromEntries(storage)}).component;
   assert.equal(next.state.showPreferences,false);
   for (const key of ['voice','big','contrast']) assert.equal(next.state[key],true);
-  assert.equal(next.state.reducedMotion,false);assert.equal(next.state.motionMode,'full');
+  assert.equal(next.state.reducedMotion,true);assert.equal(next.state.motionMode,'reduced');
 });
 
-test('each new entry starts animated even after an earlier visit was paused', () => {
+test('new entries honor saved and system reduction while an explicit replay can enable motion', () => {
   const {component:c,context,storage}=setup({entryMotion:true});context.window.matchMedia=()=>({matches:true});
-  assert.equal(!!c.bandReduced(),false);assert.equal(c.renderVals().preferences.choices.find(x=>x.id==='preferences-reducedMotion').on,false);
+  assert.equal(!!c.bandReduced(),true);assert.equal(c.renderVals().preferences.choices.find(x=>x.id==='preferences-reducedMotion').on,true);
   c.setPreference('reducedMotion',false);assert.equal(c.bandReduced(),false);assert.equal(c.renderVals().motionClass,'');assert.equal(c.renderVals().motionMode,'full');assert.equal(storage.get('ts_motion_mode'),'full');
   c.setPreference('reducedMotion',true);assert.equal(c.bandReduced(),true);assert.equal(storage.get('ts_motion_mode'),'reduced');
-  const restored=setup({entryMotion:true,storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),false);assert.equal(restored.storage.get('ts_motion_mode'),'reduced','Entering does not modify device or stored settings');
+  const restored=setup({entryMotion:true,storage:Object.fromEntries(storage)});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),true);assert.equal(restored.storage.get('ts_motion_mode'),'reduced','Entering does not modify device or stored settings');
+});
+
+test('leaving a destination cancels an audio start that resolves late', async () => {
+  const {component:c}=setup();c.state.destination='sun';let resolve;
+  c.ensureAudio=()=>({});c.waitForAudio=()=>new Promise(done=>{resolve=done;});
+  const pending=c.toggleAmbient();assert.equal(c.state.audioPending,true);c.closeDestination();resolve();await pending;
+  assert.equal(c.state.destination,'');assert.equal(c.state.audioPending,false);assert.equal(c.state.ambientPlaying,false);assert.equal(c.ambientTimer,null);assert.deepEqual(Object.keys(c.voiceGroups),[]);
+});
+
+test('destinations preserve independent science state and disclose artistic audio in both languages', () => {
+  const {component:c}=setup();const before=JSON.stringify([c.state.disc,c.state.frame,c.state.engine,c.state.mute]);
+  for(const key of ['sun','moon','saturn','aqua']){c.state.destination=key;const es=c.universeVm();assert.equal(es.destinations.length,4);assert.match(es.audioNotice,/artística/);c.setLang('en');const en=c.universeVm();assert.notEqual(en.title,es.title);assert.match(en.audioNotice,/not NASA data/);c.setLang('es');}
+  assert.equal(JSON.stringify([c.state.disc,c.state.frame,c.state.engine,c.state.mute]),before);
 });
 
 test('a legacy reduced-motion preference can be explicitly enabled without opening a static presentation', () => {

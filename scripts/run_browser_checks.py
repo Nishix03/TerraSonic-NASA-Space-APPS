@@ -33,6 +33,7 @@ CHECKS = {
     "space-background": "verify_space_background.cjs",
     "haptics": "verify_haptics.cjs",
     "cinema": "verify_cinema.cjs",
+    "universe": "verify_universe.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

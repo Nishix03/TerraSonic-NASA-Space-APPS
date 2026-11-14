@@ -2,6 +2,10 @@
 
 Créditos de los recursos distribuidos y de las referencias consultadas. El catálogo de cada personaje conserva las fuentes culturales exactas; citar una fuente no implica aprobación de esa representación por su comunidad.
 
+La introducción, los cuerpos celestes, la nave y los paisajes de los destinos son ilustraciones procedurales SVG/CSS creadas con asistencia de Codex, identificadas en las escenas y en metadatos del HTML. El ambiente musical de cada destino se sintetiza con código asistido por IA y se declara en sus controles; no representa datos NASA ni una grabación del espacio. Los dibujos originales de la banda no se han generado de nuevo ni retocado en esta edición. El equipo debe confirmar su procedencia completa antes de la declaración final del formulario.
+
+Las aclaraciones sobre estaciones terrestres y ausencia de superficie sólida en Saturno se contrastan con [NASA Space Place: estaciones](https://spaceplace.nasa.gov/seasons/en/) y [NASA Science: Saturno](https://science.nasa.gov/saturn/facts/). La consulta de SVS 5176 del 13 de noviembre confirma el producto y su origen JPL MUR; la selección local sigue siendo un conjunto fechado, no una conexión en vivo.
+
 ## Marca del reto
 - Logos oficiales de NASA Space Apps (solo estos; no se redibujan): https://www.spaceappschallenge.org/brand/ · kit: https://assets.spaceappschallenge.org/media/documents/NASA_Space_Apps_Logos_2026.zip · guía de marca: https://assets.spaceappschallenge.org/media/documents/Space_Apps_Brand_Guide_VUGpVJm.pdf
 

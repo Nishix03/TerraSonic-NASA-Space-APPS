@@ -10,7 +10,7 @@ async function launchBrowser(options={}){
 }
 async function dismissEntry(page,{staticMotion=false}={}){
  await page.waitForFunction(()=>!!document.querySelector('.px.app'));
- const skip=page.locator('.ts-cinema button');
+ const skip=page.locator('.ts-cinema .cinema-skip');
  if(await skip.count())await skip.click();
  // Layout/a11y fixtures deliberately choose the reduced-motion UI after the
  // required intro. Entry and dance fixtures keep the actual animated default.

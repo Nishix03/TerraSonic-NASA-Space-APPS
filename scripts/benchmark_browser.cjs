@@ -7,6 +7,7 @@ const { createHash } = require("node:crypto");
 const { performance } = require("node:perf_hooks");
 const { gzipSync } = require("node:zlib");
 const os=require('node:os');
+const {dismissEntry}=require('./browser_fixture.cjs');
 const { chromium } = require(process.env.TERRASONIC_PLAYWRIGHT || "playwright-core");
 
 const site = path.resolve(process.argv[2] || "_site");
@@ -103,6 +104,7 @@ async function main() {
       });
       const start = performance.now();
       await page.goto(base, { waitUntil: "domcontentloaded" });
+      await dismissEntry(page);
       await page.locator(".hero .btn.primary").waitFor();
       const homeMs = performance.now() - start;
       const atHome = { ...bytes };

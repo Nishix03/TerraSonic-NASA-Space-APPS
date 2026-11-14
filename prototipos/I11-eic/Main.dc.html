@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="terrasonic-ai-use" content="Code, procedural SVG illustrations and procedural ambient-audio design assisted by OpenAI Codex. NASA source imagery is credited separately; no NASA branding was generated or modified.">
 <title>Terrasonic · Earth Jukebox</title>
 <style>html,body{margin:0;background:#171e2b;color:#eff3f8}
 </style>
@@ -1792,7 +1793,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @media(max-height:450px){.px .space-planet{display:none}}
 @media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .solar-eclipse{display:none}}
 /* Cinematic presentation: decorative illustration, never a NASA observation. */
-.ts-cinema{position:fixed;inset:0;z-index:2000;overflow:hidden;pointer-events:none;background:#101d30;color:#eef3fa;font:400 16px/1.45 "Inter",sans-serif;isolation:isolate}
+.ts-cinema{position:fixed;inset:0;z-index:2000;overflow:hidden;background:#101d30;color:#eef3fa;font:400 16px/1.45 "Inter",sans-serif;isolation:isolate}
 .ts-cinema *{box-sizing:border-box}
 .ts-cinema .cinema-space{position:absolute;inset:-10%;background:radial-gradient(ellipse at 12% 18%,#e8b96925,transparent 45%),radial-gradient(ellipse at 80% 80%,#258da32b,transparent 60%),#101d30}
 .ts-cinema .cinema-stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 18%,#d1e8ff 90%,transparent),radial-gradient(1px 1px at 52% 66%,#8be7e9 90%,transparent),radial-gradient(1.5px 1.5px at 82% 34%,#fff 90%,transparent);background-size:173px 191px,277px 311px,419px 367px;opacity:.7}
@@ -1812,6 +1813,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .ts-cinema .cinema-copy p:last-child{max-width:42ch;color:#c4d9e8;margin:14px 0 0}
 .ts-cinema .cinema-toolbar{position:absolute;inset:auto max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.8rem;color:#c4d9e8}
 .ts-cinema .cinema-toolbar p{margin:0;max-width:35ch}
+.ts-cinema .cinema-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
 .ts-cinema button{pointer-events:auto;min-height:44px;max-width:60%;padding:10px 16px;border:1px solid #b6c5d5;border-radius:8px;color:#eef3fa;background:#182332;font:600 .875rem/1.3 sans-serif;cursor:pointer}
 .ts-cinema button:focus-visible{outline:3px solid #e8b969;outline-offset:4px}
 .ts-cinema button:hover{background:#294059}
@@ -1868,7 +1870,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @keyframes space-music-pulse{from{transform:scaleY(.55);opacity:.35}to{transform:scaleY(1);opacity:.8}}
 .px.reduce-motion .space-ocean-wave path{animation:none!important}
 .px.app[data-theme="light"] .space-ocean-wave{color:#286d87}
-@media(max-width:640px){.ts-cinema .cinema-world{width:min(82vw,47vh);top:10%;right:9%}.ts-cinema .cinema-copy{left:8%;bottom:20%}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem)}.ts-cinema .cinema-copy p:last-child{font-size:.875rem}.ts-cinema .cinema-wave{left:10%;width:80%;top:48%;height:70px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}}
+@media(max-width:640px){.ts-cinema .cinema-world{width:min(72vw,38svh,320px);top:8%;left:0;right:0;margin-inline:auto}.ts-cinema .cinema-copy{left:6%;width:88%;bottom:24%;text-align:center}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem);margin-inline:auto}.ts-cinema .cinema-copy p:last-child{font-size:.875rem;margin-inline:auto}.ts-cinema .cinema-wave{left:10%;width:80%;top:49%;height:55px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}.ts-cinema .cinema-toolbar{flex-direction:column;align-items:center;text-align:center;gap:8px}.ts-cinema .cinema-toolbar p{max-width:100%;font-size:.7rem}.ts-cinema .cinema-actions{width:100%;justify-content:center}.ts-cinema button{max-width:100%;min-width:104px}}
 @media(max-height:450px){.ts-cinema .cinema-world{width:65vh;right:12%;top:0}.ts-cinema .cinema-copy{bottom:24%;width:55%;left:6%}.ts-cinema .cinema-copy h2{font-size:clamp(1.5rem,5vh,2.5rem)}.ts-cinema .cinema-brand{font-size:.8rem;margin-bottom:6px}.ts-cinema .cinema-copy p:last-child{display:none}.ts-cinema .cinema-toolbar{font-size:.7rem}.ts-cinema .cinema-toolbar p{max-width:23ch}}
 @media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-ocean-wave path{animation:none!important}}
 @media(forced-colors:active){.ts-cinema .cinema-world,.ts-cinema .cinema-stars,.ts-cinema .cinema-sun,.ts-cinema .cinema-wave{display:none}.ts-cinema{background:Canvas;color:CanvasText}.ts-cinema button{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
@@ -1878,6 +1880,58 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .haptics-settings p{font-size:.85em;line-height:1.45;color:var(--muted);max-width:70ch}
 .px .haptics-settings .row{gap:8px;flex-wrap:wrap}
 .px .haptics-settings button{min-height:44px;white-space:normal;flex:1 1 140px;letter-spacing:.03em}
+/* Named destinations stay in the content flow; no floating touch targets cover text. */
+.px .universe-portals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:min(100%,440px);margin-top:12px}
+.px .portal-button{display:grid;justify-items:center;gap:5px;min-width:0;min-height:72px;padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);font:600 .8em/1.2 var(--body);cursor:pointer}
+.px .portal-button:hover{border-color:var(--accent);background:var(--surface)}
+.px .portal-planet{display:block;position:relative;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff9,var(--planet) 35%,#142b43 95%);box-shadow:inset -5px -3px 8px #09152666}
+.px .portal-planet[data-body="sun"]{box-shadow:0 0 15px #e8b96955;background:radial-gradient(circle at 30% 30%,#ffedbe,#e8b969 50%,#a86a34)}
+.px .portal-planet[data-body="moon"]::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 25% 60%,#1b2d4944 0 12%,transparent 13%),radial-gradient(circle at 60% 30%,#1b2d4944 0 8%,transparent 9%)}
+.px .portal-planet[data-body="saturn"]::after{content:"";position:absolute;inset:9px -11px;border:2px solid #c9c4eb;border-radius:50%;transform:rotate(-22deg)}
+.px .portal-planet[data-body="aqua"]::after{content:"";position:absolute;inset:6px 1px;border-block:2px solid #bcf1df88;border-radius:45%;transform:rotate(-18deg)}
+.px .destination{width:min(100%,1050px);margin:auto;display:grid;gap:16px;min-width:0}
+.px .destination-return{justify-self:start;min-height:44px}
+.px .destination-layout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(18px,4vw,48px)}
+.px .destination-copy h1{font-size:clamp(2rem,4vw,3.5rem);line-height:1.06;margin:6px 0 14px;letter-spacing:-.025em}
+.px .destination-copy>p{max-width:55ch;line-height:1.6}
+.px .destination-body-name{font-weight:700;color:var(--accent)}
+.px .destination-controls{display:grid;gap:10px;margin-top:18px;border-block:1px solid var(--line);padding-block:16px}
+.px .destination-controls .row{gap:8px;align-items:center;flex-wrap:wrap}
+.px .destination-controls input{max-width:100%;min-height:44px;flex:1 1 100px;accent-color:var(--accent)}
+.px .destination-controls label{font-weight:600;font-size:.85em}
+.px .destination-controls p{font-size:.85em;color:var(--muted);line-height:1.5}
+.px .destination-scene{margin:0;min-width:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.px .destination-scene svg{display:block;width:100%;height:auto;aspect-ratio:1.2}
+.px .destination-scene figcaption{padding:10px 12px;color:var(--muted);font-size:.75em;border-top:1px solid var(--line);line-height:1.4}
+.px .scene-orbit{transform-origin:320px 200px;animation:space-orbit 100s linear infinite}
+.px .scene-swell{animation:scene-swell 16s ease-in-out infinite alternate}
+.px .destination-scene[data-scene="saturn"] .scene-rings{display:block}
+.px .scene-rings{display:none}
+.px .destination-fact{border-left:3px solid var(--accent);padding-left:12px;color:var(--muted);font-size:.85em;line-height:1.5}
+.px.reduce-motion .destination *{animation:none!important}
+@keyframes scene-swell{to{transform:translateY(9px)}}
+.px .space-sun::after{content:"";position:absolute;inset:8%;border:1px dotted #ffdfab88;border-radius:50%;pointer-events:none}
+.px .planet-distant{left:3%;top:auto;bottom:20%;width:52px;opacity:.5}
+.px .space-probe{left:-5%;top:65%;animation:probe-cruise 61s linear infinite;animation-delay:-35s}
+.px .space-probe svg{width:36px;height:24px;filter:drop-shadow(-7px 0 5px #8be7e955)}
+@keyframes probe-cruise{0%,70%{opacity:0;transform:translate(0,0) rotate(-15deg)}73%{opacity:.6}78%{transform:translate(24vw,-16vh) rotate(-22deg)}84%{transform:translate(55vw,-22vh) rotate(0deg);opacity:.6}91%,100%{transform:translate(112vw,-6vh) rotate(18deg);opacity:0}}
+.px .bshow::before{content:"";position:absolute;z-index:-1;inset:20% 6% 15%;border-radius:50%;background:radial-gradient(ellipse at 50% 70%,color-mix(in srgb,var(--band-light) 12%,transparent),transparent 70%);border-bottom:1px solid color-mix(in srgb,var(--band-light) 25%,transparent);pointer-events:none}
+.ts-voyage{position:fixed;inset:0;z-index:2001;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:clamp(16px,5vw,60px);background:#101d30;color:#eef3fa;font:400 16px/1.5 Inter,sans-serif}
+.ts-voyage *{box-sizing:border-box}
+.ts-voyage .voyage-copy{text-align:center}
+.ts-voyage h2{font-size:clamp(1.5rem,5vw,2.8rem);margin:0}
+.ts-voyage p{color:#c4d9e8;margin:8px 0}
+.ts-voyage svg{width:100%;height:100%;min-height:0;align-self:center}
+.ts-voyage .voyage-target{transform-origin:740px 210px}
+.ts-voyage .voyage-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ts-voyage button{min-height:44px;padding:10px 16px;border:1px solid #9cb7ce;border-radius:8px;background:#1d3045;color:#eef3fa;font:600 1rem/1.4 Inter,sans-serif;cursor:pointer}
+.ts-voyage button:focus-visible{outline:3px solid #e8b969;outline-offset:3px}
+@media(max-width:700px){.px .destination-layout{grid-template-columns:minmax(0,1fr);gap:18px}.px .destination-scene{grid-row:1}.px .destination-scene svg{max-height:260px;aspect-ratio:1.5}.px .destination-copy h1{font-size:2rem}.px .universe-portals{margin-inline:auto}.px .portal-button{min-height:68px}.ts-voyage{padding:16px}}
+@media(max-width:640px) and (max-height:700px){.px .universe-portals{margin-top:6px}.px .portal-button{min-height:48px;padding:4px 2px;gap:2px}.px .portal-planet{width:20px;height:20px}}
+@media(max-width:359px) and (max-height:600px),(min-width:641px) and (max-height:450px){.px .hero .facts{display:none}.px .universe-portals{margin-top:6px}.px .portal-button{min-height:44px;padding:6px 2px}.px .portal-planet{display:none}}
+@media(max-height:450px){.ts-voyage .voyage-copy p{display:none}.ts-voyage{padding:10px;gap:0}}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .destination *{animation:none!important}}
+@media(forced-colors:active){.px .portal-planet{background:CanvasText;box-shadow:none}.px .destination-scene svg{forced-color-adjust:none}.ts-voyage{background:Canvas;color:CanvasText}.ts-voyage button{background:ButtonFace;color:ButtonText}}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}} {{motionClass}}" data-motion-mode="{{motionMode}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
@@ -1902,6 +1956,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 <div class="space-planet planet-ringed"><svg viewBox="0 0 150 94" focusable="false"><defs><radialGradient id="ts-ringed-disc" cx="28%" cy="25%" r="78%"><stop stop-color="#8ce4dc"/><stop offset=".45" stop-color="#458fac"/><stop offset="1" stop-color="#263b68"/></radialGradient></defs><ellipse cx="75" cy="47" rx="66" ry="14" fill="none" stroke="#a4c9df" stroke-width="6" opacity=".3" transform="rotate(-22 75 47)"/><circle cx="75" cy="47" r="28" fill="url(#ts-ringed-disc)"/><path d="M52 37q21 7 46 3M49 48q24 8 52 3M53 60q21 7 43 2" fill="none" stroke="#b5ede4" opacity=".2" stroke-width="3"/><path d="M13 59c-7 17 121-11 125-35" fill="none" stroke="#9cdad8" stroke-width="4" opacity=".55"/></svg></div>
 <div class="space-planet planet-distant"><svg viewBox="0 0 50 50" focusable="false"><circle cx="25" cy="25" r="20" fill="#426eac"/><path d="M10 14q11-7 25 1M6 24q19-6 37 1M10 35q14-5 29 0" fill="none" stroke="#82c8e3" opacity=".5" stroke-width="3"/><path d="M29 5a20 20 0 0 1 0 40c12-12 11-29 0-40" fill="#1d345b" opacity=".7"/></svg></div>
+<div class="space-flight space-probe"><svg viewBox="0 0 60 40" focusable="false"><path d="M4 20H0" stroke="#8be7e9" stroke-width="3"/><path d="M52 20L14 9l6 11-6 11z" fill="#d1e8ff"/><path d="M30 13L16 0l4 15m10 12L16 40l4-15" fill="#74a8c9"/></svg></div>
 <svg class="space-bright-stars" viewBox="0 0 1000 600" preserveAspectRatio="none" focusable="false"><g fill="none" stroke="currentColor" stroke-width=".8"><path d="M142 84v8m-4-4h8M914 340v10m-5-5h10M82 413v8m-4-4h8M832 93v6m-3-3h6"/></g><g fill="currentColor"><circle cx="205" cy="42" r="1.2"/><circle cx="957" cy="242" r="1.4"/><circle cx="35" cy="319" r="1.1"/><circle cx="758" cy="568" r="1.3"/></g></svg>
 <div class="space-reading-shade"></div><div class="space-horizon"></div>
 <i class="space-meteor meteor-one"></i><i class="space-meteor meteor-two"></i><i class="space-meteor meteor-three"></i><i class="space-meteor meteor-four"></i><i class="space-meteor meteor-five"></i>
@@ -1965,6 +2020,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
 <div class="home-experience"><div class="home-cinema"><button type="button" onClick="{{intro.replay}}" style="--intro-play-bg:{{intro.bg}};--intro-play-fg:{{intro.fg}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div><button type="button" class="scene-motion-toggle" onClick="{{intro.toggle}}" aria-label="{{intro.toggleLabel}}" title="{{intro.toggleLabel}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="{{intro.togglePath}}"/></svg></button><sc-if value="{{intro.paused}}"><p class="home-motion-note" role="status">{{intro.notice}}</p></sc-if></div>
+<nav class="universe-portals" aria-label="{{universe.navLabel}}"><sc-for list="{{universe.destinations}}" as="p"><button type="button" class="portal-button" data-destination="{{p.key}}" onClick="{{p.open}}" aria-label="{{p.label}}"><span class="portal-planet" data-body="{{p.key}}" style="--planet:{{p.color}}" aria-hidden="true"></span><span>{{p.name}}</span></button></sc-for></nav>
 </div>
 <div class="home-demo">
 <figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
@@ -1983,6 +2039,17 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </sc-if>
 
 <!-- ESCUCHAR · 1 · Elegir disco -->
+<sc-if value="{{scr.universe}}">
+<section class="destination" aria-labelledby="destination-title">
+<button type="button" class="btn sm destination-return" onClick="{{universe.back}}">{{universe.backLabel}}</button>
+<div class="destination-layout">
+<div class="destination-copy"><p class="destination-body-name">{{universe.name}}</p><h1 id="destination-title" tabindex="-1">{{universe.title}}</h1><p>{{universe.text}}</p>
+<div class="destination-controls" role="group" aria-label="{{universe.controlsLabel}}"><div class="row"><button type="button" class="btn primary" onClick="{{universe.play}}" disabled="{{universe.pending}}">{{universe.playLabel}}</button><button type="button" class="btn sm" onClick="{{intro.toggle}}">{{universe.motionLabel}}</button></div><div class="row"><label for="ambient-volume">{{universe.volumeLabel}}</label><input id="ambient-volume" type="range" min="0" max="100" step="5" value="{{universe.volume}}" aria-valuetext="{{universe.volumeText}}" onInput="{{universe.setVolume}}"></div><p role="status" aria-live="polite">{{universe.status}}</p><p>{{universe.audioNotice}}</p></div>
+<p class="destination-fact">{{universe.fact}}</p><button type="button" class="btn sm" onClick="{{universe.nasa}}">{{universe.nasaLabel}}</button></div>
+<figure class="destination-scene" data-scene="{{universe.key}}"><svg viewBox="0 0 640 520" aria-hidden="true" focusable="false"><defs><radialGradient id="destination-sky"><stop stop-color="{{universe.color}}" stop-opacity=".22"/><stop offset="1" stop-color="{{universe.sky}}"/></radialGradient><radialGradient id="destination-body" cx="30%" cy="25%"><stop stop-color="#f5f1e4"/><stop offset=".5" stop-color="{{universe.color}}"/><stop offset="1" stop-color="{{universe.ground}}"/></radialGradient></defs><rect width="640" height="520" fill="{{universe.sky}}"/><rect width="640" height="520" fill="url(#destination-sky)"/><g fill="#d2e7f4" opacity=".7"><circle cx="70" cy="90" r="1.5"/><circle cx="140" cy="185" r="1"/><circle cx="410" cy="60" r="2"/><circle cx="545" cy="160" r="1"/><circle cx="525" cy="310" r="2"/><circle cx="210" cy="35" r="1.5"/></g><g class="scene-orbit" fill="none" stroke="{{universe.color}}" opacity=".3"><ellipse cx="320" cy="200" rx="210" ry="90" transform="rotate(-24 320 200)"/><circle cx="126" cy="236" r="5" fill="{{universe.color}}"/></g><circle cx="320" cy="185" r="100" fill="url(#destination-body)"/><g class="scene-rings" fill="none" stroke="{{universe.color}}"><ellipse cx="320" cy="185" rx="180" ry="40" transform="rotate(-20 320 185)" stroke-width="8" opacity=".45"/><ellipse cx="320" cy="185" rx="163" ry="35" transform="rotate(-20 320 185)" stroke-width="2"/></g><path d="M0 390L75 350 140 379 230 330 290 369 405 315 510 366 590 343 640 365V520H0Z" fill="{{universe.ground}}" opacity=".55"/><path d="M0 435Q100 385 230 425T640 415V520H0Z" fill="{{universe.ground}}"/><g class="scene-swell" fill="none" stroke="{{universe.color}}" opacity=".5"><path d="M0 455Q120 425 255 455T640 450M0 485Q140 465 295 485T640 480"/></g></svg><figcaption>{{universe.artNotice}}</figcaption></figure>
+</div></section>
+</sc-if>
+
 <sc-if value="{{scr.jDisc}}" hint-placeholder-val="{{ false }}">
 <section class="disc-library" aria-labelledby="disc-library-title">
 <div class="pagehead">
@@ -3098,7 +3165,7 @@ var TX = {
     credDevP: 'Interfaz en HTML, CSS y JavaScript. Canvas 2D analiza los fotogramas y Web Audio sintetiza los instrumentos en el navegador. La versión estática para GitHub Pages se genera con scripts/build_pages.py.',
     credAiReview: 'El registro docs/USO_DE_IA.md aún contiene entradas pendientes de revisión y detalle. La declaración debe contrastarse con ese registro antes de presentar el proyecto.',
     credAi: 'Declaración de uso de IA',
-    credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código y pruebas. Los modelos de Blender se retiraron de esta edición 2D. Las ilustraciones previas del equipo se conservaron. Hay historias de ficción identificadas como tales; la revisión humana y cultural sigue pendiente.',
+    credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código, pruebas, escenas y audio ambiental. Los modelos de Blender se retiraron de esta edición 2D. Las ilustraciones previas del equipo se conservaron. Hay historias de ficción identificadas como tales; la revisión humana y cultural sigue pendiente.',
     notice: 'Aviso', noticeP: 'Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.',
     back: 'Atrás', prevScreen: 'Pantalla anterior', nextScreen: 'Pantalla siguiente', screensAria: 'Pantallas de esta sección',
     close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad del escaneo', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
@@ -3149,7 +3216,7 @@ var TX = {
     credDevP: 'Interface built with HTML, CSS and JavaScript. Canvas 2D analyzes the frames and Web Audio synthesizes the instruments in the browser. The static GitHub Pages version is generated with scripts/build_pages.py.',
     credAiReview: 'The docs/USO_DE_IA.md log still contains entries awaiting review and detail. This declaration should be checked against that log before submitting the project.',
     credAi: 'AI use statement',
-    credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This review uses Codex for code and tests. Blender models were removed from this 2D edition. The team’s earlier illustrations were preserved. Fictional stories are labelled as such; human and cultural review remains pending.',
+    credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This review uses Codex for code, tests, scenes and ambient audio. Blender models were removed from this 2D edition. The team’s earlier illustrations were preserved. Fictional stories are labelled as such; human and cultural review remains pending.',
     notice: 'Notice', noticeP: 'Independent project created for the NASA Space Apps Challenge; it is not affiliated with or endorsed by NASA.',
     back: 'Back', prevScreen: 'Previous screen', nextScreen: 'Next screen', screensAria: 'Screens in this section',
     close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Scan speed', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
@@ -3382,7 +3449,7 @@ class CinematicIntro {
     this.finish(false); this.markSeen();
     var preferences=document.getElementById('preferences-dialog');
     if(preferences){this.coveredPreferences={node:preferences,inert:preferences.inert,hidden:preferences.getAttribute('aria-hidden')};preferences.inert=true;preferences.setAttribute('aria-hidden','true');}
-    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static='false';root.setAttribute('aria-label',T('Presentación de TerraSonic','TerraSonic presentation'));
+    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static='false';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label',T('Presentación de TerraSonic','TerraSonic presentation'));
     root.innerHTML=`<div class="cinema-space" aria-hidden="true"><div class="cinema-stars"></div><div class="cinema-stars near"></div><div class="cinema-sun"></div><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i></div>
 <div class="cinema-world" aria-hidden="true"><svg viewBox="0 0 500 500"><defs>
 <radialGradient id="intro-ocean" cx="30%" cy="28%" r="77%"><stop stop-color="#3f9bb5"/><stop offset=".45" stop-color="#1e6088"/><stop offset=".8" stop-color="#14324e"/><stop offset="1" stop-color="#0d192b"/></radialGradient>
@@ -3396,43 +3463,79 @@ class CinematicIntro {
 <g fill="none" stroke="#e8f9ff" stroke-opacity=".3" stroke-linecap="round" stroke-width="5"><path d="M119 141q63-26 103-8m75 34q43-12 65 3M163 264q38-18 69-4m46 71q39-17 78-3M136 378q55 19 106 5"/></g><circle cx="250" cy="250" r="210" fill="url(#intro-night)"/></g>
 <g class="cinema-orbit" fill="none" stroke="#e8b969" stroke-opacity=".4"><ellipse cx="250" cy="250" rx="242" ry="93" transform="rotate(-24 250 250)"/><path d="M250 12v16m0 444v16M12 250h16m444 0h16"/></g></svg></div>
 <svg class="cinema-wave" viewBox="0 0 560 110" fill="none" aria-hidden="true"><path d="M0 55h80l16-9 16 18 16-29 16 46 16-65 16 81 16-66 16 42 16-28 16 20 16-17 16 13 16-18 16 25 16-36 16 43 16-36 16 25 16-16 16 9h80" stroke="currentColor" stroke-width="1.5"/></svg>
-<div class="cinema-copy" aria-hidden="true"><p class="cinema-brand">TERRASONIC</p><h2></h2><p class="cinema-description"></p></div>
-<div class="cinema-toolbar"><p></p><button type="button"></button></div>`;
-    this.update();this.returnFocus=trigger||document.activeElement;document.body.append(root);
+<div class="cinema-copy"><p class="cinema-brand">TERRASONIC</p><h2></h2><p class="cinema-description"></p></div>
+<div class="cinema-toolbar"><p></p><div class="cinema-actions"><button type="button" class="cinema-skip"></button><button type="button" class="cinema-pause"></button></div></div>`;
+    this.paused=false;this.update();this.returnFocus=trigger||document.activeElement;document.body.append(root);
     root.style.fontFamily=getComputedStyle(document.querySelector('.px.app')).fontFamily;
-    var skip=root.querySelector('button');skip.addEventListener('click',function(){self.finish(true);});skip.focus({preventScroll:true});
-    this.onKey=function(event){if(event.key==='Escape'||(event.key==='Tab'&&root.contains(document.activeElement))){event.preventDefault();event.stopPropagation();self.finish(true);}else if(!root.contains(event.target))self.finish(false);};
+    var appRoot=document.querySelector('.px.app');this.coveredApp={node:appRoot,inert:appRoot.inert};appRoot.inert=true;
+    var skip=root.querySelector('.cinema-skip');skip.addEventListener('click',function(){self.finish(true);});root.querySelector('.cinema-pause').addEventListener('click',function(){self.togglePause();});skip.focus({preventScroll:true});
+    this.onKey=function(event){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();self.finish(true);}else if(event.key==='Tab'){var buttons=Array.from(root.querySelectorAll('button:not([hidden])')),index=buttons.indexOf(document.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
     this.onPointer=function(event){if(!root.contains(event.target))self.finish(false);};
     this.onHidden=function(){if(document.hidden)self.finish(false);};
     document.addEventListener('keydown',this.onKey,true);document.addEventListener('pointerdown',this.onPointer,true);document.addEventListener('visibilitychange',this.onHidden);
-    var duration=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches?3000:5200;root.dataset.duration=String(duration);
+    var mobile=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches, duration=mobile?6800:5200;this.duration=duration;this.paused=false;root.dataset.duration=String(duration);
+    if(app.bandReduced()){this.showStatic();return;}
     function animate(selector,frames,options={}){var el=selector==='root'?root:root.querySelector(selector);if(!el?.animate)throw Error('Animation unavailable');var animation=el.animate(frames,{duration:duration,fill:'both',easing:'linear',...options});self.animations.push(animation);return animation;}
     try{
       animate('.cinema-space',[{transform:'scale(1)',offset:0},{transform:'scale(1.07)',offset:1}]);
       animate('.cinema-stars.near',[{transform:'scale(.98)',opacity:0},{transform:'scale(1.15)',opacity:.45}]);
       root.querySelectorAll('.cinema-meteor').forEach(function(el,i){var animation=el.animate([{opacity:0,transform:'translate(-10vw,-6vh) rotate(30deg)'},{opacity:.95,offset:.14},{opacity:.75,offset:.7},{opacity:0,transform:'translate(42vw,26vh) rotate(30deg)'}],{duration:900+i*140,delay:duration*(.04+i*.13),fill:'both',easing:'linear'});self.animations.push(animation);});
       animate('.cinema-sun',[{opacity:0,transform:'scale(.8)',offset:0},{opacity:1,transform:'scale(1)',offset:.25},{opacity:.7,transform:'scale(1.03)',offset:1}]);
-      animate('.cinema-world',[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
+      animate('.cinema-world',mobile?[{opacity:0,transform:'scale(.92)',offset:0},{opacity:1,transform:'scale(1)',offset:.2},{opacity:1,transform:'scale(1.04)',offset:.8},{opacity:0,transform:'scale(1.06)',offset:1}]:[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
       animate('.cinema-orbit',[{opacity:0,transform:'rotate(-12deg)',offset:0},{opacity:1,transform:'rotate(0deg)',offset:.5},{opacity:0,transform:'rotate(8deg)',offset:1}]);
       animate('.cinema-wave',[{opacity:0,transform:'scaleX(.3)',offset:0},{opacity:0,transform:'scaleX(.3)',offset:.46},{opacity:.85,transform:'scaleX(1)',offset:.7},{opacity:0,transform:'scaleX(1.1)',offset:1}]);
       animate('.cinema-copy',[{opacity:0,transform:'translateY(14px)',offset:0},{opacity:0,transform:'translateY(14px)',offset:.22},{opacity:1,transform:'translateY(0)',offset:.45},{opacity:1,transform:'translateY(0)',offset:.75},{opacity:0,transform:'translateY(-6px)',offset:1}]);
-      var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.72},{opacity:0,offset:1}]);
+      var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.88},{opacity:0,offset:1}]);this.endAnimation=end;
       // Real UI stays visible by default; only this optional run adds keyframes.
       var targets=['.brand','.top','#main-content .hero h1','.hero .lede','.hero .cta','.home-demo','.hero .facts'];
       targets.forEach(function(selector,i){var el=document.querySelector(selector);if(!el?.animate)return;var delay=duration*.7+i*55;self.animations.push(el.animate([{opacity:0,transform:selector==='.home-demo'?'translateX(14px) rotate(1deg)':'translateY(8px)'},{opacity:1,transform:'translate(0,0) rotate(0)'}],{duration:Math.min(380,duration-delay-20),delay:delay,fill:'backwards',easing:'cubic-bezier(.2,.7,.2,1)'}));});
       end.onfinish=function(){self.finish(true);};this.timers.push(setTimeout(function(){self.finish(true);},duration+250));
-    }catch(ignored){this.finish(true);}
+    }catch(ignored){this.showStatic();}
   }
-  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración artística · océano Pacífico','Artistic illustration · Pacific Ocean');this.root.querySelector('button').textContent=T('Saltar introducción','Skip intro');}
+  showStatic(){this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];this.root.dataset.static='true';this.root.querySelector('.cinema-pause').hidden=true;this.update();}
+  togglePause(){if(!this.root||this.root.dataset.static==='true')return;this.paused=!this.paused;this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(a=>this.paused?a.pause():a.play());if(!this.paused){var self=this;this.timers.push(setTimeout(function(){self.finish(true);},Math.max(0,this.duration-Number(this.endAnimation?.currentTime||0))+500));}this.update();}
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
   finish(restoreFocus=false){
     if(!this.root)return;
     var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
     this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];
     root?.remove();document.removeEventListener('keydown',this.onKey,true);document.removeEventListener('pointerdown',this.onPointer,true);document.removeEventListener('visibilitychange',this.onHidden);
+    if(this.coveredApp){this.coveredApp.node.inert=this.coveredApp.inert;this.coveredApp=null;}
     if(this.coveredPreferences){var pref=this.coveredPreferences;pref.node.inert=pref.inert;if(pref.hidden===null)pref.node.removeAttribute('aria-hidden');else pref.node.setAttribute('aria-hidden',pref.hidden);this.coveredPreferences=null;}
     if(this.owner.state.showPreferences)this.owner.focusPreferences();
     else if(restoreFocus&&focused){var target=this.returnFocus?.isConnected&&this.returnFocus!==document.body?this.returnFocus:document.querySelector('.hero .btn.primary');target?.focus({preventScroll:true});}
     this.returnFocus=null;
+  }
+}
+
+// These destinations are narrative illustrations, not planetary data products.
+var SPACE_DESTINATIONS = {
+  sun: { name:['Sol','Sun'], title:['Luz del verano','Summer light'], text:['Una costa dorada y una melodía luminosa. Observamos el Sol a distancia, sin aterrizar en él.','A golden coast and a bright melody. We observe the Sun from a distance, without landing on it.'], fact:['Verano es una asociación artística: las estaciones terrestres dependen de la inclinación del eje de la Tierra.','Summer is an artistic association: Earth’s seasons depend on its axial tilt.'], color:'#e8b969', sky:'#332c37', ground:'#806248', root:60, steps:[0,7,4,9], disc:1 },
+  moon: { name:['Luna','Moon'], title:['Calma del invierno','Winter calm'], text:['Un paisaje lunar y un ambiente musical suave. La llegada representa un alunizaje imaginario.','A lunar landscape and a soft musical atmosphere. The arrival depicts an imaginary lunar landing.'], fact:['El invierno y la nieve son recursos narrativos terrestres; no representan el clima de la Luna.','Winter and snow are Earth-based narrative devices; they do not represent the Moon’s climate.'], color:'#c4d9ee', sky:'#1a2b48', ground:'#56677f', root:48, steps:[0,7,3,10], disc:0 },
+  saturn: { name:['Saturno','Saturn'], title:['Estación de los anillos','Ring station'], text:['Una estación de observación junto a los anillos. La nave permanece en órbita: Saturno no tiene una superficie sólida donde aterrizar.','An observation station near the rings. The spacecraft stays in orbit: Saturn has no solid surface to land on.'], fact:['La estación y su música son una interpretación artística, no una grabación del espacio.','The station and its music are an artistic interpretation, not a recording from space.'], color:'#b9b7e9', sky:'#292b49', ground:'#66617e', root:55, steps:[0,7,5,10], disc:3 },
+  aqua: { name:['Aqua','Aqua'], title:['Corrientes del Pacífico','Pacific currents'], text:['Un mundo oceánico imaginario para explorar la relación entre color, agua y música.','An imaginary ocean world for exploring the relationship between color, water and music.'], fact:['Aqua es un escenario de ficción. Los mapas del Pacífico se consultan por separado y conservan su fuente NASA.','Aqua is a fictional setting. Pacific maps are explored separately and retain their NASA source.'], color:'#9ad8bf', sky:'#153844', ground:'#316f78', root:53, steps:[0,5,9,7], disc:2 }
+};
+function spaceText(pair){return pair[LANG==='en'?1:0];}
+class SpaceJourney {
+  constructor(owner){this.owner=owner;this.animations=[];this.timer=null;}
+  start(key,trigger,arrive){
+    this.finish(false);var self=this,app=this.owner,dest=SPACE_DESTINATIONS[key];if(!dest||app.disposed)return;
+    this.trigger=trigger;this.arrive=arrive;
+    if(app.bandReduced()||typeof document.createElement!=='function'){this.arrive=null;arrive();return;}
+    var root=document.createElement('section');this.root=root;root.className='ts-voyage';root.dataset.destination=key;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-labelledby','voyage-title');
+    root.innerHTML='<div class="voyage-copy"><h2 id="voyage-title"></h2><p></p></div><svg viewBox="0 0 900 500" aria-hidden="true"><defs><radialGradient id="voyage-light"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="740" cy="210" r="105" fill="url(#voyage-light)"/><circle class="voyage-target" cx="740" cy="210" r="54"/><ellipse cx="740" cy="210" rx="94" ry="22" fill="none" stroke="#bcd8ed" opacity=".5" transform="rotate(-20 740 210)"/><path class="voyage-path" d="M90 380C250 60 520 460 676 230" fill="none" stroke="#8be7e9" stroke-width="1.5" stroke-dasharray="3 8" opacity=".4"/><g class="voyage-ship"><path d="M-26 0l-28 0" stroke="#8be7e9" stroke-width="3" opacity=".6"/><path d="M18 0L-14-9l4 9-4 9z" fill="#eef3fa"/><path d="M-3-5l-10-12 3 12M-3 5l-10 12 3-12" fill="#8be7e9"/></g><g fill="#d7edff" opacity=".5"><circle cx="120" cy="100" r="1.5"/><circle cx="320" cy="220" r="2"/><circle cx="460" cy="70" r="1"/><circle cx="580" cy="330" r="1.5"/><circle cx="780" cy="420" r="1"/></g></svg><div class="voyage-actions"><button type="button" class="voyage-skip"></button><button type="button" class="voyage-cancel"></button></div>';
+    root.querySelector('h2').textContent=T('Viajando a ','Travelling to ')+spaceText(dest.name);root.querySelector('.voyage-copy p').textContent=T('Puedes saltar el viaje o volver.','You can skip the journey or go back.');root.querySelector('.voyage-target').setAttribute('fill',dest.color);root.querySelector('.voyage-skip').textContent=T('Ir al destino','Go to destination');root.querySelector('.voyage-cancel').textContent=T('Cancelar','Cancel');
+    this.appRoot=document.querySelector('.px.app');this.wasInert=this.appRoot.inert;this.appRoot.inert=true;document.body.append(root);root.querySelector('.voyage-skip').focus({preventScroll:true});
+    root.querySelector('.voyage-skip').onclick=function(){self.finish(true);};root.querySelector('.voyage-cancel').onclick=function(){self.finish(false);};
+    this.onKey=function(e){if(e.key==='Escape'){e.preventDefault();e.stopPropagation();self.finish(false);}else if(e.key==='Tab'){e.preventDefault();var buttons=Array.from(root.querySelectorAll('button')),i=buttons.indexOf(document.activeElement);buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
+    this.onHidden=function(){if(document.hidden)self.finish(false);};document.addEventListener('keydown',this.onKey,true);document.addEventListener('visibilitychange',this.onHidden);
+    app.vibrateSafely('confirm','launch:'+ (++app.hapticRequestSerial));
+    try{var path=root.querySelector('.voyage-path'),length=path.getTotalLength(),frames=[];for(var i=0;i<=32;i++){var point=path.getPointAtLength(length*i/32),next=path.getPointAtLength(Math.min(length,length*i/32+2)),angle=Math.atan2(next.y-point.y,next.x-point.x)*180/Math.PI;frames.push({transform:'translate('+point.x+'px,'+point.y+'px) rotate('+angle+'deg)'});}this.animations.push(root.querySelector('.voyage-ship').animate(frames,{duration:2200,fill:'both',easing:'cubic-bezier(.3,.1,.2,1)'}));this.animations.push(root.querySelector('.voyage-target').animate([{opacity:.65,transform:'scale(.97)'},{opacity:1,transform:'scale(1)'}],{duration:1800,fill:'both'}));this.timer=setTimeout(function(){self.finish(true);},2300);}catch(ignored){this.finish(true);}
+  }
+  finish(arrived){
+    clearTimeout(this.timer);this.timer=null;this.animations.forEach(function(a){a.cancel();});this.animations=[];
+    if(this.root){this.root.remove();this.root=null;this.appRoot.inert=this.wasInert;document.removeEventListener('keydown',this.onKey,true);document.removeEventListener('visibilitychange',this.onHidden);}
+    var done=this.arrive;this.arrive=null;if(arrived&&done){this.owner.vibrateSafely('notice','arrival:'+ (++this.owner.hapticRequestSerial));done();}else if(this.trigger?.isConnected)this.trigger.focus({preventScroll:true});this.trigger=null;
   }
 }
 
@@ -3466,8 +3569,10 @@ class Component extends DCLogic {
     this.preferencesConfigured = !!(preferences && preferences.configured);
     this.state.showPreferences = !this.preferencesConfigured;
     this.state.reducedMotion = !!this.state.reducedMotion;
-    // Every entry/reload starts animated; pause remains available for this visit.
-    this.state.motionMode = 'full'; this.state.reducedMotion = false;
+    // Each entry presents the intro; saved and system reduction are respected.
+    this.state.motionMode = this.state.reducedMotion ? 'reduced' : 'auto';
+    this.state.destination = ''; this.state.ambientPlaying = false; this.ambientTimer=null;
+    this.journey = new SpaceJourney(this);
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
     this.state.tutorialSkipped = {};
@@ -3512,7 +3617,7 @@ class Component extends DCLogic {
     };
     this.onTourVisible = function () {
       document.documentElement?.toggleAttribute?.('data-ts-page-hidden', !!document.hidden);
-      if (document.hidden) self.haptics.stop();
+      if (document.hidden) { self.haptics.stop(); self.journey?.finish(false); if(self.state.ambientPlaying||self.state.destination&&self.state.audioPending)self.stop(); }
       if (!document.hidden && self.state.tour) self.focusTourTarget();
       if (!document.hidden) self.cinema?.start();
     };
@@ -3554,10 +3659,12 @@ class Component extends DCLogic {
     if (window.ResizeObserver) { this.tourObserver = new ResizeObserver(this.onTourObservedResize); this.tourObserver.observe(document.body); }
     this.routeMedia = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     this.onRouteMotion = function () {
+      if(self.routeMedia?.matches&&!self.state.reducedMotion)self.setState({motionMode:'auto'});
       self.syncPreferenceMotion();
       self.setState({ motionRevision: (self.state.motionRevision||0)+1 });
       if (!self.bandReduced()) return;
       self.cinema?.finish(true);
+      self.journey?.finish(true);
       self.haptics.stop();
       if (self.routeFinish) self.routeFinish();
       if (self.state.tab === 'band') self.cancelBandClip();
@@ -3952,6 +4059,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this.disposed) return;
     this.cinema?.finish(false);
+    this.journey?.finish(false);
     this.setPreferencesInert(false);
     if (window.speechSynthesis) window.speechSynthesis.removeEventListener?.('voiceschanged', this.onVoicesChanged);
     this.disposed = true;
@@ -3996,6 +4104,44 @@ class Component extends DCLogic {
   playAnimatedIntro(event) {
     this.setPreference('reducedMotion',false);
     this.cinema?.start(true,event?.currentTarget);
+  }
+  openDestination(key,event) {
+    if(!SPACE_DESTINATIONS[key]||this.disposed||this.state.tab!=='home')return;
+    this.cinema?.finish(false);this.stop();this.closeMenus(false);this.portalReturnKey=key;
+    var self=this;this.journey.start(key,event?.currentTarget,function(){
+      if(self.disposed||self.state.tab!=='home')return;
+      self.setState({destination:key},function(){self.resetScreenScroll();document.getElementById('destination-title')?.focus({preventScroll:true});});
+    });
+  }
+  closeDestination() {
+    this.journey.finish(false);this.stop();var self=this;
+    this.setState({destination:''},function(){self.resetScreenScroll();document.querySelector('.portal-button[data-destination="'+self.portalReturnKey+'"]')?.focus({preventScroll:true});});
+  }
+  async toggleAmbient() {
+    var destination=this.state.destination,config=SPACE_DESTINATIONS[destination];if(!config||this.disposed)return;
+    if(this.state.ambientPlaying||this.state.audioPending){this.stop();return;}
+    this.stop();this.stopSpeech();var self=this,run=this.audioRun;this.setState({audioPending:true,audioError:''});
+    try{
+      await this.waitForAudio(this.ensureAudio());
+      if(this.disposed||run!==this.audioRun||this.state.destination!==destination)return;
+      this.setState({ambientPlaying:true,audioPending:false});var next=this.ac.currentTime+.06,beat=0;
+      var schedule=function(){
+        if(self.disposed||!self.state.ambientPlaying||run!==self.audioRun)return;
+        while(next<self.ac.currentTime+.15){var degree=config.steps[beat%config.steps.length];self.note('sine',config.root+degree,next,2.4,.09,{voice:'orbit',att:.18,rel:.8,cut:1200,pan:-.18});self.note('triangle',config.root+degree+7,next+.12,2.2,.025,{voice:'orbit',att:.2,rel:.8,cut:900,pan:.18});next+=2;beat++;}
+      };schedule();this.ambientTimer=setInterval(schedule,100);
+    }catch(error){if(run===this.audioRun)this.setState({audioPending:false,ambientPlaying:false,audioError:T('No se pudo iniciar el audio. Intenta de nuevo o explora la escena sin sonido.','Audio could not start. Try again or explore the scene without sound.')});}
+  }
+  universeVm() {
+    var self=this,key=this.state.destination||'sun',d=SPACE_DESTINATIONS[key],s=this.state;
+    return {key:key,name:spaceText(d.name),title:spaceText(d.title),text:spaceText(d.text),fact:spaceText(d.fact),color:d.color,sky:d.sky,ground:d.ground,
+      navLabel:T('Explorar destinos del universo','Explore universe destinations'),destinations:Object.keys(SPACE_DESTINATIONS).map(function(k){var p=SPACE_DESTINATIONS[k];return {key:k,name:spaceText(p.name),color:p.color,label:T('Explorar ','Explore ')+spaceText(p.name),open:function(event){self.openDestination(k,event);}};}),
+      backLabel:T('Volver al universo','Back to the universe'),back:function(){self.closeDestination();},controlsLabel:T('Ambiente musical artístico','Artistic musical atmosphere'),pending:s.audioPending,
+      playLabel:s.audioPending?T('Preparando audio…','Preparing audio…'):s.ambientPlaying?T('Pausar ambiente','Pause atmosphere'):T('Escuchar ambiente','Listen to atmosphere'),play:function(){self.toggleAmbient();},
+      status:s.audioError||(s.ambientPlaying?T('Ambiente en reproducción.','Atmosphere playing.'):T('En silencio. El audio empieza solo cuando lo eliges.','Silent. Audio starts only when you choose it.')),
+      motionLabel:this.bandReduced()?T('Activar movimiento','Enable motion'):T('Pausar movimiento','Pause motion'),volume:s.volume,volumeText:s.volume+'%',volumeLabel:T('Volumen','Volume'),setVolume:function(event){self.setVolume(Number(event.target.value));},
+      audioNotice:T('Música artística generada por código asistido por IA. No son datos NASA ni sonidos reales del espacio.','Artistic music generated by AI-assisted code. These are not NASA data or real sounds from space.'),
+      artNotice:T('Ilustración asistida por IA · escenario artístico','AI-assisted illustration · artistic setting'),nasaLabel:T('Explorar el mapa NASA y su sonificación','Explore the NASA map and its sonification'),nasa:function(){self.closeDestination();self.applySet('eic');self.setState({disc:d.disc,frame:0,col:-1});self.goTab('juke',1);self.loadDisc(d.disc);}
+    };
   }
   cancelBandClip() {
     clearTimeout(this.bandTimer);
@@ -4160,7 +4306,7 @@ class Component extends DCLogic {
   }
   subTitles() {
     var t = this.state.tab;
-    if (t === 'home') return [ROUTE_LOOK.home.title];
+    if (t === 'home') return [this.state.destination?spaceText(SPACE_DESTINATIONS[this.state.destination].title):ROUTE_LOOK.home.title];
     if (t === 'juke') return [T('Elige un disco', 'Pick a disc'), T('Escucha', 'Listen')];
     if (t === 'band') return [ROUTE_LOOK.band.title];
     if (t === 'data') return [T('Tu imagen', 'Your image'), T('Escucha', 'Listen')];
@@ -4177,6 +4323,8 @@ class Component extends DCLogic {
   }
   goTab(k, sub) {
     this.cinema?.finish(false);
+    this.journey?.finish(false);
+    if(this.state.destination){if(k==='home'){this.closeDestination();return;}this.stop();this.setState({destination:''});}
     this.settleArrivedRoute();
     var s = this.state;
     if (k === 'juke' && k === s.tab && sub == null && s.sub !== 0) { this.goSub(0); return; }
@@ -5148,7 +5296,7 @@ class Component extends DCLogic {
   }
   stopForScreen(tab, sub) {
     if (tab === this.state.tab && sub === this.state.sub) return;
-    if (this.state.playing || this.state.audioPending || this.state.previewKey) this.stop();
+    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.ambientPlaying) this.stop();
     this.stopSpeech();
   }
   retireAudioGraph() {
@@ -5169,7 +5317,7 @@ class Component extends DCLogic {
     var cleanup = function () { nodes.forEach(function (node) { try { if (node) node.disconnect(); } catch (ignored) {} }); };
     // Stop scheduling immediately; fade the complete dry/wet output to avoid a click.
     // A new run gets a separate graph, so reopening its output cannot revive old notes or reverb.
-    if (!this.disposed && (this.state.playing || this.state.previewKey) && this.ac && this.ac.state === 'running' && master.gain && typeof master.gain.linearRampToValueAtTime === 'function') {
+    if (!this.disposed && (this.state.playing || this.state.previewKey || this.state.ambientPlaying) && this.ac && this.ac.state === 'running' && master.gain && typeof master.gain.linearRampToValueAtTime === 'function') {
       try {
         var now = this.ac.currentTime, gain = master.gain;
         if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
@@ -5183,6 +5331,7 @@ class Component extends DCLogic {
     cleanup();
   }
   stop() {
+    clearInterval(this.ambientTimer);this.ambientTimer=null;
     if (this.state.playing && this.ac) this.flushPlayback(this.ac.currentTime);
     ++this.audioRun;
     ++this.cueRun;
@@ -5198,8 +5347,8 @@ class Component extends DCLogic {
     clearTimeout(this.previewTimer); this.previewTimer = null;
     this.retireAudioGraph();
     this.vibrateSafely(0);
-    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
-      this.setState({ playing: false, audioPending: false, previewKey: '', leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
+    if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.ambientPlaying || this.state.leadPulse || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
+      this.setState({ playing: false, ambientPlaying:false, audioPending: false, previewKey: '', leadPulse: null, chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
     }
   }
@@ -5313,7 +5462,7 @@ class Component extends DCLogic {
       showMini: s.playing && (s.tab === 'juke' || s.tab === 'data') && sub === 0 };
     var scrDir = this.navDir || 0, scrCls = this.navCount ? 's' + (scrDir > 0 ? 'r' : scrDir < 0 ? 'l' : 'f') + (this.navCount % 2 ? '-a' : '-b') : '';
     if (s.routeArrived) scrCls = 'route-arrive';
-    var scrVm = { home: s.tab === 'home', jDisc: s.tab === 'juke' && sub === 0,
+    var scrVm = { home: s.tab === 'home'&&!s.destination, universe:s.tab==='home'&&!!s.destination, jDisc: s.tab === 'juke' && sub === 0,
       play: (s.tab === 'juke' && sub === 1) || (s.tab === 'data' && sub === 1), stg: (s.tab === 'juke' && sub === 2) || (s.tab === 'data' && sub === 2),
       dUp: s.tab === 'data' && sub === 0, bPage: s.tab === 'band',
       hA: s.tab === 'how' && sub === 0, hB: s.tab === 'how' && sub === 1, hC: s.tab === 'how' && sub === 2,
@@ -5347,8 +5496,8 @@ class Component extends DCLogic {
     var leadKey = this.leadChar();
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
-      th: th, ic: this.icons, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
-      intro: { replayLabel: T('Repetir introducción','Replay intro'), bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b', replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: T('Animaciones pausadas hasta la próxima entrada.','Animations paused until the next visit.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.setPreference('reducedMotion',!self.bandReduced()); } },
+      th: th, ic: this.icons, universe:this.universeVm(), showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      intro: { replayLabel: T('Repetir introducción','Replay intro'), bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b', replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: T('Movimiento reducido. Puedes activarlo cuando quieras.','Reduced motion. You can enable it whenever you like.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.setPreference('reducedMotion',!self.bandReduced()); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
       stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),

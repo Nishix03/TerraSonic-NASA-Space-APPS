@@ -1,5 +1,7 @@
 # Introducción automática, baile único y guía móvil
 
+> Checkpoint anterior. La [revisión NSAC posterior](REVISION_NSAC.md) mantiene una presentación en cada entrada y respeta la reducción guardada o del sistema mediante una portada estática. La duración móvil vigente es de 6,8 segundos, con pausa y centrado; las cifras y la política inferiores corresponden a la edición anterior.
+
 Esta edición aplica la instrucción posterior del usuario: **la introducción debe reproducirse en cada entrada y cada recarga**, con un botón verde para repetirla; la banda conserva una sola animación tipo baile y la guía móvil debe ser mínima. Esta política sustituye la anterior de una vez por sesión y la de activación manual cuando había reducción guardada.
 
 ## Diseño
