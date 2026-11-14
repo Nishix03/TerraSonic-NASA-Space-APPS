@@ -19,6 +19,7 @@ El alcance, tiempo efectivo, evidencia y tareas pendientes se mantienen en [PIER
 ## Qué incluye
 
 - **Escuchar:** diez discos, sesenta mapas EIC/GIBS, seis fechas por disco, Melodía y Datos, posición/tiempo, pausa, velocidad y volumen. Mapa y cuadrícula visibles, escala compacta y mezcla de cinco músicos. Historial paginado.
+- **Mapa de portada:** carrusel automático de cinco imágenes EIC existentes cada tres segundos, con fecha y miniatura sincronizadas; utiliza la pausa global y respeta movimiento reducido. [Comportamiento y comprobaciones](docs/CARRUSEL_PORTADA.md).
 - **Banda:** cinco ilustraciones 2D originales con baile automático y un único control para pausarlo o reanudarlo. Muestras de instrumento detenibles e historias identificadas como ficción.
 - **Convertir:** lluvia de Chiclayo destacada o imagen propia, procesada localmente. Sustitución de la vista por la última imagen aceptada, límites y errores recuperables. Ya no importa CSV.
 - **Brisa y preferencias:** bienvenida y guía sin desplazamiento interno, práctica saltable/reabrible, voz opcional, idioma, texto grande, fuente legible, alto contraste y movimiento reducido combinables. Modo claro y oscuro pizarra guardados.

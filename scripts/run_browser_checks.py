@@ -37,6 +37,7 @@ CHECKS = {
     "universe": "verify_universe.cjs",
     "clarity": "verify_clarity.cjs",
     "background-portals": "verify_background_portals.cjs",
+    "home-carousel": "verify_home_carousel.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 

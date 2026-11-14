@@ -2061,7 +2061,7 @@ html[data-ts-page-hidden] .px .planet-portal *{animation-play-state:paused!impor
 
 </div>
 <div class="home-demo">
-<figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
+<figure class="home-map" aria-live="off" data-slide="{{carousel.index}}"><img decoding="async" src="{{heroUrl}}" alt="{{carousel.alt}}"><figcaption>{{carousel.caption}}</figcaption></figure>
 <div class="home-process">
 <ol class="homeflow" aria-label="{{tx.flowAria}}">
 <li class="flow-step"><img class="flow-art" src="{{heroUrl}}" alt=""><strong>{{tx.flowImage}}</strong></li>
@@ -2540,6 +2540,8 @@ var DISC_SETS = {
   ]
 };
 var DISCS = DISC_SETS.eic.slice();
+// Existing EIC frames: one example from each seasonal episode.
+var HOME_PREVIEW = [{disc:2,frame:0},{disc:3,frame:2},{disc:4,frame:2},{disc:0,frame:2},{disc:1,frame:2}];
 // The build embeds data/impacts.v1.json here. No runtime request is needed.
 var IMPACT_CATALOG = { version: 1, records: [] };
 var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };
@@ -3649,6 +3651,7 @@ class Component extends DCLogic {
     if(!this.state.reducedMotion){try{if(localStorage.getItem('ts_motion_mode')==='full')this.state.motionMode='full';}catch(ignored){}}
     this.state.destination = ''; this.state.ambientPlaying = false; this.ambientTimer=null;
     this.state.sampleStarting=false;this.sampleRun=0;this.sampleTimer=null;
+    this.state.homePreview=0;this.homePreviewDue=0;this.homePreviewImages=new Map();
     this.journey = new SpaceJourney(this);
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
@@ -3672,7 +3675,7 @@ class Component extends DCLogic {
     });
     this.hapticRequestSerial = 0;
   }
-  componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); if (self.state.tour) self.measureTour(); }, 200);
+  componentDidMount() { this.loadDisc(this.state.disc); this.preloadArt(); var self = this; this.syncTimer = setInterval(function () { self.syncAnims(); self.syncHomePreview(); if (self.state.tour) self.measureTour(); }, 200);
     this.onDiscPointer = function (event) {
       if (!self.discPointerOpening) return;
       if (event.detail < 2) { self.discPointerOpening = false; return; }
@@ -4140,6 +4143,7 @@ class Component extends DCLogic {
     this.setPreferencesInert(false);
     if (window.speechSynthesis) window.speechSynthesis.removeEventListener?.('voiceschanged', this.onVoicesChanged);
     this.disposed = true;
+    this.homePreviewDue=0;this.homePreviewImages.forEach(function(entry){entry.image.onload=null;entry.image.onerror=null;});this.homePreviewImages.clear();
     if (this.discPointerRoot) {
       this.discPointerRoot.removeEventListener('mousedown', this.onDiscPointer, true);
       this.discPointerRoot.removeEventListener('click', this.onDiscPointer, true);
@@ -4183,6 +4187,27 @@ class Component extends DCLogic {
     this.cinema?.start(true,event?.currentTarget);
   }
   toggleSceneMotion(){var paused=!this.bandReduced();this.setState({motionMode:paused?'reduced':'full'});if(paused){this.cinema?.finish(true);this.haptics.stop();if(this.routeFinish)this.routeFinish();this.cancelBandClip();}this.syncPreferenceMotion();}
+  syncHomePreview(){
+    var s=this.state,card=document.querySelector('.home-demo');
+    if(this.disposed||s.tab!=='home'||s.destination||s.trans||s.showPreferences||s.tour||document.hidden||this.bandReduced()||this.cinema?.root||this.journey?.root||!card||card.matches(':hover')||card.contains(document.activeElement)){this.homePreviewDue=0;return;}
+    var now=Date.now();if(!this.homePreviewDue)this.homePreviewDue=now+3000;
+    for(var offset=1;offset<HOME_PREVIEW.length;offset++){
+      var next=(s.homePreview+offset)%HOME_PREVIEW.length,slide=HOME_PREVIEW[next],url=DISC_SETS.eic[slide.disc].files[slide.frame],entry=this.homePreviewImages.get(url);
+      if(!entry){
+        if(typeof Image!=='function')return;
+        var image=new Image(),self=this;entry={image:image,ready:false,failed:false};this.homePreviewImages.set(url,entry);
+        (function(record){record.image.onload=function(){Promise.resolve().then(function(){return typeof record.image.decode==='function'?record.image.decode():null;}).then(function(){if(!self.disposed)record.ready=true;},function(){record.failed=true;});};record.image.onerror=function(){record.failed=true;};})(entry);
+        image.src=url;
+      }
+      if(entry.failed)continue;
+      if(entry.ready&&now>=this.homePreviewDue){this.homePreviewDue=now+3000;this.setState({homePreview:next});}
+      return;
+    }
+  }
+  homePreviewVm(){
+    var slide=HOME_PREVIEW[this.state.homePreview],disc=DISC_SETS.eic[slide.disc],parts=disc.dates[slide.frame].split('-'),date=MES[Number(parts[1])-1]+T(' de ',' ')+parts[0];
+    return {index:this.state.homePreview,url:disc.files[slide.frame],caption:T('Pacífico, ','Pacific, ')+date+' · NASA EIC',alt:TX[LANG].homeMapAlt+'. '+date+'. '+disc.title+'. NASA EIC.'};
+  }
   cancelSample(){++this.sampleRun;clearTimeout(this.sampleTimer);this.sampleTimer=null;if(this.state.sampleStarting)this.setState({sampleStarting:false});}
   startSample(){
     if(this.disposed||this.state.tab!=='home'||this.state.sampleStarting)return;
@@ -5484,7 +5509,7 @@ class Component extends DCLogic {
                 : { bg: '#171E2B', panel: '#202B3A', surface: '#1B2534', line: '#657A95', shadow: '#101725', fg: '#EFF3F8', muted: '#B4C1D2', accent: '#BDE9F2', hot: '#FFAC85', cold: '#82D7F3', magenta: '#F8A4D3' };
     th.fs = s.big ? '19px' : 'clamp(16px, calc(8px + 0.5vw), 19px)';
     th.headFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Barlow', 'Inter', sans-serif";
-    var tx = TX[LANG];
+    var tx = TX[LANG],homePreview=this.homePreviewVm();
     th.bodyFont = s.legible ? "'Atkinson Hyperlegible', sans-serif" : "'Inter', system-ui, sans-serif";
     var a = this.cur(), d = DISCS[s.disc], dt = this.frameDate(s.disc, s.frame);
     var referenceCoast = s.disc !== 5 || s.custom && s.custom.source === 'eic' && s.custom.mode === 'palette';
@@ -5679,7 +5704,7 @@ class Component extends DCLogic {
       },
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
       scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
-      heroUrl: DISC_SETS.eic[2].files[0],
+      heroUrl: homePreview.url, carousel:homePreview,
       heroHow:function(){self.goTab('how');},
       bandScience:{silbo:T('En el modo Datos, Silbo responde a niveles cálidos altos en la zona costera seleccionada. «Escuchar instrumento» es una muestra artística de su voz.','In Data mode, Silbo responds to high warm levels in the selected coastal area. “Hear instrument” is an artistic sample of his voice.'),inti:T('En el modo Datos, los niveles cálidos orientan los tonos y la intensidad de Inti. Su instrumento se sintetiza en el navegador.','In Data mode, warm levels guide Inti’s tones and intensity. The instrument is synthesized in the browser.'),mama:T('En el modo Datos, los niveles fríos orientan los graves y la intensidad de Mamacocha. Su voz ayuda a reconocer patrones fríos.','In Data mode, cool levels guide Mamacocha’s bass and intensity. Her voice helps identify cool patterns.'),yaku:T('En el modo Datos, las zonas intensas activan las gotas de Yaku; su posición vertical orienta la nota. La escala pentatónica es una decisión musical.','In Data mode, strong areas trigger Yaku’s drops; vertical position guides the note. The pentatonic scale is a musical choice.'),illapa:T('En el modo Datos, una proporción alta de niveles cálidos extremos activa la percusión de Illapa. No es una predicción de tormentas.','In Data mode, a high share of extreme warm levels triggers Illapa’s percussion. It is not a storm prediction.')}[bandKey],
       easyLabel: T('Explícamelo fácil', 'Explain it simply'),
