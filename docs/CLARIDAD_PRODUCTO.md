@@ -55,4 +55,6 @@ Pasan 15 recorridos de claridad en Chromium: español e inglés en seis anchuras
 
 La primera escucha cancela la solicitud pendiente al salir, detener o sustituir la entrada. La explicación se recalcula cuando cambian mapa, motor, idioma o análisis, en lugar de reconstruirse en cada pulso musical. Se conservaron los dos catálogos, ambos motores, mezcla, instrumentos, imágenes propias y lluvia. Los resultados ampliados y el ajuste posterior de astros/entrada están en [FONDO_INTERACTIVO.md](FONDO_INTERACTIVO.md).
 
+El paquete servido por HTTP comprueba que los controles de primera escucha se ven antes de abrir las explicaciones, en móvil y escritorio. El contenido completo del mapa y la banda permanece en el flujo del documento antes del pie; no se recorta para simular que toda la información cabe en una sola pantalla ni se encierra en un panel con desplazamiento interno. Se actualizó la comprobación portátil anterior, que exigía una pantalla sin el nuevo contexto científico; su primer fallo y la repetición aprobada se conservan como evidencia.
+
 La comprensión humana no se acredita mediante cambios de texto o pruebas automáticas. El [protocolo para cinco participantes](PROTOCOLO_USABILIDAD.md), con meta de al menos cuatro aciertos de cinco por criterio, queda preparado y sin resultados hasta realizar las sesiones.

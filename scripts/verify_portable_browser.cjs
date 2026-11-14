@@ -18,8 +18,9 @@ async function main(){
    await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().waitFor();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
    assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),14);
    await page.evaluate(()=>document.fonts.ready);
-   const playerCore=await page.locator('.uni').evaluate(root=>({bandBottom:root.querySelector('.listen-band').getBoundingClientRect().bottom,controlsBottom:root.querySelector('.player-sidebar').getBoundingClientRect().bottom}));
-   if(viewport.width>=1280)assert(playerCore.bandBottom<=viewport.height&&playerCore.controlsBottom<=viewport.height,'The initial player must fit the original desktop window: '+JSON.stringify(playerCore));
+   const playerCore=await page.locator('.uni').evaluate(root=>{const controls=root.querySelector('.sample-nowbar .controls').getBoundingClientRect(),band=root.querySelector('.listen-band').getBoundingClientRect(),footer=document.querySelector('.bottomnav').getBoundingClientRect();return {controlsTop:controls.top,controlsBottom:controls.bottom,bandBottom:band.bottom,footerTop:footer.top};});
+   assert(playerCore.controlsTop>=0&&playerCore.controlsBottom<=viewport.height,'The first listening controls must be visible before opening the contextual details: '+JSON.stringify(playerCore));
+   assert(playerCore.bandBottom<=playerCore.footerTop+1,'The complete band stays in the document before the footer');
    await page.screenshot({path:path.join(output,'player-'+viewport.width+'.png')});
    await page.locator('#tour-nav button').nth(1).click();await page.waitForFunction(()=>document.querySelector('.bportrait-live')?.hasAttribute('data-rendered'));
    await page.locator('#tour-nav button').nth(2).click();await page.locator('#tour-sample button').first().click();await page.locator('#playback-position').waitFor();
