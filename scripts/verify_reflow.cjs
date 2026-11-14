@@ -14,7 +14,7 @@ async function main(){
    localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
   });
-  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await dismissEntry(page);await page.waitForFunction(()=>window.__app);
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await dismissEntry(page,{staticMotion:true});await page.waitForFunction(()=>window.__app);
   const scenarios=[[320,256],[320,568],[390,844],[667,375],[768,1024],[1024,768],[1366,768],[1920,1080],[2732,1536]];
   const settings=['default','spacing','large-text'];
   for(const [width,height]of scenarios){

@@ -15,7 +15,7 @@ async function main(){
    const response=await page.goto(target);assert.equal(response.status(),200);await dismissEntry(page);await page.getByRole('button',{name:'Continuar',exact:true}).click();await page.evaluate(()=>document.fonts.ready);
    const process=await page.locator('.home-process').boundingBox();assert(process.y>=0&&process.y+process.height<=viewport.height);
    assert(await page.evaluate(()=>document.fonts.check('700 16px Barlow')));await page.screenshot({path:path.join(output,'home-'+viewport.width+'.png')});
-   await page.locator('#tour-nav button').first().click();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
+   await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').first().waitFor();assert.equal(await page.locator('.discgrid .dcard').count(),5);await page.locator('.discgrid .dcard').first().click();await page.locator('#playback-position').waitFor();await page.waitForFunction(()=>{const image=document.querySelector('.mapbox img.map');return image?.complete&&image.naturalWidth>0;});
    assert.equal(await page.locator('#playback-position').getAttribute('max'),'168');assert.equal(await page.locator('.legend-choice').count(),14);
    await page.evaluate(()=>document.fonts.ready);
    const playerCore=await page.locator('.uni').evaluate(root=>({bandBottom:root.querySelector('.listen-band').getBoundingClientRect().bottom,controlsBottom:root.querySelector('.player-sidebar').getBoundingClientRect().bottom}));
