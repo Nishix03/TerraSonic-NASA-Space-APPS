@@ -29,7 +29,7 @@ async function main() {
         }});
       });
       const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
-      await page.goto(base);await page.waitForFunction(()=>window.__app);
+      await page.goto(base);await page.locator('.cinema-skip').click();await page.waitForFunction(()=>window.__app);
       await page.evaluate(()=>{__app.state.sfx=false;});
       await page.locator('#tour-nav button').nth(1).click();
       for(const lang of ['es','en']) {

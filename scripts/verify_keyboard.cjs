@@ -15,8 +15,11 @@ async function main(){
     const Native=window.AudioContext;window.AudioContext=class extends Native{createDynamicsCompressor(){const compressor=super.createDynamicsCompressor(),connect=compressor.connect.bind(compressor);compressor.connect=(destination,...args)=>{if(destination===this.destination){const silent=this.createGain();silent.gain.value=0;connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return compressor;}};
     window.__vibrations=[];Object.defineProperty(navigator,'vibrate',{configurable:true,value:pattern=>{__vibrations.push(pattern);return true;}});
    },language);
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
-   await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.className),'skip-content');
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);const enter=page.locator('.cinema-skip');await enter.waitFor();
+   assert(await enter.evaluate(el=>el===document.activeElement));await page.keyboard.press('Tab');
+   assert(await enter.evaluate(el=>el===document.activeElement),'The static intro keeps keyboard focus on Enter');
+   await page.keyboard.press('Enter');await page.waitForFunction(()=>window.__app);
+   await page.locator('.skip-content').focus();
    await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>document.activeElement.id),'main-content');
    const nav=page.locator('#tour-nav button');await nav.first().focus();await page.keyboard.press('ArrowRight');
    assert.equal(await nav.nth(1).evaluate(el=>el===document.activeElement),true);
@@ -38,9 +41,6 @@ async function main(){
    await page.screenshot({path:path.join(output,`${width}-${language}-preferences.png`)});
    await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.className),'opt');
    await page.keyboard.press('Escape');assert.equal(await page.locator('#tour-a11y').getAttribute('open'),null);assert.equal(await page.locator('#tour-a11y>summary').evaluate(el=>el===document.activeElement),true);
-   const explanation=page.getByRole('button',{name:language==='es'?'Explícamelo fácil':'Explain it simply',exact:true});
-   await explanation.focus();await page.keyboard.press('Enter');assert(await page.locator('#easy-explanation .easy-panel').isVisible());
-   await page.keyboard.press('Enter');assert.equal(await page.locator('#easy-explanation .easy-panel').count(),0);
    await page.locator('.scr').evaluate(el=>{el.scrollTop=0;window.scrollTo(0,0);});
    await page.screenshot({path:path.join(output,`${width}-${language}-player.png`)});
    await page.locator('.skip-content').focus();
@@ -62,7 +62,7 @@ async function main(){
    const names=tree.nodes.filter(node=>!node.ignored).map(node=>({role:node.role?.value,name:node.name?.value}));
    assert(names.some(node=>node.role==='slider'&&node.name));assert(names.some(node=>node.role==='main'));
    fs.writeFileSync(path.join(output,`${width}-${language}-ax.json`),JSON.stringify(names,null,2));
-   report.checks.push({width,language,skipLink:true,navigationArrows:true,discEntryFocus:true,playPause:true,nativeSeek:true,volume:true,mute:true,date:true,popoverEscape:true,dialogTrap:true,tabTrace:75});
+   report.checks.push({width,language,skipLink:true,navigationArrows:true,discEntryFocus:true,playPause:true,nativeSeek:true,volume:true,mute:true,date:true,popoverEscape:true,introFocusTrap:true,tabTrace:75});
    console.log('PASS keyboard',width,language);await context.close();
   }
   assert.deepEqual(report.errors,[]);

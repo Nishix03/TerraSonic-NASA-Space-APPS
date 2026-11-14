@@ -31,7 +31,7 @@ async function main() {
       } });
     });
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
-    await page.goto(base); await page.waitForFunction(() => window.__app);
+    await page.goto(base);await page.locator('.cinema-skip').click(); await page.waitForFunction(() => window.__app);
     await page.evaluate(() => { __app.state.sfx = false; });
     await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();
     await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();

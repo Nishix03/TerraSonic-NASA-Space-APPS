@@ -32,6 +32,7 @@ async function main() {
   const url = 'http://127.0.0.1:' + server.address().port;
   const browser = await launchBrowser({ executablePath: process.env.TERRASONIC_CHROMIUM });
   const report = { timing: [], animation: [], errors: [], responses: [], profile: 'Chromium, 4× CPU slowdown, 150 ms latency, 200 KiB/s download, gzip; fresh mobile contexts. Section timing is click to the section heading being visible.', physicalVibrationVerified: false };
+  const releaseUrl = process.env.EARTHBEAT_PREVIEW_URL || url;
   function observe(page) {
     page.on('pageerror', error => report.errors.push(error.message));
     page.on('response', response => { if (response.status() >= 400) report.responses.push(response.url()); });
@@ -39,6 +40,14 @@ async function main() {
   async function ready(page, target) {
     await page.locator(target).waitFor({ state: 'visible' });
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  }
+  async function assertMoving(page, selector) {
+    await page.waitForFunction(selector => {
+      const element = document.querySelector(selector);
+      return element?.getAnimations().some(animation => animation.playState === 'running' && animation.currentTime > 0);
+    }, selector);
+    const before = await page.locator(selector).first().evaluate(element => getComputedStyle(element).transform);
+    await page.waitForFunction(({ selector, before }) => getComputedStyle(document.querySelector(selector)).transform !== before, { selector, before });
   }
   try {
     for (const viewport of [mobile, desktop]) {
@@ -51,11 +60,16 @@ async function main() {
       observe(page);
       const downloads = [];
       page.on('request', request => { if (request.url().includes('/baile/')) downloads.push(request.url()); });
-      await page.goto(url);
+      await page.goto(releaseUrl);
       const intro = page.locator('.ts-cinema');
       await intro.waitFor();
-      assert.equal(await intro.getAttribute('data-duration'), viewport === mobile ? '3000' : '5200');
+      assert.equal(await intro.getAttribute('data-duration'), viewport === mobile ? '6800' : '5200');
       assert.match(await intro.textContent(), /EARTHBEAT/);
+      await assertMoving(page, '.cinema-world');
+      await assertMoving(page, '.cinema-meteor');
+      await intro.getByRole('button', { name: 'Pausar', exact: true }).click();
+      assert(await page.locator('.cinema-world').evaluate(element => element.getAnimations().every(animation => animation.playState === 'paused')));
+      await intro.getByRole('button', { name: 'Reanudar', exact: true }).click();
       await page.screenshot({ path: path.join(output, `intro-${viewport.width}.png`) });
       await page.getByRole('button', { name: 'Saltar introducción' }).click();
       assert.equal(await intro.count(), 0);
@@ -71,8 +85,14 @@ async function main() {
       await page.getByRole('button', { name: 'Repetir introducción' }).click();
       await intro.waitFor();
       await page.keyboard.press('Escape');
+      for (const selector of ['.solar-corona', '.solar-eclipse', '.space-meteor.meteor-one', '.space-flight.space-probe', '.space-flight.flight-one']) {
+        if (await page.locator(selector).isVisible()) await assertMoving(page, selector);
+      }
+      assert.equal(await page.locator('.universe-portals, .portal-button').count(), 0);
       await page.locator('#tour-nav button').nth(1).click();
       const dance = page.locator('earthbeat-dance');
+      await page.locator('earthbeat-dance-button button').waitFor();
+      assert.equal(await page.locator('.avatar-actions button').count(), 2);
       const characters = ['silbo', 'inti', 'mama', 'yaku', 'illapa'];
       for (const [index, key] of characters.entries()) {
         if (index) await page.locator('.bpick button').nth(index).click();
@@ -80,18 +100,52 @@ async function main() {
           const el = document.querySelector('earthbeat-dance');
           return el?.dataset.character === key && el.dataset.frame === '1' && el.querySelector('.dance-frame').naturalWidth > 0;
         }, key);
-        await page.getByRole('button', { name: 'Pausar baile' }).click();
         const frame = await dance.getAttribute('data-frame');
-        await page.waitForTimeout(190);
-        assert.equal(await dance.getAttribute('data-frame'), frame);
+        await page.waitForFunction(start => document.querySelector('earthbeat-dance')?.dataset.frame !== start, frame);
         if (index === 0) {
+          await page.getByRole('button', { name: 'Pausar baile' }).click();
+          const stoppedAt = await dance.getAttribute('data-frame');
+          await page.waitForTimeout(200);
+          assert.equal(await dance.getAttribute('data-frame'), stoppedAt);
           await page.getByRole('button', { name: 'Bailar', exact: true }).click();
-          await page.waitForFunction(start => document.querySelector('earthbeat-dance')?.dataset.frame !== start, frame);
+          await page.waitForFunction(start => document.querySelector('earthbeat-dance')?.dataset.frame !== start, stoppedAt);
           await page.screenshot({ path: path.join(output, `dance-${viewport.width}.png`) });
         }
       }
       assert.equal(new Set(downloads).size, 20);
+      await page.locator('#tour-nav button').first().click();
+      await page.locator('.discgrid .dcard').first().click();
+      const stage = page.locator('.stage-musician');
+      await stage.first().waitFor();
+      assert.equal(await stage.count(), 5);
+      assert.equal(await page.locator('.stage-musician[aria-pressed="true"]').count(), 5);
+      await stage.first().click();
+      assert.equal(await stage.count(), 5);
+      assert.equal(await stage.first().getAttribute('aria-pressed'), 'false');
+      await stage.first().press('Space');
+      assert.equal(await stage.first().getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.locator('#tour-frame #playback-position').count(), 1);
+      assert.equal(await page.locator('#tour-frame .map-toolbar select').count(), 1);
+      const frameButtons = page.locator('#tour-frame .timeline button');
+      await frameButtons.nth(2).click();
+      assert.equal(await frameButtons.nth(2).getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.locator('#playback-position').inputValue(), '56');
+      await page.locator('#tour-frame #playback-position').focus();
+      await page.keyboard.press('End');
+      await page.keyboard.press('Home');
+      assert.equal(await page.locator('#playback-position').inputValue(), '0');
+      await page.getByRole('button', { name: 'Reproducir', exact: true }).click();
+      await page.locator('.band-stage').scrollIntoViewIfNeeded();
+      await page.locator('.stage-musician earthbeat-dance[data-dancing]').first().waitFor({timeout:10000});
+      await page.getByRole('button', { name: 'Pausar', exact: true }).click();
+      assert.equal(await page.locator('.stage-musician earthbeat-dance[data-dancing]').count(), 0);
+      await page.screenshot({ path: path.join(output, `player-${viewport.width}.png`) });
+      await page.locator('#tour-a11y summary').scrollIntoViewIfNeeded();
+      const header = await page.locator('header.top').boundingBox();
+      const layout = await page.locator('.player-layout').boundingBox();
       await page.locator('#tour-a11y summary').click();
+      assert.deepEqual(await page.locator('header.top').boundingBox(), header);
+      assert.deepEqual(await page.locator('.player-layout').boundingBox(), layout);
       await page.getByRole('button', { name: 'Vibración', exact: true }).click();
       assert.deepEqual(await page.evaluate(() => vibrations), [15]);
       await page.waitForTimeout(725);
@@ -103,9 +157,9 @@ async function main() {
       await page.keyboard.press('Escape');
       await page.reload();
       await intro.waitFor();
-      assert.equal(await intro.getAttribute('data-static'), 'true', 'Reload still shows the intro with reduced motion');
-      assert.equal(await intro.evaluate(el => el.getAnimations({ subtree: true }).length), 0);
-      await page.getByRole('button', { name: 'Saltar introducción' }).click();
+      assert.equal(await intro.getAttribute('data-static'), 'true', 'Reload honors reduced motion');
+      assert.equal(await intro.evaluate(element => element.getAnimations({ subtree: true }).length), 0);
+      await page.getByRole('button', { name: 'Entrar', exact: true }).click();
       await page.locator('#tour-nav button').nth(2).click();
       assert(await page.locator('#tour-drop input').isVisible());
       assert.match(await page.locator('.rain-chart').getAttribute('alt'), /NASA POWER/);
@@ -115,6 +169,8 @@ async function main() {
       assert.equal(await page.locator('.method-notes a:visible').count(), 5);
       assert.equal(await page.locator('.team-names li').count(), 6);
       assert.doesNotMatch(await page.locator('.team-names').textContent(), /@/);
+      assert(await page.getByRole('heading', { name: 'Creadores de EarthBeat' }).isVisible());
+      assert.equal(await page.getByText('Alvaro Mendoza Marín', { exact: true }).count(), 1);
       await page.screenshot({ path: path.join(output, `method-${viewport.width}.png`) });
       report.animation.push({ viewport, characters, patterns: [15, [25, 50, 25], 0] });
       await context.close();
@@ -123,11 +179,11 @@ async function main() {
     await accessible.addInitScript(() => localStorage.setItem('ts_prefs', JSON.stringify({ version: 1, configured: true, values: { contrast: true } })));
     const accessiblePage = await accessible.newPage();
     observe(accessiblePage);
-    await accessiblePage.goto(url);
+    await accessiblePage.goto(releaseUrl);
     const staticIntro = accessiblePage.getByRole('dialog', { name: 'EarthBeat presentation' });
     assert.equal(await staticIntro.getAttribute('data-static'), 'true');
-    assert.equal(await staticIntro.getAttribute('data-contrast'), 'true');
-    await staticIntro.waitFor({ state: 'detached' });
+    assert.equal(await staticIntro.evaluate(element => element.getAnimations({ subtree: true }).length), 0);
+    await staticIntro.getByRole('button', { name: 'Enter', exact: true }).click();
     assert(await accessiblePage.getByRole('heading', { name: 'Listen to the Pacific' }).isVisible());
     await accessible.close();
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -141,7 +197,7 @@ async function main() {
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
       const start = performance.now();
       await page.goto(url, { waitUntil: 'commit' });
-      await ready(page, '.ts-cinema button');
+      await ready(page, '.cinema-skip');
       const time = { introReadyMs: Math.round(performance.now() - start) };
       await page.getByRole('button', { name: 'Saltar introducción' }).click();
       await page.locator('#preferences-voice').uncheck();

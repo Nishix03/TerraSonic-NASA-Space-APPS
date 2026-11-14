@@ -16,7 +16,7 @@ async function main(){
     return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});
    });
    await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));});
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.locator('.cinema-skip').click();
    for(const lang of ['es','en']){
     await page.locator('#tour-lang button').nth(lang==='es'?0:1).click();
     const nav = page.locator('#tour-nav button');

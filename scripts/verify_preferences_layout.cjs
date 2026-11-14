@@ -8,7 +8,7 @@ async function main(){
    const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});
    await context.route('**/*',async route=>{if(/^(blob:|data:)/.test(route.request().url()))return route.continue();if(!route.request().url().startsWith(base))return route.abort();const file=path.resolve(site,new URL(route.request().url()).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});});
    await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.locator('.cinema-skip').click();await page.waitForFunction(()=>window.__app);
    for(const language of ['es','en'])for(const setting of ['default','large','spacing']){
     await page.evaluate(language=>__app.setLang(language),language);await page.locator('#text-test').evaluateAll(elements=>elements.forEach(el=>el.remove()));
     if(setting==='large')await page.addStyleTag({content:'.px.app{font-size:32px!important}'}).then(el=>el.evaluate(node=>node.id='text-test'));

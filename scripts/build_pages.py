@@ -60,6 +60,7 @@ def build(destination: Path) -> None:
     (destination / "runtime").mkdir(exist_ok=True)
     copy2(dance_runtime, destination / "runtime")
     copy2(prototype / "earthbeat-icon.png", destination / "earthbeat-icon.png")
+    copy2(prototype / "stage.webp", destination / "stage.webp")
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "brisa", "miniaturas"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)

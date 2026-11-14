@@ -1688,9 +1688,9 @@ test('a heard step commits map position and its textual event in one render',asy
   assert.equal(c.state.events[0].frame,c.state.frame);assert.equal(c.state.events[0].column,c.state.col+1);
 });
 
-test('the suggested solo follows a new disc while an explicitly edited band mix is preserved',()=>{
+test('the complete band is active by default and an explicitly edited mix is preserved',()=>{
   const {component:c}=setup();c.state.tab='juke';c.state.sub=0;c.renderVals().discs[0].pick();
-  assert.equal(c.leadChar(),'mama');assert.equal(c.state.mute.mama,false);assert.equal(c.state.mute.silbo,true);
+  assert.equal(c.leadChar(),'mama');assert.equal(Object.values(c.state.mute).filter(Boolean).length,0);
   c.goSub(0);const manual=c.allMute(false);manual.yaku=true;c.setBandMute(manual);c.renderVals().discs[4].pick();
   assert.deepEqual(c.state.mute,manual);assert.equal(c.leadChar(),'illapa');
 });
@@ -1703,7 +1703,9 @@ test('play and resume never override an explicit all-instruments mute',async()=>
 
 test('an accepted local file preserves an edited mix and explicit lead choice',()=>{
   const {component:c}=setup();const analysis={cells:Array(448).fill(-1),warm:0,cold:1,hot:0,coast:0};
-  c.selectLead('illapa');c.showCustom({name:'first.png',url:'blob:first',kind:'image'},analysis,'ready',c.only('mama'));
+  c.showCustom({name:'default.png',url:'blob:default',kind:'image'},analysis,'ready');
+  assert.deepEqual(c.state.mute,c.allMute(false));
+  c.selectLead('illapa');c.showCustom({name:'first.png',url:'blob:first',kind:'image'},analysis,'ready');
   assert.equal(c.state.mute.illapa,false);assert.equal(Object.values(c.state.mute).filter(value=>!value).length,1);
   const manual=c.allMute(true);c.setBandMute(manual);c.showCustom({name:'next.csv',url:'blob:next',cols:[]},analysis,'ready');
   assert.deepEqual(c.state.mute,manual);assert.equal(c.state.mixCustomized,true);

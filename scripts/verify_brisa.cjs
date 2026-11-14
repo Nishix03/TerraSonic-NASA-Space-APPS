@@ -63,7 +63,7 @@ async function main() {
     }, options);
     const page = await context.newPage(); page.on('pageerror', error => report.errors.push(error.message));
     await page.goto(base); await page.waitForFunction(() => window.__app);
-    await page.locator('.ts-cinema button').click();
+    await page.locator('.cinema-skip').click();
     await page.evaluate(() => { __app.state.sfx = false; });
     return { context, page };
   }

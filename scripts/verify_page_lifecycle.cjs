@@ -23,7 +23,7 @@ async function main(){
    const Native=window.AudioContext||window.webkitAudioContext;if(typeof Native==='function')window.AudioContext=class extends Native{createDynamicsCompressor(){const node=super.createDynamicsCompressor(),connect=node.connect.bind(node);node.connect=(destination,...args)=>{if(destination===this.destination){const monitor=this.createAnalyser();monitor.fftSize=256;__audioMonitors.push(monitor);const silent=this.createGain();silent.gain.value=0;connect(monitor);monitor.connect(silent);silent.connect(destination);return destination;}return connect(destination,...args);};return node;}};
    Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});
   });
-  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.waitForFunction(()=>window.__app);
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base);await page.locator('.cinema-skip').click();await page.waitForFunction(()=>window.__app);
   await page.getByRole('button',{name:'¿Cómo funciona?',exact:true}).click();
   await page.getByRole('button',{name:'Prueba práctica',exact:true}).click();
   await page.locator('#tour-drop input').setInputFiles(path.join(site,'fotogramas/ver2025_2.webp'));await page.waitForFunction(()=>__app.cur()&&__app.state.custom);await page.evaluate(()=>__app.seekPosition(8));

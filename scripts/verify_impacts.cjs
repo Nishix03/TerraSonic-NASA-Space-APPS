@@ -32,7 +32,7 @@ async function main() {
       };
     });
     const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));
-    await page.goto(base);await page.waitForFunction(()=>window.__app);await page.evaluate(()=>{__app.state.sfx=false;});
+    await page.goto(base);await page.locator('.cinema-skip').click();await page.waitForFunction(()=>window.__app);await page.evaluate(()=>{__app.state.sfx=false;});
     await page.locator('#tour-nav button').first().click();await page.locator('#tour-sets button').nth(1).click();
     await page.locator('.discgrid .dcard').nth(3).click();await page.locator('.timeline button').nth(2).click();
     await page.waitForFunction(()=>__app.cur());

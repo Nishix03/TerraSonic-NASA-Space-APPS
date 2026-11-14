@@ -4,7 +4,12 @@ const media = matchMedia('(prefers-reduced-motion: reduce)');
 const version = new URL(import.meta.url).search;
 const drawings = new Map();
 const reduced = () => media.matches || document.documentElement.dataset.tsReducedMotion === 'true';
-const label = (es, en) => document.documentElement.lang === 'es' ? es : en;
+const playingFrames = [0, 1, 2, 3, 2, 1, 0];
+const timings = {
+  silbo: [210, 230, 260, 175, 280, 210, 260], inti: [180, 250, 170, 145, 210, 170, 245],
+  mama: [180, 240, 280, 180, 230, 240, 250], yaku: [135, 175, 175, 155, 180, 170, 210],
+  illapa: [240, 210, 155, 150, 220, 175, 280],
+};
 
 function loadDrawings(character) {
   if (!drawings.has(character)) {
@@ -23,7 +28,7 @@ function loadDrawings(character) {
 }
 
 class BandDance extends HTMLElement {
-  static observedAttributes = ['data-character'];
+  static observedAttributes = ['data-character', 'data-playing'];
   index = 0;
   run = 0;
 
@@ -61,9 +66,10 @@ class BandDance extends HTMLElement {
     this.art?.remove();
   }
 
-  attributeChangedCallback(_, previous, next) {
+  attributeChangedCallback(name, previous, next) {
     if (previous === next || !this.art) return;
-    this.paused = false;
+    if (name === 'data-playing') { this.sync(); return; }
+    this.userPaused = false;
     this.index = 0;
     this.images = null;
     this.stop(false);
@@ -75,28 +81,28 @@ class BandDance extends HTMLElement {
 
   sync() {
     if (!this.isConnected || !this.art) return;
-    if (reduced()) {
+    if (reduced() || this.dataset.playing === 'false') {
       this.stop(false);
       this.removeAttribute('data-dancing');
     } else if (document.hidden || !this.inView) this.stop(true);
-    else if (!this.paused && !this.running && !this.loading) this.start();
-    this.notify();
+    else if (!this.userPaused && !this.running && !this.loading) this.start();
+    this.report();
   }
 
   async start() {
     if (this.loading || this.running || !this.dataset.character || reduced()) return;
     this.loading = true;
-    this.failed = false;
+    this.report();
     const run = ++this.run;
-    this.notify();
     try {
       const images = await loadDrawings(this.dataset.character);
       if (run !== this.run || !this.isConnected) return;
       this.images = images;
       this.loading = false;
       this.running = true;
+      this.report();
       if (this.motion) this.motion.play();
-      else this.motion = this.art.animate?.([
+      else if (!this.dataset.playing) this.motion = this.art.animate?.([
         { transform: 'translateY(0) rotate(-2deg)' },
         { transform: 'translateY(-2%) rotate(2deg)', offset: .5 },
         { transform: 'translateY(0) rotate(-2deg)' },
@@ -104,21 +110,21 @@ class BandDance extends HTMLElement {
       this.tick();
     } catch {
       if (run !== this.run) return;
-      this.failed = true;
       this.stop(false);
+      this.report();
     }
   }
 
   tick() {
-    const frame = frames[this.index];
+    const sequence = this.dataset.playing ? playingFrames : frames;
+    const frame = sequence[this.index];
     this.art.src = this.images[frame].src;
     this.dataset.frame = String(frame);
     this.setAttribute('data-dancing', '');
-    this.notify();
     this.timer = setTimeout(() => {
-      this.index = (this.index + 1) % frames.length;
+      this.index = (this.index + 1) % sequence.length;
       this.tick();
-    }, 160);
+    }, this.dataset.playing ? timings[this.dataset.character][this.index] : 160);
   }
 
   stop(freeze) {
@@ -127,45 +133,46 @@ class BandDance extends HTMLElement {
     this.running = this.loading = false;
     if (freeze) this.motion?.pause();
     else { this.motion?.cancel(); this.motion = null; }
-    this.notify();
   }
 
-  toggle() {
+  toggleDance() {
     if (reduced()) return;
-    this.paused = this.running || this.loading;
-    if (this.paused) this.stop(true);
+    this.userPaused = this.running || this.loading;
+    if (this.userPaused) this.stop(true);
     else this.sync();
+    this.report();
   }
 
-  notify() { this.dispatchEvent(new Event('dance-state')); }
+  report() {
+    if (this.dataset.playing === undefined) this.dispatchEvent(new CustomEvent('earthbeat-dance-state', { bubbles: true }));
+  }
 }
 
-class BandDanceControls extends HTMLElement {
+class DanceButton extends HTMLElement {
   connectedCallback() {
-    this.innerHTML = '<button type="button" class="btn sm"></button><p class="sprite-readout" role="status"></p>';
     this.dance = this.closest('.bshow').querySelector('earthbeat-dance');
-    this.button = this.querySelector('button');
-    this.status = this.querySelector('p');
-    this.button.onclick = () => this.dance.toggle();
+    this.button = document.createElement('button');
+    this.button.type = 'button';
+    this.button.className = 'btn sm';
+    this.button.onclick = () => this.dance.toggleDance();
+    this.replaceChildren(this.button);
     this.update = () => {
-      const { running, loading, failed } = this.dance;
+      const on = this.dance.running || this.dance.loading;
+      const spanish = document.documentElement.lang === 'es';
+      this.button.textContent = on ? (spanish ? 'Pausar baile' : 'Pause dance') : (spanish ? 'Bailar' : 'Dance');
       this.button.disabled = reduced();
-      const action = running || loading ? label('Pausar baile', 'Pause dance') : label('Bailar', 'Dance');
-      const status = reduced() ? label('Movimiento reducido', 'Reduced motion') : failed ? label('No se pudo cargar el baile.', 'The dance could not load.') : loading ? label('Cargando el baile…', 'Loading the dance…') : running ? label('Baile en reproducción', 'Dance is playing') : label('Baile en pausa', 'Dance is paused');
-      if (this.button.textContent !== action) this.button.textContent = action;
-      if (this.status.textContent !== status) this.status.textContent = status;
     };
-    this.dance.addEventListener('dance-state', this.update);
+    this.dance.addEventListener('earthbeat-dance-state', this.update);
     this.language = new MutationObserver(this.update);
     this.language.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     this.update();
   }
 
   disconnectedCallback() {
-    this.dance?.removeEventListener('dance-state', this.update);
+    this.dance?.removeEventListener('earthbeat-dance-state', this.update);
     this.language?.disconnect();
   }
 }
 
 customElements.define('earthbeat-dance', BandDance);
-customElements.define('earthbeat-dance-controls', BandDanceControls);
+customElements.define('earthbeat-dance-button', DanceButton);

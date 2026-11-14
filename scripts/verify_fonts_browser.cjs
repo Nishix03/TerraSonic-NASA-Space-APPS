@@ -15,7 +15,7 @@ async function main(){
     const file=path.resolve(site,new URL(url).pathname.slice(1)||'index.html');return file.startsWith(site+path.sep)&&fs.existsSync(file)?route.fulfill({path:file}):route.fulfill({status:404});
    });
    await context.addInitScript(()=>{localStorage.setItem('ts_lang','es');localStorage.setItem('ts_prefs',JSON.stringify({version:1,configured:true,values:{sfx:false}}));Object.defineProperty(window,'DCLogic',{configurable:true,set(value){Object.defineProperty(window,'DCLogic',{value,writable:true,configurable:true});const original=value.prototype.setState;value.prototype.setState=function(...args){window.__app=this;return original.apply(this,args);};}});});
-   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.__app);
+   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.cinema-skip').click();await page.waitForFunction(()=>window.__app);
    const cdp=await context.newCDPSession(page);await cdp.send('DOM.enable');await cdp.send('CSS.enable');
    if(scenario==='delayed')await page.waitForFunction(()=>document.fonts.status==='loading');
    assert(await page.locator('.hero h1').isVisible());assert(await page.locator('.hero .btn.primary').isEnabled());

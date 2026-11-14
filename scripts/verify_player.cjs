@@ -59,7 +59,7 @@ async function main() {
     });
     const page = await context.newPage(), errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(base); await page.waitForFunction(() => window.__app);
+    await page.goto(base);await page.locator('.cinema-skip').click(); await page.waitForFunction(() => window.__app);
     await page.evaluate(() => { __app.state.sfx = false; });
     await page.locator('#tour-nav button').first().click();
     if (process.argv.includes('--layout-only')) {
@@ -72,7 +72,7 @@ async function main() {
       await page.evaluate(() => { __app.setState({ mute: __app.allMute(false), leadOverride: 'mama' }); });
       for (const mode of ['melody', 'raw']) {
         await page.locator('.player-modes button').nth(mode === 'melody' ? 0 : 1).click();
-        assert.equal(await page.locator('.player-detail .chips').count(),mode==='melody'?1:0);
+        assert.equal(await page.locator('.listen-band .chips').count(),mode==='melody'?1:0);
         assert.equal(await page.locator('.band-stage .stage-musician').count(),5);
         const slider = page.locator('#playback-position');
         await slider.focus(); await slider.press('Home'); await slider.press('ArrowRight');
@@ -121,13 +121,14 @@ async function main() {
       await page.waitForFunction(() => __app.state.col === 1 && __audioPeak() > .00001);
       const mama = page.locator('.listen-member').nth(2);
       await mama.click();
-      assert.equal(await page.locator('.band-stage .stage-musician').count(),0);
+      assert.equal(await page.locator('.band-stage .stage-musician').count(),5);
+      assert.equal(await page.locator('.band-stage .stage-musician[aria-pressed="true"]').count(),0);
       await page.waitForTimeout(150);
       assert.equal(await page.evaluate(() => __app.state.playing), true);
       assert((await page.evaluate(() => __audioPeak())) < .00001, 'Individual mute also cuts reverb');
       assert.equal(await page.evaluate(() => !!__app.voiceGroups.mama), false);
       await mama.click();
-      assert.equal(await page.locator('.band-stage .stage-musician').count(),1);
+      assert.equal(await page.locator('.band-stage .stage-musician[aria-pressed="true"]').count(),1);
       await page.waitForTimeout(30);
       assert((await page.evaluate(() => __audioPeak())) < .00001, 'Unmuting must not revive an earlier tail');
       await page.locator('#tour-play button').click();

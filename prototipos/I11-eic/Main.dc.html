@@ -1021,17 +1021,6 @@ a{color:inherit}
 .px .top .nav button{flex:0 1 auto;min-width:0;white-space:normal;text-wrap:balance}
 .px details.menu .pop{width:min(16rem,calc(100vw - 2 * var(--gutter)));min-width:0;max-height:calc(100dvh - 4.5rem);overflow-y:auto}
 .px details.menu .opt{padding:6px 8px;gap:8px;overflow-wrap:anywhere}
-/* Expand preferences in the header flow so they do not cover another control. */
-.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 4px;padding-block:8px}
-.px .top:has(details.menu[open]) .right,.px details.menu[open]{display:contents}
-.px details.menu[open]::details-content{display:contents}
-.px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1}
-.px .top:has(details.menu[open]) .langsw{grid-row:1;grid-column:2}
-.px .top details.menu[open]>summary{grid-row:1;grid-column:3;justify-self:end}
-.px .top:has(details.menu[open]) .nav{grid-row:2;grid-column:1/-1;width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:center}
-.px details.menu[open] .pop{position:static;grid-row:3;grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;width:100%;min-width:0;max-height:50svh;overflow:auto}
-.px details.menu[open] .pop .opt{min-height:44px;scroll-margin:4px}
-@media(min-width:901px){.px details.menu[open] .pop{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1279px){
   .px .top .wrap{gap:4px 12px;min-height:0}
   .px .top .nav button{min-height:48px;padding-inline:6px;font-size:max(.8em,.8125rem);letter-spacing:.04em}
@@ -1070,12 +1059,11 @@ a{color:inherit}
 }
 /* Font-relative space also responds to enlarged text without splitting the name. */
 @container EarthBeat-header (max-width:18em){
-  .px .top .wrap,.px .top:has(details.menu[open]) .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto}
-  .px .top .brand,.px .top:has(details.menu[open]) .brand{grid-row:1;grid-column:1/-1}
+  .px .top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto}
+  .px .top .brand{grid-row:1;grid-column:1/-1}
   .px .top .wordmark{white-space:nowrap;overflow-wrap:normal}
   .px .top .right{grid-row:2;grid-column:1/-1;justify-self:end}
-  .px .top .nav,.px .top:has(details.menu[open]) .nav{grid-row:3;grid-column:1/-1}
-  .px .top:has(details.menu[open]) .langsw{grid-row:2;grid-column:1;justify-self:end}
+  .px .top .nav{grid-row:3;grid-column:1/-1}
   .px .top details.menu[open]>summary{grid-row:2;grid-column:2}
   .px .top details.menu[open] .pop{grid-row:4}
 }
@@ -1638,9 +1626,11 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .ts-cinema .cinema-copy p:last-child{max-width:42ch;color:#c4d9e8;margin:14px 0 0}
 .ts-cinema .cinema-toolbar{position:absolute;inset:auto max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.8rem;color:#c4d9e8}
 .ts-cinema .cinema-toolbar p{margin:0;max-width:35ch}
+.ts-cinema .cinema-actions{display:flex;gap:8px;flex-shrink:0;align-items:center}
 .ts-cinema button{pointer-events:auto;min-height:44px;max-width:60%;padding:10px 16px;border:1px solid #b6c5d5;border-radius:8px;color:#eef3fa;background:#182332;font:600 .875rem/1.3 sans-serif;cursor:pointer}
 .ts-cinema button:focus-visible{outline:3px solid #e8b969;outline-offset:4px}
 .ts-cinema button:hover{background:#294059}
+.ts-cinema button[hidden]{display:none}
 .ts-cinema[data-contrast="true"]{background:#000;color:#fff}
 .ts-cinema[data-contrast="true"] .cinema-space,.ts-cinema[data-contrast="true"] .cinema-wave{display:none}
 .ts-cinema[data-contrast="true"] .cinema-description,.ts-cinema[data-contrast="true"] .cinema-toolbar{color:#fff}
@@ -1662,7 +1652,6 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .ts-cinema .cinema-meteor:nth-of-type(4){left:28%;top:23%;width:90px}
 .ts-cinema .cinema-meteor:nth-of-type(5){left:72%;top:32%;width:80px}
 .px .sprite-actions{grid-template-columns:minmax(0,1fr)}
-.px .sprite-readout{min-height:1.4em}
 .px .tour .tbubble p:empty{display:none}
 @media(max-width:699px){
  .px .tour.mobile{gap:0;border-radius:12px;padding:0;grid-template-rows:auto auto auto}
@@ -1698,7 +1687,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @keyframes space-music-pulse{from{transform:scaleY(.55);opacity:.35}to{transform:scaleY(1);opacity:.8}}
 .px.reduce-motion .space-ocean-wave path{animation:none!important}
 .px.app[data-theme="light"] .space-ocean-wave{color:#286d87}
-@media(max-width:640px){.ts-cinema .cinema-world{width:min(82vw,47vh);top:10%;right:9%}.ts-cinema .cinema-copy{left:8%;bottom:20%}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem)}.ts-cinema .cinema-copy p:last-child{font-size:.875rem}.ts-cinema .cinema-wave{left:10%;width:80%;top:48%;height:70px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}}
+@media(max-width:640px){.ts-cinema .cinema-world{width:min(72vw,38svh,320px);top:8%;left:0;right:0;margin-inline:auto}.ts-cinema .cinema-copy{left:6%;width:88%;bottom:24%;text-align:center}.ts-cinema .cinema-copy h2{font-size:clamp(1.8rem,7vw,2.5rem);margin-inline:auto}.ts-cinema .cinema-copy p:last-child{font-size:.875rem;margin-inline:auto}.ts-cinema .cinema-wave{left:10%;width:80%;top:49%;height:55px}.ts-cinema .cinema-stars.near{display:none}.ts-cinema .cinema-sun{top:4%;left:-12%}.ts-cinema .cinema-toolbar{flex-direction:column;align-items:center;text-align:center;gap:8px}.ts-cinema .cinema-toolbar p{max-width:100%;font-size:.7rem}.ts-cinema .cinema-actions{width:100%;justify-content:center}.ts-cinema button{max-width:100%;min-width:104px}}
 @media(max-height:450px){.ts-cinema .cinema-world{width:65vh;right:12%;top:0}.ts-cinema .cinema-copy{bottom:24%;width:55%;left:6%}.ts-cinema .cinema-copy h2{font-size:clamp(1.5rem,5vh,2.5rem)}.ts-cinema .cinema-brand{font-size:.8rem;margin-bottom:6px}.ts-cinema .cinema-copy p:last-child{display:none}.ts-cinema .cinema-toolbar{font-size:.7rem}.ts-cinema .cinema-toolbar p{max-width:23ch}}
 @media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .space-ocean-wave path{animation:none!important}}
 @media(forced-colors:active){.ts-cinema .cinema-world,.ts-cinema .cinema-stars,.ts-cinema .cinema-sun,.ts-cinema .cinema-wave{display:none}.ts-cinema{background:Canvas;color:CanvasText}.ts-cinema button{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
@@ -1727,14 +1716,10 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .convert-card .rain-chart{width:100%;height:auto;aspect-ratio:560/320;object-fit:contain;background:var(--surface)}
 .px .practice-example #tour-sample{justify-items:stretch}
 .px .practice-example #tour-sample .btn{white-space:normal}
-.px .sprite-readout{font-size:.8em;color:var(--muted)}
-.px .dance-controls{flex:1 0 100%;display:grid;gap:5px;min-width:0;letter-spacing:normal;text-transform:none}
-.px .dance-controls button{width:100%;min-height:44px;white-space:normal;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg);font:600 .875rem/1.3 var(--body);text-transform:none;letter-spacing:0}
-.px .dance-controls button:hover{border-color:var(--fg);background:var(--surface)}
-.px .dance-controls p{margin:0;font-size:.8rem}
 .px .dance-frame{display:none;transform-origin:50% 85%}
 .px earthbeat-dance[data-dancing] .dance-frame{display:block}
-.px earthbeat-dance[data-dancing] .bportrait-live{visibility:hidden}
+.px earthbeat-dance[data-dancing] .dance-pose{visibility:hidden}
+.px .stage-musician earthbeat-dance{position:relative;display:block;width:100%;height:100%;min-height:0}
 .px.reduce-motion .scene-motion-toggle{box-shadow:none}
 .px .tour.mobile .guide-state{display:none}
 .px .tour.mobile .tguide .tsay{min-width:44px;min-height:44px}
@@ -1743,6 +1728,30 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .disc-library .dcard{background:color-mix(in srgb,var(--panel) 84%,transparent)}
 .px .disc-library .dcard:is(:hover,:focus-visible){background:var(--panel)}
 .px .practice-example{min-height:0}
+.px .top details.menu .pop{position:fixed;inset:var(--a11y-top,54px) max(8px,calc((100vw - 1320px)/2)) auto auto;width:min(28rem,calc(100vw - 16px));max-height:min(60dvh,calc(100dvh - var(--a11y-top,54px) - 8px));overflow:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;border-radius:8px;box-shadow:0 10px 30px #0007}
+.px .player-visual .views{align-items:start}
+.px .uni .map-toolbar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px 10px;padding:6px}
+.px .map-toolbar :is(.volume-control,.transport-speed){flex:1 1 112px;min-width:0;font-size:.74em}
+.px .map-toolbar .volume-control input{width:100%;min-width:0}
+.px .map-toolbar select{min-width:0;width:100%;font-size:1em}
+.px .map-toolbar .engines button{padding-inline:10px}
+.px .map-source{margin-inline-start:auto}
+.px .map-transport{display:grid;gap:6px;width:100%;padding:6px}
+.px .map-transport .timeline img{display:block}
+.px .band-stage{background:var(--surface) url('./stage.webp') center/cover no-repeat;grid-template-rows:minmax(0,1fr);height:clamp(156px,23vw,240px)}
+.px .band-stage-musicians{height:100%;align-items:end;padding:12px 5px 5px}
+.px .stage-musician.listen-member{padding:3px 1px;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:2px;justify-items:center;min-height:44px;border-color:transparent;background:transparent}
+.px .stage-musician.listen-member img{width:100%;height:100%}
+.px .stage-musician.listen-member[aria-pressed="false"]{filter:saturate(.3);opacity:.65}
+.px .stage-musician.listen-member:hover,.px .stage-musician.listen-member:focus-visible{border-color:var(--member-color);background:#08111b9c}
+.px .stage-musician.listen-member strong{grid-column:1;padding:2px 0;font-size:clamp(.5rem,.81vw,.68rem);text-align:center;letter-spacing:0;white-space:normal;overflow-wrap:anywhere;color:#fff;text-shadow:0 1px 4px #000}
+.px.app[data-contrast="true"] .stage-musician.listen-member strong{color:var(--fg)}
+.px .listen-band .chips{display:flex;flex-wrap:wrap;gap:5px}
+.px earthbeat-dance-button{display:inline-flex}
+@media(min-width:1001px) and (max-height:720px){
+ .px .uni .views .mapbox,.px .uni .views .mbox{max-height:clamp(155px,36vh,245px)}
+ .px .stage-musician.listen-member earthbeat-dance{height:84%}
+}
 @media(max-width:650px){
  .px .method-notes,.px .method-notes .team-names{grid-template-columns:minmax(0,1fr)}
  .px .preferences-choices label{padding:8px;gap:7px}
@@ -1798,7 +1807,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <div id="tour-lang" class="langsw" role="group" aria-label="{{tx.langAria}}">
 <sc-for list="{{langs}}" as="l" hint-placeholder-count="2"><button type="button" onClick="{{l.pick}}" aria-pressed="{{l.on}}" lang="{{l.code}}" title="{{l.name}}">{{l.short}}</button></sc-for>
 </div>
-<details id="tour-a11y" class="menu">
+<details id="tour-a11y" class="menu" onToggle="{{positionAccessibilityMenu}}">
 <summary aria-label="{{tx.a11yAria}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="7.2" r="1.5" fill="currentColor" stroke="none"></circle><path d="M7 10h10M12 10v4m0 0-3 4.5m3-4.5 3 4.5"></path></svg><span class="mlabel">{{tx.a11y}}</span></summary>
 <div class="pop" role="group" aria-label="{{tx.a11y}}">
 <sc-for list="{{a11y}}" as="a" hint-placeholder-count="5">
@@ -1935,9 +1944,20 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 </sc-if>
 
+<div class="controls player-sidebar" aria-label="{{player.controlsLabel}}">
+<div id="tour-play" class="playwrap">
+<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
+</div>
+<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
+<div class="player-tools">
+<button type="button" class="btn sm quiet" onClick="{{describe}}" disabled="{{speechUnavailable}}">{{describeLabel}}</button>
+</div>
+</div>
+
 <div class="views">
 <figure id="tour-frame" class="vpanel">
-<figcaption class="vcap"><span class="muted">{{mapSource}}</span></figcaption>
+<figcaption class="vcap map-toolbar"><div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
+<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label><div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="sr">{{engineDesc}}</p></div><span class="muted map-source">{{mapSource}}</span></figcaption>
 <div class="mapbox">
 <img decoding="async" fetchpriority="high" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
 <div aria-hidden="true" class="scanline" style="--scan-x: {{scanLeft}}"></div>
@@ -1948,6 +1968,21 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
 <button type="button" class="arrow" onClick="{{prevFrame}}" disabled="{{prevOff}}" aria-label="{{tx.prevFrame}}" style="left: 8px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11.5 3.5L6 9l5.5 5.5"></path></svg></button>
 <button type="button" class="arrow" onClick="{{nextFrame}}" disabled="{{nextOff}}" aria-label="{{tx.nextFrame}}" style="right: 8px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6.5 3.5L12 9l-5.5 5.5"></path></svg></button>
+</sc-if>
+</div>
+<div class="map-transport"><div class="transport-position">
+<label for="playback-position">{{player.positionLabel}}</label>
+<output for="playback-position" class="mono">{{player.elapsed}} <span aria-hidden="true">/</span><span class="sr">{{player.of}}</span> {{player.duration}}</output>
+<input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
+</div>
+<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
+<div id="tour-strip">
+<div class="timeline" role="group" aria-label="{{tx.timelineAria}}">
+<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
+<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" loading="lazy" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
+</sc-for>
+</div>
+</div>
 </sc-if>
 </div>
 </figure>
@@ -1975,78 +2010,22 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </aside>
 </figure>
 </div>
-<div class="controls player-sidebar" aria-label="{{player.controlsLabel}}">
-<div id="tour-play" class="playwrap">
-<button type="button" class="btn primary {{playPulse}}" onClick="{{togglePlay}}" disabled="{{playPending}}" aria-busy="{{playPending}}"><svg width="14" height="14" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"></path></svg>{{playLabel}}</button>
-</div>
-<div class="when"><b>{{frameLabel}}</b><span class="signal-state {{signalClass}}">{{signalLabel}}</span></div>
-<div class="player-tools">
-<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
-<sc-if value="{{isJuke}}"><button type="button" class="btn sm" onClick="{{toggleEasy}}" aria-expanded="{{easyOpen}}" aria-controls="easy-explanation">{{easyLabel}}</button></sc-if>
-<button type="button" class="btn sm quiet" onClick="{{describe}}" disabled="{{speechUnavailable}}">{{describeLabel}}</button>
-</div>
-</div>
-<sc-if value="{{showStrip}}" hint-placeholder-val="{{ true }}">
-<div id="tour-strip">
-<div class="timeline" role="group" aria-label="{{tx.timelineAria}}">
-<sc-for list="{{strip}}" as="f" hint-placeholder-count="6">
-<button type="button" onClick="{{f.pick}}" aria-label="{{f.aria}}" aria-pressed="{{f.on}}"><img decoding="async" loading="lazy" src="{{f.url}}" alt=""><span>{{f.label}}</span></button>
-</sc-for>
-</div>
-</div>
-</sc-if>
+
 
 </div>
 <section class="listen-band" aria-labelledby="listen-band-title">
-<div class="band-stage" style="--stage-map:url('{{frameUrl}}')" aria-hidden="true">
+<h2 id="listen-band-title">{{tx.theBand}}</h2>
+<div class="band-stage" role="group" aria-label="{{tx.bandAria}}">
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
-<div class="stage-musician {{musician.playingClass}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
-<img src="{{musician.poseUrl}}" alt="">
-</div>
-</sc-for>
-</div>
-<div class="band-stage-beat">
-<span>{{stageChord}}</span>
-<sc-if value="{{stageShowBeat}}"><span>{{stageBeat}}</span></sc-if>
-</div>
-</div>
-<h2 id="listen-band-title">{{tx.theBand}}</h2>
-<sc-if value="{{bandAllMuted}}"><p role="status" class="small muted">{{bandStatus}}</p></sc-if>
-<div class="listen-members" role="group" aria-label="{{tx.bandAria}}">
-<sc-for list="{{band}}" as="b">
-<button type="button" class="listen-member" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="--member-color: {{b.color}}">
-<img src="{{b.thumbUrl}}" alt="" width="24" height="37">
-<strong>{{b.name}}</strong><span>{{b.mixLabel}}</span>
+<button type="button" class="listen-member stage-musician {{musician.playingClass}}" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
+<earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
+<strong>{{musician.name}}</strong>
 </button>
 </sc-for>
 </div>
-</section>
 </div>
-<div class="player-detail">
-<section class="transport" aria-label="{{player.controlsLabel}}">
-<div class="transport-position">
-<label for="playback-position">{{player.positionLabel}}</label>
-<output for="playback-position" class="mono">{{player.elapsed}} <span aria-hidden="true">/</span><span class="sr">{{player.of}}</span> {{player.duration}}</output>
-<input id="playback-position" type="range" min="0" max="{{player.steps}}" step="1" value="{{player.position}}" aria-valuetext="{{player.positionText}}" onInput="{{player.seek}}">
-</div>
-<div class="transport-tools">
-<div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
-<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label>
-</div>
-<div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="sr">{{engineDesc}}</p></div>
-</section>
-<div id="easy-explanation">
-<sc-if value="{{easyVisible}}">
-<section class="easy-panel" aria-labelledby="easy-title">
-  <h2 id="easy-title">{{easyLabel}}</h2>
-  <p>{{easyText}}</p>
-  <div class="row"><button type="button" class="btn sm" onClick="{{readEasy}}" disabled="{{speechUnavailable}}">{{readEasyLabel}}</button><span class="muted small">{{speechSupport}}</span></div>
-</section>
-</sc-if>
-</div>
-<div class="readout">
-<p><strong>{{tx.see}}</strong> <span>{{seeText}}</span></p>
+<sc-if value="{{bandAllMuted}}"><p role="status" class="small muted">{{bandStatus}}</p></sc-if>
 <sc-if value="{{showHarmony}}">
 <div class="chips" role="group" aria-label="{{tx.chordsAria}}">
 <sc-for list="{{progItems}}" as="chord">
@@ -2054,8 +2033,12 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </sc-for>
 </div>
 </sc-if>
+
+</section>
 </div>
-</div>
+<div class="player-detail"><div class="readout">
+<p><strong>{{tx.see}}</strong> <span>{{seeText}}</span></p>
+</div></div>
 <p role="status" aria-live="polite" class="sr">{{player.announcement}}</p>
 </div>
 </sc-if>
@@ -2087,7 +2070,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </svg>
 <sc-if value="{{bandCur.hasOutgoing}}"><img class="bportrait bportrait-outgoing" src="{{bandCur.previousPoseUrl}}" alt=""></sc-if>
 <earthbeat-dance data-character="{{bandCur.key}}">
-<img class="bportrait bportrait-live" data-character="{{bandCur.key}}" src="{{bandCur.poseUrl}}" alt="">
+<img class="bportrait bportrait-live dance-pose" data-character="{{bandCur.key}}" src="{{bandCur.poseUrl}}" alt="">
 </earthbeat-dance>
 <sc-if value="{{bandCur.silboNotes}}">
 <svg class="bsilbo-note" viewBox="0 0 360 540" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.15">
@@ -2121,8 +2104,8 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
   <strong>{{bandCur.number}} / 05</strong>
   <div class="avatar-actions">
     <button type="button" class="btn sm" aria-pressed="{{bandCur.previewOn}}" onClick="{{bandCur.preview}}">{{bandCur.previewLabel}}</button>
+    <earthbeat-dance-button></earthbeat-dance-button>
   </div>
-  <earthbeat-dance-controls class="dance-controls"></earthbeat-dance-controls>
 </figcaption>
 </figure>
 <div id="tour-binfo" class="binfo">
@@ -2162,12 +2145,13 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <li><a href="https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/" target="_blank" rel="noopener noreferrer">Space Apps · The Earth Information Jukebox ↗</a></li>
 </ul>
 </section>
-<section aria-label="{{teamLabel}}">
+<section aria-labelledby="team-creators-title">
+<h2 id="team-creators-title">{{teamLabel}}</h2>
 <ul class="team-names">
 <li>Piero Vélez Suárez</li>
 <li>Iván Gabriel Rodas Nishio</li>
 <li>Fabio Andre Vasquez Torres</li>
-<li>Álvaro Mendoza</li>
+<li>Alvaro Mendoza Marín</li>
 <li>Diany Melisa Cachi Calderón</li>
 <li>Andy Manuel Lozada Valiente</li>
 </ul>
@@ -3223,9 +3207,9 @@ class CinematicIntro {
     if(typeof document.createElement!=='function'||!document.body?.append)return;
     if(app.disposed||app.state.tab!=='home'||app.state.tour||document.hidden||(!replay&&this.hasSeen()))return;
     this.finish(false); this.markSeen();
-    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static='false';root.setAttribute('aria-label',T('Presentación de EarthBeat','EarthBeat presentation'));
-    root.dataset.contrast=String(app.state.contrast);
-    root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');
+    var preferences=document.getElementById('preferences-dialog');
+    if(preferences){this.coveredPreferences={node:preferences,inert:preferences.inert,hidden:preferences.getAttribute('aria-hidden')};preferences.inert=true;preferences.setAttribute('aria-hidden','true');}
+    var root=document.createElement('section');this.root=root;root.className='ts-cinema';root.dataset.static='false';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label',T('Presentación de EarthBeat','EarthBeat presentation'));
     root.innerHTML=`<div class="cinema-space" aria-hidden="true"><div class="cinema-stars"></div><div class="cinema-stars near"></div><div class="cinema-sun"></div><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i><i class="cinema-meteor"></i></div>
 <div class="cinema-world" aria-hidden="true"><svg viewBox="0 0 500 500"><defs>
 <radialGradient id="intro-ocean" cx="30%" cy="28%" r="77%"><stop stop-color="#3f9bb5"/><stop offset=".45" stop-color="#1e6088"/><stop offset=".8" stop-color="#14324e"/><stop offset="1" stop-color="#0d192b"/></radialGradient>
@@ -3240,49 +3224,44 @@ class CinematicIntro {
 <g class="cinema-orbit" fill="none" stroke="#e8b969" stroke-opacity=".4"><ellipse cx="250" cy="250" rx="242" ry="93" transform="rotate(-24 250 250)"/><path d="M250 12v16m0 444v16M12 250h16m444 0h16"/></g></svg></div>
 <svg class="cinema-wave" viewBox="0 0 560 110" fill="none" aria-hidden="true"><path d="M0 55h80l16-9 16 18 16-29 16 46 16-65 16 81 16-66 16 42 16-28 16 20 16-17 16 13 16-18 16 25 16-36 16 43 16-36 16 25 16-16 16 9h80" stroke="currentColor" stroke-width="1.5"/></svg>
 <div class="cinema-copy"><p class="cinema-brand">EARTHBEAT</p><h2></h2><p class="cinema-description"></p></div>
-<div class="cinema-toolbar"><p></p><button type="button"></button></div>`;
-    this.update();this.returnFocus=trigger||document.activeElement;document.body.append(root);
-    var appRoot=document.querySelector('.px.app');
-    root.style.fontFamily=getComputedStyle(appRoot).fontFamily;
-    this.coveredApp={node:appRoot,inert:appRoot.inert};appRoot.inert=true;
-    var skip=root.querySelector('button');skip.addEventListener('click',function(){self.finish(true);});skip.focus({preventScroll:true});
-    this.onKey=function(event){
-      if(event.key==='Escape'){event.preventDefault();event.stopPropagation();self.finish(true);}
-      else if(event.key==='Tab'){event.preventDefault();skip.focus({preventScroll:true});}
-    };
+<div class="cinema-toolbar"><p></p><div class="cinema-actions"><button type="button" class="cinema-skip"></button><button type="button" class="cinema-pause"></button></div></div>`;
+    this.paused=false;this.update();this.returnFocus=trigger||document.activeElement;document.body.append(root);
+    root.style.fontFamily=getComputedStyle(document.querySelector('.px.app')).fontFamily;
+    var appRoot=document.querySelector('.px.app');this.coveredApp={node:appRoot,inert:appRoot.inert};appRoot.inert=true;
+    var skip=root.querySelector('.cinema-skip');skip.addEventListener('click',function(){self.finish(true);});root.querySelector('.cinema-pause').addEventListener('click',function(){self.togglePause();});skip.focus({preventScroll:true});
+    this.onKey=function(event){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();self.finish(true);}else if(event.key==='Tab'){var buttons=Array.from(root.querySelectorAll('button:not([hidden])')),index=buttons.indexOf(document.activeElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
+
     this.onHidden=function(){if(document.hidden)self.finish(false);};
     document.addEventListener('keydown',this.onKey,true);document.addEventListener('visibilitychange',this.onHidden);
-    var duration=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches?3000:5200;root.dataset.duration=String(duration);
-    if(app.bandReduced()||app.state.contrast||window.matchMedia('(forced-colors: active)').matches){this.showStatic(duration);return;}
+    var mobile=window.matchMedia('(max-width: 640px), (max-height: 450px)').matches, duration=mobile?6800:5200;this.duration=duration;this.paused=false;root.dataset.duration=String(duration);
+    if(app.bandReduced()){this.showStatic();return;}
     function animate(selector,frames,options={}){var el=selector==='root'?root:root.querySelector(selector);if(!el?.animate)throw Error('Animation unavailable');var animation=el.animate(frames,{duration:duration,fill:'both',easing:'linear',...options});self.animations.push(animation);return animation;}
     try{
       animate('.cinema-space',[{transform:'scale(1)',offset:0},{transform:'scale(1.07)',offset:1}]);
       animate('.cinema-stars.near',[{transform:'scale(.98)',opacity:0},{transform:'scale(1.15)',opacity:.45}]);
       root.querySelectorAll('.cinema-meteor').forEach(function(el,i){var animation=el.animate([{opacity:0,transform:'translate(-10vw,-6vh) rotate(30deg)'},{opacity:.95,offset:.14},{opacity:.75,offset:.7},{opacity:0,transform:'translate(42vw,26vh) rotate(30deg)'}],{duration:900+i*140,delay:duration*(.04+i*.13),fill:'both',easing:'linear'});self.animations.push(animation);});
       animate('.cinema-sun',[{opacity:0,transform:'scale(.8)',offset:0},{opacity:1,transform:'scale(1)',offset:.25},{opacity:.7,transform:'scale(1.03)',offset:1}]);
-      animate('.cinema-world',[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
+      animate('.cinema-world',mobile?[{opacity:0,transform:'scale(.92)',offset:0},{opacity:1,transform:'scale(1)',offset:.2},{opacity:1,transform:'scale(1.04)',offset:.8},{opacity:0,transform:'scale(1.06)',offset:1}]:[{opacity:0,transform:'translate(18%,12%) scale(.55)',offset:0},{opacity:1,transform:'translate(0,0) scale(1)',offset:.32},{opacity:1,transform:'translate(-6%,9%) scale(1.35)',offset:.62},{opacity:0,transform:'translate(-6%,9%) scale(1.55)',offset:1}]);
       animate('.cinema-orbit',[{opacity:0,transform:'rotate(-12deg)',offset:0},{opacity:1,transform:'rotate(0deg)',offset:.5},{opacity:0,transform:'rotate(8deg)',offset:1}]);
       animate('.cinema-wave',[{opacity:0,transform:'scaleX(.3)',offset:0},{opacity:0,transform:'scaleX(.3)',offset:.46},{opacity:.85,transform:'scaleX(1)',offset:.7},{opacity:0,transform:'scaleX(1.1)',offset:1}]);
-      animate('.cinema-copy',[{opacity:0,transform:'translateY(14px)',offset:0},{opacity:0,transform:'translateY(14px)',offset:.22},{opacity:1,transform:'translateY(0)',offset:.45},{opacity:1,transform:'translateY(0)',offset:.75},{opacity:0,transform:'translateY(-6px)',offset:1}]);
-      var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.72},{opacity:0,offset:1}]);
+      animate('.cinema-copy',[{opacity:1,transform:'translateY(0)',offset:0},{opacity:1,transform:'translateY(0)',offset:.88},{opacity:0,transform:'translateY(-4px)',offset:1}]);
+      var end=animate('root',[{opacity:1,offset:0},{opacity:1,offset:.88},{opacity:0,offset:1}]);this.endAnimation=end;
       // Real UI stays visible by default; only this optional run adds keyframes.
       var targets=['.brand','.top','#main-content .hero h1','.hero .lede','.hero .cta','.home-demo','.hero .facts'];
-      targets.forEach(function(selector,i){var el=document.querySelector(selector);if(!el?.animate)return;var delay=duration*.64+i*48;self.animations.push(el.animate([{opacity:0,transform:selector==='.home-demo'?'translateX(14px) rotate(1deg)':'translateY(8px)'},{opacity:1,transform:'translate(0,0) rotate(0)'}],{duration:Math.min(380,duration-delay-20),delay:delay,fill:'backwards',easing:'cubic-bezier(.2,.7,.2,1)'}));});
+      targets.forEach(function(selector,i){var el=document.querySelector(selector);if(!el?.animate)return;var delay=duration*.7+i*55;self.animations.push(el.animate([{opacity:0,transform:selector==='.home-demo'?'translateX(14px) rotate(1deg)':'translateY(8px)'},{opacity:1,transform:'translate(0,0) rotate(0)'}],{duration:Math.min(380,duration-delay-20),delay:delay,fill:'backwards',easing:'cubic-bezier(.2,.7,.2,1)'}));});
       end.onfinish=function(){self.finish(true);};this.timers.push(setTimeout(function(){self.finish(true);},duration+250));
-    }catch(ignored){this.showStatic(duration);}
+    }catch(ignored){this.showStatic();}
   }
-  showStatic(duration){
-    this.animations.forEach(function(animation){animation.onfinish=null;animation.cancel();});this.animations=[];
-    this.root.dataset.static='true';
-    var self=this;this.timers.push(setTimeout(function(){self.finish(true);},duration));
-  }
-  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('El Pacífico también se escucha.','The Pacific has a sound.');this.root.querySelector('.cinema-description').textContent=T('De la observación de la Tierra a una orquesta de cinco voces.','From observing Earth to an orchestra of five voices.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración artística · océano Pacífico','Artistic illustration · Pacific Ocean');this.root.querySelector('button').textContent=T('Saltar introducción','Skip intro');}
+  showStatic(){this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];this.root.dataset.static='true';this.root.querySelector('.cinema-pause').hidden=true;this.update();}
+  togglePause(){if(!this.root||this.root.dataset.static==='true')return;this.paused=!this.paused;this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(a=>this.paused?a.pause():a.play());if(!this.paused){var self=this;this.timers.push(setTimeout(function(){self.finish(true);},Math.max(0,this.duration-Number(this.endAnimation?.currentTime||0))+500));}this.update();}
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('Mapas NASA hechos música.','NASA maps, made musical.');this.root.querySelector('.cinema-description').textContent=T('Explora cambios de temperatura del Pacífico con la vista y el oído.','Explore Pacific temperature patterns through sight and sound.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
   finish(restoreFocus=false){
     if(!this.root)return;
     var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
     this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];
     root?.remove();document.removeEventListener('keydown',this.onKey,true);document.removeEventListener('visibilitychange',this.onHidden);
     if(this.coveredApp){this.coveredApp.node.inert=this.coveredApp.inert;this.coveredApp=null;}
+    if(this.coveredPreferences){var pref=this.coveredPreferences;pref.node.inert=pref.inert;if(pref.hidden===null)pref.node.removeAttribute('aria-hidden');else pref.node.setAttribute('aria-hidden',pref.hidden);this.coveredPreferences=null;}
     if(this.owner.state.showPreferences)this.owner.focusPreferences();
     else if(restoreFocus&&focused){var target=this.returnFocus?.isConnected&&this.returnFocus!==document.body?this.returnFocus:document.querySelector('.hero .btn.primary');target?.focus({preventScroll:true});}
     this.returnFocus=null;
@@ -3294,7 +3273,7 @@ class Component extends DCLogic {
     super(props);
     this.state = { tab: 'home', sub: 0, tour: 0, lang: LANG, tourRect: null, vw: 0, vh: 0, more: false, bsel: 0, bphase: 'idle', set: 'eic', disc: 2, frame: 3, col: -1, playing: false, speed: 110, contrast: false, big: false, legible: false, voice: true, vibe: false,
       trans: false, routeArrived: false, route: ROUTE_LOOK.home, engine: 'melody', leadOverride: null, chord: '', hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, flash: 0, custom: null, customMode: 'palette', over: false, upMsg: '',
-      mute: { silbo: false, inti: true, mama: true, yaku: true, illapa: true }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
+      mute: { silbo: false, inti: false, mama: false, yaku: false, illapa: false }, levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, an: {},
       caption: T('Elige un disco y un protagonista, y pulsa Reproducir.', 'Pick a disc and a lead, then press Play.') };
     this.timer = null; this.ac = null; this.lastThunder = -9; this.routeTimers = []; this.routeRun = 0; this.routeFinish = null; this.melDeg = null;
     this.state.sfx = true;
@@ -3491,6 +3470,10 @@ class Component extends DCLogic {
   syncPreferenceMotion() {
     if (document.documentElement.dataset) document.documentElement.dataset.tsReducedMotion = String(!!this.state.reducedMotion);
     if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') window.dispatchEvent(new window.CustomEvent('terrasonic:motion'));
+  }
+  positionAccessibilityMenu(event) {
+    var menu = event.currentTarget;
+    if (menu.open) menu.style.setProperty('--a11y-top', Math.round(menu.querySelector('summary').getBoundingClientRect().bottom + 6) + 'px');
   }
   setPreferencesInert(on) {
     if (on) {
@@ -4250,7 +4233,7 @@ class Component extends DCLogic {
         if (readyCustom) {
           self.pendingImageUrl = null;
           self.revokeCustom();
-          self.showCustom(readyCustom, res, uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: uiLabel(readyCustom) }), self.only(res.cold > res.warm ? 'mama' : 'inti'));
+          self.showCustom(readyCustom, res, uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: uiLabel(readyCustom) }));
           return;
         }
         delete self.imageLoads[key];
@@ -4260,7 +4243,7 @@ class Component extends DCLogic {
         }
         var an = Object.assign({}, self.state.an); an[key] = res;
         var nm = self.state.custom ? uiLabel(self.state.custom) : T('tu imagen', 'your image');
-        self.setState(d === 5 ? { an: an, mute: self.state.mixCustomized ? self.state.mute : self.only(self.state.leadOverride || self.discLead(5, res)), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
+        self.setState(d === 5 ? { an: an, mute: self.state.mixCustomized ? self.state.mute : self.state.leadOverride ? self.only(self.state.leadOverride) : self.allMute(false), upMsg: uiMessage('Listo: {name}. Pulsa Reproducir.', 'Ready: {name}. Press Play.', { name: nm }), caption: T('Cargado: ', 'Loaded: ') + nm + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') } : { an: an });
         if (d < 5 && self.state.tab === 'juke' && self.state.sub === 1) self.loadOtherFrames(d, f);
       } catch (e) { fail(uiMessage('No se pudo analizar el fotograma en este navegador.', 'This browser could not analyze the frame.')); }
     };
@@ -4329,10 +4312,10 @@ class Component extends DCLogic {
     this.imageLoads = Object.create(null);
   }
   revokeCustom() { var c = this.state.custom; if (c && c.url && c.url.indexOf('blob:') === 0) URL.revokeObjectURL(c.url); }
-  showCustom(custom, an, msg, initialMute) {
+  showCustom(custom, an, msg) {
     var ans = Object.assign({}, this.state.an); ans['5_0'] = an;
     this.stop(); this.lastThunder = -9;
-    var mute = this.state.mixCustomized ? this.state.mute : this.state.leadOverride ? this.only(this.state.leadOverride) : initialMute || this.only(this.discLead(5, an));
+    var mute = this.state.mixCustomized ? this.state.mute : this.state.leadOverride ? this.only(this.state.leadOverride) : this.allMute(false);
     var self = this;
     this.vibrateSafely('confirm', 'file-ready:' + this.fileRun);
     this.setState({ custom: custom, customMode: custom.mode || this.state.customMode, an: ans, disc: 5, frame: 0, col: -1, ended: false, mute: mute, upMsg: msg, caption: T('Cargado: ', 'Loaded: ') + uiLabel(custom) + T('. Pulsa Reproducir para escucharlo.', '. Press Play to hear it.') }, function () {
@@ -5179,6 +5162,7 @@ class Component extends DCLogic {
         toggle: function () { self.setPreference('reducedMotion', !s.reducedMotion); }
       },
       haptic: this.hapticVm(),
+      positionAccessibilityMenu: function (event) { self.positionAccessibilityMenu(event); },
       preferences: {
         on: s.showPreferences, title: T('¿Cómo prefieres usarlo?', 'How would you like to use it?'),
         body: T('Puedes cambiarlo luego en Accesibilidad.', 'You can change it later in Accessibility.'),
@@ -5265,7 +5249,7 @@ class Component extends DCLogic {
             var manual = self.state.leadOverride;
             var who = manual || self.discLead(k, self.state.an[k + '_0']);
             var name = BAND.find(function (b) { return b.k === who; }).name;
-            self.routeChange({ disc: k, frame: 0, col: -1, sub: 1, easyOpen: false, mute: self.state.mixCustomized ? self.state.mute : self.only(who),
+            self.routeChange({ disc: k, frame: 0, col: -1, sub: 1, easyOpen: false, mute: self.state.mixCustomized ? self.state.mute : self.allMute(false),
               caption: T('Disco ', 'Disc ') + x.n + ': ' + x.title + T('. Protagonista: ', '. Lead: ') + name + T('. Pulsa Reproducir.', '. Press Play.') }, 'juke', x.title);
             self.tutorialAction('disc');
           } };
@@ -5335,9 +5319,9 @@ class Component extends DCLogic {
       bandStatus: activeN === 0 ? T('Todos los instrumentos están silenciados. Activa un músico para escucharlo.', 'All instruments are muted. Switch a musician on to hear them.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandGo: function () { self.setBandMute(self.allMute(false)); self.setState({ caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
-      stageMusicians: band.filter(function (member) { return member.on; }).map(function (member) {
-        var level = s.levels[member.key] || 0;
-        return { poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
+      stageMusicians: band.map(function (member) {
+        var level = member.on ? s.levels[member.key] || 0 : 0;
+        return { name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
           intensity: level, playingClass: s.playing && level > .04 ? 'playing' : '' };
       }),
       stageShowBeat: melody,
@@ -5354,7 +5338,7 @@ class Component extends DCLogic {
       onDrop: function (e) { e.preventDefault(); self.setState({ over: false }); var fl = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (fl) self.handleFile(fl); },
       useSample: function () { self.loadSample(); },
       onUpMode: function (e) { self.setMode(e.target.value); },
-      teamLabel: T('Miembros del equipo', 'Team members'),
+      teamLabel: T('Creadores de EarthBeat', 'EarthBeat creators'),
       steps: STEPS
     };
   }
