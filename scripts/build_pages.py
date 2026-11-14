@@ -1,4 +1,4 @@
-"""Package the interactive EarthBeat prototype for GitHub Pages."""
+"""Build the static EarthBeat site for deployment."""
 
 from hashlib import sha256
 import json
@@ -51,6 +51,8 @@ def build(destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "index.html").write_bytes(html.encode("utf-8"))
     copy2(support_runtime, destination / "support.js")
+    for filename in ("earthbeat-logo.webp", "earthbeat-icon.png"):
+        copy2(prototype / filename, destination / filename)
     copytree(root / "assets" / "fonts", destination / "fonts", dirs_exist_ok=True)
     for folder in ("fotogramas", "fotogramas-anteriores", "brisa", "miniaturas"):
         copytree(prototype / folder, destination / folder, dirs_exist_ok=True)
