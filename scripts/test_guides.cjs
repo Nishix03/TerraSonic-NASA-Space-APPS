@@ -43,6 +43,7 @@ test('the interactive grid legend uses each color of the exact palette in both l
   assert.equal(legend.find(level=>level.number==='0').label,'0 · Cerca de lo habitual');
   assert.equal(legend.at(-1).label,'−5 · Frío extremo');
   assert.equal(c.playerVm().legendReading,'');
+  assert.match(c.playerVm().legendDescription,/Elige un recuadro/);
   assert.equal(new Set(legend.map(level=>level.description)).size,14);
   for(const [rain, image] of [[true,false],[false,true]]) {
     const alternate=c.legendVm(rain,image);
@@ -1622,7 +1623,7 @@ test('queued chords and event captions use the language selected at their actual
   await c.play();c.scheduleAudio();assert(c.playbackQueue.length>0);const first=c.playbackQueue[0];
   assert.equal(first.chord,'Rem7');c.setLang('en');c.ac.currentTime=first.at;c.flushPlayback(first.at);
   assert.equal(c.state.chord,'Dm7');assert.match(c.state.caption,/chord Dm7/);assert.match(c.state.caption,/column 1\/28/);
-  assert.equal(c.state.events[0].chord,0);assert.equal(c.state.stageNotes.mama.chord,'Dm7');
+  assert.equal(c.state.events[0].chord,0);assert.equal(c.state.stageNotes.mama.kind,'note');
 });
 
 test('Illapa cues reflect actual attacks and distinguish rhythm from the extreme-data thunder',()=>{
@@ -1652,7 +1653,6 @@ test('Illapa cues reflect actual attacks and distinguish rhythm from the extreme
   c.state.an['0_0']={...c.state.an['0_0'],cells:Array(448).fill(4.8)};
   raw(0);
   assert.equal(c.state.stageNotes.illapa.kind,'thunder');
-  assert.equal(c.state.stageNotes.illapa.chord,'');
   c.setBandMute(c.allMute(true));
   assert.equal(c.state.stageNotes.illapa,undefined);
 });

@@ -212,20 +212,19 @@ class StageNoteTrack extends HTMLElement {
   }
 
   addCue() {
-    const still = reduced() || typeof this.animate !== 'function';
+    const still = this.closest('.band-stage')?.dataset.noteMotion !== 'full' || typeof this.animate !== 'function';
     // Keep the most recent attack readable with reduced motion.
     if (still) this.clear();
     const note = document.createElement('span');
     note.className = still ? 'stage-note is-static' : 'stage-note';
     note.dataset.note = this.dataset.kind;
-    for (const [tag, label] of [['b', this.dataset.chord], ['small', this.dataset.label]]) {
-      if (!label) continue;
-      const text = document.createElement(tag);
-      text.textContent = label;
+    if (this.dataset.label) {
+      const text = document.createElement('small');
+      text.textContent = this.dataset.label;
       note.append(text);
     }
     this.append(note);
-    const arrive = 'translate(-50%, calc(var(--stage-drop) - 15px))';
+    const arrive = 'translate(-50%, calc(var(--stage-drop) - 7px))';
     const animation = still ? null : note.animate([
       { transform: 'translate(-50%, -12px)' },
       { transform: arrive, offset: .80 },

@@ -19,7 +19,7 @@ async function main(){
      const r=pop.getBoundingClientRect();return {width:r.width,height:r.height,scrollHeight:pop.scrollHeight,viewport:innerWidth,columns:getComputedStyle(pop).gridTemplateColumns,
       options:[...pop.querySelectorAll('button')].map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent.trim(),disabled:el.disabled,width:r.width,height:r.height,overflow:el.scrollWidth>el.clientWidth+2,left:r.left,right:r.right};})};
     });
-    assert(result.width<=width);assert.equal(result.options.length,11);
+    assert(result.width<=width);assert.equal(result.options.length,10);
     const brand=await page.locator('.wordmark').evaluate(el=>{const r=el.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(el);return {lines:range.getClientRects().length,left:r.left,right:r.right,topFont:getComputedStyle(el.closest('header')).fontSize};});
     if(language==='es')await page.screenshot({path:path.join(output,`${width}-${height}-${setting}.png`)});
     assert.equal(brand.lines,1,JSON.stringify({width,height,setting,brand}));assert(brand.left>=0&&brand.right<=width);

@@ -1714,8 +1714,8 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px #tour-machine .vcap h2{font:700 1.3125em/1.3 var(--head);color:var(--fg)}
 .px .player-layout #tour-frame .mapbox{aspect-ratio:560/350}
 .px .player-layout .map-legend{align-self:start}
-.px .legend-detail{display:grid;min-width:0;min-height:3em}
-.px .legend-detail:has(.legend-detail-title:not(:empty)){padding:4px 8px;border:1px solid var(--line);border-inline-start:4px solid var(--swatch);border-radius:5px;background:var(--surface)}
+.px .legend-detail{display:grid;min-width:0;min-height:3em;padding:4px 8px;border:1px solid var(--line);border-inline-start:4px solid var(--swatch);border-radius:5px;background:var(--surface)}
+.px .legend-detail-title:empty{display:none}
 .px .legend-detail-title{font:700 .89em/1.25 var(--head);overflow-wrap:anywhere}
 .px .legend-detail p{margin:2px 0 0;font-size:.79em;line-height:1.35;color:var(--muted)}
 .px .map-legend .legend-labels{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
@@ -1724,6 +1724,10 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px.app[data-contrast="true"] .legend-swatch{border-color:var(--fg)}
 .px .readout p>strong{flex:none}
 .px .player-layout .listen-band{grid-template-rows:auto 1fr auto auto;align-content:start}
+.px .stage-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 8px}
+.px .stage-motion-button{padding:3px 7px;min-height:28px;border:1px solid var(--line);border-radius:4px;font-size:.75em;cursor:pointer}
+.px .stage-motion-button:hover{border-color:var(--fg)}
+.px .stage-motion-status{grid-column:1/-1;margin:0;color:var(--muted);font-size:.72em;line-height:1.25}
 .px .player-layout .band-stage{height:auto;min-height:200px}
 .px .player-layout .band-stage-musicians{height:auto;align-items:stretch}
 .px .player-layout .stage-musician.listen-member{padding:4px 2px;border:1px solid transparent;text-align:center;align-items:end}
@@ -1732,8 +1736,8 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .stage-note-track::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:#8798aa55}
 .px .stage-note-track::after{content:"";position:absolute;bottom:0;left:50%;width:25px;border-top:2px solid #a9b8ca99;transform:translateX(-50%)}
 .px .stage-note{position:absolute;grid-column:auto;top:0;left:50%;display:grid;justify-items:center;gap:1px;z-index:1;white-space:nowrap;transform:translateX(-50%);--stage-drop:100cqh;font:700 clamp(.62rem,.9vw,.75rem)/1.15 var(--head)}
-.px .stage-note b,.px .stage-note small{padding:2px 3px;border-radius:3px;color:#fff;background:#0a0f1a;font-size:inherit}
-.px .stage-note::before{content:"";width:19px;height:19px;border:1px solid #fff;border-radius:3px;background:var(--member-color);box-shadow:0 0 6px #0009}
+.px .stage-note small{padding:2px 3px;border-radius:3px;color:#fff;background:#0a0f1a;font-size:inherit}
+.px .stage-note::before{content:"";width:12px;height:12px;border:1px solid #fff;border-radius:2px;background:var(--member-color);box-shadow:0 0 6px #0009}
 .px .stage-note[data-note="thunder"]::before{outline:1px solid var(--member-color);outline-offset:2px}
 .px .stage-note.is-static{top:auto;bottom:0}
 @media(max-width:1000px){
@@ -1840,7 +1844,6 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <button type="button" class="opt" onClick="{{a.toggle}}" aria-pressed="{{a.on}}" disabled="{{a.disabled}}"><span>{{a.label}}</span><span class="sw" aria-hidden="true"></span></button>
 </sc-for>
 <button type="button" class="opt" onClick="{{theme.toggle}}" aria-pressed="{{theme.light}}"><span>{{theme.label}}</span><span class="sw" aria-hidden="true"></span></button>
-<button type="button" class="opt" onClick="{{preferences.open}}">{{preferences.reopenLabel}}</button>
 <section class="haptics-settings" role="group" aria-labelledby="haptics-title"><h2 id="haptics-title">{{haptic.title}}</h2><p id="haptics-status" role="status" aria-live="polite">{{haptic.status}}</p><div class="row"><button type="button" class="btn sm" onClick="{{haptic.test}}" disabled="{{haptic.testOff}}" aria-describedby="haptics-status">{{haptic.testLabel}}</button><button type="button" class="btn sm" onClick="{{haptic.stop}}" disabled="{{haptic.stopOff}}">{{haptic.stopLabel}}</button></div></section>
 </div>
 </details>
@@ -2041,18 +2044,22 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </aside>
 </figure>
 <section class="listen-band" aria-labelledby="listen-band-title">
+<div class="stage-heading">
 <h2 id="listen-band-title">{{tx.theBand}}</h2>
-<div class="band-stage" role="group" aria-label="{{tx.bandAria}}">
+<button type="button" class="stage-motion-button" onClick="{{stageMotion.toggle}}" aria-describedby="stage-motion-status">{{stageMotion.action}}</button>
+<p id="stage-motion-status" class="stage-motion-status" role="status">{{stageMotion.status}}</p>
+</div>
+<div class="band-stage" role="group" aria-label="{{tx.bandAria}}" data-note-motion="{{stageMotion.mode}}">
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
 <button type="button" class="listen-member stage-musician" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
-<earthbeat-note-track class="stage-note-track" data-hit="{{musician.noteId}}" data-kind="{{musician.noteKind}}" data-chord="{{musician.noteChord}}" data-label="{{musician.noteLabel}}" aria-hidden="true"></earthbeat-note-track><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
+<earthbeat-note-track class="stage-note-track" data-hit="{{musician.noteId}}" data-kind="{{musician.noteKind}}" data-label="{{musician.noteLabel}}" aria-hidden="true"></earthbeat-note-track><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
 <strong>{{musician.name}}</strong>
 </button>
 </sc-for>
 </div>
 </div>
-<sc-if value="{{bandAllMuted}}"><p role="status" class="small muted">{{bandStatus}}</p></sc-if>
+<sc-if value="{{bandAllMuted}}"><p class="stage-muted-status small muted" role="status">{{bandStatus}}</p></sc-if>
 <sc-if value="{{showHarmony}}">
 <div class="chips" role="group" aria-label="{{tx.chordsAria}}">
 <sc-for list="{{progItems}}" as="chord">
@@ -3360,6 +3367,11 @@ class Component extends DCLogic {
     this.preferencesConfigured = !!(preferences && preferences.configured);
     this.state.showPreferences = !this.preferencesConfigured;
     this.state.reducedMotion = !!this.state.reducedMotion;
+    this.state.stageNoteMotion = null;
+    try {
+      var stageNoteMotion = localStorage.getItem('ts_stage_note_motion');
+      if (stageNoteMotion === 'full' || stageNoteMotion === 'static') this.state.stageNoteMotion = stageNoteMotion;
+    } catch (ignored) {}
     this.state.tutorial = false;
     this.state.tutorialDone = { disc: false, play: false, legend: false };
     this.state.tutorialSkipped = {};
@@ -3551,18 +3563,10 @@ class Component extends DCLogic {
     }
   }
   focusPreferences() { var target = document.getElementById('preferences-voice') || document.getElementById('preferences-dialog'); if (target) target.focus({ preventScroll: true }); }
-  openPreferences() {
-    this.cinema?.finish(false);
-    if (this.state.more) this.closeMore();
-    if (this.state.tour) this.tourClose();
-    this.preferencesReturnFocus = document.activeElement;
-    this.setState({ showPreferences: true }); this.setPreferencesInert(true); this.focusPreferences();
-  }
   finishPreferences(tutorial) {
     this.preferencesConfigured = true; this.savePreferences(); this.setPreferencesInert(false);
     this.setState({ showPreferences: false });
-    var target = this.preferencesReturnFocus;
-    if (!target || !target.isConnected) target = document.querySelector('.hero .btn.primary') || document.getElementById('tour-guide');
+    var target = document.querySelector('.hero .btn.primary') || document.getElementById('tour-guide');
     if (target) target.focus({ preventScroll: true });
     if (tutorial) this.startTutorial();
     else if (this.state.voice) this.narrateBrisa(this.sectionNarration());
@@ -3900,6 +3904,24 @@ class Component extends DCLogic {
     this.stopSpeech();
     this.stop();
     if (this.ac) this.ac.close();
+  }
+  stageMotionVm() {
+    var self = this, preference = this.state.stageNoteMotion;
+    var mode = preference || (this.bandReduced() ? 'static' : 'full');
+    var status = mode === 'full' ? T('Las fichas caen al sonar.', 'Markers fall when instruments play.')
+      : preference === 'static' ? T('Las fichas aparecen quietas.', 'Markers stay still.')
+      : this.state.reducedMotion ? T('Movimiento reducido en EarthBeat.', 'Reduced motion is on in EarthBeat.')
+      : T('Movimiento reducido en tu dispositivo.', 'Reduced motion is on in your device settings.');
+    return {
+      mode: mode, status: status,
+      action: mode === 'full' ? T('Pausar caída', 'Pause falling markers') : T('Activar caída', 'Enable falling markers'),
+      toggle: function () {
+        var next = mode === 'full' ? 'static' : 'full';
+        self.setState({ stageNoteMotion: next });
+        try { localStorage.setItem('ts_stage_note_motion', next); } catch (ignored) {}
+        self.syncPreferenceMotion();
+      }
+    };
   }
   bandReduced() {
     return this.state.reducedMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -4262,7 +4284,7 @@ class Component extends DCLogic {
       volumeLabel: T('Volumen', 'Volume'), volume: s.volume,
       changeVolume: function (e) { self.setVolume(Number(e.target.value)); },
       legendTitle: rain ? T('Lluvia mensual', 'Monthly rainfall') : T('Escala de color', 'Color scale'),
-      legend: legend, legendReading: selected?.label || '', legendDescription: selected?.description || '', legendColor: selected?.color || 'transparent',
+      legend: legend, legendReading: selected?.label || '', legendDescription: selected?.description || T('Elige un recuadro de color para saber qué significa.', 'Choose a color swatch to see what it means.'), legendColor: selected?.color || 'var(--line)',
       speechNotice: uiText(s.speechNotice),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () {
@@ -4764,11 +4786,10 @@ class Component extends DCLogic {
     this.heardThunder = this.lastThunder;
     this.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.scheduleAudio(); }, 25);
   }
-  updateStageNote(notes, key, kind, chord) {
+  updateStageNote(notes, key, kind) {
     notes[key] = {
       id: (notes[key]?.id || 0) + 1,
-      kind: kind === true ? 'note' : kind,
-      chord: chord
+      kind: kind === true ? 'note' : kind
     };
   }
   emitStep(patch, fired, chord, scheduled, vibration) {
@@ -4776,7 +4797,7 @@ class Component extends DCLogic {
       if (vibration) this.vibrateSafely(vibration, 'music:' + this.audioRun + ':' + this.state.disc + ':' + this.state.frame + ':' + patch.col);
       patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
       patch.stageNotes = Object.assign({}, this.state.stageNotes);
-      Object.keys(fired).forEach(key => { if (fired[key]) this.updateStageNote(patch.stageNotes, key, fired[key], chord); });
+      Object.keys(fired).forEach(key => { if (fired[key]) this.updateStageNote(patch.stageNotes, key, fired[key]); });
       this.setState(patch); return;
     }
     scheduled.patch = patch;
@@ -4807,15 +4828,14 @@ class Component extends DCLogic {
       if (frameChanged) announcement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
       this.heardThunder = event.thunder;
       events = events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
-      Object.keys(fired).forEach(function (key) { if (fired[key]) stageHits[key] = { kind: fired[key], chord: chord }; });
+      Object.keys(fired).forEach(function (key) { if (fired[key]) stageHits[key] = fired[key]; });
       latest = patch;
       if (event.vibration && (!event.fired.illapa || fired.illapa)) hapticStep = event;
     }
     if (latest) {
       if (announcement) latest.playerAnnouncement = announcement;
       if (!this.state.masterMuted && this.state.volume > 0) Object.keys(stageHits).forEach(function (key) {
-        var hit = stageHits[key];
-        self.updateStageNote(stageNotes, key, hit.kind, hit.chord);
+        self.updateStageNote(stageNotes, key, stageHits[key]);
       });
       this.setState(Object.assign(latest, { events: events, stageNotes: stageNotes }));
     }
@@ -5311,8 +5331,7 @@ class Component extends DCLogic {
           ['reducedMotion', T('Movimiento reducido', 'Reduced motion'), T('Personajes y transiciones sin animación.', 'Characters and transitions without animation.')]
         ].map(function (option) { return { id: 'preferences-' + option[0], label: option[1], hint: option[2], on: !!s[option[0]], change: function (e) { self.setPreference(option[0], e.target.checked); } }; }),
         continueLabel: T('Continuar', 'Continue'), tutorialLabel: T('Ver guía · 3 pasos', 'Open guide · 3 steps'),
-        continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); },
-        reopenLabel: T('Cómo prefiero usar EarthBeat', 'How I prefer to use EarthBeat'), open: function () { self.openPreferences(); }
+        continue: function () { self.finishPreferences(false); }, tutorial: function () { self.finishPreferences(true); }
       },
       frameCount: s.disc === 5 ? T('tu archivo', 'your file') : T('fotograma ', 'frame ') + (s.frame + 1) + T(' de ', ' of ') + d.files.length, prevOff: s.frame <= 0, nextOff: s.frame >= d.files.length - 1,
       trans: s.trans, route: s.route, pageName: ROUTE_LOOK[s.tab].title,
@@ -5457,11 +5476,12 @@ class Component extends DCLogic {
       bandStatus: activeN === 0 ? T('Todos los instrumentos están silenciados. Activa un músico para escucharlo.', 'All instruments are muted. Switch a musician on to hear them.') : activeN === 5 ? T('Banda completa: los cinco instrumentos están activados.', 'Full band: all five instruments are switched on.') : activeN + T(' de 5 personajes activos.', ' of 5 musicians on.'),
       bandGo: function () { self.setBandMute(self.allMute(false)); self.setState({ caption: T('Banda completa activada. Pulsa Reproducir.', 'Full band switched on. Press Play.') }); self.goTab('juke'); },
       band: band,
+      stageMotion: this.stageMotionVm(),
       stageMusicians: band.map(function (member) {
         var level = member.on ? s.levels[member.key] || 0 : 0;
         var note = member.on && s.playing && !s.masterMuted && s.volume > 0 ? s.stageNotes[member.key] : null;
         var noteLabel = note?.kind === 'thunder' ? T('Trueno', 'Thunder') : note?.kind === 'rhythm' ? T('Ritmo', 'Beat') : '';
-        return { noteId: note?.id || '', noteKind: note?.kind || '', noteChord: note?.chord || '', noteLabel: noteLabel,
+        return { noteId: note?.id || '', noteKind: note?.kind || '', noteLabel: noteLabel,
           name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color, intensity: level };
       }),
       stageShowBeat: melody,

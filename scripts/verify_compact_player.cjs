@@ -37,7 +37,7 @@ async function main(){
       assert.equal(await choice.getAttribute('aria-pressed'),'true');
      }
      while(await page.locator('.listen-member[aria-pressed="true"]').count())await page.locator('.listen-member[aria-pressed="true"]').first().click();
-     const notice=page.locator('.listen-band [role="status"]');assert(await notice.isVisible());assert((await notice.textContent()).trim());
+     const notice=page.locator('.stage-muted-status');assert(await notice.isVisible());assert((await notice.textContent()).trim());
      const last=page.locator('.listen-member').last();await last.focus();await last.scrollIntoViewIfNeeded();const box=await last.boundingBox();assert(box.y>=0&&box.y+box.height<=height+1,label+' all-muted state must keep the last musician reachable');report.interactions.push({label,allMutedNotice:true,lastMusicianReachable:true});
     }
    }

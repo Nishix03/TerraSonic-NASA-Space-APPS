@@ -168,7 +168,7 @@ async function main() {
       assert.equal(await legend.count(), 14);
       assert.equal(await page.locator('.legend-help').count(), 0);
       const explanation = page.locator('.legend-detail');
-      assert.equal((await explanation.textContent()).trim(), '');
+      assert.match(await explanation.textContent(), /Elige un recuadro de color/);
       await legend.first().click();
       assert.match(await explanation.textContent(), /Calor extremo/);
       const high = await explanation.locator('p').textContent();
@@ -189,7 +189,8 @@ async function main() {
       await page.locator('.band-stage').scrollIntoViewIfNeeded();
       const illapa = page.locator('.stage-musician').last().locator('.stage-note[data-note="rhythm"]').first();
       await illapa.waitFor({timeout:10000});
-      assert(await illapa.locator('b').textContent(), 'Rhythm cue shows its chord');
+      assert.equal(await illapa.locator('b').count(), 0);
+      assert.equal(await illapa.evaluate(note => getComputedStyle(note, '::before').width), '12px');
       assert.equal(await illapa.locator('small').textContent(), 'Ritmo');
       const drop = await illapa.evaluate(async note => {
         const animation = note.getAnimations()[0];
@@ -220,6 +221,7 @@ async function main() {
       await page.locator('#tour-a11y summary').click();
       assert.deepEqual(await page.locator('header.top').boundingBox(), header);
       assert.deepEqual(await page.locator('.player-layout').boundingBox(), layout);
+      assert.equal(await page.getByRole('button', { name: 'Cómo prefiero usar EarthBeat', exact: true }).count(), 0);
       await page.getByRole('button', { name: 'Vibración', exact: true }).click();
       assert.deepEqual(await page.evaluate(() => vibrations), [15]);
       await page.waitForTimeout(725);
@@ -264,9 +266,28 @@ async function main() {
     await accessiblePage.locator('.discgrid .dcard').first().click();
     await accessiblePage.getByRole('button', { name: 'Play', exact: true }).click();
     await accessiblePage.locator('.band-stage').scrollIntoViewIfNeeded();
+    const enableFall = accessiblePage.getByRole('button', { name: 'Enable falling markers', exact: true });
+    assert.match(await accessiblePage.locator('#stage-motion-status').textContent(), /device settings/);
     const staticCue = accessiblePage.locator('.stage-note.is-static').first();
     await staticCue.waitFor();
     assert(await staticCue.evaluate(cue => getComputedStyle(cue).opacity === '1' && cue.getAnimations().length === 0));
+    await enableFall.click();
+    const stage = accessiblePage.locator('.band-stage');
+    assert.equal(await stage.getAttribute('data-note-motion'), 'full');
+    assert.equal(await accessiblePage.locator('.px.app').getAttribute('data-motion-mode'), 'reduced');
+    const activeCue = accessiblePage.locator('.stage-note:not(.is-static)').first();
+    await activeCue.waitFor();
+    const drop = await activeCue.evaluate(async note => {
+      await note.getAnimations()[0].ready;
+      const before = note.getBoundingClientRect().top;
+      await new Promise(resolve => setTimeout(resolve, 120));
+      return note.getBoundingClientRect().top - before;
+    });
+    assert(drop > 5, 'Enabling only the falling markers works with system reduced motion');
+    assert.equal(await accessiblePage.evaluate(() => localStorage.getItem('ts_stage_note_motion')), 'full');
+    await accessiblePage.getByRole('button', { name: 'Pause falling markers', exact: true }).click();
+    await staticCue.waitFor();
+    assert.equal(await stage.getAttribute('data-note-motion'), 'static');
     await accessiblePage.getByRole('button', { name: 'Pause', exact: true }).click();
     assert.equal(await accessiblePage.locator('.stage-note').count(), 0);
     await accessible.close();

@@ -51,7 +51,7 @@ async function main() {
     await page.evaluate(()=>window.__previousAnalysis=__app.cur());await page.locator('.file-settings select').selectOption('palette');
     await page.waitForFunction(()=>__app.cur()!==window.__previousAnalysis&&__app.state.customMode==='palette');
     assert(await page.evaluate(()=>Object.values(__app.state.mute).every(Boolean)),'changing image interpretation keeps the user’s instrument mix');
-    assert.match(await page.locator('.listen-band [role="status"]').textContent(),/silenciados/);
+    assert.match(await page.locator('.stage-muted-status').textContent(),/silenciados/);
     checks.push('Local WebP analyzed in free-color mode');
     const accepted = await page.evaluate(() => __app.state.custom.url);
     for (const fixture of [
