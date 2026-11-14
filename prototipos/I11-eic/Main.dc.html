@@ -1458,8 +1458,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .band-stage{display:grid;grid-template-rows:minmax(0,1fr) auto;height:clamp(120px,22vh,210px);background-image:linear-gradient(#080c15b8,#080c15f5),var(--stage-map);background-position:center;background-size:cover;border:1px solid var(--line);border-radius:5px;overflow:hidden}
 .px .band-stage-musicians{display:flex;justify-content:center;align-items:end;gap:4px;min-height:0;padding:8px 5px 0}
 .px .stage-musician{position:relative;flex:0 1 22%;max-width:110px;height:100%;min-width:0;display:grid;place-items:end center}
-.px .stage-musician img{width:100%;height:100%;min-height:0;object-fit:contain;transform:translateY(calc(var(--intensity) * -5px));filter:drop-shadow(0 0 calc(var(--intensity) * 7px) var(--member-color));transition:transform .16s ease-out}
-.px .stage-musician.playing{background:radial-gradient(ellipse at bottom,color-mix(in srgb,var(--member-color) 26%,transparent),transparent 67%)}
+.px .stage-musician img{width:100%;height:100%;min-height:0;object-fit:contain;transform:translateY(calc(var(--intensity) * -5px));transition:transform .16s ease-out}
 .px.reduce-motion .stage-musician img{transform:none;transition:none}
 @media(prefers-reduced-motion:reduce){.px .stage-musician img{transform:none;transition:none}}
 .px.app[data-contrast="true"] .band-stage{background-image:none;background:var(--surface)}
@@ -1715,7 +1714,10 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px #tour-machine .vcap h2{font:700 1.3125em/1.3 var(--head);color:var(--fg)}
 .px .player-layout #tour-frame .mapbox{aspect-ratio:560/350}
 .px .player-layout .map-legend{align-self:start}
-.px .map-legend .legend-help{font-size:.8em;color:var(--muted);line-height:1.35}
+.px .legend-detail{display:grid;min-width:0;min-height:3em}
+.px .legend-detail:has(.legend-detail-title:not(:empty)){padding:4px 8px;border:1px solid var(--line);border-inline-start:4px solid var(--swatch);border-radius:5px;background:var(--surface)}
+.px .legend-detail-title{font:700 .89em/1.25 var(--head);overflow-wrap:anywhere}
+.px .legend-detail p{margin:2px 0 0;font-size:.79em;line-height:1.35;color:var(--muted)}
 .px .map-legend .legend-labels{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .px .map-legend .legend-choice{font-size:.76em;display:grid;align-content:center;justify-items:center;gap:2px;min-width:0;text-align:center;padding:3px 1px;font-variant-numeric:tabular-nums}
 .px .legend-swatch{width:100%;height:11px;border:1px solid var(--muted);border-radius:2px;background:var(--swatch)}
@@ -1725,19 +1727,22 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .player-layout .band-stage{height:auto;min-height:200px}
 .px .player-layout .band-stage-musicians{height:auto;align-items:stretch}
 .px .player-layout .stage-musician.listen-member{padding:4px 2px;border:1px solid transparent;text-align:center;align-items:end}
-.px .player-layout .stage-musician[aria-pressed="true"]{border-color:color-mix(in srgb,var(--member-color) 65%,transparent)}
-.px .player-layout .stage-musician.playing{background:color-mix(in srgb,var(--member-color) 27%,#080c15);border-color:var(--member-color)}
 .px .player-layout .stage-musician:focus-visible{outline:2px solid var(--fg);outline-offset:-2px}
 .px .stage-musician .stage-indicator{position:absolute;grid-column:auto;inset:6px auto auto 6px;width:10px;height:10px;border:1px solid var(--member-color);border-radius:2px}
 .px .stage-musician[aria-pressed="true"] .stage-indicator{background:var(--member-color)}
-.px .stage-musician.playing .stage-indicator{box-shadow:0 0 9px 1px var(--member-color)}
-@keyframes musician-hit-a{0%{transform:scale(1.4);box-shadow:0 0 12px 3px var(--member-color)}100%{transform:scale(1)}}
-@keyframes musician-hit-b{0%{transform:scale(1.4);box-shadow:0 0 12px 3px var(--member-color)}100%{transform:scale(1)}}
-@media(prefers-reduced-motion:no-preference){
- .px:not(.reduce-motion) .stage-indicator.pulse-a{animation:musician-hit-a .2s ease-out}
- .px:not(.reduce-motion) .stage-indicator.pulse-b{animation:musician-hit-b .2s ease-out}
-}
-.px.app[data-contrast="true"] .stage-musician.playing strong{color:#fff;text-shadow:0 1px 1px #000}
+.px .stage-musician .stage-note-track{position:absolute;grid-column:auto;inset:9% 2px auto;height:32%;pointer-events:none}
+.px .stage-note-track::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:#8798aa35}
+.px .stage-note-track::after{content:"";position:absolute;bottom:0;left:50%;width:18px;border-top:1px solid #a9b8ca88;transform:translateX(-50%)}
+.px .stage-musician .stage-note{position:absolute;grid-column:auto;inset:0 auto auto 50%;display:grid;justify-items:center;gap:2px;opacity:0;z-index:1;white-space:nowrap;transform:translateX(-50%);font:700 clamp(.53rem,.8vw,.66rem)/1.15 var(--head)}
+.px .stage-note b,.px .stage-note small{padding:2px 3px;border-radius:3px;color:#fff;background:#0a0f1a;font-size:inherit}
+.px .stage-note b:empty,.px .stage-note small:empty{display:none}
+.px .stage-note::before{content:"";width:12px;height:12px;border:1px solid #fff9;border-radius:2px;background:var(--member-color)}
+.px .stage-note[data-note="thunder"]::before{outline:1px solid var(--member-color);outline-offset:2px}
+.px:not(.reduce-motion) .stage-note.note-a{animation:stage-note-a .28s linear}
+.px:not(.reduce-motion) .stage-note.note-b{animation:stage-note-b .28s linear}
+@keyframes stage-note-a{0%{top:0;opacity:1}80%{top:88%;opacity:1}100%{top:88%;opacity:0}}
+@keyframes stage-note-b{0%{top:0;opacity:1}80%{top:88%;opacity:1}100%{top:88%;opacity:0}}
+@media(prefers-reduced-motion:reduce){.px .stage-note-track .stage-note{animation:none}}
 .px .stage-musician[aria-pressed="false"] .stage-indicator{background:#080c15}
 @media(max-width:1000px){
  .px .player-layout{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1751,12 +1756,14 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 }
 .px .uni .map-toolbar{position:relative;display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px 10px;padding:6px}
 .px .map-toolbar .volume-control{flex:1 1 78px;min-width:0;font-size:.74em}
-.px .map-toolbar .transport-speed{display:flex;flex:0 0 auto;gap:5px;align-items:center;font-size:.78em;white-space:nowrap}
-.px .map-toolbar .transport-speed select{width:64px;min-width:0;min-height:44px;padding:4px;font:inherit}
+.px .map-toolbar .transport-speed{display:grid;flex:0 0 auto;justify-items:start;gap:3px;font-size:.78em;white-space:nowrap}
+.px .map-toolbar .transport-speed select{width:55px;min-width:0;min-height:32px;padding:3px;font:inherit}
 .px .map-toolbar .player-modes{display:flex;align-items:center;gap:4px}
-.px .mode-help summary{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);cursor:pointer;font:700 .9em var(--head);list-style:none}
+.px .mode-help summary{display:grid;place-items:center;min-width:30px;min-height:44px;cursor:pointer;font:700 .92em var(--head);list-style:none}
+.px .mode-help summary:focus-visible{outline:2px solid var(--fg);outline-offset:-2px;border-radius:4px}
+.px .mode-help summary span{display:grid;place-items:center;width:19px;height:19px;border:1px solid currentColor;border-radius:50%;color:var(--muted)}
 .px .mode-help summary::-webkit-details-marker{display:none}
-.px .mode-help[open] summary{color:var(--bg);background:var(--fg)}
+.px .mode-help[open] summary span,.px .mode-help summary:hover span{color:var(--bg);background:var(--fg)}
 .px .mode-help dl{position:absolute;z-index:5;inset:100% 6px auto auto;width:min(230px,calc(100% - 12px));padding:10px;margin:4px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:5px;box-shadow:0 5px 12px #0006}
 .px .mode-help dt{font-weight:700}
 .px .mode-help dd{margin:0;color:var(--fg);line-height:1.4}
@@ -1766,12 +1773,12 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .map-source{margin-inline-start:auto;text-align:end}
 .px .map-transport{display:grid;gap:6px;width:100%;padding:6px}
 .px .map-transport .timeline img{display:block}
-.px .band-stage{background:var(--surface) url('./stage.webp') center/cover no-repeat;grid-template-rows:minmax(0,1fr);height:clamp(156px,23vw,240px)}
+.px .band-stage{background:#171b23 url('./stage.webp') center/cover no-repeat;background-blend-mode:luminosity;grid-template-rows:minmax(0,1fr);height:clamp(156px,23vw,240px)}
 .px .band-stage-musicians{height:100%;align-items:end;padding:12px 5px 5px}
 .px .stage-musician.listen-member{padding:3px 1px;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:2px;justify-items:center;min-height:44px;border-color:transparent;background:transparent}
 .px .stage-musician.listen-member img{width:100%;height:100%;object-position:center 75%}
 .px .stage-musician.listen-member[aria-pressed="false"]{filter:saturate(.3);opacity:.65}
-.px .stage-musician.listen-member:hover,.px .stage-musician.listen-member:focus-visible{border-color:var(--member-color);background:#08111b9c}
+.px .stage-musician.listen-member:hover,.px .stage-musician.listen-member:focus-visible{border-color:var(--line)}
 .px .stage-musician.listen-member strong{grid-column:1;padding:2px 0;font-size:clamp(.5rem,.81vw,.68rem);text-align:center;letter-spacing:0;white-space:normal;overflow-wrap:anywhere;color:#fff;text-shadow:0 1px 4px #000}
 .px.app[data-contrast="true"] .stage-musician.listen-member strong{color:var(--fg)}
 .px .listen-band .chips{display:flex;flex-wrap:wrap;gap:5px}
@@ -1986,7 +1993,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <label class="transport-speed"><span>{{tx.speedLabel}}</span><select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">0.75×</option><option value="110">1×</option><option value="70">1.4×</option></select></label>
 <div class="player-modes" id="tour-modes">
 <div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="{{e.descriptionId}}" title="{{e.description}}">{{e.short}}</button></sc-for></div>
-<details class="mode-help"><summary aria-label="{{tx.modesHelp}}" title="{{tx.modesHelp}}">?</summary><dl><sc-for list="{{engines}}" as="e"><dt>{{e.short}}</dt><dd>{{e.description}}</dd></sc-for></dl></details>
+<details class="mode-help"><summary aria-label="{{tx.modesHelp}}" title="{{tx.modesHelp}}"><span aria-hidden="true">?</span></summary><dl><sc-for list="{{engines}}" as="e"><dt>{{e.short}}</dt><dd>{{e.description}}</dd></sc-for></dl></details>
 <sc-for list="{{engines}}" as="e"><span class="sr" id="{{e.descriptionId}}">{{e.description}}</span></sc-for>
 </div>
 <span class="muted map-source">{{mapSource}}</span>
@@ -2030,13 +2037,14 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 <aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
 <h2 id="map-legend-title">{{player.legendTitle}}</h2>
-<p id="legend-help" class="legend-help">{{player.legendHelp}}</p>
-<div class="legend-labels" role="group" aria-labelledby="map-legend-title" aria-describedby="legend-help">
+<div class="legend-labels" role="group" aria-labelledby="map-legend-title">
 <sc-for list="{{player.legend}}" as="level">
 <button type="button" class="legend-choice" aria-label="{{level.label}}" aria-pressed="{{level.on}}" onClick="{{level.choose}}"><span class="legend-swatch" style="--swatch:{{level.color}}" aria-hidden="true"></span><span aria-hidden="true">{{level.number}}</span></button>
 </sc-for>
 </div>
-<p role="status" class="small muted legend-reading">{{player.legendReading}}</p>
+<div class="legend-detail" role="status" aria-atomic="true" style="--swatch:{{player.legendColor}}">
+<strong class="legend-detail-title">{{player.legendReading}}</strong><p>{{player.legendDescription}}</p>
+</div>
 <p role="status" class="small muted legend-reading">{{player.speechNotice}}</p>
 </aside>
 </figure>
@@ -2045,8 +2053,8 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <div class="band-stage" role="group" aria-label="{{tx.bandAria}}">
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
-<button type="button" class="listen-member stage-musician {{musician.playingClass}}" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
-<span class="stage-indicator {{musician.pulseClass}}" aria-hidden="true"></span><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
+<button type="button" class="listen-member stage-musician" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
+<span class="stage-indicator" aria-hidden="true"></span><span class="stage-note-track" aria-hidden="true"><span class="stage-note {{musician.noteClass}}" data-note="{{musician.noteKind}}"><b>{{musician.noteChord}}</b><small>{{musician.noteLabel}}</small></span></span><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
 <strong>{{musician.name}}</strong>
 </button>
 </sc-for>
@@ -2707,7 +2715,7 @@ var BAND = [
   { k: 'inti', name: 'INTI', color: '#FF5A36', disc: 'Verano 2024–25', glyph: '♫', ins: 'MARIMBA', clip: 'tocar_marimba', clips: 'idle · tocar_marimba · golpe_izq / golpe_der · acento · aparecer / salir', origin: 'El sol, en quechua', listens: 'El promedio de los píxeles cálidos (amarillo → rojo) de cada grupo de 4 columnas.', plays: 'Acordes lentos de marimba en Mi menor: Mim7, Domaj7, Sol y Re. Cuanto más calor, más grave.', persona: 'Cálido y nostálgico. Antes festejaba el sol; ahora canta lo que el calor se lleva.', quote: '¿Cuánto calor puede aguantar el mar?', brief: 'sol pixelado con rayos escalonados y cara expresiva, paleta amarillo-naranja-rojo; brilla más con la intensidad.' },
   { k: 'mama', name: 'MAMACOCHA', color: '#38C6E8', disc: 'Invierno 2024', glyph: '♩', ins: 'BAJO + COLCHÓN', clip: 'tocar_pad', clips: 'idle · tocar_pad · acorde · apagarse · aparecer / salir', origin: 'Madre del mar en la cosmovisión andina', listens: 'El promedio de los píxeles fríos (verde → azul) del fotograma.', plays: 'Un bajo profundo y calmado. En La Niña domina; en El Niño casi desaparece.', persona: 'Tranquila y protectora. Cuando ella calla, algo anda mal.', quote: 'Mientras yo cante, el mar está en calma.', brief: 'figura femenina hecha de olas en azul y turquesa, cabello de espuma; se encoge cuando el agua se calienta.' },
   { k: 'yaku', name: 'YAKU', color: '#7BE38A', disc: 'Verano 2025–26', glyph: '▾', ins: 'GOTERO', clip: 'saltar', clips: 'idle · saltar · gota · salpicadura · aparecer / salir', origin: 'El agua, en quechua', listens: 'Cuántas celdas de cada columna tienen anomalía fuerte (±2 o más) y en qué latitud.', plays: 'Gotas en escala pentatónica andina: más al norte, más agudas. Si el mar está muy cálido, pasa a tono menor.', persona: 'Inquieto y travieso. Nunca se queda quieto.', quote: '¡Plic, plic! Te digo dónde está pasando algo.', brief: 'gotita de agua con patas, ojos grandes y brillo pixelado; salta al ritmo.' },
-  { k: 'illapa', name: 'ILLAPA', color: '#E0459B', disc: 'Invierno 2026', glyph: '✦', ins: 'TIMBAL', clip: 'latido', clips: 'idle · latido · trueno · aparecer / salir', origin: 'Rayo y trueno en la cosmovisión andina', listens: 'Los píxeles de anomalía extrema (rojo oscuro y magenta) de cada columna.', plays: 'Truenos graves. Solo aparece cuando una columna supera un 25 % de valores extremos.', persona: 'Aparece poco, pero cuando llega todos callan.', quote: 'No me llames. Si vengo, es en serio.', brief: 'guerrero de tormenta con honda y rayo zigzag magenta; nube oscura detrás; frame de destello.' }
+  { k: 'illapa', name: 'ILLAPA', color: '#E0459B', disc: 'Invierno 2026', glyph: '✦', ins: 'TIMBAL', clip: 'latido', clips: 'idle · latido · trueno · aparecer / salir', origin: 'Rayo y trueno en la cosmovisión andina', listens: 'Los píxeles de anomalía extrema (rojo oscuro y magenta) de cada columna.', plays: 'Truenos graves. Lanza un trueno si al menos una de cada cuatro celdas válidas tiene calor extremo. En Melodía también marca el ritmo con timbal.', persona: 'Aparece poco, pero cuando llega todos callan.', quote: 'No me llames. Si vengo, es en serio.', brief: 'guerrero de tormenta con honda y rayo zigzag magenta; nube oscura detrás; frame de destello.' }
 ];
 var TECH = [
   { cat: 'Interfaz y código', name: 'SVG + Web Animations API', use: 'Introducción saltable, fondo espacial y bailes 2D. Los cuatro dibujos de cada músico se cargan al abrir su ficha.' },
@@ -2809,6 +2817,26 @@ var STEPS = [
  {title:'A tu manera',body:'Usa texto, teclado o la guía. Ajusta el tamaño, el contraste y el movimiento.'}
 ];
 var RAMP = [[-5,'#1B2A80'],[-4,'#2F4FD0'],[-3,'#38C6E8'],[-2,'#3FE0B5'],[-1,'#7BE38A'],[-0.5,'#B8F0A0'],[0,'#7E849E'],[0.5,'#F2E6A0'],[1,'#FFD447'],[2,'#FFA62B'],[3,'#FF6A2B'],[4,'#E8283A'],[4.5,'#C21F7A'],[5,'#7A0F1E']];
+var LEGEND_INTENSITY = {
+  0.5: ['apenas perceptible', 'barely noticeable'], 1: ['leve', 'slight'], 2: ['moderada', 'moderate'],
+  3: ['marcada', 'pronounced'], 4: ['muy marcada', 'very pronounced'], 4.5: ['casi extrema', 'near-extreme'], 5: ['extrema', 'extreme']
+};
+var LEGEND_LEVELS = {
+  [-5]: [uiMessage('Frío extremo', 'Extreme cooling'), uiMessage('El mar está en el extremo frío de la escala de EarthBeat.', 'The sea is at the coldest end of the EarthBeat scale.')],
+  [-4]: [uiMessage('Frío muy intenso', 'Very strong cooling'), uiMessage('El agua está mucho más fría que lo habitual en esa zona.', 'The water is much cooler than usual for that area.')],
+  [-3]: [uiMessage('Frío marcado', 'Pronounced cooling'), uiMessage('El descenso respecto a la temperatura habitual es marcado.', 'The drop below the usual temperature is pronounced.')],
+  [-2]: [uiMessage('Frío moderado', 'Moderate cooling'), uiMessage('El agua está claramente más fría de lo habitual, con una diferencia moderada.', 'The water is clearly cooler than usual, with a moderate difference.')],
+  [-1]: [uiMessage('Frío leve', 'Slight cooling'), uiMessage('El agua está un poco más fría de lo habitual.', 'The water is a little cooler than usual.')],
+  [-0.5]: [uiMessage('Apenas más frío', 'Barely cooler'), uiMessage('El agua está justo por debajo de su temperatura habitual.', 'The water is just below its usual temperature.')],
+  0: [uiMessage('Cerca de lo habitual', 'Close to usual'), uiMessage('La temperatura está cerca de la referencia para esa zona.', 'The temperature is close to the reference for that area.')],
+  0.5: [uiMessage('Apenas más cálido', 'Barely warmer'), uiMessage('El agua está justo por encima de su temperatura habitual.', 'The water is just above its usual temperature.')],
+  1: [uiMessage('Calor leve', 'Slight warming'), uiMessage('El agua está un poco más cálida de lo habitual.', 'The water is a little warmer than usual.')],
+  2: [uiMessage('Calor moderado', 'Moderate warming'), uiMessage('El agua está claramente más cálida de lo habitual.', 'The water is clearly warmer than usual.')],
+  3: [uiMessage('Calor marcado', 'Pronounced warming'), uiMessage('El aumento sobre la temperatura habitual es marcado.', 'The rise above the usual temperature is pronounced.')],
+  4: [uiMessage('Calor muy intenso', 'Very strong warming'), uiMessage('El agua está mucho más cálida que lo habitual en esa zona.', 'The water is much warmer than usual for that area.')],
+  4.5: [uiMessage('Cerca del extremo cálido', 'Near the warm extreme'), uiMessage('El agua se acerca a los niveles de mayor calor de la escala.', 'The water is near the highest warmth levels on the scale.')],
+  5: [uiMessage('Calor extremo', 'Extreme warming'), uiMessage('El mar está en el extremo cálido de la escala de EarthBeat.', 'The sea is at the warmest end of the EarthBeat scale.')]
+};
 var CHORDS = { Am: [[220,261.63,329.63],110], C: [[261.63,329.63,392],130.81], F: [[174.61,220,261.63],87.31], G: [[196,246.94,293.66],98], E: [[164.81,207.65,246.94],82.41] };
 var PENTA = [0,3,5,7,10];
 var ICONS = {
@@ -2880,7 +2908,7 @@ var BAND_EN = {
   inti: { ins: 'MARIMBA', origin: 'The sun, in Quechua', listens: 'The average of the warm pixels (yellow → red) in each group of 4 columns.', plays: 'Slow marimba chords in E minor: Em7, Cmaj7, G and D. The hotter it gets, the lower it sounds.', persona: 'Warm and nostalgic. He used to celebrate the sun; now he sings about what the heat takes away.', quote: 'How much heat can the sea take?' },
   mama: { ins: 'BASS + PAD', origin: 'Mother of the sea in Andean cosmology', listens: 'The average of the cold pixels (green → blue) in the frame.', plays: 'A deep, calm bass. She dominates during La Niña and almost vanishes during El Niño.', persona: 'Calm and protective. When she goes quiet, something is wrong.', quote: 'As long as I sing, the sea is calm.' },
   yaku: { ins: 'DROPPER', origin: 'Water, in Quechua', listens: 'How many cells in each column have a strong anomaly (±2 or more), and at what latitude.', plays: 'Drops on an Andean pentatonic scale: the further north, the higher. If the sea is very warm, it switches to a minor key.', persona: 'Restless and playful. Never sits still.', quote: 'Plink, plink! I’ll tell you where something is happening.' },
-  illapa: { ins: 'TIMPANI', origin: 'Lightning and thunder in Andean cosmology', listens: 'The extreme anomaly pixels (dark red and magenta) in each column.', plays: 'Deep thunder. It only appears when a column has more than 25% extreme values.', persona: 'Rarely shows up, but when he does, everyone goes quiet.', quote: 'Don’t call me. If I come, it’s serious.' }
+  illapa: { ins: 'TIMPANI', origin: 'Lightning and thunder in Andean cosmology', listens: 'The extreme anomaly pixels (dark red and magenta) in each column.', plays: 'Deep thunder. He thunders when at least one in four valid cells in the column has extreme warmth. In Melody he also marks the rhythm on timpani.', persona: 'Rarely shows up, but when he does, everyone goes quiet.', quote: 'Don’t call me. If I come, it’s serious.' }
 };
 var INS_EN = { silbo: 'QUENA', inti: 'MARIMBA', mama: 'HARP', yaku: 'DROPPER', illapa: 'TIMPANI' };
 var MUSIC_EN = {
@@ -3345,6 +3373,7 @@ class Component extends DCLogic {
     this.state.tutorialSkipped = {};
     this.state.tutorialFeedback = null;
     this.state.legendSelection = null;
+    this.state.stageNotes = {};
     this.advanceHomeMap();
     this.state.speaking = false;
     this.bandTimer = null; this.bandTurn = 0; this.bandRaf = null; this.bandRaf2 = null; this.bandPrevious = null;
@@ -4150,7 +4179,7 @@ class Component extends DCLogic {
   setVolume(value) {
     if (!Number.isFinite(value)) return;
     var volume = Math.max(0, Math.min(100, value));
-    this.setState({ volume: volume });
+    this.setState(volume === 0 ? { volume: volume, stageNotes: {} } : { volume: volume });
     this.syncVolume();
   }
   syncVolume() {
@@ -4204,25 +4233,35 @@ class Component extends DCLogic {
   recordEvent(fired, chord) {
     this.setState({ events: this.state.events.concat([this.eventFor(fired, chord)]).slice(-200) });
   }
+  legendVm(rain, localImage) {
+    var self = this, selection = this.state.legendSelection;
+    var key = [LANG, !!rain, localImage, selection].join(':');
+    if (this.legendCache?.key === key) return this.legendCache.items;
+    var items = RAMP.slice().reverse().map(function (level) {
+      var value = level[0], number = (value > 0 ? '+' : value < 0 ? '−' : '') + Math.abs(value).toLocaleString(LANG);
+      var tone = LEGEND_LEVELS[value], intensity = LEGEND_INTENSITY[Math.abs(value)];
+      var meaning = tone[0], description = tone[1];
+      if (rain) {
+        meaning = value < 0 ? T('Menos lluvia', 'Less rainfall') : value > 0 ? T('Más lluvia', 'More rainfall') : T('Lluvia media', 'Average rainfall');
+        description = value === 0 ? T('La lluvia está cerca del promedio de la serie.', 'Rainfall is close to the series average.')
+          : uiText(uiMessage('La lluvia está por {direction} del promedio de la serie. La diferencia es {intensity}.', 'Rainfall is {direction} the series average. The difference is {intensity}.', { direction: value < 0 ? T('debajo', 'below') : T('encima', 'above'), intensity: intensity[LANG === 'en' ? 1 : 0] }));
+      } else if (localImage) {
+        meaning = value < 0 ? T('Color frío', 'Cool color') : value > 0 ? T('Color cálido', 'Warm color') : T('Color neutro', 'Neutral color');
+        description = value === 0 ? T('Los colores de esta zona se acercan al centro de la escala.', 'Colors in this area are close to the middle of the scale.')
+          : uiText(uiMessage('El tono {kind} tiene una intensidad {intensity} en la escala de tu imagen.', 'The {kind} tone has {intensity} intensity on your image’s scale.', { kind: value < 0 ? T('frío', 'cool') : T('cálido', 'warm'), intensity: intensity[LANG === 'en' ? 1 : 0] }));
+      }
+      return { number: number, color: level[1], label: number + ' · ' + uiText(meaning), description: uiText(description), on: selection === value,
+        choose: function () { self.setState({ legendSelection: value }); self.tutorialAction('legend', value < 0); } };
+    });
+    this.legendCache = { key: key, items: items };
+    return items;
+  }
   playerVm() {
     var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
     var elapsed = this.formatClock(this.playerSeconds(position)), duration = this.formatClock(this.playerSeconds(steps));
     var rain = s.disc === 5 && s.custom && s.custom.kind === 'rain';
-    var localImage = s.disc === 5 && !rain;
-    var legend = RAMP.slice().reverse().map(function (level) {
-      var value = level[0], number = (value > 0 ? '+' : value < 0 ? '−' : '') + Math.abs(value).toLocaleString(LANG);
-      var meaning = rain
-        ? (value < 0 ? T('Menos lluvia de lo habitual en la serie', 'Less rainfall than the series average') : value > 0 ? T('Más lluvia de lo habitual en la serie', 'More rainfall than the series average') : T('Lluvia media de la serie', 'Average rainfall in the series'))
-        : value < 0 ? T('Más frío', 'Cooler') : value > 0 ? T('Más cálido', 'Warmer') : T('Neutro', 'Neutral');
-      return { number: number, color: level[1], label: number + ' · ' + meaning, on: s.legendSelection === value,
-        choose: function () { self.setState({ legendSelection: value }); self.tutorialAction('legend', value < 0); } };
-    });
+    var legend = this.legendVm(rain, s.disc === 5 && !rain);
     var selected = legend.find(function (level) { return level.on; });
-    var legendHelp = rain
-      ? T('Rojo: más lluvia que el promedio de la serie. Gris: promedio. Azul y verde: menos lluvia.', 'Red: above-average rainfall for this series. Gray: average. Blue and green: below average.')
-      : localImage
-      ? T('Rojo: colores más cálidos. Gris: nivel neutro. Azul y verde: colores más fríos. La escala clasifica los colores de tu imagen.', 'Red: warmer colors. Gray: neutral. Blue and green: cooler colors. The scale describes the colors in your image.')
-      : T('Rojo y naranja: más cálido de lo habitual. Gris: habitual. Azul y verde: más frío. La escala usa niveles, no grados.', 'Red and orange: warmer than usual. Gray: usual. Blue and green: cooler. The scale shows levels, not degrees.');
     return {
       controlsLabel: T('Controles de reproducción', 'Playback controls'), positionLabel: T('Tiempo del disco', 'Disc playback time'),
       position: position, steps: steps, elapsed: elapsed, duration: duration, of: T(' de ', ' of '),
@@ -4231,7 +4270,7 @@ class Component extends DCLogic {
       volumeLabel: T('Volumen', 'Volume'), volume: s.volume,
       changeVolume: function (e) { self.setVolume(Number(e.target.value)); },
       legendTitle: rain ? T('Lluvia mensual', 'Monthly rainfall') : T('Escala de color', 'Color scale'),
-      legend: legend, legendHelp: legendHelp, legendReading: selected ? selected.label : '',
+      legend: legend, legendReading: selected?.label || '', legendDescription: selected?.description || '', legendColor: selected?.color || 'transparent',
       speechNotice: uiText(s.speechNotice),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () {
@@ -4599,8 +4638,15 @@ class Component extends DCLogic {
   }
   setBandMute(mute) {
     var self = this, levels = Object.assign({}, this.state.levels), hits = Object.assign({}, this.state.hits);
-    BAND.forEach(function (b) { if (mute[b.k]) { self.retireVoice(b.k); levels[b.k] = 0; hits[b.k] = 0; } });
-    this.setState({ mute: mute, mixCustomized: true, levels: levels, hits: hits });
+    var stageNotes = Object.assign({}, this.state.stageNotes);
+    BAND.forEach(function (member) {
+      var key = member.k;
+      if (!mute[key]) return;
+      self.retireVoice(key);
+      levels[key] = 0; hits[key] = 0;
+      delete stageNotes[key];
+    });
+    this.setState({ mute: mute, mixCustomized: true, levels: levels, hits: hits, stageNotes: stageNotes });
   }
   async previewInstrument(key) {
     if (!MUSIC[key] || this.disposed) return;
@@ -4701,7 +4747,7 @@ class Component extends DCLogic {
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
     var feel = info.k === 0 ? T('sin valores utilizables en esta columna', 'no usable values in this column') : info.w > 2 ? T('nivel positivo alto', 'high positive level') : info.w > 0.8 ? T('predominio de niveles positivos', 'positive levels dominate') : info.c > 0.8 ? T('predominio de niveles negativos', 'negative levels dominate') : T('nivel cercano a la referencia', 'level near the reference');
     var has = function (p) { return notes.some(function (n) { return n.indexOf(p) === 0; }); };
-    var fired = { inti: has('Inti'), mama: has('Mamacocha'), illapa: has(T('¡Illapa', 'Illapa thunders')), silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 };
+    var fired = { inti: has('Inti'), mama: has('Mamacocha'), illapa: lv.illapa > 0 ? 'thunder' : false, silbo: has('Silbo'), yaku: !m.yaku && info.strong.length > 0 };
     var bp = this.bump(fired, fired.illapa, s);
     this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, caption: '[' + tag + ' · ' + pos + '] ' + feel + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, '', scheduled, vibration);
   }
@@ -4726,10 +4772,19 @@ class Component extends DCLogic {
     this.heardThunder = this.lastThunder;
     this.timer = setInterval(function () { if (!self.disposed && run === self.audioRun && self.state.playing) self.scheduleAudio(); }, 25);
   }
+  updateStageNote(notes, key, kind, chord) {
+    notes[key] = {
+      next: notes[key]?.next === 'a' ? 'b' : 'a',
+      kind: kind === true ? 'note' : kind,
+      chord: chord
+    };
+  }
   emitStep(patch, fired, chord, scheduled, vibration) {
     if (!scheduled) {
       if (vibration) this.vibrateSafely(vibration, 'music:' + this.audioRun + ':' + this.state.disc + ':' + this.state.frame + ':' + patch.col);
       patch.events = this.state.events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      patch.stageNotes = Object.assign({}, this.state.stageNotes);
+      Object.keys(fired).forEach(key => { if (fired[key]) this.updateStageNote(patch.stageNotes, key, fired[key], chord); });
       this.setState(patch); return;
     }
     scheduled.patch = patch;
@@ -4741,8 +4796,10 @@ class Component extends DCLogic {
   }
   flushPlayback(now) {
     var self = this, latest = null, hapticStep = null;
+    if (!this.playbackQueue?.length || this.playbackQueue[0].at > now + .002) return;
     var events = this.state.events, previousFrame = this.state.frame, announcement;
-    while (this.playbackQueue && this.playbackQueue.length && this.playbackQueue[0].at <= now + .002) {
+    var stageNotes = Object.assign({}, this.state.stageNotes), stageHits = {};
+    while (this.playbackQueue.length && this.playbackQueue[0].at <= now + .002) {
       var event = this.playbackQueue.shift(), frameChanged = previousFrame !== event.frame;
       previousFrame = event.frame;
       var patch = Object.assign({ frame: event.frame }, event.patch), fired = Object.assign({}, event.fired);
@@ -4758,12 +4815,17 @@ class Component extends DCLogic {
       if (frameChanged) announcement = T('Mapa de ', 'Map for ') + this.frameTag(this.state.disc, event.frame) + '.';
       this.heardThunder = event.thunder;
       events = events.concat([this.eventFor(fired, chord, patch)]).slice(-200);
+      Object.keys(fired).forEach(function (key) { if (fired[key]) stageHits[key] = { kind: fired[key], chord: chord }; });
       latest = patch;
       if (event.vibration && (!event.fired.illapa || fired.illapa)) hapticStep = event;
     }
     if (latest) {
       if (announcement) latest.playerAnnouncement = announcement;
-      this.setState(Object.assign(latest, { events: events }));
+      if (!this.state.masterMuted && this.state.volume > 0) Object.keys(stageHits).forEach(function (key) {
+        var hit = stageHits[key];
+        self.updateStageNote(stageNotes, key, hit.kind, hit.chord);
+      });
+      this.setState(Object.assign(latest, { events: events, stageNotes: stageNotes }));
     }
     if (hapticStep) this.vibrateSafely(hapticStep.vibration, 'music:' + this.audioRun + ':' + this.state.disc + ':' + hapticStep.frame + ':' + hapticStep.patch.col);
   }
@@ -4856,21 +4918,23 @@ class Component extends DCLogic {
     var prof = this.profile(a, s.frame), cIdx = col >= 24 ? 0 : Math.floor(col / 4) % prof.prog.length;
     var ch = chordOf(prof, prof.prog[cIdx]), info = this.colInfo(a, col), onBeat = col % 4 === 0, pan = (col / 27) * 1.2 - 0.6;
     var lv = { silbo: s.levels.silbo * 0.8, inti: s.levels.inti * 0.8, mama: s.levels.mama * 0.85, yaku: s.levels.yaku * 0.7, illapa: s.levels.illapa * 0.85 }, notes = [];
-    var lv0 = Object.assign({}, lv);
+    var fired = {};
     if (!m.mama && onBeat) {
       this.note('sine', ch.root - 12, t, sp * 3.8, 0.2 + 0.12 * Math.min(1, info.c / 2), { att: 0.03, rel: 0.25, cut: 500 });
       ch.notes.forEach(function (n, q) { self.note('triangle', n, t, sp * 4, 0.03, { att: 0.35, rel: 0.7, cut: 800 + 400 * Math.min(1, info.w), detune: q % 2 ? 7 : -7, pan: q % 2 ? 0.3 : -0.3 }); });
+      fired.mama = true;
       lv.mama = 0.45 + 0.55 * Math.min(1, info.c / 2); notes.push('Mamacocha: ' + ch.label);
     }
     if (!m.inti && info.k > 0 && (info.w > 0.15 || onBeat)) {
       var base = ch.notes[[0, 1, 2, 1][col % 4] % ch.notes.length] + 12 + (info.w > 2 ? 12 : 0);
       this.marimba(base, t, 0.06 + 0.1 * Math.min(1, info.w / 3), pan); lv.inti = Math.min(1, 0.3 + info.w / 3);
+      fired.inti = true;
       if (onBeat) notes.push('Inti: ' + ch.label);
     }
     if (!m.silbo) {
       if (s.disc !== 5 && a.coast >= 2 && col >= 22 && col <= 25) {
         var md0 = scaleMidi(prof.scale, prof.root + 12, [4, 3, 1, 0][col - 22]);
-        this.flute(md0, t, sp * 1.7, 0.13, pan); lv.silbo = 1; if (col === 22) notes.push(T('Silbo canta su motivo', 'Silbo sings his motif'));
+        this.flute(md0, t, sp * 1.7, 0.13, pan); fired.silbo = true; lv.silbo = 1; if (col === 22) notes.push(T('Silbo canta su motivo', 'Silbo sings his motif'));
       } else {
         var best = null;
         for (var r = 0; r < 16; r++) { var v = a.cells[r * 28 + col]; if (v !== null && Math.abs(v) >= 1 && (!best || Math.abs(v) > Math.abs(best.v))) best = { r: r, v: v }; }
@@ -4881,6 +4945,7 @@ class Component extends DCLogic {
           var nxt = col < 27 ? this.colInfo(a, col + 1) : null;
           var duration = sp * (nxt && nxt.strong.length > 0 ? 1.9 : 1.0);
           this.flute(md, t, duration, 0.05 + 0.1 * Math.min(1, Math.abs(best.v) / 4), pan);
+          fired.silbo = true;
           lv.silbo = Math.min(1, Math.abs(best.v) / 4 + 0.2); if (onBeat) notes.push('Silbo: ' + NOTE_ES[md % 12]);
         }
       }
@@ -4891,18 +4956,22 @@ class Component extends DCLogic {
         var onset = t + q * sp * 0.5;
         self.droplet(scaleMidi(pent, prof.root + 24, Math.round((15 - p[0]) / 15 * 7)), onset, 0.09, pan);
       });
+      fired.yaku = true;
       lv.yaku = Math.min(1, 0.3 + info.strong.length / 10);
     }
     if (!m.illapa) {
       if (info.ext >= 0.25 && col - this.lastThunder >= 2) {
         this.timpani(ch.root - 12, t, Math.min(0.5, 0.25 + info.ext)); this.noiseBurst(t, 0.25, 1.0, 700);
+        fired.illapa = 'thunder';
         this.lastThunder = col; lv.illapa = Math.min(1, info.ext * 1.5 + 0.3); notes.push(T('¡Illapa truena!', 'Illapa thunders!'));
-      } else if (col % 8 === 0) { this.timpani(ch.root - 12, t, 0.18); lv.illapa = Math.max(lv.illapa, 0.3); }
+      } else if (col % 8 === 0) {
+        this.timpani(ch.root - 12, t, 0.18); lv.illapa = Math.max(lv.illapa, 0.3);
+        fired.illapa = 'rhythm';
+      }
     }
     var vibration = s.vibe && !m.illapa && this.lastThunder === col && lv.illapa > 0.5 ? 'event' : 0;
     var lon = Math.round(140 - (col + 0.5) * 2.5), tag = this.frameTag(s.disc, s.frame), pos = s.disc === 5 ? T('columna ', 'column ') + (col + 1) + '/28' : lon + T('°O', '°W');
-    var fired = {}; BAND.forEach(function (b) { fired[b.k] = lv[b.k] !== lv0[b.k]; });
-    var bp = this.bump(fired, notes.some(function (n) { return n.indexOf(T('truena', 'thunders')) >= 0; }), s);
+    var bp = this.bump(fired, fired.illapa === 'thunder', s);
     this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] ' + T('acorde ', 'chord ') + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, ch.label, scheduled, vibration);
   }
   describeText() {
@@ -5075,7 +5144,7 @@ class Component extends DCLogic {
     this.retireAudioGraph();
     this.vibrateSafely(0);
     if (this.state.playing || this.state.audioPending || this.state.previewKey || this.state.chord || this.state.flash || Object.values(this.state.levels).some(Boolean) || Object.values(this.state.hits).some(Boolean)) {
-      this.setState({ playing: false, audioPending: false, previewKey: '', chord: '', flash: 0, playerAnnouncement: T('En pausa.', 'Paused.'),
+      this.setState({ playing: false, audioPending: false, previewKey: '', chord: '', flash: 0, stageNotes: {}, playerAnnouncement: T('En pausa.', 'Paused.'),
         levels: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 }, hits: { silbo: 0, inti: 0, mama: 0, yaku: 0, illapa: 0 } });
     }
   }
@@ -5214,8 +5283,8 @@ class Component extends DCLogic {
       { tag: T('USO', 'USE'), title: T('Explorar patrones', 'Explore patterns'), body: T('Permite contrastar patrones dentro de una misma fuente. Los niveles no son magnitudes físicas comparables entre productos.', 'Explore patterns within the same source. Levels are not physical quantities comparable across products.') }
     ];
     var engines = [
-      { key: 'melody', short: T('Melodía', 'Melody'), description: T('Combina las notas del mapa con acordes y un ritmo.', 'Combines notes from the map with chords and a rhythm.') },
-      { key: 'raw', short: T('Datos', 'Data'), description: T('Convierte los niveles de color en tonos directos, sin acordes.', 'Turns color levels directly into tones, without chords.') }
+      { key: 'melody', short: T('Melodía', 'Melody'), description: T('Combina las notas del mapa con acordes y un ritmo. Illapa marca el pulso con timbal.', 'Combines notes from the map with chords and a rhythm. Illapa keeps the beat on timpani.') },
+      { key: 'raw', short: T('Datos', 'Data'), description: T('Convierte los niveles de color en tonos directos, sin acordes. Illapa solo entra con un trueno por calor extremo.', 'Turns color levels directly into tones, without chords. Illapa only plays a thunder hit triggered by extreme warmth.') }
     ].map(function (e) {
       return { short: e.short, description: e.description, descriptionId: 'mode-description-' + e.key, on: e.key === s.engine,
         pick: function () { self.setEngine(e.key); } };
@@ -5398,9 +5467,10 @@ class Component extends DCLogic {
       band: band,
       stageMusicians: band.map(function (member) {
         var level = member.on ? s.levels[member.key] || 0 : 0;
-        var hits = member.on && s.playing ? (s.hits[member.key] || 0) : 0;
-        return { pulseClass: hits ? (hits % 2 ? 'pulse-a' : 'pulse-b') : '', name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
-          intensity: level, playingClass: s.playing && level > .04 ? 'playing' : '' };
+        var note = member.on && s.playing && !s.masterMuted && s.volume > 0 ? s.stageNotes[member.key] : null;
+        var noteLabel = note?.kind === 'thunder' ? T('Trueno', 'Thunder') : note?.kind === 'rhythm' ? T('Ritmo', 'Beat') : '';
+        return { noteClass: note ? 'note-' + note.next : '', noteKind: note?.kind || '', noteChord: note?.chord || '', noteLabel: noteLabel,
+          name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color, intensity: level };
       }),
       stageShowBeat: melody,
       stageChord: melody ? T('Acorde', 'Chord') + ' ' + (s.chord || '—') : T('Datos', 'Data'),

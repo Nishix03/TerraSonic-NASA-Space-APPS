@@ -144,10 +144,14 @@ async function main() {
       assert.equal(await page.locator('#tour-frame #playback-position').count(), 1);
       const speed = page.getByRole('combobox', { name: 'Velocidad', exact: true });
       assert.equal(await speed.inputValue(), '110');
-      assert((await speed.boundingBox()).width <= 70);
+      assert((await speed.boundingBox()).width <= 58);
+      const speedText = await page.locator('.transport-speed span').boundingBox();
+      assert(speedText.y + speedText.height <= (await speed.boundingBox()).y);
       const mode = page.getByRole('button', { name: 'Melodía', exact: true });
       assert.match(await mode.getAttribute('title'), /acordes y un ritmo/);
       const modeHelp = page.locator('.mode-help summary');
+      assert((await modeHelp.locator('span').boundingBox()).width <= 20);
+      assert.equal(await modeHelp.evaluate(el => getComputedStyle(el).borderTopWidth), '0px');
       await modeHelp.press('Enter');
       assert.match(await page.locator('.mode-help dl').textContent(), /tonos directos/);
       const helpBox = await page.locator('.mode-help dl').boundingBox();
@@ -163,10 +167,16 @@ async function main() {
       }
       const legend = page.locator('.legend-choice');
       assert.equal(await legend.count(), 14);
+      assert.equal(await page.locator('.legend-help').count(), 0);
+      const explanation = page.locator('.legend-detail');
+      assert.equal((await explanation.textContent()).trim(), '');
       await legend.first().click();
-      assert.match(await page.locator('.legend-reading').first().textContent(), /Más cálido/);
+      assert.match(await explanation.textContent(), /Calor extremo/);
+      const high = await explanation.locator('p').textContent();
+      await legend.nth(1).click();
+      assert.notEqual(await explanation.locator('p').textContent(), high);
       await legend.last().click();
-      assert.match(await page.locator('.legend-reading').first().textContent(), /Más frío/);
+      assert.match(await explanation.textContent(), /Frío extremo/);
       assert.doesNotMatch(await page.locator('.player-detail .readout').textContent(), /\d/);
       const frameButtons = page.locator('#tour-frame .timeline button');
       await frameButtons.nth(2).click();
@@ -178,11 +188,23 @@ async function main() {
       assert.equal(await page.locator('#playback-position').inputValue(), '0');
       await page.getByRole('button', { name: 'Reproducir', exact: true }).click();
       await page.locator('.band-stage').scrollIntoViewIfNeeded();
+      const illapa = page.locator('.stage-musician').last().locator('.stage-note[data-note="rhythm"]');
+      await illapa.waitFor({timeout:10000});
+      assert(await illapa.locator('b').textContent(), 'Rhythm cue shows its chord');
+      assert.equal(await illapa.locator('small').textContent(), 'Ritmo');
       await page.locator('.stage-musician earthbeat-dance[data-dancing]').first().waitFor({timeout:10000});
-      assert(await page.locator('.stage-indicator:is(.pulse-a,.pulse-b)').count() > 0, 'A playing instrument pulses');
+      for (const lane of await stage.all()) {
+        const style = await lane.evaluate(el => {
+          const lane = el.getBoundingClientRect(), track = el.querySelector('.stage-note-track').getBoundingClientRect();
+          return { bg: getComputedStyle(el).backgroundColor, offset: Math.abs((track.x + track.width / 2) - (lane.x + lane.width / 2)) };
+        });
+        assert.equal(style.bg, 'rgba(0, 0, 0, 0)');
+        assert(style.offset < 2, 'Each falling note is centered above its musician');
+      }
+      await page.screenshot({ path: path.join(output, `stage-${viewport.width}.png`) });
       await page.getByRole('button', { name: 'Pausar', exact: true }).click();
       assert.equal(await page.locator('.stage-musician earthbeat-dance[data-dancing]').count(), 0);
-      assert.equal(await page.locator('.stage-indicator:is(.pulse-a,.pulse-b)').count(), 0);
+      assert.equal(await page.locator('.stage-note:is(.note-a,.note-b)').count(), 0);
       await page.screenshot({ path: path.join(output, `player-${viewport.width}.png`) });
       await page.locator('#tour-a11y summary').scrollIntoViewIfNeeded();
       const header = await page.locator('header.top').boundingBox();

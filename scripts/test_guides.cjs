@@ -39,13 +39,19 @@ test('the interactive grid legend uses each color of the exact palette in both l
   c.state.tab='juke';c.state.sub=1;
   const legend=c.playerVm().legend;
   assert.deepEqual(Array.from(legend,level=>level.color),Array.from(context.RAMP,pair=>pair[1]).reverse());
-  assert.equal(legend[0].label,'+5 · Más cálido');
-  assert.equal(legend.find(level=>level.number==='0').label,'0 · Neutro');
-  assert.equal(legend.at(-1).label,'−5 · Más frío');
+  assert.equal(legend[0].label,'+5 · Calor extremo');
+  assert.equal(legend.find(level=>level.number==='0').label,'0 · Cerca de lo habitual');
+  assert.equal(legend.at(-1).label,'−5 · Frío extremo');
+  assert.equal(c.playerVm().legendReading,'');
+  assert.equal(new Set(legend.map(level=>level.description)).size,14);
+  for(const [rain, image] of [[true,false],[false,true]]) {
+    const alternate=c.legendVm(rain,image);
+    assert.equal(new Set(alternate.map(level=>level.description)).size,14);
+  }
   legend.at(-1).choose();
-  assert.equal(c.playerVm().legendReading,'−5 · Más frío');
+  assert.equal(c.playerVm().legendReading,'−5 · Frío extremo');
   c.setLang('en');
-  assert.equal(c.playerVm().legendReading,'−5 · Cooler');
+  assert.equal(c.playerVm().legendReading,'−5 · Extreme cooling');
   assert.equal(c.state.sub,1);
 });
 
@@ -1580,9 +1586,9 @@ test('audio clock schedules ahead while position, history and vibration follow t
   const {component:c,context,scheduled}=clockHarness(),pulses=[];context.navigator.vibrate=pattern=>{pulses.push(pattern);return true;};
   c.state.vibe=true;context.window.matchMedia=()=>({matches:false});context.navigator.userActivation.hasBeenActive=true;await c.play();c.scheduleAudio();
   assert(scheduled.length>=1);assert(scheduled.every(event=>event.at>c.ac.currentTime));
-  assert.equal(c.state.col,-1);assert.equal(c.state.events.length,0);assert.deepEqual(pulses,[]);
+  assert.equal(c.state.col,-1);assert.equal(c.state.events.length,0);assert.deepEqual(pulses,[]);assert.equal(Object.keys(c.state.stageNotes).length,0);
   c.ac.currentTime=scheduled[0].at;c.scheduleAudio();assert.equal(c.state.col,0);assert.equal(c.state.events.length,1);assert.equal(pulses.at(-1),25);
-  const event=c.state.events[0];assert.equal(event.column,1);assert.equal(event.frame,0);
+  const event=c.state.events[0];assert.equal(event.column,1);assert.equal(event.frame,0);assert.equal(c.state.stageNotes.silbo.kind,'note');
 });
 
 test('a delayed UI callback retains exact planned spacing within the lookahead', async()=>{
@@ -1604,7 +1610,7 @@ test('pause and seeking cancel the future visual queue without moving past the l
 test('queued animation levels and event names respect a musician muted before its note', async()=>{
   const {component:c,scheduled}=clockHarness();await c.play();c.scheduleAudio();
   c.setBandMute(c.allMute(true));c.ac.currentTime=scheduled[0].at;c.flushPlayback(c.ac.currentTime);
-  assert.equal(c.state.levels.silbo,0);assert.equal(c.state.hits.silbo,0);assert.equal(c.state.events[0].musicians.length,0);
+  assert.equal(c.state.levels.silbo,0);assert.equal(c.state.hits.silbo,0);assert.equal(c.state.events[0].musicians.length,0);assert.equal(c.state.stageNotes.silbo,undefined);
   c.setBandMute(c.only('silbo'));c.ac.currentTime=1;c.flushPlayback(1);
   assert.equal(c.state.hits.silbo,0,'reenabling does not animate notes cancelled by an earlier mute');
 });
@@ -1616,7 +1622,39 @@ test('queued chords and event captions use the language selected at their actual
   await c.play();c.scheduleAudio();assert(c.playbackQueue.length>0);const first=c.playbackQueue[0];
   assert.equal(first.chord,'Rem7');c.setLang('en');c.ac.currentTime=first.at;c.flushPlayback(first.at);
   assert.equal(c.state.chord,'Dm7');assert.match(c.state.caption,/chord Dm7/);assert.match(c.state.caption,/column 1\/28/);
-  assert.equal(c.state.events[0].chord,0);
+  assert.equal(c.state.events[0].chord,0);assert.equal(c.state.stageNotes.mama.chord,'Dm7');
+});
+
+test('Illapa cues reflect actual attacks and distinguish rhythm from the extreme-data thunder',()=>{
+  const {component:c,context}=clockHarness();
+  const attacks=[];
+  c.ac={currentTime:0};
+  c.state.playing=true;
+  c.state.mute=c.only('illapa');
+  c.timpani=(...args)=>attacks.push({type:'timpani',midi:args[0]});
+  c.noiseBurst=()=>attacks.push({type:'noise'});
+  const melody=context.ComponentUnderTest.prototype.stepMelody.bind(c);
+  const raw=context.ComponentUnderTest.prototype.step.bind(c);
+  melody(0);
+  assert.equal(c.state.stageNotes.illapa.kind,'rhythm');
+  const cue=c.state.stageNotes.illapa;
+  melody(1);
+  assert.equal(c.state.stageNotes.illapa,cue,'a decaying note is never counted as a new entry');
+  melody(8);
+  assert.equal(c.state.stageNotes.illapa.kind,'rhythm');
+  assert.notEqual(c.state.stageNotes.illapa.next,cue.next);
+  assert.deepEqual(attacks.map(a=>a.type),['timpani','timpani']);
+
+  c.state.engine='raw';
+  c.state.stageNotes={};
+  raw(0);
+  assert.equal(c.state.stageNotes.illapa,undefined);
+  c.state.an['0_0']={...c.state.an['0_0'],cells:Array(448).fill(4.8)};
+  raw(0);
+  assert.equal(c.state.stageNotes.illapa.kind,'thunder');
+  assert.equal(c.state.stageNotes.illapa.chord,'');
+  c.setBandMute(c.allMute(true));
+  assert.equal(c.state.stageNotes.illapa,undefined);
 });
 
 test('the audio cursor crosses a month using that frame’s tempo while the map waits for its actual time',async()=>{
