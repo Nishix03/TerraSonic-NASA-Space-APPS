@@ -1027,6 +1027,38 @@ test('stop fades and retires the old music graph; restarting reuses the context 
   assert(old.disconnected);assert.equal(current.disconnected,false);assert.equal(c.state.playing,true);
 });
 
+test('music requests playback buffering and shares a short mono impulse across independent voice effects', async () => {
+  const { component: c, context, AudioContextStub } = audioHarness();
+  const buffers = [], reverbs = [];
+  let latencyHint;
+  context.window.AudioContext = class extends AudioContextStub {
+    constructor(options) {
+      super();
+      latencyHint = options.latencyHint;
+      this.sampleRate = 48000;
+    }
+    createBuffer(channels, samples, rate) {
+      buffers.push({ channels, samples, rate });
+      return super.createBuffer(channels, samples);
+    }
+    createConvolver() {
+      const node = super.createConvolver();
+      reverbs.push(node);
+      return node;
+    }
+  };
+  c.state.mute = c.allMute(false);
+  await c.play();
+  assert.equal(latencyHint, 'playback');
+  assert.deepEqual(buffers, [
+    { channels: 1, samples: 31200, rate: 48000 },
+    { channels: 1, samples: 48000, rate: 48000 },
+  ]);
+  assert.equal(new Set(reverbs).size, 5);
+  assert(reverbs.every(node => node.buffer === c.reverbImpulse));
+  c.stop();
+});
+
 test('character transition owns its outgoing portrait and removes temporary state after its gesture', () => {
   const {component:c,context,timers}=setup();context.window.matchMedia=()=>({matches:false});c.state.tab='band';
   c.pickBand(1);
