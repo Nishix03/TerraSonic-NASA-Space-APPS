@@ -2,7 +2,19 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · órbitas conservadas y movimiento comprobado · 13 noviembre, 23:40 Bogotá
+## Edición vigente · los astros abren directamente discos de temporada
+
+Aplicación **`e671380ef04bf8bbc3c827723d1d8bb89557fac8`**, commit estático **`68040c03e948cf4e9c86223ab66b9a2711a7d052`**, fast-forward desde `4cb2f17`. Pages confirmó `built`; la lectura anónima verificó procedencia y HTML exacto de **498.528 bytes**, SHA-256 **`104078cf2ec9db13b57cddb27efa70151dbb3da078fa204b02a1843049e41a40`**. Se conservan 112 archivos de aplicación y cuatro metadatos, **16.712.671 bytes** en total. El empaquetador mantiene su huella anterior.
+
+Sol abre Verano 2024–25; Luna, Invierno 2024; Saturno, Verano 2025–26; Aqua, Invierno 2025. El cohete termina en el reproductor del disco, sin pantalla intermedia de escenario/ambientación. Con reducción de movimiento se abre inmediatamente. La selección comparte la función de las tarjetas de biblioteca y enfoca el título del reproductor, con primer mapa y controles listos para reproducir. [Correspondencias y comprobaciones](FONDO_INTERACTIVO.md).
+
+Pasan 143 pruebas de lógica, los cuatro accesos en nueve ventanas Chromium y dos por Firefox/WebKit, y 24 recorridos Chromium bilingües de mapa correcto, foco, cancelación y reproducción/pausa, sin fallos de reglas axe en el reproductor. El build exacto también pasó los dos recorridos HTTP previos a publicar, sin errores JavaScript, respuestas fallidas ni solicitudes externas.
+
+La URL pública exacta pasó dos recorridos de astros (390/1440 píxeles) y ocho recorridos de disco en móvil: los cuatro accesos en español e inglés, mapa EIC correcto, foco, Cancelar/Escape y reproducción/pausa Web Audio nativa. No hubo errores JavaScript, respuestas fallidas ni fallos de reglas axe en el reproductor. Informes locales: `_work/planet-discs/public-portals/` y `_work/planet-discs/public-discs/`. No son pruebas de teléfono físico ni de comprensión humana.
+
+Evidencias: `_work/github-preview/browser-local-e671380/`, `readback-e671380.json`, `http-e671380.json` y `official-after-e671380.json`; los primeros estados `building` permanecen en los archivos terminados en `-building.json`. Las fechas y horas exactas están en sus registros UTC. Main remoto `a8d91564d5393ef6c803acdbf49725094ea54bee`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y HTML oficial SHA-256 `d50ce659ea6660096e6c658841541c835d826fb4ee867f83ae17253732b05a76` permanecieron iguales al registro anterior a esta publicación. Solo se actualizaron `piero-mejoras` y la copia independiente.
+
+## Checkpoint · órbitas conservadas y movimiento comprobado · 13 noviembre, 23:40 Bogotá
 
 Aplicación **`f30dfb69163138177a0af2148c27d5cf0d479b65`**, commit estático **`4cb2f174b87e4a661adde57ce61abf2d3162b6fb`**, fast-forward desde `c33b8e1`. Pages confirmó `built` a las **23:40:05**. La lectura pública de las **23:40:37** comprobó procedencia y HTML exacto: **498.452 bytes**, SHA-256 **`53ca5a079227c840929bd3251120dd7088ad34753d30498ea9730bba9ba2892a`**. La copia contiene los mismos 112 archivos de aplicación y cuatro metadatos, **16.712.595 bytes** en total; el empaquetador conserva la huella anterior.
 
