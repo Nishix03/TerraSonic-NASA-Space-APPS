@@ -16,12 +16,12 @@ async function main(){
    for(const language of ['es','en']){
     await page.evaluate(language=>{__app.setLang(language);window.scrollTo(0,0);document.querySelector('.scr').scrollTop=0;},language);
     const result=await page.evaluate(()=>{
-     const elements=[...document.querySelectorAll('.hero h1,.hero .lede,.hero .cta button,.hero .facts,.home-process')];
+     const elements=[...document.querySelectorAll('.hero h1,.hero .lede,.hero .cta button,.hero .facts,.home-map,.home-process')];
      const brokenNavigation=[...document.querySelectorAll('.nav-short')].filter(el=>el.getClientRects().length).filter(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getClientRects().length>1;}).map(el=>el.textContent);
      return {elements:elements.map(el=>{const r=el.getBoundingClientRect();return {name:el.className||el.tagName,left:r.left,right:r.right,top:r.top,bottom:r.bottom};}),brokenNavigation,documentWidth:document.documentElement.scrollWidth,scroller:{height:document.querySelector('.scr').clientHeight,content:document.querySelector('.scr').scrollHeight}};
     });
     const check={width,height,language,...result};report.checks.push(check);
-    if(result.brokenNavigation.length||result.elements.some(r=>r.left<0||r.right>width+1||r.top<0||r.bottom>height+1)||result.documentWidth>width)report.failures.push(check);
+    if(result.brokenNavigation.length||result.elements.some(r=>r.left<0||r.right>width+1||(r.name==='home-map'||r.name==='home-process' ? r.top<0||r.bottom>result.scroller.content+height : r.top<0||r.bottom>height+1))||result.documentWidth>width)report.failures.push(check);
     await page.screenshot({path:path.join(output,`${width}-${height}-${language}.png`)});
    }
   }

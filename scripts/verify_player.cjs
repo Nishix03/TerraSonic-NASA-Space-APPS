@@ -98,7 +98,7 @@ async function main() {
         const date = await page.locator('.when b').textContent();
         assert(await page.evaluate(() => __app.state.events.length > 0));
         assert.equal(await page.locator('.event-history, #tour-more, .current-event').count(),0);
-        assert.equal(await page.locator('.map-legend .legend-choice').count(),3);
+        assert.equal(await page.locator('.map-legend .legend-choice').count(),14);
         assert.equal(await page.locator('#tour-machine canvas.heard').count(),1);
         assert.equal(await page.getByRole('button',{name:'Escenario',exact:true}).count(),0);
         assert.equal(await page.locator('.listen-member').count(),5);

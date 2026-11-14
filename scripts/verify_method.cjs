@@ -41,7 +41,22 @@ async function main(){
       assert.equal(await page.locator('#tour-techfilter,.techchip').count(),0);
       assert.doesNotMatch(await page.locator('#tour-techcards').textContent(),/Three\.js|GLTFLoader|Blender|Planeado|Planned/);
       await checkOverflow(page,`${width} ${lang} technology ${sub}`);
-     }else assert.match(await page.locator('#credit-ai-title').locator('..').locator('..').textContent(),lang==='es'?/pendiente/:/awaiting review/);
+     }else {
+      assert(await page.getByRole('heading',{name:lang==='es'?'Créditos y uso de IA':'Credits and AI use',exact:true}).isVisible());
+      assert.doesNotMatch(await page.locator('.credits-layout').textContent(),/USO_DE_IA\.md/);
+      assert.equal(await page.locator('.credits-layout .credit-section').count(),3);
+      assert.equal(await page.locator('#credit-science-title').count(),0);
+      if(width>=1000){
+       const cards=await page.locator('.credits-layout .credit-section').evaluateAll(elements=>elements.map(el=>el.getBoundingClientRect().height));
+       assert.equal(new Set(cards).size,1,'Credit cards share a height on desktop');
+      }
+     }
+     if(sub===1){
+      await page.locator('#credit-science-title').waitFor();
+      await page.locator('.credit-sources summary').click();
+      assert.equal(await page.locator('.credit-sources a:visible').count(),5);
+      await page.locator('.credit-sources summary').click();
+     }
      if(lang==='es'&&[390,1366].includes(width)){await resetScroll(page);await page.screenshot({path:path.join(output,`${width}-technology-${sub}.png`)});}
     }
    }

@@ -89,6 +89,21 @@ async function main() {
         if (await page.locator(selector).isVisible()) await assertMoving(page, selector);
       }
       assert.equal(await page.locator('.universe-portals, .portal-button').count(), 0);
+      const homeMap = page.locator('.home-map img');
+      const initialMap = await homeMap.getAttribute('src');
+      const initialCaption = await page.locator('.home-map figcaption').textContent();
+      await page.locator('#tour-nav button').nth(1).click();
+      await page.locator('.bidentity h1').waitFor();
+      await page.locator('.brand').click();
+      await page.waitForFunction(previous => {
+        const map = document.querySelector('.home-map img');
+        return map && map.getAttribute('src') !== previous && map.naturalWidth > 0;
+      }, initialMap);
+      const nextMap = await homeMap.getAttribute('src');
+      assert.notEqual(nextMap, initialMap);
+      assert.notEqual(await page.locator('.home-map figcaption').textContent(), initialCaption);
+      assert.match(nextMap, /fotogramas/);
+      await page.waitForFunction(() => document.querySelector('.home-map img')?.naturalWidth > 0);
       await page.locator('#tour-nav button').nth(1).click();
       const dance = page.locator('earthbeat-dance');
       await page.locator('earthbeat-dance-button button').waitFor();
@@ -118,14 +133,41 @@ async function main() {
       const stage = page.locator('.stage-musician');
       await stage.first().waitFor();
       assert.equal(await stage.count(), 5);
-      assert.equal(await page.locator('.stage-musician[aria-pressed="true"]').count(), 5);
+      assert.equal(await page.locator('.stage-musician[aria-pressed="true"] .stage-indicator').count(), 5);
+      const onColor = await stage.first().locator('.stage-indicator').evaluate(el => getComputedStyle(el).backgroundColor);
       await stage.first().click();
       assert.equal(await stage.count(), 5);
       assert.equal(await stage.first().getAttribute('aria-pressed'), 'false');
+      assert.notEqual(await stage.first().locator('.stage-indicator').evaluate(el => getComputedStyle(el).backgroundColor), onColor);
       await stage.first().press('Space');
       assert.equal(await stage.first().getAttribute('aria-pressed'), 'true');
       assert.equal(await page.locator('#tour-frame #playback-position').count(), 1);
-      assert.equal(await page.locator('#tour-frame .map-toolbar select').count(), 1);
+      const speed = page.getByRole('combobox', { name: 'Velocidad', exact: true });
+      assert.equal(await speed.inputValue(), '110');
+      assert((await speed.boundingBox()).width <= 70);
+      const mode = page.getByRole('button', { name: 'Melodía', exact: true });
+      assert.match(await mode.getAttribute('title'), /acordes y un ritmo/);
+      const modeHelp = page.locator('.mode-help summary');
+      await modeHelp.press('Enter');
+      assert.match(await page.locator('.mode-help dl').textContent(), /tonos directos/);
+      const helpBox = await page.locator('.mode-help dl').boundingBox();
+      assert(helpBox.x >= 0 && helpBox.x + helpBox.width <= viewport.width);
+      await modeHelp.click();
+      assert.equal(await page.locator('.mode-help').getAttribute('open'), null);
+      if (viewport.width === desktop.width) {
+        const panels = await page.locator('#tour-frame, #tour-machine, .listen-band').evaluateAll(els => els.map(el => {
+          const rect = el.getBoundingClientRect();
+          return [rect.top, rect.bottom];
+        }));
+        assert.deepEqual(panels, [panels[0], panels[0], panels[0]]);
+      }
+      const legend = page.locator('.legend-choice');
+      assert.equal(await legend.count(), 14);
+      await legend.first().click();
+      assert.match(await page.locator('.legend-reading').first().textContent(), /Más cálido/);
+      await legend.last().click();
+      assert.match(await page.locator('.legend-reading').first().textContent(), /Más frío/);
+      assert.doesNotMatch(await page.locator('.player-detail .readout').textContent(), /\d/);
       const frameButtons = page.locator('#tour-frame .timeline button');
       await frameButtons.nth(2).click();
       assert.equal(await frameButtons.nth(2).getAttribute('aria-pressed'), 'true');
@@ -137,8 +179,10 @@ async function main() {
       await page.getByRole('button', { name: 'Reproducir', exact: true }).click();
       await page.locator('.band-stage').scrollIntoViewIfNeeded();
       await page.locator('.stage-musician earthbeat-dance[data-dancing]').first().waitFor({timeout:10000});
+      assert(await page.locator('.stage-indicator:is(.pulse-a,.pulse-b)').count() > 0, 'A playing instrument pulses');
       await page.getByRole('button', { name: 'Pausar', exact: true }).click();
       assert.equal(await page.locator('.stage-musician earthbeat-dance[data-dancing]').count(), 0);
+      assert.equal(await page.locator('.stage-indicator:is(.pulse-a,.pulse-b)').count(), 0);
       await page.screenshot({ path: path.join(output, `player-${viewport.width}.png`) });
       await page.locator('#tour-a11y summary').scrollIntoViewIfNeeded();
       const header = await page.locator('header.top').boundingBox();
@@ -160,6 +204,7 @@ async function main() {
       assert.equal(await intro.getAttribute('data-static'), 'true', 'Reload honors reduced motion');
       assert.equal(await intro.evaluate(element => element.getAnimations({ subtree: true }).length), 0);
       await page.getByRole('button', { name: 'Entrar', exact: true }).click();
+      assert.notEqual(await homeMap.getAttribute('src'), nextMap, 'Reload advances the home map');
       await page.locator('#tour-nav button').nth(2).click();
       assert(await page.locator('#tour-drop input').isVisible());
       assert.match(await page.locator('.rain-chart').getAttribute('alt'), /NASA POWER/);

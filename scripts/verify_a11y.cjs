@@ -42,8 +42,7 @@ async function main(){
     }
     await page.locator('#tour-nav button').first().click();await page.locator('.discgrid .dcard').nth(2).click();
     await audit(lang+'-player-legend');
-    const explain=page.getByRole('button',{name:lang==='es'?'Explícamelo fácil':'Explain it simply',exact:true});
-    await explain.click();await audit(lang+'-player-explanation');await explain.click();
+    await page.locator('.legend-choice').last().click();await audit(lang+'-player-legend-selected');
     await page.locator('#tour-guide').click();await audit(lang+'-Brisa');await page.keyboard.press('Escape');
     await page.locator('#tour-a11y > summary').click();await audit(lang+'-accessibility-menu');await page.keyboard.press('Escape');
     assert.equal(await page.locator('#tour-a11y').getAttribute('open'),null,'Escape closes the preference popover');

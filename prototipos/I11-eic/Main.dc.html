@@ -782,7 +782,6 @@ a{color:inherit}
 
 /* reproductor */
 .px .uni{gap:14px;width:100%;max-width:1160px;align-self:center}
-.px .uni .views{gap:var(--layout-gap)}
 .px .uni .vpanel{gap:0;border:0;border-radius:0;background:transparent;overflow:visible}
 .px .uni .vcap{padding:0 0 10px;font-size:.8em;flex-wrap:wrap}
 .px .uni .vpanel .mapbox,.px .uni .vpanel .mbox{aspect-ratio:560/320;border:1px solid var(--line);box-shadow:none}
@@ -864,18 +863,16 @@ a{color:inherit}
 .px .seg button[aria-pressed="true"]{background:#fff;color:#000}
 
 /* ventana Más opciones */
-.px .credits-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 48px;align-items:start;min-width:0}
+.px .credits-layout{display:grid;min-width:0}
 .px .credit-section{min-width:0;padding:20px 0 8px;border-top:1px solid #3b414c}
 .px .credit-heading{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .px .credit-heading svg{flex:0 0 22px;width:22px;height:22px;color:#b8c9d6}
 .px .credit-heading h2{font:700 clamp(19px,1.6vw,25px)/1.25 var(--head);letter-spacing:.035em;text-transform:uppercase;overflow-wrap:anywhere}
-.px .credit-heading .credit-index{margin-left:auto;color:#8593a3;font:500 12px 'IBM Plex Mono',monospace}
 .px .credit-section p{max-width:68ch;font-size:max(15px,.95em);line-height:1.7;color:#c7cdd8;overflow-wrap:anywhere}
 .px .credit-section p+p{margin-top:16px}
-.px .credit-section .credit-review{font-size:max(13px,.82em);padding-left:12px;border-left:2px solid #8798aa;color:#bac5d2}
 .px .credit-tools{display:flex;gap:8px 16px;flex-wrap:wrap;margin:0 0 16px;list-style:none;padding:0;font:500 max(12px,.8em) 'IBM Plex Mono',monospace;color:#eef2f7}
 .px .credit-notice{padding-inline:18px;background:rgba(164,187,218,.035)}
-@media(max-width:700px){.px .credits-layout{grid-template-columns:minmax(0,1fr);gap:22px}.px .credit-heading{gap:10px}.px .credit-heading h2{font-size:21px}}
+@media(max-width:700px){.px .credit-heading{gap:10px}.px .credit-heading h2{font-size:21px}}
 .px .mdim{z-index:100}
 .px .modal{z-index:101;border-radius:0;background:#050505;border-color:rgba(255,255,255,.3)}
 .px .why{display:flex;flex-direction:column;gap:3px}
@@ -1152,7 +1149,9 @@ a{color:inherit}
 .px .scale-sound{color:var(--muted)}
 .px .scale-swatch{width:16px;height:16px;border:1px solid #ffffff50;border-radius:3px;background:var(--level-color)}
 .px .scale-value{font-variant-numeric:tabular-nums}
-.px .credits-layout{gap:8px}
+.px .credits-layout{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}
+.px .nasa-sources{margin-top:8px}
+@media(max-width:820px){.px .credits-layout{grid-template-columns:minmax(0,1fr)}}
 .px .credit-section{padding:10px 12px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
 .px .credit-heading{margin-bottom:6px}
 .px .credit-section p+p{margin-top:8px}
@@ -1181,7 +1180,6 @@ a{color:inherit}
 .px .file-settings select{width:100%;box-sizing:border-box}
 .px .skip-content{position:fixed;top:6px;left:8px;z-index:150;padding:12px 16px;background:#fff;color:#000;font-weight:700;transform:translateY(-180%)}
 .px .skip-content:focus{transform:none;outline:3px solid #FFD447;outline-offset:2px}
-.px .uni .views{gap:10px}
 .px .uni .vpanel{padding:8px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
 .px .uni .vcap{padding:0 0 5px}
 .px .uni .vfoot{padding:5px 0 0}
@@ -1227,18 +1225,15 @@ a{color:inherit}
   .px .controls .when{min-width:0;overflow-wrap:anywhere}
   .px .player-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,125px),1fr))}
   .px .player-tools .btn{width:100%;padding:6px;letter-spacing:.04em}
-  .px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(min-width:641px){
-  .px .uni .views{row-gap:0}
   .px .uni .vpanel{display:grid;grid-row:span 3;grid-template-rows:subgrid}
 }
 @media(max-width:640px){
   .px .hero{grid-template-columns:minmax(0,1fr);width:min(100%,440px);align-self:center;gap:10px}
   .px .hero .display{font-size:clamp(1.65rem,7.5vw,2.8rem)}
-  .px .home-map{display:none}
+  .px .home-map img{max-height:clamp(105px,23svh,175px)}
   .px .home-process{padding:6px 8px}
-  .px .uni .views{grid-template-columns:minmax(0,1fr)}
   .px .topics{grid-template-columns:repeat(6,minmax(0,1fr))}
   .px .topics button{grid-column:span 2;padding-inline:3px}
   .px .topics:has(button:nth-child(5)) button:nth-child(n+4){grid-column:span 3}
@@ -1301,7 +1296,6 @@ a{color:inherit}
 .px .transport{display:grid;gap:10px;padding:12px 0;border-block:1px solid var(--line);min-width:0}
 .px .player-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto 1fr;align-items:start;gap:8px 22px}
 .px .player-sidebar{grid-column:2;grid-row:1;display:grid;gap:8px;min-width:0}
-.px .player-visual{grid-column:1;grid-row:1/3;display:grid;gap:10px;min-width:0}
 .px .uni{max-width:1200px;container-type:inline-size;container-name:player}
 .px .player-sidebar .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .px .player-sidebar .controls .when{min-width:100px;flex:1 1 auto}
@@ -1324,10 +1318,6 @@ a{color:inherit}
 .px .player-modes .engines button{min-height:44px;padding:7px 18px;border:1px solid var(--line)}
 .px .player-modes .engines button[aria-pressed="true"],.px .transport button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .px .player-modes p{flex:1 1 240px;margin:0;max-width:70ch}
-.px .uni .views{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:12px}
-.px .uni .views>.vpanel{display:grid;grid-row:auto;grid-template-rows:auto auto auto;min-width:0;align-content:start}
-.px .uni .views .mapbox,.px .uni .views .mbox{aspect-ratio:560/320;min-height:0;height:auto;width:100%}
-.px .uni .views .mbox .heard{position:absolute;inset:0;display:block;width:100%;height:100%;image-rendering:pixelated}
 .px .grid-dim{position:absolute;inset-block:0;left:0;background:#070b1470;pointer-events:none}
 .px .uni .scanline{left:0;width:calc(100% / 28);transform:translateX(var(--scan-x));transition:transform 110ms linear}
 .px.reduce-motion .uni .scanline{transition:none}
@@ -1335,8 +1325,7 @@ a{color:inherit}
 .px .grid-dim-after{right:0}
 .px .map-legend{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;min-width:0}
 .px .map-legend h2{grid-column:1/-1;font:600 .88em/1.3 var(--head)}
-.px .legend-scale,.px .legend-labels{display:grid;grid-column:1}
-.px .legend-scale{grid-template-columns:repeat(7,minmax(0,1fr)) repeat(7,minmax(0,.857fr));height:14px;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.px .legend-labels{display:grid;grid-column:1}
 .px .legend-labels{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 .px .legend-choice{font-size:.75em;min-height:44px;padding:4px;border-radius:4px;white-space:normal}
 .px .legend-choice:first-child{text-align:left}
@@ -1369,10 +1358,9 @@ a{color:inherit}
 }
 @media(max-width:1000px){
   .px .player-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;gap:16px}
-  .px .player-sidebar,.px .player-visual,.px .listen-band{grid-column:1;grid-row:auto}
+  .px .player-sidebar,.px .listen-band{grid-column:1;grid-row:auto}
 }
 @media(max-width:620px){
-  .px .uni .views{grid-template-columns:minmax(0,1fr)}
   .px .map-legend{grid-template-columns:minmax(0,1fr)}
   .px .legend-voice{grid-column:1;grid-row:auto;justify-self:start}
 }
@@ -1406,7 +1394,7 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .top .nav button[aria-current="page"],.px .top .nav button:hover,.px .top .nav button:focus-visible{color:var(--fg)}
 .px .player-tools .btn.quiet{color:var(--muted)}
 .px .bottomnav .btn.quiet:not(:disabled){color:var(--muted)}
-.px .hero .lede,.px .tour p,.px .credit-section .credit-review{color:var(--muted)}
+.px .hero .lede,.px .tour p{color:var(--muted)}
 .px .credit-tools{color:var(--fg)}
 .px .credit-heading .credit-index{color:var(--muted)}
 .px details.menu .pop,.px select,.px .modal,.px .tour,.px .tour::before{background:var(--surface);border-color:var(--line)}
@@ -1458,21 +1446,14 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 .px .workspace:has(.uni)>.in{max-width:1480px}
 .px .uni{max-width:none}
 .px .player-layout{grid-template-columns:minmax(0,2.15fr) minmax(0,1fr);grid-template-rows:auto;gap:12px 16px}
-.px .player-visual,.px .listen-band{grid-row:auto}
 .px .player-sidebar{grid-column:auto;grid-row:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .px .player-sidebar .when{flex:1 1 auto}
 .px .player-tools{border:0;padding:0;display:flex;flex-wrap:wrap}
-.px .player-visual .views{grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);align-items:stretch}
-.px .uni .views>.vpanel{grid-template-rows:auto auto 1fr}
-.px .uni .views>.vpanel .vcap{min-height:24px}
 .px #tour-frame .vcap{justify-content:flex-end}
-.px .uni .views .mapbox,.px .uni .views .mbox{height:auto;min-height:0}
-.px .uni .views .mapbox{aspect-ratio:560/350}
 .px .map-legend{grid-template-columns:minmax(0,1fr);gap:5px;margin-top:8px}
 .px .map-legend h2{grid-column:1}
 .px .legend-labels{grid-template-columns:repeat(3,minmax(0,1fr))}
 .px .legend-choice{line-height:1.15;font-size:.7em}
-.px .legend-scale{height:12px}
 .px .listen-band{gap:7px;padding:8px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
 .px .band-stage{display:grid;grid-template-rows:minmax(0,1fr) auto;height:clamp(120px,22vh,210px);background-image:linear-gradient(#080c15b8,#080c15f5),var(--stage-map);background-position:center;background-size:cover;border:1px solid var(--line);border-radius:5px;overflow:hidden}
 .px .band-stage-musicians{display:flex;justify-content:center;align-items:end;gap:4px;min-height:0;padding:8px 5px 0}
@@ -1499,15 +1480,11 @@ html[data-ts-reduced-motion="true"]{scroll-behavior:auto}
 @media(min-width:1001px) and (max-height:720px){.px .band-stage{height:118px}.px .player-detail .transport-tools{display:flex}}
 @media(max-width:1000px){
   .px .player-layout{grid-template-columns:minmax(0,1fr)}
-  .px .player-visual,.px .listen-band{grid-column:1}
   .px .player-detail .transport{grid-template-columns:repeat(2,minmax(0,1fr))}
   .px .player-detail .transport-position{grid-column:1/-1}
 }
 @media(max-width:620px){
-  .px .player-visual .views,.px .player-detail .transport{grid-template-columns:minmax(0,1fr)}
-  .px .player-visual{display:flex;flex-direction:column}
-  .px .player-visual .player-sidebar{order:-1}
-  .px .player-visual .file-settings{order:-2}
+  .px .player-detail .transport{grid-template-columns:minmax(0,1fr)}
   .px .player-tools{flex:1 1 100%;justify-content:flex-start}
   .px .player-tools .btn{width:auto;min-height:44px}
   .px .band-stage{height:145px}
@@ -1729,28 +1706,78 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .disc-library .dcard:is(:hover,:focus-visible){background:var(--panel)}
 .px .practice-example{min-height:0}
 .px .top details.menu .pop{position:fixed;inset:var(--a11y-top,54px) max(8px,calc((100vw - 1320px)/2)) auto auto;width:min(28rem,calc(100vw - 16px));max-height:min(60dvh,calc(100dvh - var(--a11y-top,54px) - 8px));overflow:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10em),1fr));gap:6px;border-radius:8px;box-shadow:0 10px 30px #0007}
-.px .player-visual .views{align-items:start}
-.px .uni .map-toolbar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px 10px;padding:6px}
-.px .map-toolbar :is(.volume-control,.transport-speed){flex:1 1 112px;min-width:0;font-size:.74em}
+.px .player-layout{grid-template-columns:minmax(0,1.18fr) minmax(0,1fr) minmax(0,1.04fr);gap:10px;align-items:stretch}
+.px .player-layout>.player-sidebar,.px .player-layout>.file-settings{grid-column:1/-1}
+.px .player-layout>.vpanel,.px .player-layout>.listen-band{grid-column:auto;grid-row:auto;min-width:0}
+.px .player-layout>.vpanel{display:grid;grid-template-rows:auto auto 1fr;align-content:start}
+.px .player-layout .mapbox,.px .player-layout .mbox{width:100%;height:auto;min-height:0;aspect-ratio:560/320}
+.px .player-layout .mbox .heard{position:absolute;inset:0;display:block;width:100%;height:100%;image-rendering:pixelated}
+.px #tour-machine .vcap h2{font:700 1.3125em/1.3 var(--head);color:var(--fg)}
+.px .player-layout #tour-frame .mapbox{aspect-ratio:560/350}
+.px .player-layout .map-legend{align-self:start}
+.px .map-legend .legend-help{font-size:.8em;color:var(--muted);line-height:1.35}
+.px .map-legend .legend-labels{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.px .map-legend .legend-choice{font-size:.76em;display:grid;align-content:center;justify-items:center;gap:2px;min-width:0;text-align:center;padding:3px 1px;font-variant-numeric:tabular-nums}
+.px .legend-swatch{width:100%;height:11px;border:1px solid var(--muted);border-radius:2px;background:var(--swatch)}
+.px.app[data-contrast="true"] .legend-swatch{border-color:var(--fg)}
+.px .readout p>strong{flex:none}
+.px .player-layout .listen-band{grid-template-rows:auto 1fr auto auto;align-content:start}
+.px .player-layout .band-stage{height:auto;min-height:200px}
+.px .player-layout .band-stage-musicians{height:auto;align-items:stretch}
+.px .player-layout .stage-musician.listen-member{padding:4px 2px;border:1px solid transparent;text-align:center;align-items:end}
+.px .player-layout .stage-musician[aria-pressed="true"]{border-color:color-mix(in srgb,var(--member-color) 65%,transparent)}
+.px .player-layout .stage-musician.playing{background:color-mix(in srgb,var(--member-color) 27%,#080c15);border-color:var(--member-color)}
+.px .player-layout .stage-musician:focus-visible{outline:2px solid var(--fg);outline-offset:-2px}
+.px .stage-musician .stage-indicator{position:absolute;grid-column:auto;inset:6px auto auto 6px;width:10px;height:10px;border:1px solid var(--member-color);border-radius:2px}
+.px .stage-musician[aria-pressed="true"] .stage-indicator{background:var(--member-color)}
+.px .stage-musician.playing .stage-indicator{box-shadow:0 0 9px 1px var(--member-color)}
+@keyframes musician-hit-a{0%{transform:scale(1.4);box-shadow:0 0 12px 3px var(--member-color)}100%{transform:scale(1)}}
+@keyframes musician-hit-b{0%{transform:scale(1.4);box-shadow:0 0 12px 3px var(--member-color)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:no-preference){
+ .px:not(.reduce-motion) .stage-indicator.pulse-a{animation:musician-hit-a .2s ease-out}
+ .px:not(.reduce-motion) .stage-indicator.pulse-b{animation:musician-hit-b .2s ease-out}
+}
+.px.app[data-contrast="true"] .stage-musician.playing strong{color:#fff;text-shadow:0 1px 1px #000}
+.px .stage-musician[aria-pressed="false"] .stage-indicator{background:#080c15}
+@media(max-width:1000px){
+ .px .player-layout{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .px .player-layout #tour-frame{grid-column:1/-1}
+ .px .player-layout #tour-frame .mapbox{max-height:300px}
+}
+@media(max-width:640px){
+ .px .player-layout{grid-template-columns:minmax(0,1fr)}
+ .px .player-layout .band-stage{min-height:185px}
+ .px .readout p{flex-wrap:wrap}
+}
+.px .uni .map-toolbar{position:relative;display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px 10px;padding:6px}
+.px .map-toolbar .volume-control{flex:1 1 78px;min-width:0;font-size:.74em}
+.px .map-toolbar .transport-speed{display:flex;flex:0 0 auto;gap:5px;align-items:center;font-size:.78em;white-space:nowrap}
+.px .map-toolbar .transport-speed select{width:64px;min-width:0;min-height:44px;padding:4px;font:inherit}
+.px .map-toolbar .player-modes{display:flex;align-items:center;gap:4px}
+.px .mode-help summary{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);cursor:pointer;font:700 .9em var(--head);list-style:none}
+.px .mode-help summary::-webkit-details-marker{display:none}
+.px .mode-help[open] summary{color:var(--bg);background:var(--fg)}
+.px .mode-help dl{position:absolute;z-index:5;inset:100% 6px auto auto;width:min(230px,calc(100% - 12px));padding:10px;margin:4px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:5px;box-shadow:0 5px 12px #0006}
+.px .mode-help dt{font-weight:700}
+.px .mode-help dd{margin:0;color:var(--fg);line-height:1.4}
+.px .mode-help dd+dt{margin-top:6px}
 .px .map-toolbar .volume-control input{width:100%;min-width:0}
-.px .map-toolbar select{min-width:0;width:100%;font-size:1em}
-.px .map-toolbar .engines button{padding-inline:10px}
-.px .map-source{margin-inline-start:auto}
+.px .map-toolbar .engines button{padding-inline:6px}
+.px .map-source{margin-inline-start:auto;text-align:end}
 .px .map-transport{display:grid;gap:6px;width:100%;padding:6px}
 .px .map-transport .timeline img{display:block}
 .px .band-stage{background:var(--surface) url('./stage.webp') center/cover no-repeat;grid-template-rows:minmax(0,1fr);height:clamp(156px,23vw,240px)}
 .px .band-stage-musicians{height:100%;align-items:end;padding:12px 5px 5px}
 .px .stage-musician.listen-member{padding:3px 1px;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:2px;justify-items:center;min-height:44px;border-color:transparent;background:transparent}
-.px .stage-musician.listen-member img{width:100%;height:100%}
+.px .stage-musician.listen-member img{width:100%;height:100%;object-position:center 75%}
 .px .stage-musician.listen-member[aria-pressed="false"]{filter:saturate(.3);opacity:.65}
 .px .stage-musician.listen-member:hover,.px .stage-musician.listen-member:focus-visible{border-color:var(--member-color);background:#08111b9c}
 .px .stage-musician.listen-member strong{grid-column:1;padding:2px 0;font-size:clamp(.5rem,.81vw,.68rem);text-align:center;letter-spacing:0;white-space:normal;overflow-wrap:anywhere;color:#fff;text-shadow:0 1px 4px #000}
 .px.app[data-contrast="true"] .stage-musician.listen-member strong{color:var(--fg)}
 .px .listen-band .chips{display:flex;flex-wrap:wrap;gap:5px}
 .px earthbeat-dance-button{display:inline-flex}
-@media(min-width:1001px) and (max-height:720px){
- .px .uni .views .mapbox,.px .uni .views .mbox{max-height:clamp(155px,36vh,245px)}
- .px .stage-musician.listen-member earthbeat-dance{height:84%}
+@media(min-width:1001px) and (max-height:850px){
+ .px .player-layout .mapbox,.px .player-layout .mbox{max-height:clamp(145px,29vh,246px)}
 }
 @media(max-width:650px){
  .px .method-notes,.px .method-notes .team-names{grid-template-columns:minmax(0,1fr)}
@@ -1848,10 +1875,10 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 <div class="home-experience"><div class="home-cinema"><button type="button" onClick="{{intro.replay}}" style="--intro-play-bg:{{intro.bg}};--intro-play-fg:{{intro.fg}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div><button type="button" class="scene-motion-toggle" onClick="{{intro.toggle}}" aria-label="{{intro.toggleLabel}}" title="{{intro.toggleLabel}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="{{intro.togglePath}}"/></svg></button><sc-if value="{{intro.paused}}"><p class="home-motion-note" role="status">{{intro.notice}}</p></sc-if></div>
 </div>
 <div class="home-demo">
-<figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
+<figure class="home-map"><img decoding="async" src="{{homeMap.url}}" alt="{{homeMap.alt}}"><figcaption>{{homeMap.caption}}</figcaption></figure>
 <div class="home-process">
 <ol class="homeflow" aria-label="{{tx.flowAria}}">
-<li class="flow-step"><img class="flow-art" src="{{heroUrl}}" alt=""><strong>{{tx.flowImage}}</strong></li>
+<li class="flow-step"><img class="flow-art" src="{{homeMap.thumbnail}}" alt=""><strong>{{tx.flowImage}}</strong></li>
 <li class="flow-step"><svg class="flow-art flow-grid" viewBox="0 0 112 64" aria-hidden="true"><defs><pattern id="home-pixel-grid" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#a4b9c8"/></pattern></defs><rect width="112" height="64" fill="url(#home-pixel-grid)"/></svg><strong>{{tx.flowPixels}}</strong></li>
 <li class="flow-step"><span class="flow-art flow-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>{{tx.flowMusic}}</strong></li>
 </ol>
@@ -1936,7 +1963,6 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 
 <sc-if value="{{audioError}}"><p role="alert" class="small">{{audioError}}</p></sc-if>
 <div class="player-layout">
-<div class="player-visual">
 <sc-if value="{{showFileSettings}}">
 <div class="file-settings">
 <label class="field">{{tx.colorsHow}}
@@ -1954,10 +1980,17 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 </div>
 
-<div class="views">
 <figure id="tour-frame" class="vpanel">
-<figcaption class="vcap map-toolbar"><div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
-<label class="transport-speed">{{tx.speedLabel}}<select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">{{tx.slow}} · 0.75×</option><option value="110">{{tx.normal}} · 1×</option><option value="70">{{tx.fast}} · 1.4×</option></select></label><div class="player-modes"><div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="player-mode-description">{{e.short}}</button></sc-for></div><p id="player-mode-description" class="sr">{{engineDesc}}</p></div><span class="muted map-source">{{mapSource}}</span></figcaption>
+<figcaption class="vcap map-toolbar">
+<div class="volume-control"><label for="playback-volume">{{player.volumeLabel}} {{player.volume}}%</label><input id="playback-volume" type="range" min="0" max="100" step="1" value="{{player.volume}}" onInput="{{player.changeVolume}}"></div>
+<label class="transport-speed"><span>{{tx.speedLabel}}</span><select onChange="{{onSpeed}}" value="{{speed}}"><option value="180">0.75×</option><option value="110">1×</option><option value="70">1.4×</option></select></label>
+<div class="player-modes" id="tour-modes">
+<div class="engines" role="group" aria-label="{{tx.engineAria}}"><sc-for list="{{engines}}" as="e"><button type="button" onClick="{{e.pick}}" aria-pressed="{{e.on}}" aria-describedby="{{e.descriptionId}}" title="{{e.description}}">{{e.short}}</button></sc-for></div>
+<details class="mode-help"><summary aria-label="{{tx.modesHelp}}" title="{{tx.modesHelp}}">?</summary><dl><sc-for list="{{engines}}" as="e"><dt>{{e.short}}</dt><dd>{{e.description}}</dd></sc-for></dl></details>
+<sc-for list="{{engines}}" as="e"><span class="sr" id="{{e.descriptionId}}">{{e.description}}</span></sc-for>
+</div>
+<span class="muted map-source">{{mapSource}}</span>
+</figcaption>
 <div class="mapbox">
 <img decoding="async" fetchpriority="high" class="map {{frameAnim}}" src="{{frameUrl}}" alt="{{frameAlt}}">
 <div aria-hidden="true" class="scanline" style="--scan-x: {{scanLeft}}"></div>
@@ -1988,7 +2021,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </figure>
 
 <figure id="tour-machine" class="vpanel">
-<figcaption class="vcap"><span class="sr">{{tx.machineSees}}</span><span class="muted">{{tx.machineSub}}</span></figcaption>
+<figcaption class="vcap"><h2>{{tx.machineSub}}</h2></figcaption>
 <div class="mbox" aria-hidden="true">
 <canvas class="heard" width="280" height="160" data-grid="{{gridColors}}"></canvas>
 <div class="grid-dim" style="width:{{gridBefore}}"></div>
@@ -1997,29 +2030,23 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 <aside id="player-legend" class="map-legend" aria-labelledby="map-legend-title">
 <h2 id="map-legend-title">{{player.legendTitle}}</h2>
-<div class="legend-scale" aria-hidden="true">
-<sc-for list="{{player.scale}}" as="color"><span style="background: {{color}}"></span></sc-for>
-</div>
-<div class="legend-labels" role="group" aria-labelledby="map-legend-title">
+<p id="legend-help" class="legend-help">{{player.legendHelp}}</p>
+<div class="legend-labels" role="group" aria-labelledby="map-legend-title" aria-describedby="legend-help">
 <sc-for list="{{player.legend}}" as="level">
-<button type="button" class="legend-choice" aria-pressed="{{level.on}}" onClick="{{level.choose}}">{{level.label}}</button>
+<button type="button" class="legend-choice" aria-label="{{level.label}}" aria-pressed="{{level.on}}" onClick="{{level.choose}}"><span class="legend-swatch" style="--swatch:{{level.color}}" aria-hidden="true"></span><span aria-hidden="true">{{level.number}}</span></button>
 </sc-for>
 </div>
-
+<p role="status" class="small muted legend-reading">{{player.legendReading}}</p>
 <p role="status" class="small muted legend-reading">{{player.speechNotice}}</p>
 </aside>
 </figure>
-</div>
-
-
-</div>
 <section class="listen-band" aria-labelledby="listen-band-title">
 <h2 id="listen-band-title">{{tx.theBand}}</h2>
 <div class="band-stage" role="group" aria-label="{{tx.bandAria}}">
 <div class="band-stage-musicians">
 <sc-for list="{{stageMusicians}}" as="musician">
 <button type="button" class="listen-member stage-musician {{musician.playingClass}}" aria-label="{{musician.name}}" aria-pressed="{{musician.on}}" onClick="{{musician.toggle}}" style="--member-color:{{musician.color}};--intensity:{{musician.intensity}}">
-<earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
+<span class="stage-indicator {{musician.pulseClass}}" aria-hidden="true"></span><earthbeat-dance data-character="{{musician.key}}" data-playing="{{musician.playing}}" aria-hidden="true"><img class="dance-pose" src="{{musician.poseUrl}}" alt=""></earthbeat-dance>
 <strong>{{musician.name}}</strong>
 </button>
 </sc-for>
@@ -2174,15 +2201,9 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </article>
 </sc-for>
 </div>
-</sc-if>
-<sc-if value="{{scr.tCred}}" hint-placeholder-val="{{ false }}">
-<div class="pagehead">
-<div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{tx.credTitle}}</h1></div>
-<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
-</div>
-<div class="credits-layout">
-<section class="credit-section" aria-labelledby="credit-science-title">
-<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6.5h14M5 17.5h14"/></svg><h2 id="credit-science-title">{{tx.credScience}}</h2><span class="credit-index" aria-hidden="true">01</span></div>
+<sc-if value="{{techCur.nasa}}">
+<section class="credit-section nasa-sources" aria-labelledby="credit-science-title">
+<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6.5h14M5 17.5h14"/></svg><h2 id="credit-science-title">{{tx.credScience}}</h2></div>
 <p>{{tx.credDataP1}}</p><p>{{tx.credDataP2}}</p>
 <details class="credit-sources">
 <summary>{{tx.methodSourcesTitle}}</summary>
@@ -2195,17 +2216,25 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </ul>
 </details>
 </section>
+</sc-if>
+</sc-if>
+<sc-if value="{{scr.tCred}}" hint-placeholder-val="{{ false }}">
+<div class="pagehead">
+<div><p class="kicker">{{tx.techKicker}} · {{techCur.num}}</p><h1 class="display">{{tx.credTitle}}</h1></div>
+<button type="button" class="btn sm section-voice" onClick="{{sectionVoice}}" disabled="{{brisaUnavailable}}">{{sectionVoiceLabel}}</button>
+</div>
+<div class="credits-layout">
 <section class="credit-section" aria-labelledby="credit-dev-title">
-<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></svg><h2 id="credit-dev-title">{{tx.credDev}}</h2><span class="credit-index" aria-hidden="true">02</span></div>
+<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></svg><h2 id="credit-dev-title">{{tx.credDev}}</h2></div>
 <ul class="credit-tools" aria-label="{{tx.credTools}}"><li>HTML / CSS / JavaScript</li><li>Canvas 2D</li><li>Web Audio</li></ul>
 <p>{{tx.credDevP}}</p>
 </section>
 <section class="credit-section" aria-labelledby="credit-ai-title">
-<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4M18 9h4m-4 6h4M10 10h4v4h-4z"/></svg><h2 id="credit-ai-title">{{tx.credAi}}</h2><span class="credit-index" aria-hidden="true">03</span></div>
-<p>{{tx.credAiP}}</p><p class="credit-review">{{tx.credAiReview}}</p>
+<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4M18 9h4m-4 6h4M10 10h4v4h-4z"/></svg><h2 id="credit-ai-title">{{tx.credAi}}</h2></div>
+<p>{{tx.credAiP}}</p>
 </section>
 <section class="credit-section credit-notice" aria-labelledby="credit-notice-title">
-<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v7m0-11v1"/></svg><h2 id="credit-notice-title">{{tx.credInstitution}}</h2><span class="credit-index" aria-hidden="true">04</span></div>
+<div class="credit-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v7m0-11v1"/></svg><h2 id="credit-notice-title">{{tx.credInstitution}}</h2></div>
 <p>{{tx.noticeP}}</p>
 </section>
 </div>
@@ -2323,7 +2352,24 @@ var DISC_SETS = {
   { id: 'nino2023', n: '5', title: 'El Niño 2023', period: 'jul – dic 2023', color: '#E0459B', start: [2023, 6], legacy: true, files: ['fotogramas-anteriores/nino2023_0.png', 'fotogramas-anteriores/nino2023_1.png', 'fotogramas-anteriores/nino2023_2.png', 'fotogramas-anteriores/nino2023_3.png', 'fotogramas-anteriores/nino2023_4.png', 'fotogramas-anteriores/nino2023_5.png'] }
   ]
 };
+function discFrameDate(disc, frame) {
+  var date = disc.dates?.[frame];
+  if (date) {
+    var parts = date.split('-');
+    return { m: Number(parts[1]) - 1, y: Number(parts[0]) };
+  }
+  var month = disc.start[1] + frame;
+  return { m: month % 12, y: disc.start[0] + Math.floor(month / 12) };
+}
 var DISCS = DISC_SETS.eic.slice();
+// Alternate episodes before showing another month from the same episode.
+var HOME_DISCS = [DISC_SETS.eic[1]].concat(DISC_SETS.prev, DISC_SETS.eic.filter(function (disc) { return disc !== DISC_SETS.eic[1]; }));
+var HOME_MAPS = [2, 0, 4, 1, 5, 3].flatMap(function (frame) {
+  return HOME_DISCS.map(function (disc) {
+    var date = discFrameDate(disc, frame);
+    return { url: disc.files[frame], month: date.m, year: date.y, source: disc.legacy ? 'NASA GIBS' : 'NASA EIC' };
+  });
+});
 // The build embeds data/impacts.v1.json here. No runtime request is needed.
 var IMPACT_CATALOG = { version: 1, records: [] };
 var CHARACTER_CATALOG = { version: 1, characters: [], ethics: {} };
@@ -2425,12 +2471,12 @@ var GUIDES = {
       }
     },
     {
-      "id": "listen-band-title",
-      "t": "Decide quién toca",
-      "b": "Activa o silencia a cada músico. Melodía usa acordes; Datos convierte niveles en tonos.",
+      "id": "tour-modes",
+      "t": "Melodía y Datos",
+      "b": "Melodía convierte los colores en notas y las combina con acordes y un ritmo. Datos convierte los niveles de color en tonos directos, sin acordes. Toca a un músico para activarlo o silenciarlo.",
       "en": {
-        "t": "Choose who plays",
-        "b": "Enable or mute each musician. Melody uses chords; Data converts levels into tones."
+        "t": "Melody and Data",
+        "b": "Melody turns the colors into notes and combines them with chords and a rhythm. Data turns the color levels directly into tones, without chords. Tap a musician to turn their instrument on or off."
       }
     }
   ],
@@ -2507,10 +2553,10 @@ var GUIDES = {
     {
       "id": "tour-topics",
       "t": "Categorías claras",
-      "b": "Puedes consultar interfaz, datos NASA y producción. La última categoría muestra fuentes y créditos.",
+      "b": "Consulta las fuentes en Datos de la NASA y los créditos en la última categoría.",
       "en": {
         "t": "Clear categories",
-        "b": "Browse interface, NASA data and production. The final category shows sources and credits."
+        "b": "Find the sources under NASA data and the credits in the final category."
       }
     },
     {
@@ -2536,10 +2582,10 @@ var GUIDES = {
     {
       "id": "credit-ai-title",
       "t": "Créditos de producción",
-      "b": "Se declara el uso documentado de las herramientas y se señalan las revisiones pendientes.",
+      "b": "Aquí se explica qué herramientas se usaron para producir EarthBeat y cómo se utilizó la inteligencia artificial.",
       "en": {
         "t": "Production credits",
-        "b": "Documented tool use is declared and pending reviews are identified."
+        "b": "Find out which tools were used to make EarthBeat and how artificial intelligence was used."
       }
     },
     {
@@ -2920,15 +2966,14 @@ var TX = {
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Escucha el Pacífico',
     heroLede: 'El agua cantaba en el antiguo Perú. Hoy la banda convierte mapas de la NASA en música.',
     heroCta: 'Escuchar el Pacífico', heroBand: 'Conocer a la banda',
-    homeMapAlt: 'Mapa del Pacífico con franjas de temperatura del mar más cálidas y más frías de lo habitual',
-    homeMapCaption: 'Pacífico · Anomalías de temperatura del mar · NASA',
-    flowAria: 'Del mapa NASA al análisis de píxeles y a la música', flowImage: 'Imagen NASA', flowPixels: 'Análisis · 28×16', flowMusic: 'Música',
+    homeMapAlt: 'Mapa de la NASA del Pacífico que muestra dónde el mar estuvo más frío o más cálido de lo habitual.',
+    flowAria: 'Del mapa NASA al análisis de píxeles y a la música', flowImage: 'Imagen NASA', flowPixels: 'Leer colores', flowMusic: 'Música',
     discKicker: 'Escuchar · paso 1', discTitle: 'Elige un disco', discLede: 'Abre un disco para ver los cambios en la temperatura del Pacífico.',
     setsAria: 'Origen de los datos', discsAria: 'Discos',
     listenKicker: 'Escuchar · paso 2', changeDisc: 'Cambiar disco', changeFile: 'Cambiar archivo',
-    youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: '28×16 píxeles de color',
+    youSee: 'Lo que ves tú', youSeeSub: 'imagen de la NASA', machineSees: 'Lo que ve la máquina', machineSub: 'Mapa de colores',
     prevFrame: 'Fotograma anterior', nextFrame: 'Fotograma siguiente', warm: 'Cálido', cold: 'Frío', strongWarm: 'Nivel ≥ +4', coast: 'Costa',
-    moreOptions: 'Cómo suena', timelineAria: 'Línea de tiempo del disco', see: 'Ves', hear: 'Oyes', chordsAria: 'Progresión de acordes', playerReadout: 'Qué ves y qué oyes',
+    moreOptions: 'Cómo suena', timelineAria: 'Línea de tiempo del disco', see: 'Qué muestra', hear: 'Oyes', chordsAria: 'Progresión de acordes', playerReadout: 'Qué ves y qué oyes',
     theBand: 'La banda', all: 'Todos', none: 'Ninguno', bandAria: 'Banda', bandMixHelp: 'Activa o silencia a cada músico.', staticPose: 'Pose estática', bandDesign: 'Propuesta artística del proyecto. Las referencias culturales y las historias se documentan por separado.',
     bandEyebrow: 'La banda del Pacífico', pickMusician: 'Elegir músico', inScene: 'En escena', fullBody: 'en pose de cuerpo completo con su instrumento', constellation: 'Constelación',
     starring: 'Protagoniza', listens: 'Escucha', plays: 'Toca', persona: 'Carácter', instrument: 'Instrumento', bandGo: 'Armar la banda y escuchar',
@@ -2937,17 +2982,16 @@ var TX = {
     colorsHow: 'Cómo leer los colores', modePalette: 'Mapa de anomalía (escala NASA)', modeFree: 'Color libre (cualquier imagen)', column: 'Columna a escuchar',
     howKicker: 'Método', howTitle1: 'Cómo suena un mapa', howLede1: 'Del color a la música, en ocho pasos sencillos.',
     methodSourcesTitle: 'Consultar las fuentes', originalPalette: 'Paleta original', monthlyData: 'Datos mensuales', impactCatalog: 'Catálogo de impactos v1',
-    techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', techNote: 'Detalle técnico', techEmpty: 'No hay herramientas con este filtro en la categoría. Elige «Todo» para verlas.', module: 'Módulo', credTitle: 'Datos, créditos y uso de IA', credData: 'Datos',
+    techKicker: 'Tecnología', techFilterAria: 'Filtrar tecnologías', techNote: 'Detalle técnico', techEmpty: 'No hay herramientas con este filtro en la categoría. Elige «Todo» para verlas.', module: 'Módulo', credTitle: 'Créditos y uso de IA', credData: 'Datos',
     credDataP1: 'Fotogramas de la visualización del Earth Information Center «Sea Surface Temperature (SST) Anomaly – Near Real Time» (NASA SVS 5176, variante Pacífico, 16 may 2024 – 2 nov 2026), recortados al Pacífico sudeste; datos JPL MUR SST. Crédito: NASA’s Scientific Visualization Studio.',
     credDataP2: 'Los discos «NASA GIBS» (2010–2023) usan NASA JPL GHRSST L4 MUR 0,25° SST Anomalies, día 15 de cada mes, vía NASA GIBS/Worldview.',
     credScience: 'Fuentes científicas', credDev: 'Desarrollo y tecnología', credTools: 'Herramientas principales', credInstitution: 'Aviso institucional',
     credDevP: 'Interfaz en HTML, CSS y JavaScript. Canvas 2D analiza los fotogramas y Web Audio sintetiza los instrumentos en el navegador. La versión estática para GitHub Pages se genera con scripts/build_pages.py.',
-    credAiReview: 'El registro docs/USO_DE_IA.md aún contiene entradas pendientes de revisión y detalle. La declaración debe contrastarse con ese registro antes de presentar el proyecto.',
     credAi: 'Declaración de uso de IA',
     credAiP: 'El registro del proyecto documenta Claude Design y Claude Code para planificación y prototipos, y Whisper para transcribir la orientación. Esta revisión utiliza Codex para código y pruebas, y recupera las ilustraciones 2D del equipo. Los personajes y sus historias son de ficción.',
     notice: 'Aviso', noticeP: 'Proyecto independiente creado para el NASA Space Apps Challenge; no está afiliado ni respaldado por la NASA.',
     back: 'Atrás', prevScreen: 'Pantalla anterior', nextScreen: 'Pantalla siguiente', screensAria: 'Pantallas de esta sección',
-    close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad del escaneo', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
+    close: 'Cerrar', sound: 'Sonido', engineAria: 'Motor de sonido', speedLabel: 'Velocidad', modesHelp: '¿En qué se diferencian Melodía y Datos?', slow: 'Lenta', normal: 'Normal', fast: 'Rápida', fourDecisions: 'Las cuatro decisiones de la música',
     guide: 'Guía', guideOpen: 'Abrir ayuda de Brisa', guideClose: 'Cerrar guía y continuar después', guideListen: 'Escuchar a Brisa', skipGuide: 'Saltar guía', guideBy: 'Brisa · tu guía'
   },
   en: {
@@ -2955,15 +2999,14 @@ var TX = {
     heroKicker: 'NASA Space Apps Challenge 2026', heroTitle: 'Listen to the Pacific',
     heroLede: 'Water sang in ancient Peru. Today the band turns NASA maps into music.',
     heroCta: 'Listen to the Pacific', heroBand: 'Meet the band',
-    homeMapAlt: 'Pacific map showing bands of warmer and cooler than usual sea temperatures',
-    homeMapCaption: 'Pacific Ocean · Sea surface temperature anomalies · NASA',
-    flowAria: 'From NASA imagery to pixel analysis and music', flowImage: 'NASA image', flowPixels: 'Analysis · 28×16', flowMusic: 'Music',
+    homeMapAlt: 'NASA map of the Pacific showing where the sea was warmer or cooler than usual.',
+    flowAria: 'From NASA imagery to pixel analysis and music', flowImage: 'NASA image', flowPixels: 'Read colors', flowMusic: 'Music',
     discKicker: 'Listen · step 1', discTitle: 'Pick a disc', discLede: 'Open a disc to see how Pacific temperatures change.',
     setsAria: 'Data source', discsAria: 'Discs',
     listenKicker: 'Listen · step 2', changeDisc: 'Change disc', changeFile: 'Change file',
-    youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: '28×16 colored pixels',
+    youSee: 'What you see', youSeeSub: 'NASA image', machineSees: 'What the machine sees', machineSub: 'Color map',
     prevFrame: 'Previous frame', nextFrame: 'Next frame', warm: 'Warm', cold: 'Cold', strongWarm: 'Level ≥ +4', coast: 'Coast',
-    moreOptions: 'How it sounds', timelineAria: 'Disc timeline', see: 'See', hear: 'Hear', chordsAria: 'Chord progression', playerReadout: 'What you see and hear',
+    moreOptions: 'How it sounds', timelineAria: 'Disc timeline', see: 'What it shows', hear: 'Hear', chordsAria: 'Chord progression', playerReadout: 'What you see and hear',
     theBand: 'The band', all: 'All', none: 'None', bandAria: 'Band', bandMixHelp: 'Switch each musician on or off.', staticPose: 'Static pose', bandDesign: 'Artistic proposal for the project. Cultural references and stories are documented separately.',
     bandEyebrow: 'The Pacific band', pickMusician: 'Pick a musician', inScene: 'On stage', fullBody: 'in a full-body pose with their instrument', constellation: 'Constellation',
     starring: 'Leads', listens: 'Listens to', plays: 'Plays', persona: 'Personality', instrument: 'Instrument', bandGo: 'Assemble the band and listen',
@@ -2972,17 +3015,16 @@ var TX = {
     colorsHow: 'How to read the colors', modePalette: 'Anomaly map (NASA scale)', modeFree: 'Free color (any image)', column: 'Column to listen to',
     howKicker: 'Method', howTitle1: 'How a map sounds', howLede1: 'From color to music in eight simple steps.',
     methodSourcesTitle: 'Consult the sources', originalPalette: 'Original palette', monthlyData: 'Monthly data', impactCatalog: 'Impact catalog v1',
-    techKicker: 'Technology', techFilterAria: 'Filter technologies', techNote: 'Technical detail', techEmpty: 'No tools in this category match the filter. Choose “All” to see them.', module: 'Module', credTitle: 'Data, credits and AI use', credData: 'Data',
+    techKicker: 'Technology', techFilterAria: 'Filter technologies', techNote: 'Technical detail', techEmpty: 'No tools in this category match the filter. Choose “All” to see them.', module: 'Module', credTitle: 'Credits and AI use', credData: 'Data',
     credDataP1: 'Frames from the Earth Information Center visualization “Sea Surface Temperature (SST) Anomaly – Near Real Time” (NASA SVS 5176, Pacific variant, 16 May 2024 – 2 Nov 2026), cropped to the southeast Pacific; JPL MUR SST data. Credit: NASA’s Scientific Visualization Studio.',
     credDataP2: 'The “NASA GIBS” discs (2010–2023) use NASA JPL GHRSST L4 MUR 0.25° SST Anomalies, the 15th of each month, via NASA GIBS/Worldview.',
     credScience: 'Scientific sources', credDev: 'Development and technology', credTools: 'Main tools', credInstitution: 'Institutional notice',
     credDevP: 'Interface built with HTML, CSS and JavaScript. Canvas 2D analyzes the frames and Web Audio synthesizes the instruments in the browser. The static GitHub Pages version is generated with scripts/build_pages.py.',
-    credAiReview: 'The docs/USO_DE_IA.md log still contains entries awaiting review and detail. This declaration should be checked against that log before submitting the project.',
     credAi: 'AI use statement',
     credAiP: 'The project log documents Claude Design and Claude Code for planning and prototypes, and Whisper for transcribing the orientation. This revision uses Codex for code and testing and restores the team’s 2D illustrations. The characters and stories are fictional.',
     notice: 'Notice', noticeP: 'Independent project created for the NASA Space Apps Challenge; it is not affiliated with or endorsed by NASA.',
     back: 'Back', prevScreen: 'Previous screen', nextScreen: 'Next screen', screensAria: 'Screens in this section',
-    close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Scan speed', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
+    close: 'Close', sound: 'Sound', engineAria: 'Sound engine', speedLabel: 'Speed', modesHelp: 'What is the difference between Melody and Data?', slow: 'Slow', normal: 'Normal', fast: 'Fast', fourDecisions: 'The four musical decisions',
     guide: 'Guide', guideOpen: 'Open Brisa’s help', guideClose: 'Close guide and continue later', guideListen: 'Listen to Brisa', skipGuide: 'Skip guide', guideBy: 'Brisa · your guide'
   }
 };
@@ -3303,6 +3345,7 @@ class Component extends DCLogic {
     this.state.tutorialSkipped = {};
     this.state.tutorialFeedback = null;
     this.state.legendSelection = null;
+    this.advanceHomeMap();
     this.state.speaking = false;
     this.bandTimer = null; this.bandTurn = 0; this.bandRaf = null; this.bandRaf2 = null; this.bandPrevious = null;
     this.guideProgress = Object.create(null);
@@ -3558,7 +3601,11 @@ class Component extends DCLogic {
     if (page === s.tab) {
       if ((page === 'juke' || page === 'how' && s.custom) && (page === 'how' ? s.sub === 0 : s.sub === 1)) key = 'player';
       else if (page === 'how' && s.sub === 0) key = 'practice';
-      else if (page === 'tech' && s.sub === this.techPages().length - 1) key = 'credits';
+      else if (page === 'tech') {
+        var category = this.techPages()[s.sub];
+        if (category?.credits) return GUIDES.credits.slice(1);
+        if (category?.nasa) return [GUIDES.credits[0]].concat(GUIDES.tech);
+      }
     }
     return GUIDES[key] || [];
   }
@@ -3566,10 +3613,6 @@ class Component extends DCLogic {
   sectionNarration() {
     var s = this.state;
     if (s.tab === 'how' && s.sub === 0) return GUIDES.practice[0];
-    if (s.tab === 'tech') {
-      var category = this.techPages()[s.sub];
-      return category && category.credits ? GUIDES.credits[0] : GUIDES.tech[0];
-    }
     return this.guideSteps(s.tab)[0];
   }
   narrateBrisa(step, manual) {
@@ -3891,7 +3934,7 @@ class Component extends DCLogic {
     begin();
   }
   url(d, f) { if (d === 5) return this.state.custom ? this.state.custom.url : ''; return DISCS[d].files[f]; }
-  frameDate(d, f) { var dt = DISCS[d].dates && DISCS[d].dates[f]; if (dt) { var q = dt.split('-'); return { m: +q[1] - 1, y: +q[0] }; } var s = DISCS[d].start, m = s[1] + f, y = s[0] + Math.floor(m / 12); return { m: m % 12, y: y }; }
+  frameDate(d, f) { return discFrameDate(DISCS[d], f); }
   applySet(name) {
     this.invalidateLoads();
     var s = this.state; this.stop(); this.lastThunder = -9;
@@ -3991,7 +4034,7 @@ class Component extends DCLogic {
   }
   techPages() {
     var pages = this.techGroups();
-    pages.push({ title: T('Datos, créditos y uso de IA', 'Data, credits and AI use'), credits: true, items: [] });
+    pages.push({ title: TX[LANG].credTitle, credits: true, items: [] });
     return pages;
   }
   subTitles() {
@@ -4036,6 +4079,23 @@ class Component extends DCLogic {
     if (k === 'how' && patch.sub === 0 && s.custom && s.disc !== 5) Object.assign(patch, { disc: 5, frame: 0, col: -1, ended: false });
     this.routeChange(patch, k);
   }
+  advanceHomeMap() {
+    var index = this.homeMapIndex;
+    if (index == null) {
+      index = -1;
+      try {
+        var saved = sessionStorage.getItem('ts_home_map');
+        if (saved !== null && Number.isSafeInteger(Number(saved)) && Number(saved) >= 0) index = Number(saved);
+      } catch (ignored) {}
+    }
+    this.homeMapIndex = (index + 1) % HOME_MAPS.length;
+    try { sessionStorage.setItem('ts_home_map', String(this.homeMapIndex)); } catch (ignored) {}
+  }
+  homeMap() {
+    var map = HOME_MAPS[this.homeMapIndex], date = T('Pacífico, ', 'Pacific, ') + MES[map.month] + T(' de ', ' ') + map.year;
+    return { url: map.url, thumbnail: 'miniaturas/' + map.url.replace(/\.[^.]+$/, '.webp'),
+      alt: TX[LANG].homeMapAlt, caption: date + ' · ' + map.source };
+  }
   resetScreenScroll() {
     var screen = document.querySelector('.px .viewport > .scr');
     if (screen) screen.scrollTop = 0;
@@ -4058,6 +4118,7 @@ class Component extends DCLogic {
       if (run !== self.routeRun || swapped) return;
       swapped = true;
       self.navCount = 0;
+      if (tab === 'home' && self.state.tab !== 'home') self.advanceHomeMap();
       self.setState(Object.assign({ routeArrived: !finished && self.state.trans }, patch, finished ? { trans: false, routeArrived: false } : {}), function () {
         self.resetScreenScroll();
         self.ensureNavVisible();
@@ -4147,15 +4208,21 @@ class Component extends DCLogic {
     var self = this, s = this.state, position = this.playerPosition(), steps = this.playerSteps();
     var elapsed = this.formatClock(this.playerSeconds(position)), duration = this.formatClock(this.playerSeconds(steps));
     var rain = s.disc === 5 && s.custom && s.custom.kind === 'rain';
-    var legend = [
-      { label: rain ? T('−5 · Bajo el promedio', '−5 · Below average') : T('−5 · Más frío', '−5 · Cooler') },
-      { label: rain ? T('0 · Promedio', '0 · Average') : T('0 · Neutro', '0 · Neutral') },
-      { label: rain ? T('+5 · Sobre el promedio', '+5 · Above average') : T('+5 · Más cálido', '+5 · Warmer') }
-    ];
-    legend.forEach(function (entry, index) {
-      entry.on = s.legendSelection === index;
-      entry.choose = function () { self.setState({ legendSelection: index }); self.tutorialAction('legend', index === 0); };
+    var localImage = s.disc === 5 && !rain;
+    var legend = RAMP.slice().reverse().map(function (level) {
+      var value = level[0], number = (value > 0 ? '+' : value < 0 ? '−' : '') + Math.abs(value).toLocaleString(LANG);
+      var meaning = rain
+        ? (value < 0 ? T('Menos lluvia de lo habitual en la serie', 'Less rainfall than the series average') : value > 0 ? T('Más lluvia de lo habitual en la serie', 'More rainfall than the series average') : T('Lluvia media de la serie', 'Average rainfall in the series'))
+        : value < 0 ? T('Más frío', 'Cooler') : value > 0 ? T('Más cálido', 'Warmer') : T('Neutro', 'Neutral');
+      return { number: number, color: level[1], label: number + ' · ' + meaning, on: s.legendSelection === value,
+        choose: function () { self.setState({ legendSelection: value }); self.tutorialAction('legend', value < 0); } };
     });
+    var selected = legend.find(function (level) { return level.on; });
+    var legendHelp = rain
+      ? T('Rojo: más lluvia que el promedio de la serie. Gris: promedio. Azul y verde: menos lluvia.', 'Red: above-average rainfall for this series. Gray: average. Blue and green: below average.')
+      : localImage
+      ? T('Rojo: colores más cálidos. Gris: nivel neutro. Azul y verde: colores más fríos. La escala clasifica los colores de tu imagen.', 'Red: warmer colors. Gray: neutral. Blue and green: cooler colors. The scale describes the colors in your image.')
+      : T('Rojo y naranja: más cálido de lo habitual. Gris: habitual. Azul y verde: más frío. La escala usa niveles, no grados.', 'Red and orange: warmer than usual. Gray: usual. Blue and green: cooler. The scale shows levels, not degrees.');
     return {
       controlsLabel: T('Controles de reproducción', 'Playback controls'), positionLabel: T('Tiempo del disco', 'Disc playback time'),
       position: position, steps: steps, elapsed: elapsed, duration: duration, of: T(' de ', ' of '),
@@ -4164,7 +4231,7 @@ class Component extends DCLogic {
       volumeLabel: T('Volumen', 'Volume'), volume: s.volume,
       changeVolume: function (e) { self.setVolume(Number(e.target.value)); },
       legendTitle: rain ? T('Lluvia mensual', 'Monthly rainfall') : T('Escala de color', 'Color scale'),
-      legend: legend, scale: RAMP.map(function (level) { return level[1]; }),
+      legend: legend, legendHelp: legendHelp, legendReading: selected ? selected.label : '',
       speechNotice: uiText(s.speechNotice),
       readLegendLabel: s.speaking ? T('Detener voz', 'Stop narration') : T('Escuchar leyenda', 'Hear legend'),
       readLegend: function () {
@@ -4292,7 +4359,7 @@ class Component extends DCLogic {
       if (!groups[t.cat]) { groups[t.cat] = []; order.push(t.cat); }
       groups[t.cat].push({ name: t.name, use: t.use, note: t.note || '', hasNote: !!t.note });
     });
-    return order.map(function (c) { return { title: c, items: groups[c] }; });
+    return order.map(function (c) { return { title: c, items: groups[c], nasa: c === T('Datos de la NASA', 'NASA data') }; });
   }
   releasePendingImage() {
     if (this.pendingImageUrl && this.pendingImageUrl.indexOf('blob:') === 0) URL.revokeObjectURL(this.pendingImageUrl);
@@ -4839,16 +4906,26 @@ class Component extends DCLogic {
     this.emitStep({ hits: bp.hits, flash: bp.flash, col: col, levels: lv, chord: ch.label, caption: '[' + tag + ' · ' + pos + '] ' + T('acorde ', 'chord ') + ch.label + (notes.length ? ' · ' + notes.join(' · ') : '') }, fired, ch.label, scheduled, vibration);
   }
   describeText() {
-    var a = this.cur(), s = this.state, dt = this.frameDate(s.disc, s.frame);
-    if (!a) return T('Analizando el fotograma.', 'Analyzing the frame.');
-    if (s.disc === 5) {
-      var table = s.custom && s.custom.kind === 'rain';
-      var up = a.cold > a.warm ? (table ? T('Predominan niveles por debajo del promedio de la serie.', 'Levels below the series average dominate.') : T('La intensidad de colores fríos supera la de colores cálidos.', 'Cool color intensity exceeds warm color intensity.')) : a.warm > 0.8 ? (table ? T('Predominan niveles por encima del promedio de la serie.', 'Levels above the series average dominate.') : T('Destacan los colores cálidos en el análisis visual.', 'Warm colors stand out in the visual analysis.')) : (table ? T('Los niveles derivados están cerca de el promedio de la serie.', 'Derived levels are close to the series average.') : T('El análisis tiene baja intensidad de niveles cálidos y fríos.', 'The analysis has low warm and cool level intensity.'));
-      return T('Tu archivo: ', 'Your file: ') + (s.custom ? uiLabel(s.custom) : '') + '. ' + up + ' ' + Math.round(a.hot * 100) + (table ? T(' por ciento de las celdas dibujadas tienen nivel cálido de al menos +4.', ' percent of the drawn cells have a warm level of at least +4.') : T(' por ciento de los píxeles incluidos tienen nivel cálido de al menos +4.', ' percent of the included pixels have a warm level of at least +4.'));
+    var a = this.cur(), s = this.state;
+    if (!a) return T('Preparando la imagen para convertirla en música.', 'Preparing the image to turn it into music.');
+    if (s.disc === 5 && s.custom?.kind === 'rain') {
+      if (a.cold > a.warm) return T('Destacan los meses con menos lluvia que el promedio de la serie.', 'Months with below-average rainfall stand out in this series.');
+      if (a.warm > a.cold) return T('Destacan los meses con más lluvia que el promedio de la serie.', 'Months with above-average rainfall stand out in this series.');
+      return T('El gráfico muestra cómo cambia la lluvia respecto al promedio de la serie.', 'The chart shows how rainfall changes around the series average.');
     }
-    var lead = a.cold > a.warm ? T('La intensidad fría supera la cálida en el análisis visual.', 'Cool intensity exceeds warm intensity in the visual analysis.') : a.warm > 0.8 ? T('Destacan los niveles cálidos en el análisis visual.', 'Warm levels stand out in the visual analysis.') : T('El análisis tiene baja intensidad de niveles cálidos y fríos.', 'The analysis has low warm and cool level intensity.');
-    var coast = a.coastPixels === 0 ? T('La zona costera seleccionada no tiene píxeles utilizables.', 'The selected coastal zone has no usable pixels.') : T('Zona costera seleccionada: nivel derivado ', 'Selected coastal zone: derived level ') + (a.coast > 0 ? '+' : '') + a.coast.toFixed(1) + T(' en la escala de −5 a +5.', ' on the −5 to +5 scale.');
-    return DISCS[s.disc].title + ', ' + MES[dt.m] + T(' de ', ' ') + dt.y + '. ' + lead + ' ' + Math.round(a.hot * 100) + T(' por ciento de los píxeles de mar incluidos tienen nivel cálido de al menos +4. ', ' percent of the included ocean pixels have a warm level of at least +4. ') + coast;
+    if (s.disc === 5) {
+      if (a.cold > a.warm) return T('En tu imagen destacan los colores fríos. La banda convierte esos colores en notas.', 'Cool colors stand out in your image. The band turns those colors into notes.');
+      if (a.warm > a.cold) return T('En tu imagen destacan los colores cálidos. La banda convierte esos colores en notas.', 'Warm colors stand out in your image. The band turns those colors into notes.');
+      return T('La banda convierte los colores de tu imagen en notas.', 'The band turns the colors in your image into notes.');
+    }
+    var main = a.cold > a.warm ? T('Destacan las zonas donde el mar estuvo más frío de lo habitual.', 'Areas where the sea was cooler than usual stand out.')
+      : a.warm > a.cold ? T('Destacan las zonas donde el mar estuvo más cálido de lo habitual.', 'Areas where the sea was warmer than usual stand out.')
+      : T('Las zonas más frías y las más cálidas de lo habitual tienen un peso parecido.', 'Areas cooler and warmer than usual are similarly prominent.');
+    var coast = !a.coastPixels ? T('En la zona de la costa marcada faltan datos útiles.', 'There is not enough usable data in the marked coastal area.')
+      : Math.abs(a.coast) < .5 ? T('El agua cerca de la costa marcada estuvo cerca de su temperatura habitual.', 'Water near the marked coast was close to its usual temperature.')
+      : a.coast < 0 ? T('El agua cerca de la costa marcada estuvo más fría de lo habitual.', 'Water near the marked coast was cooler than usual.')
+      : T('El agua cerca de la costa marcada estuvo más cálida de lo habitual.', 'Water near the marked coast was warmer than usual.');
+    return main + ' ' + coast;
   }
   stopSpeech() {
     if (this.brisaAudio) {
@@ -5121,7 +5198,7 @@ class Component extends DCLogic {
     var prof = this.profile(), factor = this.speedFactor(), melody = s.engine === 'melody', bpmEff = Math.round(prof.bpm * factor);
     var chordLabels = prof.prog.map(function (c) { return chordOf(prof, c).label; });
     var progItems = melody ? chordLabels.map(function (l) { var on = s.playing && l === s.chord; return { label: l, bg: on ? th.accent : 'transparent', fg: on ? '#0A0D1A' : th.fg, border: on ? th.accent : th.line }; }) : [];
-    var seeText = a ? this.describeText() : T('Analizando el fotograma.', 'Analyzing the frame.');
+    var seeText = this.describeText();
     var hearText = melody
       ? prof.key + ' ' + prof.mode + ' · ' + bpmEff + T(' pulsaciones por minuto · progresión ', ' beats per minute · progression ') + chordLabels.join(' – ') + (s.playing && s.chord ? T(' · ahora suena ', ' · now playing ') + s.chord : '') + '.'
       : T('Datos: niveles derivados convertidos en tonos, sin progresión de acordes. Las alturas y los timbres siguen reglas artísticas.', 'Data: derived levels converted into tones, without a chord progression. Pitches and timbres follow artistic rules.');
@@ -5137,10 +5214,10 @@ class Component extends DCLogic {
       { tag: T('USO', 'USE'), title: T('Explorar patrones', 'Explore patterns'), body: T('Permite contrastar patrones dentro de una misma fuente. Los niveles no son magnitudes físicas comparables entre productos.', 'Explore patterns within the same source. Levels are not physical quantities comparable across products.') }
     ];
     var engines = [
-      { key: 'melody', short: T('Melodía', 'Melody'), label: T('Melodía con escala y acordes', 'Melody with a scale and chords') },
-      { key: 'raw', short: T('Datos', 'Data'), label: T('Niveles convertidos en tonos', 'Levels converted into tones') }
+      { key: 'melody', short: T('Melodía', 'Melody'), description: T('Combina las notas del mapa con acordes y un ritmo.', 'Combines notes from the map with chords and a rhythm.') },
+      { key: 'raw', short: T('Datos', 'Data'), description: T('Convierte los niveles de color en tonos directos, sin acordes.', 'Turns color levels directly into tones, without chords.') }
     ].map(function (e) {
-      return { short: e.short, label: e.label, on: e.key === s.engine, off: false,
+      return { short: e.short, description: e.description, descriptionId: 'mode-description-' + e.key, on: e.key === s.engine,
         pick: function () { self.setEngine(e.key); } };
     });
     return {
@@ -5203,7 +5280,7 @@ class Component extends DCLogic {
       },
       langs: [{ code: 'es', short: 'ES', name: 'Español' }, { code: 'en', short: 'EN', name: 'English' }].map(function (l) { return { code: l.code, short: l.short, name: l.name, on: LANG === l.code, pick: function () { self.setLang(l.code); } }; }),
       scrKind: s.tab === 'home' ? 'home' : scrVm.jDisc ? '' : 'workspace',
-      heroUrl: 'fotogramas/ver2025_2.webp',
+      homeMap: this.homeMap(),
       heroGo: function () { self.goTab('juke'); },
       heroBand: function () { self.goTab('band'); },
       easyLabel: T('Explícamelo fácil', 'Explain it simply'),
@@ -5264,7 +5341,7 @@ class Component extends DCLogic {
       gridAfter: (s.col < 0 ? 100 : (s.col + 1) / 28 * 100) + '%',
       stats: a ? { warm: a.warm.toFixed(2), cold: a.cold.toFixed(2), hot: Math.round(a.hot * 100) + '%', coast: referenceCoast && a.coastPixels > 0 ? (a.coast >= 0 ? '+' : '') + a.coast.toFixed(1) : '—' } : { warm: '…', cold: '…', hot: '…', coast: referenceCoast ? '…' : '—' },
       tour: tourVm, nav: navVm, scr: scrVm, scrCls: scrCls,
-      techCur: { title: techCur.title, items: techCur.items, num: ('0' + (sub + 1)).slice(-2) },
+      techCur: { title: techCur.title, items: techCur.items, nasa: !!techCur.nasa, num: ('0' + (sub + 1)).slice(-2) },
       bandViewClass: isBand ? 'band-view' : '',
       bandCur: Object.assign({}, band[bandIndex], this.characterVm(bandKey), {
         previewOn: s.previewKey === bandKey,
@@ -5321,7 +5398,8 @@ class Component extends DCLogic {
       band: band,
       stageMusicians: band.map(function (member) {
         var level = member.on ? s.levels[member.key] || 0 : 0;
-        return { name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
+        var hits = member.on && s.playing ? (s.hits[member.key] || 0) : 0;
+        return { pulseClass: hits ? (hits % 2 ? 'pulse-a' : 'pulse-b') : '', name: member.name, on: member.on, toggle: member.toggle, key: member.key, playing: String(member.on && s.playing && level > .04), poseUrl: 'sprites/' + member.key + '/escenario.webp', color: member.color,
           intensity: level, playingClass: s.playing && level > .04 ? 'playing' : '' };
       }),
       stageShowBeat: melody,

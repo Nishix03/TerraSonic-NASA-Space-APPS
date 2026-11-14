@@ -34,14 +34,18 @@ test('Listen has only discs and player, while every date remains selectable', ()
   }
 });
 
-test('the grid legend uses its exact palette and three bilingual labels', () => {
+test('the interactive grid legend uses each color of the exact palette in both languages', () => {
   const {component:c,context}=setup();
   c.state.tab='juke';c.state.sub=1;
-  const colors=c.playerVm().scale;
-  assert.deepEqual([...colors],Array.from(context.RAMP,pair=>pair[1]));
-  assert.deepEqual(Array.from(c.playerVm().legend,level=>level.label),['−5 · Más frío','0 · Neutro','+5 · Más cálido']);
+  const legend=c.playerVm().legend;
+  assert.deepEqual(Array.from(legend,level=>level.color),Array.from(context.RAMP,pair=>pair[1]).reverse());
+  assert.equal(legend[0].label,'+5 · Más cálido');
+  assert.equal(legend.find(level=>level.number==='0').label,'0 · Neutro');
+  assert.equal(legend.at(-1).label,'−5 · Más frío');
+  legend.at(-1).choose();
+  assert.equal(c.playerVm().legendReading,'−5 · Más frío');
   c.setLang('en');
-  assert.deepEqual(Array.from(c.playerVm().legend,level=>level.label),['−5 · Cooler','0 · Neutral','+5 · Warmer']);
+  assert.equal(c.playerVm().legendReading,'−5 · Cooler');
   assert.equal(c.state.sub,1);
 });
 
@@ -1401,8 +1405,8 @@ test('the tutorial progresses through choosing a disc, playback and interpreting
   c.renderVals().discs[2].pick(); assert.equal(c.state.tour,2); assert.equal(c.state.disc,2); assert.equal(c.state.playing,false);
   assert.match(c.renderVals().tour.nextLabel,/Saltar paso/);
   await c.play(); assert.equal(c.state.tour,3); assert.equal(c.state.playing,true);
-  c.playerVm().legend[2].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
-  c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
+  c.playerVm().legend[0].choose(); assert.equal(c.state.tutorialDone.legend,false); assert(c.renderVals().tour.feedback);
+  c.playerVm().legend.at(-1).choose(); assert.equal(c.state.tutorialDone.legend,true); assert.equal(c.renderVals().tour.nextOff,false);
   c.renderVals().tour.next(); assert.equal(c.state.tour,0); assert.equal(c.state.tutorial,false);
   assert.equal(c.state.disc,2); assert.equal(c.state.sub,1); assert.equal(c.state.playing,true); c.stop();
 });
@@ -1637,11 +1641,11 @@ test('loading a disc requests its selected date before loading the remaining dat
 
 test('map descriptions report derived source values independently of mute and avoid implying ocean conditions for a table',()=>{
   const {component:c}=setup();c.cur=()=>({cells:Array(448).fill(-1),cold:1,warm:0,hot:.25,coast:0,coastPixels:0});
-  const description=c.describeText();assert.match(description,/25 por ciento de los píxeles/);assert.match(description,/no tiene píxeles utilizables/);
+  const description=c.describeText();assert.match(description,/más frío de lo habitual/);assert.match(description,/faltan datos útiles/);assert.doesNotMatch(description,/\d/);
   c.state.mute=c.allMute(true);assert.equal(c.describeText(),description,'map interpretation is independent of the enabled instruments');
   c.state.disc=5;c.state.custom={name:'Chiclayo',kind:'rain'};
-  assert.match(c.describeText(),/por debajo del promedio de la serie/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
-  c.setLang('en');assert.match(c.describeText(),/below the series average/);assert.match(c.describeText(),/drawn cells/);
+  assert.match(c.describeText(),/menos lluvia que el promedio de la serie/);assert(!/océano|canta|suena|Silbo/.test(c.describeText()));
+  c.setLang('en');assert.match(c.describeText(),/below-average rainfall/);assert.doesNotMatch(c.describeText(),/\d/);
 });
 
 test('a stale preview encoder cannot create URLs, replace the accepted image, or commit after navigation',()=>{
@@ -1727,7 +1731,7 @@ test('local image and rainfall have no reference coast, and rainfall has average
   assert.equal(c.renderVals().stats.coast,'—');
   c.state.custom={name:'Chiclayo',kind:'rain'};
   assert.equal(c.renderVals().stats.coast,'—');
-  assert.match(c.playerVm().legend[0].label,/Bajo el promedio/);
+  assert.match(c.playerVm().legend.at(-1).label,/Menos lluvia/);
 });
 
 test('player explanations distinguish derived Data tones from composed harmony and local image position',()=>{

@@ -138,8 +138,8 @@ async function main() {
       await page.locator('#tour-play button').click();
       if(!nativeAudio){await page.waitForFunction(()=>!!__app.state.audioError);await page.locator('#tour-card .tbubble .btn').click();}
       await page.waitForFunction(() => __app.state.tour===3);
-      await page.locator('.legend-choice').last().click(); assert.match(await next(page).textContent(),/Terminar guía/);
-      await page.locator('.legend-choice').first().click(); assert.equal(await next(page).isDisabled(),false);
+      await page.locator('.legend-choice').first().click(); assert.match(await next(page).textContent(),/Terminar guía/);
+      await page.locator('.legend-choice').last().click(); assert.equal(await next(page).isDisabled(),false);
       await page.screenshot({path:path.join(output,'tutorial-'+viewport.width+'.png')});
       await next(page).click(); assert.equal(await page.locator('#tour-card').count(),0);
       assert.equal(await page.evaluate(() => __app.state.playing),nativeAudio);
@@ -169,7 +169,7 @@ async function main() {
         await page.locator('#tour-play button').click();
         await page.waitForFunction(()=>!!__app.state.audioError);
         await page.locator('#tour-card .tbubble .btn').click();
-        await page.locator('.legend-choice').first().click(); await next(page).click();
+        await page.locator('.legend-choice').last().click(); await next(page).click();
         assert.equal(await page.locator('#tour-card').count(),0);
       }
       report.journeys.push(options.emptyVoices?'Empty voice list keeps written help':'Tutorial has a written fallback without Web Audio or speech APIs');
