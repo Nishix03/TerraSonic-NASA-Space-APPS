@@ -1,5 +1,22 @@
 # Entrada automática y astros del fondo
 
+## Comportamiento vigente: cada astro abre un disco
+
+Por indicación posterior del usuario, el viaje del cohete termina directamente en el reproductor de uno de los discos de «Elige un disco». Se elimina del recorrido la pantalla intermedia de escenario/ambientación. La selección comparte la misma función que las tarjetas de la biblioteca, de modo que carga el primer mapa, su contexto científico y el protagonista habitual; conserva una mezcla modificada por el visitante.
+
+| Astro del fondo | Disco EIC que abre |
+|---|---|
+| Sol | Verano 2024–25 |
+| Luna | Invierno 2024 |
+| Saturno | Verano 2025–26 |
+| Aqua | Invierno 2025 |
+
+La etiqueta accesible y el texto del viaje nombran el disco de destino, en español e inglés. La llegada enfoca el título del reproductor, listo para pulsar Reproducir. «Abrir disco» salta el resto del viaje; Cancelar/Escape devuelve el foco al astro. Con movimiento reducido se abre el disco inmediatamente. Si antes se usó el catálogo histórico GIBS, el acceso cambia explícitamente a EIC para cargar el episodio indicado. La introducción, los astros y sus animaciones se conservan.
+
+Las pruebas de esta actualización están bajo `_work/planet-discs/`: 143 pruebas de lógica, incluyendo los cuatro accesos desde otro catálogo; recorridos de astros en nueve ventanas Chromium y dos por Firefox/WebKit; 24 recorridos Chromium de los cuatro discos en español/inglés y tres anchuras, con identidad del mapa, foco, cancelación, reproducción/pausa y reglas axe sin fallos. Los resultados de publicación se registran en [PUBLICACION.md](PUBLICACION.md).
+
+> Los apartados siguientes documentan el checkpoint previo de escenarios artísticos (`f30dfb6`) y sus pruebas. La tabla anterior sustituye su comportamiento de llegada; no se afirma que las escenas o su ambientación sigan siendo la ruta pública de los astros.
+
 ## Corrección del arranque
 
 La edición anterior guardaba `ts_motion_mode=full` al repetir la introducción, pero el constructor no recuperaba esa elección. Con reducción del sistema, la entrada podía verse inmóvil mientras «Repetir introducción» sí animaba. Además, la alternativa estática no tenía final automático.

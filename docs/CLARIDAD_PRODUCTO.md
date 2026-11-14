@@ -24,7 +24,7 @@ Mapa + proceso visible          Mapa / matriz / audio / leyenda
 Astros interactivos del fondo
 ```
 
-La afirmación «datos» se acota enseguida mediante «colores de mapas» y «frente a una referencia». La interpretación musical es una alternativa para explorar patrones; no se promete diagnóstico, predicción, precisión numérica ni mejora de aprendizaje demostrada. Los mundos artísticos se abren pulsando los propios astros del fondo, sin otra fila o desplegable. Se mantiene la navegación a la banda.
+La afirmación «datos» se acota enseguida mediante «colores de mapas» y «frente a una referencia». La interpretación musical es una alternativa para explorar patrones; no se promete diagnóstico, predicción, precisión numérica ni mejora de aprendizaje demostrada. Los astros del fondo abren directamente discos del catálogo tras su viaje ilustrado, sin otra fila, desplegable o pantalla intermedia de ambientación. Se mantiene la navegación a la banda.
 
 ## Recorrido previsto de tres acciones principales
 
@@ -43,7 +43,7 @@ No se añade un tutorial obligatorio. La secuencia está integrada en la portada
 | Tu imagen en música / Your image as music | Nuevo nombre de la conversión; recibe imágenes fijas y conserva la muestra de lluvia POWER, con metadatos distintos |
 | ¿Cómo funciona? | Explicación sencilla existente del recorrido completo; accesible desde la segunda acción de la portada, sin crear otra categoría equivalente |
 | Tecnología | Detalles, fuentes, herramientas, créditos y uso de IA; permanece como profundidad opcional |
-| Universo artístico | Cuatro destinos al pulsar los astros del fondo, con su ambientación claramente separada de los mapas |
+| Astros del fondo | Cuatro accesos directos a discos EIC de invierno/verano; el viaje es ilustrativo y termina en la sonificación del mapa elegido |
 
 Se mantienen las cinco categorías y sus rutas internas. La marca continúa volviendo a Inicio. Las etiquetas compactas son «Escuchar», «Banda», «Tu imagen», «¿Cómo funciona?» y «Tecnología», con equivalentes en inglés. No se crea una sección «Explorar datos» separada: los datos se consultan junto a la muestra a la que pertenecen.
 

@@ -3586,7 +3586,7 @@ class SpaceJourney {
     if(app.bandReduced()||typeof document.createElement!=='function'){this.arrive=null;arrive();return;}
     var root=document.createElement('section');this.root=root;root.className='ts-voyage';root.dataset.destination=key;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-labelledby','voyage-title');
     root.innerHTML='<div class="voyage-starfield" aria-hidden="true"></div><div class="voyage-copy"><h2 id="voyage-title"></h2><p></p><p class="voyage-phase" role="status" aria-live="polite"></p></div><div class="voyage-glow" aria-hidden="true"></div><svg viewBox="0 0 900 500" aria-hidden="true"><defs><radialGradient id="voyage-light"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="740" cy="210" r="105" fill="url(#voyage-light)"/><circle class="voyage-target" cx="740" cy="210" r="54"/><ellipse cx="740" cy="210" rx="94" ry="22" fill="none" stroke="#bcd8ed" opacity=".5" transform="rotate(-20 740 210)"/><path class="voyage-path" d="M90 380C250 60 520 460 676 230" fill="none" stroke="#8be7e9" stroke-width="1.5" stroke-dasharray="3 8" opacity=".4"/><g class="voyage-ship"><g class="voyage-flame"><path d="M-5 18Q0 37 5 18Z" fill="#e8b969"/><path d="M-2 18Q0 29 2 18Z" fill="#8be7e9"/></g><path d="M0-22C-8-16-9 4-6 17H6C9 4 8-16 0-22Z" fill="#eef3fa"/><circle cy="-7" r="3.5" fill="#386b8e"/><path d="M-6 6L-13 19l8-3M6 6l7 13-8-3" fill="#8be7e9"/><path d="M-5 17h10" stroke="#608baa" stroke-width="2"/></g><g fill="#d7edff" opacity=".5"><circle cx="120" cy="100" r="1.5"/><circle cx="320" cy="220" r="2"/><circle cx="460" cy="70" r="1"/><circle cx="580" cy="330" r="1.5"/><circle cx="780" cy="420" r="1"/></g></svg><div class="voyage-actions"><button type="button" class="voyage-skip"></button><button type="button" class="voyage-cancel"></button></div>';
-    root.querySelector('h2').textContent=T('Viajando a ','Travelling to ')+spaceText(dest.name);root.querySelector('.voyage-copy p').textContent=T('Puedes saltar el viaje o volver.','You can skip the journey or go back.');root.querySelector('.voyage-target').setAttribute('fill',dest.color);root.querySelector('.voyage-skip').textContent=T('Ir al destino','Go to destination');root.querySelector('.voyage-cancel').textContent=T('Cancelar','Cancel');
+    root.querySelector('h2').textContent=T('Viajando a ','Travelling to ')+spaceText(dest.name);root.querySelector('.voyage-copy p').textContent=T('Destino musical: ','Music destination: ')+DISC_SETS.eic[dest.disc].title+T('. Puedes saltar el viaje o volver.','. You can skip the journey or go back.');root.querySelector('.voyage-target').setAttribute('fill',dest.color);root.querySelector('.voyage-skip').textContent=T('Abrir disco','Open disc');root.querySelector('.voyage-cancel').textContent=T('Cancelar','Cancel');
     this.appRoot=document.querySelector('.px.app');this.wasInert=this.appRoot.inert;this.appRoot.inert=true;document.body.append(root);root.querySelector('.voyage-skip').focus({preventScroll:true});
     root.querySelector('.voyage-skip').onclick=function(){self.finish(true);};root.querySelector('.voyage-cancel').onclick=function(){self.finish(false);};
     this.onKey=function(e){if(e.key==='Escape'){e.preventDefault();e.stopPropagation();self.finish(false);}else if(e.key==='Tab'){e.preventDefault();var buttons=Array.from(root.querySelectorAll('button')),i=buttons.indexOf(document.activeElement);buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
@@ -4219,8 +4219,19 @@ class Component extends DCLogic {
     this.cinema?.finish(false);this.stop();this.closeMenus(false);this.portalReturnKey=key;
     var self=this;this.journey.start(key,event?.currentTarget,function(){
       if(self.disposed||self.state.tab!=='home')return;
-      self.setState({destination:key},function(){self.resetScreenScroll();document.getElementById('destination-title')?.focus({preventScroll:true});});
+      if(self.state.set!=='eic')self.applySet('eic');
+      self.selectDisc(SPACE_DESTINATIONS[key].disc);
     });
+  }
+  selectDisc(index) {
+    if(!Number.isInteger(index)||!DISCS[index]||!this.settleArrivedRoute())return;
+    this.stop();this.lastThunder=-9;
+    if(this.state.tour&&!this.state.tutorial)this.tourClose();
+    var disc=DISCS[index],who=this.state.leadOverride||this.discLead(index,this.state.an[index+'_0']);
+    var name=BAND.find(function(b){return b.k===who;}).name;
+    this.routeChange({tab:'juke',disc:index,frame:0,col:-1,sub:1,easyOpen:false,mute:this.state.mixCustomized?this.state.mute:this.only(who),
+      caption:T('Disco ','Disc ')+disc.n+': '+disc.title+T('. Protagonista: ','. Lead: ')+name+T('. Pulsa Reproducir.','. Press Play.')},'juke',disc.title);
+    this.tutorialAction('disc');
   }
   closeDestination() {
     this.journey.finish(false);this.stop();var self=this;
@@ -4242,7 +4253,7 @@ class Component extends DCLogic {
   }
   universeVm() {
     var self=this,key=this.state.destination||'sun',d=SPACE_DESTINATIONS[key],s=this.state,audioAvailable=typeof(window.AudioContext||window.webkitAudioContext)==='function';
-    var portals={};Object.keys(SPACE_DESTINATIONS).forEach(function(k){var p=SPACE_DESTINATIONS[k];portals[k+'Name']=spaceText(p.name);portals[k+'Label']=T('Explorar ','Explore ')+spaceText(p.name)+': '+spaceText(p.title);portals[k+'Open']=function(event){self.openDestination(k,event);};});
+    var portals={};Object.keys(SPACE_DESTINATIONS).forEach(function(k){var p=SPACE_DESTINATIONS[k];portals[k+'Name']=spaceText(p.name);portals[k+'Label']=T('Abrir disco: ','Open disc: ')+DISC_SETS.eic[p.disc].title+' · '+spaceText(p.name);portals[k+'Open']=function(event){self.openDestination(k,event);};});
     return {...portals,key:key,name:spaceText(d.name),title:spaceText(d.title),text:spaceText(d.text),fact:spaceText(d.fact),color:d.color,sky:d.sky,ground:d.ground,
       navLabel:T('Explorar destinos del universo','Explore universe destinations'),exploreLabel:T('Explorar el universo artístico','Explore the artistic universe'),artBrief:T('Escenas y música ambiental independientes de los mapas NASA.','Scenes and ambient music separate from the NASA maps.'),destinations:Object.keys(SPACE_DESTINATIONS).map(function(k){var p=SPACE_DESTINATIONS[k];return {key:k,name:spaceText(p.name),color:p.color,label:T('Explorar ','Explore ')+spaceText(p.name),open:function(event){self.openDestination(k,event);}};}),
       backLabel:T('Volver al universo','Back to the universe'),back:function(){self.closeDestination();},controlsLabel:T('Ambiente musical artístico','Artistic musical atmosphere'),pending:s.audioPending||!audioAvailable,
@@ -5706,15 +5717,7 @@ class Component extends DCLogic {
             self.settleArrivedRoute();
             if (self.state.tab !== 'juke' || self.state.sub !== 0 || self.state.trans) return;
             self.discPointerOpening = !!(event && event.detail);
-            self.stop();
-            self.lastThunder = -9;
-            if (self.state.tour && !self.state.tutorial) self.tourClose();
-            var manual = self.state.leadOverride;
-            var who = manual || self.discLead(k, self.state.an[k + '_0']);
-            var name = BAND.find(function (b) { return b.k === who; }).name;
-            self.routeChange({ disc: k, frame: 0, col: -1, sub: 1, easyOpen: false, mute: self.state.mixCustomized ? self.state.mute : self.only(who),
-              caption: T('Disco ', 'Disc ') + x.n + ': ' + x.title + T('. Protagonista: ', '. Lead: ') + name + T('. Pulsa Reproducir.', '. Press Play.') }, 'juke', x.title);
-            self.tutorialAction('disc');
+            self.selectDisc(k);
           } };
       }),
       disc: d, frameLabel: this.frameTag(s.disc, s.frame), frameUrl: this.url(s.disc, s.frame),

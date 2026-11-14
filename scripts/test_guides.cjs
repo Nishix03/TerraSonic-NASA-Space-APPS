@@ -1381,6 +1381,16 @@ test('a map context refreshes after analysis arrives and when the musical mode c
   const {component:c}=setup();c.state.disc=2;c.state.frame=0;let initial=c.listeningContext();c.state.an['2_0']={warm:1,cold:0};let analyzed=c.listeningContext();assert.notEqual(initial,analyzed);assert.match(analyzed.summary,/niveles cálidos/);assert.equal(c.listeningContext(),analyzed);c.state.engine='raw';assert.match(c.listeningContext().steps[2].text,/Inti/);c.setLang('en');assert.match(c.listeningContext().title,/What/);
 });
 
+test('each background planet opens its EIC season disc after the journey, even from the historical catalog', () => {
+  for(const [key,index] of Object.entries({sun:1,moon:0,saturn:3,aqua:2})){
+    const {component:c}=setup();c.applySet('prev');let arrive;
+    c.journey.start=(planet,trigger,done)=>{assert.equal(planet,key);arrive=done;};
+    c.openDestination(key);assert.equal(c.state.tab,'home');assert.equal(c.state.destination,'');
+    arrive();assert.equal(c.state.tab,'juke');assert.equal(c.state.sub,1);assert.equal(c.state.set,'eic');assert.equal(c.state.disc,index);assert.equal(c.state.frame,0);assert.equal(c.state.col,-1);assert.equal(c.state.playing,false);assert.equal(c.state.destination,'');
+    assert.match(c.state.caption,/Pulsa Reproducir/);c.setLang('en');assert.match(c.universeVm()[key+'Label'],/Open disc: (Winter|Summer)/);
+  }
+});
+
 test('leaving a destination cancels an audio start that resolves late', async () => {
   const {component:c}=setup();c.state.destination='sun';let resolve;
   c.ensureAudio=()=>({});c.waitForAudio=()=>new Promise(done=>{resolve=done;});
