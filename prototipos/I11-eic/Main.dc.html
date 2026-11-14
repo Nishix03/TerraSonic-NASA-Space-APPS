@@ -1880,11 +1880,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 .px .haptics-settings p{font-size:.85em;line-height:1.45;color:var(--muted);max-width:70ch}
 .px .haptics-settings .row{gap:8px;flex-wrap:wrap}
 .px .haptics-settings button{min-height:44px;white-space:normal;flex:1 1 140px;letter-spacing:.03em}
-/* Named destinations stay in the content flow; no floating touch targets cover text. */
-.px .universe-portals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:min(100%,440px);margin-top:12px}
-.px .home-universe{width:min(100%,440px);text-align:left;border-top:1px solid var(--line);font-size:.85em}
-.px .home-universe>summary{min-height:44px;cursor:pointer;padding:10px 4px;color:var(--muted);font-weight:600;line-height:1.5}
-.px .home-universe>p{font-size:.9em;color:var(--muted);line-height:1.4}
+/* First-listen context, with secondary destinations on the background bodies. */
 .px .hero .display{font-size:clamp(2rem,4.4vw,3.6rem);max-width:18ch}
 .px .listening-context{padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--panel);margin-bottom:14px;min-width:0}
 .px .sample-nowbar{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;align-items:center;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:12px}
@@ -1906,14 +1902,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @media(max-width:640px){.px .hero .display{font-size:clamp(1.65rem,7.4vw,2.8rem)}.px .context-details{grid-template-columns:minmax(0,1fr)}.px .listening-context{padding:10px}}
 @media(max-width:430px){.px .sample-nowbar{grid-template-columns:76px minmax(0,1fr);gap:10px}.px .sample-nowbar>img{width:76px;height:54px}.px .sample-nowbar .controls{grid-template-columns:auto minmax(0,1fr);gap:4px}.px .sample-nowbar #tour-more{grid-column:1/-1}.px .sample-nowbar #tour-more button{width:100%;min-height:44px}.px .sample-nowbar .when{font-size:.8em}}
 @media(max-width:359px) and (max-height:600px){.px .scr.home>.in{padding-block:6px}.px .hero{gap:8px}.px .scr.home .hero .cta{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.px .hero .cta .btn,.px .hero .cta .btn:not(.primary){grid-column:auto;min-width:0;padding-inline:6px;letter-spacing:0;font-size:.85em}}
-@media(min-width:641px) and (max-height:450px){.px .hero .display{font-size:1.8em}.px .home-universe>summary{padding-block:8px}}
-.px .portal-button{display:grid;justify-items:center;gap:5px;min-width:0;min-height:72px;padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);font:600 .8em/1.2 var(--body);cursor:pointer}
-.px .portal-button:hover{border-color:var(--accent);background:var(--surface)}
-.px .portal-planet{display:block;position:relative;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff9,var(--planet) 35%,#142b43 95%);box-shadow:inset -5px -3px 8px #09152666}
-.px .portal-planet[data-body="sun"]{box-shadow:0 0 15px #e8b96955;background:radial-gradient(circle at 30% 30%,#ffedbe,#e8b969 50%,#a86a34)}
-.px .portal-planet[data-body="moon"]::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 25% 60%,#1b2d4944 0 12%,transparent 13%),radial-gradient(circle at 60% 30%,#1b2d4944 0 8%,transparent 9%)}
-.px .portal-planet[data-body="saturn"]::after{content:"";position:absolute;inset:9px -11px;border:2px solid #c9c4eb;border-radius:50%;transform:rotate(-22deg)}
-.px .portal-planet[data-body="aqua"]::after{content:"";position:absolute;inset:6px 1px;border-block:2px solid #bcf1df88;border-radius:45%;transform:rotate(-18deg)}
+@media(min-width:641px) and (max-height:450px){.px .hero .display{font-size:1.8em}}
 .px .destination{width:min(100%,1050px);margin:auto;display:grid;gap:16px;min-width:0}
 .px .destination-return{justify-self:start;min-height:44px}
 .px .destination-layout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(18px,4vw,48px)}
@@ -1942,45 +1931,69 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 @keyframes probe-cruise{0%,70%{opacity:0;transform:translate(0,0) rotate(-15deg)}73%{opacity:.6}78%{transform:translate(24vw,-16vh) rotate(-22deg)}84%{transform:translate(55vw,-22vh) rotate(0deg);opacity:.6}91%,100%{transform:translate(112vw,-6vh) rotate(18deg);opacity:0}}
 .px .bshow::before{content:"";position:absolute;z-index:-1;inset:20% 6% 15%;border-radius:50%;background:radial-gradient(ellipse at 50% 70%,color-mix(in srgb,var(--band-light) 12%,transparent),transparent 70%);border-bottom:1px solid color-mix(in srgb,var(--band-light) 25%,transparent);pointer-events:none}
 .ts-voyage{position:fixed;inset:0;z-index:2001;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:clamp(16px,5vw,60px);background:#101d30;color:#eef3fa;font:400 16px/1.5 Inter,sans-serif}
+.ts-voyage{overflow:hidden;isolation:isolate}
 .ts-voyage *{box-sizing:border-box}
-.ts-voyage .voyage-copy{text-align:center}
+.ts-voyage .voyage-copy{text-align:center;position:relative;z-index:1}
 .ts-voyage h2{font-size:clamp(1.5rem,5vw,2.8rem);margin:0}
 .ts-voyage p{color:#c4d9e8;margin:8px 0}
-.ts-voyage svg{width:100%;height:100%;min-height:0;align-self:center}
+.ts-voyage>svg{width:100%;height:100%;min-height:0;align-self:center;pointer-events:none}
 .ts-voyage .voyage-target{transform-origin:740px 210px}
-.ts-voyage .voyage-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ts-voyage .voyage-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.ts-voyage .voyage-glow{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.ts-voyage .voyage-phase{min-height:1.5em;color:#8be7e9}
+.ts-voyage .voyage-starfield{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 10% 85%,#397f9129,transparent 65%),radial-gradient(1px 1px at 20px 40px,#c4f2ff 80%,transparent),radial-gradient(1px 1px at 110px 150px,#8be7e9 80%,transparent);background-size:100% 100%,197px 223px,313px 291px;opacity:.6}
+.px .hero{position:relative}
+.px .space-destinations{position:fixed;inset:0;z-index:2;pointer-events:none}
+.px .planet-portal{appearance:none;position:fixed;display:grid;place-items:center;min-width:44px;min-height:44px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;pointer-events:auto;opacity:1;isolation:isolate}
+.px .planet-portal *{pointer-events:none}
+.px .planet-portal.space-sun{width:104px;left:8px;top:30vh}
+.px .planet-portal.space-moon{width:96px;right:8px;top:18vh}
+.px .planet-portal.planet-ringed{width:124px;right:3%;bottom:2%;top:auto}
+.px .planet-portal.planet-distant{width:52px;left:2.5%;bottom:20%;top:auto}
+.px .planet-portal .solar-halo{inset:-12%}
+.px .planet-portal:hover{filter:drop-shadow(0 0 12px #c4f2ff66)}
+.px .planet-portal:focus-visible{outline:3px solid var(--accent);outline-offset:4px;filter:drop-shadow(0 0 12px #c4f2ff66)}
+.px .planet-name{position:absolute;bottom:0;left:50%;transform:translateX(-50%);padding:2px 5px;max-width:100%;border-radius:4px;background:var(--panel);color:var(--fg);font:600 12px/1.3 var(--body);opacity:0;white-space:nowrap}
+.px .planet-portal:is(:hover,:focus-visible) .planet-name,.px .space-destinations[data-contrast="true"] .planet-name{opacity:1}
+.px .space-dust{position:absolute;inset:0;opacity:.35;background-image:radial-gradient(1px 1px at 45px 30px,#c4f2ff,transparent),radial-gradient(1.5px 1.5px at 140px 120px,#8be7e9,transparent);background-size:243px 197px;animation:space-glimmer 13s ease-in-out infinite alternate}
+.px .shower-streak{position:absolute;width:clamp(45px,8vw,120px);height:1px;background:linear-gradient(90deg,transparent,#d7edff);opacity:0;animation:meteor-shower 64s linear infinite}
+.px .shower-streak:nth-child(1){left:2%;top:12%;animation-delay:-21s}
+.px .shower-streak:nth-child(2){left:25%;top:5%;animation-delay:-20.6s}
+.px .shower-streak:nth-child(3){left:48%;top:18%;animation-delay:-20.2s}
+.px .shower-streak:nth-child(4){left:9%;top:40%;animation-delay:-19.8s}
+.px .shower-streak:nth-child(5){left:36%;top:48%;animation-delay:-19.4s}
+.px .shower-streak:nth-child(6){left:63%;top:28%;animation-delay:-19s}
+@keyframes meteor-shower{0%,47%{opacity:0;transform:translate(0,0) rotate(34deg)}48%{opacity:.6}51%,100%{opacity:0;transform:translate(33vw,20vh) rotate(34deg)}}
+.px.reduce-motion .planet-portal *{animation:none!important}
+.px.reduce-motion .space-shower{display:none}
+html[data-ts-page-hidden] .px .planet-portal *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .planet-portal *{animation:none!important}.px:not([data-motion-mode="full"]) .space-shower{display:none}}
+@media(max-width:1200px){.px .hero{padding-block:56px}.px .space-destinations{position:absolute;inset:0}.px .planet-portal.space-sun,.px .planet-portal.space-moon,.px .planet-portal.planet-ringed,.px .planet-portal.planet-distant{position:absolute;display:grid;width:52px;height:52px;min-width:44px;min-height:44px;opacity:1;transform:none}.px .planet-portal.space-sun{left:0;top:0;right:auto;bottom:auto}.px .planet-portal.space-moon{right:0;top:0;left:auto;bottom:auto}.px .planet-portal.planet-distant{left:0;bottom:0;top:auto;right:auto}.px .planet-portal.planet-ringed{right:0;bottom:0;left:auto;top:auto}.px .planet-name{opacity:1;padding:1px 3px;font-size:max(12px,.7em)}.px .planet-portal .solar-satellite{display:none}}
+@media(max-width:640px){.px .shower-streak:nth-child(n+5){display:none}}
+@media(max-width:640px) and (max-height:700px){.px .hero .facts,.px .hero .kicker,.px .home-motion-note{display:none}}
+@media(max-height:450px) and (min-width:641px){.px .hero{padding-block:0;padding-inline:56px}.px .scr.home .hero .cta{grid-template-columns:repeat(2,minmax(0,1fr))}.px .scr.home .hero .cta .btn{grid-column:auto;font-size:.8em;padding:4px;letter-spacing:0}.px .planet-portal.space-sun{top:10%;left:0}.px .planet-portal.space-moon{top:10%;right:0}.px .planet-portal.planet-distant{bottom:8%;left:0}.px .planet-portal.planet-ringed{bottom:8%;right:0}}
+.px.app[data-theme="light"] .planet-portal{opacity:1}
+@media(forced-colors:active){.px .planet-portal{filter:none}.px .planet-name{background:Canvas;color:CanvasText;opacity:1}.px .planet-portal:focus-visible{outline-color:Highlight}.ts-voyage .voyage-glow{display:none}}
 .ts-voyage button{min-height:44px;padding:10px 16px;border:1px solid #9cb7ce;border-radius:8px;background:#1d3045;color:#eef3fa;font:600 1rem/1.4 Inter,sans-serif;cursor:pointer}
 .ts-voyage button:focus-visible{outline:3px solid #e8b969;outline-offset:3px}
-@media(max-width:700px){.px .destination-layout{grid-template-columns:minmax(0,1fr);gap:18px}.px .destination-scene{grid-row:1}.px .destination-scene svg{max-height:260px;aspect-ratio:1.5}.px .destination-copy h1{font-size:2rem}.px .universe-portals{margin-inline:auto}.px .portal-button{min-height:68px}.ts-voyage{padding:16px}}
-@media(max-width:640px) and (max-height:700px){.px .universe-portals{margin-top:6px}.px .portal-button{min-height:48px;padding:4px 2px;gap:2px}.px .portal-planet{width:20px;height:20px}}
-@media(max-width:359px) and (max-height:600px),(min-width:641px) and (max-height:450px){.px .hero .facts{display:none}.px .universe-portals{margin-top:6px}.px .portal-button{min-height:44px;padding:6px 2px}.px .portal-planet{display:none}}
+@media(max-width:700px){.px .destination-layout{grid-template-columns:minmax(0,1fr);gap:18px}.px .destination-scene{grid-row:1}.px .destination-scene svg{max-height:260px;aspect-ratio:1.5}.px .destination-copy h1{font-size:2rem}.ts-voyage{padding:16px}}
+@media(max-width:359px) and (max-height:600px),(min-width:641px) and (max-height:450px){.px .hero .facts{display:none}}
 @media(max-height:450px){.ts-voyage .voyage-copy p{display:none}.ts-voyage{padding:10px;gap:0}}
 @media(prefers-reduced-motion:reduce){.px:not([data-motion-mode="full"]) .destination *{animation:none!important}}
-@media(forced-colors:active){.px .portal-planet{background:CanvasText;box-shadow:none}.px .destination-scene svg{forced-color-adjust:none}.ts-voyage{background:Canvas;color:CanvasText}.ts-voyage button{background:ButtonFace;color:ButtonText}}
+@media(forced-colors:active){.px .destination-scene svg{forced-color-adjust:none}.ts-voyage{background:Canvas;color:CanvasText}.ts-voyage button{background:ButtonFace;color:ButtonText}}
 </style>
 </helmet>
 <div class="px app {{bandViewClass}} {{motionClass}}" data-motion-mode="{{motionMode}}" data-theme="{{theme.mode}}" style="--bg: {{th.bg}}; --panel: {{th.panel}}; --surface: {{th.surface}}; --line: {{th.line}}; --fg: {{th.fg}}; --muted: {{th.muted}}; --accent: {{th.accent}}; --hot: {{th.hot}}; --cold: {{th.cold}}; --mag: {{th.magenta}}; --head: {{th.headFont}}; --body: {{th.bodyFont}}; --section: {{sectionColor}}; --guide-space: {{tour.space}}; font-size: {{th.fs}}">
 
 <sc-if value="{{showBg}}">
 <div class="skyfix space-sky" aria-hidden="true" inert>
-<div class="space-atmosphere"></div>
+<div class="space-atmosphere"></div><div class="space-dust"></div><div class="space-shower"><i class="shower-streak"></i><i class="shower-streak"></i><i class="shower-streak"></i><i class="shower-streak"></i><i class="shower-streak"></i><i class="shower-streak"></i></div>
 <svg class="space-ocean-wave" data-playing="{{musicActive}}" viewBox="0 0 900 100" aria-hidden="true"><path d="M0 50h240l20-10 20 20 20-36 20 52 20-70 20 88 20-74 20 50 20-34 20 24 20-20 20 24 20-30 20 32 20-22 20 12h220" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
 <div class="stl s1"></div><div class="stl s2"></div><div class="stl s3"></div>
-<div class="space-sun">
-<span class="solar-halo"></span>
-<svg viewBox="0 0 160 160" focusable="false"><defs><radialGradient id="ts-solar-disc" cx="35%" cy="30%" r="75%"><stop stop-color="#fff2b9"/><stop offset=".48" stop-color="#ffc76b"/><stop offset="1" stop-color="#e68839"/></radialGradient><clipPath id="ts-solar-edge"><circle cx="80" cy="80" r="48"/></clipPath></defs>
-<g class="solar-corona" fill="none" stroke="#ffd18c"><circle cx="80" cy="80" r="64" opacity=".2"/><circle cx="80" cy="80" r="71" stroke-dasharray="1 13" stroke-width="2" opacity=".48"/><path d="M80 3v10m0 134v10M3 80h10m134 0h10M26 26l7 7m94 94 7 7M26 134l7-7m94-94 7-7" opacity=".4"/></g>
-<circle cx="80" cy="80" r="48" fill="url(#ts-solar-disc)"/><path d="M48 65c15-21 44-25 64-5M53 93c10 11 21 15 34 13" fill="none" stroke="#fff0bc" stroke-width="2" opacity=".22"/><g clip-path="url(#ts-solar-edge)"><circle class="solar-eclipse" cx="80" cy="80" r="47" fill="#13233d" stroke="#ffdea5" stroke-width=".6"/></g></svg>
-<span class="solar-satellite"><svg viewBox="0 0 36 24" focusable="false"><path d="M1 6h10v12H1zm24 0h10v12H25Z" fill="#578eaa" stroke="#acdce8" stroke-width=".6"/><path d="M6 6v12m-5-6h10M30 6v12m-5-6h10" stroke="#acdce8" stroke-width=".5"/><path d="M11 12h14M18 2v5" stroke="#d5eaf2"/><path d="m14 7 8 1-1 10-8-1Z" fill="#d5eaf2"/><circle cx="18" cy="12" r="2" fill="#d8b16f"/></svg></span>
-</div>
-<div class="space-moon">
-<svg viewBox="0 0 140 140" focusable="false"><defs><radialGradient id="ts-lunar-disc" cx="30%" cy="25%" r="82%"><stop stop-color="#e4eef6"/><stop offset=".6" stop-color="#aebfd4"/><stop offset="1" stop-color="#586c89"/></radialGradient><clipPath id="ts-lunar-edge"><circle cx="70" cy="70" r="52"/></clipPath></defs>
-<circle cx="70" cy="70" r="63" fill="none" stroke="#b8d5ef" stroke-width=".5" opacity=".2"/><circle cx="70" cy="70" r="52" fill="url(#ts-lunar-disc)"/>
-<g clip-path="url(#ts-lunar-edge)"><g fill="#6d829e" opacity=".38"><circle cx="49" cy="48" r="12"/><circle cx="83" cy="88" r="17"/><circle cx="39" cy="88" r="7"/><circle cx="93" cy="44" r="6"/><circle cx="67" cy="66" r="4"/></g><g fill="none" stroke="#eef5fa" opacity=".28"><path d="M39 49a12 12 0 0 1 20-8M69 88a17 17 0 0 1 26-14"/></g><circle cx="100" cy="57" r="61" fill="#13233d" opacity=".67"/></g>
-</svg>
-</div>
-<div class="space-planet planet-ringed"><svg viewBox="0 0 150 94" focusable="false"><defs><radialGradient id="ts-ringed-disc" cx="28%" cy="25%" r="78%"><stop stop-color="#8ce4dc"/><stop offset=".45" stop-color="#458fac"/><stop offset="1" stop-color="#263b68"/></radialGradient></defs><ellipse cx="75" cy="47" rx="66" ry="14" fill="none" stroke="#a4c9df" stroke-width="6" opacity=".3" transform="rotate(-22 75 47)"/><circle cx="75" cy="47" r="28" fill="url(#ts-ringed-disc)"/><path d="M52 37q21 7 46 3M49 48q24 8 52 3M53 60q21 7 43 2" fill="none" stroke="#b5ede4" opacity=".2" stroke-width="3"/><path d="M13 59c-7 17 121-11 125-35" fill="none" stroke="#9cdad8" stroke-width="4" opacity=".55"/></svg></div>
-<div class="space-planet planet-distant"><svg viewBox="0 0 50 50" focusable="false"><circle cx="25" cy="25" r="20" fill="#426eac"/><path d="M10 14q11-7 25 1M6 24q19-6 37 1M10 35q14-5 29 0" fill="none" stroke="#82c8e3" opacity=".5" stroke-width="3"/><path d="M29 5a20 20 0 0 1 0 40c12-12 11-29 0-40" fill="#1d345b" opacity=".7"/></svg></div>
+
+
+
+
 <div class="space-flight space-probe"><svg viewBox="0 0 60 40" focusable="false"><path d="M4 20H0" stroke="#8be7e9" stroke-width="3"/><path d="M52 20L14 9l6 11-6 11z" fill="#d1e8ff"/><path d="M30 13L16 0l4 15m10 12L16 40l4-15" fill="#74a8c9"/></svg></div>
 <svg class="space-bright-stars" viewBox="0 0 1000 600" preserveAspectRatio="none" focusable="false"><g fill="none" stroke="currentColor" stroke-width=".8"><path d="M142 84v8m-4-4h8M914 340v10m-5-5h10M82 413v8m-4-4h8M832 93v6m-3-3h6"/></g><g fill="currentColor"><circle cx="205" cy="42" r="1.2"/><circle cx="957" cy="242" r="1.4"/><circle cx="35" cy="319" r="1.1"/><circle cx="758" cy="568" r="1.3"/></g></svg>
 <div class="space-reading-shade"></div><div class="space-horizon"></div>
@@ -2045,7 +2058,7 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </div>
 <div class="facts"><sc-for list="{{heroStats}}" as="h" hint-placeholder-count="3"><div><b>{{h.k}}</b><span>{{h.l}}</span></div></sc-for></div>
 <div class="home-experience"><div class="home-cinema"><button type="button" onClick="{{intro.replay}}" style="--intro-play-bg:{{intro.bg}};--intro-play-fg:{{intro.fg}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 8a8 8 0 1 1-1 7M3 4v6h6M10 8l6 4-6 4z"/></svg><span>{{intro.replayLabel}}</span></button></div><button type="button" class="scene-motion-toggle" onClick="{{intro.toggle}}" aria-label="{{intro.toggleLabel}}" title="{{intro.toggleLabel}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="{{intro.togglePath}}"/></svg></button><sc-if value="{{intro.paused}}"><p class="home-motion-note" role="status">{{intro.notice}}</p></sc-if></div>
-<details class="home-universe"><summary>{{universe.exploreLabel}}</summary><p>{{universe.artBrief}}</p><nav class="universe-portals" aria-label="{{universe.navLabel}}"><sc-for list="{{universe.destinations}}" as="p"><button type="button" class="portal-button" data-destination="{{p.key}}" onClick="{{p.open}}" aria-label="{{p.label}}"><span class="portal-planet" data-body="{{p.key}}" style="--planet:{{p.color}}" aria-hidden="true"></span><span>{{p.name}}</span></button></sc-for></nav></details>
+
 </div>
 <div class="home-demo">
 <figure class="home-map"><img decoding="async" src="{{heroUrl}}" alt="{{tx.homeMapAlt}}"><figcaption>{{tx.homeMapCaption}}</figcaption></figure>
@@ -2060,6 +2073,23 @@ html[data-ts-page-hidden] .px .space-sky *{animation-play-state:paused!important
 </button>
 </div>
 </div>
+<nav class="space-destinations" data-contrast="{{planetContrast}}" aria-label="{{universe.navLabel}}">
+<button type="button" class="planet-portal space-sun" data-destination="sun" onClick="{{universe.sunOpen}}" aria-label="{{universe.sunLabel}}" title="{{universe.sunLabel}}">
+<span class="solar-halo"></span>
+<svg aria-hidden="true" viewBox="0 0 160 160" focusable="false"><defs><radialGradient id="ts-solar-disc" cx="35%" cy="30%" r="75%"><stop stop-color="#fff2b9"/><stop offset=".48" stop-color="#ffc76b"/><stop offset="1" stop-color="#e68839"/></radialGradient><clipPath id="ts-solar-edge"><circle cx="80" cy="80" r="48"/></clipPath></defs>
+<g class="solar-corona" fill="none" stroke="#ffd18c"><circle cx="80" cy="80" r="64" opacity=".2"/><circle cx="80" cy="80" r="71" stroke-dasharray="1 13" stroke-width="2" opacity=".48"/><path d="M80 3v10m0 134v10M3 80h10m134 0h10M26 26l7 7m94 94 7 7M26 134l7-7m94-94 7-7" opacity=".4"/></g>
+<circle cx="80" cy="80" r="48" fill="url(#ts-solar-disc)"/><path d="M48 65c15-21 44-25 64-5M53 93c10 11 21 15 34 13" fill="none" stroke="#fff0bc" stroke-width="2" opacity=".22"/><g clip-path="url(#ts-solar-edge)"><circle class="solar-eclipse" cx="80" cy="80" r="47" fill="#13233d" stroke="#ffdea5" stroke-width=".6"/></g></svg>
+<span class="solar-satellite"><svg aria-hidden="true" viewBox="0 0 36 24" focusable="false"><path d="M1 6h10v12H1zm24 0h10v12H25Z" fill="#578eaa" stroke="#acdce8" stroke-width=".6"/><path d="M6 6v12m-5-6h10M30 6v12m-5-6h10" stroke="#acdce8" stroke-width=".5"/><path d="M11 12h14M18 2v5" stroke="#d5eaf2"/><path d="m14 7 8 1-1 10-8-1Z" fill="#d5eaf2"/><circle cx="18" cy="12" r="2" fill="#d8b16f"/></svg></span>
+<span class="planet-name" aria-hidden="true">{{universe.sunName}}</span></button>
+<button type="button" class="planet-portal space-moon" data-destination="moon" onClick="{{universe.moonOpen}}" aria-label="{{universe.moonLabel}}" title="{{universe.moonLabel}}">
+<svg aria-hidden="true" viewBox="0 0 140 140" focusable="false"><defs><radialGradient id="ts-lunar-disc" cx="30%" cy="25%" r="82%"><stop stop-color="#e4eef6"/><stop offset=".6" stop-color="#aebfd4"/><stop offset="1" stop-color="#586c89"/></radialGradient><clipPath id="ts-lunar-edge"><circle cx="70" cy="70" r="52"/></clipPath></defs>
+<circle cx="70" cy="70" r="63" fill="none" stroke="#b8d5ef" stroke-width=".5" opacity=".2"/><circle cx="70" cy="70" r="52" fill="url(#ts-lunar-disc)"/>
+<g clip-path="url(#ts-lunar-edge)"><g fill="#6d829e" opacity=".38"><circle cx="49" cy="48" r="12"/><circle cx="83" cy="88" r="17"/><circle cx="39" cy="88" r="7"/><circle cx="93" cy="44" r="6"/><circle cx="67" cy="66" r="4"/></g><g fill="none" stroke="#eef5fa" opacity=".28"><path d="M39 49a12 12 0 0 1 20-8M69 88a17 17 0 0 1 26-14"/></g><circle cx="100" cy="57" r="61" fill="#13233d" opacity=".67"/></g>
+</svg>
+<span class="planet-name" aria-hidden="true">{{universe.moonName}}</span></button>
+<button type="button" class="planet-portal space-planet planet-ringed" data-destination="saturn" onClick="{{universe.saturnOpen}}" aria-label="{{universe.saturnLabel}}" title="{{universe.saturnLabel}}"><svg aria-hidden="true" viewBox="0 0 150 94" focusable="false"><defs><radialGradient id="ts-ringed-disc" cx="28%" cy="25%" r="78%"><stop stop-color="#8ce4dc"/><stop offset=".45" stop-color="#458fac"/><stop offset="1" stop-color="#263b68"/></radialGradient></defs><ellipse cx="75" cy="47" rx="66" ry="14" fill="none" stroke="#a4c9df" stroke-width="6" opacity=".3" transform="rotate(-22 75 47)"/><circle cx="75" cy="47" r="28" fill="url(#ts-ringed-disc)"/><path d="M52 37q21 7 46 3M49 48q24 8 52 3M53 60q21 7 43 2" fill="none" stroke="#b5ede4" opacity=".2" stroke-width="3"/><path d="M13 59c-7 17 121-11 125-35" fill="none" stroke="#9cdad8" stroke-width="4" opacity=".55"/></svg><span class="planet-name" aria-hidden="true">{{universe.saturnName}}</span></button>
+<button type="button" class="planet-portal space-planet planet-distant" data-destination="aqua" onClick="{{universe.aquaOpen}}" aria-label="{{universe.aquaLabel}}" title="{{universe.aquaLabel}}"><svg aria-hidden="true" viewBox="0 0 50 50" focusable="false"><circle cx="25" cy="25" r="20" fill="#426eac"/><path d="M10 14q11-7 25 1M6 24q19-6 37 1M10 35q14-5 29 0" fill="none" stroke="#82c8e3" opacity=".5" stroke-width="3"/><path d="M29 5a20 20 0 0 1 0 40c12-12 11-29 0-40" fill="#1d345b" opacity=".7"/></svg><span class="planet-name" aria-hidden="true">{{universe.aquaName}}</span></button>
+</nav>
 </section>
 </sc-if>
 
@@ -3524,9 +3554,9 @@ class CinematicIntro {
       end.onfinish=function(){self.finish(true);};this.timers.push(setTimeout(function(){self.finish(true);},duration+250));
     }catch(ignored){this.showStatic();}
   }
-  showStatic(){this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];this.root.dataset.static='true';this.root.querySelector('.cinema-pause').hidden=true;this.update();}
+  showStatic(){this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];this.root.dataset.static='true';this.root.querySelector('.cinema-pause').hidden=true;this.update();var self=this;this.timers.push(setTimeout(function(){self.finish(true);},this.duration||5200));}
   togglePause(){if(!this.root||this.root.dataset.static==='true')return;this.paused=!this.paused;this.timers.forEach(clearTimeout);this.timers=[];this.animations.forEach(a=>this.paused?a.pause():a.play());if(!this.paused){var self=this;this.timers.push(setTimeout(function(){self.finish(true);},Math.max(0,this.duration-Number(this.endAnimation?.currentTime||0))+500));}this.update();}
-  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('Mapas NASA hechos música.','NASA maps, made musical.');this.root.querySelector('.cinema-description').textContent=T('Explora cambios de temperatura del Pacífico con la vista y el oído.','Explore Pacific temperature patterns through sight and sound.');this.root.querySelector('.cinema-toolbar p').textContent=T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
+  update(){if(!this.root)return;this.root.querySelector('h2').textContent=T('Mapas NASA hechos música.','NASA maps, made musical.');this.root.querySelector('.cinema-description').textContent=T('Explora cambios de temperatura del Pacífico con la vista y el oído.','Explore Pacific temperature patterns through sight and sound.');this.root.querySelector('.cinema-toolbar p').textContent=(this.root.dataset.static==='true'?T('Entrada automática · ','Automatic intro · '):'')+T('Ilustración asistida por IA · Pacífico','AI-assisted illustration · Pacific');this.root.querySelector('.cinema-skip').textContent=this.root.dataset.static==='true'?T('Entrar','Enter'):T('Saltar introducción','Skip intro');this.root.querySelector('.cinema-pause').textContent=this.paused?T('Reanudar','Resume'):T('Pausar','Pause');}
   finish(restoreFocus=false){
     if(!this.root)return;
     var root=this.root,focused=root?.contains(document.activeElement);this.root=null;
@@ -3549,23 +3579,36 @@ var SPACE_DESTINATIONS = {
 };
 function spaceText(pair){return pair[LANG==='en'?1:0];}
 class SpaceJourney {
-  constructor(owner){this.owner=owner;this.animations=[];this.timer=null;}
+  constructor(owner){this.owner=owner;this.animations=[];this.timer=null;this.phaseTimers=[];}
   start(key,trigger,arrive){
     this.finish(false);var self=this,app=this.owner,dest=SPACE_DESTINATIONS[key];if(!dest||app.disposed)return;
     this.trigger=trigger;this.arrive=arrive;
     if(app.bandReduced()||typeof document.createElement!=='function'){this.arrive=null;arrive();return;}
     var root=document.createElement('section');this.root=root;root.className='ts-voyage';root.dataset.destination=key;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-labelledby','voyage-title');
-    root.innerHTML='<div class="voyage-copy"><h2 id="voyage-title"></h2><p></p></div><svg viewBox="0 0 900 500" aria-hidden="true"><defs><radialGradient id="voyage-light"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="740" cy="210" r="105" fill="url(#voyage-light)"/><circle class="voyage-target" cx="740" cy="210" r="54"/><ellipse cx="740" cy="210" rx="94" ry="22" fill="none" stroke="#bcd8ed" opacity=".5" transform="rotate(-20 740 210)"/><path class="voyage-path" d="M90 380C250 60 520 460 676 230" fill="none" stroke="#8be7e9" stroke-width="1.5" stroke-dasharray="3 8" opacity=".4"/><g class="voyage-ship"><path d="M-26 0l-28 0" stroke="#8be7e9" stroke-width="3" opacity=".6"/><path d="M18 0L-14-9l4 9-4 9z" fill="#eef3fa"/><path d="M-3-5l-10-12 3 12M-3 5l-10 12 3-12" fill="#8be7e9"/></g><g fill="#d7edff" opacity=".5"><circle cx="120" cy="100" r="1.5"/><circle cx="320" cy="220" r="2"/><circle cx="460" cy="70" r="1"/><circle cx="580" cy="330" r="1.5"/><circle cx="780" cy="420" r="1"/></g></svg><div class="voyage-actions"><button type="button" class="voyage-skip"></button><button type="button" class="voyage-cancel"></button></div>';
+    root.innerHTML='<div class="voyage-starfield" aria-hidden="true"></div><div class="voyage-copy"><h2 id="voyage-title"></h2><p></p><p class="voyage-phase" role="status" aria-live="polite"></p></div><div class="voyage-glow" aria-hidden="true"></div><svg viewBox="0 0 900 500" aria-hidden="true"><defs><radialGradient id="voyage-light"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="740" cy="210" r="105" fill="url(#voyage-light)"/><circle class="voyage-target" cx="740" cy="210" r="54"/><ellipse cx="740" cy="210" rx="94" ry="22" fill="none" stroke="#bcd8ed" opacity=".5" transform="rotate(-20 740 210)"/><path class="voyage-path" d="M90 380C250 60 520 460 676 230" fill="none" stroke="#8be7e9" stroke-width="1.5" stroke-dasharray="3 8" opacity=".4"/><g class="voyage-ship"><g class="voyage-flame"><path d="M-5 18Q0 37 5 18Z" fill="#e8b969"/><path d="M-2 18Q0 29 2 18Z" fill="#8be7e9"/></g><path d="M0-22C-8-16-9 4-6 17H6C9 4 8-16 0-22Z" fill="#eef3fa"/><circle cy="-7" r="3.5" fill="#386b8e"/><path d="M-6 6L-13 19l8-3M6 6l7 13-8-3" fill="#8be7e9"/><path d="M-5 17h10" stroke="#608baa" stroke-width="2"/></g><g fill="#d7edff" opacity=".5"><circle cx="120" cy="100" r="1.5"/><circle cx="320" cy="220" r="2"/><circle cx="460" cy="70" r="1"/><circle cx="580" cy="330" r="1.5"/><circle cx="780" cy="420" r="1"/></g></svg><div class="voyage-actions"><button type="button" class="voyage-skip"></button><button type="button" class="voyage-cancel"></button></div>';
     root.querySelector('h2').textContent=T('Viajando a ','Travelling to ')+spaceText(dest.name);root.querySelector('.voyage-copy p').textContent=T('Puedes saltar el viaje o volver.','You can skip the journey or go back.');root.querySelector('.voyage-target').setAttribute('fill',dest.color);root.querySelector('.voyage-skip').textContent=T('Ir al destino','Go to destination');root.querySelector('.voyage-cancel').textContent=T('Cancelar','Cancel');
     this.appRoot=document.querySelector('.px.app');this.wasInert=this.appRoot.inert;this.appRoot.inert=true;document.body.append(root);root.querySelector('.voyage-skip').focus({preventScroll:true});
     root.querySelector('.voyage-skip').onclick=function(){self.finish(true);};root.querySelector('.voyage-cancel').onclick=function(){self.finish(false);};
     this.onKey=function(e){if(e.key==='Escape'){e.preventDefault();e.stopPropagation();self.finish(false);}else if(e.key==='Tab'){e.preventDefault();var buttons=Array.from(root.querySelectorAll('button')),i=buttons.indexOf(document.activeElement);buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
     this.onHidden=function(){if(document.hidden)self.finish(false);};document.addEventListener('keydown',this.onKey,true);document.addEventListener('visibilitychange',this.onHidden);
     app.vibrateSafely('confirm','launch:'+ (++app.hapticRequestSerial));
-    try{var path=root.querySelector('.voyage-path'),length=path.getTotalLength(),frames=[];for(var i=0;i<=32;i++){var point=path.getPointAtLength(length*i/32),next=path.getPointAtLength(Math.min(length,length*i/32+2)),angle=Math.atan2(next.y-point.y,next.x-point.x)*180/Math.PI;frames.push({transform:'translate('+point.x+'px,'+point.y+'px) rotate('+angle+'deg)'});}this.animations.push(root.querySelector('.voyage-ship').animate(frames,{duration:2200,fill:'both',easing:'cubic-bezier(.3,.1,.2,1)'}));this.animations.push(root.querySelector('.voyage-target').animate([{opacity:.65,transform:'scale(.97)'},{opacity:1,transform:'scale(1)'}],{duration:1800,fill:'both'}));this.timer=setTimeout(function(){self.finish(true);},2300);}catch(ignored){this.finish(true);}
+    var duration=5200,landing=key==='moon'||key==='aqua';root.dataset.duration=String(duration);root.dataset.arrival=landing?'landing':'orbit';
+    var phase=root.querySelector('.voyage-phase');phase.textContent=T('Despegue','Liftoff');
+    try{
+      var path=root.querySelector('.voyage-path');path.setAttribute('d',landing?(key==='aqua'?'M150 430C150 280 190 145 360 100S700 35 740 98':'M150 430C150 280 190 145 360 100S700 35 740 112'):'M150 430C150 280 190 145 360 100S600 65 644 202');
+      var source=trigger?.querySelector('svg');if(source){var body=source.cloneNode(true);body.setAttribute('x','650');body.setAttribute('y','120');body.setAttribute('width','180');body.setAttribute('height','180');body.setAttribute('class','voyage-body');body.querySelectorAll('.solar-eclipse,.solar-satellite').forEach(function(el){el.remove();});root.querySelector('svg').insertBefore(body,path);root.querySelector('.voyage-target').setAttribute('opacity','0');}
+      var length=path.getTotalLength(),frames=[];
+      for(var i=0;i<=64;i++){var progress=i/64,point=path.getPointAtLength(length*progress),next=path.getPointAtLength(Math.min(length,length*progress+2)),angle=Math.atan2(next.y-point.y,next.x-point.x)*180/Math.PI+90;if(landing&&progress>.8)angle*=Math.max(0,(1-progress)/.2);frames.push({transform:'translate('+point.x+'px,'+point.y+'px) rotate('+angle+'deg) scale('+(2.2*(1-.15*Math.max(0,(progress-.8)/.2)))+')'});}
+      var ship=root.querySelector('.voyage-ship').animate(frames,{duration:duration,fill:'both',easing:'cubic-bezier(.3,.05,.25,1)'});this.animations.push(ship);
+      this.animations.push(root.querySelector('.voyage-flame').animate([{transform:'scaleY(.8)',opacity:.65},{transform:'scaleY(1)',opacity:.9}],{duration:650,iterations:8,direction:'alternate',fill:'both'}));
+      root.querySelector('svg').style.transformOrigin='50% 50%';this.animations.push(root.querySelector('svg').animate([{transform:'scale(1)'},{transform:'scale(1.035)'}],{duration:duration,fill:'both'}));
+      this.animations.push(root.querySelector('.voyage-glow').animate([{opacity:0,offset:0},{opacity:.14,offset:.04},{opacity:0,offset:.12},{opacity:0,offset:.84},{opacity:.12,offset:.92},{opacity:0,offset:1}],{duration:duration,fill:'both'}));
+      this.phaseTimers=[setTimeout(function(){if(self.root)phase.textContent=T('En vuelo','In flight');},1400),setTimeout(function(){if(self.root)phase.textContent=landing?T('Aproximación al destino','Approaching the destination'):T('Órbita de observación','Observation orbit');},3800)];
+      ship.onfinish=function(){self.finish(true);};this.timer=setTimeout(function(){self.finish(true);},duration+300);
+    }catch(ignored){this.finish(true);}
   }
   finish(arrived){
-    clearTimeout(this.timer);this.timer=null;this.animations.forEach(function(a){a.cancel();});this.animations=[];
+    clearTimeout(this.timer);this.timer=null;this.phaseTimers.forEach(clearTimeout);this.phaseTimers=[];this.animations.forEach(function(a){a.onfinish=null;a.cancel();});this.animations=[];
     if(this.root){this.root.remove();this.root=null;this.appRoot.inert=this.wasInert;document.removeEventListener('keydown',this.onKey,true);document.removeEventListener('visibilitychange',this.onHidden);}
     var done=this.arrive;this.arrive=null;if(arrived&&done){this.owner.vibrateSafely('notice','arrival:'+ (++this.owner.hapticRequestSerial));done();}else if(this.trigger?.isConnected)this.trigger.focus({preventScroll:true});this.trigger=null;
   }
@@ -3603,6 +3646,7 @@ class Component extends DCLogic {
     this.state.reducedMotion = !!this.state.reducedMotion;
     // Each entry presents the intro; saved and system reduction are respected.
     this.state.motionMode = this.state.reducedMotion ? 'reduced' : 'auto';
+    if(!this.state.reducedMotion){try{if(localStorage.getItem('ts_motion_mode')==='full')this.state.motionMode='full';}catch(ignored){}}
     this.state.destination = ''; this.state.ambientPlaying = false; this.ambientTimer=null;
     this.state.sampleStarting=false;this.sampleRun=0;this.sampleTimer=null;
     this.journey = new SpaceJourney(this);
@@ -4138,6 +4182,7 @@ class Component extends DCLogic {
     this.setPreference('reducedMotion',false);
     this.cinema?.start(true,event?.currentTarget);
   }
+  toggleSceneMotion(){var paused=!this.bandReduced();this.setState({motionMode:paused?'reduced':'full'});if(paused){this.cinema?.finish(true);this.haptics.stop();if(this.routeFinish)this.routeFinish();this.cancelBandClip();}this.syncPreferenceMotion();}
   cancelSample(){++this.sampleRun;clearTimeout(this.sampleTimer);this.sampleTimer=null;if(this.state.sampleStarting)this.setState({sampleStarting:false});}
   startSample(){
     if(this.disposed||this.state.tab!=='home'||this.state.sampleStarting)return;
@@ -4179,7 +4224,7 @@ class Component extends DCLogic {
   }
   closeDestination() {
     this.journey.finish(false);this.stop();var self=this;
-    this.setState({destination:''},function(){self.resetScreenScroll();var button=document.querySelector('.portal-button[data-destination="'+self.portalReturnKey+'"]');var group=button?.closest('details');if(group)group.open=true;button?.focus({preventScroll:true});});
+    this.setState({destination:''},function(){self.resetScreenScroll();document.querySelector('.planet-portal[data-destination="'+self.portalReturnKey+'"]')?.focus({preventScroll:true});});
   }
   async toggleAmbient() {
     var destination=this.state.destination,config=SPACE_DESTINATIONS[destination];if(!config||this.disposed)return;
@@ -4197,7 +4242,8 @@ class Component extends DCLogic {
   }
   universeVm() {
     var self=this,key=this.state.destination||'sun',d=SPACE_DESTINATIONS[key],s=this.state,audioAvailable=typeof(window.AudioContext||window.webkitAudioContext)==='function';
-    return {key:key,name:spaceText(d.name),title:spaceText(d.title),text:spaceText(d.text),fact:spaceText(d.fact),color:d.color,sky:d.sky,ground:d.ground,
+    var portals={};Object.keys(SPACE_DESTINATIONS).forEach(function(k){var p=SPACE_DESTINATIONS[k];portals[k+'Name']=spaceText(p.name);portals[k+'Label']=T('Explorar ','Explore ')+spaceText(p.name)+': '+spaceText(p.title);portals[k+'Open']=function(event){self.openDestination(k,event);};});
+    return {...portals,key:key,name:spaceText(d.name),title:spaceText(d.title),text:spaceText(d.text),fact:spaceText(d.fact),color:d.color,sky:d.sky,ground:d.ground,
       navLabel:T('Explorar destinos del universo','Explore universe destinations'),exploreLabel:T('Explorar el universo artístico','Explore the artistic universe'),artBrief:T('Escenas y música ambiental independientes de los mapas NASA.','Scenes and ambient music separate from the NASA maps.'),destinations:Object.keys(SPACE_DESTINATIONS).map(function(k){var p=SPACE_DESTINATIONS[k];return {key:k,name:spaceText(p.name),color:p.color,label:T('Explorar ','Explore ')+spaceText(p.name),open:function(event){self.openDestination(k,event);}};}),
       backLabel:T('Volver al universo','Back to the universe'),back:function(){self.closeDestination();},controlsLabel:T('Ambiente musical artístico','Artistic musical atmosphere'),pending:s.audioPending||!audioAvailable,
       playLabel:!audioAvailable?T('Audio no disponible','Audio unavailable'):s.audioPending?T('Preparando audio…','Preparing audio…'):s.ambientPlaying?T('Pausar ambiente','Pause atmosphere'):T('Escuchar ambiente','Listen to atmosphere'),play:function(){self.toggleAmbient();},
@@ -5561,8 +5607,8 @@ class Component extends DCLogic {
     var leadKey = this.leadChar();
     var leadIndex = BAND.findIndex(function (b) { return b.k === leadKey; });
     return {
-      th: th, ic: this.icons, universe:this.universeVm(), context:this.listeningContext(), sample:{pending:s.sampleStarting,label:s.sampleStarting?T('Preparando muestra…','Preparing sample…'):typeof(window.AudioContext||window.webkitAudioContext)==='function'?tx.heroCta:T('Explorar una muestra','Explore a sample'),start:function(){self.startSample();}}, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
-      intro: { replayLabel: T('Repetir introducción','Replay intro'), bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b', replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: T('Movimiento reducido. Puedes activarlo cuando quieras.','Reduced motion. You can enable it whenever you like.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.setPreference('reducedMotion',!self.bandReduced()); } },
+      th: th, ic: this.icons, planetContrast:hc?'true':'false', universe:this.universeVm(), context:this.listeningContext(), sample:{pending:s.sampleStarting,label:s.sampleStarting?T('Preparando muestra…','Preparing sample…'):typeof(window.AudioContext||window.webkitAudioContext)==='function'?tx.heroCta:T('Explorar una muestra','Explore a sample'),start:function(){self.startSample();}}, showBg: !hc, musicActive: s.playing ? 'true' : 'false', stars: this.stars, logoPx: this.logo, glow: gl, glowA: gl + '55', glowSoft: gl + '99',
+      intro: { replayLabel: T('Repetir introducción','Replay intro'), bg: hc ? th.fg : '#a7efc7', fg: hc ? th.bg : '#08261b', replay: function (event) { self.playAnimatedIntro(event); }, paused: !!this.bandReduced(), motionOn: !this.bandReduced(), notice: s.reducedMotion||s.motionMode==='auto'?T('Movimiento reducido.','Reduced motion.'):T('Animaciones en pausa.','Animations paused.'), toggleLabel: this.bandReduced() ? T('Activar animaciones','Enable animations') : T('Pausar animaciones','Pause animations'), togglePath: this.bandReduced() ? 'M8 5l11 7-11 7z' : 'M8 5v14M16 5v14', toggle: function () { self.toggleSceneMotion(); } },
       stage: BAND.map(function (b) { var off = s.mute[b.k]; return Object.assign({ memCls: off ? 'gone' : '', hidden: off ? 'true' : 'false' }, self.spriteVm(b.k)); }),
       stageNames: BAND.filter(function (b) { return !s.mute[b.k]; }).map(function (b) { return b.name; }).join(' · ') || T('nadie', 'nobody'),
       stageEmpty: BAND.every(function (b) { return s.mute[b.k]; }),

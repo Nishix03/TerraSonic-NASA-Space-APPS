@@ -1,5 +1,7 @@
 # Revisión del formulario NSAC y evolución del universo
 
+> Checkpoint inicial de esta revisión. La interacción final usa los astros del fondo, sin fila adicional; la entrada restaura la elección explícita de movimiento y la alternativa estática termina automáticamente. Véanse [FONDO_INTERACTIVO.md](FONDO_INTERACTIVO.md) y [CLARIDAD_PRODUCTO.md](CLARIDAD_PRODUCTO.md) para los cambios posteriores. Los resultados y mediciones siguientes corresponden a este checkpoint.
+
 ## Fuentes y alcance
 
 Se leyó el PDF local `Spanish NSAC.pdf`, cuatro páginas, y el brief de evolución visual adjunto. El PDF es una impresión del formulario de entrega del equipo, no una evaluación del prototipo ni una certificación de accesibilidad. La propia página advierte que incluye contenido de participantes que puede no haber sido revisado por NASA. No se envía ni modifica ese formulario desde esta tarea.

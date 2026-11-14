@@ -1394,6 +1394,13 @@ test('destinations preserve independent science state and disclose artistic audi
   assert.equal(JSON.stringify([c.state.disc,c.state.frame,c.state.engine,c.state.mute]),before);
 });
 
+test('an explicit animation choice is restored on entry while a scene pause stays in this visit', () => {
+  const {component:c,context,storage}=setup({entryMotion:true});context.window.matchMedia=()=>({matches:true});assert(c.bandReduced());c.setPreference('reducedMotion',false);
+  const saved=Object.fromEntries(storage),restored=setup({entryMotion:true,storage:saved});restored.context.window.matchMedia=()=>({matches:true});assert.equal(restored.component.bandReduced(),false);assert.equal(restored.component.state.motionMode,'full');
+  restored.component.toggleSceneMotion();assert.equal(restored.component.bandReduced(),true);assert.deepEqual(Object.fromEntries(restored.storage),saved);const next=setup({entryMotion:true,storage:saved});next.context.window.matchMedia=()=>({matches:true});assert.equal(next.component.bandReduced(),false);
+  restored.component.setPreference('reducedMotion',true);const accessible=setup({entryMotion:true,storage:Object.fromEntries(restored.storage)});assert.equal(accessible.component.state.motionMode,'reduced');assert(accessible.component.bandReduced());
+});
+
 test('a legacy reduced-motion preference can be explicitly enabled without opening a static presentation', () => {
   const {component:c,context}=setup({storage:{ts_prefs:JSON.stringify({version:1,configured:true,values:{reducedMotion:true}})}});context.window.matchMedia=()=>({matches:true});
   let played=false;c.cinema={start(replay,trigger){played=replay&&trigger==='button';}};c.playAnimatedIntro({currentTarget:'button'});

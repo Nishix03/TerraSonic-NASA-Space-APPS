@@ -30,7 +30,7 @@ async function main(){
    await page.locator('#tour-play button').focus();await page.keyboard.press('Space');await page.waitForFunction(()=>__app.state.playing&&__app.state.col>=2);
    await page.keyboard.press('Space');assert.equal(await page.evaluate(()=>__app.state.playing),false);
    const paused=await range.inputValue();await page.waitForTimeout(200);assert.equal(await range.inputValue(),paused);
-   await page.getByRole('button',{name:/\+5 s/}).focus();await page.keyboard.press('Enter');assert(Number(await range.inputValue())>Number(paused));
+   await range.focus();await page.keyboard.press('ArrowRight');assert(Number(await range.inputValue())>Number(paused));
    const volume=page.locator('#playback-volume');await volume.focus();await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>__app.state.volume),0);
    await page.keyboard.press('End');assert.equal(await page.evaluate(()=>__app.state.volume),100);
    await page.locator('.listen-member').first().focus();const before=await page.evaluate(()=>__app.state.mute.silbo);await page.keyboard.press('Space');assert.equal(await page.evaluate(()=>__app.state.mute.silbo),!before);
@@ -39,9 +39,9 @@ async function main(){
    await page.screenshot({path:path.join(output,`${width}-${language}-preferences.png`)});
    await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.className),'opt');
    await page.keyboard.press('Escape');assert.equal(await page.locator('#tour-a11y').getAttribute('open'),null);assert.equal(await page.locator('#tour-a11y>summary').evaluate(el=>el===document.activeElement),true);
-   await page.locator('#tour-more button').focus();await page.keyboard.press('Enter');assert(await page.locator('#more-dialog').isVisible());
-   await page.keyboard.press('Shift+Tab');assert.equal(await page.locator('#more-dialog').evaluate(el=>el.contains(document.activeElement)),true);
-   await page.keyboard.press('Escape');assert.equal(await page.locator('#tour-more button').evaluate(el=>el===document.activeElement),true);
+   await page.locator('#tour-more button').focus();await page.keyboard.press('Enter');
+   await page.waitForFunction(()=>__app.state.tab==='how'&&!__app.state.trans);assert.equal(await page.locator('#tour-steps li').count(),8);
+   await nav.first().focus();await page.keyboard.press('Enter');await page.locator('.dcard').nth(2).focus();await page.keyboard.press('Enter');await page.locator('#playback-position').waitFor();
    await page.locator('.scr').evaluate(el=>{el.scrollTop=0;window.scrollTo(0,0);});
    await page.screenshot({path:path.join(output,`${width}-${language}-player.png`)});
    await page.locator('.skip-content').focus();
@@ -63,7 +63,7 @@ async function main(){
    const names=tree.nodes.filter(node=>!node.ignored).map(node=>({role:node.role?.value,name:node.name?.value}));
    assert(names.some(node=>node.role==='slider'&&node.name));assert(names.some(node=>node.role==='main'));
    fs.writeFileSync(path.join(output,`${width}-${language}-ax.json`),JSON.stringify(names,null,2));
-   report.checks.push({width,language,skipLink:true,navigationArrows:true,discEntryFocus:true,playPause:true,nativeSeek:true,volume:true,mute:true,date:true,popoverEscape:true,dialogTrap:true,tabTrace:75});
+   report.checks.push({width,language,skipLink:true,navigationArrows:true,discEntryFocus:true,playPause:true,nativeSeek:true,volume:true,mute:true,date:true,popoverEscape:true,howSoundsNavigation:true,tabTrace:75});
    console.log('PASS keyboard',width,language);await context.close();
   }
   assert.deepEqual(report.errors,[]);

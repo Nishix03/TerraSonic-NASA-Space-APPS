@@ -21,10 +21,10 @@ del Pacífico                    ¿Qué estás escuchando?
 Mapas NASA → color → música     Explicación del mapa actual
 [Escuchar muestra] [Cómo]        [Ver sus datos] [Cómo suena]
 Mapa + proceso visible          Mapa / matriz / audio / leyenda
-Universo artístico desplegable
+Astros interactivos del fondo
 ```
 
-La afirmación «datos» se acota enseguida mediante «colores de mapas» y «frente a una referencia». La interpretación musical es una alternativa para explorar patrones; no se promete diagnóstico, predicción, precisión numérica ni mejora de aprendizaje demostrada. Los mundos artísticos se conservan como exploración secundaria desplegable y se mantiene la navegación a la banda.
+La afirmación «datos» se acota enseguida mediante «colores de mapas» y «frente a una referencia». La interpretación musical es una alternativa para explorar patrones; no se promete diagnóstico, predicción, precisión numérica ni mejora de aprendizaje demostrada. Los mundos artísticos se abren pulsando los propios astros del fondo, sin otra fila o desplegable. Se mantiene la navegación a la banda.
 
 ## Recorrido previsto de tres acciones principales
 
@@ -43,7 +43,7 @@ No se añade un tutorial obligatorio. La secuencia está integrada en la portada
 | Tu imagen en música / Your image as music | Nuevo nombre de la conversión; recibe imágenes fijas y conserva la muestra de lluvia POWER, con metadatos distintos |
 | ¿Cómo funciona? | Explicación sencilla existente del recorrido completo; accesible desde la segunda acción de la portada, sin crear otra categoría equivalente |
 | Tecnología | Detalles, fuentes, herramientas, créditos y uso de IA; permanece como profundidad opcional |
-| Universo artístico | Cuatro destinos conservados en un desplegable secundario, con su ambientación claramente separada de los mapas |
+| Universo artístico | Cuatro destinos al pulsar los astros del fondo, con su ambientación claramente separada de los mapas |
 
 Se mantienen las cinco categorías y sus rutas internas. La marca continúa volviendo a Inicio. Las etiquetas compactas son «Escuchar», «Banda», «Tu imagen», «¿Cómo funciona?» y «Tecnología», con equivalentes en inglés. No se crea una sección «Explorar datos» separada: los datos se consultan junto a la muestra a la que pertenecen.
 
@@ -51,4 +51,8 @@ Los contadores se explican como episodios de seis mapas, mapas analizados y voce
 
 ## Validación
 
-Los resultados técnicos y las correcciones se añadirán tras ejecutar los recorridos. La comprensión humana no se acredita mediante cambios de texto o pruebas automáticas. Se prepara un [protocolo para cinco participantes](PROTOCOLO_USABILIDAD.md), con meta de al menos cuatro aciertos de cinco por criterio, y se deja sin resultados hasta realizar las sesiones.
+Pasan 15 recorridos de claridad en Chromium: español e inglés en seis anchuras, muestra sin Web Audio, cancelación al salir durante una carga lenta y contexto POWER diferenciado. Firefox y WebKit pasan siete recorridos por motor, con anchuras 390/1440 y los casos de capacidad/cancelación/procedencia. Se verifican tres acciones principales: iniciar la muestra, consultar los datos y abrir las reglas; el mapa actual, fecha, fuente y motor se contrastan contra el estado real. También se comprueban señal/reproducción nativa cuando existe Web Audio, foco de la leyenda, ausencia de scroll interno y reglas axe en el contexto abierto. WebKit de Windows verifica la alternativa escrita porque no ofrece Web Audio.
+
+La primera escucha cancela la solicitud pendiente al salir, detener o sustituir la entrada. La explicación se recalcula cuando cambian mapa, motor, idioma o análisis, en lugar de reconstruirse en cada pulso musical. Se conservaron los dos catálogos, ambos motores, mezcla, instrumentos, imágenes propias y lluvia. Los resultados ampliados y el ajuste posterior de astros/entrada están en [FONDO_INTERACTIVO.md](FONDO_INTERACTIVO.md).
+
+La comprensión humana no se acredita mediante cambios de texto o pruebas automáticas. El [protocolo para cinco participantes](PROTOCOLO_USABILIDAD.md), con meta de al menos cuatro aciertos de cinco por criterio, queda preparado y sin resultados hasta realizar las sesiones.

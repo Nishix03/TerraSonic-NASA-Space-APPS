@@ -72,10 +72,10 @@ async function main() {
       await page.evaluate(() => { __app.setState({ mute: __app.allMute(false), leadOverride: 'mama' }); });
       for (const mode of ['melody', 'raw']) {
         await page.locator('.player-modes button').nth(mode === 'melody' ? 0 : 1).click();
-        assert.equal(await page.locator('.chordsrow').count(),mode==='melody'?1:0,'Data must not show an unused chord progression');
-        await page.locator('.player-readout summary').click();
-        if(mode==='raw')assert.match(await page.locator('.player-readout').textContent(),/niveles derivados/i);
-        await page.locator('.player-readout summary').click();
+        assert.equal(await page.locator('.chordsrow').count(),0,'The compact player has no inline chord strip');
+        await page.locator('#context-mapping>summary').click();
+        assert.match(await page.locator('#context-mapping').textContent(),mode==='raw'?/Inti/:/escala/);
+        await page.locator('#context-mapping>summary').click();
         const slider = page.locator('#playback-position');
         await slider.focus(); await slider.press('Home'); await slider.press('ArrowRight');
         assert.equal(await page.evaluate(() => __app.playerPosition()), 1);
@@ -98,13 +98,13 @@ async function main() {
         assert.deepEqual(await page.evaluate(() => [__app.state.frame, __app.state.col, __app.state.playing]), [1, 6, false]);
         assert.equal(await slider.inputValue(), '35');
         const date = await page.locator('.when b').textContent();
-        await page.locator('.transport-tools .seek-buttons button').last().click();
+        await slider.press('ArrowRight');
         assert((await slider.inputValue()) !== '35');
         await page.locator('.event-history summary').click();
         await page.locator('.event-history li').first().waitFor();
         assert(await page.locator('.event-history li').count() > 0);
         await page.locator('.event-history summary').click();
-        assert.equal(await page.locator('.map-legend li').count(), 4);
+        assert.equal(await page.locator('.map-legend li').count(), 14);
         const before = await page.evaluate(() => __app.playerPosition());
         await page.locator('#tour-lang button').nth(1).click();
         assert.equal(await page.evaluate(() => __app.playerPosition()), before);
@@ -182,8 +182,8 @@ async function main() {
       report.layouts.push({ viewport, geometry });
       assert.deepEqual(geometry.clipped, [], 'Controls and legend must stay within the viewport');
       assert(geometry.screenWidth <= geometry.screenClientWidth + 1, 'No horizontal player overflow');
-      if (viewport.width >= 1280 && !process.argv.includes('--all-muted')) assert(geometry.bandBottom <= Math.min(geometry.footerTop,viewport.height),
-        'Desktop must show the map, controls, legend and five complete musicians together: ' + JSON.stringify(geometry));
+      if (viewport.width >= 1280 && !process.argv.includes('--all-muted')) assert(geometry.bandBottom <= geometry.footerTop,
+        'The complete band must precede the footer; contextual explanations may lengthen the document: ' + JSON.stringify(geometry));
     }
     assert.deepEqual(errors, []);
     await context.close();

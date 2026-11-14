@@ -7,6 +7,7 @@ import os
 import shutil
 import signal
 import subprocess
+import sys
 import time
 
 CHECKS = {
@@ -35,6 +36,7 @@ CHECKS = {
     "cinema": "verify_cinema.cjs",
     "universe": "verify_universe.cjs",
     "clarity": "verify_clarity.cjs",
+    "background-portals": "verify_background_portals.cjs",
 }
 DEFAULT = ["home", "preferences", "reflow", "method", "characters", "convert", "brisa", "player", "impacts"]
 
@@ -66,6 +68,8 @@ def run_check(command: list[str], env: dict[str, str], stream, timeout: int) -> 
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--site", type=Path, default=Path("_site"))
     parser.add_argument("--evidence", type=Path, default=Path("_work/qa"))
