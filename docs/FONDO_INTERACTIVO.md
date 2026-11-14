@@ -40,6 +40,8 @@ Evidencias locales en `_work/portals/`: `viewport-qa`, `cross-firefox`, `cross-w
 
 La publicación exacta, hashes y lectura pública se registran en [PUBLICACION.md](PUBLICACION.md). La mejora de propósito y primer uso se documenta en [CLARIDAD_PRODUCTO.md](CLARIDAD_PRODUCTO.md).
 
+La edición pública final `f30dfb6` pasa dos recorridos de astros y dos grabaciones reales de navegador, escritorio y móvil. Las grabaciones comprueban entrada automática, recarga, Sol en movimiento, meteoro visible, pausa, viaje, guía y el único baile. Sus informes no tienen errores JavaScript ni respuestas fallidas. Las pruebas físicas y humanas indicadas a continuación siguen pendientes.
+
 ## Límites pendientes
 
 Faltan sesiones humanas de comprensión, comodidad del movimiento, lectores de pantalla reales y teléfonos físicos. No se acredita certificación WCAG, funcionamiento para toda discapacidad ni vibración física. El [protocolo de cinco participantes](PROTOCOLO_USABILIDAD.md) sigue sin resultados inventados. Las mediciones de rendimiento anteriores y sus límites están en [REVISION_NSAC.md](REVISION_NSAC.md); no se han convertido en una afirmación de rendimiento de campo. El formulario NSAC no fue enviado y el equipo debe revisar fuentes, derechos y entrega.

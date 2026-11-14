@@ -2,7 +2,19 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · entrada reparada y astros interactivos · 13 noviembre, 23:33 Bogotá
+## Edición vigente · órbitas conservadas y movimiento comprobado · 13 noviembre, 23:40 Bogotá
+
+Aplicación **`f30dfb69163138177a0af2148c27d5cf0d479b65`**, commit estático **`4cb2f174b87e4a661adde57ce61abf2d3162b6fb`**, fast-forward desde `c33b8e1`. Pages confirmó `built` a las **23:40:05**. La lectura pública de las **23:40:37** comprobó procedencia y HTML exacto: **498.452 bytes**, SHA-256 **`53ca5a079227c840929bd3251120dd7088ad34753d30498ea9730bba9ba2892a`**. La copia contiene los mismos 112 archivos de aplicación y cuatro metadatos, **16.712.595 bytes** en total; el empaquetador conserva la huella anterior.
+
+Corrige la órbita de corona/satélite detectada en la primera grabación de `e93112b`. La duración de respaldo evita depender de la herencia del contenedor decorativo después de convertir los astros en botones. Pasa la comprobación de transformación real y los cuatro destinos en nueve ventanas Chromium y dos por Firefox/WebKit, con reducción y alto contraste. Se conservan todas las correcciones de entrada, primera escucha, contexto científico y composición del checkpoint inferior.
+
+El build exacto pasó dos recorridos HTTP antes de publicar, sin errores JavaScript, respuestas fallidas ni solicitudes externas. Evidencias: `_work/github-preview/browser-local-f30dfb6/`, `readback-f30dfb6.json`, `http-f30dfb6.json` y `official-after-f30dfb6.json`. El primer estado `building`, todavía con la edición anterior, permanece en los archivos de igual nombre terminados en `-building.json`.
+
+Sobre la URL pública final pasan dos recorridos de astros, a 390/1440 píxeles, que incluyen movimiento real del Sol, cuatro destinos, viaje, limpieza, foco, teclado y reducción. También pasan dos recorridos grabados en **1342 × 605** y **390 × 667**: entrada y recarga automáticas sin pulsar reproducir, rotación del Sol, meteoro visible, pausa temporal, viaje a Saturno, guía mínima y baile automático con un único control. No hubo errores JavaScript ni respuestas fallidas. Evidencias locales: `_work/portals/public-portals-final/` y `_work/portals/public-video-final/`, con los vídeos `terrasonic-movimiento-1342.webm` y `terrasonic-movimiento-390.webm`. Son grabaciones de comprobación, no el vídeo final de hasta 30 segundos para el formulario NSAC. El intento anterior de vídeo en `public-video/` falló al detectar la corona inmóvil y queda separado de estas repeticiones aprobadas.
+
+La lectura de las **23:40:39** conservó main remoto `a8d91564d5393ef6c803acdbf49725094ea54bee`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y HTML oficial de 370.053 bytes / SHA-256 `d50ce659ea6660096e6c658841541c835d826fb4ee867f83ae17253732b05a76`, iguales al registro de las **23:39:16**. Solo se actualizaron `piero-mejoras` y la copia independiente. Los commits posteriores de documentación no cambian el código identificado por el `source.json` público.
+
+## Checkpoint · entrada reparada y astros interactivos · 13 noviembre, 23:33 Bogotá
 
 Aplicación **`e93112b8931762f4287f6f05c76703b73f0a2dc8`**, commit estático **`c33b8e1cb73b27c1f138234e6585d3ae4a9b298c`**, fast-forward desde `92eb1a3`. Pages confirmó `built` a las **23:33:13**. La lectura pública de las **23:33:36** comprobó procedencia y HTML exacto: **498.444 bytes**, SHA-256 **`4e91dfadbda70b9e38ddcf8eac3a17fe5e180c79b7f3b60eb4d043c099e67fab`**. La copia tiene 112 archivos de aplicación y cuatro metadatos, **16.712.587 bytes** en total. El empaquetador conserva su huella `d909b7927de275f6caf7d97a964bb6573a8c636fc8a69966911588a6cb69aba5`.
 
