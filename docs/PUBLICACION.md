@@ -2,7 +2,17 @@
 
 Vista de revisión actual: **https://alvaro-mendoza-12.github.io/terrasonic-piero-preview-20261113/**.
 
-## Edición vigente · activación real de movimiento · 13 noviembre, 18:19 Bogotá
+## Edición vigente · entrada automática y baile único · 13 noviembre, 19:13 Bogotá
+
+Aplicación **`14fda6728cd1feb8bf09c1e59d6ba678fa33fe0d`**, commit estático **`5378a98be8fbe1dcc621ee57f2ad679f2422096c`**, fast-forward desde `5491a3d`. Pages confirmó `built` a las **19:10:49**; la lectura anónima de las **19:13:45** comprobó `source.json` y HTML exacto de **452.309 bytes**, SHA-256 **`633599c27c4b618e4c7d3fe53de518755790e7ff60a67338376dbbc517e07d47`**. La copia conserva 112 archivos de aplicación y cuatro metadatos.
+
+La introducción se reproduce en cada entrada y recarga, antes de la bienvenida, con un botón verde para repetir. Los personajes 2D originales bailan automáticamente y conservan un solo control de pausa; se retiraron caminar y los controles de pasos. Hay dos estrellas fugaces adicionales y una guía móvil de instrucciones breves. [Comportamiento, diseño, pruebas y límites](EXPERIENCIA_AUTOMATICA.md).
+
+Pasan 151 pruebas de lógica y los recorridos de entrada, baile y guía en Chromium, Firefox y WebKit. La regresión general de Chromium pasa seis suites, incluidas 74 pantallas de axe y 408 estados de redistribución. El build exacto pasó los dos recorridos HTTP previos a publicación. Dos grabaciones del sitio público, en escritorio y móvil, comprueban arranque automático y recarga sin activar manualmente la animación, guía y baile con un solo control.
+
+Evidencias: `_work/github-preview/browser-local-14fda67/`, `readback-14fda67.json`, `http-14fda67.json`, `_work/automatic-release/` y `_work/automatic-public-video/`. La lectura de las **19:13:56** conservó main remoto `885cd51e977f96bc421a3ad2d18cef322d28039b`, main local `a8f8203e8de3097584987a5ba5635bc813181c44`, `.github/` sin diferencias y la huella oficial `bf4db6d86b2f293ebbee90cf85ae4b4ac8973aaafb8ba50c88a9d32d18f6f951`. Se hizo push a `piero-mejoras` y a la copia independiente de revisión. Los commits posteriores de documentación y recetas no cambian la aplicación identificada en `source.json`.
+
+## Checkpoint · activación real de movimiento · 13 noviembre, 18:19 Bogotá
 
 Aplicación **`58cecc25a64410019380a2980d57f8bfe229b835`**, commit estático **`5491a3d9f7e4b08df76faf90ed5ce20b8fdfbc46`**, fast-forward desde `f798af8`. Pages confirmó `built` a las **18:17:06**; la lectura anónima de las **18:19:00** comprobó `source.json` y HTML exacto de **449.555 bytes**, SHA-256 **`6dcf246608e5ba61fb413b4c63a0825bf755929523213fb5ede4900376ca21a1`**.
 

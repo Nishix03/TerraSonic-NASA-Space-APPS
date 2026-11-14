@@ -29,7 +29,9 @@ async function main(){
   }
   for(const viewport of [{width:360,height:640},{width:390,height:667},{width:768,height:1024},{width:1024,height:768},{width:1440,height:900},{width:667,height:375},{width:320,height:256}]){
    const {context,page}=await open(viewport);const root=page.locator('.ts-cinema');await root.waitFor();const duration=Number(await root.getAttribute('data-duration'));assert.equal(duration,viewport.width<=640||viewport.height<=450?3000:5200);assert.equal(await root.locator('.cinema-meteor').count(),5);
-   await page.waitForTimeout(duration*.25);const world=root.locator('.cinema-world');const before=await world.evaluate(e=>getComputedStyle(e).transform);await page.waitForTimeout(180);assert.notEqual(await world.evaluate(e=>getComputedStyle(e).transform),before);
+   await page.waitForTimeout(duration*.25);const world=root.locator('.cinema-world');const before=await world.evaluate(e=>getComputedStyle(e).transform);
+   // Sample a rendered frame rather than assuming a fixed compositor cadence.
+   await page.waitForFunction(previous=>{const e=document.querySelector('.cinema-world');return !!e&&getComputedStyle(e).transform!==previous;},before,{polling:'raf',timeout:1200});
    const box=await root.locator('button').boundingBox();assert(box&&box.x>=0&&box.y>=0&&box.x+box.width<=viewport.width+1&&box.y+box.height<=viewport.height+1&&box.height>=44);
    await page.screenshot({path:path.join(out,`entry-${viewport.width}.png`)});await root.waitFor({state:'detached',timeout:duration+1500});
    assert.equal(await page.evaluate(()=>__app.cinema.animations.length+__app.cinema.timers.length),0);assert.equal(await page.evaluate(()=>__app.state.playing||!!__app.ac),false);assert.deepEqual(await page.evaluate(()=>__vibrations),[]);assert.equal(await page.locator('.space-meteor').count(),5);assert.equal(await page.evaluate(()=>__app.bandReduced()),false);

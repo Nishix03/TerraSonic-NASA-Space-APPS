@@ -6,7 +6,7 @@ La aplicación es estática y funciona en español e inglés. Usa Canvas y Web A
 
 ## Estado de esta rama
 
-**Dirección vigente: banda 2D original.** El usuario descartó los modelos 3D y pidió conservar las ilustraciones del equipo, mejorar sus secuencias y corregir la introducción/guía en móvil. Esta edición usa poses y cuatro PNG originales por músico, con pausa e inspección por pasos. Los estudios 3D quedan archivados. [Implementación, pruebas y límites](docs/SPRITES_2D.md).
+**Dirección vigente: banda 2D original.** El usuario descartó los modelos 3D y pidió conservar las ilustraciones del equipo, mejorar sus secuencias y corregir la introducción/guía en móvil. Esta edición usa cuatro PNG originales por músico, con un solo baile automático y pausa. Los estudios 3D quedan archivados. [Implementación, pruebas y límites](docs/EXPERIENCIA_AUTOMATICA.md).
 
 La revisión vive en `piero-mejoras`. No modifica `main` ni la [web oficial](https://nishix03.github.io/TerraSonic-NASA-Space-APPS/).
 

@@ -32,6 +32,24 @@ Se eliminan pasos de inspección, modos redundantes y texto repetido. La instruc
 
 `scripts/verify_cinema.cjs` comprueba reproducción automática, tres recargas seguidas, preferencias y marcas antiguas, entrada anterior a bienvenida, botón verde, salidas, siete tamaños, limpieza y ausencia de audio/vibración. `scripts/verify_sprites.cjs` comprueba los cinco músicos, un único control, los cuatro dibujos originales, movimiento suave, pausa/reanudación y limpieza al salir. `scripts/verify_mobile_guide.cjs` recorre la guía en español/inglés con texto normal/grande y alternativa sin Web Audio.
 
-Los demás recorridos de navegador usan el botón real de saltar antes de comprobar sus pantallas. Las pruebas unitarias de navegación aíslan los efectos temporales; las pruebas de entrada utilizan el constructor real y los recorridos de navegador verifican su comportamiento sin ese aislamiento. Los resultados iniciales y sus correcciones se conservan separados de los informes finales.
+Los demás recorridos de navegador usan el botón real de saltar antes de comprobar sus pantallas. Los recorridos de accesibilidad, redistribución y ventanas bajas eligen además pausa mediante la interfaz real, para medir contenido estático. Entrada, baile y guía se prueban con el movimiento automático efectivo. Las pruebas unitarias de navegación aíslan los efectos temporales; las pruebas de entrada utilizan el constructor real y los recorridos de navegador verifican su comportamiento sin ese aislamiento. Los resultados iniciales y sus correcciones se conservan separados de los informes finales.
+
+### Resultados finales · 13 noviembre de 2026
+
+Aplicación publicada: `14fda6728cd1feb8bf09c1e59d6ba678fa33fe0d`. Pasan **137 pruebas de componente y 14 de control háptico**. Los controles hápticos verifican capacidad e invocaciones; no acreditan vibración física.
+
+| Motor | Entrada y recargas | Cinco músicos y pausa | Guía móvil ES/EN |
+|---|---:|---:|---:|
+| Chromium | 15 recorridos | 15 recorridos | 16 recorridos |
+| Firefox 146 | 15 recorridos | 15 recorridos | 16 recorridos |
+| WebKit 26 | 15 recorridos | 15 recorridos | 16 recorridos |
+
+El build exacto servido por HTTP también pasa las seis suites generales de Chromium: 74 pantallas de axe sin infracciones detectadas, 408 estados de redistribución, 84 estados RETO 05, 10 recorridos de capacidad/preferencias hápticas, 16 casos de ventana baja y seis de fondo espacial. Pasan los dos recorridos HTTP de publicación.
+
+Informes de entrada, banda y guía: `_work/automatic-entry-qa/chromium/cinema/`, `_work/automatic-entry-qa/final-smoke/sprites/`, `_work/automatic-entry-qa/chromium/mobile-guide/`, `_work/automatic-release/firefox/cinema/`, `_work/automatic-release/firefox-ready/sprites/`, `_work/automatic-release/firefox/mobile-guide/`, `_work/automatic-release/webkit-rendered/cinema/`, `_work/automatic-release/webkit/sprites/` y `_work/automatic-release/webkit/mobile-guide/`. Regresión general: `_work/automatic-release/chromium/run.json`. Lógica: `_work/automatic-release-unit.log` y `_work/automatic-entry-haptics-unit.log`.
+
+Las primeras mediciones de Firefox comenzaron antes de terminar la precarga de dibujos; la receta espera ahora el primer fotograma real y la carga completa. WebKit necesitó esperar un fotograma renderizado, en vez de asumir una cadencia fija de 180 ms. Las repeticiones finales conservan la exigencia de observar dibujos y transformaciones reales; estos ajustes de las recetas no alteran el producto publicado. Las primeras ejecuciones quedan conservadas en sus carpetas originales.
+
+Se grabó la URL pública en **1342×605 y 390×667**, sin pulsar reproducir al entrar, con reducción antigua guardada y reducción de sistema simulada. Ambos recorridos verifican arranque automático, pausa, recarga con otra introducción automática, meteoros visibles, movimiento solar, guía compacta y baile automático con un solo control. No registraron errores JavaScript ni respuestas HTTP fallidas. Evidencia: `_work/automatic-public-video/results.json`, `terrasonic-movimiento-1342.webm` y `terrasonic-movimiento-390.webm` en la misma carpeta. Las capturas `guide-390.png` y `band-390.png` muestran el resultado público.
 
 Se trata de pruebas de navegador y viewports CSS; no se declara certificación WCAG, revisión de teléfono físico ni FPS garantizados.
